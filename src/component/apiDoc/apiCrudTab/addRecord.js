@@ -24,4 +24,4 @@ AddRecord.propTypes = {
   db: PropTypes.string,
   table:PropTypes.string
 }
-export default AddRecord;
+export default AddRecord

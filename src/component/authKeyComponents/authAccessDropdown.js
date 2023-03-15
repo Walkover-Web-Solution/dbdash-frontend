@@ -1,33 +1,9 @@
 import React, { useState ,useEffect} from "react";
-import Checkbox from "@material-ui/core/Checkbox";
-import InputLabel from "@material-ui/core/InputLabel";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import { makeStyles } from "@material-ui/core/styles";
+import {Checkbox,InputLabel,ListItemIcon,ListItemText,MenuItem,FormControl,Select} from "@mui/material"
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    width: 300
-  },
-  indeterminateColor: {
-    color: "#F50057"
-  },
-  selectAllText: {
-    fontWeight: 500
-  },
-  selectedAll: {
-    backgroundColor: "rgba(0, 0, 0, 0.08)",
-    "&:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.08)"
-    }
-  }
-}));
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -58,7 +34,6 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
     // console.log("option",options)
   }
   // console.log("Authkeydrop",props)
-  const classes = useStyles();
   // const [selected, setSelected] = useState([]);
   const isAllSelected =
     options.length > 0 && selected.length === options.length;
@@ -88,7 +63,8 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
     console.log(data)
   }
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl sx={{margin: 1,
+      width: 300}}>
       <InputLabel id="mutiple-select-label">Multiple Select</InputLabel>
       <Select
         labelId="mutiple-select-label"
@@ -101,13 +77,19 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
         {console.log(selected)}
         <MenuItem
           value="all"
-          classes={{
-            root: isAllSelected ? classes.selectedAll : ""
+          sx={{
+            ...(isAllSelected && {backgroundColor: "rgba(0, 0, 0, 0.08)",
+            ["&:hover"]: {
+              backgroundColor: "rgba(0, 0, 0, 0.08)"
+            }})
           }}
+          // classes={{
+          //   root: isAllSelected ? classes.selectedAll : ""
+          // }}
         >
           <ListItemIcon>
             <Checkbox
-               classes={{ indeterminate: classes.indeterminateColor }}
+    sx={{ color: "#F50057"}}
               //  checked={isAllSelected}
                indeterminate={
                  selected?.length > 0 && selected?.length < options.length
@@ -116,7 +98,8 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
               />
           </ListItemIcon>
           <ListItemText
-            classes={{ primary: classes.selectAllText }}
+      
+            sx={{fontWeight: 500}}
             primary="Select All"
           />
         </MenuItem>

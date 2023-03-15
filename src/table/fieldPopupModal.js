@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import  PropTypes  from 'prop-types';
 import {
   Button,
@@ -9,31 +8,16 @@ import {
   TextField,
   Select,
   MenuItem,
-} from '@material-ui/core';
+} from '@mui/material';
 
 
 
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dialog: {
-    width: 400,
-    padding: theme.spacing(2),
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-}));
+
 
 
 export default function FieldPopupModal(props)  {
     // console.log("popup",props)
-  const classes = useStyles();
 //   const [open, setOpen] = useState(false);
 
 //   const handleOpen = () => {
@@ -63,10 +47,13 @@ const handleTextChange = (event) => {
         open={props?.open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        className={classes.modal}
+        sx ={{display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'}}
       >
         <DialogTitle id="form-dialog-title">Create Column</DialogTitle>
-        <DialogContent className={classes.dialog}>
+        <DialogContent sx={{width: 400,
+    padding: 2}}>
           <TextField
             autoFocus
             margin="dense"
@@ -84,7 +71,8 @@ const handleTextChange = (event) => {
             onChange={handleSelectChange}
             defaultValue	 ="text"
             displayEmpty
-            className={classes.formControl}
+            sx={{margin:1,
+              minWidth: 120,}}
           >
             {/* <MenuItem value="">Select an option</MenuItem> */}
             <MenuItem value="text" >text</MenuItem>
