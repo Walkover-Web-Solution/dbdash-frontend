@@ -33,12 +33,13 @@ export default function CreateAuthKey() {
   };
   const createAuth = async () => {
     // e.preventDefault();
-    // const adminId = localStorage.getItem("userid");
+    const adminId1 = localStorage.getItem("userid");
     const adminId = userDetails?.fullName ;
     const data = {
        name : name,
        scope :scope,
-       access : selected
+       access : selected,
+       userId:adminId1
     }
     const create = await createAuthkey(dbId, adminId, data )
     setOpen(true)
