@@ -78,6 +78,7 @@ export default function TablesList({dbData,tables,setTables}) {
     };
     await updateTable(db_id,tableName, data1);
     await getAllTableName(dbData?.db?._id, dbData?.db?.org_id?._id);
+    setTableNa(null);
   };
   const deleteTableName = async (tableid) => {
     // console.log("deltetb",tableid);
