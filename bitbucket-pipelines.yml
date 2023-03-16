@@ -1,0 +1,24 @@
+image: node:16.10.0
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Package install and Build
+          deployment: development
+          script:
+            - npm install react-scripts@5.0.1 -g --silent
+            - npm install
+            - npm run build
+          artifacts:
+            - build/**
+      - step:
+          name: Beta Deployment to GCP
+          script:
+            - pipe: atlassian/google-cloud-storage-deploy:1.0.1
+              variables:
+                KEY_FILE: $DEV_KEY_FILE
+                PROJECT: "via-socket-prod"
+                BUCKET: "dbdash.intospace.io"
+                SOURCE: "build/**"
+                # ACL: "public-read"
+                CACHE_CONTROL: "no-cache"
