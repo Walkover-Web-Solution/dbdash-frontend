@@ -271,10 +271,10 @@ export default function Header({
   return id == 999999 || id == 9999991 ? (
     <>
 
-      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'>
+      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block",backgroundColor: '#E8E8E8' } })} className='th noselect'>
         <div
           className='th-content'
-          style={{ display: "flex", justifyContent: "center" }}
+          style={{ display: "flex", justifyContent: "center", }}
           onClick={handleOpen}>
           <span className='svg-icon-sm svg-gray'>
             <PlusIcon />
@@ -286,7 +286,7 @@ export default function Header({
         <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
           style={{ display: "flex", justifyContent: "center" }}>
           <div
-            className='th-content' style={{ paddingLeft: "25px" }}>
+            className='th-content' style={{ paddingLeft: "25px",backgroundColor: "#E8E8E8" }}>
             checkbox
           </div>
         </div>}
@@ -294,7 +294,7 @@ export default function Header({
   ) : (
     <>
       <div {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'>
-        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
+        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement} style={{backgroundColor: "#E8E8E8"}}>
           <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
           {label}
         </div>

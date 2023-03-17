@@ -13,13 +13,12 @@ MainTable() {
   const tableInfo=useSelector((state)=>getTableInfo(state));
   // const [state, dispatch] = useReducer(reducer,tableInfo);
   const dispatchs = useDispatch();
-  
  
 
   return (
     <div
       style={{
-        width: "100vw",
+        width: "98vw",
         height: "100vh",
         overflowX: "hidden"
       }}
@@ -36,14 +35,13 @@ MainTable() {
         }}
       >
       </div>
-      <div style={{ overflow: "auto", display: "flex" }}>
+      <div style={{ overflow: "auto", display: "flex",backgroundColor: "#fff", width: "100vw"}}>
         <div
           style={{
             flex: "1 1 auto",
             padding: "1rem",
-            maxWidth: 1000,
-            marginLeft: "auto",
-            marginRight: "auto"
+            marginLeft: "15px",
+            marginRight: "30px"
           }}
         >
           {tableInfo?.columns?.length>0 && <Table
