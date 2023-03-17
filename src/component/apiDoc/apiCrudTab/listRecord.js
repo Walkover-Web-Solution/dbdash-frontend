@@ -7,9 +7,9 @@ import { Typography } from '@mui/material';
 function ListRecord(props) {
   return (
     <>
-    <div>
-        <h2>List records</h2>
-        <p>
+    
+        <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>List records</Typography>
+        <Typography>
         To list records in {props.table} ,issue a GET request to the {props.table} endpoint using {props.table} ids<br/>
         You can filter, sort, and format the results with the following query parameters.
         <br/>
@@ -38,8 +38,8 @@ function ListRecord(props) {
                                  <br/>
                      <b>sort</b>&nbsp; A list of sort objects that specifies how the records will be ordered.<br/>
                      http://localhost:5000/:dbId/:tableId/?fields=field1,field2,field3&sort=field1,asc.
-        </p>
-        </div>
+        </Typography>
+        
         <br/>
     <Box>
       <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}"` }/>

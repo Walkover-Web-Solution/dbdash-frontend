@@ -1,22 +1,23 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
-import { Box } from '@mui/system';
+//import { Box } from '@mui/system';
 import CodeSnippet from '../codeSnippet';
+import { Typography } from '@mui/material';
 function AddRecord(props) {
   return (
     <>
-    <div>
-        <h2>Add Table Records</h2>
-        <p>
+    
+        <Typography style={{fontWeight: 'bold' ,fontSize: '24px' }}>Add Table Records</Typography>
+        <Typography>
       To create new  Table records, use the create method.Note that table names and table ids can be used interchangeably.<br/>
       Using table ids means table name changes do not require modifications to your API request.
-      </p>
-    </div>
-    <Box>
+      </Typography>
+    
+    
       <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}"`}/>
-      <p>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</p>
-      <p>{`-H "Content-Type: application/json"` }</p>
-    </Box>
+      <Typography>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</Typography>
+      <Typography>{`-H "Content-Type: application/json"` }</Typography>
+    
     </>
   )
 }

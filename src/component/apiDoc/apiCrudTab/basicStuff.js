@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types';
 // import CodeSnippet from '../codeSnippet';
 import { getAllfields } from '../../../api/fieldApi';
 import { Box } from "@mui/system";
+import { Typography } from "@mui/material";
 function BasicStuff(props) {
   const [fieldData, setFieldData] = useState(null)
   const tableData = async () => {
@@ -13,28 +14,31 @@ function BasicStuff(props) {
     tableData();
   }, [props.db, props.table]);
   return (
-    <>
-      <Box >
-        <h5>Database Id - {props.db}</h5>
-        <h5>Table Id - {props.table}</h5>
+    <Box>
+      
+         <Typography style={{fontWeight: 'bold'}} >Database Id - {props.db}</Typography>
+        <Typography style={{fontWeight: 'bold'}} >Table Id - {props.table}</Typography>
         <br></br>
-        <h4>fieldName    fieldId   fieldType </h4>
+        <Typography style={{fontWeight: 'bold'}} >fieldName    fieldId   fieldType </Typography>
+    {console.log(fieldData)}
         {fieldData && Object.entries(fieldData).map((fields, index) => (
           <Box
+          style={{fontWeight: 'bold'}}
             key={index}
           >
-            {fields[1].fieldName} -
-            {fields[0]} -
-            {fields[1].fieldType}
+             <Typography > {fields[1].fieldName} -
+              </Typography> 
+           <Typography >  {fields[0]} - </Typography>  
+            <Typography >  {fields[1].fieldType} </Typography>
           </Box>
         ))}
-      </Box>
+      
       {/* <CodeSnippet codeString="const myVar = 'Hello, world!';" /> */}
-    </>
+    </Box>
   )
 }
 BasicStuff.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string
 }
-export default BasicStuff
+export default BasicStuff 

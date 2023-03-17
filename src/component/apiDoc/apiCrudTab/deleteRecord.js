@@ -2,19 +2,20 @@ import React from 'react'
 import { PropTypes } from 'prop-types';
 import { Box } from '@mui/system';
 import CodeSnippet from '../codeSnippet';
+import { Typography } from '@mui/material';
 function DeleteRecord(props) {
   return (
     <>
-    <div>
-    <h2>Delete Table Records</h2>
-        <p>
+    <Box>
+    <Typography style={{fontWeight: 'bold', fontSize: '24px' }}>Delete Table Records</Typography>
+        <span>
         To delete {props.table} records, issue a DELETE request to the Teams endpoint.
-      </p>
-    </div>
+      </span>
+    </Box>
     <br/>
     <Box>
       <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}/{:id}"`}/>
-      <p>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</p>
+      <span>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</span>
     </Box>
     </>
   )
