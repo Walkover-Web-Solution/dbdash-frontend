@@ -21,7 +21,6 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.log(error);
     if (error?.response?.status === 401) {
       toast.error('Session Expired');
       localStorage.removeItem("accessToken");

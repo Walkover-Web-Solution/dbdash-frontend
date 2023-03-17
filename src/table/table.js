@@ -23,7 +23,7 @@ const defaultColumn = {
 export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
 
   // const [selectedRange, setSelectedRange] = useState({});  
-  // console.log(selectedRange);
+
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();

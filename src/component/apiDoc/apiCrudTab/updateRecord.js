@@ -1,22 +1,24 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
 import { Box } from '@mui/system';
+
 import CodeSnippet from '../codeSnippet';
+import { Typography } from "@mui/material";
 function UpdateRecord(props) {
   return (
     <>
-    <div>
-       <h2>Update Table Records</h2>
-        <p>
+    
+       <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>Update Table Records</Typography>
+        <span>
         To update {props.table} records, issue a request to the {props.table} endpoint.  A PATCH request will only update the fields
         <br/> included in the request. Fields not included in the request will be unchanged.
-        </p>
-    </div>
+        </span>
+    
     <br/>
     <Box>
       <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}/{:id}"`}/>
-      <p>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</p>
-      <p>{`-H "Content-Type: application/json"` }</p>
+      <span>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</span>
+      <span>{`-H "Content-Type: application/json"` }</span>
     </Box>
     </>
   )

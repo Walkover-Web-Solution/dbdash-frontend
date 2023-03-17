@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import Typography from '@mui/material/Typography';
+//import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material'
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
@@ -25,7 +25,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        {children}
         </Box>
       )}
     </Box>
@@ -67,7 +67,9 @@ function ApiCrudTablist(props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
+        <Box>
         <BasicStuff db={props.db} table={props.table}/>
+        </Box>
       </TabPanel>
       {/* <TabPanel value={value} index={1}>
         <RetrieveRecord db={props.db} table={props.table} />

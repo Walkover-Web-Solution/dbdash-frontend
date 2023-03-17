@@ -9,21 +9,7 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-
-
-
-
-
-
-
 export default function FieldPopupModal(props)  {
-    // console.log("popup",props)
-//   const [open, setOpen] = useState(false);
-
-//   const handleOpen = () => {
-//     setOpen(true);
-//   };
-
 const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
   };

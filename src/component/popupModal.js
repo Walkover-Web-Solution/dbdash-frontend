@@ -60,7 +60,7 @@ export default function PopupModal(props) {
               <Button variant="contained" onClick={()=>{
                   // props?.saveFunction ();
                   props?.submitData();
-                  console.log("props")
+                 
               }}>
                 Create
               </Button>

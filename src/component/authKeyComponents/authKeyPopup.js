@@ -22,12 +22,9 @@ const style = {
   p: 4,
 };
 export default function AuthKeyPopup(props) {
-  // console.log(p)
-  // const [copySuccess, setCopySuccess] = useState(false);
   
   const [copyText, setCopyText] = useState('');
   const [isCopied, setIsCopied] = useState(false);
-  console.log(copyText);
   const handleClose = () => props.setOpen(false);
   const handleCopyText = () => {
     setCopyText(props?.title);
@@ -35,6 +32,7 @@ export default function AuthKeyPopup(props) {
   const handleCopyClick = () => {
     navigator.clipboard.writeText(props?.title);
     // setCopySuccess(true);
+    console.log(copyText)
     setIsCopied(true)
   };
   return (

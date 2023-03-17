@@ -88,7 +88,6 @@ export default function Header({
     },
     // {
     //   onClick: () => {
-    //     console.log("plus")
     //     handleOpen()
     //     // dispatch(updateColumnHeaders({
     //     //   columnId: id,
