@@ -11,10 +11,10 @@ const getHeaders = async(dbId,tableName) =>{
         {
             id: 9999991,
             width: 100,
-            label: "checkbox",
+            label: "check",
             disableResizing: true,
-            dataType: "checkbox",
-            accessor : "checkbox",
+            dataType: "check",
+            accessor : "check",
         },
     ]
    
