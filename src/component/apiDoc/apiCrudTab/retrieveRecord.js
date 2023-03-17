@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types';
 
 
 function RetrieveRecord(props) {
-  console.log("RetrieveRecord Props : ",props);
   return (
     <div>Retrieve Record</div>
   )

@@ -18,7 +18,6 @@ export default function TablesList({dbData,tables,setTables}) {
   const navigate =useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    console.log("new",newValue)
   };
   const [table, setTable] = useState();
   const [tabIndex,setTabIndex]= useState(-1);

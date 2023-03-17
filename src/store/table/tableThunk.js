@@ -146,10 +146,9 @@ export const addRows = createAsyncThunk(
 export const deleteRows = createAsyncThunk(
     "table/deleteRows",
     async(payload,{dispatch,getState})=>{
-        // console.log((payload))
+       
         var arr = [];
         for (var index in payload) {
-            // console.log("index",payload[index].original.id);
             arr.push(payload[index].original.id )
         }
         const {tableId, dbId} = getState().table

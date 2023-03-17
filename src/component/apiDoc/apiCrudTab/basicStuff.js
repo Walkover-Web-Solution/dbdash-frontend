@@ -20,7 +20,6 @@ function BasicStuff(props) {
         <Typography style={{fontWeight: 'bold'}} >Table Id - {props.table}</Typography>
         <br></br>
         <Typography style={{fontWeight: 'bold'}} >fieldName    fieldId   fieldType </Typography>
-    {console.log(fieldData)}
         {fieldData && Object.entries(fieldData).map((fields, index) => (
           <Box
           style={{fontWeight: 'bold'}}

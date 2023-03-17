@@ -34,7 +34,6 @@ export default function SingleTable({dbData,table,setTabIndex,getAllTableName,in
     setTableNa(null);
   };
   const deleteTableName = async (tableid) => {
-    // console.log("deltetb",tableid);
     await deleteTable(dbData?.db?._id, tableid);
     await getAllTableName(dbData?.db?._id, dbData?.db?.org_id?._id);
   };

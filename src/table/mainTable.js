@@ -11,7 +11,7 @@ MainTable() {
   useEffect(() => {
 },[]);
   const tableInfo=useSelector((state)=>getTableInfo(state));
-  console.log("tableinfo",tableInfo);
+
   // const [state, dispatch] = useReducer(reducer,tableInfo);
   const dispatchs = useDispatch();
  

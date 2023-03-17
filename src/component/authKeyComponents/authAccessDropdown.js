@@ -29,16 +29,15 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
   const [options, setOptions] = useState([]);
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
-    // console.log("data",data)
+    
     setOptions(data.data.data.tables || {});
-    // console.log("option",options)
+   
   }
-  // console.log("Authkeydrop",props)
-  // const [selected, setSelected] = useState([]);
+ 
+  
   const isAllSelected =
     options.length > 0 && selected.length === options.length;
   const handleChange = (event) => {
-    console.log(event.target.value,12345);
     const value = event.target.value;
     if (value[value.length - 1] === "all") {
       if(selected.length === Object.entries(options)?.length){
@@ -57,10 +56,9 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
   useEffect(()=>{
     callFunc();
   },[])
-  console.log('setSelected',selected)
   const callFunc = async()=>{
-    const data = await getAllTableName(dbId);
-    console.log(data)
+      await getAllTableName(dbId);
+
   }
   return (
     <FormControl sx={{margin: 1,
@@ -74,7 +72,6 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
         renderValue={(selected) => selected.join(", ")}
         MenuProps={MenuProps}
       >
-        {console.log(selected)}
         <MenuItem
           value="all"
           sx={{
@@ -104,8 +101,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
           />
         </MenuItem>
         { Object.entries(options).map((option,index) => {
-         return  <MenuItem key={index} value={option[0]}>
-         {/* {console.log("options",option[0])} */}
+         return  <MenuItem key={index} value={option[0]}>         
          <ListItemIcon>
            {/* {option[0]} */}
            {/* <Checkbox checked={option[0]} /> */}
@@ -114,7 +110,6 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
             if(!selected?.includes(e.target.value)){
               setSelected([...selected,e.target.value])
             }
-            console.log(e.target.value);
            }}
            defaultChecked={selected?.includes(option[0])}
            />
