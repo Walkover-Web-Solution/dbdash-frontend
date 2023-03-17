@@ -17,7 +17,7 @@ export default function AuthKeyDropdown({scope,setScope}) {
   return (
     <>
        <Box>
-      <FormControl sx={{ m: 1, width:"300%" }}>
+      <FormControl sx={{ m: 1, width:300 }}>
         <InputLabel id="demo-simple-select-helper-label">Add Space</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"

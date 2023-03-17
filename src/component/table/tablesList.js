@@ -177,17 +177,7 @@ export default function TablesList({dbData,tables,setTables}) {
         <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 }} >
           Add Table
         </Button> </Box>
-              {/* <TabWithDropdown
-      label={table[1]?.tableName || table[0]}
-      dropdown={<Dropdown />}
-    />
-            </Box>
-          ))}
-          </Tabs>
-        </Box>
-        <Button onClick={handleOpen} variant="contained" sx={{width:122}} >
-          Add Table
-        </Button> </Box> */}
+  
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
       <Box>
           <SingleTable  table={clickedTable} />

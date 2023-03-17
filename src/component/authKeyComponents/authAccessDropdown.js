@@ -68,6 +68,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
       <InputLabel id="mutiple-select-label">Multiple Select</InputLabel>
       <Select
         labelId="mutiple-select-label"
+        label="Multiple Select"
         multiple
         value={selected}
         onChange={handleChange}
@@ -89,7 +90,6 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
         >
           <ListItemIcon>
             <Checkbox
-    sx={{ color: "#F50057"}}
               //  checked={isAllSelected}
                indeterminate={
                  selected?.length > 0 && selected?.length < options.length
