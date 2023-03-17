@@ -22,7 +22,6 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
   };
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
-
   useEffect(() => {
 
     setValue({value: initialValue, update: false});
@@ -99,6 +98,16 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
 
   let element;
   switch (dataType) {
+    case "checkbox":
+      element = (
+        <input type="checkbox" 
+        checked={value.value}
+        onChange={()=>{
+          setValue(() => ({value: !(value.value), update: true}))
+        }}
+        />
+      );
+      break;
     case "text":
       element = (
         <ContentEditable
@@ -112,7 +121,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         />
       );
       break;
-      case "varchar":
+    case "varchar":
       element = (
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
@@ -204,7 +213,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         </>
       );
       break;
-      case "checkbox":
+      case "check":
       element =(<><div   {...row.getRowProps()} className= "tr">
           <input type="checkbox" {...row.getToggleRowSelectedProps()} />
           </div>
