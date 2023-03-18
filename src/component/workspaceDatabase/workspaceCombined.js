@@ -2,11 +2,13 @@ import React,{useEffect, useState} from 'react'
 import  {Box} from '@mui/material'
 import PopupModal from '../popupModal';
 import Button from '@mui/material/Button';
-import {findUserByEmail} from "../../api/userApi"
+// import {findUserByEmail} from "../../api/userApi"
 import { UserAuth } from "../../context/authContext.js"
 import { createOrg } from "../../api/orgApi";
 import { OrgList } from './orgList';
 import { PropTypes } from 'prop-types';
+import { selectOrgandDb } from "../../store/database/databaseSelector.js"
+import { useSelector } from 'react-redux';
 // import makeData from "../../table/makeData"
 // import { bulkAddColumns } from '../../store/table/tableThunk';
 // import { Dispatch } from 'react';
@@ -16,7 +18,11 @@ import { PropTypes } from 'prop-types';
 export default function WorkspaceCombined() {
               
     const {user} = UserAuth();
-    const [alldbs,setAllDbs] = useState([]);
+    // const alldbs = useSelector(selectOrgandDb());
+    // const [alldbs,setAllDbs] = useState([]);
+    // const alldbs =[]
+    const alldbs =  useSelector((state) => selectOrgandDb(state)) || [];
+    console.log(alldbs)  
     // const dispatchs=useDispatch();
 
     //state to display modal
@@ -26,33 +32,34 @@ export default function WorkspaceCombined() {
 
     useEffect(()=>{
       // dispatchs(bulkAddColumns(makeData(10)));
-    if(user?.email)
-      getOrgAndDb();
+    // if(user?.email)
+      // getOrgAndDb();
     },[user])
 
-    const filterDbsBasedOnOrg = async (allDbs)=>
-    {
-      var result = {};
-      allDbs.map((item)=>{        
-          result[item.org_id._id]=result[item.org_id._id]?[...result[item.org_id._id],item]:[item]
-      })
-      setAllDbs(result);  
-    }
+    // const filterDbsBasedOnOrg = async (allDbs)=>
+    // {
+    //   var result = {};
+    //   allDbs.map((item)=>{        
+    //       result[item.org_id._id]=result[item.org_id._id]?[...result[item.org_id._id],item]:[item]
+    //   })
+    //   setAllDbs(result);  
+    //   // console.log("result",result);
+    // }
 
 
-    const getOrgAndDb = async()=>
-    {
-      const data = await findUserByEmail(user?.email);  
-      localStorage.setItem("userid",data?.data?.data?._id);
-      filterDbsBasedOnOrg(data?.data?.data?.dbs)
-    }
+    // const getOrgAndDb = async()=>
+    // {
+    //   const data = await findUserByEmail(user?.email);  
+    //   localStorage.setItem("userid",data?.data?.data?._id);
+    //   filterDbsBasedOnOrg(data?.data?.data?.dbs)
+    // }
     
   const saveOrgToDB = async () => {
       // e.preventDefault();
       const userid = localStorage.getItem("userid");
       await createOrg({name: org,user_id:userid})
       setOpen(false);
-      await getOrgAndDb();
+      // await getOrgAndDb();
     };
   return (
     <>
@@ -66,7 +73,7 @@ export default function WorkspaceCombined() {
           <Box>
           {Object.entries(alldbs).map(([orgId, dbs]) => (
                 <Box key={orgId}>
-                  <OrgList orgId={orgId} dbs ={dbs} getOrgAndDbs={getOrgAndDb} /> 
+                  <OrgList orgId={orgId} dbs ={dbs}  /> 
                  
                    </Box>
                    

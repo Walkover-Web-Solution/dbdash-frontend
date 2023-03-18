@@ -5,9 +5,11 @@ import SingleDatabase from "./singleDatabase";
 import Grid from "@mui/material/Grid";
 import { Box,Card, Typography, TextField, Button, IconButton} from "@mui/material";
 import ControlPointSharpIcon  from '@mui/icons-material/AddSharp';
-import { createDb } from "../../api/dbApi";
+// import { createDb } from "../../api/dbApi";
 import { updateOrg, deleteOrg } from "../../api/orgApi";
 import PropTypes from "prop-types";
+import { createDbThunk } from "../../store/database/databaseThunk";
+import { useDispatch } from "react-redux";
 
 
 
@@ -18,6 +20,7 @@ export const OrgList = (props) => {
   const [open, setOpen] = useState(false);
   const [orgId, setOrg] = useState();
   const handleOpen = () => setOpen(true);
+  const dispatch = useDispatch()
 
   const saveDb = async () => {
     // e.preventDefault();
@@ -27,8 +30,8 @@ export const OrgList = (props) => {
       name: db,
     };
     setOpen(false);
-    await createDb(orgId, data);
-    await props?.getOrgAndDbs();
+    dispatch(createDbThunk({orgId, data}));
+    // await props?.getOrgAndDbs();
   };
 
   const renameWorkspace = async (orgId) => {
@@ -37,7 +40,7 @@ export const OrgList = (props) => {
       name: orgName,
     };
     await updateOrg(orgId, data,userid);
-    await props?.getOrgAndDbs();
+    // await props?.getOrgAndDbs();
   };
 
   const deleteOrganization = async () => {
@@ -45,7 +48,7 @@ export const OrgList = (props) => {
     const userid = localStorage.getItem("userid");
 
     await deleteOrg(props?.orgId,userid);
-    await props?.getOrgAndDbs();
+    // await props?.getOrgAndDbs();
   };
 
   return (

@@ -1,31 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { Card, CardContent, Typography, Box, TextField ,Button} from "@mui/material";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import PropTypes from "prop-types";
 import {  useNavigate } from "react-router-dom";
 import Dropdown from "../dropdown";
-import { renameDb, deleteDb } from "../../api/dbApi";
+// import { deleteDb } from "../../api/dbApi";
+import { useDispatch } from "react-redux";
+// import { updateDb } from "../../store/database/databaseSlice";
+import { removeDbThunk, renameDBThunk } from "../../store/database/databaseThunk";
 
 // import {deleteDb} from '../api/dbApi.js';
 export default function SingleDatabase(props) {
   const [name, setName] = useState(false);
-  const [dbname, setDbname] = useState();
+  const [dbname, setDbname] = useState("");
   const navigate = useNavigate();
+  const dispatch=useDispatch();
+  
   // const [open, setOpen] = useState(false);
   const renameDatabase = async (orgId, id, name) => {
     const data = {
       name: dbname || name,
     };
-    await renameDb(orgId, id, data);
-    await props.getOrgAndDbs();
+    // await renameDb(orgId, id, data);
+    dispatch(renameDBThunk({orgId, id, data}))
+    // await props.getOrgAndDbs();
   };
   const handleOpen = () => {
     setName(false);
   };
-  useEffect(() => {});
+
   const deletDatabases = async () => {
-    await deleteDb(props?.db?.org_id?._id, props?.db._id);
-    await props.getOrgAndDbs();
+    console.log(props?.db);
+    console.log(props?.db?.org_id?._id)
+    if( props?.db?.org_id?._id)
+    dispatch(removeDbThunk({orgId: props?.db?.org_id?._id, dbId: props?.db._id}));
+    // console.log("deletDatabases")
+    // await props.getOrgAndDbs();
   };
   return (
     // <Link

@@ -14,6 +14,7 @@ const getAllDb = async () =>
 
 const getDbById = async (dbId) =>
 {
+    console.log(dbId)
      return await axios.get(URL +`/dbs/dbs/${dbId}`);
 }
 
