@@ -30,8 +30,6 @@ export default function SingleDatabase(props) {
   };
 
   const deletDatabases = async () => {
-    console.log(props?.db);
-    console.log(props?.db?.org_id?._id)
     if( props?.db?.org_id?._id)
     dispatch(removeDbThunk({orgId: props?.db?.org_id?._id, dbId: props?.db._id}));
     // console.log("deletDatabases")

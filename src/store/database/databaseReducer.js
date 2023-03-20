@@ -40,18 +40,18 @@ export function extraReducers(builder) {
     
         state.status ="loading"
       })
-      .addCase(renameDBThunk.fulfilled, (state,actions) => {
+      .addCase(renameDBThunk.fulfilled, (state,action) => {
     
         state.status = "succeeded";
         // console.log(current(state));
-        let arr=state.orgId[actions.payload.org_id] || [];
+        let arr=state.orgId[action.payload.org_id] || [];
        let object =  arr.map((obj)=>{
-        if(obj._id == actions.payload._id)
-          {obj.name= actions.payload.name
+        if(obj._id == action.payload._id)
+          {obj.name= action.payload.name
             return obj;}
           return obj
         })
-        state.orgId={...state.orgId,[actions.payload.org_id]:object};
+        state.orgId={...state.orgId,[action.payload.org_id]:object};
 
         // console.log(current(state));
         
@@ -127,13 +127,13 @@ export function extraReducers(builder) {
   
         state.status ="loading"
       })
-      .addCase(createDbThunk.fulfilled, (state,actions) => {
+      .addCase(createDbThunk.fulfilled, (state,action) => {
 
         state.status = "succeeded";
-        let arr=state.orgId[actions.payload.org_id] || [];
-        // console.log(arr);
-        const newArr=[...arr,actions.payload];
-        state.orgId={...state.orgId,[actions.payload.org_id]:newArr};
+        const { org_id, id } = action.payload;
+        const arr = state.orgId[org_id] || [];
+        const newArr = arr.filter((item) => item.id !== id);
+        state.orgId = { ...state.orgId, [org_id]: newArr };
 
         // console.log(current(state.orgId));
 
@@ -167,17 +167,14 @@ export function extraReducers(builder) {
   
         state.status ="loading"
       })
-      .addCase(removeDbThunk.fulfilled, (state,actions) => {
+      .addCase(removeDbThunk.fulfilled, (state,action) => {
 
         state.status = "succeeded";
 
-        // console.log(current(state));
-        // const { org_id, _id } = actions.payload;
-        // console.log(org_id,_id);
-        // const newArr = state.orgId[org_id].filter(db => db.id !== _id);
-        // console.log("newArr",newArr)
-        // state.orgId = { ...state.orgId, [org_id]: newArr };
-        state.orgId = actions.payload
+        const { org_id, _id } = action.payload;
+        const newArr = state.orgId[org_id].filter(db => db.id !== _id);
+        state.orgId = { ...state.orgId, [org_id]: newArr };
+        // state.orgId = action.payload
         console.log(current(state));
       })
       .addCase(removeDbThunk.rejected, (state) => {

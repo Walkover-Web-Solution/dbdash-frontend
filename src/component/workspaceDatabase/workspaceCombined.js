@@ -22,7 +22,6 @@ export default function WorkspaceCombined() {
     // const [alldbs,setAllDbs] = useState([]);
     // const alldbs =[]
     const alldbs =  useSelector((state) => selectOrgandDb(state)) || [];
-    console.log(alldbs)  
     // const dispatchs=useDispatch();
 
     //state to display modal
