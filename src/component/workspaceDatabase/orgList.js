@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "../dropdown";
 import PopupModal from "../popupModal";
 import SingleDatabase from "./singleDatabase";
@@ -50,6 +50,10 @@ export const OrgList = (props) => {
     await deleteOrg(props?.orgId,userid);
     // await props?.getOrgAndDbs();
   };
+
+  useEffect(()=>{
+    // console.log(props?.dbs);
+  },[props.dbs]);
 
   return (
     <>
@@ -115,7 +119,7 @@ export const OrgList = (props) => {
             <Grid container spacing={2}>
               {props.dbs.map((db) => (
                 <Box key={db._id} sx={{ m: 4, display: "flex" }}>
-                  <SingleDatabase db={db} getOrgAndDbs={props?.getOrgAndDbs} />
+                  <SingleDatabase db={db}  getOrgAndDbs={props?.getOrgAndDbs} />
                 </Box>
               ))}
 

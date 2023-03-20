@@ -11,6 +11,9 @@ import { removeDbThunk, renameDBThunk } from "../../store/database/databaseThunk
 
 // import {deleteDb} from '../api/dbApi.js';
 export default function SingleDatabase(props) {
+  // console.log("Props of singleDatabase",props)
+
+
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState("");
   const navigate = useNavigate();
@@ -30,14 +33,15 @@ export default function SingleDatabase(props) {
   };
 
   const deletDatabases = async () => {
-    console.log(props?.db);
-    console.log(props?.db?.org_id?._id)
-    if( props?.db?.org_id?._id)
-    dispatch(removeDbThunk({orgId: props?.db?.org_id?._id, dbId: props?.db._id}));
-    // console.log("deletDatabases")
-    // await props.getOrgAndDbs();
+    if( props?.db?.org_id?._id){
+      dispatch(removeDbThunk({orgId: props?.db?.org_id?._id, dbId: props?.db?._id}));
+    }
+    else if(props?.db?.org_id){
+      dispatch(removeDbThunk({orgId: props?.db?.org_id, dbId: props?.db?._id}));
+    }
+ 
   };
-  return (
+  return (  
     // <Link
     //   to={{ pathname: "/db/" + props.db._id }}
     //   style={{ textDecoration: "none" }}

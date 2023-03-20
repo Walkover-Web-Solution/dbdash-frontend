@@ -1,7 +1,7 @@
 import { createAsyncThunk} from "@reduxjs/toolkit";
 import { renameDb ,deleteDb ,createDb} from "../../api/dbApi";
 import { findUserByEmail } from "../../api/userApi";
-import { UserAuth } from "../../context/authContext";
+// import { UserAuth } from "../../context/authContext";
 
 // import { updateDb } from './databaseSlice';
 
@@ -48,17 +48,11 @@ export const renameDBThunk = createAsyncThunk (
 
 export const removeDbThunk = createAsyncThunk (
     "organdDb/removeDbThunk", async (payload ) =>{
-        const user = UserAuth();
-        // console.log("user",user?.email);
-       await deleteDb(payload.orgId, payload.dbId);
-       const data = await findUserByEmail(user?.email);  
-        localStorage.setItem("userid",data?.data?.data?._id);
-        console.log("data",data);
-        var result = {};
-        data?.data?.data?.dbs.map((item)=>{        
-            result[item.org_id._id]=result[item.org_id._id]?[...result[item.org_id._id],item]:[item]
-        })        
-      console.log("result",result);
-      return result;
+
+        console.log(payload);
+        const res=await deleteDb(payload.orgId, payload.dbId);
+        console.log(res);
+
+    return payload.orgId;
     }
 );
