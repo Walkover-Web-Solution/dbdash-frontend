@@ -158,7 +158,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
       {selectedFlatRows?.length > 0 && <Button sx = {{m:2}} onClick={()=>{
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
-      <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")}>
+      <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
             {headerGroups[0].headers.map((column) => {
@@ -201,8 +201,9 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
                     cellsSelected[cell.id]
                       ? { ...cell.getCellProps().style, 
                         // backgroundColor: '#6beba80'
-                       userSelect: 'none' }
-                      : {...cell.getCellProps().style, userSelect: 'none' }
+                       userSelect: 'none',flex: 'none' }
+                      : {...cell.getCellProps().style, userSelect: 'none',flex: 'none' }
+
                   }
                   className='td'> 
                     {cell.render("Cell")}

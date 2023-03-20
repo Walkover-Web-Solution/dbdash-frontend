@@ -26,23 +26,22 @@ MainTable() {
     >
       <div
         style={{
-          height: 120,
+          height: 40,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          type:"checkbox"
-
+          type:"checkbox",
         }}
       >
       </div>
-      <div style={{ overflow: "auto", display: "flex",backgroundColor: "#fff", width: "100vw"}}>
+      <div style={{ overflow: "auto", display: "flex", width: "100vw"}}>
         <div
           style={{
-            flex: "1 1 auto",
             padding: "1rem",
             marginLeft: "15px",
-            marginRight: "30px"
+            marginRight: "30px",
+            backgroundColor:'#fff',
           }}
         >
           {tableInfo?.columns?.length>0 && <Table
