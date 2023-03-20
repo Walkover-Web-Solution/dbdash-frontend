@@ -33,7 +33,7 @@ export default function SingleDatabase(props) {
     //   style={{ textDecoration: "none" }}
     //   state={{ db: props.db }}
     // >
-      <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2 }} onClick={()=>{
+      <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2,cursor:'pointer' }} onClick={()=>{
     
         navigate("/db/"+ props.db._id , {state : { db: props.db }});
       }}>

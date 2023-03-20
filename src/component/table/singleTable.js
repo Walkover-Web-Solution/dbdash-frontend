@@ -128,7 +128,7 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
 }
 SingleTable.propTypes = {
   dbData: PropTypes.any,
-  table: PropTypes.string,
+  table: PropTypes.array,
   dbId: PropTypes.string,
   label : PropTypes.any,
   dropdown:PropTypes.any,
