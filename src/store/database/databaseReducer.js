@@ -130,12 +130,19 @@ export function extraReducers(builder) {
       .addCase(createDbThunk.fulfilled, (state,action) => {
 
         state.status = "succeeded";
-        const { org_id, id } = action.payload;
-        const arr = state.orgId[org_id] || [];
-        const newArr = arr.filter((item) => item.id !== id);
-        state.orgId = { ...state.orgId, [org_id]: newArr };
+        console.log(current(state).orgId);
+        let arr=state.orgId[action.payload.org_id] || [];
+        // console.log(arr);
+        // const data={
+        //   name:action.payload.org_id.name,
+        //   org_id:action.payload.org_id._id,
+        //   _id:action.payload._id,
+        //   con_url: `postgres://postgres:root@localhost/${action.payload.org_id.name}_${action.payload.org_id._id}`
+        // }
+        const newArr=[...arr,action.payload];
+        state.orgId={...state.orgId,[action.payload.org_id]:newArr};
 
-        // console.log(current(state.orgId));
+        console.log(current(state).orgId);
 
       })
       .addCase(createDbThunk.rejected, (state) => {
@@ -170,12 +177,7 @@ export function extraReducers(builder) {
       .addCase(removeDbThunk.fulfilled, (state,action) => {
 
         state.status = "succeeded";
-
-        const { org_id, _id } = action.payload;
-        const newArr = state.orgId[org_id].filter(db => db.id !== _id);
-        state.orgId = { ...state.orgId, [org_id]: newArr };
-        // state.orgId = action.payload
-        console.log(current(state));
+        delete state.orgId[action.payload];
       })
       .addCase(removeDbThunk.rejected, (state) => {
 
