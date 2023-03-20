@@ -4,15 +4,15 @@ import PopupModal from '../popupModal';
 import Button from '@mui/material/Button';
 // import {findUserByEmail} from "../../api/userApi"
 import { UserAuth } from "../../context/authContext.js"
-import { createOrg } from "../../api/orgApi";
+// import { createOrg } from "../../api/orgApi";
 import { OrgList } from './orgList';
 import { PropTypes } from 'prop-types';
 import { selectOrgandDb } from "../../store/database/databaseSelector.js"
 import { useSelector } from 'react-redux';
+import { createOrgThunk } from '../../store/database/databaseThunk';
 // import makeData from "../../table/makeData"
 // import { bulkAddColumns } from '../../store/table/tableThunk';
-// import { Dispatch } from 'react';
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 
 export default function WorkspaceCombined() {
@@ -22,7 +22,7 @@ export default function WorkspaceCombined() {
     // const [alldbs,setAllDbs] = useState([]);
     // const alldbs =[]
     const alldbs =  useSelector((state) => selectOrgandDb(state)) || [];
-    // const dispatchs=useDispatch();
+    const dispatch = useDispatch();
 
     //state to display modal
     const [org, setOrg] = useState();
@@ -56,7 +56,8 @@ export default function WorkspaceCombined() {
   const saveOrgToDB = async () => {
       // e.preventDefault();
       const userid = localStorage.getItem("userid");
-      await createOrg({name: org,user_id:userid})
+      dispatch(createOrgThunk({name: org,user_id:userid}));
+      // await createOrg({name: org,user_id:userid})
       setOpen(false);
       // await getOrgAndDb();
     };

@@ -6,10 +6,12 @@ import Grid from "@mui/material/Grid";
 import { Box,Card, Typography, TextField, Button, IconButton} from "@mui/material";
 import ControlPointSharpIcon  from '@mui/icons-material/AddSharp';
 // import { createDb } from "../../api/dbApi";
-import { updateOrg, deleteOrg } from "../../api/orgApi";
+// import { deleteOrg } from "../../api/orgApi";
 import PropTypes from "prop-types";
-import { createDbThunk } from "../../store/database/databaseThunk";
+import { createDbThunk, deleteOrgThunk, renameOrgThunk } from "../../store/database/databaseThunk";
 import { useDispatch } from "react-redux";
+import { UserAuth } from "../../context/authContext"
+
 
 
 
@@ -21,33 +23,38 @@ export const OrgList = (props) => {
   const [orgId, setOrg] = useState();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
+  var user = UserAuth();
+
 
   const saveDb = async () => {
     // e.preventDefault();
     const userId = localStorage.getItem("userid");
+    const email = user?.user?.email
+    console.log("emailll",user?.user?.email)
     const data = {
       user_id: userId,
       name: db,
     };
     setOpen(false);
-    dispatch(createDbThunk({orgId, data}));
+    dispatch(createDbThunk({orgId, data,email}));
     // await props?.getOrgAndDbs();
   };
 
   const renameWorkspace = async (orgId) => {
     const userid = localStorage.getItem("userid");
     const data = {
-      name: orgName,
+      name: orgName || name,
     };
-    await updateOrg(orgId, data,userid);
+    dispatch(renameOrgThunk({orgId, data, userid}))
+    // await updateOrg(orgId, data,userid);
     // await props?.getOrgAndDbs();
   };
 
   const deleteOrganization = async () => {
       
     const userid = localStorage.getItem("userid");
-
-    await deleteOrg(props?.orgId,userid);
+    dispatch(deleteOrgThunk({orgId : props?.orgId,userid}))
+    // await deleteOrg(props?.orgId,userid);
     // await props?.getOrgAndDbs();
   };
 

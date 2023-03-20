@@ -1,11 +1,11 @@
 import { current } from '@reduxjs/toolkit';
-import { removeDbThunk, renameDBThunk,createDbThunk,bulkAdd } from './databaseThunk';
+import { removeDbThunk, renameDBThunk,createDbThunk,bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk } from './databaseThunk';
 
 export const initialState = {
     status:'idle',
     orgId: {
        
-    }
+    },
 };
 
 export const reducers = {
@@ -45,6 +45,7 @@ export function extraReducers(builder) {
         state.status = "succeeded";
         // console.log(current(state));
         let arr=state.orgId[action.payload.org_id] || [];
+        // console.log("arr", arr)
        let object =  arr.map((obj)=>{
         if(obj._id == action.payload._id)
           {obj.name= action.payload.name
@@ -72,7 +73,7 @@ export function extraReducers(builder) {
     
       })
       .addCase(bulkAdd.fulfilled, (state,action) => {
-        console.log("state",action.payload);
+        // console.log("state",action.payload);
         state.orgId = action.payload
         state.status = "succeeded";
 
@@ -86,40 +87,49 @@ export function extraReducers(builder) {
         // MDBToast.error("Unable to fetch jamaats.");
       })
 
-    // //   rename Org
+    //   rename Org
 
-    //   .addCase(renameOrg.pending, (state) => {
+      .addCase(renameOrgThunk.pending, (state) => {
   
-    //     state.status ="loading"
-    //   })
-    //   .addCase(renameOrg.fulfilled, (state) => {
+        state.status ="loading"
+      })
+      .addCase(renameOrgThunk.fulfilled, (state,action) => {
 
-    //     state.status = "succeeded";
+        state.status = "succeeded";
+        let arr=state.orgId[action.payload._id] || [];
+        arr.map((obj)=>{
+          obj.org_id.name= action.payload.name
+        })
+        // console.log("arr",current(arr))
+        state.orgId={...state.orgId,[action.payload._id]:arr};
+        // console.log("new state ",current(state))
 
-    //   })
-    //   .addCase(renameOrg.rejected, (state) => {
+      })
+      .addCase(renameOrgThunk.rejected, (state) => {
 
-    //     state.status = "failed";
-    //     // MDBToast.error("Unable to fetch jamaats.");
-    //   })
+        state.status = "failed";
+        // MDBToast.error("Unable to fetch jamaats.");
+      })
 
 
-    //    //   create Org
+       //   create Org
 
-    //    .addCase(createOrg.pending, (state) => {
+       .addCase(createOrgThunk.pending, (state) => {
   
-    //     state.status ="loading"
-    //   })
-    //   .addCase(createOrg.fulfilled, (state) => {
+        state.status ="loading"
+      })
+      .addCase(createOrgThunk.fulfilled, (state) => {
 
-    //     state.status = "succeeded";
+        state.status = "succeeded";
+        
 
-    //   })
-    //   .addCase(createOrg.rejected, (state) => {
 
-    //     state.status = "failed";
-    //     // MDBToast.error("Unable to fetch jamaats.");
-    //   })
+      })
+      .addCase(createOrgThunk.rejected, (state) => {
+
+        state.status = "failed";
+        // MDBToast.error("Unable to fetch jamaats.");
+      })
 
     // //   create Db
 
@@ -128,22 +138,15 @@ export function extraReducers(builder) {
         state.status ="loading"
       })
       .addCase(createDbThunk.fulfilled, (state,action) => {
-
+        console.log(action.payload)
+        state.orgId = action.payload
         state.status = "succeeded";
-        console.log(current(state).orgId);
-        let arr=state.orgId[action.payload.org_id] || [];
-        // console.log(arr);
-        // const data={
-        //   name:action.payload.org_id.name,
-        //   org_id:action.payload.org_id._id,
-        //   _id:action.payload._id,
-        //   con_url: `postgres://postgres:root@localhost/${action.payload.org_id.name}_${action.payload.org_id._id}`
-        // }
-        const newArr=[...arr,action.payload];
-        state.orgId={...state.orgId,[action.payload.org_id]:newArr};
+        // let arr=state.orgId[action.payload.org_id] || [];
+        // const newArr=[...arr,action.payload];
+        // state.orgId={...state.orgId,[action.payload.org_id]:newArr};
+        console.log(current(state));
 
-        console.log(current(state).orgId);
-
+        
       })
       .addCase(createDbThunk.rejected, (state) => {
 
@@ -153,38 +156,39 @@ export function extraReducers(builder) {
 
     //   Delete Org
 
-    // .addCase(deleteOrg.pending, (state) => {
-  
-    //     state.status ="loading"
-    //   })
-    //   .addCase(deleteOrg.fulfilled, (state) => {
-
-    //     state.status = "succeeded";
-
-    //   })
-    //   .addCase(deleteOrg.rejected, (state) => {
-
-    //     state.status = "failed";
-    //     // MDBToast.error("Unable to fetch jamaats.");
-    //   })
-   
-    //   Delete Db
-
-    .addCase(removeDbThunk.pending, (state) => {
+    .addCase(deleteOrgThunk.pending, (state) => {
   
         state.status ="loading"
       })
-      .addCase(removeDbThunk.fulfilled, (state,action) => {
+      .addCase(deleteOrgThunk.fulfilled, (state) => {
 
         state.status = "succeeded";
-        delete state.orgId[action.payload];
+
       })
-      .addCase(removeDbThunk.rejected, (state) => {
+      .addCase(deleteOrgThunk.rejected, (state) => {
 
         state.status = "failed";
         // MDBToast.error("Unable to fetch jamaats.");
       })
-      
-  }
+   
+    //   Delete Db
+
+    .addCase(removeDbThunk.pending, (state) => {
+      state.status ="loading"
+    })
+    .addCase(removeDbThunk.fulfilled, (state,actions) => {
+      state.status = "succeeded";
+      const arr=state.orgId[actions.payload.orgId];
+      const newArr=arr.filter(ele => {
+        return ele._id!==actions.payload.dbId;
+      });
+      state.orgId[actions.payload.orgId]=newArr;
+    })
+    .addCase(removeDbThunk.rejected, (state) => {
+      state.status = "failed";
+      // MDBToast.error("Unable to fetch jamaats.");
+    })
+
+}
   
 
