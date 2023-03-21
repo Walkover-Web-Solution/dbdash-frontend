@@ -76,7 +76,7 @@ const handleTextChange = (event) => {
 }
 FieldPopupModal.propTypes ={
     setOpen:PropTypes.func,
-    open:PropTypes.func,
+    open:PropTypes.bool,
     textValue:PropTypes.any,
     selectValue:PropTypes.any,
     setTextValue:PropTypes.func,

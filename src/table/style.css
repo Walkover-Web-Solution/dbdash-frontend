@@ -186,6 +186,11 @@ html {
   padding: 0.5rem;
   display: flex;
   align-items: center;
+  background-color: #E8E8E8;
+}
+
+.th-content:hover{
+  background-color: #f5f5f5;
 }
 
 .td {

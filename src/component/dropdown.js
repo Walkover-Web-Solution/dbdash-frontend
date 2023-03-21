@@ -69,5 +69,5 @@ Dropdown.propTypes = {
   tableId : PropTypes.string,
   deleteFunction : PropTypes.func, 
   setTabIndex:PropTypes.func,
-  tabIndex:PropTypes.string
+  tabIndex:PropTypes.number
 };

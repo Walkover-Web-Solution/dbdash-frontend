@@ -1,17 +1,20 @@
 import { Box } from '@mui/material'
-import { Link,useNavigate } from "react-router-dom";
+import { Link,useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react'
 import { UserAuth } from "../../context/authContext.js"
 import { findUserByEmail } from "../../api/userApi"
 import { Button, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
 import ApiCrudTablist from './apiCrudTab/apiCrudTablist';
 import { getDbById } from '../../api/dbApi';
+
 import PropTypes from "prop-types";
 export default function Navbar() {
   const [alldbs, setAllDbs] = useState(false);
   const [tables, setTables] = useState({});
   const [dbId,setDbId] = useState("")
   const navigate = useNavigate()
+  const params = useParams()
+  console.log("navigate", location);
   // const [open,setOpen] = useState(true)
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb,setSelectedDb] = useState(null);
@@ -36,10 +39,22 @@ export default function Navbar() {
     allDbs.map((item) => {
       result[item.org_id._id] = result[item.org_id._id] ? [...result[item.org_id._id], item] : [item]
     })
-    setSelectedOption(result?.[Object.keys(result)?.[0]]?.[0]._id);
-    setSelectedDb(result?.[Object.keys(result)?.[0]]?.[0]._id)
-    setDbId(result?.[Object.keys(result)?.[0]]?.[0]._id)
-    await getAllTableName(result?.[Object.keys(result)?.[0]]?.[0]._id)
+    // console.log("result",result)
+    
+    Object.keys(result).forEach(async(orgId) =>{
+      const dbObj = result[orgId].find(db=>db?._id === params.dbId)
+      if(dbObj){
+        setSelectedOption(dbObj._id);
+        setSelectedDb(dbObj._id)
+        setDbId(dbObj._id)
+        await getAllTableName(dbObj._id)
+
+      }
+    })
+    // setSelectedOption(result?.[Object.keys(result)?.[0]]?.[0]._id);
+    // setSelectedDb(result?.[Object.keys(result)?.[0]]?.[0]._id)
+    // setDbId(result?.[Object.keys(result)?.[0]]?.[0]._id)
+    // await getAllTableName(result?.[Object.keys(result)?.[0]]?.[0]._id)
     setAllDbs(result);
     
   }

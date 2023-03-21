@@ -299,7 +299,7 @@ export default function Header({
   return id == 999999 || id == 9999991 ? (
     <>
 
-      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block",backgroundColor: '#E8E8E8' } })} className='th noselect'>
+      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block",backgroundColor: '#E8E8E8'} })} className='th noselect'>
         <div
           className='th-content'
           style={{ display: "flex", justifyContent: "center", }}
@@ -311,18 +311,18 @@ export default function Header({
         <FieldPopupModal title="create column" label="Column Name" setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftColumn} />
 
       </div > :
-        <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
+        <div  {...getHeaderProps({ style: { display: "inline-block"} })} className='th noselect'
           style={{ display: "flex", justifyContent: "center" }}>
           <div
-            className='th-content' style={{ paddingLeft: "25px",backgroundColor: "#E8E8E8" }}>
+            className='th-content' style={{paddingLeft: "25px"}}>
             checkbox
           </div>
         </div>}
     </>
   ) : (
     <>
-      <div {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'>
-        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement} style={{backgroundColor: "#E8E8E8"}}>
+      <div {...getHeaderProps({ style: { display: "inline-block",flex: 'none'}})} className='th noselect'>
+        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
           <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
           {label}
         </div>

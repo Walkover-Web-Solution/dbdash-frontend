@@ -2,12 +2,13 @@ import React, {useState} from 'react'
 import PropTypes from "prop-types";
 import { Box, TextField, Tab,Button, ClickAwayListener} from '@mui/material';
 import Dropdown from '../dropdown';
-import {updateTable, deleteTable } from '../../api/tableApi';
+// import {updateTable, deleteTable } from '../../api/tableApi';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
-export default function SingleTable({dbData,table,setTabIndex,getAllTableName,index,tabIndex,highlightActiveTable}) {
+export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,highlightActiveTable}) {
   const navigate = useNavigate();
   
   const [tableNa, setTableNa] = useState(null);
@@ -27,15 +28,12 @@ export default function SingleTable({dbData,table,setTabIndex,getAllTableName,in
   const renameTableName = async (db_id, tableName) => {
     const data1 = {
       newTableName: tableNa || table[0]
-      
     };
-    await updateTable(db_id,tableName, data1);
-    await getAllTableName(dbData?.db?._id, dbData?.db?.org_id?._id);
+    dispatch(updateTable1({"dbId":dbData?.db?._id,"tableName":tableName, "data1":data1}));
     setTableNa(null);
   };
   const deleteTableName = async (tableid) => {
-    await deleteTable(dbData?.db?._id, tableid);
-    await getAllTableName(dbData?.db?._id, dbData?.db?.org_id?._id);
+    dispatch(removeTable1({"dbId":dbData?.db?._id, "tableid":tableid}));
   };
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
@@ -81,7 +79,7 @@ export default function SingleTable({dbData,table,setTabIndex,getAllTableName,in
                     <TextField
                       // onBlur={handleOpen}
                       defaultValue ={table[1]?.tableName || table[0]}
-                      autoFocus sx={{ width: 75, fontWeight: 'bold' }} value={tableNa  }
+                      autoFocus sx={{ width: 75, fontWeight: 'bold' }} value={tableNa}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           renameTableName(dbData?.db?._id,table[0]);
@@ -130,7 +128,7 @@ export default function SingleTable({dbData,table,setTabIndex,getAllTableName,in
 }
 SingleTable.propTypes = {
   dbData: PropTypes.any,
-  table: PropTypes.string,
+  table: PropTypes.array,
   dbId: PropTypes.string,
   label : PropTypes.any,
   dropdown:PropTypes.any,

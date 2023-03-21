@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PopupModal from '../popupModal';
-import { createTable } from '../../api/tableApi';
-import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
 import SingleTable from './singleTable';
 import {useNavigate} from "react-router-dom";
 import Tabs from '@mui/material/Tabs';
 import { bulkAddColumns } from '../../store/table/tableThunk';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
+import { getAllTableInfo } from '../../store/allTable/allTableSelector';
+import { createTable1, getTable1 } from '../../store/allTable/allTableThunk';
 
 export default function TablesList({dbData,tables,setTables}) {
   const dispatch= useDispatch();
@@ -23,15 +23,15 @@ export default function TablesList({dbData,tables,setTables}) {
   const [tabIndex,setTabIndex]= useState(-1);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+
   const saveTable = async () => {
-    const dbId = dbData?.db._id;
     const data = {
       tableName: table
     }
-    await createTable(dbId, data);
     setOpen(false);
-    getAllTableName(dbData?.db?._id, dbData?.db?.org_id?._id);
+    dispatch(createTable1({"dbId":dbData?.db?._id,"data":data}));
+    
   };
   useEffect(() => {
     if (dbData) {
@@ -47,8 +47,8 @@ export default function TablesList({dbData,tables,setTables}) {
       }));
     }
   }, [tables])
-  const getAllTableName = async (dbId, orgId) => {
-    const data = await getDbById(dbId, orgId)
+  const getAllTableName = async (dbId) => {
+    const data = await dispatch(getTable1({ "dbId":dbId}));
     setTables(data.data.data.tables || {});
     return data;
   }
@@ -64,7 +64,7 @@ export default function TablesList({dbData,tables,setTables}) {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
-          {Object.entries(tables).map((table, index) => (
+          {Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
               <SingleTable table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex} getAllTableName={getAllTableName} index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
