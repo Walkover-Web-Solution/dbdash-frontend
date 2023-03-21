@@ -79,7 +79,7 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
                     <TextField
                       // onBlur={handleOpen}
                       defaultValue ={table[1]?.tableName || table[0]}
-                      autoFocus sx={{ width: 75, fontWeight: 'bold' }} value={tableNa  }
+                      autoFocus sx={{ width: 75, fontWeight: 'bold' }} value={tableNa}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           renameTableName(dbData?.db?._id,table[0]);
