@@ -1,45 +1,39 @@
-import React, { useState} from "react";
-import { Card, CardContent, Typography, Box, TextField ,Button} from "@mui/material";
+import React, { useState } from "react";
+import { Card, CardContent, Typography, Box, TextField, Button } from "@mui/material";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import PropTypes from "prop-types";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "../dropdown";
-// import { deleteDb } from "../../api/dbApi";
 import { useDispatch } from "react-redux";
-// import { updateDb } from "../../store/database/databaseSlice";
 import { removeDbThunk, renameDBThunk } from "../../store/database/databaseThunk";
 
-// import {deleteDb} from '../api/dbApi.js';
 export default function SingleDatabase(props) {
-  // console.log("Props of singleDatabase",props)
-
 
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState();
   const navigate = useNavigate();
-  const dispatch=useDispatch();
-  
-  // const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+
   const renameDatabase = async (orgId, id, name) => {
     const data = {
       name: dbname || name,
     };
-    // await renameDb(orgId, id, data);
-    dispatch(renameDBThunk({orgId, id, data}))
-    // await props.getOrgAndDbs();
+    console.log("in rename databse", orgId, id, data);
+    dispatch(renameDBThunk({ orgId, id, data }))
+    setDbname();
   };
   const handleOpen = () => {
     setName(false);
   };
 
   const deletDatabases = async () => {
-    if( props?.db?.org_id?._id){
-      dispatch(removeDbThunk({orgId: props?.db?.org_id?._id, dbId: props?.db?._id}));
+    if (props?.db?.org_id?._id) {
+      dispatch(removeDbThunk({ orgId: props?.db?.org_id?._id, dbId: props?.db?._id }));
     }
-    else if(props?.db?.org_id){
-      dispatch(removeDbThunk({orgId: props?.db?.org_id, dbId: props?.db?._id}));
+    else if (props?.db?.org_id) {
+      dispatch(removeDbThunk({ orgId: props?.db?.org_id, dbId: props?.db?._id }));
     }
- 
+
   };
   return (  
     // <Link
@@ -57,84 +51,84 @@ export default function SingleDatabase(props) {
           
             <ClickAwayListener onClickAway={handleOpen} >
               <Box>
-              <TextField
-                // onBlur={handleOpen}
-                autoFocus
-                sx={{ width: 120, fontWeight: "bold" }}
-                defaultValue={props?.db?.name}
-                value={dbname}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
+                <TextField
+                  // onBlur={handleOpen}
+                  autoFocus
+                  sx={{ width: 120, fontWeight: "bold" }}
+                  defaultValue={props?.db?.name}
+                  value={dbname}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      renameDatabase(
+                        props.db.org_id?._id,
+                        props.db._id,
+                        props.db.name
+
+                      );
+                      setName(false);
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onChange={(e) => {
+                    setDbname(e.target.value);
+                  }}
+                  size="small"
+                />
+                <Button
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setName(false)
                     renameDatabase(
                       props.db.org_id?._id,
                       props.db._id,
                       props.db.name
                     );
-                    setName(false);
-                  }
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-                onChange={(e) => {
-                  setDbname(e.target.value);
-                }}
-                size="small"
-              />
-              <Button
-              type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setName(false)
-                  renameDatabase(
-                    props.db.org_id?._id,
-                    props.db._id,
-                    props.db.name
-                  );
 
-                }}
-                variant="contained"
-                sx={{
-                  width: "8rem",
-                  backgroundColor: "#1C2833",
-                  fontSize: "12px",
-                  mx: 3,
-                  zIndex :"555",
-                  ":hover": {
-                    bgcolor: "#273746",
-                    color: "white",
-                    border: 0,
-                    borderColor: "#1C2833",
-                  },
-                }}
-              >
-                Rename
-              </Button>
+                  }}
+                  variant="contained"
+                  sx={{
+                    width: "8rem",
+                    backgroundColor: "#1C2833",
+                    fontSize: "12px",
+                    mx: 3,
+                    zIndex: "555",
+                    ":hover": {
+                      bgcolor: "#273746",
+                      color: "white",
+                      border: 0,
+                      borderColor: "#1C2833",
+                    },
+                  }}
+                >
+                  Rename
+                </Button>
               </Box>
-              </ClickAwayListener>
-            </>
-          ) : (
-            <>
-              <Typography sx={{ fontWeight: "bold" }}>
-                {props.db.name}{" "}
-              </Typography>
-              <Box sx={{ mt: -1 }}>
-                <Dropdown
-                  first={"Rename Database"}
-                  second={"Delete Database"}
-                  setName={setName}
-                  idToDelete={props?.db?._id}
-                  deleteFunction={deletDatabases}
-                  title={"Database"}
-                />
-              </Box>
-            </>
-          )}
-        </CardContent>
-      </Card>
-    // </Link>
+            </ClickAwayListener>
+          </>
+        ) : (
+          <>
+            <Typography sx={{ fontWeight: "bold" }}>
+              {props.db.name}{" "}
+            </Typography>
+            <Box sx={{ mt: -1 }}>
+              <Dropdown
+                first={"Rename Database"}
+                second={"Delete Database"}
+                setName={setName}
+                idToDelete={props?.db?._id}
+                deleteFunction={deletDatabases}
+                title={"Database"}
+              />
+            </Box>
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 SingleDatabase.propTypes = {
