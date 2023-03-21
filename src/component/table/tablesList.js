@@ -48,7 +48,7 @@ export default function TablesList({dbData,tables,setTables}) {
     }
   }, [tables])
   const getAllTableName = async (dbId) => {
-    const data = dispatch(getTable1({ "dbId":dbId}));
+    const data = await dispatch(getTable1({ "dbId":dbId}));
     setTables(data.data.data.tables || {});
     return data;
   }
