@@ -5,9 +5,8 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
-
-// import { createOrg } from "../api/orgApi";
+import useValidator from "react-joi";
+import Joi from "joi";
 
 const style = {
   position: "absolute",
@@ -22,8 +21,34 @@ const style = {
 };
 
 export default function PopupModal(props) {
-  // const [org, setOrg] = React.useState();
   const handleClose = () => props.setOpen(false);
+
+  const { state, setData, setExplicitField,validate} = useValidator({
+    initialData: {
+      [props?.id]: null,
+    },
+    schema: Joi.object({
+      [props?.id]: Joi.string().min(5).required(),
+    }),
+    explicitCheck: {
+      [props?.id]: false,
+    },
+    validationOptions: {
+      abortEarly: true,
+    },
+  });
+
+const createProjectJoi = (e) => {
+    
+    e.persist();
+
+    setData((old) => ({
+        ...old,
+        [props?.id]: e.target.value,
+    }));
+};
+
+
   return (
     <Box>
       <Modal
@@ -39,6 +64,13 @@ export default function PopupModal(props) {
           </Typography>
           <Box sx={{ my: 2 }}>
             <TextField
+             error={
+              state?.$errors?.[props?.id].length === 0
+                  ? false
+                  : state.$errors?.[props?.id]
+                      ? true
+                      : false
+          }
              autoFocus
               id={props?.id}
               name={props?.id}
@@ -46,7 +78,9 @@ export default function PopupModal(props) {
               variant="standard"
               onChange={(e) => {
                 props.setVariable(e.target.value);
+                createProjectJoi(e);
               }}
+              onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   props.submitData(e);
@@ -54,13 +88,15 @@ export default function PopupModal(props) {
                 }
               }}
             />
+             <div style={{ color: "red", fontSize: "12px" }}>
+                    {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
+                </div>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
               <Button variant="contained" onClick={()=>{
-                  // props?.saveFunction ();
                   props?.submitData();
-                 
+                  validate();
               }}>
                 Create
               </Button>
