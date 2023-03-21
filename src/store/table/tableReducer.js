@@ -212,7 +212,7 @@ export const reducers = {
               ...state.columns.slice(typeIndex + 1, state.columns.length)
             ],
             skipReset: true
-          };
+          };  
         }
       case "text":
         if (state.columns[typeIndex].dataType === "text") {

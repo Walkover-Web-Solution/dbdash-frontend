@@ -17,6 +17,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
+  // const [open,setOpen] = useState(false)
   const onChange = (e) => {
     setValue({value: e.target.value, update: false});
   };
@@ -80,6 +81,8 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
     setShowAdd(false);
   }
 
+  console.log(open);
+
   const {styles, attributes} = usePopper(selectRef, selectPop, {
     placement: "bottom-start",
     strategy: "fixed"
@@ -107,6 +110,21 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         }}
         />
       );
+      break;
+      case "datetime":
+        // {console.log(value)}
+      element = 
+      // (open===false?
+      //  <input onClick={()=>setOpen(true)} />:
+        
+      ( <input type="datetime-local" id="meeting-time" name="meeting-time"
+        min="2023-03-20T00:00" max="2023-12-31T23:59" 
+        value ={new Date(value.value || null)?.toISOString()?.slice(0,16)}
+        
+        onChange={onChange}
+        // onClick={()=>setOpen(true)}
+        onBlur={() => setValue((old) => ({value: old.value, update: true}))}
+        />);
       break;
     case "text":
       element = (

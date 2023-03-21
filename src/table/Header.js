@@ -206,6 +206,17 @@ export default function Header({
       icon: <CheckIcon fontSize="2px" />,
       label: "checkbox"
     },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "datetime"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      label: "date and time"
+    },
   ];
 
   let propertyIcon;
@@ -213,7 +224,10 @@ export default function Header({
     case "varchar":
       propertyIcon = <TextIcon />;
       break;
-      case "checkbox":
+    case "datetime":
+      propertyIcon = <TextIcon />;
+      break;
+    case "checkbox":
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
     case "integer":
