@@ -137,6 +137,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         onClick={(e)=>{ if(e.detail == 2){
           console.log("hello")
           setInputBoxShow(true);
+          console.log(interviewDateRef.current);
           interviewDateRef.current.focus();
           interviewDateRef.current.showPicker();
         }}}/>
