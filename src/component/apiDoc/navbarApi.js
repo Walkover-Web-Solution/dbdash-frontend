@@ -104,8 +104,8 @@ export default function Navbar() {
   
       {Object.keys(tables).length >=1 && <Box >
          <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
-          <Select value={selectTable}
+          <InputLabel htmlFor="grouped-select" >Tables-Name</InputLabel>
+          <Select value={selectTable}  label="Tables-Name"
             onChange={handleChangeTable} >
             {Object.entries(tables)?.map((table) => (
               <MenuItem key={table[0]} value={table[0]} >
