@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PopupModal from '../popupModal';
+import FilterModal from "../filterPopUp"
 import PropTypes from "prop-types";
 import SingleTable from './singleTable';
-import {useNavigate} from "react-router-dom";
+import {useNavigate,useParams} from "react-router-dom";
 import Tabs from '@mui/material/Tabs';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +14,8 @@ import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import { createTable1, getTable1 } from '../../store/allTable/allTableThunk';
 
 export default function TablesList({dbData,tables,setTables}) {
+  const params = useParams();
+  console.log("params",params)
   const dispatch= useDispatch();
   const [value, setValue] = React.useState(0);  
   const navigate =useNavigate();
@@ -22,7 +25,10 @@ export default function TablesList({dbData,tables,setTables}) {
   const [table, setTable] = useState();
   const [tabIndex,setTabIndex]= useState(-1);
   const [open, setOpen] = useState(false);
+  const [openn,setOpenn] = useState(false)
   const handleOpen = () => setOpen(true);
+  const handleOpenn = () => setOpenn(true);
+
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
 
   const saveTable = async () => {
@@ -48,9 +54,23 @@ export default function TablesList({dbData,tables,setTables}) {
     }
   }, [tables])
   const getAllTableName = async (dbId) => {
-    const data = await dispatch(getTable1({ "dbId":dbId}));
-    setTables(data.data.data.tables || {});
+    const data =  dispatch(getTable1({ "dbId":dbId}));
+    setTables(data?.data?.data?.tables || {});
     return data;
+    // const getAllTableName = (dbId) => {
+    //   return new Promise((resolve, reject) => {
+    //     try {
+    //       dispatch(getTable1({ "dbId": dbId })).then((data) => {
+    //         setTables(data.data.data.tables || {});
+    //         resolve(data);
+    //       }).catch((error) => {
+    //         reject(error);
+    //       });
+    //     } catch (error) {
+    //       reject(error);
+    //     }
+    //   });
+    // };
   }
   
   return (
@@ -74,8 +94,13 @@ export default function TablesList({dbData,tables,setTables}) {
         </Box>
         <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 }} >
           Add Table
-        </Button> </Box>
+        </Button>                 
+        </Box>
+        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
+          Filter
+        </Button> 
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
+        <FilterModal open={openn} setOpen={setOpenn} dbId={params?.dbId} tableName={params?.tableName}/>
         <MainTable/>
     </>
   );

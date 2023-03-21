@@ -81,8 +81,6 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
     setShowAdd(false);
   }
 
-  console.log(open);
-
   const {styles, attributes} = usePopper(selectRef, selectPop, {
     placement: "bottom-start",
     strategy: "fixed"

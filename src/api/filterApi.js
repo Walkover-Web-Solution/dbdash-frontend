@@ -3,6 +3,7 @@ const URL = process.env.REACT_APP_API_BASE_URL;
 
 const createFilter = async (db_id,tableName,data) =>
 {
+    console.log(db_id,tableName,data)
     return await axios.post(URL +`/dbs/${db_id}/${tableName}/filter`,data)
 }
 

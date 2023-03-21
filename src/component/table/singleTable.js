@@ -47,6 +47,7 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
 
   return (
     <> 
+    <Button>FILTER</Button>
     <Box
               sx={{
                 p: '5px',
