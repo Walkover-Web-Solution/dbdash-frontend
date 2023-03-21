@@ -20,9 +20,23 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
 
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <Tab label={label} />
-      {dropdown}
-    </Box>
+    <Tab  label={label.length > 10 ? (
+     <> {`${label.slice(0, 10)}...`}
+    {dropdown}
+         </>) : (
+                     <>
+                  {label}
+                  {dropdown}
+                   </>
+                  )}
+                sx={{
+         minWidth: 'auto',
+       overflowX: 'auto',
+       flexDirection:'row'
+           }}
+    title={label}
+   />
+ </Box>
   );
 
   const renameTableName = async (db_id, tableName) => {
@@ -56,7 +70,7 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
                 // minWidth: '175px',
                 // maxWidth: '200px',
-                width: "135px",
+                // width: "135px",
                 textAlign: 'center',
                 //textOverflow: 'ellipsis',
                 overflow: 'hidden',

@@ -7,16 +7,6 @@ import MainNavbar from "../component/mainNavbar";
 
 
 function ApiDocPage() {
-    // const location = useLocation();
-    // const [dbData, setDbData] = useState(null);
-
-    // useEffect(() => {   
-    //     if (location?.state) {
-    //         setDbData(location?.state);
-    //     } else {
-    //         // handle case where no data was passed
-    //     }
-    // }, [props?.location?.state]);
 
     return (
         <>
@@ -30,8 +20,4 @@ function ApiDocPage() {
 }
 
 export default ApiDocPage;
-// apidocPage.propTypes = {
-//     location: PropTypes.shape({
-//         state: PropTypes.object
-//     })
-// };
+

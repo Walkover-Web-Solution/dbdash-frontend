@@ -7,8 +7,11 @@ import { Link } from 'react-router-dom'
 import { Divider } from "@mui/material";
 import MainNavbar from "../component/mainNavbar";
 import { getDbById } from "../api/dbApi";
+import {  getTable1 } from '../store/allTable/allTableThunk';
+import { useDispatch } from "react-redux";
 function DbDetails() {
     var {dbId} = useParams();
+    const dispatch = useDispatch()
     // const location = useLocation();
     const [tables, setTables] = useState(0);
     const [dbData, setDbData] = useState(null);
@@ -17,6 +20,8 @@ function DbDetails() {
         //     setDbData(location?.state);
         // } else {
             getAllTableName(dbId);
+            if(dbId)
+            dispatch(getTable1({ "dbId":dbId}));
             // handle case where no data was passed
         // }
     }, [dbId]);
