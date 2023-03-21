@@ -24,18 +24,18 @@ export const bulkAdd = createAsyncThunk (
 
 export const createDbThunk = createAsyncThunk (
     "organdDb/createDbThunk", async (payload ) =>{
-       await createDb(payload.orgId, payload.data);      
+       const data =await createDb(payload.orgId, payload.data);      
         // dispatch(bulkAdd({data:data.data.data}));
 
         console.log("email,",payload)
-        // return data?.data?.data;
-        const data = await findUserByEmail(payload?.email);  
-        localStorage.setItem("userid",data?.data?.data?._id);
-        var result = {};
-        data?.data?.data?.dbs.map((item)=>{        
-            result[item.org_id._id]=result[item.org_id._id]?[...result[item.org_id._id],item]:[item]
-        })    
-      return result;
+        return data?.data?.data;
+    //     const data = await findUserByEmail(payload?.email);  
+    //     localStorage.setItem("userid",data?.data?.data?._id);
+    //     var result = {};
+    //     data?.data?.data?.dbs.map((item)=>{        
+    //         result[item.org_id._id]=result[item.org_id._id]?[...result[item.org_id._id],item]:[item]
+    //     })    
+    //   return result;
 
     }
 );
@@ -72,18 +72,15 @@ export const renameOrgThunk = createAsyncThunk (
 export const deleteOrgThunk = createAsyncThunk (
     "organdDb/deleteOrgThunk", async (payload) =>{
         // dispatch(renameDb());
-        const data=await deleteOrg(payload.orgId,payload.userid);
-        return data.data.data;
+        await deleteOrg(payload.orgId,payload.userid);
+        return payload.orgId;
     }
 );
 
 export const createOrgThunk = createAsyncThunk (
     "organdDb/createOrgThunk", async (payload) =>{
-        // dispatch(renameDb());
         const data=await createOrg({name:payload.name,user_id: payload.user_id});
-        console.log(data);
-        // return data.data.data;
-        console.log(payload);
-        return 8;
+        // console.log(data);
+        return data.data.data;
     }
 );

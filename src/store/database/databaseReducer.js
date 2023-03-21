@@ -1,4 +1,4 @@
-import { current } from '@reduxjs/toolkit';
+// import { current } from '@reduxjs/toolkit';
 import { removeDbThunk, renameDBThunk,createDbThunk,bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk } from './databaseThunk';
 
 export const initialState = {
@@ -118,12 +118,12 @@ export function extraReducers(builder) {
   
         state.status ="loading"
       })
-      .addCase(createOrgThunk.fulfilled, (state) => {
+      .addCase(createOrgThunk.fulfilled, (state,action) => {
 
         state.status = "succeeded";
-        
-
-
+        let arr=state.orgId[action.payload.org_id._id] || [];
+        const newArr=[...arr,action.payload];
+        state.orgId={...state.orgId,[action.payload.org_id._id]:newArr};
       })
       .addCase(createOrgThunk.rejected, (state) => {
 
@@ -138,14 +138,10 @@ export function extraReducers(builder) {
         state.status ="loading"
       })
       .addCase(createDbThunk.fulfilled, (state,action) => {
-        console.log(action.payload)
-        state.orgId = action.payload
         state.status = "succeeded";
-        // let arr=state.orgId[action.payload.org_id] || [];
-        // const newArr=[...arr,action.payload];
-        // state.orgId={...state.orgId,[action.payload.org_id]:newArr};
-        console.log(current(state));
-
+        let arr=state.orgId[action.payload.org_id._id] || [];
+        const newArr=[...arr,action.payload];
+        state.orgId={...state.orgId,[action.payload.org_id._id]:newArr};
         
       })
       .addCase(createDbThunk.rejected, (state) => {
@@ -160,9 +156,12 @@ export function extraReducers(builder) {
   
         state.status ="loading"
       })
-      .addCase(deleteOrgThunk.fulfilled, (state) => {
+      .addCase(deleteOrgThunk.fulfilled, (state,action) => {
 
         state.status = "succeeded";
+        let arr=state.orgId;
+        delete arr[action.payload];
+        state.orgId ={...arr}
 
       })
       .addCase(deleteOrgThunk.rejected, (state) => {

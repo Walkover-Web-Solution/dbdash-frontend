@@ -15,7 +15,7 @@ export default function SingleDatabase(props) {
 
 
   const [name, setName] = useState(false);
-  const [dbname, setDbname] = useState("");
+  const [dbname, setDbname] = useState();
   const navigate = useNavigate();
   const dispatch=useDispatch();
   
@@ -54,13 +54,14 @@ export default function SingleDatabase(props) {
         <CardContent sx={{ display: "flex" }}>
           {name ? (
             <>
+          
             <ClickAwayListener onClickAway={handleOpen} >
               <Box>
               <TextField
                 // onBlur={handleOpen}
                 autoFocus
                 sx={{ width: 120, fontWeight: "bold" }}
-                defaultValue={props.db.name}
+                defaultValue={props?.db?.name}
                 value={dbname}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {

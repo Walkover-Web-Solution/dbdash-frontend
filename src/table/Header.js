@@ -17,7 +17,7 @@ import { addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType 
 // import PopupModal from "../component/popupModal";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
-
+import CheckIcon from '@mui/icons-material/Check';
 
 
 export default function Header({
@@ -193,13 +193,28 @@ export default function Header({
       },
       icon: <TextIcon />,
       label: "Varchar"
-    }
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "checkbox"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <CheckIcon fontSize="2px" />,
+      label: "checkbox"
+    },
   ];
 
   let propertyIcon;
   switch (dataType) {
     case "varchar":
       propertyIcon = <TextIcon />;
+      break;
+      case "checkbox":
+      propertyIcon = <CheckIcon fontSize="2px" />;
       break;
     case "integer":
       propertyIcon = <HashIcon />;
