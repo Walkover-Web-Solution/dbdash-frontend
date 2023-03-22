@@ -101,6 +101,24 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
 
   let element;
   switch (dataType) {
+    case "createdby" :
+      element = (
+        <input type ="text"
+        readOnly="readonly"
+        defaultValue ={(value?.value && value?.value?.toString()) || ""}
+        className='data-input'
+      />
+      );
+      break;
+      case "createdat" :
+        element = (
+          <input type ="text"
+          readOnly="readonly"
+          defaultValue ={(value?.value && value?.value?.toString()) || ""}
+          className='data-input'
+        />
+        );
+        break;
     case "checkbox":
       element = (
         <input type="checkbox" 
@@ -111,7 +129,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         />
       );
       break;
-      case "datetime":
+    case "datetime":
         // {console.log(value)}
       element = 
       // (open===false?
