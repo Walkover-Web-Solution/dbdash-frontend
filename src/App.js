@@ -33,10 +33,6 @@ function App() {
       <Route exact path="*" element={<Navigate to="/notFound" />} />
     </Routes>
 
-
-
-
-    
     </AuthContextProvider>
 
 

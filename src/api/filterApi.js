@@ -3,7 +3,6 @@ const URL = process.env.REACT_APP_API_BASE_URL;
 
 const createFilter = async (db_id,tableName,data) =>
 {
-    console.log(db_id,tableName,data)
     return await axios.post(URL +`/dbs/${db_id}/${tableName}/filter`,data)
 }
 
@@ -22,13 +21,16 @@ const updateQuery = async (db_id,tableName,data) =>
     return await axios.patch(URL +`/dbs/${db_id}/${tableName}/updateQuery`,data)
 }
 
-
-
+const runQueryonTable = async(dbId,data)=>{
+    console.log("data",data)
+    return await axios.post(URL +`/dbs/${dbId}/runQuery`,{filter:data})
+}
 
 
 export{
     createFilter,
     updateFilterName,
     deleteFilter,
-    updateQuery
+    updateQuery,
+    runQueryonTable
  }

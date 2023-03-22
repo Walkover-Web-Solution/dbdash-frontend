@@ -10,19 +10,32 @@ import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
 export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,highlightActiveTable}) {
   const navigate = useNavigate();
-  
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
   const [name,setName] = useState();
-
+  const [filter,setFilter] = useState({})
   const dispatch= useDispatch();
- 
+//  console.log(table)
 
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <Tab label={label} />
-      {dropdown}
-    </Box>
+    <Tab  label={label.length > 10 ? (
+     <> {`${label.slice(0, 10)}...`}
+    {dropdown}
+         </>) : (
+                     <>
+                  {label}
+                  {dropdown}
+                   </>
+                  )}
+                sx={{
+         minWidth: 'auto',
+       overflowX: 'auto',
+       flexDirection:'row'
+           }}
+    title={label}
+   />
+ </Box>
   );
 
   const renameTableName = async (db_id, tableName) => {
@@ -37,6 +50,7 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
   };
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
+    setFilter(table[1]?.filters)
     dispatch(bulkAddColumns({
       "dbId":dbData?.db?._id,
       "tableName": table[0]
@@ -45,9 +59,16 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
     highlightActiveTable()
   }
 
+  function onFilterClicked(filter){
+    dispatch(bulkAddColumns({
+      "dbId":dbData?.db?._id,
+      "tableName": table[0],
+      "filter":filter
+    }));
+  }
+
   return (
     <> 
-    <Button>FILTER</Button>
     <Box
               sx={{
                 p: '5px',
@@ -57,7 +78,7 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
                 // minWidth: '175px',
                 // maxWidth: '200px',
-                width: "135px",
+                // width: "135px",
                 textAlign: 'center',
                 //textOverflow: 'ellipsis',
                 overflow: 'hidden',
@@ -123,6 +144,16 @@ export default function SingleTable({dbData,table,setTabIndex,index,tabIndex,hig
                   </>)
                 }
               </Box>
+              {filter && Object.entries(filter).map((filter, index) => (
+                  <Box key={index} >
+                    <Button 
+                    onClick={()=>{
+                      onFilterClicked(filter[1].query)
+                    }}
+                    >{filter[0]}</Button>
+                  </Box>
+            ))
+          }
     </>
     
   )

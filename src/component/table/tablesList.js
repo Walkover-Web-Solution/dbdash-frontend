@@ -11,12 +11,11 @@ import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
 import { getAllTableInfo } from '../../store/allTable/allTableSelector';
-import { createTable1, getTable1 } from '../../store/allTable/allTableThunk';
+import { createTable1} from '../../store/allTable/allTableThunk';
 
-export default function TablesList({dbData,tables,setTables}) {
-  const params = useParams();
-  console.log("params",params)
+export default function TablesList({dbData}) {
   const dispatch= useDispatch();
+  const params = useParams();
   const [value, setValue] = React.useState(0);  
   const navigate =useNavigate();
   const handleChange = (event, newValue) => {
@@ -40,39 +39,15 @@ export default function TablesList({dbData,tables,setTables}) {
     
   };
   useEffect(() => {
-    if (dbData) {
-      getAllTableName(dbData?.db?._id, dbData?.db?.org_id?._id);
+    if(dbData?.db?.tables)
+    {
+        dispatch(bulkAddColumns({
+          "dbId":dbData?.db?._id,
+          "tableName": Object.keys(dbData?.db?.tables)[0]
+        }));
+        navigate(`/db/${dbData?.db?._id}/table/${Object.keys(dbData?.db?.tables)[0]}`);   
     }
-  }, [dbData]);
-  useEffect(() => {
-    if (Object.entries(tables)?.length >0){
-      navigate(`/db/${dbData?.db?._id}/table/${Object.keys(tables)[0]}`);
-      dispatch(bulkAddColumns({
-        "dbId":dbData?.db?._id,
-        "tableName": Object.keys(tables)[0]
-      }));
-    }
-  }, [tables])
-  const getAllTableName = async (dbId) => {
-    const data =  dispatch(getTable1({ "dbId":dbId}));
-    setTables(data?.data?.data?.tables || {});
-    return data;
-    // const getAllTableName = (dbId) => {
-    //   return new Promise((resolve, reject) => {
-    //     try {
-    //       dispatch(getTable1({ "dbId": dbId })).then((data) => {
-    //         setTables(data.data.data.tables || {});
-    //         resolve(data);
-    //       }).catch((error) => {
-    //         reject(error);
-    //       });
-    //     } catch (error) {
-    //       reject(error);
-    //     }
-    //   });
-    // };
-  }
-  
+  }, [dbData])
   return (
     <>
       <Box sx={{ width: "100%", display: "flex", height: "auto" }}>
@@ -86,7 +61,7 @@ export default function TablesList({dbData,tables,setTables}) {
       >
           {Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
-              <SingleTable table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex} getAllTableName={getAllTableName} index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
+              <SingleTable table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
             ))
           }
@@ -96,11 +71,13 @@ export default function TablesList({dbData,tables,setTables}) {
           Add Table
         </Button>                 
         </Box>
+        
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
           Filter
         </Button> 
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
-        <FilterModal open={openn} setOpen={setOpenn} dbId={params?.dbId} tableName={params?.tableName}/>
+        <FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName}/>
+        
         <MainTable/>
     </>
   );

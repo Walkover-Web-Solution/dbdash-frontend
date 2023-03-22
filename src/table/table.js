@@ -201,8 +201,8 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
                     cellsSelected[cell.id]
                       ? { ...cell.getCellProps().style, 
                         // backgroundColor: '#6beba80'
-                       userSelect: 'none',flex: 'none' }
-                      : {...cell.getCellProps().style, userSelect: 'none',flex: 'none' }
+                       userSelect: 'none',flex: 'none' ,}
+                      : {...cell.getCellProps().style, userSelect: 'none',flex: 'none',height:'30px' }
 
                   }
                   className='td'> 

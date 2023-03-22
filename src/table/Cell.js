@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import ContentEditable from "react-contenteditable";
 import Relationship from "./Relationship";
 import {usePopper} from "react-popper";
@@ -23,6 +23,8 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
   };
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
+  const interviewDateRef = useRef();
+  const [inputBoxShow,setInputBoxShow] = useState(false)
   useEffect(() => {
 
     setValue({value: initialValue, update: false});
@@ -115,14 +117,33 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
       // (open===false?
       //  <input onClick={()=>setOpen(true)} />:
         
-      ( <input type="datetime-local" id="meeting-time" name="meeting-time"
-        min="2023-03-20T00:00" max="2023-12-31T23:59" 
+      ( 
+        <>
+      
+      <input type="datetime-local" id="meeting-time" name="meeting-time"
+        min="2023-03-20T00:00" max="2023-12-31T23:59" ref ={interviewDateRef} 
         value ={new Date(value.value || null)?.toISOString()?.slice(0,16)}
-        
+        onClick={(e)=>{ if(e.detail == 2){
+          console.log("hello")
+        }}}
         onChange={onChange}
+        style={{"display":inputBoxShow?"block":"none"}}
         // onClick={()=>setOpen(true)}
+
         onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-        />);
+        />
+        <input type ="text" 
+         style={{"display":inputBoxShow?"none":"block"}}
+        onClick={(e)=>{ if(e.detail == 2){
+          console.log("hello")
+          setInputBoxShow(true);
+          console.log(interviewDateRef.current);
+          interviewDateRef.current.focus();
+          interviewDateRef.current.showPicker();
+        }}}/>
+        </>
+     
+        );
       break;
     case "text":
       element = (

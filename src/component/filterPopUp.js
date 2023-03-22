@@ -28,10 +28,6 @@ export default function FilterModal(props) {
   const [table,setTable] = useState();
   const [filterName,setFilterName] = useState('');
   const [valuee,setValuee] = useState('');
-//   console.log(table)
-
-  console.log(fieldData)
-console.log(selectedOption)
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -43,17 +39,14 @@ console.log(selectedOption)
 
   useEffect(()=>{
     tableData();
-  },[])
+  },[props])
   const tableData = async () => {
-    const data = await getAllfields(props.dbId, props.tableName)
+
+    const data = await getAllfields(props?.dbId, props?.tableName)
     setFieldData(data?.data?.data?.fields)
-    console.log(fieldData)
   }
 
   const getQueryData = async()=>{
-    console.log(selectedOption);
-    console.log(filterName);
-    console.log(table);
     let query = "";
     if(selectedOption == "LIKE" || selectedOption == "NOT LIKE" )
     {
@@ -116,6 +109,7 @@ console.log(selectedOption)
             <Box>
               <Button variant="contained" onClick={()=>{
                 getQueryData();
+                handleClose()
               }}>
                 Create
               </Button>
