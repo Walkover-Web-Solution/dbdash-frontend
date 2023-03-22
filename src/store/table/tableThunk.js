@@ -126,7 +126,7 @@ export const updateCells = createAsyncThunk(
     async(payload,{dispatch,getState})=>{
        const {tableId, dbId} = getState().table
        const value = payload.value
-       const  columnId= payload.columnId
+       const  columnId= payload.columnId;
        await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
         dispatch(updateCell(payload));
         return payload;

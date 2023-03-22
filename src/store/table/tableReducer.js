@@ -121,28 +121,57 @@ export const reducers = {
 
     }
   },
+
+
   updateTableData(state, payload) {
 
     return {
       ...state, data: payload.payload
     }
   },
+
+  
+  
+
   updateCell(state, payload) {
+    
     const action = payload.payload
-    return {
-      ...state,
-      skipReset: true,
-      data: state.data.map((row, index) => {
-        if (index === action.rowIndex) {
-          return {
-            ...state.data[action.rowIndex],
-            [action.columnId]: action.value
-          };
-        }
-        return row;
-      })
-    };
+    // console.log(action);
+    // console.log(current(state));
+    // console.log(current(state));
+
+    state.skipReset=true;
+    let arr= [];
+    state.data.forEach((ele)=>{
+      if(ele.id!==action.rowIndex) {
+        arr=[...arr,{...ele}];
+      }
+      else{
+        arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
+      }
+    });
+    state.data=arr;
+    
+
+    // return {
+    //   ...state,
+    //   skipReset: true,
+    //   data: state.data.map((row, index) => {
+    //     if (index === action.rowIndex) {
+    //       return {
+    //         ...state.data[action.rowIndex],
+    //         [action.columnId]: action.value
+    //       };
+    //     }
+    //     return row;
+    //   })
+    // };
+
+    // console.log(current(state));
   },
+
+
+
   addRow(state) {
     return {
       ...state,
@@ -150,6 +179,9 @@ export const reducers = {
       data: [...state.data, {}]
     };
   },
+
+
+
   updateColumnType(state, payload) {
     const action = payload.payload
     if (action) {
@@ -296,6 +328,8 @@ export function extraReducers(builder) {
       state.status = "failed";
     })
 
+
+
     .addCase(bulkAddColumns.pending, (state) => {
       state.status = "loading"
     })
@@ -312,6 +346,8 @@ export function extraReducers(builder) {
     .addCase(bulkAddColumns.rejected, (state) => {
       state.status = "failed";
     })
+
+
 
     .addCase(deleteColumns.pending, (state) => {
       state.status = "loading"
@@ -363,12 +399,12 @@ export function extraReducers(builder) {
       state.status = "failed";
     })
 
+
     .addCase(updateCells.pending, (state) => {
       state.status = "loading"
     })
     .addCase(updateCells.fulfilled, (state) => {
       state.status = "succeeded";
-
     })
     .addCase(updateCells.rejected, (state) => {
       state.status = "failed";

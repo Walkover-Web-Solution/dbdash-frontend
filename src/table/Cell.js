@@ -30,6 +30,8 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
     setValue({value: initialValue, update: false});
   }, [initialValue]);
 
+  
+
   useEffect(() => {
     if (value?.update) {
       // dataDispatch({type: "update_cell", columnId: id, rowIndex: index, value: value.value});
@@ -38,6 +40,8 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
       }))
     }
   }, [value, dispatch, id, row.index]);
+
+  
 
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {
