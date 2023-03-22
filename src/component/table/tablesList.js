@@ -25,11 +25,11 @@ export default function TablesList({dbData}) {
   const [tabIndex,setTabIndex]= useState(-1);
   const [open, setOpen] = useState(false);
   const [openn,setOpenn] = useState(false)
+  const [filter,setFilter]=useState(false);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
 
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-
   const saveTable = async () => {
     const data = {
       tableName: table
@@ -61,7 +61,7 @@ export default function TablesList({dbData}) {
       >
           {Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
-              <SingleTable table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
+              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
             ))
           }
@@ -73,7 +73,7 @@ export default function TablesList({dbData}) {
         </Box>
         
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
-          Filter
+          addFilter
         </Button> 
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
         <FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName}/>
