@@ -29,11 +29,18 @@ const getHeaders = async(dbId,tableName) =>{
     }
     json.id = field[0];
     json.label = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
+    
     json.accessor = field[0]?.toLowerCase() ;
+    if( field[1].fieldType == "createdby" )
+    json.accessor = "createdby" ;
+    if( field[1].fieldType == "createdat")
+    json.accessor = "createdat" ;
+    // columns.push (json);
     json.dataType = field[1].fieldType?.toLowerCase();
     columns.push (json);
     }
     )
+    
     columns.push({
              id: 999999,
              width: 20,
@@ -64,6 +71,7 @@ export const bulkAddColumns = createAsyncThunk(
             "tableId":payload.tableName,
             "dbId":payload.dbId
         }
+        console.log("dataa",dataa);
         return dataa;
     }
 ) ;
