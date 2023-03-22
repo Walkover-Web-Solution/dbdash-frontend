@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ContentEditable from "react-contenteditable";
 import Relationship from "./Relationship";
 import {usePopper} from "react-popper";
@@ -7,7 +7,9 @@ import PlusIcon from "./img/Plus";
 import {randomColor} from "./utils";
 import { addColumns, updateCells } from "../store/table/tableThunk";
 import { useDispatch } from "react-redux";
-
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 export default function Cell({value: initialValue, row, column: {id, dataType, options}, dataDispatch}) {
 
 
@@ -23,7 +25,6 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
   };
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
-  const interviewDateRef = useRef();
   const [inputBoxShow,setInputBoxShow] = useState(false)
   useEffect(() => {
 
@@ -119,27 +120,21 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         
       ( 
         <>
-      
-      <input type="datetime-local" id="meeting-time" name="meeting-time"
-        min="2023-03-20T00:00" max="2023-12-31T23:59" ref ={interviewDateRef} 
-        value ={new Date(value.value || null)?.toISOString()?.slice(0,16)}
-        onClick={(e)=>{ if(e.detail == 2){
-          console.log("hello")
-        }}}
-        onChange={onChange}
-        style={{"display":inputBoxShow?"block":"none"}}
-        // onClick={()=>setOpen(true)}
-
-        onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-        />
-        <input type ="text" 
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DateTimePicker
+      onClick={()=>{ console.log("dfsdfs");setInputBoxShow(false);}}
+      open={inputBoxShow} value ={value?.value?new Date(value?.value):new Date()} onChange={(newValue)=> setValue({value: newValue, update: false})} 
+      sx={{"display":inputBoxShow?"block":"none"}}
+      onClose={()=>{ setInputBoxShow(false);}}
+      //  onBlur={() => { console.log("helloo");setInputBoxShow(false);  setValue((old) => ({value: old.value, update: true}))}}
+      />
+    </LocalizationProvider>
+        <input type ="text" className='data-input'
+        value={value?.value}
          style={{"display":inputBoxShow?"none":"block"}}
         onClick={(e)=>{ if(e.detail == 2){
-          console.log("hello")
           setInputBoxShow(true);
-          console.log(interviewDateRef.current);
-          interviewDateRef.current.focus();
-          interviewDateRef.current.showPicker();
+          
         }}}/>
         </>
      
