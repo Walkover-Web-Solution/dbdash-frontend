@@ -143,6 +143,7 @@ export const reducers = {
         arr=[...arr,{...ele}];
       }
       else{
+        console.log("in id ");
         arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
       }
     });
@@ -156,7 +157,7 @@ export const reducers = {
     //     if (index === action.rowIndex) {
     //       return {
     //         ...state.data[action.rowIndex],
-    //         [action.columnId]: action.value
+    //         [action.columnId.toLowerCase()]: action.value
     //       };
     //     }
     //     return row;
