@@ -38,6 +38,13 @@ export default function TablesList({dbData}) {
     dispatch(createTable1({"dbId":dbData?.db?._id,"data":data}));
     
   };
+  function onFilterClicked(filter) {
+    dispatch(bulkAddColumns({
+      "dbId": dbData?.db?._id,
+      "tableName": params?.tableName,
+      "filter": filter
+    }));
+  }
   useEffect(() => {
     if(dbData?.db?.tables)
     {
@@ -59,7 +66,7 @@ export default function TablesList({dbData}) {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
-          {Object.entries(AllTableInfo.tables).map((table, index) => (
+          {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
               <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
@@ -71,7 +78,23 @@ export default function TablesList({dbData}) {
           Add Table
         </Button>                 
         </Box>
-        
+        <Box display="flex" flexWrap="nowrap">
+        {filter  &&
+          Object.entries(filter).map((filter, index) => (
+            <Box key={index} marginRight={1}>
+              <Button
+                onClick={() => {
+                  
+                  onFilterClicked(filter[1].query);
+                }}
+                variant="contained"
+                color="primary"
+              >
+                {filter[0]}
+              </Button>
+            </Box>
+          ))}
+      </Box>
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
           addFilter
         </Button> 

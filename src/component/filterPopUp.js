@@ -98,8 +98,6 @@ export default function FilterModal(props) {
                 <MenuItem value="NOT LIKE">does not contain</MenuItem>
                 <MenuItem value="=">is</MenuItem>
                 <MenuItem value="!=">is not</MenuItem>
-                <MenuItem value="is empty">is empty</MenuItem>
-                <MenuItem value="is not empty">is not empty</MenuItem>
             </Select>
           </Box>
           <Box><input type="text" onChange={(e)=>{

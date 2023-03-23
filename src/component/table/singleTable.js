@@ -61,14 +61,6 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
     highlightActiveTable()
   }
 
-  function onFilterClicked(filter) {
-    dispatch(bulkAddColumns({
-      "dbId": dbData?.db?._id,
-      "tableName": table[0],
-      "filter": filter
-    }));
-  }
-
   return (
     <>
       <Box
@@ -146,23 +138,6 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
             </Box>
           </>)
         }
-      </Box>
-      <Box display="flex" flexWrap="nowrap">
-        {filter  &&
-          Object.entries(filter).map((filter, index) => (
-            <Box key={index} marginRight={1}>
-              <Button
-                onClick={() => {
-                  
-                  onFilterClicked(filter[1].query);
-                }}
-                variant="contained"
-                color="primary"
-              >
-                {filter[0]}
-              </Button>
-            </Box>
-          ))}
       </Box>
     </>
 
