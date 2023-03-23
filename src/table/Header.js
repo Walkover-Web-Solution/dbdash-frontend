@@ -241,6 +241,12 @@ export default function Header({
     case "select":
       propertyIcon = <MultiIcon />;
       break;
+    case "createdby":
+      propertyIcon = <TextIcon />;
+      break;
+      case "createdat":
+      propertyIcon = <TextIcon />;
+      break;
     default:
       break;
   }

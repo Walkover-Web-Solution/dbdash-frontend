@@ -54,7 +54,7 @@ export default function TablesList({dbData}) {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
-          {Object.entries(AllTableInfo.tables).map((table, index) => (
+          {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
               <SingleTable table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
