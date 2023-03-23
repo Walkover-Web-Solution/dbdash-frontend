@@ -136,10 +136,6 @@ export const reducers = {
   updateCell(state, payload) {
     
     const action = payload.payload
-    // console.log(action);
-    // console.log(current(state));
-    // console.log(current(state));
-
     state.skipReset=true;
     let arr= [];
     state.data.forEach((ele)=>{

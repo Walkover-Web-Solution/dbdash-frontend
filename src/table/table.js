@@ -36,9 +36,9 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
       const text = event.clipboardData.getData('text/plain');
        const newData = cloneDeep(data);
        newData[row][cell.column.id] = text.trim();
-      
+      console.log("cell",cell)
        dispatch(updateCells({
-        columnId: cell.column.id, rowIndex: cell.row.index+1, value: text
+        columnId: cell.column.id, rowIndex: cell.row.original.id, value: text
       }))
     
 
