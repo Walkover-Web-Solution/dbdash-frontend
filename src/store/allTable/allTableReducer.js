@@ -5,15 +5,7 @@ export const initialState = {
   status : "idel"
 };
 export const reducers = {
-    // add(state,payload){
-    // },
-    // getAll(state,payload){
-    //     console.log(payload)
-    // },
-    // update(state,payload){
-    // },
-    // remove(state){
-    // }
+
 };
 export function extraReducers(builder) {
      builder

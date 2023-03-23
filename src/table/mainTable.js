@@ -14,7 +14,6 @@ MainTable() {
 
   const dispatchs = useDispatch();
  
-
   return (
     <div
       style={{
@@ -45,7 +44,7 @@ MainTable() {
         >
           {tableInfo?.columns?.length>0 && <Table
             columns={tableInfo.columns}
-            data={tableInfo.data}
+            data={tableInfo.data|| []}
             dispatch={dispatchs}
             skipReset={tableInfo.skipReset}
           />}

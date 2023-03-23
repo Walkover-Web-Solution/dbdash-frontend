@@ -26,6 +26,7 @@ export default function CreateAuthKey() {
   const [authKey,setAuthKey] = useState("")
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
+  const isDisabled = !name || !scope || selected.length === 0;
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -58,7 +59,7 @@ export default function CreateAuthKey() {
         sx={{mt: 4, ml: 1, mr: 1, border: 2, minHeight: 50}}>
         <Box sx={{display: "grid",justifyContent: "center"}}>
           <Box sx={{ display: "flex", justifyContent: "center", mt: "120px" }}>
-            <Typography sx={{ mr: "100px", mt: "6px" }}>Name</Typography>
+            <Typography sx={{ mr: "100px", mt: "6px" }} >Name</Typography>
             <TextField id="standard-basic" label="Standard" variant="standard" value={name} onChange={(e) => {
                 setName(e.target.value);
               }} onKeyDown={handleKeyDown}/>
@@ -78,7 +79,7 @@ export default function CreateAuthKey() {
         </Box>
           <Box sx={{ display: "flex", position: "relative", justifyContent: "flex-end",bottom: 10,mr:3}}>
             <Box sx={{m:1}}>
-              <Button variant="contained" onClick={()=>{createAuth()
+              <Button variant="contained" disabled={isDisabled} onClick={()=>{createAuth()
                handleOpen()
               }}>
                 Create

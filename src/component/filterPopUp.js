@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import { Select, MenuItem, TextField } from '@mui/material';
-import { getAllfields } from "../api/fieldApi";
+// import { getAllfields } from "../api/fieldApi";
 import { createFilter } from "../api/filterApi"
+import { getTableInfo } from "../store/table/tableSelector";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -26,64 +28,97 @@ export default function FilterModal(props) {
   // const [selectField,setSelectField] = useState(['selectFields1'])
   // const [selectCommand,setSelectCommand] = useState(['selectCommand1'])
   // const [AndOr,setAndOr] = useState([AndOr])
+  const tableInfo=useSelector((state)=>getTableInfo(state));
+  
   const handleClose = () => props.setOpen(false);
   const [fieldData, setFieldData] = useState("");
-  const[andOrSelect,setAndOrSelect] = useState("")
-  console.log(andOrSelect)
-  const [selectedOption, setSelectedOption] = useState(['option1']);
-  const[fields,setFields] = useState(['field1'])
-  const [AndOr,setAndOr] = useState(['input1'])
-  const [valuee, setValuee] = useState(['input1']);
-  const [table, setTable] = useState();
   const [filterName, setFilterName] = useState('');
-  const handleChange = (event) => {
-    setSelectedOption([event.target.value]);
+  const [query,setQuery]=useState([{
+    "andor":"",
+    "fields": "",
+    "selectedOption":"",
+    "value":""
+  }])
+  const handleChangeSelectedOption = (event,index) => {
+    var temp  = query;
+    temp[index].selectedOption = event.target.value;
+ 
+    setQuery([...temp]);
+  };
+  useEffect(()=>{
+    tableData();
+  },[])
+  const handleChangeField = (event,index) => {
+    var temp  = query;
+    temp[index].fields = event.target.value;
+    console.log(temp)
+    setQuery([...temp]);
+   
+  };
+  const handleChangeValue = (event,index) => {
+    var temp  = query;
+    temp[index].value = event.target.value;
+    setQuery([...temp]);
+   
   };
 
-  const handleChangeAndOr = (event) => {
-    setAndOrSelect(event.target.value);
+  const handleRemove = (index) => {
+    const newData = [...query];
+    newData.splice(index, 1);
+    setQuery([...newData])
+  }
+  const handleChangeAndOr = (event,index) => {
+    var temp  = query;
+    temp[index].andor = event.target.value;
+    setQuery([...temp]);
   };
 
   const handleAddInput = () => {
-    // console.log(filterInput,selectField,selectCommand)
-    const newInput = `input${valuee.length + 1}`;
-    setValuee([...valuee, newInput]);
-    const selectFields = `input${fields.length + 1}`;
-    setFields([...fields, selectFields]);
-    const selectCommands = `input${selectedOption.length + 1}`;
-    setSelectedOption([...selectedOption, selectCommands]);
-    const AndOR = `input${AndOr.length + 1}`;
-    setAndOr([...AndOr, AndOR]);
+    setQuery([...query,{"andor":"",
+    "fields": "",
+    "selectedOption":"",
+    "value":""}])
   };
-  const handleChangee = (event) => {
-    setTable(event.target.value);
-    console.log(table)
-  };
-
-  useEffect(() => {
-    tableData();
-  }, [props])
+  
   const tableData = async () => {
+    var columns = tableInfo.columns;
+    console.log("columns",columns)
+    columns = columns?.splice(1,columns.length-2)
 
-    const data = await getAllfields(props?.dbId, props?.tableName)
-    setFieldData(data?.data?.data?.fields)
+    setFieldData(columns)
   }
 
   const getQueryData = async () => {
-    console.log("selectedOption", selectedOption)
-    let query = "";
-    if (selectedOption == "LIKE" || selectedOption == "NOT LIKE") {
-      query = "select * from " + props?.tableName + " where " + table + " " + selectedOption + "'%" + valuee + "%'"
+    let queryToSend = "select * from " + props?.tableName + " where ";
+    for(var i =0;i<query?.length;i++)
+    {
+        switch (query[i]?.andor) {
+          case "and":
+            queryToSend =queryToSend +" and "
+          break;
+          case "or":
+            queryToSend =queryToSend +" or "
+            break;
+          
+        }
+
+        queryToSend +=   query[i].fields  + " " 
+        if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
+          queryToSend += " " + query[i].selectedOption + " '%" +  query[i].value + "%'"
+        }
+        if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
+          queryToSend +=  query[i].selectedOption + " '" + query[i].value + "'"
+        }
+        if(query[i].selectedOption == "=" || query[i].selectedOption == "!="){
+          queryToSend +=  query[i].selectedOption + " '" + query[i].value + "'"
+        }
     }
-    else if (selectedOption == "=" || selectedOption == "!=") {
-      query = "select * from " + props?.tableName + " where " + table + " " + selectedOption + " '" + valuee + "'"
-    }
+    
     const dataa = {
       filterName: filterName,
-      query: query
+      query: queryToSend
     }
-    const data = await createFilter(props?.dbId, props?.tableName, dataa)
-    console.log("data", data?.data?.data)
+     await createFilter(props?.dbId, props?.tableName, dataa)
   }
 
   return (
@@ -112,64 +147,46 @@ export default function FilterModal(props) {
             </Box>
           </Box>
 
-                {console.log("andor = ",AndOr)}
-                {console.log("fields = ",fields)}
-                {console.log("selectedOptions = ",selectedOption)}
-                {console.log("valuee = ",valuee)}
-
-
-         <Box style={{ display: "flex", flexDirection: "row" }}>
-            <Box><Button style={{ padding: "14%" }}>WHERE</Button></Box>
-
-
+    
+        { query.map((q,index)=>(<Box key={index} style={{ display: "flex", flexDirection: "row" }}>
+            {index==0 && <Box><Button style={{ padding: "14%" }}>WHERE</Button></Box>}
             
-           <Box>
-            {AndOr?.map((input) => {
-                // if (AndOr?.length !=0 ) {
-                  return (
-                    <Select key={input} onChange={handleChangeAndOr}>
-                      <MenuItem value="&&">and</MenuItem>
-                      <MenuItem value="||">or</MenuItem>
-                    </Select>
-                  );
-                // }
-              })}
-            </Box>
+           {index!=0  && <Box>
+              <Select onChange={(e)=>handleChangeAndOr(e,index)}>
+                    <MenuItem value="and">and</MenuItem>
+                    <MenuItem value="or">or</MenuItem>
+                  </Select>
+            </Box>}
             <Box>
-            {fields?.map((input) => (
-              <Select key={input} onChange={handleChangee} >
+              <Select onChange={(e)=>handleChangeField(e,index)} >
                 {fieldData && Object.entries(fieldData).map((fields, index) => (
-                  <MenuItem key={index} value={fields[0]} >
-                    {fields[1].fieldName}
-                  </MenuItem>
+                  <MenuItem key={index} value={fields[1].id} >
+                  {fields[1].label}
+                </MenuItem>
                 ))}
               </Select>
-               ))}
             </Box>
 
             <Box>
-            {selectedOption?.map((input) => (
-              <Select key={input} onChange={handleChange} >
+           
+              <Select onChange={(e)=>handleChangeSelectedOption(e,index)} >
                 <MenuItem value="LIKE">contains</MenuItem>
                 <MenuItem value="NOT LIKE">does not contain</MenuItem>
                 <MenuItem value="=">is</MenuItem>
                 <MenuItem value="!=">is not</MenuItem>
               </Select>
-                ))}
             </Box>
 
             <Box>
-              {valuee.map((input) => (
-                <TextField key={input} sx={{ width: 150, height: 60, fontWeight: 'bold' }} placeholder="Enter the value" type="text" onChange={(e) => {
-                  setValuee([e.target.value])
-                }} />
-              ))}
+            
+                <TextField sx={{ width: 150, height: 60, fontWeight: 'bold' }} placeholder="Enter the value" type="text" onChange={(e) => handleChangeValue(e,index)} />
             </Box>
-
-
-          </Box>
+           {index>=1 && <Button onClick={()=>{
+              handleRemove(index)
+            }}>Remove</Button>}
+          </Box>))}
           <Button onClick={handleAddInput}>+</Button>
-
+          
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>

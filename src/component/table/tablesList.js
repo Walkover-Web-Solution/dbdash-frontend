@@ -16,7 +16,7 @@ import { createTable1} from '../../store/allTable/allTableThunk';
 export default function TablesList({dbData}) {
   const dispatch= useDispatch();
   const params = useParams();
-  const [value, setValue] = React.useState(0);  
+  const [value, setValue] = useState(params?.tableName);  
   const navigate =useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -48,13 +48,26 @@ export default function TablesList({dbData}) {
   useEffect(() => {
     if(dbData?.db?.tables)
     {
+      const tableNames = Object.keys(dbData.db.tables);
+      const activeTabIndex = params.tableName
+        ? tableNames.indexOf(params.tableName)
+        : 0;
+
+        // setTabIndex(activeTabIndex);
+        setValue(activeTabIndex);
+      
         dispatch(bulkAddColumns({
           "dbId":dbData?.db?._id,
-          "tableName": Object.keys(dbData?.db?.tables)[0]
+          "tableName": params?.tableName||Object.keys(dbData?.db?.tables)[0]
         }));
+        // console.log(dbData?.db?.tables);
+        // console.log(Object.keys(dbData?.db?.tables)[0]);
+        // console.log(dbData?.db?.tables[Object.keys(dbData?.db?.tables)[0]].filters);
+        // setFilter(dbData?.db?.tables[Object.keys(dbData?.db?.tables)[0]].filters)
         navigate(`/db/${dbData?.db?._id}/table/${Object.keys(dbData?.db?.tables)[0]}`);   
     }
-  }, [dbData])
+  }, [dbData ])
+
   return (
     <>
       <Box sx={{ width: "100%", display: "flex", height: "auto" }}>
@@ -68,7 +81,8 @@ export default function TablesList({dbData}) {
       >
           {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
-              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
+              {console.log()}
+              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(params.tableName)}/>
             </Box>
             ))
           }
@@ -90,7 +104,7 @@ export default function TablesList({dbData}) {
                 variant="contained"
                 color="primary"
               >
-                {filter[0]}
+                {filter[1]?.filterName}
               </Button>
             </Box>
           ))}

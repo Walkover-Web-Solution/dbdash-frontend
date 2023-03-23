@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
+import useValidator from "react-joi";
+import Joi from "joi";
 
 // import { createOrg } from "../api/orgApi";
 
@@ -23,7 +24,41 @@ const style = {
 
 export default function PopupModal(props) {
   // const [org, setOrg] = React.useState();
+  
   const handleClose = () => props.setOpen(false);
+
+  const [textFieldValue, setTextFieldValue] = useState("");
+
+
+  const { state, setData, setExplicitField,validate} = useValidator({
+    initialData: {
+      [props?.id]: null,
+    },
+    schema: Joi.object({
+      [props?.id]: Joi.string().min(8).required(),
+    }),
+    explicitCheck: {
+      [props?.id]: false,
+    },
+    validationOptions: {
+      abortEarly: true,
+    },
+  });
+
+const createProjectJoi = (e) => {
+    
+    e.persist();
+    const value = e.target.value;
+    setTextFieldValue(value);
+
+    setData((old) => ({
+        ...old,
+        [props?.id]: value,
+    }));
+    validate();
+};
+
+
   return (
     <Box>
       <Modal
@@ -39,6 +74,13 @@ export default function PopupModal(props) {
           </Typography>
           <Box sx={{ my: 2 }}>
             <TextField
+             error={
+              state?.$errors?.[props?.id].length === 0
+                  ? false
+                  : state.$errors?.[props?.id]
+                      ? true
+                      : false
+          }
              autoFocus
               id={props?.id}
               name={props?.id}
@@ -46,21 +88,28 @@ export default function PopupModal(props) {
               variant="standard"
               onChange={(e) => {
                 props.setVariable(e.target.value);
+                createProjectJoi(e);
               }}
+              onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  props.submitData(e);
-                  handleClose();
-                }
+                console.log(textFieldValue)
+                if(textFieldValue.length >= 8){
+                  if (e.key === 'Enter') {
+                    props.submitData(e);
+                    handleClose();
+                  }
+                }               
               }}
             />
+             <div style={{ color: "red", fontSize: "12px" }}>
+                    {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
+                </div>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Button variant="contained" onClick={()=>{
-                  // props?.saveFunction ();
+              <Button variant="contained" disabled={textFieldValue.length < 8} onClick={()=>{
+                validate();
                   props?.submitData();
-                 
               }}>
                 Create
               </Button>

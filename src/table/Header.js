@@ -32,6 +32,7 @@ export default function Header({
   const [open, setOpen] = useState(false);
   // const [variable, setVariable] = useState("");
 
+
   const handleOpen = () => {
     setOpen(true);
     setExpanded(false);

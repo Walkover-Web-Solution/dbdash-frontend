@@ -22,7 +22,6 @@ const updateQuery = async (db_id,tableName,data) =>
 }
 
 const runQueryonTable = async(dbId,data)=>{
-    console.log("data",data)
     return await axios.post(URL +`/dbs/${dbId}/runQuery`,{filter:data})
 }
 
