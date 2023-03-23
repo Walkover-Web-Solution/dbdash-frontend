@@ -42,8 +42,8 @@ function ListRecord(props) {
         
         <br/>
     <Box>
-      <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}"` }/>
-      <p>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</p>
+      <CodeSnippet  codeString={`"https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}"` }/>
+      <p>{`-H "Key: YOUR_SECRET_API_TOKEN" `}</p>
     </Box>
     <Box>
       <Typography></Typography>

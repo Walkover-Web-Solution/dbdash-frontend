@@ -33,8 +33,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
     setOptions(data.data.data.tables || {});
    
   }
- 
-  
+   
   const isAllSelected =
     options.length > 0 && selected.length === options.length;
   const handleChange = (event) => {
@@ -46,7 +45,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
       }
       let all = []
       Object.entries(options).map((option)=>{
-        all = [...all, option[0]]
+        all = [...all, option[1].tableName]
       })
       setSelected(all);
       return;
@@ -101,12 +100,13 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
           />
         </MenuItem>
         { Object.entries(options).map((option,index) => {
+          // console.log("proper", option[1].tableName);
          return  <MenuItem key={index} value={option[0]}>         
          <ListItemIcon>
            {/* {option[0]} */}
            {/* <Checkbox checked={option[0]} /> */}
            {/* <input type="checkbox" value={option[0]}/> */}
-           <Checkbox value={option[0]} onChange={(e)=>{
+           <Checkbox value={option[1].tableName} onChange={(e)=>{
             if(!selected?.includes(e.target.value)){
               setSelected([...selected,e.target.value])
             }
@@ -114,7 +114,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
            defaultChecked={selected?.includes(option[0])}
            />
          </ListItemIcon>
-         <ListItemText primary={option[0]} />
+         <ListItemText primary={option[1].tableName} />
        </MenuItem>
 })}
       </Select>

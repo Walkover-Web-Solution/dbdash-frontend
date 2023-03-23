@@ -22,6 +22,7 @@ const style = {
   p: 4,
 };
 export default function AuthKeyPopup(props) {
+  console.log("first",props);
   
   const [copyText, setCopyText] = useState('');
   const [isCopied, setIsCopied] = useState(false);

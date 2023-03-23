@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -23,12 +23,15 @@ const style = {
 export default function PopupModal(props) {
   const handleClose = () => props.setOpen(false);
 
+  const [textFieldValue, setTextFieldValue] = useState("");
+
+
   const { state, setData, setExplicitField,validate} = useValidator({
     initialData: {
       [props?.id]: null,
     },
     schema: Joi.object({
-      [props?.id]: Joi.string().min(5).required(),
+      [props?.id]: Joi.string().min(8).required(),
     }),
     explicitCheck: {
       [props?.id]: false,
@@ -41,11 +44,14 @@ export default function PopupModal(props) {
 const createProjectJoi = (e) => {
     
     e.persist();
+    const value = e.target.value;
+    setTextFieldValue(value);
 
     setData((old) => ({
         ...old,
-        [props?.id]: e.target.value,
+        [props?.id]: value,
     }));
+    validate();
 };
 
 
@@ -82,10 +88,13 @@ const createProjectJoi = (e) => {
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  props.submitData(e);
-                  handleClose();
-                }
+                console.log(textFieldValue)
+                if(textFieldValue.length >= 8){
+                  if (e.key === 'Enter') {
+                    props.submitData(e);
+                    handleClose();
+                  }
+                }               
               }}
             />
              <div style={{ color: "red", fontSize: "12px" }}>
@@ -94,9 +103,9 @@ const createProjectJoi = (e) => {
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Button variant="contained" onClick={()=>{
+              <Button variant="contained" disabled={textFieldValue.length < 8} onClick={()=>{
+                validate();
                   props?.submitData();
-                  validate();
               }}>
                 Create
               </Button>
