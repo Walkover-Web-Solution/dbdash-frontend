@@ -5,7 +5,7 @@ import Dropdown from '../dropdown';
 // import {updateTable, deleteTable } from '../../api/tableApi';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
 export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex, highlightActiveTable,setFilter }) {
@@ -15,6 +15,9 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   const [name, setName] = useState();
   
   const dispatch = useDispatch();
+  const params = useParams();
+
+  console.log("Params",params);
 
 
   const TabWithDropdown = ({ label, dropdown }) => (

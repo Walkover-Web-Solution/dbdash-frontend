@@ -27,7 +27,8 @@ axios.interceptors.response.use(
       window.location.href = "/";
     }
     if (error?.response?.status === 403) {
-      alert("forbidden Error : you have limited access")
+      toast.error('forbidden Error : you have limited access');
+      // alert("forbidden Error : you have limited access")
     }
     if (error?.response?.status === 405) {
       alert("Can'nt Delete Becuase this Org only one DB")
