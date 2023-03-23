@@ -5,6 +5,7 @@ import {insertRow} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
 // reducer imports
 import { addColumnToLeft, addColumnToRight, addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
+import { runQueryonTable } from "../../api/filterApi";
 const getHeaders = async(dbId,tableName) =>{
     const fields = await getAllfields(dbId,tableName);
     let columns = [
@@ -29,11 +30,18 @@ const getHeaders = async(dbId,tableName) =>{
     }
     json.id = field[0];
     json.label = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
+    
     json.accessor = field[0]?.toLowerCase() ;
+    if( field[1].fieldType == "createdby" )
+    json.accessor = "createdby" ;
+    if( field[1].fieldType == "createdat")
+    json.accessor = "createdat" ;
+    // columns.push (json);
     json.dataType = field[1].fieldType?.toLowerCase();
     columns.push (json);
     }
     )
+    
     columns.push({
              id: 999999,
              width: 20,
@@ -56,15 +64,32 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload) =>{      
-        const columns =  await getHeaders(payload.dbId,payload.tableName)
-        const data = await getTable(payload.dbId,payload.tableName)
-        const dataa = {
-            "columns":columns,
-            "row":data.data.data.tableData,
-            "tableId":payload.tableName,
-            "dbId":payload.dbId
+        if(payload.filter != null)
+        {
+            const querydata = await runQueryonTable(
+                payload.dbId,
+                payload?.filter
+            )
+            const columns =  await getHeaders(payload.dbId,payload.tableName)
+            const dataa = {
+                "columns":columns,
+                "row":querydata.data.data,
+                "tableId":payload.tableName,
+                "dbId":payload.dbId
+            }
+            return dataa;
         }
-        return dataa;
+        else{  
+            const columns =  await getHeaders(payload.dbId,payload.tableName)
+            const data = await getTable(payload.dbId,payload.tableName)
+            const dataa = {
+                "columns":columns,
+                "row":data.data.data.tableData,
+                "tableId":payload.tableName,
+                "dbId":payload.dbId
+            }
+            return dataa;
+        }
     }
 ) ;
 
@@ -126,7 +151,7 @@ export const updateCells = createAsyncThunk(
     async(payload,{dispatch,getState})=>{
        const {tableId, dbId} = getState().table
        const value = payload.value
-       const  columnId= payload.columnId
+       const  columnId= payload.columnId;
        await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
         dispatch(updateCell(payload));
         return payload;

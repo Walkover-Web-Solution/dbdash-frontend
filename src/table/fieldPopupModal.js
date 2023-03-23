@@ -66,6 +66,8 @@ const handleTextChange = (event) => {
             <MenuItem value="integer">integer</MenuItem>
             <MenuItem value="checkbox">checkbox</MenuItem>
             <MenuItem value="datetime">datetime</MenuItem>
+            <MenuItem value="createdby">created By</MenuItem>
+            <MenuItem value="createdat">created At</MenuItem>
           </Select>
 
         </DialogContent>

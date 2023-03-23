@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PopupModal from '../popupModal';
+import FilterModal from "../filterPopUp"
 import PropTypes from "prop-types";
 import SingleTable from './singleTable';
-import {useNavigate} from "react-router-dom";
+import {useNavigate,useParams} from "react-router-dom";
 import Tabs from '@mui/material/Tabs';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +15,7 @@ import { createTable1} from '../../store/allTable/allTableThunk';
 
 export default function TablesList({dbData}) {
   const dispatch= useDispatch();
+  const params = useParams();
   const [value, setValue] = React.useState(0);  
   const navigate =useNavigate();
   const handleChange = (event, newValue) => {
@@ -22,9 +24,12 @@ export default function TablesList({dbData}) {
   const [table, setTable] = useState();
   const [tabIndex,setTabIndex]= useState(-1);
   const [open, setOpen] = useState(false);
+  const [openn,setOpenn] = useState(false)
+  const [filter,setFilter]=useState(false);
   const handleOpen = () => setOpen(true);
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const handleOpenn = () => setOpenn(true);
 
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const saveTable = async () => {
     const data = {
       tableName: table
@@ -33,6 +38,13 @@ export default function TablesList({dbData}) {
     dispatch(createTable1({"dbId":dbData?.db?._id,"data":data}));
     
   };
+  function onFilterClicked(filter) {
+    dispatch(bulkAddColumns({
+      "dbId": dbData?.db?._id,
+      "tableName": params?.tableName,
+      "filter": filter
+    }));
+  }
   useEffect(() => {
     if(dbData?.db?.tables)
     {
@@ -54,9 +66,9 @@ export default function TablesList({dbData}) {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
-          {Object.entries(AllTableInfo.tables).map((table, index) => (
+          {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
-              <SingleTable table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
+              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
             ))
           }
@@ -64,8 +76,31 @@ export default function TablesList({dbData}) {
         </Box>
         <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 }} >
           Add Table
-        </Button> </Box>
+        </Button>                 
+        </Box>
+        <Box display="flex" flexWrap="nowrap">
+        {filter  &&
+          Object.entries(filter).map((filter, index) => (
+            <Box key={index} marginRight={1}>
+              <Button
+                onClick={() => {
+                  
+                  onFilterClicked(filter[1].query);
+                }}
+                variant="contained"
+                color="primary"
+              >
+                {filter[0]}
+              </Button>
+            </Box>
+          ))}
+      </Box>
+        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
+          addFilter
+        </Button> 
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
+        <FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName}/>
+        
         <MainTable/>
     </>
   );

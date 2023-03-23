@@ -32,6 +32,7 @@ export default function Header({
   const [open, setOpen] = useState(false);
   // const [variable, setVariable] = useState("");
 
+
   const handleOpen = () => {
     setOpen(true);
     setExpanded(false);
@@ -238,6 +239,12 @@ export default function Header({
       break;
     case "select":
       propertyIcon = <MultiIcon />;
+      break;
+    case "createdby":
+      propertyIcon = <TextIcon />;
+      break;
+      case "createdat":
+      propertyIcon = <TextIcon />;
       break;
     default:
       break;

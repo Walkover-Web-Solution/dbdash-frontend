@@ -7,9 +7,10 @@ import PlusIcon from "./img/Plus";
 import PropTypes from 'prop-types';
 import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from 'react-table-plugins'
-import { addRows ,deleteRows} from "../store/table/tableThunk";
+import { addRows ,deleteRows, updateCells} from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
 
 const defaultColumn = {
   minWidth: 50,
@@ -22,20 +23,20 @@ const defaultColumn = {
 
 export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
 
-  // const [selectedRange, setSelectedRange] = useState({});  
-
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();
     document.execCommand('copy');
+
   };
+  
+  const dispatch =useDispatch();
   const handlePaste = (event,row,cell) => {
     event.preventDefault();
       const text = event.clipboardData.getData('text/plain');
-       const newData = cloneDeep(data);
-       newData[row][cell.column.id] = text.trim();
-
-    dataDispatch(updateTableData(newData))
+       dispatch(updateCells({
+        columnId: cell.column.id, rowIndex: cell.row.original.id, value: text
+      }))
   };
 
   const sortTypes = useMemo(
@@ -162,7 +163,6 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
             {headerGroups[0].headers.map((column) => {
-              console.log("headers")
               return (
                 column.render("Header")
               )
