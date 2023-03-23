@@ -59,7 +59,7 @@ export default function FilterModal(props) {
         filterName:filterName,
         query: query
     }
-    const data = await createFilter(props?.dbId,props?.tableName,dataa)
+     await createFilter(props?.dbId,props?.tableName,dataa)
   }
 
   return (

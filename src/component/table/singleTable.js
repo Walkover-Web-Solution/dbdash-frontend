@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
-export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex, highlightActiveTable,filter,setFilter }) {
+export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex, highlightActiveTable,setFilter }) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
