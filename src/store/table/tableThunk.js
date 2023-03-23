@@ -5,6 +5,7 @@ import {insertRow} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
 // reducer imports
 import { addColumnToLeft, addColumnToRight, addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
+import { runQueryonTable } from "../../api/filterApi";
 const getHeaders = async(dbId,tableName) =>{
     const fields = await getAllfields(dbId,tableName);
     let columns = [
@@ -63,16 +64,35 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload) =>{      
-        const columns =  await getHeaders(payload.dbId,payload.tableName)
-        const data = await getTable(payload.dbId,payload.tableName)
-        const dataa = {
-            "columns":columns,
-            "row":data.data.data.tableData,
-            "tableId":payload.tableName,
-            "dbId":payload.dbId
+        // console.log(payload.filter)
+        if(payload.filter != null)
+        {
+            const querydata = await runQueryonTable(
+                payload.dbId,
+                payload?.filter
+            )
+            console.log("ans",querydata)
+            const columns =  await getHeaders(payload.dbId,payload.tableName)
+            const dataa = {
+                "columns":columns,
+                "row":querydata.data.data,
+                "tableId":payload.tableName,
+                "dbId":payload.dbId
+            }
+            return dataa;
         }
-        console.log("dataa",dataa);
-        return dataa;
+        else{  
+            const columns =  await getHeaders(payload.dbId,payload.tableName)
+            const data = await getTable(payload.dbId,payload.tableName)
+            console.log(data);
+            const dataa = {
+                "columns":columns,
+                "row":data.data.data.tableData,
+                "tableId":payload.tableName,
+                "dbId":payload.dbId
+            }
+            return dataa;
+        }
     }
 ) ;
 

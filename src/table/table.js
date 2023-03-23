@@ -170,7 +170,6 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
             {headerGroups[0].headers.map((column) => {
-              // console.log("headers")
               return (
                 column.render("Header")
               )
