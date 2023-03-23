@@ -5,8 +5,9 @@ import Dropdown from '../dropdown';
 // import {updateTable, deleteTable } from '../../api/tableApi';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
+
 
 export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex, highlightActiveTable,filter,setFilter }) {
   const navigate = useNavigate();
@@ -15,8 +16,9 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   const [name, setName] = useState();
   
   const dispatch = useDispatch();
-  //  console.log(table)
-  // console.log(filter)
+  // const params = useParams();
+  //  console.log("params", params)
+
 
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -49,6 +51,8 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   const deleteTableName = async (tableid) => {
     dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
   };
+  console.log("table",table[0])
+
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)
@@ -154,6 +158,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
-  filter:PropTypes.object,
+  filter:PropTypes.bool,
   setFilter :PropTypes.func
 };

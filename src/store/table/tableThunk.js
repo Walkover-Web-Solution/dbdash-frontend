@@ -84,7 +84,6 @@ export const bulkAddColumns = createAsyncThunk(
         else{  
             const columns =  await getHeaders(payload.dbId,payload.tableName)
             const data = await getTable(payload.dbId,payload.tableName)
-            console.log(data);
             const dataa = {
                 "columns":columns,
                 "row":data.data.data.tableData,
