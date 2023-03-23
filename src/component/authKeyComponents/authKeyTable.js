@@ -47,7 +47,6 @@ export default function AuthKey(props) {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                {/* <TableCell>Access</TableCell> */}
                 <TableCell>Scope</TableCell>
                 <TableCell>Created By</TableCell>
                 <TableCell>Created On</TableCell>
