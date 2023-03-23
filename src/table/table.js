@@ -162,9 +162,12 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
       <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
-            {headerGroups[0].headers.map((column) => {
+            {headerGroups[0].headers.map((column,index) => {
               return (
-                column.render("Header")
+                <React.Fragment key ={index}>
+               {  column.render("Header")}
+                </React.Fragment>
+               
               )
             })}
           </div>
