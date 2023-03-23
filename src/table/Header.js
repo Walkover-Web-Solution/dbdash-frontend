@@ -32,7 +32,6 @@ export default function Header({
   const [open, setOpen] = useState(false);
   // const [variable, setVariable] = useState("");
 
-  // console.log(tableInfo);
 
   const handleOpen = () => {
     setOpen(true);

@@ -163,7 +163,6 @@ export const reducers = {
     //   })
     // };
 
-    // console.log(current(state));
   },
 
 

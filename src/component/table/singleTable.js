@@ -15,8 +15,7 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   const [name, setName] = useState();
   
   const dispatch = useDispatch();
-  //  console.log(table)
-  // console.log(filter)
+
 
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -52,7 +51,6 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)
-    console.log(filter)
     dispatch(bulkAddColumns({
       "dbId": dbData?.db?._id,
       "tableName": table[0]

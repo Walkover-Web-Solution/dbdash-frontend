@@ -30,7 +30,6 @@ export const OrgList = (props) => {
     // e.preventDefault();
     const userId = localStorage.getItem("userid");
     const email = user?.user?.email
-    console.log("emailll",user?.user?.email)
     const data = {
       user_id: userId,
       name: db,
@@ -54,12 +53,10 @@ export const OrgList = (props) => {
       
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({orgId : props?.orgId,userid}))
-    // await deleteOrg(props?.orgId,userid);
-    // await props?.getOrgAndDbs();
+
   };
 
   useEffect(()=>{
-    // console.log(props?.dbs);
   },[props.dbs]);
 
   return (

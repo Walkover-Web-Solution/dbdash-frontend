@@ -27,23 +27,16 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();
     document.execCommand('copy');
-    // console.log("Value",value);
+
   };
   
   const dispatch =useDispatch();
   const handlePaste = (event,row,cell) => {
     event.preventDefault();
       const text = event.clipboardData.getData('text/plain');
-       const newData = cloneDeep(data);
-       newData[row][cell.column.id] = text.trim();
-      console.log("cell",cell)
        dispatch(updateCells({
         columnId: cell.column.id, rowIndex: cell.row.original.id, value: text
       }))
-    
-
-
-    dataDispatch(updateTableData(newData));
   };
 
   const sortTypes = useMemo(
