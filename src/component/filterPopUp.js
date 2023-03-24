@@ -8,7 +8,8 @@ import { Select, MenuItem, TextField } from '@mui/material';
 // import { getAllfields } from "../api/fieldApi";
 import { createFilter } from "../api/filterApi"
 import { getTableInfo } from "../store/table/tableSelector";
-import { useSelector } from "react-redux";
+import { getAllTableInfo } from "../store/allTable/allTableSelector";
+import { useSelector} from "react-redux";
 import { cloneDeep } from "lodash";
 const style = {
   position: "absolute",
@@ -23,11 +24,14 @@ const style = {
 };
 
 export default function FilterModal(props) {
-
+  
   const tableInfo=useSelector((state)=>getTableInfo(state));
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const handleClose = () => props.setOpen(false);
   const [fieldData, setFieldData] = useState("");
   const [filterName, setFilterName] = useState('');
+  const [editData,setEditData] = useState("");
+
   const [query,setQuery]=useState([{
     "andor":"",
     "fields": "",
@@ -40,8 +44,35 @@ export default function FilterModal(props) {
  
     setQuery([...temp]);
   };
-  useEffect(()=>{
-
+  // useEffect(()=>{
+  //   if(props?.edit == true)
+  //   {
+  //     console.log(props?.filterId)
+  //     setFilterName(AllTableInfo.tables[props?.tableName].filters[props?.filterId].filterName)
+  //     setEditData(AllTableInfo.tables[props?.tableName].filters[props?.filterId].query)
+  //     // setQueryParts(queryWithoutSelect);
+  //     console.log(editData)
+      
+  //   }
+  // })
+  useEffect(()=>{   
+    if(props?.edit == true)
+    {
+      console.log(AllTableInfo.tables[props?.tableName].filters[props?.filterId].query)
+      setEditData(AllTableInfo.tables[props?.tableName].filters[props?.filterId].query)
+      setFilterName(AllTableInfo.tables[props?.tableName].filters[props?.filterId].filterName)
+      const parts = editData.split("where");
+      const whereIndex = parts.findIndex((part) => part.toLowerCase() === "where");
+      const queryWithoutSelect = parts.slice(whereIndex).join(" ");
+      console.log(queryWithoutSelect)
+      if(queryWithoutSelect.includes("LIKE"))
+      {
+        var temp  = query;
+        temp[0].selectedOption = "contains";
+        setQuery([...temp])
+        console.log(query)
+      }
+    }
     tableData();
   },[])
   const handleChangeField = (event,index) => {
@@ -53,8 +84,7 @@ export default function FilterModal(props) {
   const handleChangeValue = (event,index) => {
     var temp  = query;
     temp[index].value = event.target.value;
-    setQuery([...temp]);
-   
+    setQuery([...temp]);  
   };
 
   const handleRemove = (index) => {
@@ -75,8 +105,7 @@ export default function FilterModal(props) {
     "value":""}])
   };
   
-  const tableData = async () => {
-    
+  const tableData = async () => {    
     var columns = cloneDeep( tableInfo.columns)
     columns = columns?.length>2 ? columns?.splice(1,columns?.length-2):[]
     setFieldData(columns)
@@ -92,10 +121,8 @@ export default function FilterModal(props) {
           break;
           case "or":
             queryToSend =queryToSend +" or "
-            break;
-          
+            break; 
         }
-
         queryToSend +=   query[i].fields  + " " 
         if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
           queryToSend += " " + query[i].selectedOption + " '%" +  query[i].value + "%'"
@@ -133,7 +160,7 @@ export default function FilterModal(props) {
 
             <Box>
 
-              <TextField autoFocus sx={{ width: 150, height: 60, fontWeight: 'bold' }} type="text" placeholder="enter filter name" onChange={(e) => {
+              <TextField autoFocus sx={{ width: 150, height: 60, fontWeight: 'bold' }} value={filterName} type="text" placeholder="enter filter name" onChange={(e) => {
                 setFilterName(e.target.value)
               }} />
 
@@ -152,7 +179,6 @@ export default function FilterModal(props) {
                   </Select>
             </Box>}
             <Box>
-              {console.log(fieldData)}
               <Select onChange={(e)=>handleChangeField(e,index)} >
                 {fieldData && Object.entries(fieldData)?.map((fields, index) => (
                   <MenuItem key={index} value={fields[1]?.id} >
@@ -208,5 +234,7 @@ FilterModal.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   dbId: PropTypes.any,
-  tableName: PropTypes.any
+  tableName: PropTypes.any,
+  edit:PropTypes.any,
+  filterId:PropTypes.any
 };
