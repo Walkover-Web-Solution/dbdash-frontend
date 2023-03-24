@@ -29,7 +29,7 @@ const renameDb = async (orgId,id,data) =>
 
 const deleteDb = async (orgId,id) =>
 {
-     return await axios.delete(URL +`/dbs/${orgId}/dbs/${id}`)
+   return  await axios.delete(URL +`/dbs/${orgId}/dbs/${id}`)
 }
 
 

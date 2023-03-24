@@ -20,17 +20,19 @@ axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error) => {
+   (error) => {
+   
     if (error?.response?.status === 401) {
       toast.error('Session Expired');
       localStorage.removeItem("accessToken");
       window.location.href = "/";
     }
     if (error?.response?.status === 403) {
-      alert("forbidden Error : you have limited access")
+      toast.error(error?.response.data?.message);
+      // alert("forbidden Error : you have limited access")
     }
-    if (error?.response?.status === 405) {
-      alert("Can'nt Delete Becuase this Org only one DB")
+    if (error?.response.data?.message=="Can't Delete DB becuase this Org have only one DB") {
+      toast.error("default db in org cannot be deleted")
     }
     return Promise.reject(error);
   }

@@ -34,7 +34,7 @@ const removeUserInOrg = async (id , data) =>
 
 const deleteOrg = async (id,userId)=>
 {
-    return await axios.delete(URL + `/orgs/${id}/${userId}`)
+    return await axios.delete(URL + `/orgs/${id}/${userId}`);
 }
 
 
