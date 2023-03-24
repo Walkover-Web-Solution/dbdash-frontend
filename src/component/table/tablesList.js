@@ -122,7 +122,7 @@ export default function TablesList({dbData}) {
           addFilter
         </Button> 
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
-        <FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName}/>
+       { openn&&<FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo ={AllTableInfo}/>}
         
         <MainTable/>
     </>
