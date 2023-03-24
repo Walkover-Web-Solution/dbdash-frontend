@@ -9,7 +9,7 @@ import { Select, MenuItem, TextField } from '@mui/material';
 import { createFilter } from "../api/filterApi"
 import { getTableInfo } from "../store/table/tableSelector";
 import { useSelector } from "react-redux";
-
+import { cloneDeep } from "lodash";
 const style = {
   position: "absolute",
   top: "50%",
@@ -41,6 +41,7 @@ export default function FilterModal(props) {
     setQuery([...temp]);
   };
   useEffect(()=>{
+
     tableData();
   },[])
   const handleChangeField = (event,index) => {
@@ -75,9 +76,9 @@ export default function FilterModal(props) {
   };
   
   const tableData = async () => {
-    var columns = tableInfo.columns;
-    columns = columns?.splice(1,columns.length-2)
-
+    
+    var columns = cloneDeep( tableInfo.columns)
+    columns = columns?.length>2 ? columns?.splice(1,columns?.length-2):[]
     setFieldData(columns)
   }
 
@@ -151,9 +152,10 @@ export default function FilterModal(props) {
                   </Select>
             </Box>}
             <Box>
+              {console.log(fieldData)}
               <Select onChange={(e)=>handleChangeField(e,index)} >
-                {tableInfo.columns && fieldData && Object.entries(fieldData).map((fields, index) => (
-                  <MenuItem key={index} value={fields[1].id} >
+                {fieldData && Object.entries(fieldData)?.map((fields, index) => (
+                  <MenuItem key={index} value={fields[1]?.id} >
                   {fields[1].label}
                 </MenuItem>
                 ))}
