@@ -20,13 +20,14 @@ export default function TablesList({dbData}) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
 
 
-  const [value, setValue] = useState(params?.tableName || Object.keys(AllTableInfo.tables)[0]);  
+  const [value, setValue] = useState(0);  
   const navigate =useNavigate();
   const handleChange = (event, newValue) => {
+    console.log("newValue",newValue);
     setValue(newValue);
-    const tableNames = Object.keys(AllTableInfo.tables);
-    const selectedTableName = tableNames[newValue];
-    navigate(`/db/${dbData?.db?._id}/table/${selectedTableName}`);
+    // const tableNames = Object.keys(AllTableInfo.tables);
+    // const selectedTableName = tableNames[newValue];
+    // navigate(`/db/${dbData?.db?._id}/table/${selectedTableName}`);
   };
   const [table, setTable] = useState();
   const [tabIndex,setTabIndex]= useState(-1);
@@ -55,26 +56,25 @@ export default function TablesList({dbData}) {
     if(dbData?.db?.tables)
     {
       const tableNames = Object.keys(dbData.db.tables);
-      const activeTabIndex = params.tableName
-        ? tableNames.indexOf(params.tableName)
-        : 0;
-
-        // setTabIndex(activeTabIndex);
-        setValue(activeTabIndex);
-      
+      // const activeTabIndex = params?.tableName
+      //   ? tableNames.indexOf(params?.tableName)
+      //   : 0;
+      setValue(tableNames?.indexOf(params?.tableName) || 0 );
         dispatch(bulkAddColumns({
           "dbId":dbData?.db?._id,
-          "tableName": params?.tableName|| Object.keys(dbData?.db?.tables)[0]
+          "tableName": params?.tableName|| tableNames[0]
         }));
-        // if(!(params?.tableName))
-        // navigate(`/db/${dbData?.db?._id}/table/${tableNames[activeTabIndex]}}`);   
+        if(!(params?.tableName))
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+       
     }
-  }, [dbData,dispatch, params.tableName, setValue])
+  }, [dbData,value])
 
   return (
     <>
       <Box sx={{ width: "100%", display: "flex", height: "auto" }}>
         <Box  sx={{ display: 'flex', overflow: 'hidden', width: "100%", height: "auto"}} >
+          {console.log("value",value)}
         <Tabs
         value={value}
         onChange={handleChange}
@@ -85,7 +85,7 @@ export default function TablesList({dbData}) {
           {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
               {console.log()}
-              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(params.tableName)}/>
+              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue( index  )}/>
             </Box>
             ))
           }
