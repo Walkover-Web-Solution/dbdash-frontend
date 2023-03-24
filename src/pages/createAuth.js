@@ -19,14 +19,16 @@ export default function CreateAuthKey() {
  const location = useLocation()
  const { id } = useParams();
  const dbId = location.state;
- const [selected,setSelected] = useState([])
+ console.log("Dbid",dbId)
+//  const [tableIds,setSelected] = useState([])
  const [scope, setScope] = useState('');
  const [name,setName] = useState('');
  const userDetails = useSelector((state) => selectActiveUser(state));
   const [authKey,setAuthKey] = useState("")
   const [open, setOpen] = useState(false);
+  const [tableIds,setTableIds]=useState([])
   const handleOpen = () => setOpen(true);
-  const isDisabled = !name || !scope || selected.length === 0;
+  const isDisabled = !name || !scope || tableIds.length === 0;
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -34,14 +36,15 @@ export default function CreateAuthKey() {
   };
   const createAuth = async () => {
     // e.preventDefault();
-    const adminId1 = localStorage.getItem("userid");
-    const adminId = userDetails?.fullName ;
+    const adminId = localStorage.getItem("userid");
+    const adminId1 = userDetails?.fullName ;
     const data = {
        name : name,
        scope :scope,
-       access : selected,
+       access : tableIds,
        userId:adminId1
     }
+    console.log("accessofuser", tableIds)
     const create = await createAuthkey(dbId, adminId, data )
     setOpen(true)
     setAuthKey(create?.data?.data?.authKey)
@@ -67,7 +70,7 @@ export default function CreateAuthKey() {
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
             <Typography sx={{ mr: "40px", mt: "30px" }}>Scope</Typography>
             <Box sx={{ mt: "10px" }}>
-              <AuthAccessDropDown  selected={selected} setSelected={setSelected} dbId={dbId} />
+              <AuthAccessDropDown  tableIds={tableIds}   setTableIds={setTableIds} dbId={dbId} />
             </Box>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center" }}>

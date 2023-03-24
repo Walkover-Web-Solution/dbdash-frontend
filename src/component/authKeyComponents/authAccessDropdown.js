@@ -25,8 +25,9 @@ const MenuProps = {
   variant: "menu"
 };
 
-export default function AuthAccessDropDown({selected,setSelected,dbId}) {
+export default function AuthAccessDropDown({tableIds,setTableIds,dbId}) {
   const [options, setOptions] = useState([]);
+  const [selected,setSelected]=useState([]);
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
     
@@ -41,13 +42,18 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
     if (value[value.length - 1] === "all") {
       if(selected.length === Object.entries(options)?.length){
         setSelected([])
+        setTableIds([])
         return
       }
       let all = []
+      let allIds =[]
       Object.entries(options).map((option)=>{
         all = [...all, option[1].tableName]
+        allIds =[...allIds,option[0]];
+
       })
       setSelected(all);
+      setTableIds(allIds)
       return;
     }
     setSelected(value);
@@ -109,6 +115,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
            <Checkbox value={option[1].tableName} onChange={(e)=>{
             if(!selected?.includes(e.target.value)){
               setSelected([...selected,e.target.value])
+              setTableIds([...tableIds,option[0]])
             }
            }}
            defaultChecked={selected?.includes(option[0])}
@@ -123,6 +130,6 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
 }
 AuthAccessDropDown.propTypes = {
   dbId: PropTypes.string,
-  selected: PropTypes.any,
-  setSelected: PropTypes.func
+  tableIds: PropTypes.any,
+  setTableIds: PropTypes.func
 };
