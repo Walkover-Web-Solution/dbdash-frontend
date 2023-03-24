@@ -125,7 +125,6 @@ export default function Header({
     {
       onClick: () =>
        {
-        console.log("in delte button ");
         // dataDispatch({type: "update_column_header", columnId: id, label: header});
         // dispatch(updateColumnHeaders({
         //   columnId: id,
