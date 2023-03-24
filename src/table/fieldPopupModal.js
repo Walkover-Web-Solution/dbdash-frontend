@@ -19,13 +19,9 @@ const handleTextChange = (event) => {
   const handleClose = () => {
     props?.setOpen(false);
   };
- 
+ console.log(props)
+  const isInputEmpty = props?.textValue.trim() === '';
 
-//   const handlesubmit =()=>{
-   
-
-//     props?.setOpen(false)
-//   }
   return (
     <div>
       
@@ -71,7 +67,7 @@ const handleTextChange = (event) => {
           </Select>
 
         </DialogContent>
-        <Button onClick={props?.submitData} color="primary">Submit</Button>
+        <Button onClick={props?.submitData} color="primary" disabled={isInputEmpty}>Submit</Button>
       </Dialog>
     </div>
   );
