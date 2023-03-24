@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from "react";
-import {Checkbox,InputLabel,ListItemIcon,ListItemText,MenuItem,FormControl,Select} from "@mui/material"
+import {Checkbox,InputLabel,ListItemIcon,ListItemText,MenuItem,FormControl,Select, ListItem} from "@mui/material"
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
 
@@ -34,8 +34,8 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
    
   }
    
-  const isAllSelected =
-    options.length > 0 && selected.length === options.length;
+  const isAllSelected = options.length > 0 && selected.length === options.length;
+  
   const handleChange = (event) => {
     const value = event.target.value;
     if (value[value.length - 1] === "all") {
@@ -100,22 +100,27 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
           />
         </MenuItem>
         { Object.entries(options).map((option,index) => {
-
-         return  <MenuItem key={index} value={option[0]}>         
-         <ListItemIcon>
-           {/* {option[0]} */}
-           {/* <Checkbox checked={option[0]} /> */}
-           {/* <input type="checkbox" value={option[0]}/> */}
-           <Checkbox value={option[1].tableName} onChange={(e)=>{
-            if(!selected?.includes(e.target.value)){
-              setSelected([...selected,e.target.value])
+          // console.log("proper", option[1].tableName);
+        return(
+          <ListItem key={index} disableGutters>
+      <ListItemIcon>
+        <Checkbox
+          value={option[1].tableName}
+          onChange={(e) => {
+            if (!selected?.includes(e.target.value)) {
+              setSelected([...selected, e.target.value]);
             }
-           }}
-           defaultChecked={selected?.includes(option[0])}
-           />
-         </ListItemIcon>
-         <ListItemText primary={option[1].tableName} />
-       </MenuItem>
+          }}
+          defaultChecked={selected?.includes(option[0])}
+        />
+      </ListItemIcon>
+      <ListItemText
+        primary={option[1].tableName}
+        disableTypography
+        sx={{ cursor: "default" }}
+      />
+    </ListItem>
+        );
 })}
       </Select>
     </FormControl>
