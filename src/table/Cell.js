@@ -143,13 +143,13 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
       <DateTimePicker
       orientation="landscape"
       // onClick={()=>{setInputBoxShow(false);}}
-      open={inputBoxShow} value ={value?.value?new Date(value?.value):new Date()} onChange={(newValue)=>{ setValue({value: newValue, update: false}); setInputBoxShow(false); } }
+      open={inputBoxShow} value ={value?.value?new Date(value?.value):new Date()} onChange={(newValue)=>{ setValue({value: newValue, update: true}); setInputBoxShow(false); } }
       // sx={{"display":inputBoxShow?"block":"none"}}
       onClose={()=>{ setInputBoxShow(false);}}
       />
     </LocalizationProvider>}
         <input type ="text" className='data-input'
-        value={value?.value}
+        defaultValue={value?.value}
          style={{"display":inputBoxShow?"none":"block"}}
         onClick={(e)=>{ if(e.detail == 2){
           setInputBoxShow(true);

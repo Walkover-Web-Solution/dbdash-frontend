@@ -51,6 +51,15 @@ export default function TablesList({dbData}) {
       "filter": filter
     }));
   }
+  useEffect(()=>{
+    console.log(dbData?.db?.tables)
+    if(dbData?.db?.tables)
+    {
+      const tableNames = Object.keys(dbData.db.tables);
+      console.log("tableNames",tableNames);
+    setValue(tableNames?.indexOf(params?.tableName) || 0 );
+    }
+  },[dbData]);
   useEffect(() => {
     if(dbData?.db?.tables)
     {
@@ -58,7 +67,7 @@ export default function TablesList({dbData}) {
       // const activeTabIndex = params?.tableName
       //   ? tableNames.indexOf(params?.tableName)
       //   : 0;
-      setValue(tableNames?.indexOf(params?.tableName) || 0 );
+      // setValue(tableNames?.indexOf(params?.tableName) || 0 );
         dispatch(bulkAddColumns({
           "dbId":dbData?.db?._id,
           "tableName": params?.tableName|| tableNames[0]
@@ -67,7 +76,7 @@ export default function TablesList({dbData}) {
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
        
     }
-  }, [dbData,value])
+  }, [])
 
   return (
     <>
@@ -99,7 +108,6 @@ export default function TablesList({dbData}) {
             <Box key={index} marginRight={1}>
               <Button
                 onClick={() => {
-                  
                   onFilterClicked(filter[1].query);
                 }}
                 variant="contained"
