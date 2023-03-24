@@ -5,7 +5,6 @@ const createField = async (db_id,tableName,data) =>
     return await axios.post(URL +`/dbs/${db_id}/${tableName}/field`,data)
 }
 const getAllfields = async (db_id, tableName) =>{
-    console.log(db_id,tableName)
     return  await axios.get(URL+`/dbs/${db_id}/${tableName}/field`)
 }
 

@@ -9,7 +9,7 @@ import { useNavigate} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
 
-export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex, highlightActiveTable,setFilter }) {
+export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex,highlightActiveTable,setFilter }) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
@@ -48,7 +48,7 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   const deleteTableName = async (tableid) => {
     dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
   };
-  console.log("table",table[0])
+  
 
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
@@ -154,6 +154,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
-  filter:PropTypes.bool,
+  filter:PropTypes.object,
   setFilter :PropTypes.func
 };

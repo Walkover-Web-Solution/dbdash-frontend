@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import useValidator from "react-joi";
 import Joi from "joi";
 
+// import { createOrg } from "../api/orgApi";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -21,6 +23,8 @@ const style = {
 };
 
 export default function PopupModal(props) {
+  // const [org, setOrg] = React.useState();
+  
   const handleClose = () => props.setOpen(false);
 
   const [textFieldValue, setTextFieldValue] = useState("");

@@ -93,14 +93,14 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
       const newData = cloneDeep(data)
       const firstValue =Object.keys(selectedCellIds)[0].split('_');
       const newValueToReplace = newData[firstValue[1]][firstValue[0]];
-      Object.keys(selectedCellIds).forEach((key, i) => {
+      {selectedCellIds>=1 && Object.keys(selectedCellIds)?.forEach((key, i) => {
         const keyName = key.split('_')[0] 
         const index = key.split('_')[1]
         if(i === 0 ||firstValue[0] != keyName ) return;
         
   
         newData[index][keyName] = newValueToReplace;
-      })
+      })}
       dataDispatch(updateTableData(newData))
       
     }
@@ -174,7 +174,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
 
         </div>
         <div {...getTableBodyProps()}>
-          {rows.map((row, rowIndex ) => {
+          {rows?.map((row, rowIndex ) => {
             prepareRow(row);
             return (
               <div  key={rowIndex} {...row.getRowProps()} className= {'tr'+rowIndex}

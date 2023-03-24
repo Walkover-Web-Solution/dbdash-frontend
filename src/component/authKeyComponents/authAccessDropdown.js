@@ -100,7 +100,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
           />
         </MenuItem>
         { Object.entries(options).map((option,index) => {
-          // console.log("proper", option[1].tableName);
+
          return  <MenuItem key={index} value={option[0]}>         
          <ListItemIcon>
            {/* {option[0]} */}

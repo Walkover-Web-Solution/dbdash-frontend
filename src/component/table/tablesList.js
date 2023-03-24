@@ -20,13 +20,13 @@ export default function TablesList({dbData}) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
 
 
-  const [value, setValue] = useState(params?.tableName || Object.keys(AllTableInfo.tables)[0]);  
+  const [value, setValue] = useState(0);  
   const navigate =useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    const tableNames = Object.keys(AllTableInfo.tables);
-    const selectedTableName = tableNames[newValue];
-    navigate(`/db/${dbData?.db?._id}/table/${selectedTableName}`);
+    // const tableNames = Object.keys(AllTableInfo.tables);
+    // const selectedTableName = tableNames[newValue];
+    // navigate(`/db/${dbData?.db?._id}/table/${selectedTableName}`);
   };
   const [table, setTable] = useState();
   const [tabIndex,setTabIndex]= useState(-1);
@@ -51,25 +51,32 @@ export default function TablesList({dbData}) {
       "filter": filter
     }));
   }
+  useEffect(()=>{
+    console.log(dbData?.db?.tables)
+    if(dbData?.db?.tables)
+    {
+      const tableNames = Object.keys(dbData.db.tables);
+      console.log("tableNames",tableNames);
+    setValue(tableNames?.indexOf(params?.tableName) || 0 );
+    }
+  },[dbData]);
   useEffect(() => {
     if(dbData?.db?.tables)
     {
       const tableNames = Object.keys(dbData.db.tables);
-      const activeTabIndex = params.tableName
-        ? tableNames.indexOf(params.tableName)
-        : 0;
-
-        // setTabIndex(activeTabIndex);
-        setValue(activeTabIndex);
-      
+      // const activeTabIndex = params?.tableName
+      //   ? tableNames.indexOf(params?.tableName)
+      //   : 0;
+      // setValue(tableNames?.indexOf(params?.tableName) || 0 );
         dispatch(bulkAddColumns({
           "dbId":dbData?.db?._id,
-          "tableName": params?.tableName|| Object.keys(dbData?.db?.tables)[0]
+          "tableName": params?.tableName|| tableNames[0]
         }));
-        // if(!(params?.tableName))
-        // navigate(`/db/${dbData?.db?._id}/table/${tableNames[activeTabIndex]}}`);   
+        if(!(params?.tableName))
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+       
     }
-  }, [dbData,dispatch, params.tableName, setValue])
+  }, [])
 
   return (
     <>
@@ -82,10 +89,10 @@ export default function TablesList({dbData}) {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
+
           {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
-              {console.log()}
-              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(params.tableName)}/>
+              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
             ))
           }
@@ -101,13 +108,12 @@ export default function TablesList({dbData}) {
             <Box key={index} marginRight={1}>
               <Button
                 onClick={() => {
-                  
                   onFilterClicked(filter[1].query);
                 }}
                 variant="contained"
                 color="primary"
               >
-                {filter[0]}
+                {filter[1]?.filterName}
               </Button>
             </Box>
           ))}
@@ -116,7 +122,7 @@ export default function TablesList({dbData}) {
           addFilter
         </Button> 
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
-        <FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName}/>
+       { openn&&<FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo ={AllTableInfo}/>}
         
         <MainTable/>
     </>

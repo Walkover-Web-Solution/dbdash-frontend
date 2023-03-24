@@ -70,6 +70,7 @@ export const bulkAddColumns = createAsyncThunk(
                 payload.dbId,
                 payload?.filter
             )
+            console.log("querydata",querydata);
             const columns =  await getHeaders(payload.dbId,payload.tableName)
             const dataa = {
                 "columns":columns,
