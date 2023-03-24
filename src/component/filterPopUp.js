@@ -34,7 +34,6 @@ export default function FilterModal(props) {
 
   const handleChangee = (event) => {
     setTable(event.target.value);
-    console.log(table)
   };
 
   useEffect(()=>{
@@ -60,8 +59,7 @@ export default function FilterModal(props) {
         filterName:filterName,
         query: query
     }
-    const data = await createFilter(props?.dbId,props?.tableName,dataa)
-    console.log("data",data?.data?.data)
+     await createFilter(props?.dbId,props?.tableName,dataa)
   }
 
   return (

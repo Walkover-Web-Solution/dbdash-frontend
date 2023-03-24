@@ -18,7 +18,6 @@ export default function SingleDatabase(props) {
     const data = {
       name: dbname || name,
     };
-    console.log("in rename databse", orgId, id, data);
     dispatch(renameDBThunk({ orgId, id, data }))
     setDbname();
   };

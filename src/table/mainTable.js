@@ -14,7 +14,6 @@ MainTable() {
 
   const dispatchs = useDispatch();
  
-
   return (
     <div
       style={{
