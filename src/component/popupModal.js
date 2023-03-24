@@ -92,7 +92,6 @@ const createProjectJoi = (e) => {
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                console.log(textFieldValue)
                 if(textFieldValue.length >= 8){
                   if (e.key === 'Enter') {
                     props.submitData(e);

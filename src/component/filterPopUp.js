@@ -51,7 +51,6 @@ export default function FilterModal(props) {
   const handleChangeField = (event,index) => {
     var temp  = query;
     temp[index].fields = event.target.value;
-    console.log(temp)
     setQuery([...temp]);
    
   };
@@ -82,7 +81,6 @@ export default function FilterModal(props) {
   
   const tableData = async () => {
     var columns = tableInfo.columns;
-    console.log("columns",columns)
     columns = columns?.splice(1,columns.length-2)
 
     setFieldData(columns)

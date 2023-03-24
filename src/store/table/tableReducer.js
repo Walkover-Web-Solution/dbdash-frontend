@@ -143,7 +143,6 @@ export const reducers = {
         arr=[...arr,{...ele}];
       }
       else{
-        console.log("in id ");
         arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
       }
     });
