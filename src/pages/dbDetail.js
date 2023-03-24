@@ -55,7 +55,7 @@ function DbDetails() {
                 )}
             </Container>
             <Divider color="black" variant="fullwidth" sx={{ mb: 2}}  />
-            <Box align="center">
+            <Box align="center" >
                 <TablesList dbData={dbData} tables={tables} setTables={setTables} />
             </Box>
         </>

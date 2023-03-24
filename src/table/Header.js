@@ -125,6 +125,7 @@ export default function Header({
     {
       onClick: () =>
        {
+        console.log("in delte button ");
         // dataDispatch({type: "update_column_header", columnId: id, label: header});
         // dispatch(updateColumnHeaders({
         //   columnId: id,
@@ -262,8 +263,8 @@ export default function Header({
 
   useEffect(() => {
     if (inputRef) {
-      inputRef.focus();
-      inputRef.select();
+      // inputRef.focus();
+      // inputRef.select();
     }
   }, [inputRef]);
 
@@ -401,7 +402,7 @@ export default function Header({
               }}>
               {buttons.map((button, index) => (
                 <button type='button' key={index} className='sort-button'
-                  onClick={button.onClick}
+                  onClick={()=>button.onClick()}
                 >
                   <span   key = {index} className='svg-icon svg-text icon-margin'>{button.icon}</span>
                   {button.label}

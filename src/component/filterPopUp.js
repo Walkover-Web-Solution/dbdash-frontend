@@ -39,10 +39,13 @@ export default function FilterModal(props) {
   useEffect(()=>{
     tableData();
   },[props])
+
+
   const tableData = async () => {
 
     const data = await getAllfields(props?.dbId, props?.tableName)
     setFieldData(data?.data?.data?.fields)
+    console.log("field",props)
   }
 
   const getQueryData = async()=>{
