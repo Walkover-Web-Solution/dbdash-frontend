@@ -139,14 +139,15 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
      
       ( 
         <>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+     {inputBoxShow && <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DateTimePicker
-      onClick={()=>{setInputBoxShow(false);}}
-      open={inputBoxShow} value ={value?.value?new Date(value?.value):new Date()} onChange={(newValue)=> setValue({value: newValue, update: false})} 
-      sx={{"display":inputBoxShow?"block":"none"}}
+      orientation="landscape"
+      // onClick={()=>{setInputBoxShow(false);}}
+      open={inputBoxShow} value ={value?.value?new Date(value?.value):new Date()} onChange={(newValue)=>{ setValue({value: newValue, update: false}); setInputBoxShow(false); } }
+      // sx={{"display":inputBoxShow?"block":"none"}}
       onClose={()=>{ setInputBoxShow(false);}}
       />
-    </LocalizationProvider>
+    </LocalizationProvider>}
         <input type ="text" className='data-input'
         value={value?.value}
          style={{"display":inputBoxShow?"none":"block"}}

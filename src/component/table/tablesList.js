@@ -16,10 +16,17 @@ import { createTable1} from '../../store/allTable/allTableThunk';
 export default function TablesList({dbData}) {
   const dispatch= useDispatch();
   const params = useParams();
+
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+
+
   const [value, setValue] = useState(0);  
   const navigate =useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    // const tableNames = Object.keys(AllTableInfo.tables);
+    // const selectedTableName = tableNames[newValue];
+    // navigate(`/db/${dbData?.db?._id}/table/${selectedTableName}`);
   };
   const [table, setTable] = useState();
   const [tabIndex,setTabIndex]= useState(-1);
@@ -29,7 +36,6 @@ export default function TablesList({dbData}) {
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
 
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const saveTable = async () => {
     const data = {
       tableName: table
@@ -41,7 +47,7 @@ export default function TablesList({dbData}) {
   function onFilterClicked(filter) {
     dispatch(bulkAddColumns({
       "dbId": dbData?.db?._id,
-      "tableName": params?.tableName,
+      "tableName": params?.tableName || Object.keys(dbData?.db?.tables)[0],
       "filter": filter
     }));
   }
@@ -49,14 +55,17 @@ export default function TablesList({dbData}) {
     if(dbData?.db?.tables)
     {
       const tableNames = Object.keys(dbData.db.tables);
-        setValue(tableNames?.indexOf(params?.tableName) || 0 );
-      
+      // const activeTabIndex = params?.tableName
+      //   ? tableNames.indexOf(params?.tableName)
+      //   : 0;
+      setValue(tableNames?.indexOf(params?.tableName) || 0 );
         dispatch(bulkAddColumns({
           "dbId":dbData?.db?._id,
-          "tableName": params?.tableName||tableNames[0]
+          "tableName": params?.tableName|| tableNames[0]
         }));
         if(!(params?.tableName))
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+       
     }
   }, [dbData,value])
 

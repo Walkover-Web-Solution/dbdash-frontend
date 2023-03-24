@@ -23,11 +23,6 @@ const style = {
 };
 
 export default function FilterModal(props) {
-  // const [org, setOrg] = React.useState();
-  // const [filterInput, setFilterInput] = useState(['input1']);
-  // const [selectField,setSelectField] = useState(['selectFields1'])
-  // const [selectCommand,setSelectCommand] = useState(['selectCommand1'])
-  // const [AndOr,setAndOr] = useState([AndOr])
   const tableInfo=useSelector((state)=>getTableInfo(state));
   
   const handleClose = () => props.setOpen(false);
