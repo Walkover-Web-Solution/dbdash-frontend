@@ -23,8 +23,8 @@ const style = {
 };
 
 export default function FilterModal(props) {
+
   const tableInfo=useSelector((state)=>getTableInfo(state));
-  
   const handleClose = () => props.setOpen(false);
   const [fieldData, setFieldData] = useState("");
   const [filterName, setFilterName] = useState('');
@@ -152,7 +152,7 @@ export default function FilterModal(props) {
             </Box>}
             <Box>
               <Select onChange={(e)=>handleChangeField(e,index)} >
-                {fieldData && Object.entries(fieldData).map((fields, index) => (
+                {tableInfo.columns && fieldData && Object.entries(fieldData).map((fields, index) => (
                   <MenuItem key={index} value={fields[1].id} >
                   {fields[1].label}
                 </MenuItem>
