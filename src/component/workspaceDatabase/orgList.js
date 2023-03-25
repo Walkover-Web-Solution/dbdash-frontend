@@ -29,7 +29,6 @@ export const OrgList = (props) => {
   const handleOpenShareOrg = () => {
     setShareOrg(true);
   };
-  console.log("allorgss",allorgss)
   useEffect(() => {
     
    const obj =  allorgss.find(org => org._id === props?.orgId);
@@ -70,7 +69,6 @@ export const OrgList = (props) => {
       
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({orgId : props?.orgId,userid}))
-    console.log("userid", userid)
    
   };
 

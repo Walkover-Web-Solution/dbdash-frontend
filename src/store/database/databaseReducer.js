@@ -1,4 +1,3 @@
-import { current } from '@reduxjs/toolkit';
 import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk} from './databaseThunk';
 
 export const initialState = {
@@ -196,7 +195,6 @@ export function extraReducers(builder) {
       arr.find((temp,index)=>{
         if(temp._id==action.payload.allorgs[0]._id)
         {
-          console.log("mathed");
           arr[index]= action.payload.allorgs[0];
         }
       })
@@ -217,25 +215,19 @@ export function extraReducers(builder) {
     })
     .addCase(removeUserInOrgThunk.fulfilled, (state, action) => {
 
-      console.log("in reducer",action.payload.allorgs[0]);
-      console.log("hello",current(state.allOrg))
       var arr = state.allOrg;
       arr.find((temp,index)=>{
         if(temp._id==action.payload.allorgs[0]._id)
         {
-          console.log("mathed");
           arr[index]= action.payload.allorgs[0];
         }
       })
-      console.log("arrr",current(arr));
       state.allOrg = arr
       state.status = "succeeded";
-      console.log("hello",current(state.allOrg))
     })
     .addCase(removeUserInOrgThunk.rejected, (state) => {
 
       state.status = "failed";
-      console.log("rejected ");
       // MDBToast.error("Unable to fetch jamaats.");
     })
 

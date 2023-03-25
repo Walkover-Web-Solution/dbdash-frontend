@@ -152,7 +152,6 @@ export default function FilterModal(props) {
                   </Select>
             </Box>}
             <Box>
-              {console.log(fieldData)}
               <Select onChange={(e)=>handleChangeField(e,index)} >
                 {fieldData && Object.entries(fieldData)?.map((fields, index) => (
                   <MenuItem key={index} value={fields[1]?.id} >

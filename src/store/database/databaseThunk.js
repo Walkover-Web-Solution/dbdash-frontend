@@ -16,7 +16,6 @@ export const bulkAdd = createAsyncThunk(
         })
         const orgIds = Object.keys(result);
         const allorgs = await getAllOrgs(orgIds)
-        // console.log("allorgs",allorgs.data.data)
         const ans = {
             result:result,
             allorgs:allorgs?.data?.data
@@ -82,9 +81,7 @@ export const createOrgThunk = createAsyncThunk(
 
     export const shareUserInOrgThunk = createAsyncThunk(
         "organdDb/shareUserInOrgThunk", async (payload) => {
-            console.log(payload.orgId, payload.adminId,payload.email)
              await addUserInOrg(payload.orgId, payload.adminId,{email:payload.email});
-            console.log("in get all orgs ");
             const allorgs = await getAllOrgs(payload.orgId)
             const allData= {
                 allorgs:allorgs?.data?.data
@@ -95,9 +92,7 @@ export const createOrgThunk = createAsyncThunk(
 
 export const removeUserInOrgThunk = createAsyncThunk(
     "organdDb/removeUserInOrgThunk", async (payload) => {
-        console.log(payload.orgId, payload.adminId,payload.email)
          await removeUserInOrg(payload.orgId, payload.adminId,{email:payload.email});
-        console.log("in get all orgs ");
         const allorgs = await getAllOrgs(payload.orgId)
         const allData= {
             allorgs:allorgs?.data?.data
