@@ -9,7 +9,9 @@ const createOrg = async (data) =>
 
 const getAllOrgs = async (data) => 
 {
+   
     return await axios.post(URL +"/orgs/getsomeorgs",{userIds:data});
+ 
 }
 
 const getOrgById = async (id) =>
