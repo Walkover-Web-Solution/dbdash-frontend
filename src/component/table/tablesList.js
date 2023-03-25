@@ -103,9 +103,9 @@ export default function TablesList({dbData}) {
         {filter  &&
           Object.entries(filter).map((filter, index) => (
             <Box key={index} marginRight={1}>
-              <Box sx={{backgroundColor:"grey",height:30,width:80,display:"flex", gap:"10px", alignItems:"center",justifyContent:"center"}}
+              <Box sx={{backgroundColor:"grey",height:30,width:120,display:"flex", gap:"10px", alignItems:"center",justifyContent:"center"}}
                 onClick={() => {
-                  
+                  console.log(filter[0])
                   onFilterClicked(filter[1].query,filter[0]);
                 }}
                 variant="contained"
@@ -118,10 +118,11 @@ export default function TablesList({dbData}) {
               </Box>
             </Box>
           ))}
-      </Box>
+
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
           addFilter
         </Button> 
+      </Box>
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
        { openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo ={AllTableInfo}/>}
         

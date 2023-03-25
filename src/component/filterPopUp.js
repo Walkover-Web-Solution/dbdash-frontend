@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import { Select, MenuItem, TextField } from '@mui/material';
 // import { getAllfields } from "../api/fieldApi";
-import { createFilter } from "../api/filterApi"
+import { createFilter,updateQuery } from "../api/filterApi"
 import { getTableInfo } from "../store/table/tableSelector";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
 import { useSelector} from "react-redux";
@@ -38,6 +38,7 @@ export default function FilterModal(props) {
     "selectedOption":"",
     "value":""
   }])
+  console.log("filterId",props?.filterId)
   const handleChangeSelectedOption = (event,index) => {
     var temp  = query;
     temp[index].selectedOption = event.target.value;
@@ -46,17 +47,6 @@ export default function FilterModal(props) {
   };
 
   console.log("edit query",query)
-  // useEffect(()=>{
-  //   if(props?.edit == true)
-  //   {
-  //     console.log(props?.filterId)
-  //     setFilterName(AllTableInfo.tables[props?.tableName].filters[props?.filterId].filterName)
-  //     setEditData(AllTableInfo.tables[props?.tableName].filters[props?.filterId].query)
-  //     // setQueryParts(queryWithoutSelect);
-  //     console.log(editData)
-      
-  //   }
-  // })
   useEffect(()=>{   
     if(props?.edit == true)
     {
@@ -72,7 +62,6 @@ export default function FilterModal(props) {
          conditions = whereClause
       }
       console.log("query condtions = ",conditions)
-      console.log(conditions[1])
       var finalQuery = [];
       if(typeof(conditions) != "object")
       {
@@ -90,7 +79,12 @@ export default function FilterModal(props) {
             console.log("pqrs",pqrs)
             json.fields = pqrs[0]
             json.selectedOption = pqrs[1] == "NOT" ? pqrs[1]+" "+ pqrs[2] : pqrs[1]
-            json.value = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
+            let valuee = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
+            if(valuee.indexOf('%') !== -1)
+            {
+              valuee = valuee.substring(1, valuee.length - 1);
+            }
+            json.value = valuee
             finalQuery.push(json)
             i++;
             console.log(query)
@@ -103,7 +97,12 @@ export default function FilterModal(props) {
             console.log("pqrst  [0] ",pqrs[0])
             json.fields = pqrs[0];
             json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
-            json.value = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
+            let valuee = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
+            if(valuee.indexOf('%') !== -1)
+            {
+              valuee = valuee.substring(1, valuee.length - 1);
+            }
+            json.value = valuee
             console.log("first json",json);
             finalQuery.push(json)
         }
@@ -180,6 +179,36 @@ export default function FilterModal(props) {
      await createFilter(props?.dbId, props?.tableName, dataa)
   }
 
+  const editQueryData = async () => {
+    let queryToSend = "select * from " + props?.tableName + " where ";
+    for(var i =0;i<query?.length;i++)
+    {
+        switch (query[i]?.andor) {
+          case "and":
+            queryToSend =queryToSend +" and " 
+          break;
+          case "or":
+            queryToSend =queryToSend +" or "
+            break; 
+        }
+        queryToSend +=   query[i].fields  + " " 
+        if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
+          queryToSend += " " + query[i].selectedOption + " '%" +  query[i].value + "%'"
+        }
+        if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
+          queryToSend +=  query[i].selectedOption + " '" + query[i].value + "'"
+        }
+        if(query[i].selectedOption == "=" || query[i].selectedOption == "!="){
+          queryToSend +=  query[i].selectedOption + " '" + query[i].value + "'"
+        }
+    }
+    const dataa = {
+      filterId:props?.filterId,
+      filterName: filterName,
+      query: queryToSend
+    }
+     await updateQuery(props?.dbId, props?.tableName,dataa)
+  }
   return (
     <Box >
       <Modal
@@ -229,7 +258,7 @@ export default function FilterModal(props) {
 
             <Box>
               <Select 
-              value={q?.selectedOption}
+              value={q?.selectedOption} key={q?.value}
               onChange={(e)=>handleChangeSelectedOption(e,index)} >
                 <MenuItem value="LIKE">contains</MenuItem>
                 <MenuItem value="NOT LIKE">does not contain</MenuItem>
@@ -250,13 +279,20 @@ export default function FilterModal(props) {
           
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Box>
+            {props?.edit == false && <Box>
               <Button variant="contained" onClick={() => {
                 getQueryData();
                 handleClose()
               }}>
                 Create
               </Button>
+            </Box>}
+            <Box>
+              {console.log(props?.edit)}
+             {props?.edit == true  && <Button onClick={()=>{
+                editQueryData()
+                handleClose()
+              }}>Edit</Button>}
             </Box>
             <Box>
               <Button variant="outlined" onClick={handleClose}>
@@ -278,39 +314,3 @@ FilterModal.propTypes = {
   edit:PropTypes.any,
   filterId:PropTypes.any
 };
-
-
-
-// var temp = `fldLYxtFB NOT LIKE '%cvxccv%' or fldLYxtFB  NOT LIKE '%cvvcvc%' and fldLYxtFB = 'xcvf'`
-// const conditions = temp.split(/\s+(or|and)\s+/i);
-// console.log("Welcome to Programiz!",conditions);
-// var json1=[]
-// for(var i = 0;i <conditions.length;i++)
-// {
-//     // console.log(conditions[i]);
-//     if(conditions[i]=='or'|| conditions[i]=='and')
-//     {
-//         let json ={}
-//         json.andor = conditions[i];
-//         var pqrs = conditions[i+1].split(/\s+/);
-//         console.log("pqrs",pqrs)
-//         json.field = pqrs[0]
-//         json.selected = pqrs[1] == "NOT" ? pqrs[1]+pqrs[2] : pqrs[1]
-//         json.value = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
-//         json1.push(json);
-//         console.log(json);
-//       i++;
-//     }
-//     else{
-//           let json ={}
-//         json.andor = "";
-//         var pqrs = conditions[i].split(/\s+/);
-//         json.field = pqrs[0]
-//         json.selected = pqrs[1] == "NOT" ? pqrs[1]+pqrs[2] : pqrs[1]
-//         json.value = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
-//         json1.push(json);
-//     }
-   
-    
-// }
-// console.log(json1);
