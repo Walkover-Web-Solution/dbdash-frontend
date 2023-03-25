@@ -315,7 +315,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftColumn} />
+        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block"} })} className='th noselect'

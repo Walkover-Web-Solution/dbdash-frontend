@@ -10,7 +10,10 @@ import ControlPointSharpIcon  from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
 import { createDbThunk, deleteOrgThunk, renameOrgThunk } from "../../store/database/databaseThunk";
 import { useDispatch } from "react-redux";
-import { UserAuth } from "../../context/authContext"
+// import { UserAuth } from "../../context/authContext"
+import { useSelector } from "react-redux";
+import { selectActiveUser } from "../../store/user/userSelector";
+
 
 
 
@@ -23,13 +26,15 @@ export const OrgList = (props) => {
   const [orgId, setOrg] = useState();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
-  var user = UserAuth();
+  // var user = UserAuth();
+  const emailId=useSelector((state)=>selectActiveUser(state));
+
 
 
   const saveDb = async () => {
     // e.preventDefault();
     const userId = localStorage.getItem("userid");
-    const email = user?.user?.email
+    const email = emailId?.email
     const data = {
       user_id: userId,
       name: db,
