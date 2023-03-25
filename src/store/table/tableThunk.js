@@ -70,6 +70,7 @@ export const bulkAddColumns = createAsyncThunk(
                 payload.dbId,
                 payload?.filter
             )
+            console.log("querydata",querydata);
             const columns =  await getHeaders(payload.dbId,payload.tableName)
             const dataa = {
                 "columns":columns,
@@ -174,9 +175,11 @@ export const deleteRows = createAsyncThunk(
        
         var arr = [];
         for (var index in payload) {
+            // console.log(arr.push(payload[index].original.id ))
             arr.push(payload[index].original.id )
         }
         const {tableId, dbId} = getState().table
+        console.log(dbId,tableId,{row_id:arr})
        await deleteRow(dbId,tableId,{row_id:arr}) ;
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         return payload;

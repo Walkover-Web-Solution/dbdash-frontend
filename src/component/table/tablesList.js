@@ -57,14 +57,17 @@ export default function TablesList({dbData}) {
       "filter": filter
     }));
   }
+  useEffect(()=>{
+    if(dbData?.db?.tables)
+    {
+      const tableNames = Object.keys(dbData.db.tables);
+    setValue(tableNames?.indexOf(params?.tableName) || 0 );
+    }
+  },[value]);
   useEffect(() => {
     if(dbData?.db?.tables)
     {
       const tableNames = Object.keys(dbData.db.tables);
-      // const activeTabIndex = params?.tableName
-      //   ? tableNames.indexOf(params?.tableName)
-      //   : 0;
-      setValue(tableNames?.indexOf(params?.tableName) || 0 );
         dispatch(bulkAddColumns({
           "dbId":dbData?.db?._id,
           "tableName": params?.tableName|| tableNames[0]
@@ -73,7 +76,7 @@ export default function TablesList({dbData}) {
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
        
     }
-  }, [dbData,value])
+  }, [dbData])
 
   return (
     <>
