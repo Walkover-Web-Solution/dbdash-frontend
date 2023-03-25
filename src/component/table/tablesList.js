@@ -35,7 +35,6 @@ export default function TablesList({dbData}) {
   const [filter,setFilter]=useState(false);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
-
   const saveTable = async () => {
     const data = {
       tableName: table
@@ -44,11 +43,13 @@ export default function TablesList({dbData}) {
     dispatch(createTable1({"dbId":dbData?.db?._id,"data":data}));
     
   };
+
   function onFilterClicked(filter) {
     dispatch(bulkAddColumns({
       "dbId": dbData?.db?._id,
       "tableName": params?.tableName || Object.keys(dbData?.db?.tables)[0],
-      "filter": filter
+      "filter": filter,
+      "org_id":dbData?.db?.org_id
     }));
   }
   useEffect(()=>{

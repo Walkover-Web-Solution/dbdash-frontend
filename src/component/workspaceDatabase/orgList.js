@@ -1,47 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Dropdown from "../dropdown";
 import PopupModal from "../popupModal";
 import SingleDatabase from "./singleDatabase";
 import Grid from "@mui/material/Grid";
 import { Box,Card, Typography, TextField, Button, IconButton} from "@mui/material";
 import ControlPointSharpIcon  from '@mui/icons-material/AddSharp';
-// import { createDb } from "../../api/dbApi";
-// import { deleteOrg } from "../../api/orgApi";
 import PropTypes from "prop-types";
-import { createDbThunk, deleteOrgThunk, renameOrgThunk } from "../../store/database/databaseThunk";
-import { useDispatch } from "react-redux";
-// import { UserAuth } from "../../context/authContext"
-import { useSelector } from "react-redux";
-import { selectActiveUser } from "../../store/user/userSelector";
-
-
+import {  createDbThunk, deleteOrgThunk, renameOrgThunk } from "../../store/database/databaseThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { addUserInOrg, removeUserInOrg } from "../../api/orgApi";
+import ShareOrgModal from "./shareOrgModal";
+import { allOrg } from "../../store/database/databaseSelector";
 
 
 
 export const OrgList = (props) => {
   const [name, setName] = useState(false);
+  const[user,setUser]=useState([])
   const [orgName, setOrgName] = useState();
   const [db, setDb] = useState(false);
   const [open, setOpen] = useState(false);
+  const [shareOrg, setShareOrg] = useState(false);
   const [orgId, setOrg] = useState();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
-  // var user = UserAuth();
-  const emailId=useSelector((state)=>selectActiveUser(state));
+  const allorgss = useSelector((state) => allOrg(state))
+  const [isAdmin,setIsAdmin]=useState(false);
+  const handleOpenShareOrg = () => {
+    setShareOrg(true);
+  };
 
-
-
+  useEffect(() => {
+    
+   const obj =  allorgss?.find(org => org._id === props?.orgId);
+   setUser(obj)
+   const userId = localStorage.getItem("userid")
+   if(obj?.users)
+   {
+    console.log("obj users ", obj );
+     Object.entries(obj?.users).map((user) => {
+        if(user[1].user_id._id == userId && user[1].user_type == "admin" )
+        {
+          setIsAdmin(true);
+        }
+      });
+     
+    }
+  }, [])
+  
+ 
   const saveDb = async () => {
-    // e.preventDefault();
     const userId = localStorage.getItem("userid");
-    const email = emailId?.email
     const data = {
       user_id: userId,
       name: db,
     };
     setOpen(false);
-    dispatch(createDbThunk({orgId, data,email}));
-    // await props?.getOrgAndDbs();
+    dispatch(createDbThunk({orgId, data}));
   };
 
   const renameWorkspace = async (orgId) => {
@@ -50,37 +65,56 @@ export const OrgList = (props) => {
       name: orgName || name,
     };
     dispatch(renameOrgThunk({orgId, data, userid}))
-    // await updateOrg(orgId, data,userid);
-    // await props?.getOrgAndDbs();
+   
   };
 
   const deleteOrganization = async () => {
       
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({orgId : props?.orgId,userid}))
-
+    console.log("userid", userid)
+   
   };
 
-  useEffect(()=>{
-  },[props.dbs]);
+  const shareWorkspace = async (email) => {
+
+    const data = {
+      email: email
+    }
+    const adminId = localStorage.getItem("userid")
+    await addUserInOrg(props?.orgId, adminId, data)
+  }
+
+  const removeUserFromWorkspace = async (email) => {
+
+    const data = {
+      email: email
+    }
+    const adminId = localStorage.getItem("userid")
+    await removeUserInOrg(props?.orgId, adminId, data)
+    console.log(email)
+    // await dispatch(bulkAdd({email:email}))
+    
+  }
 
   return (
     <>
       <Box key={props?.orgId} sx={{ m: 3 }}>
-        <Box sx={{ my: 7, display: "flex" }}>
-          {name ? (
+        { 
+       ( <Box sx={{ my: 7, display: "flex"}}>
+          { name ? (
             <>
               <TextField 
                 autoFocus
                 sx={{ width: 120, fontWeight: "bold" }}
                 defaultValue={props.dbs[0]?.org_id?.name}
                 value={orgName}
-                onKeyDown={(e) => {
+                Down={(e) => {
                   if (e.key === 'Enter') {
                     renameWorkspace(props?.orgId);
                     setName(false);
                   }
-                }}
+                }}onKey
                 onChange={(e) => setOrgName(e.target.value)}
                 size="small"
               />
@@ -109,7 +143,7 @@ export const OrgList = (props) => {
                 {props.dbs[0]?.org_id?.name}{" "}
               </Typography>
 
-              <Box sx={{ mt: -1 }}>
+             {isAdmin &&  <Box sx={{ mt: -1 }}>
                 <Dropdown
                   first={"Rename workspace"}
                   second={"Delete workspace"}
@@ -118,10 +152,25 @@ export const OrgList = (props) => {
                   deleteFunction={deleteOrganization}
                   title= "Organization"
                 />
-              </Box>
+              </Box>}
+
+              
+             
             </>
           )}
-        </Box>
+          {isAdmin && <Box>
+            <div style={{right:"10px",display:"flex"}}>
+              <Button 
+              variant="contained" size="small" color="success" sx ={{display: "flex"}} onClick={handleOpenShareOrg}>
+              Share
+              </Button>
+              </div>
+          <ShareOrgModal 
+          shareOrg={shareOrg} org={user} setShareOrg={setShareOrg} shareWorkspace={shareWorkspace}
+           removeUserFromWorkspace={removeUserFromWorkspace} />
+          </Box>
+          }
+        </Box>)}
 
         <Box sx={{ display: "flex" }}>
           <Box sx={{ display: "flex" }}>
@@ -174,7 +223,7 @@ export const OrgList = (props) => {
   );
 };
 OrgList.propTypes = {
-  dbs: PropTypes.array,
+  dbs: PropTypes.any,
   orgId: PropTypes.string,
   getOrgAndDbs: PropTypes.func,
 };
