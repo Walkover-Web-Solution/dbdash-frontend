@@ -38,7 +38,6 @@ export default function FilterModal(props) {
     "selectedOption":"",
     "value":""
   }])
-  console.log("filterId",props?.filterId)
   const handleChangeSelectedOption = (event,index) => {
     var temp  = query;
     temp[index].selectedOption = event.target.value;
@@ -46,7 +45,6 @@ export default function FilterModal(props) {
     setQuery([...temp]);
   };
 
-  console.log("edit query",query)
   useEffect(()=>{   
     if(props?.edit == true)
     {
@@ -61,7 +59,6 @@ export default function FilterModal(props) {
       else{
          conditions = whereClause
       }
-      console.log("query condtions = ",conditions)
       var finalQuery = [];
       if(typeof(conditions) != "object")
       {
@@ -76,7 +73,6 @@ export default function FilterModal(props) {
             let json ={}         
             json.andor = conditions[i];
             const pqrs = conditions[i+1].split(/\s+/);
-            console.log("pqrs",pqrs)
             json.fields = pqrs[0]
             json.selectedOption = pqrs[1] == "NOT" ? pqrs[1]+" "+ pqrs[2] : pqrs[1]
             let valuee = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
@@ -87,14 +83,11 @@ export default function FilterModal(props) {
             json.value = valuee
             finalQuery.push(json)
             i++;
-            console.log(query)
         }
         else{
             let json = {};
             json.andor = "";
             const pqrs = conditions[0].trim().split(/\s+/);
-            console.log("pqrst",pqrs)
-            console.log("pqrst  [0] ",pqrs[0])
             json.fields = pqrs[0];
             json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
             let valuee = pqrs[pqrs.length-1].substring(1,pqrs[pqrs.length-1].length-1 );
@@ -103,7 +96,6 @@ export default function FilterModal(props) {
               valuee = valuee.substring(1, valuee.length - 1);
             }
             json.value = valuee
-            console.log("first json",json);
             finalQuery.push(json)
         }
       
@@ -288,7 +280,6 @@ export default function FilterModal(props) {
               </Button>
             </Box>}
             <Box>
-              {console.log(props?.edit)}
              {props?.edit == true  && <Button onClick={()=>{
                 editQueryData()
                 handleClose()

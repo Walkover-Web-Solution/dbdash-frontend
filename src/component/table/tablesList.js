@@ -43,7 +43,7 @@ export default function TablesList({dbData}) {
     }
     setOpen(false);
     dispatch(createTable1({"dbId":dbData?.db?._id,"data":data}));
-    
+ 
   };
   const handleEdit = async()=>{
     setEdit(true)
@@ -105,7 +105,6 @@ export default function TablesList({dbData}) {
             <Box key={index} marginRight={1}>
               <Box sx={{backgroundColor:"grey",height:30,width:120,display:"flex", gap:"10px", alignItems:"center",justifyContent:"center"}}
                 onClick={() => {
-                  console.log(filter[0])
                   onFilterClicked(filter[1].query,filter[0]);
                 }}
                 variant="contained"

@@ -154,6 +154,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
-  filter:PropTypes.bool,
+  filter:PropTypes.any,
   setFilter :PropTypes.func
 };
