@@ -161,6 +161,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
-  filter:PropTypes.object,
+  filter:PropTypes.any,
   setFilter :PropTypes.func
 };

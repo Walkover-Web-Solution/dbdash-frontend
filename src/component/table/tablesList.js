@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
 import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import { createTable1} from '../../store/allTable/allTableThunk';
-
+import EditIcon from '@mui/icons-material/Edit';
 export default function TablesList({dbData}) {
   const dispatch= useDispatch();
   const params = useParams();
@@ -35,16 +35,22 @@ export default function TablesList({dbData}) {
   const [filter,setFilter]=useState(false);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
+  const [edit,setEdit] = useState(false)
+  const [filterId,setFilterId] = useState("")
   const saveTable = async () => {
     const data = {
       tableName: table
     }
     setOpen(false);
     dispatch(createTable1({"dbId":dbData?.db?._id,"data":data}));
-    
+ 
   };
-
-  function onFilterClicked(filter) {
+  const handleEdit = async()=>{
+    setEdit(true)
+    setOpenn(true)
+  }
+  function onFilterClicked(filter,id) {
+    setFilterId(id)
     dispatch(bulkAddColumns({
       "dbId": dbData?.db?._id,
       "tableName": params?.tableName || Object.keys(dbData?.db?.tables)[0],
@@ -87,7 +93,7 @@ export default function TablesList({dbData}) {
 
           {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
             <Box key={index} >
-              <SingleTable filter={filter} setFilter = {setFilter} table={table} tabIndex={tabIndex}  setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
+              <SingleTable filter={filter} setFilter = {setFilter} table={table}  tabIndex={tabIndex} setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
             ))
           }
@@ -101,23 +107,27 @@ export default function TablesList({dbData}) {
         {filter  &&
           Object.entries(filter).map((filter, index) => (
             <Box key={index} marginRight={1}>
-              <Button
+              <Box sx={{backgroundColor:"grey",height:30,width:120,display:"flex", gap:"10px", alignItems:"center",justifyContent:"center"}}
                 onClick={() => {
-                  onFilterClicked(filter[1].query);
+                  onFilterClicked(filter[1].query,filter[0]);
                 }}
                 variant="contained"
                 color="primary"
               >
                 {filter[1]?.filterName}
-              </Button>
+              <EditIcon fontSize='small' onClick={()=>{
+                handleEdit();
+              }}/>
+              </Box>
             </Box>
           ))}
-      </Box>
+
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
           addFilter
         </Button> 
+      </Box>
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
-       { openn&&<FilterModal open={openn} setOpen={setOpenn} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo ={AllTableInfo}/>}
+       { openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo ={AllTableInfo}/>}
         
         <MainTable/>
     </>
