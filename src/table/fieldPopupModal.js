@@ -20,12 +20,6 @@ const handleTextChange = (event) => {
     props?.setOpen(false);
   };
  
-
-//   const handlesubmit =()=>{
-   
-
-//     props?.setOpen(false)
-//   }
   return (
     <div>
       
@@ -60,7 +54,6 @@ const handleTextChange = (event) => {
             sx={{margin:1,
               minWidth: 120,}}
           >
-            {/* <MenuItem value="">Select an option</MenuItem> */}
             <MenuItem value="text" >text</MenuItem>
             <MenuItem value="varchar">varchar</MenuItem>
             <MenuItem value="integer">integer</MenuItem>
@@ -68,6 +61,7 @@ const handleTextChange = (event) => {
             <MenuItem value="datetime">datetime</MenuItem>
             <MenuItem value="createdby">created By</MenuItem>
             <MenuItem value="createdat">created At</MenuItem>
+            <MenuItem value="generatedcolumn">generated column</MenuItem>
           </Select>
 
         </DialogContent>

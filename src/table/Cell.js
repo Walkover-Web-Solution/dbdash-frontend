@@ -264,14 +264,22 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         </>
       );
       break;
-      case "check":
+    case "check":
       element =(<><div   {...row.getRowProps()} className= "tr">
           <input type="checkbox" {...row.getToggleRowSelectedProps()} />
           </div>
       </>)
           
         break;
-
+    case "generatedcolumn":
+          element = (
+            <input type ="text"
+            readOnly="readonly"
+            defaultValue ={(value?.value && value?.value?.toString()) || ""}
+            className='data-input'
+          />
+          );
+          break;
     default:
       element = null;
       break;
