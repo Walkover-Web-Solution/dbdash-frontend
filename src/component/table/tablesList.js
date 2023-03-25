@@ -52,11 +52,9 @@ export default function TablesList({dbData}) {
     }));
   }
   useEffect(()=>{
-    console.log(dbData?.db?.tables)
     if(dbData?.db?.tables)
     {
       const tableNames = Object.keys(dbData.db.tables);
-      console.log("tableNames",tableNames);
     setValue(tableNames?.indexOf(params?.tableName) || 0 );
     }
   },[dbData]);

@@ -175,9 +175,11 @@ export const deleteRows = createAsyncThunk(
        
         var arr = [];
         for (var index in payload) {
+            // console.log(arr.push(payload[index].original.id ))
             arr.push(payload[index].original.id )
         }
         const {tableId, dbId} = getState().table
+        console.log(dbId,tableId,{row_id:arr})
        await deleteRow(dbId,tableId,{row_id:arr}) ;
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         return payload;
