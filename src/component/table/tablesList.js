@@ -69,13 +69,14 @@ export default function TablesList({dbData}) {
     if(dbData?.db?.tables)
     {
       const tableNames = Object.keys(dbData.db.tables);
-        dispatch(bulkAddColumns({
-          "dbId":dbData?.db?._id,
-          "tableName": params?.tableName|| tableNames[0]
-        }));
-        if(!(params?.tableName))
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
-       
+      dispatch(bulkAddColumns({
+        "dbId":dbData?.db?._id,
+        "tableName": params?.tableName|| tableNames[0]
+      }));
+      if(!(params?.tableName))
+      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+   setValue(tableNames?.indexOf(params?.tableName) || 0 );
+      
     }
   }, [dbData])
 
