@@ -59,7 +59,6 @@ export default function TablesList({dbData}) {
     }));
   }
   useEffect(()=>{
-    console.log("in url ")
     if(dbData?.db?.tables)
     {
       const tableNames = Object.keys(dbData.db.tables);

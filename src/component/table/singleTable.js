@@ -17,7 +17,6 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   const [, setTableButton] = useState(false);
   const [name, setName] = useState();
   // const alldb = useSelector((state) => selectOrgandDb(state))
-  // console.log('alldb',alldb)
 
   
   const dispatch = useDispatch();

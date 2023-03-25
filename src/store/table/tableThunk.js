@@ -100,11 +100,9 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{  
             const columns =  await getHeaders(payload.dbId,payload.tableName)
-            // const data = await getTable(payload.dbId,payload.tableName)
-            // const  s  = allOrg(getState());
-            // console.log("getState",s.map((i)=>console.log(i.users[0].user_id._id )) )
+           
             const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id)
-            // console.log("payload",payload?.alldb)
+       
             const dataa = {
                 "columns":columns,
                 "row":data,
