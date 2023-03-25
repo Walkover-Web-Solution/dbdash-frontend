@@ -12,8 +12,10 @@ export default function LandingPage() {
    const dispatch = useDispatch();
    useEffect(()=>{
       if(user?.email)
-      dispatch(bulkAdd({email:user?.email}))
-   })
+     {
+       dispatch(bulkAdd({email:user?.email}))
+      }
+   },[user])
   return (
     <Container maxWidth='true'>
 

@@ -1,10 +1,12 @@
-import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk } from './databaseThunk';
+import { current } from '@reduxjs/toolkit';
+import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk} from './databaseThunk';
 
 export const initialState = {
   status: 'idle',
   orgId: {
 
   },
+  allOrg:[]
 };
 
 export const reducers = {
@@ -70,7 +72,8 @@ export function extraReducers(builder) {
 
     })
     .addCase(bulkAdd.fulfilled, (state, action) => {
-      state.orgId = action.payload
+      state.orgId = action.payload.result
+      state.allOrg = action.payload.allorgs
       state.status = "succeeded";
     })
     .addCase(bulkAdd.rejected, (state) => {
@@ -113,9 +116,12 @@ export function extraReducers(builder) {
     .addCase(createOrgThunk.fulfilled, (state, action) => {
 
       state.status = "succeeded";
-      let arr = state.orgId[action.payload.org_id._id] || [];
-      const newArr = [...arr, action.payload];
-      state.orgId = { ...state.orgId, [action.payload.org_id._id]: newArr };
+      let arr = state.orgId[action.payload.data.org_id._id] || [];
+      const newArr = [...arr, action.payload.data];
+      state.orgId = { ...state.orgId, [action.payload.data.org_id._id]: newArr };
+      console.log(current(state.allorgs));
+      console.log("allsldflds",action.payload.allorgs);
+      state.allOrg = action.payload.allorgs
     })
     .addCase(createOrgThunk.rejected, (state) => {
 
@@ -179,6 +185,7 @@ export function extraReducers(builder) {
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
+
 
 }
 

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { Box } from '@mui/material'
 import PopupModal from '../popupModal';
 import Button from '@mui/material/Button';
-import { UserAuth } from "../../context/authContext.js"
 import { OrgList } from './orgList';
 import { PropTypes } from 'prop-types';
 import { selectOrgandDb } from "../../store/database/databaseSelector.js"
@@ -12,20 +11,12 @@ import { useDispatch } from "react-redux";
 
 export default function WorkspaceCombined() {
 
-  const { user } = UserAuth();
   const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
   const dispatch = useDispatch();
 
-  //state to display modal
   const [org, setOrg] = useState();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-
-  useEffect(() => {
-    // dispatchs(bulkAddColumns(makeData(10)));
-    // if(user?.email)
-    // getOrgAndDb();
-  }, [user])
 
   const saveOrgToDB = async () => {
     const userid = localStorage.getItem("userid");
@@ -44,7 +35,7 @@ export default function WorkspaceCombined() {
         <Box>
           {Object.entries(alldbs).map(([orgId, dbs]) => (
             <Box key={orgId}>
-              <OrgList orgId={orgId} dbs={dbs} />
+              <OrgList orgId={orgId}  dbs={dbs} />
 
             </Box>
           ))

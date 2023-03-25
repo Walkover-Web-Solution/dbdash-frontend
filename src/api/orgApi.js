@@ -7,9 +7,9 @@ const createOrg = async (data) =>
     return await axios.post(URL + "/orgs",data)
 }
 
-const getAllOrgs = async () => 
+const getAllOrgs = async (data) => 
 {
-    return await axios.get(URL +"/orgs");
+    return await axios.post(URL +"/orgs/getsomeorgs",{userIds:data});
 }
 
 const getOrgById = async (id) =>
@@ -17,9 +17,9 @@ const getOrgById = async (id) =>
     return await axios.get(URL +`/orgs/${id}`);
 }
 
-const addUserInOrg = async (id, data) =>
+const addUserInOrg = async (id, adminId, data) =>
 {
-    return  await axios.patch(URL + `/orgs/${id}/adduser`,data)
+    return  await axios.patch(URL + `/orgs/${id}/adduser/${adminId}`,data)
 }
 
 const updateOrg = async (id ,data,userId) =>
@@ -27,9 +27,9 @@ const updateOrg = async (id ,data,userId) =>
     return await axios.patch(URL + `/orgs/${id}/${userId}`,data)
 }
 
-const removeUserInOrg = async (id , data) =>
+const removeUserInOrg = async (id ,adminId, data) =>
 {
-    return await axios.patch(URL + `/orgs/${id}/removeuser`,data)
+    return await axios.patch(URL + `/orgs/${id}/removeuser/${adminId}`,data)
 }    
 
 const deleteOrg = async (id,userId)=>
