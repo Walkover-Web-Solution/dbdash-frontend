@@ -31,7 +31,7 @@ axios.interceptors.response.use(
       // alert("forbidden Error : you have limited access")
     }
     if (error?.response?.status === 405) {
-      alert("Can'nt Delete Becuase this Org only one DB")
+      alert("Can't Delete Becuase this Org only one DB")
     }
     return Promise.reject(error);
   }

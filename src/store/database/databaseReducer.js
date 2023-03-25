@@ -1,5 +1,5 @@
 import { current } from '@reduxjs/toolkit';
-import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk} from './databaseThunk';
+import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk} from './databaseThunk';
 
 export const initialState = {
   status: 'idle',
@@ -119,9 +119,7 @@ export function extraReducers(builder) {
       let arr = state.orgId[action.payload.data.org_id._id] || [];
       const newArr = [...arr, action.payload.data];
       state.orgId = { ...state.orgId, [action.payload.data.org_id._id]: newArr };
-      console.log(current(state.allorgs));
-      console.log("allsldflds",action.payload.allorgs);
-      state.allOrg = action.payload.allorgs
+      state.allOrg = [...state.allOrg , action.payload.allorgs[0]]
     })
     .addCase(createOrgThunk.rejected, (state) => {
 
@@ -185,6 +183,62 @@ export function extraReducers(builder) {
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
+
+    //   Add user in Org
+
+    .addCase(shareUserInOrgThunk.pending, (state) => {
+
+      state.status = "loading"
+    })
+    .addCase(shareUserInOrgThunk.fulfilled, (state, action) => {
+
+      var arr = state.allOrg;
+      arr.find((temp,index)=>{
+        if(temp._id==action.payload.allorgs[0]._id)
+        {
+          console.log("mathed");
+          arr[index]= action.payload.allorgs[0];
+        }
+      })
+      state.allOrg = arr
+      state.status = "succeeded";
+    })
+    .addCase(shareUserInOrgThunk.rejected, (state) => {
+
+      state.status = "failed";
+      // MDBToast.error("Unable to fetch jamaats.");
+    })
+
+    //   Remove user from Org
+
+    .addCase(removeUserInOrgThunk.pending, (state) => {
+
+      state.status = "loading"
+    })
+    .addCase(removeUserInOrgThunk.fulfilled, (state, action) => {
+
+      console.log("in reducer",action.payload.allorgs[0]);
+      console.log("hello",current(state.allOrg))
+      var arr = state.allOrg;
+      arr.find((temp,index)=>{
+        if(temp._id==action.payload.allorgs[0]._id)
+        {
+          console.log("mathed");
+          arr[index]= action.payload.allorgs[0];
+        }
+      })
+      console.log("arrr",current(arr));
+      state.allOrg = arr
+      state.status = "succeeded";
+      console.log("hello",current(state.allOrg))
+    })
+    .addCase(removeUserInOrgThunk.rejected, (state) => {
+
+      state.status = "failed";
+      console.log("rejected ");
+      // MDBToast.error("Unable to fetch jamaats.");
+    })
+
 
 
 }

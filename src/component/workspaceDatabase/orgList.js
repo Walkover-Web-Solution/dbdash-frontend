@@ -6,9 +6,9 @@ import Grid from "@mui/material/Grid";
 import { Box,Card, Typography, TextField, Button, IconButton} from "@mui/material";
 import ControlPointSharpIcon  from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
-import {  createDbThunk, deleteOrgThunk, renameOrgThunk } from "../../store/database/databaseThunk";
+import {  createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk } from "../../store/database/databaseThunk";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserInOrg, removeUserInOrg } from "../../api/orgApi";
+// import {  removeUserInOrg } from "../../api/orgApi";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
 
@@ -16,7 +16,7 @@ import { allOrg } from "../../store/database/databaseSelector";
 
 export const OrgList = (props) => {
   const [name, setName] = useState(false);
-  const[user,setUser]=useState([])
+  const[orgUsers,setOrgUsers]=useState([])
   const [orgName, setOrgName] = useState();
   const [db, setDb] = useState(false);
   const [open, setOpen] = useState(false);
@@ -29,11 +29,11 @@ export const OrgList = (props) => {
   const handleOpenShareOrg = () => {
     setShareOrg(true);
   };
-
+  console.log("allorgss",allorgss)
   useEffect(() => {
     
    const obj =  allorgss.find(org => org._id === props?.orgId);
-   setUser(obj)
+   setOrgUsers(obj)
    const userId = localStorage.getItem("userid")
    if(obj?.users)
    { Object.entries(obj?.users).map((user) => {
@@ -44,7 +44,7 @@ export const OrgList = (props) => {
       });
      
     }
-  }, [])
+  }, [allorgss])
   
  
   const saveDb = async () => {
@@ -75,23 +75,17 @@ export const OrgList = (props) => {
   };
 
   const shareWorkspace = async (email) => {
-
-    const data = {
-      email: email
-    }
+    
     const adminId = localStorage.getItem("userid")
-    await addUserInOrg(props?.orgId, adminId, data)
+    dispatch(shareUserInOrgThunk({orgId:props?.orgId, adminId:adminId ,email:email}))
+    // await addUserInOrg(props?.orgId, adminId, data)
   }
 
   const removeUserFromWorkspace = async (email) => {
 
-    const data = {
-      email: email
-    }
     const adminId = localStorage.getItem("userid")
-    await removeUserInOrg(props?.orgId, adminId, data)
-    console.log(email)
-    // await dispatch(bulkAdd({email:email}))
+    dispatch(removeUserInOrgThunk({orgId:props?.orgId, adminId:adminId ,email:email}))
+    // await removeUserInOrg(props?.orgId, adminId, data)
     
   }
 
@@ -157,15 +151,15 @@ export const OrgList = (props) => {
             </>
           )}
           {isAdmin && <Box>
-            <div style={{right:"10px",display:"flex"}}>
+            <Box sx={{right:"10px",display:"flex"}}>
               <Button 
               variant="contained" size="small" color="success" sx ={{display: "flex"}} onClick={handleOpenShareOrg}>
               Share
               </Button>
-              </div>
-          <ShareOrgModal 
-          shareOrg={shareOrg} org={user} setShareOrg={setShareOrg} shareWorkspace={shareWorkspace}
-           removeUserFromWorkspace={removeUserFromWorkspace} />
+              </Box>
+              <ShareOrgModal 
+              shareOrg={shareOrg} org={orgUsers} setShareOrg={setShareOrg} shareWorkspace={shareWorkspace}
+               removeUserFromWorkspace={removeUserFromWorkspace} />
           </Box>
           }
         </Box>)}

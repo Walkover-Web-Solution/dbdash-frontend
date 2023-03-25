@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify'
+
 
 
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
-
+  
   const handleClose = () => {
     props.setShareOrg(false);
+    setEmail("");
   };
 
   const handleEmailChange = (event) => {
@@ -18,6 +21,7 @@ export default function ShareOrgModal(props) {
   const handleSendInvite = () => {
     props.shareWorkspace(email);
     handleClose();
+    toast.success("Error sending invite. Please try again.");
   };
 
   const handleKeyDown = (event) => {
@@ -32,10 +36,10 @@ export default function ShareOrgModal(props) {
   };
 
   return (
-    <div>
-      <Dialog open={props.shareOrg} onClose={handleClose}>
-        <DialogTitle>Add User to Organization</DialogTitle>
-        <DialogContent>
+    
+      <Dialog open={props.shareOrg} onClose={handleClose} >
+        <DialogTitle sx={{width:500}}>Add User to Organization</DialogTitle>
+        <DialogContent sx={{flex:'none'}}>
           <TextField
             autoFocus
             margin="dense"
@@ -59,20 +63,32 @@ export default function ShareOrgModal(props) {
           </Button>
           
         </DialogActions>
-         <Typography variant="h6">Shared with:</Typography>
+
+    <Box sx={{m:1}}>
+         <Typography variant="h6"><strong>Shared with:</strong></Typography>
+    </Box>
+    <Box >
         {Object.values(props.org.users).map((user) => (
-          <div key={user.user_id.email}>
+          
+          <Box key={user.user_id.email} sx={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+
+            <Box sx={{m:1}} >
             <Typography>{user.user_id.email}</Typography>
+            </Box>
+
+            <Box sx={{alignItems:'center'}}>
             <IconButton
               aria-label="delete"
               onClick={() => handleRemoveUser(user.user_id.email)}
             >
               <DeleteIcon />
             </IconButton>
-          </div>
+            </Box>
+
+          </Box>
         ))}
+        </Box>
       </Dialog>
-    </div>
   );
 }
 
@@ -81,7 +97,7 @@ ShareOrgModal.propTypes = {
   setShareOrg: PropTypes.func,
   shareWorkspace: PropTypes.func,
   org: PropTypes.shape({
-    users: PropTypes.object
+    users: PropTypes.array
   }),
   removeUserFromWorkspace: PropTypes.func
 };

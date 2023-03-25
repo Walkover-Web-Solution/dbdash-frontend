@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { renameDb, deleteDb, createDb } from "../../api/dbApi";
-import { createOrg, deleteOrg, getAllOrgs, updateOrg } from "../../api/orgApi";
+import { addUserInOrg, createOrg, deleteOrg, getAllOrgs, removeUserInOrg, updateOrg } from "../../api/orgApi";
 import { findUserByEmail } from "../../api/userApi";
 // import { UserAuth } from "../../context/authContext";
 // import { updateDb } from './databaseSlice';
@@ -78,5 +78,30 @@ export const createOrgThunk = createAsyncThunk(
         }
         return allData;
     }
+);
+
+    export const shareUserInOrgThunk = createAsyncThunk(
+        "organdDb/shareUserInOrgThunk", async (payload) => {
+            console.log(payload.orgId, payload.adminId,payload.email)
+             await addUserInOrg(payload.orgId, payload.adminId,{email:payload.email});
+            console.log("in get all orgs ");
+            const allorgs = await getAllOrgs(payload.orgId)
+            const allData= {
+                allorgs:allorgs?.data?.data
+            }
+            return allData;
+        }
 );  
 
+export const removeUserInOrgThunk = createAsyncThunk(
+    "organdDb/removeUserInOrgThunk", async (payload) => {
+        console.log(payload.orgId, payload.adminId,payload.email)
+         await removeUserInOrg(payload.orgId, payload.adminId,{email:payload.email});
+        console.log("in get all orgs ");
+        const allorgs = await getAllOrgs(payload.orgId)
+        const allData= {
+            allorgs:allorgs?.data?.data
+        }
+        return allData;
+    }
+);  

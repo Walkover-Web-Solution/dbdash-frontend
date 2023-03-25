@@ -9,6 +9,7 @@ const createOrg = async (data) =>
 
 const getAllOrgs = async (data) => 
 {
+    console.log("getAllOrgs",data)
     return await axios.post(URL +"/orgs/getsomeorgs",{userIds:data});
 }
 
