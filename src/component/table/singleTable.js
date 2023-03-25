@@ -7,6 +7,8 @@ import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
+// import { selectOrgandDb } from "../../store/database/databaseSelector";
+
 
 
 export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex,highlightActiveTable,setFilter }) {
@@ -14,6 +16,9 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
   const [name, setName] = useState();
+  // const alldb = useSelector((state) => selectOrgandDb(state))
+  // console.log('alldb',alldb)
+
   
   const dispatch = useDispatch();
 
@@ -54,6 +59,7 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)
     dispatch(bulkAddColumns({
+      //  "alldb":alldb,
       "dbId": dbData?.db?._id,
       "tableName": table[0]
     }));
@@ -84,7 +90,8 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
           onTableClicked(table[0])
           dispatch(bulkAddColumns({
             "dbId": dbData?.db?._id,
-            "tableName": table[0]
+            "tableName": table[0],
+            "org_id":dbData?.db?.org_id
           }));
         }}
       >
@@ -154,6 +161,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
-  filter:PropTypes.object,
+  filter:PropTypes.any,
   setFilter :PropTypes.func
 };
