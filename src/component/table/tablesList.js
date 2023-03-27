@@ -12,7 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
 import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import { createTable1} from '../../store/allTable/allTableThunk';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
+import SingleFilter from './singleFilter';
 export default function TablesList({dbData}) {
   const dispatch= useDispatch();
   const params = useParams();
@@ -35,7 +36,7 @@ export default function TablesList({dbData}) {
   const [filter,setFilter]=useState(false);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
-  const [edit,setEdit] = useState(false)
+  // const [edit,setEdit] = useState(false)
   const [filterId,setFilterId] = useState("")
   const saveTable = async () => {
     const data = {
@@ -107,20 +108,7 @@ export default function TablesList({dbData}) {
         <Box display="flex" flexWrap="nowrap">
         {filter  &&
           Object.entries(filter).map((filter, index) => (
-            <Box key={index} marginRight={1}>
-              <Box sx={{backgroundColor:"grey",height:30,width:120,display:"flex", gap:"10px", alignItems:"center",justifyContent:"center"}}
-                onClick={() => {
-                  onFilterClicked(filter[1].query,filter[0]);
-                }}
-                variant="contained"
-                color="primary"
-              >
-                {filter[1]?.filterName}
-              <EditIcon fontSize='small' onClick={()=>{
-                handleEdit();
-              }}/>
-              </Box>
-            </Box>
+           <SingleFilter key={index} filter={filter} index={index} handleEdit={handleEdit} onFilterClicked={onFilterClicked}/>
           ))}
 
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
@@ -128,7 +116,9 @@ export default function TablesList({dbData}) {
         </Button> 
       </Box>
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
-       { openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo ={AllTableInfo}/>}
+       { openn && <FilterModal open={openn} 
+       edit={edit} 
+       setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo ={AllTableInfo}/>}
         
         <MainTable/>
     </>
