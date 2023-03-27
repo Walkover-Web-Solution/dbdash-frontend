@@ -46,7 +46,7 @@ export default function TablesList({ dbData }) {
     setAnchorEl(null);
   };
 
-  console.log(value)
+
   const saveTable = async () => {
     const data = {
       tableName: table
