@@ -93,21 +93,21 @@ export default function TablesList({dbData}) {
       >
 
           {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
-            <Box key={index} >
+            <Box key={index} sx={{height:'57px'}}>
               <SingleTable filter={filter} setFilter = {setFilter} table={table}  tabIndex={tabIndex} setTabIndex={setTabIndex}  index={index} dbData={dbData} highlightActiveTable={()=>setValue(index)}/>
             </Box>
             ))
           }
           </Tabs>
         </Box>
-        <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 }} >
+        <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 ,height:40,mt:1.5,mr:1}} >
           Add Table
         </Button>                 
         </Box>
         <Box display="flex" flexWrap="nowrap">
         {filter  &&
           Object.entries(filter).map((filter, index) => (
-            <Box key={index} marginRight={1}>
+            <Box key={index} marginRight={1} sx={{mt:4.5,ml:1}}>
               <Box sx={{backgroundColor:"grey",height:30,width:120,display:"flex", gap:"10px", alignItems:"center",justifyContent:"center"}}
                 onClick={() => {
                   onFilterClicked(filter[1].query,filter[0]);
@@ -123,8 +123,8 @@ export default function TablesList({dbData}) {
             </Box>
           ))}
 
-        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122 }} >
-          addFilter
+        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122,mt:4 ,ml:2}} >
+          Add Filter
         </Button> 
       </Box>
         <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
@@ -144,3 +144,6 @@ TablesList.propTypes = {
   label : PropTypes.any,
   setTables:PropTypes.any
 };
+
+
+
