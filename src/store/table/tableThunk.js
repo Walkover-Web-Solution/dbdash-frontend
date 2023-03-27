@@ -6,6 +6,10 @@ import { updateRow ,deleteRow} from "../../api/rowApi";
 // reducer imports
 import { addColumnToLeft, addColumnToRight, addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
 import { runQueryonTable } from "../../api/filterApi";
+import { allOrg } from "../database/databaseSelector";
+// import { useSelector } from "react-redux";
+
+// const alldb = useSelector((state) => selectOrgandDb(state))
 const getHeaders = async(dbId,tableName) =>{
     const fields = await getAllfields(dbId,tableName);
     let columns = [
@@ -53,6 +57,21 @@ const getHeaders = async(dbId,tableName) =>{
 }
 
 
+const getRowData = async(dbId,tableName,{getState},org_id) =>{
+    const data = await getTable(dbId,tableName);
+    const obj = data.data.data.tableData;
+    const userInfo = allOrg(getState());
+    const users = userInfo.find((org)=>org?._id== org_id)?.users;
+    var userJson= {};
+    users?.forEach(user => {
+        userJson[user.user_id._id]=user.user_id;
+    });
+    obj.map((row)=>{
+        row.createdby = userJson[row.createdby].first_name +" " + userJson[row.createdby].last_name; 
+    })
+    return obj
+}
+
 export const addColumns = createAsyncThunk(
     "table/addColumns",
     async (payload,{dispatch}) =>{
@@ -63,14 +82,13 @@ export const addColumns = createAsyncThunk(
 
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
-    async (payload) =>{      
+    async (payload,{getState}) =>{      
         if(payload.filter != null)
         {
             const querydata = await runQueryonTable(
                 payload.dbId,
                 payload?.filter
             )
-            console.log("querydata",querydata);
             const columns =  await getHeaders(payload.dbId,payload.tableName)
             const dataa = {
                 "columns":columns,
@@ -82,10 +100,12 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{  
             const columns =  await getHeaders(payload.dbId,payload.tableName)
-            const data = await getTable(payload.dbId,payload.tableName)
+           
+            const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id)
+       
             const dataa = {
                 "columns":columns,
-                "row":data.data.data.tableData,
+                "row":data,
                 "tableId":payload.tableName,
                 "dbId":payload.dbId
             }
@@ -175,11 +195,9 @@ export const deleteRows = createAsyncThunk(
        
         var arr = [];
         for (var index in payload) {
-            // console.log(arr.push(payload[index].original.id ))
             arr.push(payload[index].original.id )
         }
         const {tableId, dbId} = getState().table
-        console.log(dbId,tableId,{row_id:arr})
        await deleteRow(dbId,tableId,{row_id:arr}) ;
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         return payload;

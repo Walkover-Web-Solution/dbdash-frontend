@@ -64,25 +64,21 @@ export default function TablesList({ dbData }) {
     dispatch(bulkAddColumns({
       "dbId": dbData?.db?._id,
       "tableName": params?.tableName || Object.keys(dbData?.db?.tables)[0],
-      "filter": filter
+      "filter": filter,
+      "org_id":dbData?.db?.org_id
     }));
   }
   useEffect(() => {
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
-      setValue(tableNames?.indexOf(params?.tableName) || 0);
-    }
-  }, [value]);
-  useEffect(() => {
-    if (dbData?.db?.tables) {
-      const tableNames = Object.keys(dbData.db.tables);
       dispatch(bulkAddColumns({
-        "dbId": dbData?.db?._id,
-        "tableName": params?.tableName || tableNames[0]
+        "dbId":dbData?.db?._id,
+        "tableName": params?.tableName|| tableNames[0]
       }));
-      if (!(params?.tableName))
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
-      setValue(tableNames?.indexOf(params?.tableName) || 0);
+      if(!(params?.tableName))
+      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+   setValue(tableNames?.indexOf(params?.tableName) || 0 );
+      
     }
   }, [dbData])
 
