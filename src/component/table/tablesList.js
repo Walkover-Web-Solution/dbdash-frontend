@@ -14,7 +14,7 @@ import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import { createTable1 } from '../../store/allTable/allTableThunk';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
+import {deleteFilter} from "../../api/filterApi"
 export default function TablesList({ dbData }) {
   const dispatch = useDispatch();
   const params = useParams();
@@ -67,6 +67,13 @@ export default function TablesList({ dbData }) {
       "filter": filter,
       "org_id":dbData?.db?.org_id
     }));
+  }
+  const deleteFilterInDb = async(filterId)=>{
+    const data={
+      filterId: filterId,
+    }
+    const ans = await deleteFilter(dbData?.db?._id,params?.tableName,data)
+    console.log("ans",ans)
   }
   useEffect(() => {
     if (dbData?.db?.tables) {
@@ -126,7 +133,7 @@ export default function TablesList({ dbData }) {
                   onClose={handleClose}
                 >
                   <MenuItem onClick={() => { handleEdit(); }}>Edit</MenuItem>
-                  <MenuItem onClick={handleClose}>Delete</MenuItem>
+                  <MenuItem onClick={()=>{deleteFilterInDb(filter[0]); handleClose()}}>Delete</MenuItem>
                 </Menu>
               </Box>
             </Box>
