@@ -140,7 +140,7 @@ export default function TablesList({ dbData }) {
           ))}
 
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122,mt:4 ,ml:2 }} >
-          addFilter
+          Add Filter
         </Button>
       </Box>
       <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />

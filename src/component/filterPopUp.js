@@ -11,17 +11,24 @@ import { getTableInfo } from "../store/table/tableSelector";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
 import { useSelector} from "react-redux";
 import { cloneDeep } from "lodash";
+import AddIcon from '@mui/icons-material/Add';
+
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+  width: "auto",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
+
+const addBtnStyle = {
+  color:"white",
+  bgcolor:"#1976d2"
+}
 
 export default function FilterModal(props) {
   
@@ -211,12 +218,10 @@ export default function FilterModal(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Box style={{ display: "flex", flexDirection: "row" }}>
-
+          <Box style={{ display: "flex", flexDirection: "column"}}>
             <Typography id="title" variant="h6" component="h2">
               Create filter
             </Typography>
-
             <Box>
 
               <TextField autoFocus sx={{ width: 150, height: 60, fontWeight: 'bold' }} value={filterName} type="text" placeholder="enter filter name" onChange={(e) => {
@@ -267,7 +272,7 @@ export default function FilterModal(props) {
               handleRemove(index)
             }}>Remove</Button>}
           </Box>))}
-          <Button onClick={handleAddInput}>+</Button>
+          <Button onClick={handleAddInput} sx={{mb:2}}> <AddIcon sx={addBtnStyle}/> </Button>
           
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -279,17 +284,20 @@ export default function FilterModal(props) {
                 Create
               </Button>
             </Box>}
+
             <Box>
              {props?.edit == true  && <Button onClick={()=>{
                 editQueryData()
                 handleClose()
-              }}>Edit</Button>}
+              }} variant="contained">Edit</Button>}
             </Box>
+            
             <Box>
               <Button variant="outlined" onClick={handleClose}>
                 Cancel
               </Button>
             </Box>
+
           </Box>
         </Box>
       </Modal>
