@@ -132,7 +132,7 @@ export default function TablesList({ dbData }) {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={() => { handleEdit(); }}>Edit</MenuItem>
+                  <MenuItem onClick={() => { handleEdit(); handleClose()}}>Edit</MenuItem>
                   <MenuItem onClick={()=>{deleteFilterInDb(filter[0]); handleClose()}}>Delete</MenuItem>
                 </Menu>
               </Box>
