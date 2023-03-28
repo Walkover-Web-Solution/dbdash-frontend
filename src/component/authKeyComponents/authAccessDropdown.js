@@ -62,8 +62,8 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
   },[])
   const callFunc = async()=>{
       await getAllTableName(dbId);
-
   }
+
   return (
     <FormControl sx={{margin: 1,
       width: 300}}>

@@ -210,6 +210,7 @@ export default function FilterModal(props) {
   }
   return (
     <Box >
+
       <Modal
         disableRestoreFocus
         open={props.open}
@@ -218,62 +219,68 @@ export default function FilterModal(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Box style={{ display: "flex", flexDirection: "column"}}>
-            <Typography id="title" variant="h6" component="h2">
-              Create filter
-            </Typography>
-            <Box>
 
-              <TextField autoFocus sx={{ width: 150, height: 60, fontWeight: 'bold' }} value={filterName} type="text" placeholder="enter filter name" onChange={(e) => {
-                setFilterName(e.target.value)
-              }} />
-
-              <Box />
-            </Box>
+          <Box sx={{display:'flex',alignItems:'center',justifyContent:'center', mb:2}}>
+            <Typography id="title" variant="h6" component="h2" fontWeight="bold" fontSize={26}>
+                Create Filter
+              </Typography>
           </Box>
 
+          <Box style={{ display: "flex", flexDirection: "column"}}>
+  
+            <Box sx={{mb:2, display:'flex',justifyContent:'center',alignItems:'center'}}>
+              <TextField autoFocus sx={{ width: 150, height: 60, fontWeight: 'bold' }} value={filterName} type="text" placeholder="enter filter name" onChange={(e) => {setFilterName(e.target.value)}} />
+            </Box>
     
-        { query.map((q,index)=>(<Box key={index} style={{ display: "flex", flexDirection: "row" }}>
-            {index==0 && <Box><Button style={{ padding: "14%" }}>WHERE</Button></Box>}
-            
-           {index!=0  && <Box>
-              <Select value={q?.andor}
-                onChange={(e)=>handleChangeAndOr(e,index)}>
-                    <MenuItem value="and">and</MenuItem>
-                    <MenuItem value="or">or</MenuItem>
-                  </Select>
-            </Box>}
             <Box>
-              <Select value ={q?.fields} onChange={(e)=>handleChangeField(e,index)} >
-                {fieldData && Object.entries(fieldData)?.map((fields, index) => (
-                  <MenuItem key={index} value={fields[1]?.id} >
-                  {fields[1].label}
-                </MenuItem>
-                ))}
-              </Select>
+              { query.map((q,index)=>(<Box key={index} sx={{ display: "flex", flexDirection: "row" }}>
+                        {index==0 && <Box><Typography sx={{mt:2,mr:1,color:'blue'}}>WHERE</Typography></Box>}
+                        
+                      {index!=0  && <Box>
+                          <Select value={q?.andor}
+                            onChange={(e)=>handleChangeAndOr(e,index)}>
+                                <MenuItem value="and">and</MenuItem>
+                                <MenuItem value="or">or</MenuItem>
+                              </Select>
+                        </Box>}
+
+                        <Box sx={{mr:1}}>
+                          <Select value ={q?.fields} onChange={(e)=>handleChangeField(e,index)} sx={{width:150}}>
+                            {fieldData && Object.entries(fieldData)?.map((fields, index) => (
+                              <MenuItem key={index} value={fields[1]?.id} >
+                              {fields[1].label}
+                            </MenuItem>
+                            ))}
+                          </Select>
+                        </Box>
+
+                        <Box sx={{mr:1}}>
+                          <Select sx={{width:150}}
+                          value={q?.selectedOption} key={q?.value}
+                          onChange={(e)=>handleChangeSelectedOption(e,index)} >
+                            <MenuItem value="LIKE">contains</MenuItem>
+                            <MenuItem value="NOT LIKE">does not contain</MenuItem>
+                            <MenuItem value="=">is</MenuItem>
+                            <MenuItem value="!=">is not</MenuItem>
+                          </Select>
+                        </Box>
+
+                        <Box>
+                        
+                        <TextField value={q?.value} sx={{ width: 150, height: 60, fontWeight: 'bold',}} placeholder="Enter the value" type="text" onChange={(e) => handleChangeValue(e,index)} />
+                        </Box>
+                      {index>=1 && <Button onClick={()=>{
+                          handleRemove(index)
+                        }}>Remove</Button>}
+              </Box>))}
             </Box>
 
-            <Box>
-              <Select 
-              value={q?.selectedOption} key={q?.value}
-              onChange={(e)=>handleChangeSelectedOption(e,index)} >
-                <MenuItem value="LIKE">contains</MenuItem>
-                <MenuItem value="NOT LIKE">does not contain</MenuItem>
-                <MenuItem value="=">is</MenuItem>
-                <MenuItem value="!=">is not</MenuItem>
-              </Select>
+            <Box  sx={{mb:2,ml:1}}>
+              <Button onClick={handleAddInput}> <AddIcon sx={addBtnStyle}/> </Button>
             </Box>
 
-            <Box>
-            
-            <TextField value={q?.value} sx={{ width: 150, height: 60, fontWeight: 'bold' }} placeholder="Enter the value" type="text" onChange={(e) => handleChangeValue(e,index)} />
-            </Box>
-           {index>=1 && <Button onClick={()=>{
-              handleRemove(index)
-            }}>Remove</Button>}
-          </Box>))}
-          <Button onClick={handleAddInput} sx={{mb:2}}> <AddIcon sx={addBtnStyle}/> </Button>
-          
+          </Box>
+                
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {props?.edit == false && <Box>
@@ -300,6 +307,7 @@ export default function FilterModal(props) {
 
           </Box>
         </Box>
+        
       </Modal>
     </Box>
   );

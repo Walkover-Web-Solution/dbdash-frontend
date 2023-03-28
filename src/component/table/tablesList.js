@@ -116,7 +116,7 @@ export default function TablesList({ dbData }) {
         {filter &&
           Object.entries(filter).map((filter, index) => (
             <Box key={index} marginRight={1}  sx={{mt:4.5,ml:1}}>
-              <Box sx={{ backgroundColor: "grey", height: 30, width: 120, display: "flex", gap: "10px", alignItems: "center", justifyContent: "center" }}
+              <Box sx={{ backgroundColor: "#4B4E5A", height: 30, width: 120, display: "flex", gap: "10px", alignItems: "center", justifyContent: "center",color:"#fff", borderRadius:3,p:1}}
                 onClick={() => {
                   onFilterClicked(filter[1].query, filter[0]);
                 }}
@@ -125,7 +125,7 @@ export default function TablesList({ dbData }) {
               >
                 {filter[1]?.filterName}
                 <IconButton onClick={handleClick}>
-                  <MoreVertIcon />
+                  <MoreVertIcon sx={{ color: "#fff" }}/>
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
