@@ -36,29 +36,34 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
    
   const isAllSelected =
     options.length > 0 && selected.length === options.length;
+
   const handleChange = (event) => {
     const value = event.target.value;
-    if (value[value.length - 1] === "all") {
-      if(selected.length === Object.entries(options)?.length){
-        setSelected([])
-        return
-      }
-      let all = []
-      Object.entries(options).map((option)=>{
-        all = [...all, option[1].tableName]
-      })
-      setSelected(all);
-      return;
-    }
-    setSelected(value);
+    console.log("target",event.target.value)
+
+    // if (value[value.length - 1] === "all") {
+    //   console.log("all this is")
+    //   if(selected.length === Object.entries(options)?.length){
+    //     setSelected([])
+    //     return
+    //   }
+    //   let all = []
+    //   Object.entries(options).map((option)=>{
+    //     all = [...all, option[1].tableName] 
+    //   })
+    //   setSelected(all);
+    //   return;
+    // }
+    if (value[value.length - 1] !== "all")
+    {setSelected(value);}
   };
   useEffect(()=>{
     callFunc();
   },[])
   const callFunc = async()=>{
       await getAllTableName(dbId);
-
   }
+
   return (
     <FormControl sx={{margin: 1,
       width: 300}}>
@@ -85,7 +90,19 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
           // }}
         >
           <ListItemIcon>
-            <Checkbox
+            <Checkbox onChange={(e)=>{ 
+      console.log("all this is")
+      if(!e.target.checked ){
+        setSelected([])
+        return
+      }
+      let all = []
+      Object.entries(options).map((option)=>{
+        all = [...all, option[1].tableName] 
+      })
+      setSelected(all);
+      return;
+    }}
               //  checked={isAllSelected}
                indeterminate={
                  selected?.length > 0 && selected?.length < options.length
@@ -101,17 +118,21 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
         </MenuItem>
         { Object.entries(options).map((option,index) => {
 
-         return  <MenuItem key={index} value={option[0]}>         
+         return  <MenuItem key={index} value={option[1].tableName}>         
          <ListItemIcon>
            {/* {option[0]} */}
            {/* <Checkbox checked={option[0]} /> */}
            {/* <input type="checkbox" value={option[0]}/> */}
-           <Checkbox value={option[1].tableName} onChange={(e)=>{
+           <Checkbox checked={selected?.includes(option[1].tableName)} value={option[1].tableName} onChange={(e)=>{
             if(!selected?.includes(e.target.value)){
               setSelected([...selected,e.target.value])
             }
+            else{
+
+              setSelected(selected.filter((removeVal)=>removeVal!==e.target.value))
+            }
            }}
-           defaultChecked={selected?.includes(option[0])}
+           //defaultChecked={selected?.includes(option[0])}
            />
          </ListItemIcon>
          <ListItemText primary={option[1].tableName} />
