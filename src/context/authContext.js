@@ -54,7 +54,9 @@ const dispatch = useDispatch();
 
   const signUp = async (email, password, firstName, lastName) => {
     try {
+      console.log(email, password);
       const userInfo = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("user info ",userInfo);
       if (userInfo) {
         const dataToSend = {
           "email": email,
@@ -68,6 +70,7 @@ const dispatch = useDispatch();
         navigate("/dashboard")
       }
     } catch (error) {
+
       console.log(error);
     }
   }
@@ -89,7 +92,7 @@ const dispatch = useDispatch();
 
   const logOut = () => {
     signOut(auth);
-    localStorage.removeItem('accessToken');
+    localStorage.clear();
   };
 
 
