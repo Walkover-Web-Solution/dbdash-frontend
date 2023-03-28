@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
+  const userId = localStorage.getItem("userid")
   
   const handleClose = () => {
     props.setShareOrg(false);
@@ -68,25 +69,24 @@ export default function ShareOrgModal(props) {
          <Typography variant="h6"><strong>Shared with:</strong></Typography>
     </Box>
     <Box >
-        {Object.values(props.org.users).map((user) => (
-          
-          <Box key={user.user_id.email} sx={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-
-            <Box sx={{m:1}} >
-            <Typography>{user.user_id.email}</Typography>
-            </Box>
-
-            <Box sx={{alignItems:'center'}}>
-            <IconButton
-              aria-label="delete"
-              onClick={() => handleRemoveUser(user.user_id.email)}
-            >
-              <DeleteIcon />
-            </IconButton>
-            </Box>
-
-          </Box>
-        ))}
+    {Object.values(props.org.users).map((user) => {
+  if (user.user_id._id !== userId || user.user_type !== "admin") {
+    return (
+      <Box key={user.user_id.email} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+        <Box sx={{ m: 1 }}>
+          <Typography>{user.user_id.email}</Typography>
+        </Box>
+        <Box sx={{ alignItems: "center" }}>
+          <IconButton aria-label="delete" onClick={() => handleRemoveUser(user.user_id.email)}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      </Box>
+    );
+  } else {
+    return null; // don't render the user if they are an admin
+  }
+})}
         </Box>
       </Dialog>
   );
