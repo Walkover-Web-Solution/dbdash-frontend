@@ -92,7 +92,10 @@ const dispatch = useDispatch();
 
   const logOut = () => {
     signOut(auth);
-    localStorage.clear();
+    // localStorage.clear();
+    Object.keys(localStorage).forEach(function(key){
+      localStorage.removeItem(key);
+    });
   };
 
 
