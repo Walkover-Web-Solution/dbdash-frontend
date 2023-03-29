@@ -46,7 +46,6 @@ export default function TablesList({ dbData }) {
     setAnchorEl(null);
   };
 
-  console.log(value)
   const saveTable = async () => {
     const data = {
       tableName: table
@@ -72,8 +71,7 @@ export default function TablesList({ dbData }) {
     const data={
       filterId: filterId,
     }
-    const ans = await deleteFilter(dbData?.db?._id,params?.tableName,data)
-    console.log("ans",ans)
+     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
   useEffect(() => {
     if (dbData?.db?.tables) {

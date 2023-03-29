@@ -31,7 +31,7 @@ export default function Header({
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [open, setOpen] = useState(false);
   // const [variable, setVariable] = useState("");
-
+ 
 
   const handleOpen = () => {
     setOpen(true);
@@ -56,7 +56,6 @@ export default function Header({
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
 
- 
 
  
 

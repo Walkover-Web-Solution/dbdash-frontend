@@ -88,6 +88,20 @@ console.log(selected);
   const handleChange = (event) => {
     const value = event.target.value;
   
+
+    // if (value[value.length - 1] === "all") {
+    //   console.log("all this is")
+    //   if(selected.length === Object.entries(options)?.length){
+    //     setSelected([])
+    //     return
+    //   }
+    //   let all = []
+    //   Object.entries(options).map((option)=>{
+    //     all = [...all, option[1].tableName] 
+    //   })
+    //   setSelected(all);
+    //   return;
+    // }
     if (value[value.length - 1] !== "all")
     {setSelected(value);}
     // console.log("SetSelected",selected)
@@ -124,7 +138,6 @@ console.log(selected);
         >
           <ListItemIcon>
             <Checkbox onChange={(e)=>{ 
-      // console.log("all this is")
       if(!e.target.checked ){
         setSelected([])
         return

@@ -13,7 +13,6 @@ const updateFilterName = async (db_id,tableName,data) =>
 
 const deleteFilter = async (db_id,tableName,data) =>
 {
-    console.log("fkshdfj",db_id,tableName,data)
     return await axios.patch(URL +`/dbs/${db_id}/${tableName}/deleteFilter`,data)
 }
 
