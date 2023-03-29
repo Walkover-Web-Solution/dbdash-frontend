@@ -11,7 +11,7 @@ import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
 
 
-export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex,highlightActiveTable,setFilter }) {
+export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex,highlightActiveTable,setFilter}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
@@ -49,8 +49,10 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
+
   const deleteTableName = async (tableid) => {
     dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
+    
   };
   
 

@@ -15,9 +15,11 @@ import { createTable1 } from '../../store/allTable/allTableThunk';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
+
 export default function TablesList({ dbData }) {
   const dispatch = useDispatch();
   const params = useParams();
+  
 
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
 
@@ -37,6 +39,9 @@ export default function TablesList({ dbData }) {
   const [edit, setEdit] = useState(false)
   const [filterId, setFilterId] = useState("")
   const [anchorEl, setAnchorEl] = useState(null);
+
+
+  
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -74,6 +79,7 @@ export default function TablesList({ dbData }) {
      await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
   useEffect(() => {
+
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(bulkAddColumns({
@@ -85,7 +91,9 @@ export default function TablesList({ dbData }) {
    setValue(tableNames?.indexOf(params?.tableName) || 0 );
       
     }
-  }, [dbData])
+  }, [dbData,params])
+
+  
 
   return (
     <>
@@ -100,7 +108,7 @@ export default function TablesList({ dbData }) {
           >
             {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
               <Box key={index}  sx={{height:'57px'}} >
-                <SingleTable filter={filter} setFilter={setFilter} table={table} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} />
+                <SingleTable  filter={filter} setFilter={setFilter} table={table} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)}/>
               </Box>
             ))
             }
