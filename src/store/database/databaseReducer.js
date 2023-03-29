@@ -1,5 +1,5 @@
-import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk} from './databaseThunk';
 
+import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk} from './databaseThunk';
 export const initialState = {
   status: 'idle',
   orgId: {
@@ -113,12 +113,14 @@ export function extraReducers(builder) {
       state.status = "loading"
     })
     .addCase(createOrgThunk.fulfilled, (state, action) => {
-
       state.status = "succeeded";
       let arr = state.orgId[action.payload.data.org_id._id] || [];
       const newArr = [...arr, action.payload.data];
       state.orgId = { ...state.orgId, [action.payload.data.org_id._id]: newArr };
+      if (state.allOrg)
       state.allOrg = [...state.allOrg , action.payload.allorgs[0]]
+      else
+      state.allOrg = [action.payload.allorgs[0]]
     })
     .addCase(createOrgThunk.rejected, (state) => {
 

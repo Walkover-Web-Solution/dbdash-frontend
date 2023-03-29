@@ -19,11 +19,7 @@ import {deleteFilter} from "../../api/filterApi"
 export default function TablesList({ dbData }) {
   const dispatch = useDispatch();
   const params = useParams();
-  
-
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-
-
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
   const handleChange = (event, newValue) => {
@@ -39,10 +35,8 @@ export default function TablesList({ dbData }) {
   const [edit, setEdit] = useState(false)
   const [filterId, setFilterId] = useState("")
   const [anchorEl, setAnchorEl] = useState(null);
-
-
-  
-
+  const [tableLength,setTableLength] = useState("")
+  // console.log("tablelength",tableLength)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,10 +70,10 @@ export default function TablesList({ dbData }) {
     const data={
       filterId: filterId,
     }
-     await deleteFilter(dbData?.db?._id,params?.tableName,data)
+    await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
   useEffect(() => {
-
+    setTableLength(Object.keys(AllTableInfo.tables).length)
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(bulkAddColumns({
@@ -108,7 +102,7 @@ export default function TablesList({ dbData }) {
           >
             {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
               <Box key={index}  sx={{height:'57px'}} >
-                <SingleTable  filter={filter} setFilter={setFilter} table={table} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)}/>
+                <SingleTable filter={filter} setFilter={setFilter} table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} />
               </Box>
             ))
             }

@@ -101,6 +101,8 @@ export const OrgList = (props) => {
                 sx={{ width: 120, fontWeight: "bold" }}
                 defaultValue={props.dbs[0]?.org_id?.name}
                 value={orgName}
+            
+                onBlur={() => setName(false)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     renameWorkspace(props?.orgId);
