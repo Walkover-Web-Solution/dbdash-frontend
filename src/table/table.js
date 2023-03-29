@@ -215,6 +215,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
                 key={column.id}
                 columns={column}
                 index={index}
+    
               />)
                             
             })}

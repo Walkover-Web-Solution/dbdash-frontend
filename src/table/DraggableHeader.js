@@ -1,62 +1,65 @@
 
 import React, { useRef,useMemo,
-  // useEffect
+  useEffect
 } from 'react';
 
-// import { useDrop, useDrag } from "react-dnd";
-// import { getEmptyImage } from "react-dnd-html5-backend";
-// import ItemTypes from "./ItemTypes";
+import { useDrop, useDrag } from "react-dnd";
+import { getEmptyImage } from "react-dnd-html5-backend";
+import ItemTypes from "./ItemTypes";
 
 import PropTypes from 'prop-types';
 
 
 
 export default function DraggableHeader ({ columns, 
-  // index, reoder
+  index, reoder,key
  }){
-    // console.log("col")
+    console.log("col")
     // const ItemTypes = {
     //     COLUMN: 'column'
     //   };
     const ref = useRef();
-  //   const { id, label } = columns;
-  //   const Header = label;
-  //   const [, drop] = useDrop({
-  //     accept: ItemTypes.COLUMN,
-  //     drop: (item) => {
-  //       reoder(item, index);
-  //     }
-  //   });
-  // {console.log(ItemTypes.COLUMN)}
-  //   const [{ isDragging }, drag, preview] = useDrag({
-  //     type: ItemTypes.COLUMN,
-  //     item: () => {
-  //       return {
-  //         id,
-  //         index,
-  //         header: Header
-  //       };
-  //     },
-  //     collect: (monitor) => ({
-  //       isDragging: monitor.isDragging()
-  //     })
-  //   });
+    const { id, Header } = columns;
+    
+    const [, drop] = useDrop({
+      accept: ItemTypes.COLUMN,
+      drop: (item) => {
+        reoder(item, index);
+      }
+    });
+  {console.log(ItemTypes.COLUMN)}
+  console.log("columns",columns)
+
+    const [{ isDragging }, drag, preview] = useDrag({
+      type: ItemTypes.COLUMN,
+      item: () => {
+        return {
+          id,
+          index,
+          header: Header
+        };
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging()
+      })
+    });
   
-    // drag(drop(ref));
+    drag(drop(ref));
   
     const memoizedColumn = useMemo(() => columns.render("label"), [columns]);
-    // const opacity = isDragging ? 0 : 1;
+    console.log("columns",columns);
+    const opacity = isDragging ? 0 : 1;
   
-    // useEffect(() => {
-    //   preview(getEmptyImage(), { captureDraggingState: true });
-    // }, [preview]);
+    useEffect(() => {
+      preview(getEmptyImage(), { captureDraggingState: true });
+    }, [preview]);
   
     return (
       <>   
-      <div className='td'
+      <div className='td' key={key}
         ref={ref}
         {...columns.getHeaderProps()}
-        style={{ cursor: "move"}}
+        style={{ cursor: "move",opacity}}
       >
         {memoizedColumn}
       </div>
@@ -70,5 +73,5 @@ export default function DraggableHeader ({ columns,
     columns:PropTypes.any, 
     index:PropTypes.number, 
     reoder:PropTypes.func, 
-  
+    key:PropTypes.number,
   }
