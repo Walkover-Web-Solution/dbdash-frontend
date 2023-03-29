@@ -39,7 +39,6 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
 
   const handleChange = (event) => {
     const value = event.target.value;
-    console.log("target",event.target.value)
 
     // if (value[value.length - 1] === "all") {
     //   console.log("all this is")
@@ -91,7 +90,6 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
         >
           <ListItemIcon>
             <Checkbox onChange={(e)=>{ 
-      console.log("all this is")
       if(!e.target.checked ){
         setSelected([])
         return
