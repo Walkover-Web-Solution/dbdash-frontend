@@ -111,8 +111,9 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
 
   const reoder = useCallback(
     (item, newIndex) => {
+      console.log(item?.index, newIndex);
       const newOrder = [...state.columnOrder];
-      const { index: currentIndex } = item;
+      const { index: currentIndex } = item.index;
 
       const [removedColumn] = newOrder.splice(currentIndex, 1);
 
@@ -203,7 +204,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
             {headerGroups[0].headers.map((column,index) => {
-              {console.log("hgf",column)}
+              // {console.log("hgf",column)}
               // return (
               //   <React.Fragment key ={index}>
               //  {  column.render("Header")}
