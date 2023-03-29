@@ -15,11 +15,16 @@ import { getAuthkey,deleteAuthkey} from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
 import { useSelector } from "react-redux";
 import { selectActiveUser } from "../../store/user/userSelector";
+// import { useNavigate, useParams } from "react-router-dom";
 export default function AuthKey(props) {
 
   const adminId = localStorage.getItem("userid");
   const[authKeys,setAuthKeys] = useState(null)
   const user=useSelector((state)=>selectActiveUser(state));
+  // const navigate = useNavigate();
+
+  // const params = useParams();
+
   
 
   useEffect(  ()=>{
@@ -71,7 +76,7 @@ export default function AuthKey(props) {
                   <TableCell>{user?.first_name}</TableCell>
                   <TableCell>{authKeys[keys].createDate}</TableCell>
                   <TableCell>     
-                  <TableMenuDropdown  second={"Delete"} third={"Show AuthKey"} title={keys} deleteFunction={deleteAuthkeyFun}/>
+                  <TableMenuDropdown authData={authKeys[keys]} first={"Edit"} second={"Delete"} third={"Show AuthKey"} title={keys} deleteFunction={deleteAuthkeyFun}/>
                   </TableCell>
                   {/* first={"Edit"} */}
             
