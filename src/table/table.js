@@ -1,6 +1,6 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useCallback } from "react";
 import clsx from "clsx";
-import { useTable, useFlexLayout, useResizeColumns, useRowSelect, useSortBy } from "react-table";
+import { useTable, useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useColumnOrder } from "react-table";
 import Cell from "./Cell";
 import Header from "./Header";
 import PlusIcon from "./img/Plus";
@@ -12,6 +12,18 @@ import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 
+import { DndProvider }  from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import withScrolling from "react-dnd-scrolling";
+import Preview from "./Preview";
+import DraggableHeader from "./DraggableHeader";
+
+// import { useDrop, useDrag } from "react-dnd";
+// import { getEmptyImage } from "react-dnd-html5-backend";
+// import ItemTypes from "./ItemTypes";
+
+const ScrollingComponent = withScrolling("div");
+
 const defaultColumn = {
   minWidth: 50,
   width: 150,
@@ -20,6 +32,10 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast"
 };
+
+
+
+
 
 export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
 
@@ -63,8 +79,8 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
   );
 
   const { getTableProps, getTableBodyProps, headerGroups,rows, prepareRow,
-     selectedFlatRows,  
-    state: { selectedCellIds, currentSelectedCellIds  },
+     selectedFlatRows,  state,setColumnOrder,
+    state: { selectedCellIds, currentSelectedCellIds,},
      
   } = useTable(
     {
@@ -78,15 +94,36 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
       sortTypes,
       cellIdSplitBy: '_',
       initialState: {
-        selectedCellIds: {}
-      }
+        selectedCellIds: {},
+        columnOrder: columns
+      },
+      
     },
     useCellRangeSelection,
     useFlexLayout,
     useResizeColumns,
     useSortBy,
-    useRowSelect
+    useRowSelect,
+    useColumnOrder
   );
+
+
+
+  const reoder = useCallback(
+    (item, newIndex) => {
+      const newOrder = [...state.columnOrder];
+      const { index: currentIndex } = item;
+
+      const [removedColumn] = newOrder.splice(currentIndex, 1);
+
+      newOrder.splice(newIndex, 0, removedColumn);
+
+      setColumnOrder(newOrder);
+    },
+    [state, setColumnOrder]
+  );
+
+
 
   useEffect(() => {
     if(Object.keys(selectedCellIds).length > 0) {
@@ -159,16 +196,27 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
       {selectedFlatRows?.length > 0 && <Button sx = {{m:2}} onClick={()=>{
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
+
+        <DndProvider backend={HTML5Backend}>
+        <ScrollingComponent style={{ overflow: "auto", maxHeight: 450 }}>
       <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
             {headerGroups[0].headers.map((column,index) => {
-              return (
-                <React.Fragment key ={index}>
-               {  column.render("Header")}
-                </React.Fragment>
+              {console.log("hgf",column)}
+              // return (
+              //   <React.Fragment key ={index}>
+              //  {  column.render("Header")}
+              //   </React.Fragment>
                
-              )
+              // )
+              return(<DraggableHeader
+                reoder={reoder}
+                key={column.id}
+                columns={column}
+                index={index}
+              />)
+                            
             })}
           </div>
 
@@ -226,11 +274,16 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
           </div>
         </div>
       </div>
+
+      </ScrollingComponent>
+        <Preview />
+      </DndProvider>
       {/* <pre>
         <code>
         {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
         </code>
       </pre> */}
+    
     </>
   );
 }
