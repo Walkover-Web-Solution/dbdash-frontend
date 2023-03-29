@@ -23,7 +23,7 @@ const getHeaders = async(dbId,tableName) =>{
         },
     ]
    
-   Object.entries(fields.data.data.fields).forEach( (field) =>{
+   Object.entries(fields?.data?.data?.fields).forEach( (field) =>{
        var json = {
            id: "",
         label: "",
@@ -61,11 +61,21 @@ const getRowData = async(dbId,tableName,{getState},org_id) =>{
     const data = await getTable(dbId,tableName);
     const obj = data.data.data.tableData;
     const userInfo = allOrg(getState());
-    const users = userInfo.find((org)=>org?._id== org_id)?.users;
+    const users = userInfo?.find((org)=>org?._id== org_id)?.users;
     var userJson= {};
     users?.forEach(user => {
-        userJson[user.user_id._id]=user.user_id;
+        userJson[user.user_id._id]=user?.user_id;
     });
+    if(!users )
+    {
+        userInfo.forEach(obj => {
+            obj.users.forEach(user => {
+            if(!(userJson?.[user.user_id._id]))
+              userJson[user.user_id._id]=user?.user_id;
+            });
+          });
+    }
+
     obj.map((row)=>{
         row.createdby = userJson[row.createdby].first_name +" " + userJson[row.createdby].last_name; 
     })
@@ -100,7 +110,6 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{  
             const columns =  await getHeaders(payload.dbId,payload.tableName)
-           
             const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id)
        
             const dataa = {
