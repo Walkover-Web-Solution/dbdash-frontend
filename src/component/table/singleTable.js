@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, {useState} from 'react'
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../dropdown';
@@ -11,16 +11,14 @@ import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
 
 
-export default function SingleTable({ dbData, table, setTabIndex, index, tabIndex,highlightActiveTable,setFilter }) {
+export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter }) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
   const [name, setName] = useState();
   // const alldb = useSelector((state) => selectOrgandDb(state))
-
-  
+ 
   const dispatch = useDispatch();
-
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Tab label={label.length > 10 ? (
@@ -41,7 +39,6 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
       />
     </Box>
   );
-
   const renameTableName = async (db_id, tableName) => {
     const data1 = {
       newTableName: tableNa || table[0]
@@ -50,7 +47,9 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
     setTableNa(null);
   };
   const deleteTableName = async (tableid) => {
-    dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
+    if(Object.keys(dbData?.db?.tables).length >=2){
+      dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
+    } 
   };
   
 
@@ -133,15 +132,25 @@ export default function SingleTable({ dbData, table, setTabIndex, index, tabInde
             </ClickAwayListener>
           </>) :
           (<>
-            < Box sx={{ mt: -1 }}>
-              <TabWithDropdown sx={{ width: 100 }}
+            {tableLength>=2 ?< Box sx={{ mt: -1 }}>
+              {<TabWithDropdown sx={{ width: 100 }}
                 label={table[1]?.tableName || table[0]}
                 dropdown={<Dropdown setTabIndex={setTabIndex}
-                  tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
+                  tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
                   first="Rename" second="Delete" idToDelete={dbData?.db?._id}
                   deleteFunction={deleteTableName} setName={setName} />}
-              />
+              />}
+            </Box>:
+              < Box sx={{ mt: -1 }}>
+              {<TabWithDropdown sx={{ width: 100 }}
+                label={table[1]?.tableName || table[0]}
+                dropdown={<Dropdown setTabIndex={setTabIndex}
+                  tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
+                  first="Rename" idToDelete={dbData?.db?._id}
+                  deleteFunction={deleteTableName} setName={setName} />}
+              />}
             </Box>
+            }
           </>)
         }
       </Box>
@@ -161,5 +170,6 @@ SingleTable.propTypes = {
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
   filter:PropTypes.any,
-  setFilter :PropTypes.func
+  setFilter :PropTypes.func,
+  tableLength:PropTypes.any
 };

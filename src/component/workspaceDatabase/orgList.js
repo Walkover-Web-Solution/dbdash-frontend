@@ -3,7 +3,7 @@ import Dropdown from "../dropdown";
 import PopupModal from "../popupModal";
 import SingleDatabase from "./singleDatabase";
 import Grid from "@mui/material/Grid";
-import { Box,Card, Typography, TextField, Button, IconButton} from "@mui/material";
+import { Box,Card, Typography, TextField, Button, IconButton, ClickAwayListener} from "@mui/material";
 import ControlPointSharpIcon  from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
 import {  createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk } from "../../store/database/databaseThunk";
@@ -91,8 +91,9 @@ export const OrgList = (props) => {
   return (
     <>
       <Box key={props?.orgId} sx={{ m: 3 }}>
-        { 
-       ( <Box sx={{ my: 7, display: "flex"}}>
+      <ClickAwayListener onClickAway={() => { setName(false) }} >
+       <Box sx={{ my: 7, display: "flex"}}>
+        
           { name ? (
             <>
               <TextField 
@@ -100,12 +101,7 @@ export const OrgList = (props) => {
                 sx={{ width: 120, fontWeight: "bold" }}
                 defaultValue={props.dbs[0]?.org_id?.name}
                 value={orgName}
-                // Down={(e) => {
-                //   if (e.key === 'Enter') {
-                //     renameWorkspace(props?.orgId);
-                //     setName(false);
-                //   }
-                // }}onKey
+            
                 onBlur={() => setName(false)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -168,7 +164,8 @@ export const OrgList = (props) => {
                removeUserFromWorkspace={removeUserFromWorkspace} />
           </Box>
           }
-        </Box>)}
+        </Box>
+        </ClickAwayListener>
 
         <Box sx={{ display: "flex" }}>
           <Box sx={{ display: "flex" }}>

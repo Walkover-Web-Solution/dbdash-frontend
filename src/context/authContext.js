@@ -54,9 +54,7 @@ const dispatch = useDispatch();
 
   const signUp = async (email, password, firstName, lastName) => {
     try {
-      console.log(email, password);
       const userInfo = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("user info ",userInfo);
       if (userInfo) {
         const dataToSend = {
           "email": email,
