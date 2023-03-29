@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, {  useEffect} from "react";
 import {Checkbox,InputLabel,ListItemIcon,ListItemText,MenuItem,FormControl,Select} from "@mui/material"
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
@@ -25,37 +25,72 @@ const MenuProps = {
   variant: "menu"
 };
 
-export default function AuthAccessDropDown({selected,setSelected,dbId}) {
-  const [options, setOptions] = useState([]);
+export default function AuthAccessDropDown({selected,setSelected,options,setOptions,dbId}) {
+
+// const tableId = Object.entries(dbIds.authData.access).map(([tableId]) => tableId)
+// console.log("AA gya Aa gya ",tableId)
+
+
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
     
     setOptions(data.data.data.tables || {});
    
   }
-   
+  // console.log("options",options);
+
+  // const optionIds = Object.keys(options).map((id) => {
+  //   return id;
+  // });
+  // // console.log(optionIds);
+
+  // const optionList = Object.entries(options).map(([id, {tableName}]) => {
+  //   return {id, tableName};
+  // });
+  // console.log(optionList);
+
+  
+
+  // console.log(dbIds,124);
+  // useEffect(() => {
+  //  if(dbIds){
+  //   //drs
+  //  }
+  // }, [dbIds])
+  
+  
+console.log(selected);
+// const tableId = Object.entries(dbIds?.authData?.access).map(([tableId]) => tableId);
+// const optionList = Object.entries(options).map(([id, {tableName}]) => ({id, tableName}));
+
+// const selectedTables = optionList
+//   .filter(({id}) => tableId.includes(id))
+//   .map(({tableName}) => tableName);
+
+//   console.log("selectedTables", selectedTables);
+
+
+
   const isAllSelected =
     options.length > 0 && selected.length === options.length;
 
+    // const tableIdArray = [];
+    // if (options.length > 0) {
+    //   for (const [key, value] of Object.entries(options)) {
+    //     if (value.tableName === tableId) {
+    //       tableIdArray.push(tableId);
+    //       break;
+    //     }
+    //   }
+    // }
+    // console.log("tableid",tableIdArray)
+
   const handleChange = (event) => {
     const value = event.target.value;
-    console.log("target",event.target.value)
-
-    // if (value[value.length - 1] === "all") {
-    //   console.log("all this is")
-    //   if(selected.length === Object.entries(options)?.length){
-    //     setSelected([])
-    //     return
-    //   }
-    //   let all = []
-    //   Object.entries(options).map((option)=>{
-    //     all = [...all, option[1].tableName] 
-    //   })
-    //   setSelected(all);
-    //   return;
-    // }
+  
     if (value[value.length - 1] !== "all")
     {setSelected(value);}
+    // console.log("SetSelected",selected)
   };
   useEffect(()=>{
     callFunc();
@@ -85,13 +120,11 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
               backgroundColor: "rgba(0, 0, 0, 0.08)"
             }})
           }}
-          // classes={{
-          //   root: isAllSelected ? classes.selectedAll : ""
-          // }}
+        
         >
           <ListItemIcon>
             <Checkbox onChange={(e)=>{ 
-      console.log("all this is")
+      // console.log("all this is")
       if(!e.target.checked ){
         setSelected([])
         return
@@ -103,7 +136,7 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
       setSelected(all);
       return;
     }}
-              //  checked={isAllSelected}
+              
                indeterminate={
                  selected?.length > 0 && selected?.length < options.length
               }
@@ -120,22 +153,25 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
 
          return  <MenuItem key={index} value={option[1].tableName}>         
          <ListItemIcon>
-           {/* {option[0]} */}
-           {/* <Checkbox checked={option[0]} /> */}
-           {/* <input type="checkbox" value={option[0]}/> */}
+        
            <Checkbox checked={selected?.includes(option[1].tableName)} value={option[1].tableName} onChange={(e)=>{
             if(!selected?.includes(e.target.value)){
               setSelected([...selected,e.target.value])
+    // console.log("SetSelected1",selected)
+
             }
             else{
 
               setSelected(selected.filter((removeVal)=>removeVal!==e.target.value))
+    // console.log("SetSelected2",selected)
+
             }
            }}
-           //defaultChecked={selected?.includes(option[0])}
+        
            />
          </ListItemIcon>
          <ListItemText primary={option[1].tableName} />
+      
        </MenuItem>
 })}
       </Select>
@@ -145,5 +181,8 @@ export default function AuthAccessDropDown({selected,setSelected,dbId}) {
 AuthAccessDropDown.propTypes = {
   dbId: PropTypes.string,
   selected: PropTypes.any,
-  setSelected: PropTypes.func
+  setSelected: PropTypes.func,
+  dbIds: PropTypes.object,
+  options: PropTypes.object,
+  setOptions: PropTypes.func,
 };
