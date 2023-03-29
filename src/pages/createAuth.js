@@ -36,7 +36,6 @@ export default function CreateAuthKey() {
       event.preventDefault();
     }
   };
-  console.log("selected", selected);
   const createAuth = async () => {
     // e.preventDefault();
     const adminId1 = localStorage.getItem("userid");
