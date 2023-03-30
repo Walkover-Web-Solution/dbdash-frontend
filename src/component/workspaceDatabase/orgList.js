@@ -11,9 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 // import {  removeUserInOrg } from "../../api/orgApi";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
-
-
-
 export const OrgList = (props) => {
   const [name, setName] = useState(false);
   const[orgUsers,setOrgUsers]=useState([])
@@ -30,7 +27,6 @@ export const OrgList = (props) => {
     setShareOrg(true);
   };
   useEffect(() => {
-    
    const obj =  allorgss.find(org => org._id === props?.orgId);
    setOrgUsers(obj)
    const userId = localStorage.getItem("userid")
@@ -42,11 +38,8 @@ export const OrgList = (props) => {
           setIsAdmin(true);
         }
       });
-     
     }
   }, [allorgss])
-  
- 
   const saveDb = async () => {
     const userId = localStorage.getItem("userid");
     const data = {
@@ -56,52 +49,39 @@ export const OrgList = (props) => {
     setOpen(false);
     dispatch(createDbThunk({orgId, data}));
   };
-
   const renameWorkspace = async (orgId) => {
     const userid = localStorage.getItem("userid");
     const data = {
       name: orgName || name,
     };
     dispatch(renameOrgThunk({orgId, data, userid}))
-   
   };
-
   const deleteOrganization = async () => {
-      
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({orgId : props?.orgId,userid}))
-   
   };
-
   const shareWorkspace = async (email) => {
-    
     const adminId = localStorage.getItem("userid")
     dispatch(shareUserInOrgThunk({orgId:props?.orgId, adminId:adminId ,email:email}))
     // await addUserInOrg(props?.orgId, adminId, data)
   }
-
   const removeUserFromWorkspace = async (email) => {
-
     const adminId = localStorage.getItem("userid")
     dispatch(removeUserInOrgThunk({orgId:props?.orgId, adminId:adminId ,email:email}))
     // await removeUserInOrg(props?.orgId, adminId, data)
-    
   }
-
   return (
     <>
       <Box key={props?.orgId} sx={{ m: 3 }}>
       <ClickAwayListener onClickAway={() => { setName(false) }} >
        <Box sx={{ my: 7, display: "flex"}}>
-        
           { name ? (
             <>
-              <TextField 
+              <TextField
                 autoFocus
                 sx={{ width: 120, fontWeight: "bold" }}
                 defaultValue={props.dbs[0]?.org_id?.name}
                 value={orgName}
-            
                 onBlur={() => setName(false)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -112,7 +92,6 @@ export const OrgList = (props) => {
                 onChange={(e) => setOrgName(e.target.value)}
                 size="small"
               />
-
               <Button onClick={() => { setName(false); renameWorkspace(props?.orgId); }}
                 variant="contained"
                 sx={{
@@ -136,7 +115,6 @@ export const OrgList = (props) => {
               <Typography sx={{ fontWeight: "bold" }}>
                 {props.dbs[0]?.org_id?.name}{" "}
               </Typography>
-
              {isAdmin &&  <Box sx={{ mt: -1 }}>
                 <Dropdown
                   first={"Rename workspace"}
@@ -147,26 +125,22 @@ export const OrgList = (props) => {
                   title= "Organization"
                 />
               </Box>}
-
-              
-             
             </>
           )}
           {isAdmin && <Box>
             <Box sx={{right:"10px",display:"flex"}}>
-              <Button 
+              <Button
               variant="contained" size="small" color="success" sx ={{display: "flex"}} onClick={handleOpenShareOrg}>
               Share
               </Button>
               </Box>
-              <ShareOrgModal 
+              <ShareOrgModal
               shareOrg={shareOrg} org={orgUsers} setShareOrg={setShareOrg} shareWorkspace={shareWorkspace}
                removeUserFromWorkspace={removeUserFromWorkspace} />
           </Box>
           }
         </Box>
         </ClickAwayListener>
-
         <Box sx={{ display: "flex" }}>
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
@@ -175,13 +149,9 @@ export const OrgList = (props) => {
                   <SingleDatabase db={db}  getOrgAndDbs={props?.getOrgAndDbs} />
                 </Box>
               ))}
-
             {/* <Curl dbs={props?.dbs}/> */}
-             
-
               <Card sx={{m: 4, minWidth: 250, minHeight: 200, boxShadow: 2 ,display: "flex" ,alignItems:"center",justifyContent:"center" }}>
-               
-                  {/* <Button 
+                  {/* <Button
                     onClick={(e) => {
                       handleOpen(e);
                       setOrg(props?.orgId);
@@ -189,16 +159,14 @@ export const OrgList = (props) => {
                     variant="contained" >
                     Create Db
                   </Button> */}
-
                 <IconButton sx={{color: "black"}}
                 onClick={(e) => {
                     handleOpen(e);
                     setOrg(props?.orgId);
-                  }} 
+                  }}
                 >
                     < ControlPointSharpIcon  cursor="pointer" sx={{ fontSize: "50px" }} />
                 </IconButton>
-                
               </Card>
             </Grid>
             <PopupModal
@@ -210,10 +178,8 @@ export const OrgList = (props) => {
               setVariable={setDb}
             />
           </Box>
-          
         </Box>
       </Box>
-    
     </>
   );
 };
@@ -222,4 +188,3 @@ OrgList.propTypes = {
   orgId: PropTypes.string,
   getOrgAndDbs: PropTypes.func,
 };
-
