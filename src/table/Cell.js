@@ -27,7 +27,6 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow,setInputBoxShow] = useState(false)
   useEffect(() => {
-
     setValue({value: initialValue, update: false});
   }, [initialValue]);
 
