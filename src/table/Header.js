@@ -45,6 +45,8 @@ export default function Header({
     dispatch(addColumsToLeft({
       columnId: 999999, focus: false,  fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue
     }));
+    setSelectValue('Text')
+
   }
   const createLeftorRightColumn =() =>{
     setOpen(false);
@@ -52,6 +54,7 @@ export default function Header({
       fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:        
         selectValue,direction:directionAndId.direction,position:directionAndId.position
     }));
+    setSelectValue('Text')
   
   }
   const [expanded, setExpanded] = useState(created || false);

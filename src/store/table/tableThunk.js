@@ -177,7 +177,7 @@ export const addColumsToLeft = createAsyncThunk(
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType
         }
-       const data12= await createField(payload?.dbId,payload?.tableId,data);
+       await createField(payload?.dbId,payload?.tableId,data);
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
