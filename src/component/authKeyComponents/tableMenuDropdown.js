@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import {useNavigate,useParams} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import {
   Typography,
@@ -11,15 +12,19 @@ import {
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteAuthKeyPopup from './authKeyTablePopup/deleteAuthkeyPopup';
 import DisplayAuthKeyPopup from './authKeyTablePopup/displayAuthkeyPopup';
+
 export default function AuthDropdown(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setOpen] = useState(false);
   const[display,setDisplay]=useState(false);
+  const navigate = useNavigate();
+  const params = useParams();
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-  const handleCloseUserMenu = (event) => {
-    event.stopPropagation();
+  const handleCloseUserMenu = () => {
+    // event.stopPropagation();
     setAnchorElUser(null);
   };
   // const handleClickOpen = () => {
@@ -55,7 +60,10 @@ export default function AuthDropdown(props) {
         display ={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem onClick={handleCloseUserMenu}>
+
+        <MenuItem onClick={() => {handleCloseUserMenu(); 
+          navigate(`/authKeyCreate/${params.id}`,{state:{authData:props?.authData,title:props?.title}})
+          }}>
           <Typography textAlign="center">{props?.first}</Typography>
         </MenuItem>
         <MenuItem
@@ -88,4 +96,5 @@ AuthDropdown.propTypes = {
   third: PropTypes.string,
   title: PropTypes.string,
   deleteFunction: PropTypes.func,
+  authData :PropTypes.object,
 };

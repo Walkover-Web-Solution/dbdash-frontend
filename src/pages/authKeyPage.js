@@ -25,7 +25,7 @@ export default function AuthKeyPage() {
      </Box>
 
       <Box sx={{ display: "flex", justifyContent: "end", m: 1 }}>
-        <Link to ={`/authKeyCreate/${id}`} state={id} style={{textDecoration:'none'}} >
+        <Link to ={`/authKeyCreate/${id}`}  style={{textDecoration:'none'}} >
         <Button variant="contained" startIcon={<AddIcon/>}>
           Create Authkey
         </Button>

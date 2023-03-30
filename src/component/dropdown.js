@@ -56,7 +56,7 @@ export default function Dropdown(props) {
               e.stopPropagation();handleCloseUserMenu(e);setOpen(true);}}>
               <Typography  onClick={handleClickOpen} textAlign="center" >{props?.second}</Typography>
             </MenuItem>
-            <AlertPopup open={open} setOpen ={setOpen} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
+            <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>
     </>
   )
@@ -69,5 +69,6 @@ Dropdown.propTypes = {
   tableId : PropTypes.string,
   deleteFunction : PropTypes.func, 
   setTabIndex:PropTypes.func,
-  tabIndex:PropTypes.number
+  tabIndex:PropTypes.number,
+  tables:PropTypes.any
 };

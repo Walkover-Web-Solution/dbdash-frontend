@@ -23,6 +23,7 @@ function MainNavbar() {
     try {
 
       await logOut();
+      localStorage.clear();
       navigate("/")
     }
     catch (e) {

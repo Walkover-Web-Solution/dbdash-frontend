@@ -68,6 +68,7 @@ const dispatch = useDispatch();
         navigate("/dashboard")
       }
     } catch (error) {
+
       console.log(error);
     }
   }
@@ -89,7 +90,10 @@ const dispatch = useDispatch();
 
   const logOut = () => {
     signOut(auth);
-    localStorage.removeItem('accessToken');
+    // localStorage.clear();
+    Object.keys(localStorage).forEach(function(key){
+      localStorage.removeItem(key);
+    });
   };
 
 

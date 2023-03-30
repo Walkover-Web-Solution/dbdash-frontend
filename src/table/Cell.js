@@ -272,7 +272,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
           
         break;
     case "generatedcolumn":
-          element = (
+      element = (
             <input type ="text"
             readOnly="readonly"
             defaultValue ={(value?.value && value?.value?.toString()) || ""}

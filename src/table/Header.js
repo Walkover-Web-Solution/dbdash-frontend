@@ -3,8 +3,8 @@ import { usePopper } from "react-popper";
 import { grey } from "./colors";
 import ArrowUpIcon from "./img/ArrowUp";
 import ArrowDownIcon from "./img/ArrowDown";
-// import ArrowLeftIcon from "./img/ArrowLeft";
-// import ArrowRightIcon from "./img/ArrowRight";
+import ArrowLeftIcon from "./img/ArrowLeft";
+import ArrowRightIcon from "./img/ArrowRight";
 import TrashIcon from "./img/Trash";
 import TextIcon from "./Text";
 import MultiIcon from "./img/Multi";
@@ -13,7 +13,7 @@ import PlusIcon from "./img/Plus";
 import { useDispatch, useSelector } from "react-redux";
 import { shortId } from "./utils";
 import PropTypes from 'prop-types';
-import { addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
+import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 // import PopupModal from "../component/popupModal";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
@@ -27,9 +27,12 @@ export default function Header({
 }) {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
+  const [query,setQuery] = useState("")
   const [selectValue, setSelectValue] = useState('Text');
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [open, setOpen] = useState(false);
+  const [directionAndId, setDirectionAndId] = useState({
+  })
   // const [variable, setVariable] = useState("");
 
 
@@ -37,11 +40,23 @@ export default function Header({
     setOpen(true);
     setExpanded(false);
   }
-  const createLeftColumn = () => {
+  const createColumn = () => {
     setOpen(false);
+    console.log("query",query)
     dispatch(addColumsToLeft({
-      columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue
+      columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,query:query
     }));
+    setSelectValue('Text')
+
+  }
+  const createLeftorRightColumn = () => {
+    setOpen(false);
+    dispatch(addColumnrightandleft({
+      fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:
+        selectValue, direction: directionAndId.direction, position: directionAndId.position
+    }));
+    setSelectValue('Text')
+
   }
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -56,9 +71,8 @@ export default function Header({
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
 
- 
 
- 
+
 
   const buttons = [
     {
@@ -87,44 +101,35 @@ export default function Header({
       icon: <ArrowDownIcon />,
       label: "Sort descending"
     },
-    // {
-    //   onClick: () => {
-    //     handleOpen()
-    //     // dispatch(updateColumnHeaders({
-    //     //   columnId: id,
-    //     //   label: header
-    //     // }))
-    //     // dataDispatch({type: "add_column_to_left", columnId: id, focus: false});
-    //     // dispatch(addColumsToLeft({
-    //     //   columnId: id, focus: false,
-    //     // }))
-    //     // dispatch(addColumsToLeft({
-    //     //   columnId: 999999, focus: false,fieldName:variable,dbId:tableInfo?.dbId,tableId:tableInfo?.tableId,fieldType:"text"
-    //     // }));
-    //     // setExpanded(false);
-    //   },
-    //   icon: <ArrowLeftIcon />,
-    //   label: "Insert left"
-    // },
-    // {
-    //   onClick: () => {
-    //     dispatch(updateColumnHeaders({
-    //       type: "updateColumnHeader",
-    //       columnId: id,
-    //       label: header
-    //     }))
-    //     dispatch(addColumnsToRight({
-    //       type: "addColumnToRight",
-    //       columnId: id, focus: false
-    //     }))
-    //     setExpanded(false);
-    //   },
-    //   icon: <ArrowRightIcon />,
-    //   label: "Insert right"
-    // },
     {
-      onClick: () =>
-       {
+      onClick: () => {
+        handleOpen()
+        setDirectionAndId({
+          "direction": "left",
+          "position": id,
+
+        })
+        setExpanded(false);
+      },
+      icon: <ArrowLeftIcon />,
+      label: "Insert left"
+    },
+    {
+      onClick: () => {
+        setOpen(true);
+
+        setDirectionAndId({
+          "direction": "right",
+          "position": id,
+
+        })
+        setExpanded(false);
+      },
+      icon: <ArrowRightIcon />,
+      label: "Insert right"
+    },
+    {
+      onClick: () => {
         // dataDispatch({type: "update_column_header", columnId: id, label: header});
         // dispatch(updateColumnHeaders({
         //   columnId: id,
@@ -243,7 +248,7 @@ export default function Header({
     case "createdby":
       propertyIcon = <TextIcon />;
       break;
-      case "createdat":
+    case "createdat":
       propertyIcon = <TextIcon />;
       break;
     default:
@@ -291,22 +296,21 @@ export default function Header({
 
   function handleBlur(e) {
     e.preventDefault();
-    if(id != header )
-    {
+    if (id != header) {
       dispatch(updateColumnHeaders({
-      columnId: id,
-      dbId: tableInfo?.dbId,
-      tableName: tableInfo?.tableId,
-      fieldName: id,
-      label: header
-    }))
-  }
+        columnId: id,
+        dbId: tableInfo?.dbId,
+        tableName: tableInfo?.tableId,
+        fieldName: id,
+        label: header
+      }))
+    }
   }
 
   return id == 999999 || id == 9999991 ? (
     <>
 
-      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block",backgroundColor: '#E8E8E8'} })} className='th noselect'>
+      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block", backgroundColor: '#E8E8E8' } })} className='th noselect'>
         <div
           className='th-content'
           style={{ display: "flex", justifyContent: "center", }}
@@ -315,26 +319,28 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftColumn} />
+        <FieldPopupModal title="create column" label="Column Name" setQuery={setQuery} textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn} />
 
       </div > :
-        <div  {...getHeaderProps({ style: { display: "inline-block"} })} className='th noselect'
+        <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
           style={{ display: "flex", justifyContent: "center" }}>
           <div
-            className='th-content' style={{paddingLeft: "25px"}}>
+            className='th-content' style={{ paddingLeft: "25px" }}>
             checkbox
           </div>
         </div>}
     </>
   ) : (
     <>
-      <div {...getHeaderProps({ style: { display: "inline-block",flex: 'none'}})} className='th noselect'>
+      <div {...getHeaderProps({ style: { display: "inline-block", flex: 'none' } })} className='th noselect'>
         <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
           <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
           {label}
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
+      <FieldPopupModal title="create column" label="Column Name" setQuery={setQuery} textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftorRightColumn} />
+
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (
         <div ref={setPopperElement} style={{ ...styles.popper, zIndex: 3 }} {...attributes.popper}>
@@ -386,7 +392,7 @@ export default function Header({
                   }}>
                   {types.map((type, index) => (
                     <button key={index} className='sort-button' onClick={type.onClick}>
-                      <span  key = {index}  className='svg-icon svg-text icon-margin'>{type.icon}</span>
+                      <span key={index} className='svg-icon svg-text icon-margin'>{type.icon}</span>
                       {type.label}
                     </button>
                   ))}
@@ -401,9 +407,9 @@ export default function Header({
               }}>
               {buttons.map((button, index) => (
                 <button type='button' key={index} className='sort-button'
-                  onClick={()=>button.onClick()}
+                  onClick={() => button.onClick()}
                 >
-                  <span   key = {index} className='svg-icon svg-text icon-margin'>{button.icon}</span>
+                  <span key={index} className='svg-icon svg-text icon-margin'>{button.icon}</span>
                   {button.label}
                 </button>
               ))}
