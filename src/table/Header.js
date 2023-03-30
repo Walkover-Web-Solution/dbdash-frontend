@@ -180,13 +180,13 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "integer"
+          dataType: "numeric"
         }))
         setShowType(false);
         setExpanded(false);
       },
       icon: <HashIcon />,
-      label: "Integer"
+      label: "number"
     },
     {
       onClick: () => {
@@ -236,7 +236,7 @@ export default function Header({
     case "checkbox":
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
-    case "integer":
+    case "number":
       propertyIcon = <HashIcon />;
       break;
     case "text":
