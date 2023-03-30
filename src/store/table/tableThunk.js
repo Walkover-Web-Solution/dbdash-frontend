@@ -191,20 +191,21 @@ export const addColumsToLeft = createAsyncThunk(
 export const updateCells = createAsyncThunk(
     "table/updateCells",
     async(payload,{dispatch,getState})=>{
-        console.log("payload",payload?.value)
        const {tableId, dbId} = getState().table
        const value = payload.value
        const  columnId= payload.columnId;
+       console.log(payload?.value)
        if(payload?.dataTypess == "file")
        {
-            const formData = new FormData();
-            formData.append('file', payload?.value);
-            await uploadImage(dbId,tableId,payload.rowIndex,{[columnId]:formData})
+            await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
             dispatch(updateCell(payload))
             return payload;
        }
-        await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
-        dispatch(updateCell(payload));
+       else{
+
+           await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
+           dispatch(updateCell(payload));
+    }
         return payload;
     }   
 )
