@@ -223,19 +223,28 @@ setHead([...myArray])
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
             {head && head[0].headers?.map((column,index) => {
               // {console.log("hgf",column)}
-              // return (
-              //   <React.Fragment key ={index}>
-              //  {  column.render("Header")}
-              //   </React.Fragment>
-               
-              // )
-              return(<DraggableHeader
+              return (
+                <React.Fragment key ={index}>
+               {/* {  column.render("Header")} */}
+               <DraggableHeader
                 reoder={reoder}
                 key={column.id}
                 columns={column}
                 index={index}
     
-              />)
+              />
+                </React.Fragment>
+               
+              )
+              // return(
+              // <DraggableHeader
+              //   reoder={reoder}
+              //   key={column.id}
+              //   columns={column}
+              //   index={index}
+    
+              // />
+              // )
                             
             })}
           </div>

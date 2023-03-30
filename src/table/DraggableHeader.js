@@ -1,9 +1,5 @@
 
-import React, {
-  useRef, useMemo,
-  useEffect
-} from 'react';
-
+import React, {useRef, useMemo,useEffect,useState} from 'react';
 import { useDrop, useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import ItemTypes from "./ItemTypes";
@@ -20,6 +16,8 @@ export default function DraggableHeader({ columns,
   //   };
   const ref = useRef();
   const { id, label } = columns;
+  const [, setShowType] = useState(false);
+
   const Header = label
   const [, drop] = useDrop({
     accept: ItemTypes.COLUMN,
@@ -48,7 +46,7 @@ export default function DraggableHeader({ columns,
 
   drag(drop(ref));
 
-  const memoizedColumn = useMemo(() => columns.render("label"), [columns]);
+  const memoizedColumn = useMemo(() => columns.render("Header"), [columns]);
   // console.log("columns", columns);
   const opacity = isDragging ? 0 : 1;
 
@@ -58,10 +56,12 @@ export default function DraggableHeader({ columns,
 
   return (
     <>
-      <div className='td' key={key}
+      <div className='td bg-white shadow-5 border-radius-md' key={key}
         ref={ref}
-        {...columns.getHeaderProps()}
-        style={{ cursor: "move", opacity }}
+        {...columns.getHeaderProps({ style: { display: "inline-block" ,cursor: "move", opacity} })}
+        // style={{ cursor: "move", opacity }}
+        onMouseEnter={() => setShowType(true)}
+        onMouseLeave={() => setShowType(false)}
       >
         {memoizedColumn}
       </div>
