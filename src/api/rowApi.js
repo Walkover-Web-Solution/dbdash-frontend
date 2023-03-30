@@ -15,10 +15,17 @@ const deleteRow = async (db_id,tableName,row_id) =>
 {
     return await axios.patch(URL +`/${db_id}/${tableName}`,row_id)
 }
-
+const uploadImage = async (dbId, tableName, rowId, file) => {
+    console.log("file",file)   
+    // const formData = new FormData();
+    // formData.append('file', file);
+    // console.log(formData)
+    return await axios.post(URL + `/${dbId}/${tableName}/${rowId}/upload`, file);
+}
 
 export{
     insertRow,
     updateRow,
-    deleteRow
+    deleteRow,
+    uploadImage
 }

@@ -9,9 +9,10 @@ import { addColumns, updateCells } from "../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import AddIcon from '@mui/icons-material/Add';
+// import { uploadImage } from "../api/fieldApi";
 export default function Cell({value: initialValue, row, column: {id, dataType, options}, dataDispatch}) {
-
 
   const dispatch=useDispatch();
 
@@ -19,25 +20,42 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
-  // const [open,setOpen] = useState(false)
+  const [dataTypes,setDataType] = useState("")
   const onChange = (e) => {
     setValue({value: e.target.value, update: false});
   };
+
+  const onChangeFile = (e,type) => {  
+    console.log(",mfnvk,vn",type)
+    // const file = event.target.files[0];
+
+  // if (dataType === "attachment") {
+  //   const reader = new FileReader();
+
+  //   reader.onload = (e) => {
+  //     const dataUrl = e.target.result;
+  //     setValue({ value: dataUrl, update: true });
+  //   };
+
+  //   reader.readAsDataURL(file);
+  // }
+    setDataType(e.target.files[0])
+      setValue({value: e.target.files[0], update: false,dataType:type});
+  };
+
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow,setInputBoxShow] = useState(false)
   useEffect(() => {
-
     setValue({value: initialValue, update: false});
   }, [initialValue]);
 
-  
+
 
   useEffect(() => {
-    if (value?.update) {
-      // dataDispatch({type: "update_cell", columnId: id, rowIndex: index, value: value.value});
+    if (value?.update) {      
       dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: value.value
+        columnId: id, rowIndex: row.original.id, value: value.value,dataTypess:dataTypes
       }))
     }
   }, [value, dispatch, id, row.index]);
@@ -47,13 +65,6 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {
       if (e.target.value !== "") {
-
-        // dispatch({
-        //   type: "add_option_to_column",
-        //   option: e.target.value,
-        //   backgroundColor: randomColor(),
-        //   columnId: id
-        // });
         dispatch(addColumns({
           option: e.target.value,
           backgroundColor: randomColor(),
@@ -142,9 +153,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
      {inputBoxShow && <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DateTimePicker
       orientation="landscape"
-      // onClick={()=>{setInputBoxShow(false);}}
       open={inputBoxShow} value ={value?.value?new Date(value?.value):new Date()} onChange={(newValue)=>{ setValue({value: newValue, update: true}); setInputBoxShow(false); } }
-      // sx={{"display":inputBoxShow?"block":"none"}}
       onClose={()=>{ setInputBoxShow(false);}}
       />
     </LocalizationProvider>}
@@ -165,9 +174,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
           onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-        // onMouseDown={()=>{
-
-        // }}
+        
           className='data-input'
         />
       );
@@ -271,6 +278,19 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
       </>)
           
         break;
+        case "attachment":
+  element = (
+    <div>
+      <input
+        type="file"
+        id="attachmentInput"
+        onChange={(e)=>{onChangeFile(e,"file")}}
+        onBlur={() => setValue((old) => ({value: old.value, update: true}))}
+      />
+    </div>
+  );
+  break;
+
 
     default:
       element = null;
