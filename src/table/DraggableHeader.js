@@ -31,7 +31,6 @@ export default function DraggableHeader({ columns,
         reoder(monitor, index)
     )
   })
-console.log(index);
   const [{ isDragging }, drag, preview] = useDrag({
     item: { type: ItemTypes.COLUMN },
     begin: () => {

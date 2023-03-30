@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useCallback } from "react";
+import React, { useMemo, useEffect, useCallback, useState } from "react";
 import clsx from "clsx";
 import { useTable, useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useColumnOrder } from "react-table";
 import Cell from "./Cell";
@@ -38,13 +38,14 @@ const defaultColumn = {
 
 
 export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
-
+const[head,setHead] = useState()
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();
     document.execCommand('copy');
 
   };
+
   
   const dispatch =useDispatch();
   const handlePaste = (event,row,cell) => {
@@ -79,7 +80,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
   );
 
   const { getTableProps, getTableBodyProps, headerGroups,rows, prepareRow,
-     selectedFlatRows,  state,setColumnOrder,
+     selectedFlatRows,  
     state: { selectedCellIds, currentSelectedCellIds,},
      
   } = useTable(
@@ -107,24 +108,41 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
     useColumnOrder
   );
 
+  useEffect(() => {
+    if(headerGroups)
+    setHead(headerGroups)
+  
 
-
+  }, [headerGroups])
   const reoder = useCallback(
     (item, newIndex) => {
-      console.log(item?.index, newIndex);
-      const newOrder = [...state.columnOrder];
-      const { index: currentIndex } = item.index;
+      console.log(item, newIndex)
+      let myArray = head
+  
+      const temp = myArray[0].headers[item?.index];
+      myArray[0].headers[item?.index] = myArray[0].headers[newIndex];
+      myArray[0].headers[newIndex] = temp;
 
-      const [removedColumn] = newOrder.splice(currentIndex, 1);
+setHead([...myArray])
 
-      newOrder.splice(newIndex, 0, removedColumn);
 
-      setColumnOrder(newOrder);
+    //   console.log(item?.index, newIndex);
+    //   const newOrder = [...state.columnOrder];
+    //   const { index: currentIndex } = item.index;
+
+    //   const [removedColumn] = newOrder.splice(currentIndex, 1);
+
+    //   newOrder.splice(newIndex, 0, removedColumn);
+    //   setColumnOrder(newOrder);
     },
-    [state, setColumnOrder]
+    // [state, setColumnOrder]
   );
 
+  useEffect(() => {
+   
 
+    console.log(head);
+  }, [head])
 
   useEffect(() => {
     if(Object.keys(selectedCellIds).length > 0) {
@@ -203,7 +221,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
       <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
-            {headerGroups[0].headers.map((column,index) => {
+            {head && head[0].headers?.map((column,index) => {
               // {console.log("hgf",column)}
               // return (
               //   <React.Fragment key ={index}>
