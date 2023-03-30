@@ -7,7 +7,7 @@ import AuthAccessDropDown from "../component/authKeyComponents/authAccessDropdow
 // import AuthKeyPopup from "../component/authKeyComponents/authKeyPopup";
 import AuthKeyDropdown from "../component/authKeyComponents/authKeyDropdown";
 import { PropTypes } from "prop-types";
-import { createAuthkey, getAuthkey } from "../api/authkeyApi";
+import { createAuthkey, getAuthkey, updateAuthkey } from "../api/authkeyApi";
 import MainNavbar from "../component/mainNavbar";
 // import DisplayAuthKeyPopup from "../component/authKeyComponents/authKeyTablePopup/displayAuthkeyPopup";
 import AuthKeyPopup from "../component/authKeyComponents/authKeyPopup";
@@ -28,6 +28,8 @@ export default function CreateAuthKey() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const [options, setOptions] = useState([]);
+  // console.log("dbid",dbId.title)
+
 
   const isDisabled = !name || !scope || selected.length === 0;
   const handleKeyDown = (event) => {
@@ -39,19 +41,24 @@ export default function CreateAuthKey() {
     // e.preventDefault();
     const adminId1 = localStorage.getItem("userid");
     const adminId = userDetails?.fullName;
+    const data = {
+      name: name,
+      scope: scope,
+      access: selected,
+      userId: adminId1,
+    };
     if (!dbId) {
-      const data = {
-        name: name,
-        scope: scope,
-        access: selected,
-        userId: adminId1,
-      };
+     
       const create = await createAuthkey(id, adminId, data);
       setOpen(true);
       setAuthKey(create?.data?.data?.authKey);
       await getAuthkey(id, adminId);
       return;
     }
+     const authKey = dbId.title
+     await updateAuthkey(id,adminId1,authKey,data)
+     setAuthKey(dbId.title);
+      await getAuthkey(id, adminId);
 
   };
 
@@ -68,7 +75,7 @@ export default function CreateAuthKey() {
       const selectedTables = optionList
         .filter(({ id }) => tableIds.includes(id))
         .map(({ tableName }) => tableName);
-      console.log("selectedTable", selectedTables);
+      // console.log("selectedTable", selectedTables);
       setSelected(selectedTables);
     }
   };
