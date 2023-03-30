@@ -4,7 +4,7 @@ import { getTable } from "../../api/tableApi";
 import {insertRow} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
 // reducer imports
-import { addColumnToLeft, addColumnToRight, addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
+import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
 import { runQueryonTable } from "../../api/filterApi";
 import { allOrg } from "../database/databaseSelector";
 // import { useSelector } from "react-redux";
@@ -150,13 +150,23 @@ export const updateColumnHeaders = createAsyncThunk(
     }
 )
 
-export const addColumnsToRight = createAsyncThunk(
-    "table/addColumnsToRight",
-    async(payload,{dispatch,getState})=>{
-
-        dispatch(addColumnToRight(payload));
+export const addColumnrightandleft = createAsyncThunk(
+    "table/addColmunsrightandleft",
+    async(payload,{dispatch,getState})=>
+    {
+        const data={
+            fieldName:payload?.fieldName,
+            fieldType:payload?.fieldType,
+            direction:payload?.direction,
+            position:payload?.position,
+        }
+          
+      console.log("hello from addcolumns")
+     await createField(payload?.dbId,payload?.tableId,data);
+      
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
+    
         return payload;
     }
 )
@@ -168,13 +178,17 @@ export const addColumsToLeft = createAsyncThunk(
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType
         }
-        await createField(payload?.dbId,payload?.tableId,data);
+       const data12= await createField(payload?.dbId,payload?.tableId,data);
+       console.log("dataofThunk",data12)
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         return payload;
+        
     }
+      
 )
+
 
 export const updateCells = createAsyncThunk(
     "table/updateCells",

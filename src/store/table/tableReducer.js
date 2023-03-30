@@ -1,5 +1,5 @@
 // import { current } from '@reduxjs/toolkit';
-import { addColumns, addColumnsToRight, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft } from './tableThunk.js';
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 
 
@@ -71,7 +71,7 @@ export const reducers = {
       ]
     };
   },
-  addColumnToRight(state, payload) {
+  addColumnrightandleft(state, payload) {
     const action = payload.payload;
     if (action) {
       var rightIndex = state.columns.findIndex(
@@ -91,6 +91,7 @@ export const reducers = {
           dataType: "text",
           created: action.focus && true,
           options: []
+          
         },
         ...state.columns.slice(rightIndex + 1, state.columns.length)
       ]
@@ -98,7 +99,7 @@ export const reducers = {
   },
   addColumnToLeft(state, payload) {
     const action = payload.payload;
-
+     console.log("addcoulmntoLeft",state,payload)
     if (action) {
       var leftIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
@@ -370,15 +371,15 @@ export function extraReducers(builder) {
 
 
     // for add column to right
-    .addCase(addColumnsToRight.pending, (state) => {
+    .addCase(addColumnrightandleft.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(addColumnsToRight.fulfilled, (state) => {
+    .addCase(addColumnrightandleft.fulfilled, (state) => {
 
       state.status = "succeeded";
 
     })
-    .addCase(addColumnsToRight.rejected, (state) => {
+    .addCase(addColumnrightandleft.rejected, (state) => {
       state.status = "failed";
     })
 

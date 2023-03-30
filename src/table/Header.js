@@ -3,8 +3,8 @@ import { usePopper } from "react-popper";
 import { grey } from "./colors";
 import ArrowUpIcon from "./img/ArrowUp";
 import ArrowDownIcon from "./img/ArrowDown";
-// import ArrowLeftIcon from "./img/ArrowLeft";
-// import ArrowRightIcon from "./img/ArrowRight";
+ import ArrowLeftIcon from "./img/ArrowLeft";
+import ArrowRightIcon from "./img/ArrowRight";
 import TrashIcon from "./img/Trash";
 import TextIcon from "./Text";
 import MultiIcon from "./img/Multi";
@@ -13,7 +13,7 @@ import PlusIcon from "./img/Plus";
 import { useDispatch, useSelector } from "react-redux";
 import { shortId } from "./utils";
 import PropTypes from 'prop-types';
-import { addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
+import {  addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 // import PopupModal from "../component/popupModal";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
@@ -30,6 +30,8 @@ export default function Header({
   const [selectValue, setSelectValue] = useState('Text');
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [open, setOpen] = useState(false);
+  const [directionAndId,setDirectionAndId]= useState({
+  })
   // const [variable, setVariable] = useState("");
  
 
@@ -37,11 +39,20 @@ export default function Header({
     setOpen(true);
     setExpanded(false);
   }
-  const createLeftColumn = () => {
+  const createColumn = () => {
     setOpen(false);
+    
     dispatch(addColumsToLeft({
-      columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue
+      columnId: 999999, focus: false,  fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue
     }));
+  }
+  const createLeftorRightColumn =() =>{
+    setOpen(false);
+    dispatch(addColumnrightandleft({
+      fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:        
+        selectValue,direction:directionAndId.direction,position:directionAndId.position
+    }));
+  
   }
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -86,41 +97,33 @@ export default function Header({
       icon: <ArrowDownIcon />,
       label: "Sort descending"
     },
-    // {
-    //   onClick: () => {
-    //     handleOpen()
-    //     // dispatch(updateColumnHeaders({
-    //     //   columnId: id,
-    //     //   label: header
-    //     // }))
-    //     // dataDispatch({type: "add_column_to_left", columnId: id, focus: false});
-    //     // dispatch(addColumsToLeft({
-    //     //   columnId: id, focus: false,
-    //     // }))
-    //     // dispatch(addColumsToLeft({
-    //     //   columnId: 999999, focus: false,fieldName:variable,dbId:tableInfo?.dbId,tableId:tableInfo?.tableId,fieldType:"text"
-    //     // }));
-    //     // setExpanded(false);
-    //   },
-    //   icon: <ArrowLeftIcon />,
-    //   label: "Insert left"
-    // },
-    // {
-    //   onClick: () => {
-    //     dispatch(updateColumnHeaders({
-    //       type: "updateColumnHeader",
-    //       columnId: id,
-    //       label: header
-    //     }))
-    //     dispatch(addColumnsToRight({
-    //       type: "addColumnToRight",
-    //       columnId: id, focus: false
-    //     }))
-    //     setExpanded(false);
-    //   },
-    //   icon: <ArrowRightIcon />,
-    //   label: "Insert right"
-    // },
+    {
+      onClick: () => {
+        handleOpen()
+        setDirectionAndId({
+          "direction": "left",
+          "position":id,
+          
+        })
+        setExpanded(false);
+      },
+      icon: <ArrowLeftIcon />,
+      label: "Insert left"
+    },
+    {
+      onClick: () => {
+        setOpen(true);
+        
+        setDirectionAndId({
+          "direction": "right",
+          "position":id,
+          
+        })
+        setExpanded(false);
+      },
+      icon: <ArrowRightIcon />,
+      label: "Insert right"
+    },
     {
       onClick: () =>
        {
@@ -314,7 +317,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftColumn} />
+        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block"} })} className='th noselect'
@@ -334,6 +337,8 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
+      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
+
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (
         <div ref={setPopperElement} style={{ ...styles.popper, zIndex: 3 }} {...attributes.popper}>

@@ -10,6 +10,7 @@ import {
   MenuItem,
 } from '@mui/material';
 export default function FieldPopupModal(props)  {
+  
 const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
   };
@@ -18,6 +19,7 @@ const handleTextChange = (event) => {
   };
   const handleClose = () => {
     props?.setOpen(false);
+    // props.setOpenPopup(false);
   };
  
   const isInputEmpty = props?.textValue.trim() === '';
@@ -79,6 +81,8 @@ const handleTextChange = (event) => {
 FieldPopupModal.propTypes ={
     setOpen:PropTypes.func,
     open:PropTypes.bool,
+    setOpenPopup:PropTypes.func,
+    openPopup:PropTypes.bool,
     textValue:PropTypes.any,
     selectValue:PropTypes.any,
     setTextValue:PropTypes.func,
