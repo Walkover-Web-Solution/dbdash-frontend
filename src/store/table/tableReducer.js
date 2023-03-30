@@ -99,7 +99,6 @@ export const reducers = {
   },
   addColumnToLeft(state, payload) {
     const action = payload.payload;
-     console.log("addcoulmntoLeft",state,payload)
     if (action) {
       var leftIndex = state.columns.findIndex(
         (column) => column.id === action.columnId

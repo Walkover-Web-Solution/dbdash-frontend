@@ -14,14 +14,12 @@ import DeleteAuthKeyPopup from './authKeyTablePopup/deleteAuthkeyPopup';
 import DisplayAuthKeyPopup from './authKeyTablePopup/displayAuthkeyPopup';
 
 export default function AuthDropdown(props) {
-  console.log("prosp",props.title);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setOpen] = useState(false);
   const[display,setDisplay]=useState(false);
   const navigate = useNavigate();
   const params = useParams();
-  // console.log(params.id)
-  // console.log("qqqqq",props?.authData);
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };

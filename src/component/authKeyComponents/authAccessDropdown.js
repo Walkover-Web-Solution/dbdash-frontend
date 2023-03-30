@@ -27,8 +27,6 @@ const MenuProps = {
 
 export default function AuthAccessDropDown({selected,setSelected,options,setOptions,dbId}) {
 
-// const tableId = Object.entries(dbIds.authData.access).map(([tableId]) => tableId)
-// console.log("AA gya Aa gya ",tableId)
 
 
   const getAllTableName = async (dbId) => {

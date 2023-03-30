@@ -161,7 +161,6 @@ export const addColumnrightandleft = createAsyncThunk(
             position:payload?.position,
         }
           
-      console.log("hello from addcolumns")
      await createField(payload?.dbId,payload?.tableId,data);
       
         const {tableId, dbId} = getState().table
@@ -179,7 +178,6 @@ export const addColumsToLeft = createAsyncThunk(
             fieldType:payload?.fieldType
         }
        const data12= await createField(payload?.dbId,payload?.tableId,data);
-       console.log("dataofThunk",data12)
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
