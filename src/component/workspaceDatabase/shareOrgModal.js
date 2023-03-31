@@ -20,10 +20,17 @@ export default function ShareOrgModal(props) {
   };
 
   const handleSendInvite = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Invalid email");
+      return;
+    }
+  
     props.shareWorkspace(email);
     handleClose();
-    toast.success("Error sending invite. Please try again.");
+    toast.success("Invitation sent successfully");
   };
+  
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -34,6 +41,7 @@ export default function ShareOrgModal(props) {
 
   const handleRemoveUser = (email) => {
     props.removeUserFromWorkspace(email);
+    toast.success("User removed successfully");
   };
 
   return (
