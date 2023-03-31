@@ -29,16 +29,22 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
     document.execCommand('copy');
 
   };
+
+
   
   const dispatch =useDispatch();
   const handlePaste = (event,row,cell) => {
     event.preventDefault();
+
       const text = event.clipboardData.getData('text/plain');
        dispatch(updateCells({
         columnId: cell.column.id, rowIndex: cell.row.original.id, value: text
+        
       }))
+
   };
 
+  
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA, rowB, columnId, desc) {

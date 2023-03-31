@@ -18,7 +18,8 @@ import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHead
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
 import CheckIcon from '@mui/icons-material/Check';
-
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import {getQueryByAi} from "../api/fieldApi"
 
 export default function Header({
   column: { id, created, label, dataType, getResizerProps, getHeaderProps },
@@ -30,6 +31,7 @@ export default function Header({
   const [query,setQuery] = useState("")
   const [selectValue, setSelectValue] = useState('Text');
   const tableInfo = useSelector((state) => getTableInfo(state));
+
   const [open, setOpen] = useState(false);
   const [directionAndId, setDirectionAndId] = useState({
   })
@@ -40,13 +42,15 @@ export default function Header({
     setOpen(true);
     setExpanded(false);
   }
-  const createColumn = () => {
+  const createColumn = async () => {
     setOpen(false);
-    console.log("query",query)
+    if(!query)
     dispatch(addColumsToLeft({
       columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,query:query
     }));
     setSelectValue('Text')
+    await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {
+    })
 
   }
   const createLeftorRightColumn = () => {
@@ -58,6 +62,7 @@ export default function Header({
     setSelectValue('Text')
 
   }
+
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -223,6 +228,18 @@ export default function Header({
       },
       label: "date and time"
     },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <AttachFileIcon fontSize="2px" />,
+      label: "attachment"
+    },
   ];
 
   let propertyIcon;
@@ -250,6 +267,9 @@ export default function Header({
       break;
     case "createdat":
       propertyIcon = <TextIcon />;
+      break;
+      case "attachment":
+      propertyIcon = <AttachFileIcon fontSize="1px" />;
       break;
     default:
       break;

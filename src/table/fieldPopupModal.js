@@ -28,7 +28,8 @@ const handleTextChange = (event) => {
   };
   const handleClose = () => {
     props?.setOpen(false);
-    // props.setOpenPopup(false);
+    setOpenn(false);
+    props?.setSelectValue("Text");
   };
 
 
@@ -44,18 +45,19 @@ const handleTextChange = (event) => {
         justifyContent: 'center'}}
       >
         <DialogTitle id="form-dialog-title">Create Column</DialogTitle>
-        <DialogContent sx={{width: 400,
-    padding: 2}}>
-          <TextField
+        <TextField
             autoFocus
             margin="dense"
             id="text-field"
-            label="Text Field"
+            label="Field Name"
             type="text"
             // value={props?.textValue}
             onChange={handleTextChange}
             fullWidth
           />
+        <DialogContent sx={{width: 400,
+    padding: 2}}>
+          
           <Select
             labelId="select-label"
             id="select"
@@ -66,7 +68,7 @@ const handleTextChange = (event) => {
             sx={{margin:1,
               minWidth: 120,}}
           >
-            <MenuItem value="text" >text</MenuItem>
+            <MenuItem value="Text" >text</MenuItem>
             <MenuItem value="varchar">varchar</MenuItem>
             <MenuItem value="integer">integer</MenuItem>
             <MenuItem value="checkbox">checkbox</MenuItem>
@@ -74,19 +76,22 @@ const handleTextChange = (event) => {
             <MenuItem value="createdby">created By</MenuItem>
             <MenuItem value="createdat">created At</MenuItem>
             <MenuItem value="generatedcolumn">generated column</MenuItem>
+            <MenuItem value="attachment">attachment</MenuItem>
           </Select>
 
          {  openn && 
+
          (
           <Box>
+            <Box>write query in human friendly way to manupulate the column and resultand query will be give to you !!!  and vie versa</Box>
                <TextField
             autoFocus
             margin="dense"
             id="text-field"
-            label="Text Field"
+            label="Enter the query"
             type="text"
             // value={props?.textValue}
-            // onChange={handleTextChange}
+            placeholder={"multiply column speed and distance"}
            onChange={(e)=>{
             props?.setQuery(e.target.value)
            }}
@@ -98,6 +103,7 @@ const handleTextChange = (event) => {
           id="text-field"
           label="Text Field"
           type="text"
+          placeholder={"resultant query"}
           // value={props?.textValue}
           // onChange={handleTextChange}
          onChange={(e)=>{

@@ -1,59 +1,72 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ContentEditable from "react-contenteditable";
 import Relationship from "./Relationship";
-import {usePopper} from "react-popper";
-import {grey} from "./colors";
+import { usePopper } from "react-popper";
+import { grey } from "./colors";
 import PlusIcon from "./img/Plus";
-import {randomColor} from "./utils";
+import { randomColor } from "./utils";
 import { addColumns, updateCells } from "../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-export default function Cell({value: initialValue, row, column: {id, dataType, options}, dataDispatch}) {
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+// import AddIcon from '@mui/icons-material/Add';
+// import { uploadImage } from "../api/fieldApi";
+export default function Cell({ value: initialValue, row, column: { id, dataType, options }, dataDispatch }) {
 
+  const dispatch = useDispatch();
 
-  const dispatch=useDispatch();
-
-  const [value, setValue] = useState({value: initialValue, update: false});
+  const [value, setValue] = useState({ value: initialValue, update: false });
+  
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
-  // const [open,setOpen] = useState(false)
-  const onChange = (e) => {
-    setValue({value: e.target.value, update: false});
-  };
+  const [dataTypes, setDataType] = useState("")
+  const[imgUpload,setImageUpload]=useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
-  const [inputBoxShow,setInputBoxShow] = useState(false)
-  useEffect(() => {
+  const [inputBoxShow, setInputBoxShow] = useState(false);
 
+
+
+  const onChange = (e) => {
+    setValue({ value: e.target.value, update: false });
+  };
+
+  const onChangeFile = (e, type) => {
+    console.log("e.target.files[0]", e.target.files[0])
+    setDataType(type)
+    if (e.target.files[0] != null) {
+      setImageUpload( e.target.files[0])
+    }
+
+    e.target.value = null;
+  };
+  useEffect(() => {
     setValue({value: initialValue, update: false});
   }, [initialValue]);
 
-  
+  useEffect(()=>{
+    if(imgUpload)
+    dispatch(updateCells({
+      columnId: id, rowIndex: row.original.id, value: imgUpload , dataTypess: dataTypes
+    }))
+  },[imgUpload])
 
-  useEffect(() => {
-    if (value?.update) {
-      // dataDispatch({type: "update_cell", columnId: id, rowIndex: index, value: value.value});
-      dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: value.value
-      }))
-    }
-  }, [value, dispatch, id, row.index]);
+    useEffect(() => {
+      if (value?.update) {
+        dispatch(updateCells({
+          columnId: id, rowIndex: row.original.id, value: value.value, dataTypess: dataTypes
+        }))
+      }
+    }, [value, dispatch, id, row.index]);
 
-  
+
 
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {
       if (e.target.value !== "") {
-
-        // dispatch({
-        //   type: "add_option_to_column",
-        //   option: e.target.value,
-        //   backgroundColor: randomColor(),
-        //   columnId: id
-        // });
         dispatch(addColumns({
           option: e.target.value,
           backgroundColor: randomColor(),
@@ -88,7 +101,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
     setShowAdd(false);
   }
 
-  const {styles, attributes} = usePopper(selectRef, selectPop, {
+  const { styles, attributes } = usePopper(selectRef, selectPop, {
     placement: "bottom-start",
     strategy: "fixed"
   });
@@ -106,57 +119,57 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
 
   let element;
   switch (dataType) {
-    case "createdby" :
+    case "createdby":
       element = (
-        <input type ="text"
-        readOnly="readonly"
-        defaultValue ={(value?.value && value?.value?.toString()) || ""}
-        className='data-input'
-      />
-      );
-      break;
-      case "createdat" :
-        element = (
-          <input type ="text"
+        <input type="text"
           readOnly="readonly"
-          defaultValue ={(value?.value && value?.value?.toString()) || ""}
+          defaultValue={(value?.value && value?.value?.toString()) || ""}
           className='data-input'
         />
-        );
-        break;
+      );
+      break;
+    case "createdat":
+      element = (
+        <input type="text"
+          readOnly="readonly"
+          defaultValue={(value?.value && value?.value?.toString()) || ""}
+          className='data-input'
+        />
+      );
+      break;
     case "checkbox":
       element = (
-        <input type="checkbox" 
-        checked={value.value}
-        onChange={()=>{
-          setValue(() => ({value: !(value.value), update: true}))
-        }}
+        <input type="checkbox"
+          checked={value.value}
+          onChange={() => {
+            setValue(() => ({ value: !(value.value), update: true }))
+          }}
         />
       );
       break;
     case "datetime":
-      element = 
-     
-      ( 
-        <>
-     {inputBoxShow && <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <DateTimePicker
-      orientation="landscape"
-      // onClick={()=>{setInputBoxShow(false);}}
-      open={inputBoxShow} value ={value?.value?new Date(value?.value):new Date()} onChange={(newValue)=>{ setValue({value: newValue, update: true}); setInputBoxShow(false); } }
-      // sx={{"display":inputBoxShow?"block":"none"}}
-      onClose={()=>{ setInputBoxShow(false);}}
-      />
-    </LocalizationProvider>}
-        <input type ="text" className='data-input'
-        defaultValue={value?.value}
-         style={{"display":inputBoxShow?"none":"block"}}
-        onClick={(e)=>{ if(e.detail == 2){
-          setInputBoxShow(true);
-          
-        }}}/>
-        </>
-     
+      element =
+
+        (
+          <>
+            {inputBoxShow && <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                orientation="landscape"
+                open={inputBoxShow} value={value?.value ? new Date(value?.value) : new Date()} onChange={(newValue) => { setValue({ value: newValue, update: true }); setInputBoxShow(false); }}
+                onClose={() => { setInputBoxShow(false); }}
+              />
+            </LocalizationProvider>}
+            <input type="text" className='data-input'
+              defaultValue={value?.value}
+              style={{ "display": inputBoxShow ? "none" : "block" }}
+              onClick={(e) => {
+                if (e.detail == 2) {
+                  setInputBoxShow(true);
+
+                }
+              }} />
+          </>
+
         );
       break;
     case "text":
@@ -164,10 +177,8 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-        // onMouseDown={()=>{
+          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
 
-        // }}
           className='data-input'
         />
       );
@@ -177,7 +188,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
+          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
           className='data-input'
         />
       );
@@ -187,7 +198,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         <ContentEditable
           html={(value?.value && value.value.toString()) || ""}
           onChange={onChange}
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
+          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
           className='data-input text-align-right'
         />
       );
@@ -214,13 +225,13 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
                 maxWidth: 320,
                 padding: "0.75rem"
               }}>
-              <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
-                {options.map((option,index) => (
+              <div className='d-flex flex-wrap-wrap' style={{ marginTop: "-0.5rem" }}>
+                {options.map((option, index) => (
                   <div key={index}
                     className='cursor-pointer'
-                    style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                    style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
                     onClick={() => {
-                      setValue({value: option.label, update: true});
+                      setValue({ value: option.label, update: true });
                       setShowSelect(false);
                     }}>
                     <Relationship value={option.label} backgroundColor={option.backgroundColor} />
@@ -247,7 +258,7 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
                 )}
                 <div
                   className='cursor-pointer'
-                  style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                  style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
                   onClick={handleAddOption}>
                   <Relationship
                     value={
@@ -280,6 +291,44 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
           />
           );
           break;
+    case "attachment":
+      element = (
+        <div>
+  {console.log("value",value)}
+  {value?.value?.length >0 && value?.value?.map((imgLink,index) => (
+    // <div key ={index}  style={{ display: "flex"}}  >
+      <img key ={index}  src={imgLink} alt="My Image" style={{ width: "25%", height: "100%",marginRight:"2px"}}  />
+      /* {value?.value?.length===index+1  && 
+        <input
+          style={{ width: "25%", height: "100%",marginRight:"2px"}} 
+          type="file"
+          id="attachmentInput"
+          onChange={(e) => { onChangeFile(e, "file") }}
+        />
+      // } */
+    // </div>
+
+  ))}
+  <UploadFileIcon fontSize="medium"/>
+   <input
+          style={{ 
+            width: "25%", 
+            height: "100%", 
+            marginRight: "2px",
+            margin: "0",
+            padding: "0",
+            paddingBottom: "2px"
+          }} 
+          type="file"
+          id="attachmentInput"
+          onChange={(e) => { onChangeFile(e, "file") }}
+        />
+</div>
+
+      );
+      break;
+
+
     default:
       element = null;
       break;
