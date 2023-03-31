@@ -28,29 +28,35 @@ export default function Header({
 }) {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
-  const [query,setQuery] = useState("")
+  const [queryByAi,setQueryByAi] = useState(false)
   const [selectValue, setSelectValue] = useState('Text');
   const tableInfo = useSelector((state) => getTableInfo(state));
 
   const [open, setOpen] = useState(false);
   const [directionAndId, setDirectionAndId] = useState({
   })
-  // const [variable, setVariable] = useState("");
-
 
   const handleOpen = () => {
     setOpen(true);
     setExpanded(false);
   }
-  const createColumn = async () => {
-    setOpen(false);
-    if(!query)
-    dispatch(addColumsToLeft({
-      columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,query:query
-    }));
+  const createColumn = async (userQuery) => {
+   
+    if(!userQuery)
+    {
+      setOpen(false);
+      dispatch(addColumsToLeft({
+        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,query:queryByAi
+      }));
+    }
+   
+    else
+    {
+      const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
+      setQueryByAi(response?.data?.data);
+      console.log("response ",response);
+    }
     setSelectValue('Text')
-    await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {
-    })
 
   }
   const createLeftorRightColumn = () => {
@@ -339,7 +345,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" setQuery={setQuery} textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn} />
+        <FieldPopupModal title="create column" label="Column Name"  queryByAi = {queryByAi} textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
@@ -359,7 +365,7 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" setQuery={setQuery} textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftorRightColumn} />
+      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftorRightColumn} />
 
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (

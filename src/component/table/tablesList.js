@@ -15,6 +15,7 @@ import { createTable1 } from '../../store/allTable/allTableThunk';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
+
 export default function TablesList({ dbData }) {
   const dispatch = useDispatch();
   const params = useParams();
@@ -85,6 +86,8 @@ export default function TablesList({ dbData }) {
       
     }
   }, [dbData,params])
+
+  
 
   return (
     <>

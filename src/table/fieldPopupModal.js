@@ -12,7 +12,8 @@ import {
 import { Box } from '@mui/system';
 export default function FieldPopupModal(props)  {
   const [openn,setOpenn] = useState(false);
-const handleTextChange = (event) => {
+  const [userQuery,setUserQuery] = useState(false);
+  const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
   };
   const handleSelectChange = (event) => {
@@ -93,10 +94,12 @@ const handleTextChange = (event) => {
             // value={props?.textValue}
             placeholder={"multiply column speed and distance"}
            onChange={(e)=>{
-            props?.setQuery(e.target.value)
+            setUserQuery(e.target.value)
            }}
             fullWidth
           />
+          <Button onClick={()=>{props?.submitData(userQuery)}} color="primary" >Submit</Button>
+
           <TextField
           autoFocus
           margin="dense"
@@ -104,11 +107,7 @@ const handleTextChange = (event) => {
           label="Text Field"
           type="text"
           placeholder={"resultant query"}
-          // value={props?.textValue}
-          // onChange={handleTextChange}
-         onChange={(e)=>{
-          props?.setQuery(e.target.value)
-         }}
+          value={props?.queryByAi}
           fullWidth
         /> 
           </Box>
@@ -117,7 +116,7 @@ const handleTextChange = (event) => {
           }
 
         </DialogContent>
-        <Button onClick={props?.submitData} color="primary" >Submit</Button>
+        <Button onClick={()=>{props?.submitData(userQuery)}} color="primary" >Submit</Button>
       </Dialog>
       
     </div>
@@ -133,6 +132,6 @@ FieldPopupModal.propTypes ={
     setTextValue:PropTypes.func,
     setSelectValue:PropTypes.func,
     submitData:PropTypes.func,
-    setQuery:PropTypes.func
+    queryByAi:PropTypes.any
 }
 

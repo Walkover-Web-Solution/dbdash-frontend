@@ -46,6 +46,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
+
   const deleteTableName = async (tableid) => {
     if(Object.keys(dbData?.db?.tables).length >=2){
       dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
