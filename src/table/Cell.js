@@ -181,11 +181,12 @@ export default function Cell({value: initialValue, row, column: {id, dataType, o
         />
       );
       break;
-    case "number":
+    case "numeric":
       element = (
         <ContentEditable
           html={(value?.value && value.value.toString()) || ""}
           onChange={onChange}
+          
           onBlur={() => setValue((old) => ({value: old.value, update: true}))}
           className='data-input text-align-right'
           step="any"

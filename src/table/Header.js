@@ -186,7 +186,7 @@ export default function Header({
         setExpanded(false);
       },
       icon: <HashIcon />,
-      label: "number"
+      label: "numeric"
     },
     {
       onClick: () => {
@@ -236,7 +236,7 @@ export default function Header({
     case "checkbox":
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
-    case "number":
+    case "numeric":
       propertyIcon = <HashIcon />;
       break;
     case "text":

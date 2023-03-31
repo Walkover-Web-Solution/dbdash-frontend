@@ -189,6 +189,7 @@ export const reducers = {
     switch (action.dataType) {
       case "numeric":
         if (state.columns[typeIndex].dataType === "numeric") {
+
           return state;
         } else {
           return {
