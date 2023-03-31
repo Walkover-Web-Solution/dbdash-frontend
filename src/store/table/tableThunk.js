@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
-import {insertRow} from "../../api/rowApi";
+import {insertRow, uploadImage} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
 // reducer imports
 import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
-import { runQueryonTable } from "../../api/filterApi";
 import { allOrg } from "../database/databaseSelector";
+import  {runQueryonTable}  from "../../api/filterApi";
 // import { useSelector } from "react-redux";
 // const alldb = useSelector((state) => selectOrgandDb(state))
 const getHeaders = async(dbId,tableName) =>{
@@ -176,8 +176,18 @@ export const updateCells = createAsyncThunk(
        const {tableId, dbId} = getState().table
        const value = payload.value
        const  columnId= payload.columnId;
-       await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
-        dispatch(updateCell(payload));
+       console.log(payload?.value)
+       if(payload?.dataTypess == "file")
+       {
+            await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
+            dispatch(updateCell(payload))
+            return payload;
+       }
+       else{
+
+           await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
+           dispatch(updateCell(payload));
+    }
         return payload;
     }
 )
