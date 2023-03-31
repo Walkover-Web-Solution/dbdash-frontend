@@ -133,12 +133,6 @@ export default function Header({
     {
       onClick: () =>
        {
-        // dataDispatch({type: "update_column_header", columnId: id, label: header});
-        // dispatch(updateColumnHeaders({
-        //   columnId: id,
-        //   label: header
-        // }))
-        // // dataDispatch({type: "delete_column", columnId: id});
         dispatch(deleteColumns({
           label: header,
           columnId: id,
