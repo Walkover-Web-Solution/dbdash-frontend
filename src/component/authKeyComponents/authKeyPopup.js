@@ -6,9 +6,6 @@ import PropTypes from "prop-types";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-// import { Snackbar } from '@material-ui/core';
-// import { Alert } from '@material-ui/lab';
-// import { FileCopy } from '@mui/icons-material';
 const style = {
   position: "absolute",
   top: "50%",

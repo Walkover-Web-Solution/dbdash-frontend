@@ -27,7 +27,8 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
-
+   var rowProperties = row?.getToggleRowSelectedProps();
+   rowProperties.indeterminate =  rowProperties.indeterminate?.toString();
 
 
   const onChange = (e) => {
@@ -277,7 +278,8 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
       break;
     case "check":
       element =(<><div   {...row.getRowProps()} className= "tr">
-          <input type="checkbox" {...row.getToggleRowSelectedProps()} />
+          <input type="checkbox" {...rowProperties} />
+          {console.log(row?.getToggleRowSelectedProps())}
           </div>
       </>)
           
