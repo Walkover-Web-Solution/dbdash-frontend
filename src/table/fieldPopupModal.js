@@ -10,7 +10,6 @@ import {
   MenuItem,
 } from '@mui/material';
 export default function FieldPopupModal(props)  {
-  
 const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
   };
@@ -48,7 +47,8 @@ const handleTextChange = (event) => {
             id="text-field"
             label="Text Field"
             type="text"
-            // value={props?.textValue}
+             value={props.textValue}
+          //  /  {console.log("value",props.textValue)}
             onChange={handleTextChange}
             fullWidth
           />

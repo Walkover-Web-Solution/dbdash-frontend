@@ -369,7 +369,7 @@ export function extraReducers(builder) {
     })
 
 
-    // for add column to right
+    // for add column to right and left
     .addCase(addColumnrightandleft.pending, (state) => {
       state.status = "loading"
     })
