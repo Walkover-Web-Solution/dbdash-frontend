@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import { Box } from '@mui/system';
 export default function FieldPopupModal(props)  {
   const [openn,setOpenn] = useState(false);
 const handleTextChange = (event) => {
@@ -75,7 +76,10 @@ const handleTextChange = (event) => {
             <MenuItem value="generatedcolumn">generated column</MenuItem>
           </Select>
 
-         { openn && <TextField
+         {  openn && 
+         (
+          <Box>
+               <TextField
             autoFocus
             margin="dense"
             id="text-field"
@@ -87,7 +91,24 @@ const handleTextChange = (event) => {
             props?.setQuery(e.target.value)
            }}
             fullWidth
-          />}
+          />
+          <TextField
+          autoFocus
+          margin="dense"
+          id="text-field"
+          label="Text Field"
+          type="text"
+          // value={props?.textValue}
+          // onChange={handleTextChange}
+         onChange={(e)=>{
+          props?.setQuery(e.target.value)
+         }}
+          fullWidth
+        /> 
+          </Box>
+        
+        )
+          }
 
         </DialogContent>
         <Button onClick={props?.submitData} color="primary" >Submit</Button>
