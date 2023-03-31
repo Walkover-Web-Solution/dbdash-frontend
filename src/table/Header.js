@@ -3,7 +3,7 @@ import { usePopper } from "react-popper";
 import { grey } from "./colors";
 import ArrowUpIcon from "./img/ArrowUp";
 import ArrowDownIcon from "./img/ArrowDown";
- import ArrowLeftIcon from "./img/ArrowLeft";
+import ArrowLeftIcon from "./img/ArrowLeft";
 import ArrowRightIcon from "./img/ArrowRight";
 import TrashIcon from "./img/Trash";
 import TextIcon from "./Text";
@@ -18,6 +18,7 @@ import {  addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHea
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
 import CheckIcon from '@mui/icons-material/Check';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 
 export default function Header({
@@ -29,6 +30,7 @@ export default function Header({
   const [textValue, setTextValue] = useState('');
   const [selectValue, setSelectValue] = useState('Text');
   const tableInfo = useSelector((state) => getTableInfo(state));
+
   const [open, setOpen] = useState(false);
   const [directionAndId,setDirectionAndId]= useState({
   })
@@ -57,6 +59,7 @@ export default function Header({
     setSelectValue('Text')
   
   }
+
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -223,6 +226,18 @@ export default function Header({
       },
       label: "date and time"
     },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <AttachFileIcon fontSize="2px" />,
+      label: "attachment"
+    },
   ];
 
   let propertyIcon;
@@ -250,6 +265,9 @@ export default function Header({
       break;
       case "createdat":
       propertyIcon = <TextIcon />;
+      break;
+      case "attachment":
+      propertyIcon = <AttachFileIcon fontSize="1px" />;
       break;
     default:
       break;

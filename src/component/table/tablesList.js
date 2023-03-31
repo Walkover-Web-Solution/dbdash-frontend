@@ -84,7 +84,7 @@ export default function TablesList({ dbData }) {
    setValue(tableNames?.indexOf(params?.tableName) || 0 );
       
     }
-  }, [dbData])
+  }, [dbData,params])
 
   return (
     <>
