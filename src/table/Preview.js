@@ -2,7 +2,7 @@ import React from 'react';
 import { useDragLayer } from "react-dnd";
 
 const Preview = () => {
-  const { isDragging, item, currentOffset } = useDragLayer((monitor) => ({
+  const { isDragging,currentOffset } = useDragLayer((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     initialOffset: monitor.getInitialSourceClientOffset(),
@@ -21,7 +21,7 @@ const Preview = () => {
         background: "red"
       }}
     >
-      {item.header}
+      {/* {item.header} */}
     </div>
   ) : null;
 };

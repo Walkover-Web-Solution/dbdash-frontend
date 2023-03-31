@@ -37,7 +37,8 @@ const defaultColumn = {
 
 
 
-export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
+export default function Table({ columns, data,dispatch:dataDispatch, skipReset,setColumns }) {
+  console.log(columns)
 const[head,setHead] = useState()
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
@@ -110,6 +111,7 @@ const[head,setHead] = useState()
 
   useEffect(() => {
     if(headerGroups)
+    console.log(headerGroups[0]?.headers)
     setHead(headerGroups)
   
 
@@ -117,31 +119,27 @@ const[head,setHead] = useState()
   const reoder = useCallback(
     (item, newIndex) => {
       console.log(item, newIndex)
-      let myArray = head
-  
-      const temp = myArray[0].headers[item?.index];
-      myArray[0].headers[item?.index] = myArray[0].headers[newIndex];
-      myArray[0].headers[newIndex] = temp;
+      console.log(columns)
+      const newOrder = Array.from(columns);
+      console.log("newOrder",newOrder)
 
-setHead([...myArray])
+const { index: currentIndex } = item;
+const [removedColumn] = newOrder.splice(currentIndex,  1);
+console.log("removedColumn",removedColumn)
 
-
-    //   console.log(item?.index, newIndex);
-    //   const newOrder = [...state.columnOrder];
-    //   const { index: currentIndex } = item.index;
-
-    //   const [removedColumn] = newOrder.splice(currentIndex, 1);
-
-    //   newOrder.splice(newIndex, 0, removedColumn);
-    //   setColumnOrder(newOrder);
+newOrder.splice(newIndex, 0, removedColumn);
+// console.log("currentIndex",currentIndex,newIndex)
+      // console.log("newOrder",newOrder)
+      setHead([...newOrder]);
+      setColumns(newOrder)
+      // console.log(newOrder)
     },
-    // [state, setColumnOrder]
+    [head, setHead]
   );
 
   useEffect(() => {
-   
-
-    console.log(head);
+  
+    // console.log(head);
   }, [head])
 
   useEffect(() => {
@@ -270,7 +268,7 @@ setHead([...myArray])
                     {...cell.getCellRangeSelectionProps()}
                     {...cell.getCellProps(
                       {
-                        onCopy: event => handleCopy(event, cell.value),
+                    onCopy: event => handleCopy(event, cell.value),
                     onPaste : event => handlePaste(event, rowIndex, cell)  
                   }
                   )} 
@@ -322,5 +320,6 @@ Table.propTypes = {
   columns:PropTypes.any,
   data:PropTypes.any,
   dispatch:PropTypes.any,
-  skipReset:PropTypes.any
+  skipReset:PropTypes.any,
+  setColumns:PropTypes.func
 };
