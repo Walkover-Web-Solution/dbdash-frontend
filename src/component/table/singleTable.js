@@ -118,6 +118,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
                   sx={{
                     width: 2,
                     fontSize: 8,
+                    mt: 1 
                   }}
                   type='submit' onClick={(e) => {
                     e.preventDefault();
