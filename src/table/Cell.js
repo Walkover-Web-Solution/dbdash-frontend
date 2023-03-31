@@ -287,7 +287,6 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
     case "attachment":
       element = (
         <div>
-  {console.log("value",value)}
   {value?.value?.length >0 && value?.value?.map((imgLink,index) => (
     // <div key ={index}  style={{ display: "flex"}}  >
       <img key ={index}  src={imgLink} alt="My Image" style={{ width: "25%", height: "100%",marginRight:"2px"}}  />

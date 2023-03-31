@@ -9,8 +9,14 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 export default function FieldPopupModal(props)  {
-  
+  console.log(props)
+  const handleSwitchChange = (event) => {
+    props?.setUnique(event.target.checked);
+  };
 const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
   };
@@ -72,7 +78,9 @@ const handleTextChange = (event) => {
             <MenuItem value="createdat">created At</MenuItem>
             <MenuItem value="attachment">attachment</MenuItem>
           </Select>
-
+          <FormGroup>
+            <FormControlLabel control={<Switch checked={props?.unique}  onClick={(e)=>{handleSwitchChange(e)}}/>} label="Unique" />
+          </FormGroup>
         </DialogContent>
         <Button onClick={props?.submitData} color="primary" disabled={isInputEmpty}>Submit</Button>
       </Dialog>
@@ -88,6 +96,8 @@ FieldPopupModal.propTypes ={
     selectValue:PropTypes.any,
     setTextValue:PropTypes.func,
     setSelectValue:PropTypes.func,
-    submitData:PropTypes.func
+    submitData:PropTypes.func,
+    setUnique:PropTypes.func,
+    unique:PropTypes.any
 }
 
