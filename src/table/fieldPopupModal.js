@@ -84,7 +84,7 @@ export default function FieldPopupModal(props)  {
 
          (
           <Box>
-            <Box>write query in human friendly way to manupulate the column and resultand query will be give to you !!!  and vie versa</Box>
+            <Box>write query in human friendly way to manupulate the column and resultant query will be give to you !!!  and vie versa</Box>
                <TextField
             autoFocus
             margin="dense"
@@ -98,25 +98,28 @@ export default function FieldPopupModal(props)  {
            }}
             fullWidth
           />
-          <Button onClick={()=>{props?.submitData(userQuery)}} color="primary" >Submit</Button>
+          <Button onClick={()=>{props?.submitData(userQuery)}} color="primary" >next</Button>
 
-          <TextField
+          { props?.queryByAi && <TextField
           autoFocus
           margin="dense"
           id="text-field"
-          label="Text Field"
+          label="Query by Ai"
           type="text"
+          onChange={(e)=>{
+            props?.setQueryByAi(e.target.value)
+           }}
           placeholder={"resultant query"}
-          value={props?.queryByAi}
+          value={props?.queryByAi && props?.queryByAi?.split("(")[1].split(")")[0]}
           fullWidth
-        /> 
+        /> }
           </Box>
         
         )
           }
 
         </DialogContent>
-        <Button onClick={()=>{props?.submitData(userQuery)}} color="primary" >Submit</Button>
+        <Button onClick={()=>{props?.submitData(false)}}color="primary" >Submit</Button>
       </Dialog>
       
     </div>
@@ -132,6 +135,7 @@ FieldPopupModal.propTypes ={
     setTextValue:PropTypes.func,
     setSelectValue:PropTypes.func,
     submitData:PropTypes.func,
-    queryByAi:PropTypes.any
+    queryByAi:PropTypes.any,
+    setQueryByAi:PropTypes.func
 }
 

@@ -42,21 +42,24 @@ export default function Header({
   }
   const createColumn = async (userQuery) => {
    
+    console.log("in create columm",userQuery);
     if(!userQuery)
     {
       setOpen(false);
       dispatch(addColumsToLeft({
         columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,query:queryByAi
       }));
+      setSelectValue('Text')
+      setQueryByAi(false)
     }
    
     else
     {
       const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
       setQueryByAi(response?.data?.data);
-      console.log("response ",response);
+     
     }
-    setSelectValue('Text')
+   
 
   }
   const createLeftorRightColumn = () => {
@@ -345,7 +348,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name"  queryByAi = {queryByAi} textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn} />
+        <FieldPopupModal title="create column" label="Column Name" setQueryByAi = {setQueryByAi} queryByAi = {queryByAi} textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
