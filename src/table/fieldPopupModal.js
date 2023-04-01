@@ -21,7 +21,11 @@ export default function FieldPopupModal(props) {
   const [lookupField,setLookupField] = useState(false)
   // console.log(props)
   const handleSwitchChange = (event) => {
-    props?.setUnique(event.target.checked);
+    var data =  props?.metaData;
+    data.unique = event.target.checked
+    console.log(props?.metaData)
+    props?.setMetaData(data);
+    console.log( event.target.checked)
   };
   const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
@@ -118,7 +122,7 @@ export default function FieldPopupModal(props) {
           </Select>}
 
           <FormGroup>
-            <FormControlLabel control={<Switch checked={props?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
+            <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>
         </DialogContent>
         <Button onClick={props?.submitData} color="primary" disabled={isInputEmpty}>Submit</Button>
@@ -136,7 +140,7 @@ FieldPopupModal.propTypes = {
   setTextValue: PropTypes.func,
   setSelectValue: PropTypes.func,
   submitData: PropTypes.func,
-  setUnique: PropTypes.func,
-  unique: PropTypes.any
+  setMetaData: PropTypes.func,
+  metaData: PropTypes.any
 }
 
