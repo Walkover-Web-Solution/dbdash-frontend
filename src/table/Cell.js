@@ -38,13 +38,15 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const handleUploadFileClick = () => {
     setOpen(true);
   };
+   var rowProperties = row?.getToggleRowSelectedProps();
+   rowProperties.indeterminate =  rowProperties.indeterminate?.toString();
+
 
   const onChange = (e) => {
     setValue({ value: e.target.value, update: false });
   };
 
   const onChangeFile = (e, type) => {
-    console.log("e.target.files[0]", e.target.files[0])
     setDataType(type)
     
 if (e.target.files[0] != null) {
@@ -59,7 +61,7 @@ if (e.target.files[0] != null) {
     if (imgUpload)
     {
       dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: imgUpload, dataTypess: dataTypes
+        columnId: id, rowIndex: row.original.id, value: imgUpload, dataTypes: dataTypes
       })).then(() => {
         toast.success('Image uploaded successfully!');
       });
@@ -69,7 +71,7 @@ if (e.target.files[0] != null) {
   useEffect(() => {
     if (value?.update) {
       dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: value.value, dataTypess: dataTypes
+        columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
       }))
     }
   }, [value, dispatch, id, row.index]);
@@ -78,7 +80,7 @@ if (e.target.files[0] != null) {
   useEffect(() => {
     if (value?.update) {
       dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: value.value, dataTypess: dataTypes
+        columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
       }))
     }
   }, [value, dispatch, id, row.index]);
@@ -295,9 +297,9 @@ if (e.target.files[0] != null) {
       );
       break;
     case "check":
-      element = (<><div   {...row.getRowProps()} className="tr">
-        <input type="checkbox" {...row.getToggleRowSelectedProps()} />
-      </div>
+      element =(<><div   {...row.getRowProps()} className= "tr">
+          <input type="checkbox" {...rowProperties} />
+          </div>
       </>)
       break;
       case "Lookup":

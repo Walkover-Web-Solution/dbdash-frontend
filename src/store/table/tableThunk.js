@@ -159,11 +159,11 @@ export const addColumnrightandleft = createAsyncThunk(
 export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async(payload,{dispatch,getState})=>{
-        console.log("payload",payload)
         const data={
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType,
-            metaData:payload?.metaData
+            metaData:payload?.metaData,
+            query:payload?.query
         }
        await createField(payload?.dbId,payload?.tableId,data);
         dispatch(addColumnToLeft(payload));
@@ -178,10 +178,12 @@ export const updateCells = createAsyncThunk(
        const {tableId, dbId} = getState().table
        const value = payload.value
        const  columnId= payload.columnId;
-       console.log(payload?.value)
        if(payload?.dataTypess == "file")
-       {
-            await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
+       { 
+        const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
+        
+            payload.value = data?.data?.data;
+                console.log("paylaod ",payload)
             dispatch(updateCell(payload))
             return payload;
        }

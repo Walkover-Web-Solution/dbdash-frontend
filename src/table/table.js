@@ -100,7 +100,6 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
   useEffect(() => {
     if (Object.keys(selectedCellIds).length > 0) {
       const newData = cloneDeep(data)
-      console.log("newData",newData);
       const firstValue = Object.keys(selectedCellIds)[0].split('_');
       const newValueToReplace = newData[firstValue[1]][firstValue[0]];
       {

@@ -15,6 +15,7 @@ import { createTable1 } from '../../store/allTable/allTableThunk';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
+
 export default function TablesList({ dbData }) {
   const dispatch = useDispatch();
   const params = useParams();
@@ -25,7 +26,7 @@ export default function TablesList({ dbData }) {
     setValue(newValue);
   };
   const [table, setTable] = useState();
-  const [tabIndex, setTabIndex] = useState(-1);
+  const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false)
   const [filter, setFilter] = useState(false);
@@ -35,7 +36,6 @@ export default function TablesList({ dbData }) {
   const [filterId, setFilterId] = useState("")
   const [anchorEl, setAnchorEl] = useState(null);
   const [tableLength,setTableLength] = useState("")
-  // console.log("tablelength",tableLength)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -72,7 +72,6 @@ export default function TablesList({ dbData }) {
     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
   useEffect(() => {
-    setTableLength(Object.keys(AllTableInfo.tables).length)
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(bulkAddColumns({
@@ -85,7 +84,15 @@ export default function TablesList({ dbData }) {
     setFilter(AllTableInfo.tables[params?.tableName]?.filters)
       
     }
-  }, [dbData,params])
+  }, [dbData])
+  useEffect(()=>{
+    if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
+    {
+      setTableLength(Object.keys(AllTableInfo?.tables).length)
+    }
+  },[AllTableInfo])
+
+  
 
   return (
     <>

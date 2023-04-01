@@ -12,19 +12,20 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import { Box } from '@mui/system';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-export default function FieldPopupModal(props) {
+
+export default function FieldPopupModal(props)  {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [lookupField,setLookupField] = useState(false)
-  // console.log(props)
+  const [openn,setOpenn] = useState(false);
+  const [userQuery,setUserQuery] = useState(false);
   const handleSwitchChange = (event) => {
     var data =  props?.metaData;
     data.unique = event.target.checked
-    console.log(props?.metaData)
     props?.setMetaData(data);
-    console.log( event.target.checked)
   };
   const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
@@ -40,13 +41,23 @@ export default function FieldPopupModal(props) {
       setLookupField(false)
       props?.setSelectValue(event.target.value);
     }
+    if(event.target.value == "generatedcolumn")
+    {
+      setOpenn(true)
+      props?.setSelectValue(event.target.value);
+    }else
+    {
+      props?.setSelectValue(event.target.value);
+      setOpenn(false)
+    }
   };
   const handleClose = () => {
     props?.setOpen(false);
-    // props.setOpenPopup(false);
+    setOpenn(false);
+    props?.setSelectValue("Text");
   };
 
-  const isInputEmpty = props?.textValue.trim() === '';
+  // const isInputEmpty = props?.textValue.trim() === '';
 
   return (
     <div>
@@ -66,17 +77,18 @@ export default function FieldPopupModal(props) {
           width: 400,
           padding: 2
         }}>
-          <TextField
+        <TextField
             autoFocus
             margin="dense"
             id="text-field"
-            label="Text Field"
+            label="Field Name"
             type="text"
              value={props.textValue}
-          //  /  {console.log("value",props.textValue)}
             onChange={handleTextChange}
             fullWidth
           />
+        
+          
           <Select
             labelId="select-label"
             id="select"
@@ -89,13 +101,14 @@ export default function FieldPopupModal(props) {
               minWidth: 120,
             }}
           >
-            <MenuItem value="text" >text</MenuItem>
+            <MenuItem value="Text" >text</MenuItem>
             <MenuItem value="varchar">varchar</MenuItem>
             <MenuItem value="numeric">number</MenuItem>
             <MenuItem value="checkbox">checkbox</MenuItem>
             <MenuItem value="datetime">datetime</MenuItem>
             <MenuItem value="createdby">created By</MenuItem>
             <MenuItem value="createdat">created At</MenuItem>
+            <MenuItem value="generatedcolumn">generated column</MenuItem>
             <MenuItem value="attachment">attachment</MenuItem>
             <MenuItem value="lookup">lookup</MenuItem>
 
@@ -119,13 +132,51 @@ export default function FieldPopupModal(props) {
               </div>         
             ))}
           </Select>}
+         {  openn && 
+
+         (
+          <Box>
+            <Box>write query in human friendly way to manupulate the column and resultant query will be give to you !!!  and vie versa</Box>
+               <TextField
+            autoFocus
+            margin="dense"
+            id="text-field"
+            label="Enter the query"
+            type="text"
+            // value={props?.textValue}
+            placeholder={"multiply column speed and distance"}
+           onChange={(e)=>{
+            setUserQuery(e.target.value)
+           }}
+            fullWidth
+          />
+          <Button onClick={()=>{props?.submitData(userQuery)}} color="primary" >next</Button>
+
+          { props?.queryByAi && <TextField
+          autoFocus
+          margin="dense"
+          id="text-field"
+          label="Query by Ai"
+          type="text"
+          onChange={(e)=>{
+            props?.setQueryByAi(e.target.value)
+           }}
+          placeholder={"resultant query"}
+          value={props?.queryByAi && props?.queryByAi?.split("(")[1].split(")")[0]}
+          fullWidth
+        /> }
+          </Box>
+        
+        )
+          }
 
           <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>
         </DialogContent>
-        <Button onClick={props?.submitData} color="primary" disabled={isInputEmpty}>Submit</Button>
+        <Button onClick={()=>{props?.submitData(false)}}color="primary" >Submit</Button>
       </Dialog>
+      
     </div>
   );
 }
@@ -140,6 +191,8 @@ FieldPopupModal.propTypes = {
   setSelectValue: PropTypes.func,
   submitData: PropTypes.func,
   setMetaData: PropTypes.func,
-  metaData: PropTypes.any
+  metaData: PropTypes.any,
+  queryByAi:PropTypes.any,
+  setQueryByAi:PropTypes.func,
 }
 
