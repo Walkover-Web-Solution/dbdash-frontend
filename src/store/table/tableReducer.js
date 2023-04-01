@@ -1,6 +1,7 @@
 // import { current } from '@reduxjs/toolkit';
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
+import { current } from 'immer';
 
 
 export const initialState = {
@@ -143,6 +144,15 @@ export const reducers = {
         arr=[...arr,{...ele}];
       }
       else{
+        // console.log(ele[action.columnId.toLowerCase()])
+        if(typeof(ele[action.columnId.toLowerCase()]) === "object")
+        {
+          arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
+          console.log(current(ele[action.columnId.toLowerCase()]));
+          // var arrr = ele[action.columnId.toLowerCase()].push(action.value);
+          // console.log(current(arrr));
+        }
+        else
         arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
       }
     });
@@ -370,7 +380,7 @@ export function extraReducers(builder) {
     })
 
 
-    // for add column to right
+    // for add column to right and left
     .addCase(addColumnrightandleft.pending, (state) => {
       state.status = "loading"
     })

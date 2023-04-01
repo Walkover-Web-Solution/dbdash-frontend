@@ -35,10 +35,6 @@ export default function Authpage() {
       <Box sx={{backgroundColor: "white", width: '35%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 3, borderRadius: 4, mt:2, mb:2,height:510 }}>
 
         <Box sx={{m:2}}>
-          {/* <img style={{ width: "100px"}}
-            src="https://uploads-ssl.webflow.com/63403f10e7b52a177fd0c2ac/634934b92269c62bb6cf2e0a_Logo.png"
-            alt="Via Socket"
-          /> */}
 
           <h3>DB DASH</h3>
         </Box>

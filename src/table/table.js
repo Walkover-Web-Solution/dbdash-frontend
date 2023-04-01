@@ -7,10 +7,13 @@ import PlusIcon from "./img/Plus";
 import PropTypes from 'prop-types';
 import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from 'react-table-plugins'
-import { addRows ,deleteRows, updateCells} from "../store/table/tableThunk";
+import { addRows, deleteRows, updateCells } from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
+// import InfiniteScroll from "react-infinite-scroll-component";
+
+
 
 const defaultColumn = {
   minWidth: 50,
@@ -21,7 +24,7 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast"
 };
 
-export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
+export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
@@ -68,10 +71,10 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups,rows, prepareRow,
-     selectedFlatRows,  
-    state: { selectedCellIds, currentSelectedCellIds  },
-     
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,
+    selectedFlatRows,
+    state: { selectedCellIds, currentSelectedCellIds },
+
   } = useTable(
     {
       columns,
@@ -95,20 +98,22 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
   );
 
   useEffect(() => {
-    if(Object.keys(selectedCellIds).length > 0) {
+    if (Object.keys(selectedCellIds).length > 0) {
       const newData = cloneDeep(data)
-      const firstValue =Object.keys(selectedCellIds)[0].split('_');
+      const firstValue = Object.keys(selectedCellIds)[0].split('_');
       const newValueToReplace = newData[firstValue[1]][firstValue[0]];
-      {selectedCellIds>=1 && Object.keys(selectedCellIds)?.forEach((key, i) => {
-        const keyName = key.split('_')[0] 
-        const index = key.split('_')[1]
-        if(i === 0 ||firstValue[0] != keyName ) return;
-        
-  
-        newData[index][keyName] = newValueToReplace;
-      })}
+      {
+        selectedCellIds >= 1 && Object.keys(selectedCellIds)?.forEach((key, i) => {
+          const keyName = key.split('_')[0]
+          const index = key.split('_')[1]
+          if (i === 0 || firstValue[0] != keyName) return;
+
+
+          newData[index][keyName] = newValueToReplace;
+        })
+      }
       dataDispatch(updateTableData(newData))
-      
+
     }
   }, [selectedCellIds])
 
@@ -123,7 +128,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
   //     endColumn: columnIndex
   //   });
   // };
-  
+
 
   // const handleCellMouseOver = (rowIndex, columnIndex) => {
   //   setSelectedRange(prevRange => {
@@ -147,8 +152,7 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
     return false;
   }
   
-  
-
+    
   return (
     <>
       {/* <pre>
@@ -162,89 +166,106 @@ export default function Table({ columns, data,dispatch:dataDispatch, skipReset }
           )}
         </code>
       </pre> */}
-      {selectedFlatRows?.length > 0 && <Button sx = {{m:2}} onClick={()=>{
+      {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
       <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
-            {headerGroups[0].headers.map((column,index) => {
+            {headerGroups[0].headers.map((column, index) => {
               return (
-                <React.Fragment key ={index}>
-               {  column.render("Header")}
+                <React.Fragment key={index}>
+                  {column.render("Header")}
                 </React.Fragment>
-               
+
               )
             })}
           </div>
 
         </div>
-        <div {...getTableBodyProps()}>
-          {rows?.map((row, rowIndex ) => {
-            prepareRow(row);
-            return (
-              <div  key={rowIndex} {...row.getRowProps()} className= {'tr'+rowIndex}
-              style=
-              {
-                row.isSelected ? { ...row.getRowProps().style, backgroundColor: 'blue' } : {
-                  ...row.getRowProps().style
-                }
-              }>
-                {row.cells.map((cell,columnIndex) => {
-                  return (
-                    
-                    <div key={columnIndex}
-                    // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
-                    // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
-                    {...cell.getCellRangeSelectionProps()}
-                    {...cell.getCellProps(
-                      {
-                        onCopy: event => handleCopy(event, cell.value),
-                    onPaste : event => handlePaste(event, rowIndex, cell)  
-                  }
-                  )} 
-                  
-                  // suppressContentEditableWarning={true}
-                  // contentEditable
+        {/* <InfiniteScroll
+          dataLength={rows.length}
+          next={this.fetchMoreData}
+          hasMore={true}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        > */}
+          <div {...getTableBodyProps()}>
+            {rows?.map((row, rowIndex) => {
+              prepareRow(row);
+              return (
+                <div key={rowIndex} {...row.getRowProps()} className={'tr' + rowIndex}
                   style=
                   {
-                    cellsSelected[cell.id]
-                      ? { ...cell.getCellProps().style, 
-                        // backgroundColor: '#6beba80'
-                       userSelect: 'none',flex: 'none' ,}
-                      : {...cell.getCellProps().style, userSelect: 'none',flex: 'none',height:'30px' }
+                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: 'blue' } : {
+                      ...row.getRowProps().style
+                    }
+                  }>
+                  {row.cells.map((cell, columnIndex) => {
+                    return (
 
-                  }
-                  className='td'> 
-                    {cell.render("Cell")}
-                  </div>
-                )})}
-              </div>
-            );
-          })}
-          <div className='tr add-row' 
-          onClick={() => dataDispatch(addRows({ type: "add_row" }))}
-          >
-            <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
-              <PlusIcon />
-            </span>
-            New
+                      <div key={columnIndex}
+                        // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
+                        // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
+                        {...cell.getCellRangeSelectionProps()}
+                        {...cell.getCellProps(
+                          {
+                            onCopy: event => handleCopy(event, cell.value),
+                            onPaste: event => handlePaste(event, rowIndex, cell)
+                          }
+                        )}
+
+                        // suppressContentEditableWarning={true}
+                        // contentEditable
+                        style=
+                        {
+                          cellsSelected[cell.id]
+                            ? {
+                              ...cell.getCellProps().style,
+                              // backgroundColor: '#6beba80'
+                              userSelect: 'none', flex: 'none',
+                            }
+                            : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '30px' }
+
+                        }
+                        className='td'>
+                        {cell.render("Cell")}
+                      </div>
+                    )
+                  })}
+                </div>
+              );
+            })}
+            <div className='tr add-row'
+              onClick={() => dataDispatch(addRows({ type: "add_row" }))}
+            >
+              <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
+                <PlusIcon />
+              </span>
+              New
+            </div>
           </div>
-        </div>
+        {/* </InfiniteScroll> */}
       </div>
       {/* <pre>
         <code>
         {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
         </code>
       </pre> */}
+
     </>
+
   );
 }
 
 
 Table.propTypes = {
-  columns:PropTypes.any,
-  data:PropTypes.any,
-  dispatch:PropTypes.any,
-  skipReset:PropTypes.any
+  columns: PropTypes.any,
+  data: PropTypes.any,
+  dispatch: PropTypes.any,
+  skipReset: PropTypes.any
 };
