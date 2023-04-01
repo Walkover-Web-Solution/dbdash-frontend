@@ -172,7 +172,7 @@ export default function FieldPopupModal(props)  {
           displayEmpty
           sx={{ margin: 1, minWidth: 120 }}
         >
-          {/* <MenuItem value="Select">seledct decimal value </MenuItem> */}
+          <MenuItem value="Select">seledct decimal value </MenuItem>
 
           <MenuItem value="1">1.0</MenuItem>
           <MenuItem value="2">1.00</MenuItem>
