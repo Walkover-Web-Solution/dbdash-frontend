@@ -31,7 +31,7 @@ export default function Header({
   const [queryByAi,setQueryByAi] = useState(false)
   const [selectValue, setSelectValue] = useState('Text');
   const tableInfo = useSelector((state) => getTableInfo(state));
-
+  const [unique, setUnique] = useState(false);
   const [open, setOpen] = useState(false);
   const [directionAndId, setDirectionAndId] = useState({
   })
@@ -143,13 +143,8 @@ export default function Header({
       label: "Insert right"
     },
     {
-      onClick: () => {
-        // dataDispatch({type: "update_column_header", columnId: id, label: header});
-        // dispatch(updateColumnHeaders({
-        //   columnId: id,
-        //   label: header
-        // }))
-        // // dataDispatch({type: "delete_column", columnId: id});
+      onClick: () =>
+       {
         dispatch(deleteColumns({
           label: header,
           columnId: id,
@@ -194,13 +189,13 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "integer"
+          dataType: "numeric"
         }))
         setShowType(false);
         setExpanded(false);
       },
       icon: <HashIcon />,
-      label: "Integer"
+      label: "numeric"
     },
     {
       onClick: () => {
@@ -262,7 +257,7 @@ export default function Header({
     case "checkbox":
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
-    case "integer":
+    case "numeric":
       propertyIcon = <HashIcon />;
       break;
     case "text":
@@ -368,7 +363,7 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} setTextValue={setTextValue} selectValue={selectValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createLeftorRightColumn} />
+      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} unique={unique} setUnique={setUnique} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
 
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (

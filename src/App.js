@@ -12,7 +12,8 @@ import WithAuth from './component/withAuth';
 import Notfoundpage from './component/notFoundPage';
 import AuthKeyPage from './pages/authKeyPage';
 import CreateAuth from './pages/createAuth';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
   
 
@@ -21,6 +22,7 @@ function App() {
   return (
    <>
    <AuthContextProvider>
+   <ToastContainer />
     <Routes>
       <Route exact path ="/" element ={<WithAuth><Authpage/></WithAuth>} />
       <Route exact path ="/dashboard" element ={<Protected><LandingPage/></Protected>} />

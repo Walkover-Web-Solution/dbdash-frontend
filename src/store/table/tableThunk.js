@@ -173,10 +173,11 @@ export const addColumnrightandleft = createAsyncThunk(
 export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async(payload,{dispatch,getState})=>{
-        console.log(payload)
+        console.log("payload",payload)
         const data={
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType,
+            unique:payload?.unique,
             query:payload?.query
         }
        await createField(payload?.dbId,payload?.tableId,data);

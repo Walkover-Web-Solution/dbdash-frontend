@@ -187,8 +187,9 @@ export const reducers = {
     }
 
     switch (action.dataType) {
-      case "integer":
-        if (state.columns[typeIndex].dataType === "integer") {
+      case "numeric":
+        if (state.columns[typeIndex].dataType === "numeric") {
+
           return state;
         } else {
           return {
@@ -202,7 +203,7 @@ export const reducers = {
               ...row,
               [action.columnId]: isNaN(row[action.columnId])
                 ? ""
-                : Number.parseInt(row[action.columnId])
+                : Number.parseFloat(row[action.columnId])
             }))
           };
         }
