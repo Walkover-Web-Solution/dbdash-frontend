@@ -183,7 +183,6 @@ export const updateCells = createAsyncThunk(
         const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
         
             payload.value = data?.data?.data;
-                console.log("paylaod ",payload)
             dispatch(updateCell(payload))
             return payload;
        }
