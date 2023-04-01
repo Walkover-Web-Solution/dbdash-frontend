@@ -32,6 +32,7 @@ export default function Header({
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [metaData, setMetaData] = useState({});
   const [open, setOpen] = useState(false);
+  const [decimalSelectValue,setDecimalSelectValue] = useState('')
   const [directionAndId,setDirectionAndId]= useState({
   })
   // const [variable, setVariable] = useState("");
@@ -346,7 +347,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}  setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
+        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} setDecimalSelectValue={setDecimalSelectValue} metaData={metaData}  setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block"} })} className='th noselect'
@@ -366,7 +367,7 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
+      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setDecimalSelectValue={setDecimalSelectValue} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
 
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (
