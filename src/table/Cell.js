@@ -11,6 +11,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import SelectFilepopup from './selectFilepopup';
+import { toast } from 'react-toastify';
+import { Link } from '@mui/material';
+
+
 export default function Cell({ value: initialValue, row, column: { id, dataType, options }, dataDispatch }) {
 
   const dispatch = useDispatch();
@@ -25,8 +30,14 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
+  const [open, setOpen] = useState(false);
+    const handleImageClick = (imgLink) => {
+      window.open(imgLink, '_blank');
+    };
 
-
+  const handleUploadFileClick = () => {
+    setOpen(true);
+  };
 
   const onChange = (e) => {
     setValue({ value: e.target.value, update: false });
@@ -35,22 +46,34 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const onChangeFile = (e, type) => {
     console.log("e.target.files[0]", e.target.files[0])
     setDataType(type)
-    if (e.target.files[0] != null) {
+    
+if (e.target.files[0] != null) {
       setImageUpload(e.target.files[0])
     }
-
     e.target.value = null;
   };
   useEffect(() => {
     setValue({ value: initialValue, update: false });
   }, [initialValue]);
-
   useEffect(() => {
     if (imgUpload)
+    {
       dispatch(updateCells({
         columnId: id, rowIndex: row.original.id, value: imgUpload, dataTypess: dataTypes
-      }))
+      })).then(() => {
+        toast.success('Image uploaded successfully!');
+      });
+    }
   }, [imgUpload])
+
+  useEffect(() => {
+    if (value?.update) {
+      dispatch(updateCells({
+        columnId: id, rowIndex: row.original.id, value: value.value, dataTypess: dataTypes
+      }))
+    }
+  }, [value, dispatch, id, row.index]);
+
 
   useEffect(() => {
     if (value?.update) {
@@ -279,30 +302,25 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
       break;
     case "attachment":
       element = (
-        <div style={{  display: "flex"}}>
-          {/* {console.log("value", value)} */}
+        <div style={{display: "flex", flexDirection: "row"}}>
           {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
-             <a key={index} href={imgLink} target="_blank" rel="noopener noreferrer" 
-             style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-             <img src={imgLink} alt="My Image" style={{ width: "25%", height: "100%", marginRight: "1px" }} />
-           </a>
-          ))}
-          <UploadFileIcon fontSize="medium" />
-          <input
-            style={{
-              width: "25%",
-              height: "100%",
-              marginRight: "2px",
-              margin: "0",
-              padding: "0",
-              paddingBottom: "2px"
-            }}
-            type="file"
-            id="attachmentInput"
-            onChange={(e) => { onChangeFile(e, "file") }}
-          />
-        </div>
+           <Link key={index} href="#" onClick={() => handleImageClick(imgLink)}>
+           <img src={imgLink} alt="My Image" style={{ width: "50px", height: "100%" ,marginRight: "3px" }} />
+         </Link>
 
+          ))}
+
+          <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
+              <div >
+                <SelectFilepopup
+                  title="uplaodfile"
+                  label="UploadFileIcon"
+                  open={open}
+                  setOpen={setOpen}
+                  onChangeFile={onChangeFile}
+                />
+              </div>
+        </div>
       );
       break;
 

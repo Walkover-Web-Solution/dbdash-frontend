@@ -54,7 +54,8 @@ const handleTextChange = (event) => {
             id="text-field"
             label="Text Field"
             type="text"
-            // value={props?.textValue}
+             value={props.textValue}
+          //  /  {console.log("value",props.textValue)}
             onChange={handleTextChange}
             fullWidth
           />
