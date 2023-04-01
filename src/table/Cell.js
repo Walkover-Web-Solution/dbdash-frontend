@@ -280,8 +280,18 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
         <input type="checkbox" {...row.getToggleRowSelectedProps()} />
       </div>
       </>)
-
       break;
+      case "Lookup":
+        element = (
+          <ContentEditable
+            html={(value?.value && value?.value?.toString()) || ""}
+            onChange={onChange}
+            onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+  
+            className='data-input'
+          />
+        );
+        break;
     case "attachment":
       element = (
         <div>

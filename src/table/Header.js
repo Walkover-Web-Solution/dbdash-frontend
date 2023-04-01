@@ -237,6 +237,18 @@ export default function Header({
       icon: <AttachFileIcon fontSize="2px" />,
       label: "attachment"
     },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      // icon: <TextIcon />,
+      label: "lookup"
+    }
   ];
 
   let propertyIcon;
@@ -267,6 +279,9 @@ export default function Header({
       break;
       case "attachment":
       propertyIcon = <AttachFileIcon fontSize="1px" />;
+      break;
+      case "lookup":
+        propertyIcon = <TextIcon />;
       break;
     default:
       break;
