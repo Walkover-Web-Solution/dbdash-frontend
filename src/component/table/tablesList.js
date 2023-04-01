@@ -82,6 +82,7 @@ export default function TablesList({ dbData }) {
       if(!(params?.tableName))
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
    setValue(tableNames?.indexOf(params?.tableName) || 0 );
+    setFilter(AllTableInfo.tables[params?.tableName]?.filters)
       
     }
   }, [dbData,params])
