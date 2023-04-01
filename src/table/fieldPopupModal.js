@@ -17,7 +17,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 export default function FieldPopupModal(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  console.log(AllTableInfo?.tables)
   const [lookupField,setLookupField] = useState(false)
   // console.log(props)
   const handleSwitchChange = (event) => {
@@ -89,7 +88,6 @@ export default function FieldPopupModal(props) {
               minWidth: 120,
             }}
           >
-            {/* <MenuItem value="">Select an option</MenuItem> */}
             <MenuItem value="text" >text</MenuItem>
             <MenuItem value="varchar">varchar</MenuItem>
             <MenuItem value="integer">integer</MenuItem>
@@ -105,7 +103,7 @@ export default function FieldPopupModal(props) {
           {lookupField && <Select
             labelId="select-label"
             id="select"
-            // value={props.selectValue}
+            // value={props.selectValue.AllTableInfo.tables}
             // onChange={handleTableChange}
             defaultValue="text"
             displayEmpty
