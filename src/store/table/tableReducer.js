@@ -1,7 +1,6 @@
 // import { current } from '@reduxjs/toolkit';
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
-import { current } from 'immer';
 
 
 export const initialState = {
@@ -139,21 +138,24 @@ export const reducers = {
     const action = payload.payload
     state.skipReset=true;
     let arr= [];
+  
     state.data.forEach((ele)=>{
       if(ele.id!==action.rowIndex) {
         arr=[...arr,{...ele}];
       }
       else{
-        // console.log(ele[action.columnId.toLowerCase()])
-        if(typeof(ele[action.columnId.toLowerCase()]) === "object")
-        {
-          arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
-          console.log(current(ele[action.columnId.toLowerCase()]));
-          // var arrr = ele[action.columnId.toLowerCase()].push(action.value);
-          // console.log(current(arrr));
+       
+        if(action?.dataTypes == "file")
+        {  
+        var arrr = ele?.[action?.columnId] == null ? 
+        [] : ele?.[action?.columnId]  ;
+        arrr.push(action.value)
+        arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
         }
         else
-        arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
+        {
+          arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
+        }
       }
     });
     state.data=arr;

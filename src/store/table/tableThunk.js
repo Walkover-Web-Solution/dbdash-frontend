@@ -178,7 +178,7 @@ export const updateCells = createAsyncThunk(
        const {tableId, dbId} = getState().table
        const value = payload.value
        const  columnId= payload.columnId;
-       if(payload?.dataTypess == "file")
+       if(payload?.dataTypes == "file")
        { 
         const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
         
