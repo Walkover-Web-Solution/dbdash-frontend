@@ -17,12 +17,16 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 export default function FieldPopupModal(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  console.log(AllTableInfo?.tables)
+  console.log("All Table Info",AllTableInfo.tables )
   const [lookupField,setLookupField] = useState(false)
   const [selectedTable, setSelectedTable] = useState('text');
-  
+  const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
+  const [ selectedFieldName,setSelectedFieldName] = useState(false);
 
-  // console.log(props)
+  // const fieldsOfSelected = AllTableInfo.tables[selectedTable]?.fields
+  // AllTableInfo.tables && Object.entries(AllTableInfo.tables.fields).map((table) =>{table} )
+
+  
   const handleSwitchChange = (event) => {
     var data =  props?.metaData;
     data.unique = event.target.checked
@@ -112,7 +116,9 @@ export default function FieldPopupModal(props) {
             // value={props.selectValue}
             // onChange={handleTableChange}
             value={selectedTable}
-            onChange={(event) => setSelectedTable(event.target.value)}
+            onChange={(event) => {setSelectedTable(event.target.value); 
+              setShowFieldsDropdown(true)}}
+            
             defaultValue="text"
             displayEmpty
             sx={{
@@ -121,15 +127,48 @@ export default function FieldPopupModal(props) {
             }}
           >
                 
-            {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (  
-              
+            {AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).map((table, index) => (  
+            
                 //\ <MenuItem>{table[1]?.tableName}</MenuItem>
-                <MenuItem key={index} value={table[1]?.tableName}>{table[1]?.tableName}</MenuItem> 
-                
+                <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem> 
+          
             ))}
             
           </Select>}
-              
+       {   showFieldsDropdown &&(   <Select
+            labelId="select-label"
+            id="select"
+            value={selectedFieldName }
+            
+            defaultValue="fields"
+            displayEmpty
+            sx={{
+              margin: 1,
+              minWidth: 120,
+            }}
+
+            onChange={(e) => setSelectedFieldName(e.target.value)}
+          >
+                                      
+      {  
+      Object.entries(AllTableInfo.tables[selectedTable]?.fields).filter(( fields) =>{ 
+        if (fields[1]?.metaData?.unique )
+        {
+          return fields ;
+        }
+      })  
+      .map(( fields) => 
+      (
+        
+       
+        <MenuItem key={fields[0]} value={fields[0]}>
+          {fields[1]?.fieldName}
+        </MenuItem>
+      ))
+      }
+          </Select>
+
+)}     
             
           <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
