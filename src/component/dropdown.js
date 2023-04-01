@@ -47,7 +47,7 @@ export default function Dropdown(props) {
               e.stopPropagation(); props?.setName (true);
               if (typeof props?.setTabIndex === 'function') 
               {
-
+                console.log(props?.tabIndex);
                 props?.setTabIndex(props?.tabIndex)
               }
               }}>{props?.first}</Typography>
