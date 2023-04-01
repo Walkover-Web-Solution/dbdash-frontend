@@ -30,7 +30,7 @@ export default function Header({
   const [textValue, setTextValue] = useState('');
   const [selectValue, setSelectValue] = useState('Text');
   const tableInfo = useSelector((state) => getTableInfo(state));
-  const [unique, setUnique] = useState(false);
+  const [metaData, setMetaData] = useState({});
   const [open, setOpen] = useState(false);
   const [directionAndId,setDirectionAndId]= useState({
   })
@@ -44,7 +44,7 @@ export default function Header({
   const createColumn = () => {
     setOpen(false);   
     dispatch(addColumsToLeft({
-      columnId: 999999, focus: false,  fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue, unique:unique
+      columnId: 999999, focus: false,  fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,metaData:metaData
     }));
     setSelectValue('Text')
 
@@ -53,7 +53,7 @@ export default function Header({
     setOpen(false);
     dispatch(addColumnrightandleft({
       fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:        
-        selectValue,direction:directionAndId.direction,position:directionAndId.position
+        selectValue,direction:directionAndId.direction,position:directionAndId.position ,metaData:metaData
     }));
     setSelectValue('Text')
   
@@ -231,6 +231,18 @@ export default function Header({
       icon: <AttachFileIcon fontSize="2px" />,
       label: "attachment"
     },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      // icon: <TextIcon />,
+      label: "lookup"
+    }
   ];
 
   let propertyIcon;
@@ -261,6 +273,9 @@ export default function Header({
       break;
       case "attachment":
       propertyIcon = <AttachFileIcon fontSize="1px" />;
+      break;
+      case "lookup":
+        propertyIcon = <TextIcon />;
       break;
     default:
       break;
@@ -331,7 +346,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} unique={unique} setUnique={setUnique} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
+        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}  setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block"} })} className='th noselect'
@@ -351,7 +366,7 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} unique={unique} setUnique={setUnique} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
+      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
 
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (

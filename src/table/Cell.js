@@ -300,6 +300,17 @@ if (e.target.files[0] != null) {
       </div>
       </>)
       break;
+      case "Lookup":
+        element = (
+          <ContentEditable
+            html={(value?.value && value?.value?.toString()) || ""}
+            onChange={onChange}
+            onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+  
+            className='data-input'
+          />
+        );
+        break;
     case "attachment":
       element = (
         <div style={{display: "flex", flexDirection: "row"}}>
