@@ -12,6 +12,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SelectFilepopup from './selectFilepopup'
+import { Link } from '@mui/material';
 // import AddIcon from '@mui/icons-material/Add';
 // import { uploadImage } from "../api/fieldApi";
 export default function Cell({ value: initialValue, row, column: { id, dataType, options }, dataDispatch }) {
@@ -85,7 +86,9 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   function handleAddOption() {
     setShowAdd(true);
   }
-
+  const handleImageClick = (imgLink) => {
+    window.open(imgLink, '_blank');
+  };
   function handleOptionBlur(e) {
     if (e.target.value !== "") {
 
@@ -285,39 +288,39 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
         <input type="checkbox" {...row.getToggleRowSelectedProps()} />
       </div>
       </>)
-
       break;
-    case "attachment":
-      element = (
-        <div>
-          {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
-            <img key={index} src={imgLink} alt="My Image" style={{ width: "25%", height: "100%", marginRight: "2px" }} />
-
-          ))}
-
-          <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
-              <div>
-                <SelectFilepopup
-                  title="uplaodfile"
-                  label="UploadFileIcon"
-                  open={open}
-                  setOpen={setOpen}
-                  onChangeFile={onChangeFile}
-                  // onClick={() => {
-                  //   fileInputRef.current.click();
-                  // }}
-                  
-                />
-              </div>
-
-
-
-        </div>
-
-
-
-      );
-      break;
+      case "Lookup":
+        element = (
+          <ContentEditable
+            html={(value?.value && value?.value?.toString()) || ""}
+            onChange={onChange}
+            onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+  
+            className='data-input'
+          />
+        );
+        break;
+        case "attachment":
+          element = (
+            <div>
+              {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
+               <Link key={index} href="#" onClick={() => handleImageClick(imgLink)}>
+               <img src={imgLink} alt="My Image" style={{ width: "25%", height: "100%", marginRight: "2px" }} />
+             </Link>
+              ))}
+              <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
+                  <div>
+                    <SelectFilepopup
+                      title="uplaodfile"
+                      label="UploadFileIcon"
+                      open={open}
+                      setOpen={setOpen}
+                      onChangeFile={onChangeFile}
+                    />
+                  </div>
+            </div>
+          );
+          break;
 
 
     default:
