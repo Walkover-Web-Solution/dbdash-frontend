@@ -11,6 +11,7 @@ import  {runQueryonTable}  from "../../api/filterApi";
 // const alldb = useSelector((state) => selectOrgandDb(state))
 const getHeaders = async(dbId,tableName) =>{
     const fields = await getAllfields(dbId,tableName);
+    delete fields?.data?.data?.fields["fieldIds"]
     let columns = [
         {
             id: 9999991,
