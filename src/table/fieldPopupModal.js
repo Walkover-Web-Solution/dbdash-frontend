@@ -8,6 +8,7 @@ import {
   TextField,
   Select,
   MenuItem,
+  Typography,
 } from '@mui/material';
 import {useSelector } from 'react-redux';
 import { Box } from '@mui/system';
@@ -15,6 +16,8 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
+
+import Joi from 'joi';
 
 export default function FieldPopupModal(props)  {
   const [openn,setOpenn] = useState(false);
@@ -26,6 +29,12 @@ export default function FieldPopupModal(props)  {
   const [ selectedFieldName,setSelectedFieldName] = useState(false);
   
 
+  const schema = Joi.object({
+    fieldName: Joi.string().alphanum().min(3).max(15).required(),
+  });
+
+  const [errors, setErrors] = useState({});
+
   // useEffect(() => {
   //   if (AllTableInfo?.tables) {
   //     setSelectedTable(Object.values(AllTableInfo.tables)[0]?.tableName || "");
@@ -35,13 +44,22 @@ export default function FieldPopupModal(props)  {
   const handleSwitchChange = (event) => {
     var data =  props?.metaData;
     data.unique = event.target.checked
-    console.log(props?.metaData)
+    console.log(props?.metaData)  
     props?.setMetaData(data);
     console.log( event.target.checked)
   };
   const handleTextChange = (event) => {
+    const { error } = schema.validate({ fieldName: event.target.value });
+  if (error) {
+    setErrors({ fieldName: error.details[0].message });
+  } else {
+    setErrors({});
+  }
     props?.setTextValue(event.target.value);
   };
+
+  
+
   const handleSelectChange = (event) => {
     if(event.target.value == "generatedcolumn")
     {
@@ -81,7 +99,7 @@ export default function FieldPopupModal(props)  {
         justifyContent: 'center'}}
       >
         <DialogTitle id="form-dialog-title">Create Column</DialogTitle>
-        <TextField
+        <TextField sx={{m:2}}
             autoFocus
             margin="dense"
             id="text-field"
@@ -90,8 +108,14 @@ export default function FieldPopupModal(props)  {
              value={props.textValue}
           //  /  {console.log("value",props.textValue)}
             onChange={handleTextChange}
-            fullWidth
+            
           />
+          
+          {errors.fieldName && (
+  <Typography variant="body2" color="error" fontSize={12}>
+    {errors.fieldName}
+  </Typography>)}
+
         <DialogContent sx={{width: 400,
     padding: 2}}>
           
@@ -212,9 +236,10 @@ export default function FieldPopupModal(props)  {
           <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>
         </DialogContent>
-        <Button onClick={()=>{props?.submitData(false)}}color="primary" >Submit</Button>
+        <Button onClick={()=>{props?.submitData(false)}}color="primary"  disabled={errors.fieldName || props?.textValue?.length < 3 ||
+    props?.textValue?.length > 15} >Submit</Button>
       </Dialog>
-      
+      {/* textFieldValue.length < 3 || textFieldValue.length >15 */}
     </div>
   );
 }
