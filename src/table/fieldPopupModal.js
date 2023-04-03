@@ -30,7 +30,7 @@ export default function FieldPopupModal(props)  {
   
 
   const schema = Joi.object({
-    fieldName: Joi.string().alphanum().min(3).max(15).required(),
+    fieldName: Joi.string().min(3).max(15).required(),
   });
 
   const [errors, setErrors] = useState({});
