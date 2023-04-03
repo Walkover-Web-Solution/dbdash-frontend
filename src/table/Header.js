@@ -362,7 +362,7 @@ export default function Header({
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
-          style={{ display: "flex", justifyContent: "center" }}>
+          style={{ display: "flex", justifyContent: "center"}}>
           <div
             className='th-content' style={{ paddingLeft: "25px" }}>
             checkbox

@@ -198,17 +198,18 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
             {rows?.map((row, rowIndex) => {
               prepareRow(row);
               return (
-                <div key={rowIndex} {...row.getRowProps()} className={'tr' + rowIndex}
+                <div key={rowIndex} {...row.getRowProps()} className={`tr ${rowIndex}`}
                   style=
                   {
-                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: 'blue' } : {
-                      ...row.getRowProps().style
+                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#e0edf2' } : {
+                      ...row.getRowProps().style, backgroundColor: 'transparent'
                     }
                   }>
                   {row.cells.map((cell, columnIndex) => {
                     return (
 
                       <div key={columnIndex}
+                      
                         // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
                         // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
                         {...cell.getCellRangeSelectionProps()}
