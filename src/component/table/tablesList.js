@@ -72,6 +72,7 @@ export default function TablesList({ dbData }) {
     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
   useEffect(() => {
+    setTableLength(Object.keys(AllTableInfo?.tables).length)
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(bulkAddColumns({
@@ -88,12 +89,12 @@ export default function TablesList({ dbData }) {
       
     }
   }, [dbData])
-  useEffect(()=>{
-    if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
-    {
-      setTableLength(Object.keys(AllTableInfo?.tables).length)
-    }
-  },[AllTableInfo])
+  // useEffect(()=>{
+  //   if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
+  //   {
+  //     setTableLength(Object.keys(AllTableInfo?.tables).length)
+  //   }
+  // },[AllTableInfo])
 
   
 

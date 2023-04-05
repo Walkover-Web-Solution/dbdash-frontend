@@ -305,7 +305,7 @@ if (e.target.files[0] != null) {
           </div>
       </>)
       break;
-      case "Lookup":
+      case "lookup":
         element = (
           <ContentEditable
             html={(value?.value && value?.value?.toString()) || ""}
