@@ -79,8 +79,11 @@ export default function TablesList({ dbData }) {
         "tableName": params?.tableName|| tableNames[0]
       }));
       if(!(params?.tableName))
-      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
-   setValue(tableNames?.indexOf(params?.tableName) || 0 );
+      {
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+      }
+      // console.log(tableNames?.indexOf(params?.tableName));
+    setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
     setFilter(AllTableInfo.tables[params?.tableName]?.filters)
       
     }

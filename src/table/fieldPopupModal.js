@@ -26,18 +26,10 @@ export default function FieldPopupModal(props)  {
   const [ selectedFieldName,setSelectedFieldName] = useState(false);
   
 
-  // useEffect(() => {
-  //   if (AllTableInfo?.tables) {
-  //     setSelectedTable(Object.values(AllTableInfo.tables)[0]?.tableName || "");
-  //   }
-  // }, [AllTableInfo]); 
-
   const handleSwitchChange = (event) => {
     var data =  props?.metaData;
     data.unique = event.target.checked
-    console.log(props?.metaData)
     props?.setMetaData(data);
-    console.log( event.target.checked)
   };
   const handleTextChange = (event) => {
     props?.setTextValue(event.target.value);
@@ -65,7 +57,10 @@ export default function FieldPopupModal(props)  {
     setLookupField(false)
     setShowFieldsDropdown(false)
     setSelectedFieldName(false)
+    setUserQuery(false)
     props?.setSelectValue("Text");
+    props?.setTextValue("");
+    props?.setMetaData({});
   };
 
 
@@ -88,7 +83,6 @@ export default function FieldPopupModal(props)  {
             label="Field Name"
             type="text"
              value={props.textValue}
-          //  /  {console.log("value",props.textValue)}
             onChange={handleTextChange}
             fullWidth
           />
@@ -100,7 +94,7 @@ export default function FieldPopupModal(props)  {
             id="select"
             value={props.selectValue}
             onChange={handleSelectChange}
-            defaultValue	 ="text"
+            defaultValue	 ="Text"
             displayEmpty
             sx={{margin:1,
               minWidth: 120,}}
@@ -147,7 +141,7 @@ export default function FieldPopupModal(props)  {
             props?.setQueryByAi(e.target.value)
            }}
           placeholder={"resultant query"}
-          value={props?.queryByAi && props?.queryByAi?.split("(")[1].split(")")[0]}
+          value={props?.queryByAi && props?.queryByAi}
           fullWidth
         /> }
           </Box>
@@ -161,7 +155,6 @@ export default function FieldPopupModal(props)  {
             // onChange={handleTableChange}
             value={selectedTable}
             onChange={(event) => {
-              console.log("SDFSDFSD",event.target.value)
               setSelectedTable(event.target.value);
               setShowFieldsDropdown(true)}}
             defaultValue={ selectedTable }
@@ -172,7 +165,6 @@ export default function FieldPopupModal(props)  {
               minWidth: 120,
             }}
           >
-           { console.log(AllTableInfo?.tables)}
             {AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).map((table, index) => (
                 //\ <MenuItem>{table[1]?.tableName}</MenuItem>
                 <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>

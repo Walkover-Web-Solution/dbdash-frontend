@@ -358,7 +358,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}  setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
+        <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}   setQueryByAi = {setQueryByAi}   setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} queryByAi={queryByAi} submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
@@ -378,7 +378,7 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
+      <FieldPopupModal title="create column" label="Column Name" textValue={textValue} metaData={metaData}   setQueryByAi = {setQueryByAi} setMetaData={setMetaData} setTextValue={setTextValue} queryByAi={queryByAi} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
 
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (
