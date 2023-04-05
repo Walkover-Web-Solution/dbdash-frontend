@@ -11,12 +11,9 @@ import { useParams } from 'react-router';
 
 export default function FieldPopupModal(props) {
   const [openn, setOpenn] = useState(false);
-  const [userQuery,] = useState(false);
+  const [userQuery,setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [lookupField, setLookupField] = useState(false)
-  const [selectedTable, setSelectedTable] = useState("");
-  const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
-  const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [searchValue, setsearchValue] = useState([]);
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -35,6 +32,18 @@ export default function FieldPopupModal(props) {
     fieldName: Joi.string().min(3).max(15).required(),
   });
   
+  const [queryResult,setQueryResult] = useState(false)
+  useEffect(()=>{
+    var query  = props?.queryByAi
+    try {
+      query = JSON.parse(query)?.add_column?.new_column_name?.generated?.expression
+    } catch (err) {
+      query = "enter valid query"
+    }
+    setQueryResult(query);
+
+  },[props?.queryByAi])
+
   const handleSwitchChange = (event) => {
     var data = props?.metaData;
     data.unique = event.target.checked
@@ -52,16 +61,24 @@ export default function FieldPopupModal(props) {
   };
 
   const handleSelectChange = (event) => {
+    
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
+      setLookupField(false)
+      props?.setShowFieldsDropdown(false)
+      props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "lookup") {
       setLookupField(true)
+      setOpenn(false)
       props?.setSelectValue(event.target.value);
     }
     else {
+      props?.setShowFieldsDropdown(false)
+      props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
+      setLookupField(false)
       setOpenn(false)
     }
   };
@@ -70,9 +87,12 @@ export default function FieldPopupModal(props) {
     props?.setOpen(false);
     setOpenn(false);
     setLookupField(false)
-    setShowFieldsDropdown(false)
-    setSelectedFieldName(false)
+    setUserQuery(false)
+    props?.setShowFieldsDropdown(false)
+    props?.setSelectedFieldName(false)
     props?.setSelectValue("Text");
+    props?.setTextValue("");
+    props?.setMetaData({});
   };
 
   // Teach Autosuggest how to calculate suggestions for any given input value.
@@ -151,7 +171,7 @@ export default function FieldPopupModal(props) {
         }}
       >
         <DialogTitle id="form-dialog-title">Create Column</DialogTitle>
-        <TextField sx={{ m: 2 }}
+        <TextField
           autoFocus
           margin="dense"
           id="text-field"
@@ -176,7 +196,7 @@ export default function FieldPopupModal(props) {
             id="select"
             value={props.selectValue}
             onChange={handleSelectChange}
-            defaultValue="text"
+            defaultValue	 ="Text"
             displayEmpty
             sx={{
               margin: 1,
@@ -222,22 +242,25 @@ export default function FieldPopupModal(props) {
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps}
                   renderSuggestionsContainer={renderSuggestionsContainer}
+                  onChange={(e)=>{
+                    setUserQuery(e.target.value)
+                   }}
                 />
                 <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >next</Button>
 
-                {/* {props?.queryByAi && <TextField
+                 {props?.queryByAi && <TextField
                   autoFocus
                   margin="dense"
                   id="text-field"
                   label="Query by Ai"
                   type="text"
-                  onChange={(e) => {
-                    props?.setQueryByAi(e.target.value)
-                  }}
+                  // onChange={(e) => {
+                  //   props?.setQueryByAi(e.target.value)
+                  // }}
                   placeholder={"resultant query"}
-                  value={props?.queryByAi && props?.queryByAi?.split("(")[1].split(")")[0]}
+                  value={queryResult}
                   fullWidth
-                />} */}
+                />} 
               </Box>
 
             )
@@ -245,15 +268,13 @@ export default function FieldPopupModal(props) {
           {lookupField && <Select
             labelId="select-label"
             id="select"
-            // value={props.selectValue}
-            // onChange={handleTableChange}
-            value={selectedTable}
+            value={props?.selectedTable}
             onChange={(event) => {
-              setSelectedTable(event.target.value);
-              setShowFieldsDropdown(true)
+              console.log("SDFSDFSD", event.target.value)
+              props?.setSelectedTable(event.target.value);
+              props?.setShowFieldsDropdown(true)
             }}
-            defaultValue={selectedTable}
-            // defaultValue={AllTableInfo?.tables && Object.values(AllTableInfo.tables)[0].tableName}
+            defaultValue={props?.selectedTable}
             displayEmpty
             sx={{
               margin: 1,
@@ -261,24 +282,23 @@ export default function FieldPopupModal(props) {
             }}
           >
             {AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).map((table, index) => (
-              //\ <MenuItem>{table[1]?.tableName}</MenuItem>
               <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
             ))}
           </Select>}
-          {showFieldsDropdown && (<Select
+          {props?.showFieldsDropdown && (<Select
             labelId="select-label"
             id="select"
-            value={selectedFieldName}
+            value={props?.selectedFieldName}
             defaultValue="fields"
             displayEmpty
             sx={{
               margin: 1,
               minWidth: 120,
             }}
-            onChange={(e) => setSelectedFieldName(e.target.value)}
+            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
           >
             {
-              Object.entries(AllTableInfo.tables[selectedTable]?.fields)?.filter((fields) => {
+              Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
                 if (fields[1]?.metaData?.unique) {
                   return fields;
                 }
@@ -300,7 +320,6 @@ export default function FieldPopupModal(props) {
         <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 3 ||
           props?.textValue?.length > 15} >Submit</Button>
       </Dialog>
-      {/* textFieldValue.length < 3 || textFieldValue.length >15 */}
     </div>
   );
 }
@@ -318,6 +337,12 @@ FieldPopupModal.propTypes = {
   queryByAi: PropTypes.any,
   setQueryByAi: PropTypes.func,
   setMetaData: PropTypes.func,
-  metaData: PropTypes.any
+  metaData: PropTypes.any,
+  setShowFieldsDropdown:PropTypes.func,
+  showFieldsDropdown:PropTypes.any,
+  setSelectedTable:PropTypes.func,
+  selectedTable:PropTypes.any,
+  selectedFieldName:PropTypes.any,
+  setSelectedFieldName:PropTypes.func
 }
 
