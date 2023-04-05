@@ -17,14 +17,14 @@ import Switch from '@mui/material/Switch';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
 
 export default function FieldPopupModal(props) {
+ 
   const [openn, setOpenn] = useState(false);
   const [userQuery, setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [lookupField, setLookupField] = useState(false)
-  // const [selectedTable, setSelectedTable] = useState("");
-  // const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
-  // const [selectedFieldName, setSelectedFieldName] = useState(false);
-
+  const [openViewDropdown,setOpenViewDropdown] = useState(false)
+  const [openLinkedField,setOpenLinkedField] = useState(false)
+  // const [view, setView] = useState(false)
   const handleSwitchChange = (event) => {
     var data = props?.metaData;
     data.unique = event.target.checked
@@ -38,8 +38,14 @@ export default function FieldPopupModal(props) {
       setOpenn(true)
       props?.setSelectValue(event.target.value);
     }
-    else if (event.target.value == "lookup") {
+    else if (event.target.value == "link") {
       setLookupField(true)
+      props?.setSelectValue(event.target.value);
+    }
+    else if(event.target.value == "lookup"){
+      // setView(true)
+      setOpenLinkedField(true)
+      setLookupField(false)
       props?.setSelectValue(event.target.value);
     }
     else {
@@ -111,7 +117,9 @@ export default function FieldPopupModal(props) {
             <MenuItem value="createdat">created At</MenuItem>
             <MenuItem value="generatedcolumn">generated column</MenuItem>
             <MenuItem value="attachment">attachment</MenuItem>
-            <MenuItem value="lookup">lookup</MenuItem>
+            <MenuItem value="link">Link to another record</MenuItem>
+            <MenuItem value="lookup">Lookup</MenuItem>
+
           </Select>
 
           {openn &&
@@ -151,6 +159,7 @@ export default function FieldPopupModal(props) {
         
         )
           }
+            {/* show table name   */}
           {lookupField && <Select
             labelId="select-label"
             id="select"
@@ -171,6 +180,7 @@ export default function FieldPopupModal(props) {
               <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
             ))}
           </Select>}
+                {/* show fields that are uniquw  */}
           {props?.showFieldsDropdown && (<Select
             labelId="select-label"
             id="select"
@@ -199,6 +209,66 @@ export default function FieldPopupModal(props) {
           </Select>
           )}
 
+    {openLinkedField && (<Select
+            labelId="select-label"
+            id="select"
+            value={props?.selectedTable}
+            defaultValue="fields"
+            displayEmpty
+            sx={{
+              margin: 1,
+              minWidth: 120,
+            }}
+            onChange={(e) =>{ 
+              
+              // console.log({
+              //   [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
+              // })
+              props?.setLinkedValueName({
+                [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
+              })
+              props?.setSelectedTable(AllTableInfo?.tables[props?.tableId].fields[e.target.value]?.metaData?.foreignKey?.tableId) ; 
+              console.log(AllTableInfo?.tables[props?.tableId].fields[e.target.value]?.metaData?.foreignKey?.tableId)
+              setOpenViewDropdown(true)}}
+          >
+            {
+              Object.entries(AllTableInfo?.tables[props?.tableId].fields)?.filter((fields) => {
+                if (fields[1]?.metaData?.foreignKey?.fieldId) {
+                  return fields;
+                }
+              })
+                .map((fields) =>
+                (
+                  <MenuItem key={fields[0]} value={fields[0]}>
+                    {fields[1]?.fieldName}
+                  </MenuItem>
+                ))
+            }
+          </Select>
+          )}
+          
+          {openViewDropdown && (<Select
+            labelId="select-label"
+            id="select"
+            value={props?.selectedFieldName}
+            defaultValue="fields"
+            displayEmpty
+            sx={{
+              margin: 1,
+              minWidth: 120,
+            }}
+            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
+          >
+            {
+              Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.map((fields) =>
+                (
+                  <MenuItem key={fields[0]} value={fields[0]}>
+                    {fields[1]?.fieldName}
+                  </MenuItem>
+                ))
+            }
+          </Select>
+          )}
 
           <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
@@ -229,6 +299,9 @@ FieldPopupModal.propTypes = {
   setSelectedTable:PropTypes.func,
   selectedTable:PropTypes.any,
   selectedFieldName:PropTypes.any,
-  setSelectedFieldName:PropTypes.func
+  setSelectedFieldName:PropTypes.func,
+  tableId:PropTypes.any,
+  linkedValueName:PropTypes.any,
+  setLinkedValueName:PropTypes.func
 }
 

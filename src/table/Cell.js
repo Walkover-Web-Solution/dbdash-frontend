@@ -305,7 +305,18 @@ if (e.target.files[0] != null) {
           </div>
       </>)
       break;
-      case "lookup":
+      case "link":
+        element = (
+          <ContentEditable
+            html={(value?.value && value?.value?.toString()) || ""}
+            onChange={onChange}
+            onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+  
+            className='data-input'
+          />
+        );
+        break;
+        case "lookup":
         element = (
           <ContentEditable
             html={(value?.value && value?.value?.toString()) || ""}

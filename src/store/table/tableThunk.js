@@ -8,6 +8,7 @@ import { getTable1 } from "../allTable/allTableThunk";
 import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
 import  {runQueryonTable}  from "../../api/filterApi";
+import { createView } from "../../api/viewApi";
 // import { useSelector } from "react-redux";
 // const alldb = useSelector((state) => selectOrgandDb(state))
 const getHeaders = async(dbId,tableName) =>{
@@ -152,8 +153,19 @@ export const addColumnrightandleft = createAsyncThunk(
             fieldType:payload?.fieldType,
             direction:payload?.direction,
             position:payload?.position,
+            metaData:payload?.metaData,
+            selectedFieldName:payload?.selectedFieldName,
+            selectedTable:payload?.selectedTable,
+            query:payload?.query,
+            linkedValueName:payload?.linkedValueName,
+            foreignKey : payload?.foreignKey
         }
-     await createField(payload?.dbId,payload?.tableId,data);
+        if(payload?.fieldType == "lookup")
+            await createView(payload?.dbId,payload?.tableId,data);
+        else 
+            await createField(payload?.dbId,payload?.tableId,data);
+
+     dispatch(getTable1({dbId:payload?.dbId}))
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         return payload;
@@ -162,16 +174,24 @@ export const addColumnrightandleft = createAsyncThunk(
 export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async(payload,{dispatch,getState})=>{
-        console.log(payload)
+        console.log("payload",payload)
         const data={
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType,
             metaData:payload?.metaData,
             query:payload?.query,
             selectedFieldName:payload?.selectedFieldName,
-            selectedTable:payload?.selectedTable
+            selectedTable:payload?.selectedTable,
+            linkedValueName:payload?.linkedValueName,
+            foreignKey : payload?.foreignKey
         }
-       await createField(payload?.dbId,payload?.tableId,data);
+        // console.log()
+
+        if(payload?.fieldType == "lookup")
+            await createView(payload?.dbId,payload?.tableId,data);
+        else 
+            await createField(payload?.dbId,payload?.tableId,data);
+
        dispatch(getTable1({dbId:payload?.dbId}))
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
