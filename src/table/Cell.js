@@ -299,13 +299,21 @@ if (e.target.files[0] != null) {
         </>
       );
       break;
-    case "check":
-      element =(<><div   {...row.getRowProps()} className= "tr">
-          <input type="checkbox" {...rowProperties} />
-          </div>
-      </>)
-      break;
-      case "lookup":
+      case "check":
+  element = (
+    <div {...row.getRowProps()} className="tr">
+      <div className="count" title="Check">
+        {row.index + 1}
+      </div>
+      <div className="checkbox-container">
+        <input type="checkbox" {...rowProperties} className="checkbox" />
+      </div>
+    </div>
+  );
+  break;
+
+      
+      case "Lookup":
         element = (
           <ContentEditable
             html={(value?.value && value?.value?.toString()) || ""}
