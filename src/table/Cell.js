@@ -31,6 +31,7 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
   const [open, setOpen] = useState(false);
+  
     const handleImageClick = (imgLink) => {
       window.open(imgLink, '_blank');
     };
@@ -144,6 +145,7 @@ if (e.target.files[0] != null) {
           readOnly="readonly"
           defaultValue={(value?.value && value?.value?.toString()) || ""}
           className='data-input'
+          style={{background: "none"}}
         />
       );
       break;
@@ -153,6 +155,7 @@ if (e.target.files[0] != null) {
           readOnly="readonly"
           defaultValue={(value?.value && value?.value?.toString()) || ""}
           className='data-input'
+          style={{background: "none"}}
         />
       );
       break;
@@ -180,7 +183,7 @@ if (e.target.files[0] != null) {
             </LocalizationProvider>}
             <input type="text" className='data-input'
               defaultValue={value?.value}
-              style={{ "display": inputBoxShow ? "none" : "block" }}
+              style={{ "display": inputBoxShow ? "none" : "block" ,background: "none"}}
               onClick={(e) => {
                 if (e.detail == 2) {
                   setInputBoxShow(true);
@@ -317,7 +320,7 @@ if (e.target.files[0] != null) {
       element = (
         <div style={{display: "flex", flexDirection: "row"}}>
           {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
-           <Link key={index} href="#" onClick={() => handleImageClick(imgLink)}>
+           <Link key={index} onClick={() => handleImageClick(imgLink)}>
            <img src={imgLink} alt="My Image" style={{ width: "50px", height: "100%" ,marginRight: "3px" }} />
          </Link>
 
