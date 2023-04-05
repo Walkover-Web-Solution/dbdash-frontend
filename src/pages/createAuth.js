@@ -28,7 +28,6 @@ export default function CreateAuthKey() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const [options, setOptions] = useState([]);
-  // console.log("dbid",dbId.title)
 
 
   const isDisabled = !name || !scope || selected.length === 0;
@@ -75,15 +74,10 @@ export default function CreateAuthKey() {
       const selectedTables = optionList
         .filter(({ id }) => tableIds.includes(id))
         .map(({ tableName }) => tableName);
-      // console.log("selectedTable", selectedTables);
       setSelected(selectedTables);
     }
   };
-  // console.log("data",dbId)
-  // // console.log("updated",dbId.authData.name)
-  // console.log("jsdbsbs",Object.entries(dbId.authData.access))
-  // console.log("jsdbsbs",Object.entries(dbId.authData.access)[1][1]?.scope)
-
+ 
   useEffect(() => {
     updateValueOnEdit();
   }, [dbId, options]);

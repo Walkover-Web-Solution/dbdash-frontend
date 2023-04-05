@@ -35,12 +35,12 @@ export default function FieldPopupModal(props) {
     fieldName: Joi.string().min(3).max(15).required(),
   });
   
-
   const handleSwitchChange = (event) => {
     var data = props?.metaData;
     data.unique = event.target.checked
     props?.setMetaData(data);
   };
+
   const handleTextChange = (event) => {
     const { error } = schema.validate({ fieldName: event.target.value });
     if (error) {
@@ -50,6 +50,7 @@ export default function FieldPopupModal(props) {
     }
     props?.setTextValue(event.target.value);
   };
+
   const handleSelectChange = (event) => {
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
@@ -64,6 +65,7 @@ export default function FieldPopupModal(props) {
       setOpenn(false)
     }
   };
+
   const handleClose = () => {
     props?.setOpen(false);
     setOpenn(false);
@@ -75,7 +77,7 @@ export default function FieldPopupModal(props) {
 
   // Teach Autosuggest how to calculate suggestions for any given input value.
   const getSuggestions = (value) => {
-    const inputValues = value.trim()?.toLowerCase()?.split(" ");
+    const inputValues = value?.trim()?.toLowerCase()?.split(" ");
     const inputLength = inputValues.length;
     const searchTerm = inputValues[inputLength - 1];
    
@@ -87,6 +89,7 @@ export default function FieldPopupModal(props) {
   };
 
   const getSuggestionValue = (suggestion) => {
+
     const newVal = value?.split(" ");
     let newdata = "";
     for (let i = 0; i < newVal.length - 1; i++) {
@@ -103,15 +106,18 @@ export default function FieldPopupModal(props) {
     let addVal = newValue;
     setValue(addVal);
   };
+
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
   const onSuggestionsFetchRequested = ({ value }) => {
     setSuggestions(getSuggestions(value));
   };
+
   // Autosuggest will call this function every time you need to clear suggestions.
   const onSuggestionsClearRequested = () => {
     setSuggestions([]);
   };
+
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
     placeholder: "Type a programming language",
@@ -153,7 +159,6 @@ export default function FieldPopupModal(props) {
           type="text"
           value={props.textValue}
           onChange={handleTextChange}
-
         />
 
         {errors.fieldName && (
@@ -191,7 +196,6 @@ export default function FieldPopupModal(props) {
           </Select>
 
           {openn &&
-
             (
               <Box>
                 <Box>write query in human friendly way to manupulate the column and resultant query will be give to you !!!  and vie versa</Box>
@@ -210,13 +214,13 @@ export default function FieldPopupModal(props) {
           /> */}
 
                 <Autosuggest
+                  autoFocus
                   suggestions={suggestions}
                   onSuggestionsFetchRequested={onSuggestionsFetchRequested}
                   onSuggestionsClearRequested={onSuggestionsClearRequested}
                   getSuggestionValue={getSuggestionValue}
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps}
-                  renderInput={(params) => <TextField {...params} label="Movie" />}
                   renderSuggestionsContainer={renderSuggestionsContainer}
                 />
                 <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >next</Button>
@@ -289,7 +293,6 @@ export default function FieldPopupModal(props) {
           </Select>
           )}
 
-
           <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>
@@ -301,6 +304,7 @@ export default function FieldPopupModal(props) {
     </div>
   );
 }
+
 FieldPopupModal.propTypes = {
   setOpen: PropTypes.func,
   open: PropTypes.bool,
