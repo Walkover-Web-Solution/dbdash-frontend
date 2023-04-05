@@ -296,7 +296,8 @@ html {
 }
 
 .tr:hover > .td {
-  background-color: #f5f5f5;
+  background-color: #ecf3f3;
+
 }
 
 .count {

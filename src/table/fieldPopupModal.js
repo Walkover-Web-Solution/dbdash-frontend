@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -21,6 +21,17 @@ export default function FieldPopupModal(props) {
   const [userQuery, setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [lookupField, setLookupField] = useState(false)
+  const [queryResult,setQueryResult] = useState(false)
+  useEffect(()=>{
+    var query  = props?.queryByAi
+    try {
+      query = JSON.parse(query)?.add_column?.new_column_name?.generated?.expression
+    } catch (err) {
+      query = "enter valid query"
+    }
+    setQueryResult(query);
+
+  },[props?.queryByAi])
   // const [selectedTable, setSelectedTable] = useState("");
   // const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   // const [selectedFieldName, setSelectedFieldName] = useState(false);
@@ -34,16 +45,24 @@ export default function FieldPopupModal(props) {
     props?.setTextValue(event.target.value);
   };
   const handleSelectChange = (event) => {
+    
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
+      setLookupField(false)
+      props?.setShowFieldsDropdown(false)
+      props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "lookup") {
       setLookupField(true)
+      setOpenn(false)
       props?.setSelectValue(event.target.value);
     }
     else {
+      props?.setShowFieldsDropdown(false)
+      props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
+      setLookupField(false)
       setOpenn(false)
     }
   };
@@ -118,7 +137,7 @@ export default function FieldPopupModal(props) {
 
             (
               <Box>
-                <Box>write query in human friendly way to manupulate the column and resultant query will be give to you !!!  and vie versa</Box>
+                <Box>write query in human friendly way to manupulate the column and resultant query will be given to you !!!  and vive versa</Box>
                 <TextField
                   autoFocus
                   margin="dense"
@@ -140,11 +159,12 @@ export default function FieldPopupModal(props) {
           id="text-field"
           label="Query by Ai"
           type="text"
-          onChange={(e)=>{
-            props?.setQueryByAi(e.target.value)
-           }}
+            readOnly = "true"
+          // onChange={(e)=>{
+          //   props?.setQueryByAi(e.target.value)
+          //  }}
           placeholder={"resultant query"}
-          value={props?.queryByAi && props?.queryByAi}
+          value={queryResult}
           fullWidth
         /> }
           </Box>

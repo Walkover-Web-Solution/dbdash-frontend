@@ -18,9 +18,10 @@ import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHead
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
 import CheckIcon from '@mui/icons-material/Check';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import {getQueryByAi} from "../api/fieldApi"
-
+import FunctionsIcon from '@mui/icons-material/Functions';
 export default function Header({
   column: { id, created, label, dataType, getResizerProps, getHeaderProps },
   setSortBy,
@@ -48,8 +49,10 @@ export default function Header({
     if(!userQuery)
     {
       setOpen(false);
+
+      var queryToSend =  JSON.parse(queryByAi)?.add_column?.new_column_name?.data_type +  ` GENERATED ALWAYS AS (${JSON.parse(queryByAi)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       dispatch(addColumsToLeft({
-        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,query:queryByAi,metaData:metaData,selectedTable,selectedFieldName
+        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName
       }));
       setSelectValue('Text')
       setQueryByAi(false)
@@ -58,8 +61,9 @@ export default function Header({
     else
     {
       const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
+      // console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
+      console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
       setQueryByAi(response?.data?.data);
-     
     }
    
 
@@ -232,6 +236,7 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
+      icon: <DateRangeIcon fontSize="2px" />,
       label: "date and time"
     },
     {
@@ -265,8 +270,12 @@ export default function Header({
     case "varchar":
       propertyIcon = <TextIcon />;
       break;
+      case "generatedcolumn":
+      propertyIcon = <FunctionsIcon fontSize="2px" />;
+      break;
     case "datetime":
-      propertyIcon = <TextIcon />;
+  
+      propertyIcon = <DateRangeIcon fontSize="2px" />;
       break;
     case "checkbox":
       propertyIcon = <CheckIcon fontSize="2px" />;
@@ -360,7 +369,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div>
-        <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData}  setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
+        <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData}  setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
@@ -380,7 +389,7 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable} setSelectValue={setSelectValue} textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
+      <FieldPopupModal title="create column" label="Column Name"   queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable} setSelectValue={setSelectValue} textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
 
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (
