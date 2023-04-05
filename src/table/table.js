@@ -201,8 +201,9 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
                 <div key={rowIndex} {...row.getRowProps()} className={'tr' + rowIndex}
                   style=
                   {
-                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: 'blue' } : {
-                      ...row.getRowProps().style
+                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: 'blue'} : {
+          
+                      ...row.getRowProps().style, 
                     }
                   }>
                   {row.cells.map((cell, columnIndex) => {
