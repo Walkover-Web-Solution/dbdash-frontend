@@ -207,18 +207,18 @@ export default function Header({
       icon: <HashIcon />,
       label: "numeric"
     },
-    {
-      onClick: () => {
-        dispatch(updateColumnsType({
-          columnId: id,
-          dataType: "varchar"
-        }))
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TextIcon />,
-      label: "Varchar"
-    },
+    // {
+    //   onClick: () => {
+    //     dispatch(updateColumnsType({
+    //       columnId: id,
+    //       dataType: "varchar"
+    //     }))
+    //     setShowType(false);
+    //     setExpanded(false);
+    //   },
+    //   icon: <TextIcon />,
+    //   label: "Varchar"
+    // },
     {
       onClick: () => {
         dispatch(updateColumnsType({
@@ -283,9 +283,9 @@ export default function Header({
 
   let propertyIcon;
   switch (dataType) {
-    case "varchar":
-      propertyIcon = <TextIcon />;
-      break;
+    // case "varchar":
+    //   propertyIcon = <TextIcon />;
+    //   break;
       case "generatedcolumn":
       propertyIcon = <FunctionsIcon fontSize="2px" />;
       break;

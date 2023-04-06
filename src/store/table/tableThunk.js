@@ -126,6 +126,9 @@ export const deleteColumns = createAsyncThunk(
                 viewFieldId : payload?.fieldName
             }
             await deleteFieldInView(payload?.dbId,payload?.tableId,data)
+            dispatch(deleteColumn(payload));
+            const {tableId, dbId} = getState().table
+            dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
             return 2;
         }
         else

@@ -215,7 +215,7 @@ export default function FieldPopupModal(props) {
             }}
           >
             <MenuItem value="Text" >text</MenuItem>
-            <MenuItem value="varchar">varchar</MenuItem>
+            {/* <MenuItem value="varchar">varchar</MenuItem> */}
             <MenuItem value="numeric">number</MenuItem>
             <MenuItem value="checkbox">checkbox</MenuItem>
             <MenuItem value="datetime">datetime</MenuItem>
