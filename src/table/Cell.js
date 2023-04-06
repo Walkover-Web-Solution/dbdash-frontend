@@ -336,13 +336,12 @@ if (e.target.files[0] != null) {
         break;
         case "lookup":
         element = (
-          <ContentEditable
-            html={(value?.value && value?.value?.toString()) || ""}
-            onChange={onChange}
-            onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-  
-            className='data-input'
-          />
+          <input type="text"
+          readOnly="readonly"
+          defaultValue={(value?.value && value?.value?.toString()) || ""}
+          className='data-input'
+          style={{background: "none"}}
+        />
         );
         break;
     case "attachment":

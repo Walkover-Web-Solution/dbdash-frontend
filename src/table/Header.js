@@ -68,8 +68,6 @@ export default function Header({
     else
     {
       const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
-      // console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
-      // console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
       setQueryByAi(response?.data?.data);
     }
    
