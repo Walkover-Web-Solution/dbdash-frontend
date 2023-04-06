@@ -17,7 +17,7 @@ function ListRecord(props) {
       <b>Specific fields</b> &nbsp;Only data for fields whose names are in this list will be included in the result.<br/>
                     If you do not need every field, you can use this parameter to reduce the amount of<br/>
                     data transferred.<br/>
-                    http://localhost:5000/:dbId/:tableId/?fields=field1,field2,field3<br/>
+                    {`"https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}"` }/?fields=field1,field2,field3<br/>
                     <br/>
                     <br/>
       <b>filterByFormula</b> &nbsp;A formula used to filter records. The formula will be evaluated for each record,and if the result is<br/>
@@ -27,22 +27,23 @@ function ListRecord(props) {
                              before passing it as a value. You can use this tool to not only encode the formula but also create<br/>
                             the entire url you need.
                             <br/>
-                            http://localhost:5000/:dbId/:tableId/?fields=field1,field2,field3&filter=field1=!nullANDfield2=&quot;10&quot;<br/>
+                            {`"https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}"` }/?fields=field1,field2,field3&filter=field1=!nullANDfield2=&quot;10&quot;<br/>
                             <br/>
                             <br/>
              <b>pageSize</b>&nbsp;The number of records returned in each request.Must be less than or equal to 100.<br/>
                                  Default is 100.
                                  <br/>
-                                 http://localhost:5000/:dbId/:tableId/?page=2&limit=10
+                                 {`"https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}"` }/?page=2&limit=10
                                  <br/>
                                  <br/>
                      <b>sort</b>&nbsp; A list of sort objects that specifies how the records will be ordered.<br/>
-                     http://localhost:5000/:dbId/:tableId/?fields=field1,field2,field3&sort=field1,asc.
+                     {`"https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}"` }/?fields=field1,field2,field3&sort=field1,asc.
         </Typography>
         
         <br/>
     <Box>
-      <CodeSnippet  codeString={`"https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}"` }/>
+      <CodeSnippet  codeString={`"https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}"`}
+      />
       <p>{`-H "Key: YOUR_SECRET_API_TOKEN" `}</p>
     </Box>
     <Box>

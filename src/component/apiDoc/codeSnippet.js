@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { githubGist } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+// import { githubGist } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import { Button } from "@mui/material";
 // import { FaCopy } from "react-icons/fa";
 import PropTypes from 'prop-types';
@@ -16,15 +16,13 @@ const CodeSnippet = ({ codeString }) => {
   };
 
   return (
-    <div style={{ position: "relative",backgroundColor: "black" }}>
-      <SyntaxHighlighter language="jsx" style={githubGist}>
+    <div style={{display:'flex'}}>
+      <SyntaxHighlighter language="jsx" style={{textDecoration:'none',height:'200px', width: '1000px'}} >
         {codeString}
       </SyntaxHighlighter>
       <Button
         style={{
-          position: "absolute",
-          top: "0.5rem",
-          right: "0.5rem",
+          marginRight: 'auto',
           padding: "0.5rem",
           cursor: "pointer"
         }}
