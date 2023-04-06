@@ -18,6 +18,7 @@ export default function FieldPopupModal(props) {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [errors, setErrors] = useState({});
+  const [queryResult,setQueryResult] = useState(false)
   const params = useParams();
 
   useEffect(() => {
@@ -32,7 +33,6 @@ export default function FieldPopupModal(props) {
     fieldName: Joi.string().min(3).max(15).required(),
   });
   
-  const [queryResult,setQueryResult] = useState(false)
   useEffect(()=>{
     var query  = props?.queryByAi
     try {
