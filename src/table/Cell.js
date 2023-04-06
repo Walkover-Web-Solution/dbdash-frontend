@@ -36,19 +36,19 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const [open, setOpen] = useState(false);
   
 
-  const getNumber=(value)=>{
-    let i=0;
-    let frontString="",lastString="";
-    while(i<value.length && value[i]!=='.'){
-      frontString+=value[i];
-      i++;
-    }
-    if(i===value.length) {
-      return frontString;
-    }
-    i=value.length-1;
-    while(i>0 && value[i]!=='0')
-  }
+  // const getNumber=(value)=>{
+  //   let i=0;
+  //   let frontString="",lastString="";
+  //   while(i<value.length && value[i]!=='.'){
+  //     frontString+=value[i];
+  //     i++;
+  //   }
+  //   if(i===value.length) {
+  //     return frontString;
+  //   }
+  //   i=value.length-1;
+  //   while(i>0 && value[i]!=='0')
+  // }
   
     const handleImageClick = (imgLink) => {
       window.open(imgLink, '_blank');
