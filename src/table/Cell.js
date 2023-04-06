@@ -14,10 +14,14 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SelectFilepopup from './selectFilepopup';
 import { toast } from 'react-toastify';
 import { Link } from '@mui/material';
+// import { log } from "console";
+// import { log } from "console"; 1
 
 
-export default function Cell({ value: initialValue, row, column: { id, dataType, options }, dataDispatch }) {
-
+export default function Cell({ value: initialValue, row, column: { id, dataType, options,metaData }, dataDispatch }) {
+  console.log("Zeroes",metaData)
+  // console.log("id",id)
+  // console.log("options",options)
   const dispatch = useDispatch();
   const [value, setValue] = useState({ value: initialValue, update: false });
 
@@ -31,6 +35,20 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const [inputBoxShow, setInputBoxShow] = useState(false);
   const [open, setOpen] = useState(false);
   
+
+  const getNumber=(value)=>{
+    let i=0;
+    let frontString="",lastString="";
+    while(i<value.length && value[i]!=='.'){
+      frontString+=value[i];
+      i++;
+    }
+    if(i===value.length) {
+      return frontString;
+    }
+    i=value.length-1;
+    while(i>0 && value[i]!=='0')
+  }
   
     const handleImageClick = (imgLink) => {
       window.open(imgLink, '_blank');
@@ -68,7 +86,6 @@ if (e.target.files[0] != null) {
       });
     }
   }, [imgUpload])
-
   useEffect(() => {
     if (value?.update) {
       dispatch(updateCells({
@@ -78,13 +95,15 @@ if (e.target.files[0] != null) {
   }, [value, dispatch, id, row.index]);
 
 
-  useEffect(() => {
-    if (value?.update) {
-      dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
-      }))
-    }
-  }, [value, dispatch, id, row.index]);
+  // useEffect(() => {
+  //   if (value?.update) {
+  //     dispatch(updateCells({
+  //       columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
+  //     }))
+  //   }
+  // }, [value, dispatch, id, row.index]);
+
+  
 
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {
@@ -210,12 +229,14 @@ if (e.target.files[0] != null) {
       element = (
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
+          
           onChange={onChange}
           onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
 
           className='data-input'
         />
       );
+      
       break;
     case "varchar":
       element = (
@@ -227,17 +248,34 @@ if (e.target.files[0] != null) {
         />
       );
       break;
-    case "numeric":
-      element = (
-        <ContentEditable
-          html={(value?.value && value.value.toString()) || ""}
-          onChange={onChange}
-          
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-          className='data-input text-align-right'
-          step="any"
-        />
-      );
+      case "numeric":
+        element = (
+          <ContentEditable
+            html={(value?.value && value.value.toString()) || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              console.log(value);
+              const arr=value.split(".00");
+              console.log(arr);
+              let formattedValue;
+              if(arr[1]){
+                formattedValue = arr[0]+arr[1]+'.00';
+              }
+              else{
+                formattedValue = arr[0]+'.00';
+              }
+              console.log("dEEPAK",formattedValue)
+              // const formattedValue = parseFloat(value.replace(/[^0-9.-]/g, ""))
+
+              // console.log("formattedValue",formattedValue.toFixed(3))
+              // const newValue = formattedValue.toFixed(3)
+              onChange({ target: { value: formattedValue } });
+            }}
+            onBlur={() => setValue((old) => ({value: old.value, update: true}))}
+            className='data-input text-align-right'
+            step="any"
+          />
+        ); 
       break;
       case "integer":
       element = (

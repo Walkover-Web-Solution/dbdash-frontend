@@ -31,7 +31,8 @@ const getHeaders = async(dbId,tableName) =>{
         accessor: "",
         minWidth: 100,
         dataType: "",
-        options: []
+        options: [],
+        metaData: {}
     }
     json.id = field[0];
     json.label = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
@@ -40,6 +41,7 @@ const getHeaders = async(dbId,tableName) =>{
     json.accessor = "createdby" ;
     if( field[1].fieldType == "createdat")
     json.accessor = "createdat" ;
+    json.metaData = field[1]?.metaData
     // columns.push (json);
     json.dataType = field[1].fieldType?.toLowerCase();
     columns.push (json);
