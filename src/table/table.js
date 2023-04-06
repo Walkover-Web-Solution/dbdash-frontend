@@ -11,8 +11,6 @@ import { addRows, deleteRows, updateCells } from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-// import InfiniteScroll from "react-infinite-scroll-component";
-
 
 
 const defaultColumn = {
@@ -34,7 +32,6 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
   };
 
 
-  
   const dispatch =useDispatch();
   const handlePaste = (event,row,cell) => {
     event.preventDefault();
@@ -119,27 +116,6 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
 
   let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds }
 
-
-  // const handleCellMouseDown = (rowIndex, columnIndex) => {
-  //   setSelectedRange({
-  //     startRow: rowIndex,
-  //     endRow: rowIndex,
-  //     startColumn: columnIndex,
-  //     endColumn: columnIndex
-  //   });
-  // };
-
-
-  // const handleCellMouseOver = (rowIndex, columnIndex) => {
-  //   setSelectedRange(prevRange => {
-  //     return {
-  //       ...prevRange,
-  //       endRow: rowIndex,
-  //       endColumn: columnIndex
-  //     };
-  //   });
-  // };
-
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
       for (let column of headerGroup.headers) {
@@ -155,17 +131,6 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
     
   return (
     <>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedFlatRows: selectedFlatRows.map(row => row.original)
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
       {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
@@ -183,32 +148,22 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
           </div>
 
         </div>
-        {/* <InfiniteScroll
-          dataLength={rows.length}
-          next={this.fetchMoreData}
-          hasMore={true}
-          loader={<h4>Loading...</h4>}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-        > */}
           <div {...getTableBodyProps()}>
             {rows?.map((row, rowIndex) => {
               prepareRow(row);
               return (
-                <div key={rowIndex} {...row.getRowProps()} className={'tr' + rowIndex}
+                <div key={rowIndex} {...row.getRowProps()} className={`tr ${rowIndex}`}
                   style=
                   {
-                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: 'blue' } : {
-                      ...row.getRowProps().style
+                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#e0edf2' } : {
+                      ...row.getRowProps().style, backgroundColor: 'transparent'
                     }
                   }>
                   {row.cells.map((cell, columnIndex) => {
                     return (
 
                       <div key={columnIndex}
+                      
                         // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
                         // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
                         {...cell.getCellRangeSelectionProps()}
@@ -249,16 +204,8 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
               New
             </div>
           </div>
-        {/* </InfiniteScroll> */}
       </div>
-      {/* <pre>
-        <code>
-        {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
-        </code>
-      </pre> */}
-
     </>
-
   );
 }
 

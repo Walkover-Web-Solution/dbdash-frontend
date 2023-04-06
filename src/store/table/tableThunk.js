@@ -3,6 +3,7 @@ import { createField, deleteField, getAllfields, updateField } from "../../api/f
 import { getTable } from "../../api/tableApi";
 import {insertRow, uploadImage} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
+import { getTable1 } from "../allTable/allTableThunk";
 // reducer imports
 import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
@@ -11,6 +12,7 @@ import  {runQueryonTable}  from "../../api/filterApi";
 // const alldb = useSelector((state) => selectOrgandDb(state))
 const getHeaders = async(dbId,tableName) =>{
     const fields = await getAllfields(dbId,tableName);
+    delete fields?.data?.data?.fields["fieldIds"]
     let columns = [
         {
             id: 9999991,
@@ -78,6 +80,7 @@ export const addColumns = createAsyncThunk(
     "table/addColumns",
     async (payload,{dispatch}) =>{
         dispatch(addOptionToColumn(payload));
+
         return 5;
     }
 ) ;
@@ -160,13 +163,17 @@ export const addColumnrightandleft = createAsyncThunk(
 export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async(payload,{dispatch,getState})=>{
+        console.log(payload)
         const data={
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType,
             metaData:payload?.metaData,
-            query:payload?.query
+            query:payload?.query,
+            selectedFieldName:payload?.selectedFieldName,
+            selectedTable:payload?.selectedTable
         }
        await createField(payload?.dbId,payload?.tableId,data);
+       dispatch(getTable1({dbId:payload?.dbId}))
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
@@ -179,17 +186,15 @@ export const updateCells = createAsyncThunk(
        const {tableId, dbId} = getState().table
        const value = payload.value
        const  columnId= payload.columnId;
-       if(payload?.dataTypess == "file")
+       if(payload?.dataTypes == "file")
        { 
         const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
         
             payload.value = data?.data?.data;
-                console.log("paylaod ",payload)
             dispatch(updateCell(payload))
             return payload;
        }
        else{
-
            await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
            dispatch(updateCell(payload));
     }

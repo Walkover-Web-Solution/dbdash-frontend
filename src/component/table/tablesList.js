@@ -72,6 +72,7 @@ export default function TablesList({ dbData }) {
     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
   useEffect(() => {
+    setTableLength(Object.keys(AllTableInfo?.tables).length)
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(bulkAddColumns({
@@ -79,18 +80,21 @@ export default function TablesList({ dbData }) {
         "tableName": params?.tableName|| tableNames[0]
       }));
       if(!(params?.tableName))
-      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
-   setValue(tableNames?.indexOf(params?.tableName) || 0 );
+      {
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+      }
+      // console.log(tableNames?.indexOf(params?.tableName));
+    setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
     setFilter(AllTableInfo.tables[params?.tableName]?.filters)
       
     }
   }, [dbData])
-  useEffect(()=>{
-    if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
-    {
-      setTableLength(Object.keys(AllTableInfo?.tables).length)
-    }
-  },[AllTableInfo])
+  // useEffect(()=>{
+  //   if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
+  //   {
+  //     setTableLength(Object.keys(AllTableInfo?.tables).length)
+  //   }
+  // },[AllTableInfo])
 
   
 

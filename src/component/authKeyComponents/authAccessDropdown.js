@@ -27,6 +27,7 @@ const MenuProps = {
 
 export default function AuthAccessDropDown({ selected, setSelected, options, setOptions, dbId }) {
 
+  
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
 
