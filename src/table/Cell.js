@@ -314,10 +314,10 @@ if (e.target.files[0] != null) {
       case "check":
         element = (
           <div {...row.getRowProps()} className="tr">
-            <div className="count" title="Check">
+            {!row.isSelected &&<div className="count" title="Check">
               {row.index + 1}
-            </div>
-            <div className="checkbox-container">
+            </div>}
+            <div className={!row.isSelected ? "checkbox-container":""}>
               <input type="checkbox" {...rowProperties} className="checkbox" />
             </div>
           </div>

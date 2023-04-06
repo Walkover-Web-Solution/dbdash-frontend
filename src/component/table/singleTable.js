@@ -11,12 +11,13 @@ import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
 
 
-export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter }) {
+export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter,value }) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
   const [name, setName] = useState();
   // const alldb = useSelector((state) => selectOrgandDb(state))
+  
  
   const dispatch = useDispatch();
   const TabWithDropdown = ({ label, dropdown }) => (
@@ -48,12 +49,17 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
   };
 
   const deleteTableName = async (tableid) => {
+
     if(Object.keys(dbData?.db?.tables).length >=2){
       dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
     } 
-  };
-  
 
+    const previousIndex = value - 1;
+    // console.log(previousIndex);
+    navigate(`/db/${dbData.db._id}/table/${Object.keys(dbData?.db?.tables)[previousIndex]}`);
+    
+  };
+  // console.log(dbData?.db?.tables ?Object.keys(dbData?.db?.tables) : "");
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)
@@ -173,5 +179,6 @@ SingleTable.propTypes = {
   setTabIndex: PropTypes.func,
   filter:PropTypes.any,
   setFilter :PropTypes.func,
-  tableLength:PropTypes.any
+  tableLength:PropTypes.any,
+  value:PropTypes.any
 };
