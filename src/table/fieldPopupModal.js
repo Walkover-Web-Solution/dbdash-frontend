@@ -22,6 +22,8 @@ export default function FieldPopupModal(props) {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [errors, setErrors] = useState({});
+  const [showNumericOptions, setShowNumericOptions] = useState(false);
+  const [showDecimalOptions , setShowDecimalOptions] = useState(false);
   const params = useParams();
 
   useEffect(() => {
@@ -64,6 +66,18 @@ export default function FieldPopupModal(props) {
     props?.setTextValue(event.target.value);
   };
 
+  // const handleSelectChange = (event) => {
+   
+  // };
+
+  const selectDecimalValue = (event) => {
+    const data= props?.metaData;
+    data.decimal = event.target.value
+    props?.setDecimalSelectValue(data)
+    props?.setDecimalSelectValue(event.target.value)
+    console.log("first",event.target.value)
+  }
+
   const handleSelectChange = (event) => {
     
     if (event.target.value == "generatedcolumn") {
@@ -90,6 +104,19 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue(event.target.value);
       setLookupField(false)
       setOpenn(false)
+    }
+
+    if (event.target.value === 'numeric') {
+      setShowNumericOptions(true);
+      setShowDecimalOptions(false);
+    } else if (event.target.value === 'decimal' && showNumericOptions) {
+      props?.setSelectValue('numeric')
+      setShowNumericOptions(true);
+      setShowDecimalOptions(true);
+    } else {
+      props?.setSelectValue('numeric')
+      setShowNumericOptions(false);
+      setShowDecimalOptions(false);
     }
   };
 
@@ -227,6 +254,43 @@ export default function FieldPopupModal(props) {
             <MenuItem value="lookup">Lookup</MenuItem>
 
           </Select>
+          {showNumericOptions && (
+              <Select
+                labelId="numeric-select-label"
+                id="numeric-select"
+                value={props.selectValue}
+                onChange={(e)=>handleSelectChange(e)}
+                defaultValue="value"
+                displayEmpty
+                sx={{ margin: 1, minWidth: 120 }}
+              >
+                <MenuItem value="value">Select Type</MenuItem>
+                <MenuItem value="integer">integer</MenuItem>
+                <MenuItem value="decimal">decimal</MenuItem>
+              </Select>
+            )}
+      {showDecimalOptions && (
+        <Select
+          labelId="decimal-select-label"
+          id="decimal-select"
+          value={props.decimalSelectValue}
+          onChange={(e)=>{selectDecimalValue(e)}}
+          defaultValue="1"
+          displayEmpty
+          sx={{ margin: 1, minWidth: 120 }}
+        >
+          <MenuItem value="Select">seledct decimal value </MenuItem>
+
+          <MenuItem value="1">1.0</MenuItem>
+          <MenuItem value="2">1.00</MenuItem>
+          <MenuItem value="3">1.000</MenuItem>
+          <MenuItem value="4">1.0000</MenuItem>
+          <MenuItem value="5">1.00000</MenuItem>
+          <MenuItem value="6">1.000000</MenuItem>
+          <MenuItem value="7">1.0000000</MenuItem>
+        </Select>
+      )}
+
 
           {openn &&
             (
@@ -419,6 +483,8 @@ FieldPopupModal.propTypes = {
   selectedTable:PropTypes.any,
   selectedFieldName:PropTypes.any,
   setSelectedFieldName:PropTypes.func,
+  setDecimalSelectValue:PropTypes.func,
+  decimalSelectValue:PropTypes.any,
   tableId:PropTypes.any,
   linkedValueName:PropTypes.any,
   setLinkedValueName:PropTypes.func
