@@ -23,10 +23,11 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import {getQueryByAi} from "../api/fieldApi"
 import FunctionsIcon from '@mui/icons-material/Functions';
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps },
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },
   setSortBy,
   // dispatch:dataDispatch
 }) {
+  console.log(metadata);
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi,setQueryByAi] = useState(false)
