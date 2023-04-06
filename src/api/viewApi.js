@@ -13,7 +13,8 @@ const deleteView = async (db_id,tableName,data) =>
 
 const deleteFieldInView = async (db_id,tableName,data) =>
 {
-    return await axios.delete(URL +`/dbs/${db_id}/deletefieldinview/${tableName}`,data)
+    console.log("db_id,tableName,data",db_id,tableName,data)
+    return await axios.patch(URL +`/dbs/${db_id}/deletefieldinview/${tableName}`,data)
 }
 
 

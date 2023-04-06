@@ -242,7 +242,7 @@ export default function FieldPopupModal(props) {
             }}
           >
             <MenuItem value="Text" >text</MenuItem>
-            <MenuItem value="varchar">varchar</MenuItem>
+            {/* <MenuItem value="varchar">varchar</MenuItem> */}
             <MenuItem value="numeric">number</MenuItem>
             <MenuItem value="checkbox">checkbox</MenuItem>
             <MenuItem value="datetime">datetime</MenuItem>
@@ -349,7 +349,6 @@ export default function FieldPopupModal(props) {
             id="select"
             value={props?.selectedTable}
             onChange={(event) => {
-              console.log("SDFSDFSD", event.target.value)
               props?.setSelectedTable(event.target.value);
               props?.setShowFieldsDropdown(true)
             }}
@@ -412,7 +411,6 @@ export default function FieldPopupModal(props) {
                 [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
               })
               props?.setSelectedTable(AllTableInfo?.tables[props?.tableId].fields[e.target.value]?.metaData?.foreignKey?.tableId) ; 
-              console.log(AllTableInfo?.tables[props?.tableId].fields[e.target.value]?.metaData?.foreignKey?.tableId)
               setOpenViewDropdown(true)}}
           >
             {

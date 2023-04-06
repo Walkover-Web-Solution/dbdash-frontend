@@ -23,10 +23,11 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import {getQueryByAi} from "../api/fieldApi"
 import FunctionsIcon from '@mui/icons-material/Functions';
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps },
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },
   setSortBy,
   // dispatch:dataDispatch
 }) {
+  console.log(metadata);
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi,setQueryByAi] = useState(false)
@@ -68,8 +69,6 @@ export default function Header({
     else
     {
       const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
-      // console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
-      // console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
       setQueryByAi(response?.data?.data);
     }
    
@@ -96,9 +95,7 @@ export default function Header({
   const [header, setHeader] = useState(label);
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
-  const [showType, setShowType] = useState(false);
-
-
+  const [showType, setShowType] = useState(false)
 
 
   const buttons = [
@@ -162,6 +159,7 @@ export default function Header({
           label: header,
           columnId: id,
           fieldName: id,
+          fieldDataType:dataType,
           tableId: tableInfo?.tableId,
           dbId: tableInfo?.dbId
         }))
@@ -210,18 +208,18 @@ export default function Header({
       icon: <HashIcon />,
       label: "numeric"
     },
-    {
-      onClick: () => {
-        dispatch(updateColumnsType({
-          columnId: id,
-          dataType: "varchar"
-        }))
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TextIcon />,
-      label: "Varchar"
-    },
+    // {
+    //   onClick: () => {
+    //     dispatch(updateColumnsType({
+    //       columnId: id,
+    //       dataType: "varchar"
+    //     }))
+    //     setShowType(false);
+    //     setExpanded(false);
+    //   },
+    //   icon: <TextIcon />,
+    //   label: "Varchar"
+    // },
     {
       onClick: () => {
         dispatch(updateColumnsType({
@@ -286,9 +284,9 @@ export default function Header({
 
   let propertyIcon;
   switch (dataType) {
-    case "varchar":
-      propertyIcon = <TextIcon />;
-      break;
+    // case "varchar":
+    //   propertyIcon = <TextIcon />;
+    //   break;
       case "generatedcolumn":
       propertyIcon = <FunctionsIcon fontSize="2px" />;
       break;
