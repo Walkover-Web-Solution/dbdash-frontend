@@ -14,8 +14,8 @@ function DeleteRecord(props) {
     </Box>
     <br/>
     <Box>
-      <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}/{:id}"`}/>
-      <span>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</span>
+      <CodeSnippet  codeString={`https://localhost:5000/${props.db}/${props.table}/{:id}`}/>
+      <span>{`-H Authorization: Bearer YOUR_SECRET_API_TOKEN `}</span>
     </Box>
     </>
   )

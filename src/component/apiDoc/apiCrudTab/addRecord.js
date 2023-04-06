@@ -14,9 +14,9 @@ function AddRecord(props) {
       </Typography>
     
     
-      <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}"`}/>
-      <Typography>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</Typography>
-      <Typography>{`-H "Content-Type: application/json"` }</Typography>
+      <CodeSnippet  codeString={`https://localhost:5000/${props.db}/${props.table}`}/>
+      <Typography>{`-H Authorization: Bearer YOUR_SECRET_API_TOKEN `}</Typography>
+      <Typography>{`-H Content-Type: application/json` }</Typography>
     
     </>
   )

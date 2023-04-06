@@ -16,9 +16,9 @@ function UpdateRecord(props) {
     
     <br/>
     <Box>
-      <CodeSnippet  codeString={`"https://localhost:5000/${props.db}/${props.table}/{:id}"`}/>
-      <span>{`-H "Authorization: Bearer YOUR_SECRET_API_TOKEN" `}</span>
-      <span>{`-H "Content-Type: application/json"` }</span>
+      <CodeSnippet  codeString={`https://localhost:5000/${props.db}/${props.table}/{:id}`}/>
+      <span>{`-H Authorization: Bearer YOUR_SECRET_API_TOKEN `}</span>
+      <span>{`-H Content-Type: application/json` }</span>
     </Box>
     </>
   )
