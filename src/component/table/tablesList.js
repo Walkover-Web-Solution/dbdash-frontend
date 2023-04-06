@@ -36,6 +36,7 @@ export default function TablesList({ dbData }) {
   const [filterId, setFilterId] = useState("")
   const [anchorEl, setAnchorEl] = useState(null);
   const [tableLength,setTableLength] = useState("")
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -49,9 +50,19 @@ export default function TablesList({ dbData }) {
       tableName: table
     }
     setOpen(false);
+    // console.log(dbData?.db?.tables,321)
+
     dispatch(createTable1({ "dbId": dbData?.db?._id, "data": data }));
 
+    // console.log(dbData?.db?.tables,123)
+
+    // const tableNames = Object.keys(dbData?.db?.tables);
+    // const lastTableName = tableNames[tableNames.length - 1];
+    // navigate(`/db/${dbData.db._id}/table/${lastTableName}`);
   };
+
+  // console.log(dbData?.db?.tables)
+
   const handleEdit = async () => {
     setEdit(true)
     setOpenn(true)
@@ -83,7 +94,6 @@ export default function TablesList({ dbData }) {
       {
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
       }
-      // console.log(tableNames?.indexOf(params?.tableName));
     setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
     setFilter(AllTableInfo.tables[params?.tableName]?.filters)
       
@@ -97,7 +107,6 @@ export default function TablesList({ dbData }) {
   // },[AllTableInfo])
 
   
-
   return (
     <>
       <Box sx={{ width: "100%", display: "flex", height: "auto" }}>
@@ -111,7 +120,7 @@ export default function TablesList({ dbData }) {
           >
             {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
               <Box key={index}  sx={{height:'57px'}} >
-                <SingleTable filter={filter} setFilter={setFilter} table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} />
+                <SingleTable filter={filter} setFilter={setFilter} table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} value={value}/>
               </Box>
             ))
             }
@@ -152,7 +161,7 @@ export default function TablesList({ dbData }) {
           Add Filter
         </Button>
       </Box>
-      <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable} />
+      <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable}/>
       {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo={AllTableInfo} />}
 
       <MainTable />

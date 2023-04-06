@@ -190,7 +190,6 @@ export const addColumnrightandleft = createAsyncThunk(
 export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async(payload,{dispatch,getState})=>{
-        console.log("payload",payload)
         const data={
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType,
@@ -201,7 +200,6 @@ export const addColumsToLeft = createAsyncThunk(
             linkedForeignKey:payload?.linkedValueName,
             foreignKey : payload?.foreignKey
         }
-        // console.log()
 
         if(payload?.fieldType == "lookup")
             await createView(payload?.dbId,payload?.tableId,data);
