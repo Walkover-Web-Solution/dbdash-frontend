@@ -1,33 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import Autosuggest from "react-autosuggest";
+import { Paper, Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Box, Switch } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { Box } from '@mui/system';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
+import Joi from 'joi';
+import { useParams } from 'react-router';
 
 export default function FieldPopupModal(props) {
   const [openn, setOpenn] = useState(false);
-  const [userQuery, setUserQuery] = useState(false);
+  const [userQuery,setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const [lookupField,setLookupField] = useState(false)
-  // const [openn,setOpenn] = useState(false);
-  // const [userQuery,setUserQuery] = useState(false);
+  const [lookupField, setLookupField] = useState(false)
+  const [searchValue, setsearchValue] = useState([]);
+  const [value, setValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [errors, setErrors] = useState({});
   const [showNumericOptions, setShowNumericOptions] = useState(false);
   const [showDecimalOptions , setShowDecimalOptions] = useState(false);
- 
- 
-  // const [lookupField, setLookupField] = useState(false)
+  const params = useParams();
+
+  useEffect(() => {
+    if (AllTableInfo?.tables[params?.tableName] && searchValue.length == 0) {
+
+      let data = AllTableInfo?.tables[params?.tableName]     
+      setsearchValue(data)
+    }
+  }, [AllTableInfo])
+
+  const schema = Joi.object({
+    fieldName: Joi.string().min(3).max(15).required(),
+  });
+  
   const [queryResult,setQueryResult] = useState(false)
   useEffect(()=>{
     var query  = props?.queryByAi
@@ -39,9 +45,6 @@ export default function FieldPopupModal(props) {
     setQueryResult(query);
 
   },[props?.queryByAi])
-  // const [selectedTable, setSelectedTable] = useState("");
-  // const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
-  // const [selectedFieldName, setSelectedFieldName] = useState(false);
 
   const handleSwitchChange = (event) => {
     var data = props?.metaData;
@@ -49,8 +52,13 @@ export default function FieldPopupModal(props) {
     props?.setMetaData(data);
   };
 
-
   const handleTextChange = (event) => {
+    const { error } = schema.validate({ fieldName: event.target.value });
+    if (error) {
+      setErrors({ fieldName: error.details[0].message });
+    } else {
+      setErrors({});
+    }
     props?.setTextValue(event.target.value);
   };
 
@@ -100,6 +108,7 @@ export default function FieldPopupModal(props) {
       setShowDecimalOptions(false);
     }
   };
+
   const handleClose = () => {
     props?.setOpen(false);
     setOpenn(false);
@@ -110,6 +119,68 @@ export default function FieldPopupModal(props) {
     props?.setSelectValue("Text");
     props?.setTextValue("");
     props?.setMetaData({});
+  };
+
+  // Teach Autosuggest how to calculate suggestions for any given input value.
+  const getSuggestions = (value) => {
+    const inputValues = value?.trim()?.toLowerCase()?.split(" ");
+    const inputLength = inputValues.length;
+    const searchTerm = inputValues[inputLength - 1];
+   
+    let response = [];
+    if( searchTerm.length !== 0){
+     response = Object.entries(searchValue.fields).filter((lang) => lang[1]?.fieldName?.toLowerCase()?.startsWith(searchTerm))
+    }
+      return response
+  };
+
+  const getSuggestionValue = (suggestion) => {
+
+    const newVal = value?.split(" ");
+    let newdata = "";
+    for (let i = 0; i < newVal.length - 1; i++) {
+      newdata += newVal[i] + " ";
+    }
+    newdata = newdata ? newdata + suggestion[1].fieldName : suggestion[1]?.fieldName;
+    return newdata;
+  };
+
+  // Use your imagination to render suggestions.
+  const renderSuggestion = (suggestion) => <MenuItem>{suggestion[1].fieldName}</MenuItem>;
+
+  const onChange = (event, { newValue }) => {
+    let addVal = newValue;
+    setValue(addVal);
+    setUserQuery(newValue)
+  };
+
+  // Autosuggest will call this function every time you need to update suggestions.
+  // You already implemented this logic above, so just use it.
+  const onSuggestionsFetchRequested = ({ value }) => {
+    setSuggestions(getSuggestions(value));
+  };
+
+  // Autosuggest will call this function every time you need to clear suggestions.
+  const onSuggestionsClearRequested = () => {
+    setSuggestions([]);
+  };
+
+  // Autosuggest will pass through all these props to the input.
+  const inputProps = {
+    placeholder: "Type a programming language",
+    value,
+    onChange,
+    style: { width: "360px", height: "50px", border: '1px solid black', borderRadius: "5px", marginTop: 10 }
+  };
+
+
+  const renderSuggestionsContainer = (options) => {
+    const { containerProps, children } = options;
+    return (
+      <Paper {...containerProps} square style={{ maxHeight: "100px", overflowY: "auto" }}>
+        {children}
+      </Paper>
+    );
   };
 
 
@@ -134,10 +205,14 @@ export default function FieldPopupModal(props) {
           label="Field Name"
           type="text"
           value={props.textValue}
-          //  /  {console.log("value",props.textValue)}
           onChange={handleTextChange}
-          fullWidth
         />
+
+        {errors.fieldName && (
+          <Typography variant="body2" color="error" fontSize={12}>
+            {errors.fieldName}
+          </Typography>)}
+
         <DialogContent sx={{
           width: 400,
           padding: 2
@@ -205,42 +280,55 @@ export default function FieldPopupModal(props) {
 
 
           {openn &&
-
             (
               <Box>
-                <Box>write query in human friendly way to manupulate the column and resultant query will be given to you !!!  and vive versa</Box>
-                <TextField
+                <Box>write query in human friendly way to manupulate the column and resultant query will be give to you !!!  and vie versa</Box>
+                {/* <TextField
+            autoFocus
+            margin="dense"
+            id="text-field"
+            label="Enter the query"
+            type="text"
+            // value={props?.textValue}
+            placeholder={"multiply column speed and distance"}
+           onChange={(e)=>{
+            setUserQuery(e.target.value)
+           }}
+            fullWidth
+          /> */}
+
+                <Autosuggest
                   autoFocus
-                  margin="dense"
-                  id="text-field"
-                  label="Enter the query"
-                  type="text"
-                  // value={props?.textValue}
-                  placeholder={"multiply column speed and distance"}
-                  onChange={(e) => {
-                    setUserQuery(e.target.value)
-                  }}
-                  fullWidth
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                  renderSuggestionsContainer={renderSuggestionsContainer}
+                  // onChange={(e)=>{
+                  //   console.log(e.target.value)
+                  //   setUserQuery(e.target.value)
+                  //  }}
                 />
                 <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >next</Button>
 
-          { props?.queryByAi && <TextField
-          autoFocus
-          margin="dense"
-          id="text-field"
-          label="Query by Ai"
-          type="text"
-            readOnly = "true"
-          // onChange={(e)=>{
-          //   props?.setQueryByAi(e.target.value)
-          //  }}
-          placeholder={"resultant query"}
-          value={queryResult}
-          fullWidth
-        /> }
-          </Box>
-        
-        )
+                 {props?.queryByAi && <TextField
+                  autoFocus
+                  margin="dense"
+                  id="text-field"
+                  label="Query by Ai"
+                  type="text"
+                  // onChange={(e) => {
+                  //   props?.setQueryByAi(e.target.value)
+                  // }}
+                  placeholder={"resultant query"}
+                  value={queryResult}
+                  fullWidth
+                />} 
+              </Box>
+
+            )
           }
           {lookupField && <Select
             labelId="select-label"
@@ -290,17 +378,17 @@ export default function FieldPopupModal(props) {
           </Select>
           )}
 
-
           <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>
         </DialogContent>
-        <Button onClick={() => { props?.submitData(false) }} color="primary" >Submit</Button>
+        <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 3 ||
+          props?.textValue?.length > 15} >Submit</Button>
       </Dialog>
-
     </div>
   );
 }
+
 FieldPopupModal.propTypes = {
   setOpen: PropTypes.func,
   open: PropTypes.bool,
