@@ -78,13 +78,13 @@ if (e.target.files[0] != null) {
   }, [value, dispatch, id, row.index]);
 
 
-  useEffect(() => {
-    if (value?.update) {
-      dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
-      }))
-    }
-  }, [value, dispatch, id, row.index]);
+  // useEffect(() => {
+  //   if (value?.update) {
+  //     dispatch(updateCells({
+  //       columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
+  //     }))
+  //   }
+  // }, [value, dispatch, id, row.index]);
 
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {

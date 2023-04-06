@@ -94,9 +94,7 @@ export default function Header({
   const [header, setHeader] = useState(label);
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
-  const [showType, setShowType] = useState(false);
-
-
+  const [showType, setShowType] = useState(false)
 
 
   const buttons = [
@@ -160,6 +158,7 @@ export default function Header({
           label: header,
           columnId: id,
           fieldName: id,
+          fieldDataType:dataType,
           tableId: tableInfo?.tableId,
           dbId: tableInfo?.dbId
         }))
