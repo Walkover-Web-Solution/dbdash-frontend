@@ -150,7 +150,7 @@ export default function FieldPopupModal(props) {
   const renderSuggestionsContainer = (options) => {
     const { containerProps, children } = options;
     return (
-      <Paper {...containerProps} square>
+      <Paper {...containerProps} square style={{ maxHeight: "100px", overflowY: "auto" }}>
         {children}
       </Paper>
     );
