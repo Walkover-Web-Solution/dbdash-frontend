@@ -44,7 +44,7 @@ export default function Header({
     setExpanded(false);
   }
   const createColumn = async (userQuery) => {
-   
+   console.log("userQuery",userQuery)
   
     if(!userQuery)
     {
@@ -62,7 +62,7 @@ export default function Header({
     {
       const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
       // console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
-      console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
+      // console.log(JSON.parse(response?.data?.data)?.add_column?.new_column_name?.generated?.expression)
       setQueryByAi(response?.data?.data);
     }
    

@@ -125,6 +125,7 @@ export default function FieldPopupModal(props) {
   const onChange = (event, { newValue }) => {
     let addVal = newValue;
     setValue(addVal);
+    setUserQuery(newValue)
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
@@ -242,9 +243,10 @@ export default function FieldPopupModal(props) {
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps}
                   renderSuggestionsContainer={renderSuggestionsContainer}
-                  onChange={(e)=>{
-                    setUserQuery(e.target.value)
-                   }}
+                  // onChange={(e)=>{
+                  //   console.log(e.target.value)
+                  //   setUserQuery(e.target.value)
+                  //  }}
                 />
                 <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >next</Button>
 
