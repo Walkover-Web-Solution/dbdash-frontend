@@ -7,14 +7,22 @@ import PlusIcon from "./img/Plus";
 import { randomColor } from "./utils";
 import { addColumns, updateCells } from "../store/table/tableThunk";
 import { useDispatch } from "react-redux";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SelectFilepopup from './selectFilepopup';
 import { toast } from 'react-toastify';
-import { Link } from '@mui/material';
+import { Link} from '@mui/material';
+import { DemoContainer} from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(localizedFormat);
 
 export default function Cell({ value: initialValue, row, column: { id, dataType, options }, dataDispatch }) {
 
@@ -30,7 +38,6 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
   const [open, setOpen] = useState(false);
-  
   
     const handleImageClick = (imgLink) => {
       window.open(imgLink, '_blank');
@@ -181,31 +188,34 @@ if (e.target.files[0] != null) {
         />
       );
       break;
-    case "datetime":
-      element =
+      case "datetime":
+  element = (
+    <>
+     {inputBoxShow && <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer sx={{mt: "-20px", flexWrap: "nowrap", overflow: "hidden"}} components={['MobileDateTimePicker' ]} >
+            <MobileDateTimePicker open={inputBoxShow}  onChange={(newValue) => { setValue({ value: newValue, update: true }); }} onClose={() => { setInputBoxShow(false); }} />
+               </DemoContainer>
+            </LocalizationProvider>}  
+      <input
+        type="text"
+        className="data-input"
+        readOnly="readonly"
+        defaultValue={value?.value && dayjs.utc(value.value).local().format("DD/MM/YYYY hh:mm A")}
+        style={{
+          display: inputBoxShow ? "none" : "block",
+          background: "none",
+        }}
+        onClick={(e) => {
+          if (e.detail == 2) {
+            setInputBoxShow(true);
+          }
+        }}
+      />
+    </>
+  );
+  break;
 
-        (
-          <>
-            {inputBoxShow && <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                orientation="landscape"
-                open={inputBoxShow} value={value?.value ? new Date(value?.value) : new Date()} onChange={(newValue) => { setValue({ value: newValue, update: true }); setInputBoxShow(false); }}
-                onClose={() => { setInputBoxShow(false); }}
-              />
-            </LocalizationProvider>}
-            <input type="text" className='data-input'
-              defaultValue={value?.value}
-              style={{ "display": inputBoxShow ? "none" : "block" ,background: "none"}}
-              onClick={(e) => {
-                if (e.detail == 2) {
-                  setInputBoxShow(true);
 
-                }
-              }} />
-          </>
-
-        );
-      break;
     case "text":
       element = (
         <ContentEditable
@@ -217,16 +227,16 @@ if (e.target.files[0] != null) {
         />
       );
       break;
-    case "varchar":
-      element = (
-        <ContentEditable
-          html={(value?.value && value?.value?.toString()) || ""}
-          onChange={onChange}
-          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-          className='data-input'
-        />
-      );
-      break;
+    // case "varchar":
+    //   element = (
+    //     <ContentEditable
+    //       html={(value?.value && value?.value?.toString()) || ""}
+    //       onChange={onChange}
+    //       onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+    //       className='data-input'
+    //     />
+    //   );
+    //   break;
     case "numeric":
       element = (
         <ContentEditable
@@ -314,16 +324,16 @@ if (e.target.files[0] != null) {
       case "check":
         element = (
           <div {...row.getRowProps()} className="tr">
-            <div className="count" title="Check">
+           {!row.isSelected && <div className="count" title="Check">
               {row.index + 1}
-            </div>
-            <div className="checkbox-container">
+            </div>}
+            <div className={!row.isSelected ? "checkbox-container" : ""}>
               <input type="checkbox" {...rowProperties} className="checkbox" />
             </div>
           </div>
         );
         break;
-      
+
     case "lookup":
         element = (
           <ContentEditable
