@@ -322,7 +322,7 @@ export default function Header({
         propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon/> <ReadMoreOutlinedIcon fontSize="2px" /></>  :<TextIcon/> );
       break;
       case "lookup":
-        propertyIcon = <ManageSearchOutlinedIcon/>;
+        propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
     default:
       break;
