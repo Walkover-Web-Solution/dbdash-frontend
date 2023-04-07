@@ -22,6 +22,9 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import {getQueryByAi} from "../api/fieldApi"
 import FunctionsIcon from '@mui/icons-material/Functions';
+import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
+import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 export default function Header({
   column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },
   setSortBy,
@@ -265,7 +268,7 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      // icon: <TextIcon />,
+      icon: <ReadMoreOutlinedIcon fontSize="2px" />,
       label: "link"
     },
     {
@@ -277,7 +280,7 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      // icon: <TextIcon />,
+      icon: <ManageSearchOutlinedIcon fontSize="2px" />,
       label: "lookup"
     }
   ];
@@ -298,10 +301,10 @@ export default function Header({
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
     case "numeric":
-      propertyIcon = <HashIcon />;
+      propertyIcon =(  metadata?.unique  ? <><TextIcon /> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
     case "text":
-      propertyIcon = <TextIcon />;
+      propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
     case "select":
       propertyIcon = <MultiIcon />;
@@ -316,10 +319,10 @@ export default function Header({
       propertyIcon = <AttachFileIcon fontSize="1px" />;
       break;
       case "link":
-        propertyIcon = <TextIcon />;
+        propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon/> <ReadMoreOutlinedIcon fontSize="2px" /></>  :<TextIcon/> );
       break;
       case "lookup":
-        propertyIcon = <TextIcon />;
+        propertyIcon = <ManageSearchOutlinedIcon/>;
       break;
     default:
       break;
