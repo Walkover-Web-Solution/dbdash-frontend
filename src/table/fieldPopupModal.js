@@ -98,27 +98,25 @@ export default function FieldPopupModal(props) {
       setLookupField(false)
       props?.setSelectValue(event.target.value);
     }
-    else {
-      props?.setShowFieldsDropdown(false)
-      props?.setSelectedFieldName(false)
-      props?.setSelectValue(event.target.value);
-      setLookupField(false)
-      setOpenn(false)
-    }
+   
 
-    if (event.target.value === 'numeric') {
+    else if (event.target.value === 'numeric') {
       setShowNumericOptions(true);
       setShowDecimalOptions(false);
     } else if (event.target.value === 'decimal' && showNumericOptions) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
-    } else {
-      props?.setSelectValue('numeric')
+    }  else {
+      props?.setShowFieldsDropdown(false)
+      props?.setSelectedFieldName(false)
+      props?.setSelectValue(event.target.value);
       setShowNumericOptions(false);
       setShowDecimalOptions(false);
+      setLookupField(false)
+      setOpenn(false)
     }
-  };
+  }
 
   const handleClose = () => {
     props?.setOpen(false);
