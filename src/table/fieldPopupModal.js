@@ -18,7 +18,6 @@ export default function FieldPopupModal(props) {
   const [lookupField, setLookupField] = useState(false)
   const [openViewDropdown,setOpenViewDropdown] = useState(false)
   const [openLinkedField,setOpenLinkedField] = useState(false)
-  // const [view, setView] = useState(false)
   const [searchValue, setsearchValue] = useState([]);
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -36,7 +35,9 @@ export default function FieldPopupModal(props) {
   }, [AllTableInfo])
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(3).max(20).required(),
+    fieldName: Joi.string().min(3).max(15).pattern(/^\S+$/).messages({
+      'string.pattern.base': 'Field name should not contain spaces',
+    }).required(),
   });
   
   const [queryResult,setQueryResult] = useState(false)
@@ -61,15 +62,13 @@ export default function FieldPopupModal(props) {
     const { error } = schema.validate({ fieldName: event.target.value });
     if (error) {
       setErrors({ fieldName: error.details[0].message });
-    } else {
+    } 
+   
+    else {
       setErrors({});
     }
     props?.setTextValue(event.target.value);
   };
-
-  // const handleSelectChange = (event) => {
-   
-  // };
 
   const selectDecimalValue = (event) => {
     const data= props?.metaData;
@@ -80,42 +79,44 @@ export default function FieldPopupModal(props) {
 
   const handleSelectChange = (event) => {
     console.log(event.target)
+
+    setLookupField(false)
+    setShowNumericOptions(false);
+    setShowDecimalOptions(false);
+    setOpenn(false);
+    setLookupField(false)
+    props?.setShowFieldsDropdown(false)
+    props?.setSelectedFieldName(false)
+
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
-      setLookupField(false)
       setShowSwitch(false)
-      props?.setShowFieldsDropdown(false)
-      props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
       setLookupField(true)
-      setOpenLinkedField(true);
       props?.setSelectValue(event.target.value);
       const firstTable = Object.keys(AllTableInfo.tables)[0];
       props?.setSelectedTable(firstTable);
       props?.setLinkedValueName({
         [firstTable]: AllTableInfo.tables[firstTable].fields[0],
       });
-      setOpenn(false)
+      
     }
     else if(event.target.value == "lookup"){
-      // setView(true)
       setOpenLinkedField(true)
-      setLookupField(false)
+      
       props?.setSelectValue(event.target.value);
     }
    
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
       setShowNumericOptions(true);
-      setShowDecimalOptions(false);
+      setOpenLinkedField(false)
     }
     else if (event.target.value === 'integer') {
       props?.setSelectValue('numeric')
       setShowSwitch(true);
-      // setShowNumericOptions(true);
-      setShowDecimalOptions(false);
     } 
     else if (event.target.value === 'decimal' && showNumericOptions) {
       props?.setSelectValue('numeric')
@@ -232,6 +233,7 @@ export default function FieldPopupModal(props) {
           type="text"
           value={props.textValue}
           onChange={handleTextChange}
+          sx={{width:'92%',mr:2,ml:2}}
         />
 
         {errors.fieldName && (
@@ -381,11 +383,16 @@ export default function FieldPopupModal(props) {
               <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
             ))}
           </Select>}
-                {/* show fields that are uniquw  */}
+
+          {/* show fields that are uniquw  */}
           {props?.showFieldsDropdown && (<Select
             labelId="select-label"
             id="select"
-            value={props?.selectedFieldName}
+            value={props?.selectedFieldName || Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
+              if (fields[1]?.metaData?.unique) {
+                return fields;
+              }
+            })[0][0]}
             defaultValue="fields"
             displayEmpty
             sx={{
@@ -408,7 +415,8 @@ export default function FieldPopupModal(props) {
                 ))
             }
           </Select>
-          )}
+          )
+          }
 
     {openLinkedField && (<Select
             labelId="select-label"
