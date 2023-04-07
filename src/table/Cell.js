@@ -216,7 +216,7 @@ if (e.target.files[0] != null) {
   break;
 
 
-    case "text":
+    case "longtext":
       element = (
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
@@ -227,37 +227,31 @@ if (e.target.files[0] != null) {
         />
       );
       break;
-    // case "varchar":
-    //   element = (
-    //     <ContentEditable
-    //       html={(value?.value && value?.value?.toString()) || ""}
-    //       onChange={onChange}
-    //       onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-    //       className='data-input'
-    //     />
-    //   );
-    //   break;
-    case "numeric":
+    case "singlelinetext":
       element = (
         <ContentEditable
-          html={(value?.value && value.value.toString()) || ""}
+          html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
-          
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-          className='data-input text-align-right'
-          step="any"
+          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+          className='data-input'
         />
+      );
+      break;
+    case "numeric":
+      element = (
+        <input type="number"
+        defaultValue={(value?.value && value?.value?.toString()) || ""}
+        className='data-input'
+        style={{background: "none"}}
+      />
       );
       break;
       case "integer":
       element = (
-        <ContentEditable
-          html={(value?.value && value.value.toString()) || ""}
-          onChange={onChange}
-          
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-          className='data-input text-align-right'
-          step="any"
+        <input type="number"
+          defaultValue={(value?.value && value?.value?.toString()) || ""}
+          className='data-input'
+          style={{background: "none"}}
         />
       );
       break;

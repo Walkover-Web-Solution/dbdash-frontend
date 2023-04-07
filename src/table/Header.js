@@ -25,6 +25,7 @@ import FunctionsIcon from '@mui/icons-material/Functions';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
+import TextFormatIcon from '@mui/icons-material/TextFormat';
 export default function Header({
   column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },
   setSortBy,
@@ -64,7 +65,7 @@ export default function Header({
       dispatch(addColumsToLeft({
         columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
       }));
-      setSelectValue('Text')
+      setSelectValue('text')
       setQueryByAi(false)
     }
    
@@ -82,7 +83,7 @@ export default function Header({
       fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:        
         selectValue,direction:directionAndId.direction,position:directionAndId.position ,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
     }));
-    setSelectValue('Text')
+    setSelectValue('text')
 
   }
 
@@ -196,7 +197,19 @@ export default function Header({
         setExpanded(false);
       },
       icon: <TextIcon />,
-      label: "Text"
+      label: "long text"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <TextFormatIcon fontSize="2px"/>,
+      label: "singlelinetext"
     },
     {
       onClick: () => {
@@ -210,18 +223,6 @@ export default function Header({
       icon: <HashIcon />,
       label: "numeric"
     },
-    // {
-    //   onClick: () => {
-    //     dispatch(updateColumnsType({
-    //       columnId: id,
-    //       dataType: "varchar"
-    //     }))
-    //     setShowType(false);
-    //     setExpanded(false);
-    //   },
-    //   icon: <TextIcon />,
-    //   label: "Varchar"
-    // },
     {
       onClick: () => {
         dispatch(updateColumnsType({
@@ -286,9 +287,9 @@ export default function Header({
 
   let propertyIcon;
   switch (dataType) {
-    // case "varchar":
-    //   propertyIcon = <TextIcon />;
-    //   break;
+    case "singlelinetext":
+      propertyIcon = <TextFormatIcon fontSize="2px"/>;
+      break;
       case "generatedcolumn":
       propertyIcon = <FunctionsIcon fontSize="2px" />;
       break;
@@ -302,7 +303,7 @@ export default function Header({
     case "numeric":
       propertyIcon =(  metadata?.unique  ? <><TextIcon /> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
-    case "text":
+    case "longtext":
       propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
     case "select":

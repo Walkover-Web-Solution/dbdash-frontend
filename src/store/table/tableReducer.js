@@ -254,7 +254,7 @@ export const reducers = {
             skipReset: true
           };  
         }
-      case "text":
+      case "longtext":
         if (state.columns[typeIndex].dataType === "text") {
           return state;
         } else if (state.columns[typeIndex].dataType === "select") {
@@ -282,8 +282,8 @@ export const reducers = {
             }))
           };
         }
-      case "varchar":
-        if (state.columns[typeIndex].dataType === "varchar") {
+      case "singlelinetext":
+        if (state.columns[typeIndex].dataType === "text") {
           return state;
         } else if (state.columns[typeIndex].dataType === "select") {
           return {
