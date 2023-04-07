@@ -71,7 +71,6 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,
     selectedFlatRows,
     state: { selectedCellIds, currentSelectedCellIds },
-
   } = useTable(
     {
       columns,
@@ -93,7 +92,7 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
     useSortBy,
     useRowSelect
   );
-
+  // console.log("data",data)
   useEffect(() => {
     if (Object.keys(selectedCellIds).length > 0) {
       const newData = cloneDeep(data)

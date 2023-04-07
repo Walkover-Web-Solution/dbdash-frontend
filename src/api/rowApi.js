@@ -5,6 +5,19 @@ const insertRow = async (db_id, tableName, data) => {
     return await axios.post(URL + `/${db_id}/${tableName}`, data)
 }
 
+
+const getRow = async (db_id,tableName,page)=>
+{
+    const limit = 5
+    console.log("page",page,limit)
+    // query.page = 1 ;
+    // query.limit = 5;
+    // console.log(query)
+    const s =  await axios.get(URL +`/${db_id}/${tableName}?page=${page}&limit=${limit}`)
+    console.log('s',s)
+    return s;
+}
+
 const updateRow = async (db_id, tableName, row_id, data) => {
     return await axios.patch(URL + `/${db_id}/${tableName}/${row_id}`, data)
 }
@@ -25,6 +38,7 @@ const uploadImage = async (dbId, tableName, rowId, columnId,fileobj) => {
 
 export {
     insertRow,
+    getRow,
     updateRow,
     deleteRow,
     uploadImage

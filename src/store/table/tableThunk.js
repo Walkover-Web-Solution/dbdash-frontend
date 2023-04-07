@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, updateField } from "../../api/fieldApi";
-import { getTable } from "../../api/tableApi";
-import {insertRow, uploadImage} from "../../api/rowApi";
+// import { getTable } from "../../api/tableApi";
+import {getRow, insertRow, uploadImage} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
 // reducer imports
@@ -54,9 +54,11 @@ const getHeaders = async(dbId,tableName) =>{
     })
     return columns;
 }
-const getRowData = async(dbId,tableName,{getState},org_id) =>{
-    const data = await getTable(dbId,tableName);
-    const obj = data.data.data.tableData;
+const getRowData = async(dbId,tableName,page,{getState},org_id) =>{
+    const data = await getRow(dbId,tableName,page);
+    console.log("data",data.data.data)
+    const obj = data.data.data;
+    // console.log("obj",obj)
     const userInfo = allOrg(getState());
     const users = userInfo?.find((org)=>org?._id== org_id)?.users;
     var userJson= {};
@@ -75,6 +77,7 @@ const getRowData = async(dbId,tableName,{getState},org_id) =>{
     obj.map((row)=>{
         row.createdby = userJson[row.createdby].first_name +" " + userJson[row.createdby].last_name;
     })
+    console.log("obj",obj)
     return obj
 }
 export const addColumns = createAsyncThunk(
@@ -105,7 +108,7 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{
             const columns =  await getHeaders(payload.dbId,payload.tableName)
-            const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id)
+            const data = await getRowData(payload.dbId,payload.tableName,payload.page,{getState},payload.org_id)
             const dataa = {
                 "columns":columns,
                 "row":data,
@@ -120,6 +123,7 @@ export const deleteColumns = createAsyncThunk(
     "table/deleteColumns",
     async(payload,{dispatch,getState})=>{
         await deleteField(payload?.dbId,payload?.tableId,payload?.fieldName)
+        dispatch( getTable1({dbId:payload?.dbId}))
         //delte api call
             dispatch(deleteColumn(payload));
             const {tableId, dbId} = getState().table
@@ -136,6 +140,7 @@ export const updateColumnHeaders = createAsyncThunk(
             newFieldType:payload?.fieldType
         }
         await updateField(payload?.dbId,payload?.tableName,payload?.fieldName,data)
+        dispatch( getTable1({dbId:payload?.dbId}))
         dispatch(updateColumnHeader(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
