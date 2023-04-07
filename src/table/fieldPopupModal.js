@@ -178,7 +178,7 @@ export default function FieldPopupModal(props) {
 
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
-    placeholder: "Type a programming language",
+    placeholder: "ask a query to ai ",
     value,
     onChange,
     style: { width: "360px", height: "50px", border: '1px solid black', borderRadius: "5px", marginTop: 10 }
@@ -324,7 +324,7 @@ export default function FieldPopupModal(props) {
                   //   setUserQuery(e.target.value)
                   //  }}
                 />
-                <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >next</Button>
+                <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >Ask</Button>
 
                  {props?.queryByAi && <TextField
                   autoFocus
@@ -332,6 +332,7 @@ export default function FieldPopupModal(props) {
                   id="text-field"
                   label="Query by Ai"
                   type="text"
+                  readOnly="readonly"
                   // onChange={(e) => {
                   //   props?.setQueryByAi(e.target.value)
                   // }}
