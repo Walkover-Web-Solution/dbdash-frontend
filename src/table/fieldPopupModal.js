@@ -35,7 +35,9 @@ export default function FieldPopupModal(props) {
   }, [AllTableInfo])
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(3).max(15).required(),
+    fieldName: Joi.string().min(3).max(15).pattern(/^\S+$/).messages({
+      'string.pattern.base': 'Field name should not contain spaces',
+    }).required(),
   });
   
   const [queryResult,setQueryResult] = useState(false)
@@ -60,7 +62,9 @@ export default function FieldPopupModal(props) {
     const { error } = schema.validate({ fieldName: event.target.value });
     if (error) {
       setErrors({ fieldName: error.details[0].message });
-    } else {
+    } 
+   
+    else {
       setErrors({});
     }
     props?.setTextValue(event.target.value);
