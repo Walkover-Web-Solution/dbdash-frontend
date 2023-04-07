@@ -84,7 +84,6 @@ export default function FieldPopupModal(props) {
       setOpenn(true)
       setLookupField(false)
       setShowSwitch(false)
-      props?.setSelectValue('numeric')
       props?.setShowFieldsDropdown(false)
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
@@ -111,7 +110,14 @@ export default function FieldPopupModal(props) {
       setShowSwitch(true);
       setShowNumericOptions(true);
       setShowDecimalOptions(false);
-    } else if (event.target.value === 'decimal' && showNumericOptions) {
+    }
+    else if (event.target.value === 'integer') {
+      props?.setSelectValue('numeric')
+      setShowSwitch(true);
+      // setShowNumericOptions(true);
+      setShowDecimalOptions(false);
+    } 
+    else if (event.target.value === 'decimal' && showNumericOptions) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);

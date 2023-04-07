@@ -239,25 +239,19 @@ if (e.target.files[0] != null) {
       break;
     case "numeric":
       element = (
-        <ContentEditable
-          html={(value?.value && value.value.toString()) || ""}
-          onChange={onChange}
-          
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-          className='data-input text-align-right'
-          step="any"
-        />
+        <input type="number"
+        defaultValue={(value?.value && value?.value?.toString()) || ""}
+        className='data-input'
+        style={{background: "none"}}
+      />
       );
       break;
       case "integer":
       element = (
-        <ContentEditable
-          html={(value?.value && value.value.toString()) || ""}
-          onChange={onChange}
-          
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-          className='data-input text-align-right'
-          step="any"
+        <input type="number"
+          defaultValue={(value?.value && value?.value?.toString()) || ""}
+          className='data-input'
+          style={{background: "none"}}
         />
       );
       break;
