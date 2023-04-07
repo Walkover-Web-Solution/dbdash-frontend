@@ -15,6 +15,7 @@ import { createTable1 } from '../../store/allTable/allTableThunk';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
+// import { uploadCSV } from '../../api/rowApi';
 
 export default function TablesList({ dbData }) {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ export default function TablesList({ dbData }) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
+  // const [CSV,setCSV] = useState([])
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -61,6 +63,13 @@ export default function TablesList({ dbData }) {
     setEdit(true)
     setOpenn(true)
   }
+  // const submitCSV = async()=>{
+  //   const data = {
+  //     csvfile:CSV
+  //   }
+  //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
+  //   console.log(csv)
+  // }
   function onFilterClicked(filter, id) {
     setFilterId(id)
     dispatch(bulkAddColumns({
@@ -154,10 +163,19 @@ export default function TablesList({ dbData }) {
         <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122,mt:4 ,ml:2 }} >
           Add Filter
         </Button>
+        <div>
+        {/* <input
+              type="file"
+              id="my-file-input"
+              onChange={(e)=>{setCSV(e.target.files[0])}}
+            />
+        <Button onClick={()=>{submitCSV()}}>Submit</Button> */}
+
+        </div>
+          
       </Box>
       <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable}/>
       {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo={AllTableInfo} />}
-
       <MainTable />
     </>
   );

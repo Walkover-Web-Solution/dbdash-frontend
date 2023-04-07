@@ -168,6 +168,16 @@ if (e.target.files[0] != null) {
         />
       );
       break;
+      // case "integer":
+      //   element = (
+      //     <input type="text"
+      //       readOnly="readonly"
+      //       defaultValue={(value?.value && value?.value?.toString()) || ""}
+      //       className='data-input'
+      //       style={{background: "none"}}
+      //     />
+      //   );
+      //   break;
     case "createdat":
       element = (
         <input type="text"
@@ -178,6 +188,16 @@ if (e.target.files[0] != null) {
         />
       );
       break;
+      case "id":
+        element = (
+          <input type="text"
+            readOnly="readonly"
+            defaultValue={(value?.value && value?.value?.toString()) || ""}
+            className='data-input'
+            style={{background: "none"}}
+          />
+        );
+        break;
     case "checkbox":
       element = (
         <input type="checkbox"
@@ -244,15 +264,6 @@ if (e.target.files[0] != null) {
         className='data-input'
         style={{background: "none"}}
       />
-      );
-      break;
-      case "integer":
-      element = (
-        <input type="number"
-          defaultValue={(value?.value && value?.value?.toString()) || ""}
-          className='data-input'
-          style={{background: "none"}}
-        />
       );
       break;
     case "select":

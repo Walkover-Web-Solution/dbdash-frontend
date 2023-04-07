@@ -282,6 +282,18 @@ export default function Header({
       },
       icon: <ManageSearchOutlinedIcon fontSize="2px" />,
       label: "lookup"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <ManageSearchOutlinedIcon fontSize="2px" />,
+      label: "id"
     }
   ];
 
@@ -322,6 +334,9 @@ export default function Header({
         propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon/> <ReadMoreOutlinedIcon fontSize="2px" /></>  :<TextIcon/> );
       break;
       case "lookup":
+        propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
+      break;
+      case "id":
         propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
     default:

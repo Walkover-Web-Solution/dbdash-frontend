@@ -22,10 +22,15 @@ const uploadImage = async (dbId, tableName, rowId, columnId,fileobj) => {
         }
     });
 }
+const uploadCSV = async(dbId,tableName,data)=>
+{
+    return await axios.post(URL + `/${dbId}/${tableName}/csvupload`,data)
+}
 
 export {
     insertRow,
     updateRow,
     deleteRow,
-    uploadImage
+    uploadImage,
+    uploadCSV
 }
