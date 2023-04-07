@@ -77,7 +77,7 @@ if (e.target.files[0] != null) {
   }, [imgUpload])
 
   useEffect(() => {
-    if (value?.update) {
+    if (value?.update &&  value.value!=null) {
       dispatch(updateCells({
         columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
       }))

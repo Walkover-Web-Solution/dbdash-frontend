@@ -120,7 +120,6 @@ export const bulkAddColumns = createAsyncThunk(
 export const deleteColumns = createAsyncThunk(
     "table/deleteColumns",
     async(payload,{dispatch,getState})=>{
-        console.log("payload",payload)
         if(payload?.fieldDataType == "lookup")
         {
             const data = {

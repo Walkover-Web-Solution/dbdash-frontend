@@ -50,18 +50,12 @@ export default function TablesList({ dbData }) {
       tableName: table
     }
     setOpen(false);
-    // console.log(dbData?.db?.tables,321)
 
     dispatch(createTable1({ "dbId": dbData?.db?._id, "data": data }));
 
-    // console.log(dbData?.db?.tables,123)
-
-    // const tableNames = Object.keys(dbData?.db?.tables);
-    // const lastTableName = tableNames[tableNames.length - 1];
-    // navigate(`/db/${dbData.db._id}/table/${lastTableName}`);
+   
   };
 
-  // console.log(dbData?.db?.tables)
 
   const handleEdit = async () => {
     setEdit(true)

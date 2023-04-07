@@ -75,11 +75,10 @@ export default function FieldPopupModal(props) {
     data.decimal = event.target.value
     props?.setDecimalSelectValue(data)
     props?.setDecimalSelectValue(event.target.value)
-    console.log("first",event.target.value)
   }
 
   const handleSelectChange = (event) => {
-    
+    console.log(event.target)
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
       setLookupField(false)
@@ -93,13 +92,13 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue(event.target.value);
     }
     else if(event.target.value == "lookup"){
+      console.log("in loookup ")
       // setView(true)
       setOpenLinkedField(true)
       setLookupField(false)
       props?.setSelectValue(event.target.value);
     }
    
-
     else if (event.target.value === 'numeric') {
       setShowNumericOptions(true);
       setShowDecimalOptions(false);
@@ -230,7 +229,7 @@ export default function FieldPopupModal(props) {
           <Select
             labelId="select-label"
             id="select"
-            value={props.selectValue}
+            value={props?.selectValue}
             onChange={handleSelectChange}
             defaultValue	 ="Text"
             displayEmpty

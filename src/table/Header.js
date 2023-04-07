@@ -30,7 +30,6 @@ export default function Header({
   setSortBy,
   // dispatch:dataDispatch
 }) {
-  console.log(metadata);
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi,setQueryByAi] = useState(false)
@@ -63,7 +62,7 @@ export default function Header({
 
       var queryToSend =  JSON.parse(queryByAi)?.add_column?.new_column_name?.data_type +  ` GENERATED ALWAYS AS (${JSON.parse(queryByAi)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       dispatch(addColumsToLeft({
-        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: "generatedcolumn",query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
+        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
       }));
       setSelectValue('Text')
       setQueryByAi(false)
@@ -325,6 +324,7 @@ export default function Header({
         propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
     default:
+      propertyIcon = <MultiIcon />;
       break;
   }
 
