@@ -216,7 +216,7 @@ if (e.target.files[0] != null) {
   break;
 
 
-    case "text":
+    case "longtext":
       element = (
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
@@ -227,16 +227,16 @@ if (e.target.files[0] != null) {
         />
       );
       break;
-    // case "varchar":
-    //   element = (
-    //     <ContentEditable
-    //       html={(value?.value && value?.value?.toString()) || ""}
-    //       onChange={onChange}
-    //       onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-    //       className='data-input'
-    //     />
-    //   );
-    //   break;
+    case "singlelinetext":
+      element = (
+        <ContentEditable
+          html={(value?.value && value?.value?.toString()) || ""}
+          onChange={onChange}
+          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+          className='data-input'
+        />
+      );
+      break;
     case "numeric":
       element = (
         <ContentEditable

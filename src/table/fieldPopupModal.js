@@ -11,6 +11,7 @@ import { useParams } from 'react-router';
 
 export default function FieldPopupModal(props) {
  
+  const [showSwitch, setShowSwitch] = useState(true);
   const [openn, setOpenn] = useState(false);
   const [userQuery,setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -35,7 +36,7 @@ export default function FieldPopupModal(props) {
   }, [AllTableInfo])
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(3).max(15).required(),
+    fieldName: Joi.string().min(3).max(20).required(),
   });
   
   const [queryResult,setQueryResult] = useState(false)
@@ -82,17 +83,24 @@ export default function FieldPopupModal(props) {
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
       setLookupField(false)
+      setShowSwitch(false)
+      props?.setSelectValue('numeric')
       props?.setShowFieldsDropdown(false)
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
       setLookupField(true)
-      setOpenn(false)
+      setOpenLinkedField(true);
       props?.setSelectValue(event.target.value);
+      const firstTable = Object.keys(AllTableInfo.tables)[0];
+      props?.setSelectedTable(firstTable);
+      props?.setLinkedValueName({
+        [firstTable]: AllTableInfo.tables[firstTable].fields[0],
+      });
+      setOpenn(false)
     }
     else if(event.target.value == "lookup"){
-      console.log("in loookup ")
       // setView(true)
       setOpenLinkedField(true)
       setLookupField(false)
@@ -100,13 +108,17 @@ export default function FieldPopupModal(props) {
     }
    
     else if (event.target.value === 'numeric') {
+      setShowSwitch(true);
       setShowNumericOptions(true);
       setShowDecimalOptions(false);
     } else if (event.target.value === 'decimal' && showNumericOptions) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
-    }  else {
+    } else if (event.target.value === 'checkbox') {
+      setShowSwitch(false);
+    }  
+    else {
       props?.setShowFieldsDropdown(false)
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
@@ -124,7 +136,7 @@ export default function FieldPopupModal(props) {
     setUserQuery(false)
     props?.setShowFieldsDropdown(false)
     props?.setSelectedFieldName(false)
-    props?.setSelectValue("Text");
+    props?.setSelectValue("longtext");
     props?.setTextValue("");
     props?.setMetaData({});
   };
@@ -231,15 +243,15 @@ export default function FieldPopupModal(props) {
             id="select"
             value={props?.selectValue}
             onChange={handleSelectChange}
-            defaultValue	 ="Text"
+            defaultValue	 ="longtext"
             displayEmpty
             sx={{
               margin: 1,
               minWidth: 120,
             }}
           >
-            <MenuItem value="Text" >text</MenuItem>
-            {/* <MenuItem value="varchar">varchar</MenuItem> */}
+            <MenuItem value="longtext" >long text</MenuItem>
+            <MenuItem value="singlelinetext">Single line text</MenuItem>
             <MenuItem value="numeric">number</MenuItem>
             <MenuItem value="checkbox">checkbox</MenuItem>
             <MenuItem value="datetime">datetime</MenuItem>
@@ -450,12 +462,12 @@ export default function FieldPopupModal(props) {
           </Select>
           )}
 
-          <FormGroup>
+          {showSwitch && <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
-          </FormGroup>
+          </FormGroup>}
         </DialogContent>
         <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 3 ||
-          props?.textValue?.length > 15} >Submit</Button>
+          props?.textValue?.length > 20} >Submit</Button>
       </Dialog>
     </div>
   );
