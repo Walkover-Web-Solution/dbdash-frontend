@@ -127,6 +127,7 @@ export const deleteColumns = createAsyncThunk(
                 viewFieldId : payload?.fieldName
             }
             await deleteFieldInView(payload?.dbId,payload?.tableId,data)
+            dispatch( getTable1({dbId:payload?.dbId}))
             dispatch(deleteColumn(payload));
             const {tableId, dbId} = getState().table
             dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
@@ -138,6 +139,7 @@ export const deleteColumns = createAsyncThunk(
             await deleteField(payload?.dbId,payload?.tableId,payload?.fieldName)
             //delte api call
                 dispatch(deleteColumn(payload));
+                dispatch( getTable1({dbId:payload?.dbId}))
                 const {tableId, dbId} = getState().table
                 dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
             return 2;
@@ -153,6 +155,7 @@ export const updateColumnHeaders = createAsyncThunk(
             newFieldType:payload?.fieldType
         }
         await updateField(payload?.dbId,payload?.tableName,payload?.fieldName,data)
+        dispatch( getTable1({dbId:payload?.dbId}))
         dispatch(updateColumnHeader(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
