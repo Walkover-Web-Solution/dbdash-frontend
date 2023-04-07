@@ -223,7 +223,9 @@ export default function FieldPopupModal(props) {
 
         <DialogContent sx={{
           width: 400,
-          padding: 2
+          padding: 2,
+          display:'flex',
+          flexDirection: 'row',
         }}>
 
           <Select
@@ -390,41 +392,64 @@ export default function FieldPopupModal(props) {
           </Select>
           )}
 
-    {openLinkedField && (<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedTable}
-            defaultValue="fields"
-            displayEmpty
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) =>{ 
-              
-              // console.log({
-              //   [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
-              // })
-              props?.setLinkedValueName({
-                [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
-              })
-              props?.setSelectedTable(AllTableInfo?.tables[props?.tableId].fields[e.target.value]?.metaData?.foreignKey?.tableId) ; 
-              setOpenViewDropdown(true)}}
-          >
-            {
-              Object.entries(AllTableInfo?.tables[props?.tableId].fields)?.filter((fields) => {
+{openLinkedField && (
+            <>
+              {Object.entries(
+                AllTableInfo?.tables[props?.tableId].fields
+              )?.filter((fields) => {
                 if (fields[1]?.metaData?.foreignKey?.fieldId) {
                   return fields;
                 }
-              })
-                .map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-            }
-          </Select>
+              }).length > 0 ? (
+                <Select
+                  labelId="select-label"
+                  id="select"
+                  value={props?.selectedTable}
+                  defaultValue="fields"
+                  displayEmpty
+                  sx={{
+                    margin: 1,
+                    minWidth: 120,
+                  }}
+                  onChange={(e) => {
+                    props?.setLinkedValueName({
+                      [e.target.value]:
+                        AllTableInfo?.tables[props?.tableId].fields[
+                          e.target.value
+                        ],
+                    });
+                    props?.setSelectedTable(
+                      AllTableInfo?.tables[props?.tableId].fields[
+                        e.target.value
+                      ]?.metaData?.foreignKey?.tableId
+                    );
+                    setOpenViewDropdown(true);
+                  }}
+                >
+                  {Object.entries(AllTableInfo?.tables[props?.tableId].fields)
+                    ?.filter((fields) => {
+                      if (fields[1]?.metaData?.foreignKey?.fieldId) {
+                        return fields;
+                      }
+                    })
+                    .map((fields) => (
+                      <MenuItem key={fields[0]} value={fields[0]}>
+                        {fields[1]?.fieldName}
+                      </MenuItem>
+                    ))}
+                </Select>
+              ) : (
+                <p
+                  style={{
+                    marginTop: "25px",
+                    marginLeft: "25px",
+                    color: "red",
+                  }}
+                >
+                  No linked field found
+                </p>
+              )}
+            </>
           )}
           
           {openViewDropdown && (<Select
@@ -450,10 +475,10 @@ export default function FieldPopupModal(props) {
           </Select>
           )}
 
+        </DialogContent>
           <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>
-        </DialogContent>
         <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 3 ||
           props?.textValue?.length > 15} >Submit</Button>
       </Dialog>
