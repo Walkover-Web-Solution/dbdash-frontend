@@ -1,12 +1,11 @@
 
-import React, { useMemo,useEffect} from 'react';
+import React, { useEffect} from 'react';
 import { useDrop, useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import ItemTypes from "./ItemTypes";
 import PropTypes from 'prop-types';
 
-export default function DraggableHeader({ columns,
-  index, reoder, key})
+export default function DraggableHeader({ columns,index, reoder, key})
   {
 
     const dropRef = React.useRef(null)
@@ -39,7 +38,7 @@ export default function DraggableHeader({ columns,
 
   // drag(drop(ref));
 
-  const memoizedColumn = useMemo(() => columns.render("Header"), [columns]);
+  //const memoizedColumn = useMemo(() => columns.render("Header"), [columns]);
   // console.log("columns", columns);
   // const opacity = isDragging ? 0 : 1;
 
@@ -52,14 +51,27 @@ export default function DraggableHeader({ columns,
 
   return (
 
-      <div className='td bg-white shadow-5 border-radius-md' key={key}
-       ref={dropRef}>
-        <td ref={dragRef}>move</td>
-{memoizedColumn}
-      
-    </div>
+    <div className='td bg-white border-radius-md' key={key}
 
-  );
+     ref={dropRef} {...columns.getHeaderProps()}>
+      {(typeof columns.id !== 'number') ? <div style={{cursor:'move'}} ref={dragRef}>
+      {/* <td ref={dragRef} >
+        move
+        </td> */}
+        {columns.render("Header")}
+      </div> : 
+      <div style={{cursor:'move'}} >
+      {/* <td ref={dragRef} >
+        move
+        </td> */}
+        {columns.render("Header")}
+      </div>
+      }
+      {(typeof columns.id !== 'number') && <div {...columns.getResizerProps()} className='resizer'/>}
+
+    
+  </div>
+);
 
 }
 
