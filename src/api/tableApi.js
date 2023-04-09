@@ -6,9 +6,12 @@ const createTable = async (db_id,data) =>
     return await axios.post(URL +`/dbs/${db_id}/table`,data)
 }
 
-const getTable = async (db_id , tableName) =>
+const getTable = async (db_id , tableName,page) =>
 {
-    return await axios.get(URL +`/dbs/${db_id}/${tableName}/fetchtable`)
+    console.log('page',page)
+    // return await axios.get(URL +`/dbs/${db_id}/${tableName}/fetchtable`)
+    return await axios.get(URL +`/${db_id}/${tableName}?page=${page || 1}`)
+
 }
 
 const updateTable = async(db_id,tableName,data) =>

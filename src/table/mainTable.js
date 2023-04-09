@@ -1,18 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import Table from "./table";
 // import { grey } from "./colors";
 import {  useDispatch ,useSelector } from "react-redux";
 import { getTableInfo } from "../store/table/tableSelector";
+import { bulkAddColumns } from "../store/table/tableThunk";
 
 function 
 MainTable() {
-
+const [page,setPage] = useState(2);
   useEffect(() => {
 },[]);
   const tableInfo=useSelector((state)=>getTableInfo(state));
 
   const dispatchs = useDispatch();
+
+  const fetchMoreData = () => {
+  console.log("fetchMoreData")
+    dispatchs(bulkAddColumns({
+      "dbId": tableInfo.dbId,
+      "tableName": tableInfo.tableId,
+      "page":page
+    }));
+    setPage(page + 1);
+
+    // setTimeout(() => {
+    //   setItems(items.concat(tableInfo.data(2)));
+    // }, 1500);
+  };
  
   return (
     <div
@@ -43,6 +58,8 @@ MainTable() {
           }}
         >
           {tableInfo?.columns?.length>0 && <Table
+          update={fetchMoreData}
+          hasMore={true}
             columns={tableInfo.columns}
             data={tableInfo.data|| []}
             dispatch={dispatchs}

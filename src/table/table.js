@@ -11,6 +11,7 @@ import { addRows, deleteRows, updateCells } from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 
 const defaultColumn = {
@@ -22,8 +23,8 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast"
 };
 
-export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
-
+export default function Table({ columns, data, dispatch: dataDispatch, skipReset,hasMore,update }) {
+console.log("update",update)
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();
@@ -131,9 +132,16 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
     
   return (
     <>
+
       {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
+       <InfiniteScroll
+      dataLength={rows.length}
+      next={update}
+      hasMore={hasMore}
+      loader={<h4>Loading more 2 itens...</h4>}
+    >
       <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
@@ -205,6 +213,7 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
             </div>
           </div>
       </div>
+      </InfiniteScroll>
     </>
   );
 }
@@ -212,6 +221,8 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
 
 Table.propTypes = {
   columns: PropTypes.any,
+  hasMore:PropTypes.any,
+  update:PropTypes.any,
   data: PropTypes.any,
   dispatch: PropTypes.any,
   skipReset: PropTypes.any

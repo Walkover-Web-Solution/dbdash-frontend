@@ -57,9 +57,9 @@ const getHeaders = async(dbId,tableName) =>{
     })
     return columns;
 }
-const getRowData = async(dbId,tableName,{getState},org_id) =>{
-    const data = await getTable(dbId,tableName);
-    const obj = data.data.data.tableData;
+const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
+    const data = await getTable(dbId,tableName,page);
+    const obj = data.data.data.rows;
     const userInfo = allOrg(getState());
     const users = userInfo?.find((org)=>org?._id== org_id)?.users;
     var userJson= {};
@@ -108,7 +108,7 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{
             const columns =  await getHeaders(payload.dbId,payload.tableName)
-            const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id)
+            const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.page)
             const dataa = {
                 "columns":columns,
                 "row":data,
