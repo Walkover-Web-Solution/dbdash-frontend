@@ -260,7 +260,7 @@ export default function FieldPopupModal(props) {
           >
             <MenuItem value="longtext" >long text</MenuItem>
             <MenuItem value="singlelinetext">Single line text</MenuItem>
-            <MenuItem value="Text" >text</MenuItem>
+            {/* <MenuItem value="Text" >text</MenuItem> */}
             <MenuItem value="numeric">number</MenuItem>
             <MenuItem value="checkbox">checkbox</MenuItem>
             <MenuItem value="datetime">datetime</MenuItem>
