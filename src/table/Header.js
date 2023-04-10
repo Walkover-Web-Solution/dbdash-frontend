@@ -26,6 +26,8 @@ import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import TextFormatIcon from '@mui/icons-material/TextFormat';
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
 export default function Header({
   column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },
   setSortBy,
@@ -34,7 +36,7 @@ export default function Header({
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi,setQueryByAi] = useState(false)
-  const [selectValue, setSelectValue] = useState('Text');
+  const [selectValue, setSelectValue] = useState('longtext');
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [metaData, setMetaData] = useState({});
   const [open, setOpen] = useState(false);
@@ -300,7 +302,7 @@ export default function Header({
   let propertyIcon;
   switch (dataType) {
     case "singlelinetext":
-      propertyIcon = <TextFormatIcon fontSize="2px"/>;
+      propertyIcon = (  metadata?.unique  ? <><TextFormatIcon fontSize="2px" /> <KeyOutlinedIcon fontSize="2px" /></>  :<TextFormatIcon/>  );
       break;
       case "generatedcolumn":
       propertyIcon = <FunctionsIcon fontSize="2px" />;
@@ -322,13 +324,13 @@ export default function Header({
       propertyIcon = <MultiIcon />;
       break;
     case "createdby":
-      propertyIcon = <TextIcon />;
+      propertyIcon = <PersonPinIcon fontSize="2px"/>;
       break;
     case "createdat":
-      propertyIcon = <TextIcon />;
+      propertyIcon = <MoreTimeIcon fontSize="2px"/>;
       break;
       case "attachment":
-      propertyIcon = <AttachFileIcon fontSize="1px" />;
+      propertyIcon = <AttachFileIcon fontSize="2px" />;
       break;
       case "link":
         propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon/> <ReadMoreOutlinedIcon fontSize="2px" /></>  :<TextIcon/> );
