@@ -78,7 +78,6 @@ export default function FieldPopupModal(props) {
   }
 
   const handleSelectChange = (event) => {
-    console.log(event.target)
 
     setLookupField(false)
     setShowNumericOptions(false);

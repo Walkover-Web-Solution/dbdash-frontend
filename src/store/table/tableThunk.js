@@ -9,6 +9,7 @@ import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,updateCell,up
 import { allOrg } from "../database/databaseSelector";
 import  {runQueryonTable}  from "../../api/filterApi";
 import { createView, deleteFieldInView } from "../../api/viewApi";
+import { getTableInfo } from "./tableSelector";
 // import { useSelector } from "react-redux";
 // const alldb = useSelector((state) => selectOrgandDb(state))
 const getHeaders = async(dbId,tableName) =>{
@@ -61,6 +62,7 @@ const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
     const data = await getTable(dbId,tableName,page);
     const obj = data.data.data.rows;
     const userInfo = allOrg(getState());
+    const tableInfo = getTableInfo(getState())
     const users = userInfo?.find((org)=>org?._id== org_id)?.users;
     var userJson= {};
     users?.forEach(user => {
@@ -78,7 +80,15 @@ const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
     obj.map((row)=>{
         row.createdby = userJson[row.createdby].first_name +" " + userJson[row.createdby].last_name;
     })
-    return obj
+    const dataAndPageNo = {}
+    if(tableInfo.tableId== tableName && tableInfo.pageNo < page)
+    {
+        dataAndPageNo.rows = [...tableInfo.data, ...obj  ];   
+        return dataAndPageNo;
+    }
+    dataAndPageNo.pageNo = 1;
+    dataAndPageNo.rows = obj;
+    return dataAndPageNo;
 }
 export const addColumns = createAsyncThunk(
     "table/addColumns",
@@ -108,12 +118,14 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{
             const columns =  await getHeaders(payload.dbId,payload.tableName)
-            const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.page)
+            const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.pageNo)
+
             const dataa = {
                 "columns":columns,
-                "row":data,
+                "row":data.rows,
                 "tableId":payload.tableName,
-                "dbId":payload.dbId
+                "dbId":payload.dbId,
+                "pageNo" : data.pageNo
             }
             return dataa;
         }

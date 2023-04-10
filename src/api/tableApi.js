@@ -8,7 +8,6 @@ const createTable = async (db_id,data) =>
 
 const getTable = async (db_id , tableName,page) =>
 {
-    console.log('page',page)
     // return await axios.get(URL +`/dbs/${db_id}/${tableName}/fetchtable`)
     return await axios.get(URL +`/${db_id}/${tableName}?page=${page || 1}`)
 

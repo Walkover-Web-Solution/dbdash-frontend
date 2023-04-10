@@ -13,7 +13,6 @@ import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-
 const defaultColumn = {
   minWidth: 50,
   width: 150,
@@ -24,7 +23,7 @@ const defaultColumn = {
 };
 
 export default function Table({ columns, data, dispatch: dataDispatch, skipReset,hasMore,update }) {
-console.log("update",update)
+// console.log("update",update)
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();
@@ -132,16 +131,12 @@ console.log("update",update)
     
   return (
     <>
-
+    {console.log("in table js ")}
+         {/* {console.log(data?.length)} */}
       {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
-       <InfiniteScroll
-      dataLength={rows.length}
-      next={update}
-      hasMore={hasMore}
-      loader={<h4>Loading more 2 itens...</h4>}
-    >
+       
       <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
         <div>
           <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
@@ -156,6 +151,23 @@ console.log("update",update)
           </div>
 
         </div>
+
+        <div 
+        style={{
+          widht :"auto",
+        // width: "98vw",
+        height: "100vh",
+        overflowX: "hidden",
+      }}
+      id="scrollableDiv">
+
+        <InfiniteScroll
+          dataLength={data?.length}
+          next={update}
+          hasMore={true || hasMore}
+          // loader={<h4>Loading more 2 items...</h4>}
+          scrollableTarget="scrollableDiv"
+        >
           <div {...getTableBodyProps()}>
             {rows?.map((row, rowIndex) => {
               prepareRow(row);
@@ -212,8 +224,10 @@ console.log("update",update)
               New
             </div>
           </div>
+        </InfiniteScroll>
+        </div>
       </div>
-      </InfiniteScroll>
+      
     </>
   );
 }

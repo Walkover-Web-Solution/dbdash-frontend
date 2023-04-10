@@ -11,7 +11,7 @@ import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 
 
 
-export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter,value }) {
+export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter,value ,setPage}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
@@ -63,11 +63,13 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)
+    setPage(1);
     dispatch(bulkAddColumns({
       //  "alldb":alldb,
       "dbId": dbData?.db?._id,
       "tableName": table[0]
     }));
+
     setTableButton(true);
     highlightActiveTable()
   }
@@ -96,7 +98,8 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
           dispatch(bulkAddColumns({
             "dbId": dbData?.db?._id,
             "tableName": table[0],
-            "org_id":dbData?.db?.org_id
+            "org_id":dbData?.db?.org_id,
+            "pageNo": 1
           }));
         }}
       >
@@ -180,5 +183,6 @@ SingleTable.propTypes = {
   filter:PropTypes.any,
   setFilter :PropTypes.func,
   tableLength:PropTypes.any,
-  value:PropTypes.any
+  value:PropTypes.any,
+  setPage:PropTypes.any
 };

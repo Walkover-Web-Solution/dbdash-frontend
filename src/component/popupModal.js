@@ -114,7 +114,7 @@ const createProjectJoi = (e) => {
               </Button>
             </Box>
             <Box>
-              <Button variant="outlined" onClick={handleClose}>
+              <Button variant="outlined" onClick={(e)=>handleClose(e)}>
                 Cancel
               </Button>
             </Box>

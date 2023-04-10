@@ -6,5 +6,5 @@ const allTableSlice = createSlice({
     reducers,
     extraReducers
   });
-export const { add , getAll,update,remove } = allTableSlice.actions;
+export const { add , getAll,update,remove,setAllTablesData } = allTableSlice.actions;
 export default allTableSlice.reducer

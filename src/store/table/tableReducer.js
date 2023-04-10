@@ -10,6 +10,8 @@ export const initialState = {
   dbId: [],
   skipReset: false,
   status: "idle",
+  pageNo : 0,
+  isTableLoading : false
 };
 
 export const reducers = {
@@ -340,6 +342,14 @@ export function extraReducers(builder) {
 
     .addCase(bulkAddColumns.pending, (state) => {
       state.status = "loading"
+      if( state.pageNo == 0  )
+      {
+        state.isTableLoading = true
+      }
+      else
+      {
+        state.isTableLoading = false
+      }
     })
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
@@ -347,11 +357,14 @@ export function extraReducers(builder) {
         state.data = action.payload.row;
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId
+        state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
+        state.isTableLoading = false
       }
       state.status = "succeeded";
 
     })
     .addCase(bulkAddColumns.rejected, (state) => {
+      state.isTableLoading = false
       state.status = "failed";
     })
 
