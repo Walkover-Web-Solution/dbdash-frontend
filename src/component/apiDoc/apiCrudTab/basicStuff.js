@@ -5,7 +5,6 @@ import { getAllfields } from '../../../api/fieldApi';
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import Grid from '@mui/material/Grid';
-
 function BasicStuff(props) {
   const [fieldData, setFieldData] = useState(null)
   const tableData = async () => {
@@ -17,7 +16,6 @@ function BasicStuff(props) {
   }, [props.db, props.table]);
   return (
     <Box>
-
       <Typography style={{ fontWeight: 'bold' }} >Database Id - {props.db}</Typography>
       <Typography style={{ fontWeight: 'bold' }} >Table Id - {props.table}</Typography>
       <br></br>
@@ -41,7 +39,7 @@ function BasicStuff(props) {
           ))}
         </Grid>
       </Grid>
-
+      <br></br>
       {/* <CodeSnippet codeString="const myVar = 'Hello, world!';" /> */}
     </Box>
   )
@@ -50,4 +48,4 @@ BasicStuff.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string
 }
-export default BasicStuff 
+export default BasicStuff
