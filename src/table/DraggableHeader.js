@@ -55,15 +55,11 @@ export default function DraggableHeader({ columns,index, reoder, key})
 
      ref={dropRef} {...columns.getHeaderProps()}>
       {(typeof columns.id !== 'number') ? <div style={{cursor:'move'}} ref={dragRef}>
-      {/* <td ref={dragRef} >
-        move
-        </td> */}
+     
         {columns.render("Header")}
       </div> : 
       <div style={{cursor:'move'}} >
-      {/* <td ref={dragRef} >
-        move
-        </td> */}
+      
         {columns.render("Header")}
       </div>
       }

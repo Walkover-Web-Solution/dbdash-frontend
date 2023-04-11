@@ -84,7 +84,6 @@ export const addColumns = createAsyncThunk(
     "table/addColumns",
     async (payload,{dispatch}) =>{
         dispatch(addOptionToColumn(payload));
-
         return 5;
     }
 ) ;
@@ -104,7 +103,6 @@ export const bulkAddColumns = createAsyncThunk(
                 "tableId":payload.tableName,
                 "dbId":payload.dbId
             }
-
             return dataa;
         }
         else{
@@ -138,7 +136,6 @@ export const deleteColumns = createAsyncThunk(
         }
         else
         {
-
             await deleteField(payload?.dbId,payload?.tableId,payload?.fieldName)
             //delte api call
                 dispatch(deleteColumn(payload));
@@ -153,6 +150,7 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async(payload,{dispatch,getState})=>{
+        console.log("updatapayload",payload)
         const data={
             newFieldName:payload?.label,
             newFieldType:payload?.fieldType
@@ -185,9 +183,8 @@ export const addColumnrightandleft = createAsyncThunk(
         }
         if(payload?.fieldType == "lookup")
             await createView(payload?.dbId,payload?.tableId,data);
-        else 
+        else
             await createField(payload?.dbId,payload?.tableId,data);
-
      dispatch(getTable1({dbId:payload?.dbId}))
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
@@ -207,12 +204,10 @@ export const addColumsToLeft = createAsyncThunk(
             linkedForeignKey:payload?.linkedValueName,
             foreignKey : payload?.foreignKey
         }
-
         if(payload?.fieldType == "lookup")
             await createView(payload?.dbId,payload?.tableId,data);
-        else 
+        else
             await createField(payload?.dbId,payload?.tableId,data);
-
        dispatch(getTable1({dbId:payload?.dbId}))
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
@@ -228,9 +223,8 @@ export const updateCells = createAsyncThunk(
        const value = payload.value
        const  columnId= payload.columnId;
        if(payload?.dataTypes == "file")
-       { 
+       {
         const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
-        
             payload.value = data?.data?.data;
             dispatch(updateCell(payload))
             return payload;
@@ -272,17 +266,23 @@ export const updateColumnsType = createAsyncThunk(
         return payload;
     }
 )
-
 export const updateColumnOrder = createAsyncThunk(
     "table/updateColumnOrder",
     async(payload)=>{
-        // backend api call
+        console.log("payload oldIndex",payload?.oldIndex)
+        console.log("payload newIndex",payload?.newIndex)
+        const data={
+            oldIndex:payload?.oldIndex,
+            newIndex:payload?.newIndex
+        }
+        
+        await updateField(payload?.dbId,payload?.tableName,payload?.oldIndex,data)
+        // dispatch( getTable1({dbId:payload?.dbId}))
+        // // dispatch(updateColumnHeader(payload));
+        // const {tableId, dbId} = getState().table
+        // // console.log("first",current(getState().table))
+        // dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
+        // // // backend api call
         return payload;
     }
 )
-
-
-
-
-
-

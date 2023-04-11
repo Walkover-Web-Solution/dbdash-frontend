@@ -11,19 +11,16 @@ import { addRows, deleteRows, updateCells, updateColumnOrder } from "../store/ta
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-
 import { DndProvider }  from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
-
+import { useParams } from "react-router";
 // import { useDrop, useDrag } from "react-dnd";
 // import { getEmptyImage } from "react-dnd-html5-backend";
 // import ItemTypes from "./ItemTypes";
-
 const ScrollingComponent = withScrolling("div");
-
 const defaultColumn = {
   minWidth: 50,
   width: 150,
@@ -32,52 +29,37 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast"
 };
-
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
-
-
-
-
 export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
+  const params = useParams();
+console.log("params",params);
   console.log(columns)
 const[head,setHead] = useState()
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();
     document.execCommand('copy');
-
   };
-
-
-  
   const dispatch =useDispatch();
   const handlePaste = (event,row,cell) => {
     event.preventDefault();
-
       const text = event.clipboardData.getData('text/plain');
        dispatch(updateCells({
         columnId: cell.column.id, rowIndex: cell.row.original.id, value: text
-        
       }))
-
   };
-
-  
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA, rowB, columnId, desc) {
         if (!rowA.values[columnId] && !rowB.values[columnId]) {
           return 0;
         }
-
         if (!rowA.values[columnId]) {
           return desc ? -1 : 1;
         }
-
         if (!rowB.values[columnId]) {
           return desc ? 1 : -1;
         }
-
         return isNaN(rowA.values[columnId])
           ? rowA.values[columnId].localeCompare(rowB.values[columnId])
           : rowA.values[columnId] - rowB.values[columnId];
@@ -85,11 +67,9 @@ const[head,setHead] = useState()
     }),
     []
   );
-
   const { getTableProps, getTableBodyProps, headerGroups,rows, prepareRow,
-     selectedFlatRows,  
+     selectedFlatRows,
     state: { selectedCellIds, currentSelectedCellIds,},
-     
   } = useTable(
     {
       columns,
@@ -105,7 +85,6 @@ const[head,setHead] = useState()
         selectedCellIds: {},
         columnOrder: columns
       },
-      
     },
     useCellRangeSelection,
     useFlexLayout,
@@ -114,13 +93,10 @@ const[head,setHead] = useState()
     useRowSelect,
     useColumnOrder
   );
-
   useEffect(() => {
     if(headerGroups)
     console.log(headerGroups[0]?.headers)
     setHead(headerGroups)
-  
-
   }, [headerGroups])
   const reoder = useCallback(
     (item, newIndex) => {
@@ -128,28 +104,23 @@ const[head,setHead] = useState()
       console.log(columns)
       const newOrder = Array.from(columns);
       console.log("newOrder",newOrder)
-
-const { index: currentIndex } = item;
-const [removedColumn] = newOrder.splice(currentIndex,  1);
-console.log("removedColumn",removedColumn)
-
-newOrder.splice(newIndex, 0, removedColumn);
-// console.log("currentIndex",currentIndex,newIndex)
+    const { index: currentIndex } = item;
+    const [removedColumn] = newOrder.splice(currentIndex,  1);
+    console.log("removedColumn",item,newIndex)
+    newOrder.splice(newIndex, 0, removedColumn);
+//    console.log("currentIndex",currentIndex,newIndex)
       // console.log("newOrder",newOrder)
       setHead([...newOrder]);
       // setColumns(newOrder)
-      dispatch(updateColumnOrder({columns: newOrder}));
-      //call redux make thunk and reducer pass new column order and update 
+      dispatch(updateColumnOrder({columns: newOrder,oldIndex:item?.id,newIndex:newIndex,dbId:params.dbId,tableName:params.tableName}));
+      //call redux make thunk and reducer pass new column order and update
       // console.log(newOrder)
     },
     [head, setHead]
   );
-
   useEffect(() => {
-  
     // console.log(head);
   }, [head])
-
   useEffect(() => {
     if(Object.keys(selectedCellIds).length > 0) {
       const newData = cloneDeep(data)
@@ -160,18 +131,13 @@ newOrder.splice(newIndex, 0, removedColumn);
           const keyName = key.split('_')[0]
           const index = key.split('_')[1]
           if (i === 0 || firstValue[0] != keyName) return;
-
-
           newData[index][keyName] = newValueToReplace;
         })
       }
       dataDispatch(updateTableData(newData))
-
     }
   }, [selectedCellIds])
-
   let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds }
-
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
       for (let column of headerGroup.headers) {
@@ -180,17 +146,13 @@ newOrder.splice(newIndex, 0, removedColumn);
         }
       }
     }
-
     return false;
   }
-  
-    
   return (
     <>
       {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
-
         <DndProvider backend={HTML5Backend}>
         <ScrollingComponent style={{ overflow: "auto", maxHeight: 450 }}>
       <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
@@ -206,10 +168,8 @@ newOrder.splice(newIndex, 0, removedColumn);
                 key={column.id}
                 columns={column}
                 index={index}
-    
               />
                 </React.Fragment>
-
               )
               // return(
               // <DraggableHeader
@@ -217,13 +177,10 @@ newOrder.splice(newIndex, 0, removedColumn);
               //   key={column.id}
               //   columns={column}
               //   index={index}
-    
               // />
               // )
-                            
             })}
           </div>
-
         </div>
         </div>
         <div {...getTableBodyProps()}>
@@ -239,7 +196,6 @@ newOrder.splice(newIndex, 0, removedColumn);
               }>
                 {row.cells.map((cell,columnIndex) => {
                   return (
-                    
                     <div key={columnIndex}
                     // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
                     // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
@@ -247,28 +203,27 @@ newOrder.splice(newIndex, 0, removedColumn);
                     {...cell.getCellProps(
                       {
                     onCopy: event => handleCopy(event, cell.value),
-                    onPaste : event => handlePaste(event, rowIndex, cell)  
+                    onPaste : event => handlePaste(event, rowIndex, cell)
                   }
-                  )} 
-                  
+                  )}
                   // suppressContentEditableWarning={true}
                   // contentEditable
                   style=
                   {
                     cellsSelected[cell.id]
-                      ? { ...cell.getCellProps().style, 
+                      ? { ...cell.getCellProps().style,
                         // backgroundColor: '#6beba80'
                        userSelect: 'none',flex: 'none' ,}
                       : {...cell.getCellProps().style, userSelect: 'none',flex: 'none',height:'30px' }
                   }
-                  className='td'> 
+                  className='td'>
                     {cell.render("Cell")}
                   </div>
                 )})}
               </div>
             );
           })}
-          <div className='tr add-row' 
+          <div className='tr add-row'
           onClick={() => dataDispatch(addRows({ type: "add_row" }))}
           >
             <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
@@ -277,7 +232,6 @@ newOrder.splice(newIndex, 0, removedColumn);
             New
           </div>
         </div>
-
       </ScrollingComponent>
         <Preview />
       </DndProvider>
@@ -286,12 +240,9 @@ newOrder.splice(newIndex, 0, removedColumn);
         {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
         </code>
       </pre> */}
-    
     </>
   );
 }
-
-
 Table.propTypes = {
   columns: PropTypes.any,
   data: PropTypes.any,
