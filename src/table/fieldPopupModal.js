@@ -8,6 +8,18 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
 import Joi from 'joi';
 import { useParams } from 'react-router';
+import CheckIcon from '@mui/icons-material/Check';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import FunctionsIcon from '@mui/icons-material/Functions';
+import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
+import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
+// import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
+import TextFormatIcon from '@mui/icons-material/TextFormat';
+import NotesIcon from '@mui/icons-material/Notes';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import NumbersIcon from '@mui/icons-material/Numbers';
 
 export default function FieldPopupModal(props) {
  
@@ -94,6 +106,7 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
+      setShowSwitch(false)
       setLookupField(true)
       props?.setSelectValue(event.target.value);
       const firstTable = Object.keys(AllTableInfo.tables)[0];
@@ -258,18 +271,18 @@ export default function FieldPopupModal(props) {
               minWidth: 120,
             }}
           >
-            <MenuItem value="longtext" >long text</MenuItem>
-            <MenuItem value="singlelinetext">Single line text</MenuItem>
+            <MenuItem value="longtext" defaultValue="ansh"><NotesIcon fontSize="2px" sx={{mr : 1}}/>long text</MenuItem>
+            <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
             <MenuItem value="Text" >text</MenuItem>
-            <MenuItem value="numeric">number</MenuItem>
-            <MenuItem value="checkbox">checkbox</MenuItem>
-            <MenuItem value="datetime">datetime</MenuItem>
-            <MenuItem value="createdby">created By</MenuItem>
-            <MenuItem value="createdat">created At</MenuItem>
-            <MenuItem value="generatedcolumn">generated column</MenuItem>
-            <MenuItem value="attachment">attachment</MenuItem>
-            <MenuItem value="link">Link to another record</MenuItem>
-            <MenuItem value="lookup">Lookup</MenuItem>
+            <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{mr : 1}}/>Number</MenuItem>
+            <MenuItem value="checkbox"><CheckIcon fontSize="2px" sx={{mr : 1}}/>Checkbox</MenuItem>
+            <MenuItem value="datetime"><DateRangeIcon fontSize="2px" sx={{mr : 1}}/>Datetime</MenuItem>
+            <MenuItem value="createdby"><PersonPinIcon fontSize="2px" sx={{mr : 1}}/>Created By</MenuItem>
+            <MenuItem value="createdat"><MoreTimeIcon fontSize="2px" sx={{mr : 1}}/>Created At</MenuItem>
+            <MenuItem value="generatedcolumn"><FunctionsIcon fontSize="2px" sx={{mr : 1}}/>Generated column</MenuItem>
+            <MenuItem value="attachment"><AttachFileIcon fontSize="2px" sx={{mr : 1}}/>Attachment</MenuItem>
+            <MenuItem value="link"><ReadMoreOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Link</MenuItem>
+            <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Lookup</MenuItem>
             <MenuItem value="id">id</MenuItem>
  
           </Select>
