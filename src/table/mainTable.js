@@ -45,7 +45,7 @@ MainTable() {
           }}
         >
           {tableInfo?.columns?.length>0 && <Table
-            columns={columns}
+            columns={tableInfo.columns}
             data={tableInfo.data|| []}
             dispatch={dispatchs}
             skipReset={tableInfo.skipReset}

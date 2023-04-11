@@ -7,7 +7,7 @@ import PlusIcon from "./img/Plus";
 import PropTypes from 'prop-types';
 import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from 'react-table-plugins'
-import { addRows, deleteRows, updateCells } from "../store/table/tableThunk";
+import { addRows, deleteRows, updateCells, updateColumnOrder } from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -38,7 +38,7 @@ const defaultColumn = {
 
 
 
-export default function Table({ columns, data,dispatch:dataDispatch, skipReset,setColumns }) {
+export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
   console.log(columns)
 const[head,setHead] = useState()
   const handleCopy = (event, value) => {
@@ -137,7 +137,9 @@ newOrder.splice(newIndex, 0, removedColumn);
 // console.log("currentIndex",currentIndex,newIndex)
       // console.log("newOrder",newOrder)
       setHead([...newOrder]);
-      setColumns(newOrder)
+      // setColumns(newOrder)
+      dispatch(updateColumnOrder({columns: newOrder}));
+      //call redux make thunk and reducer pass new column order and update 
       // console.log(newOrder)
     },
     [head, setHead]
@@ -253,59 +255,28 @@ newOrder.splice(newIndex, 0, removedColumn);
                   // contentEditable
                   style=
                   {
-                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#e0edf2' } : {
-                      ...row.getRowProps().style, backgroundColor: 'transparent'
-                    }
-                  }>
-                  {row.cells.map((cell, columnIndex) => {
-                    return (
-
-                      <div key={columnIndex}
-                      
-                        // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
-                        // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
-                        {...cell.getCellRangeSelectionProps()}
-                        {...cell.getCellProps(
-                          {
-                            onCopy: event => handleCopy(event, cell.value),
-                            onPaste: event => handlePaste(event, rowIndex, cell)
-                          }
-                        )}
-
-                        // suppressContentEditableWarning={true}
-                        // contentEditable
-                        style=
-                        {
-                          cellsSelected[cell.id]
-                            ? {
-                              ...cell.getCellProps().style,
-                              // backgroundColor: '#6beba80'
-                              userSelect: 'none', flex: 'none',
-                            }
-                            : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '30px' }
-
-                        }
-                        className='td'>
-                        {cell.render("Cell")}
-                      </div>
-                    )
-                  })}
-                </div>
-              );
-            })}
-            <div className='tr add-row'
-              onClick={() => dataDispatch(addRows({ type: "add_row" }))}
-            >
-              <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
-                <PlusIcon />
-              </span>
-              New
-            </div>
-          
-          </div>
+                    cellsSelected[cell.id]
+                      ? { ...cell.getCellProps().style, 
+                        // backgroundColor: '#6beba80'
+                       userSelect: 'none',flex: 'none' ,}
+                      : {...cell.getCellProps().style, userSelect: 'none',flex: 'none',height:'30px' }
+                  }
+                  className='td'> 
+                    {cell.render("Cell")}
+                  </div>
+                )})}
+              </div>
             );
           })}
-      </div>
+          <div className='tr add-row' 
+          onClick={() => dataDispatch(addRows({ type: "add_row" }))}
+          >
+            <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
+              <PlusIcon />
+            </span>
+            New
+          </div>
+        </div>
 
       </ScrollingComponent>
         <Preview />

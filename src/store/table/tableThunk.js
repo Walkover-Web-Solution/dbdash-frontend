@@ -104,6 +104,7 @@ export const bulkAddColumns = createAsyncThunk(
                 "tableId":payload.tableName,
                 "dbId":payload.dbId
             }
+
             return dataa;
         }
         else{
@@ -115,6 +116,7 @@ export const bulkAddColumns = createAsyncThunk(
                 "tableId":payload.tableName,
                 "dbId":payload.dbId
             }
+            console.log("data",dataa);
             return dataa;
         }
     }
@@ -215,6 +217,7 @@ export const addColumsToLeft = createAsyncThunk(
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
+        console.log(('hiii'));
         return payload;
     }
 )
@@ -270,6 +273,13 @@ export const updateColumnsType = createAsyncThunk(
     }
 )
 
+export const updateColumnOrder = createAsyncThunk(
+    "table/updateColumnOrder",
+    async(payload)=>{
+        // backend api call
+        return payload;
+    }
+)
 
 
 

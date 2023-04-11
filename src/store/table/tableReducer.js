@@ -1,5 +1,5 @@
-// import { current } from '@reduxjs/toolkit';
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft } from './tableThunk.js';
+import { current } from '@reduxjs/toolkit';
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 
 
@@ -343,12 +343,14 @@ export function extraReducers(builder) {
     })
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
+        console.log(current(state));
         state.columns = action.payload.columns;
         state.data = action.payload.row;
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId
       }
       state.status = "succeeded";
+      console.log(current(state));
 
     })
     .addCase(bulkAddColumns.rejected, (state) => {
@@ -437,6 +439,19 @@ export function extraReducers(builder) {
 
     })
     .addCase(updateColumnsType.rejected, (state) => {
+      state.status = "failed";
+    })
+
+    .addCase(updateColumnOrder.pending, (state) => {
+      state.status = "loading"
+    })
+    .addCase(updateColumnOrder.fulfilled, (state,{payload}) => {
+      console.log(payload);
+      state.columns = payload.columns
+      state.status = "succeeded";
+
+    })
+    .addCase(updateColumnOrder.rejected, (state) => {
       state.status = "failed";
     })
 }
