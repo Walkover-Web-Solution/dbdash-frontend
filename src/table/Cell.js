@@ -168,6 +168,16 @@ if (e.target.files[0] != null) {
         />
       );
       break;
+      // case "integer":
+      //   element = (
+      //     <input type="text"
+      //       readOnly="readonly"
+      //       defaultValue={(value?.value && value?.value?.toString()) || ""}
+      //       className='data-input'
+      //       style={{background: "none"}}
+      //     />
+      //   );
+      //   break;
     case "createdat":
       element = (
         <input type="text"
@@ -178,6 +188,16 @@ if (e.target.files[0] != null) {
         />
       );
       break;
+      case "id":
+        element = (
+          <input type="text"
+            readOnly="readonly"
+            defaultValue={(value?.value && value?.value?.toString()) || ""}
+            className='data-input'
+            style={{background: "none"}}
+          />
+        );
+        break;
     case "checkbox":
       element = (
         <input type="checkbox"
@@ -216,7 +236,7 @@ if (e.target.files[0] != null) {
   break;
 
 
-    case "text":
+    case "longtext":
       element = (
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
@@ -227,38 +247,23 @@ if (e.target.files[0] != null) {
         />
       );
       break;
-    // case "varchar":
-    //   element = (
-    //     <ContentEditable
-    //       html={(value?.value && value?.value?.toString()) || ""}
-    //       onChange={onChange}
-    //       onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-    //       className='data-input'
-    //     />
-    //   );
-    //   break;
-    case "numeric":
+    case "singlelinetext":
       element = (
         <ContentEditable
-          html={(value?.value && value.value.toString()) || ""}
+          html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
-          
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-          className='data-input text-align-right'
-          step="any"
+          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+          className='data-input'
         />
       );
       break;
-      case "integer":
+    case "numeric":
       element = (
-        <ContentEditable
-          html={(value?.value && value.value.toString()) || ""}
-          onChange={onChange}
-          
-          onBlur={() => setValue((old) => ({value: old.value, update: true}))}
-          className='data-input text-align-right'
-          step="any"
-        />
+        <input type="number"
+        defaultValue={(value?.value && value?.value?.toString()) || ""}
+        className='data-input'
+        style={{background: "none"}}
+      />
       );
       break;
     case "select":
