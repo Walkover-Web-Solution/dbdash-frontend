@@ -34,7 +34,7 @@ export default function Header({
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi,setQueryByAi] = useState(false)
-  const [selectValue, setSelectValue] = useState('Text');
+  const [selectValue, setSelectValue] = useState('longtext');
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [metaData, setMetaData] = useState({});
   const [open, setOpen] = useState(false);
