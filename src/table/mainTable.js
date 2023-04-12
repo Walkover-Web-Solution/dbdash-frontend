@@ -3,20 +3,23 @@ import "./style.css";
 import Table from "./table";
 // import { grey } from "./colors";
 import {  useDispatch ,useSelector } from "react-redux";
-import { getTableInfo } from "../store/table/tableSelector";
+// import { getTableInfo } from "../store/table/tableSelector";
 import { bulkAddColumns } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
 function MainTable({page,setPage}) {
-  // console.log("render main table ")
-
-  const tableInfo=useSelector((state)=>getTableInfo(state));
+  
+  const columns=useSelector((state)=>state.table.columns);
+  const data=useSelector((state)=>state.table.data);
+  const dbId=useSelector((state)=>state.table.dbId);
+  const tableId=useSelector((state)=>state.table.tableId);
   // const [page,setPage] = useState(2);
+  console.log("render main table ",data)
   const dispatchs = useDispatch();
   // console.log("fetchMoreData",page)
   const fetchMoreData = () => {
     dispatchs(bulkAddColumns({
-      "dbId": tableInfo.dbId,
-      "tableName": tableInfo.tableId,
+      "dbId": dbId,
+      "tableName": tableId,
       "pageNo":page+1
     }));
     setPage((page) => page + 1);
@@ -51,13 +54,13 @@ function MainTable({page,setPage}) {
             backgroundColor:'#fff',
           }}
         >
-          {tableInfo?.columns?.length>0 && <Table
+          {columns?.length > 0 && <Table
           update={fetchMoreData}
           hasMore={true}
-            columns={tableInfo.columns}
-            data={tableInfo.data|| []}
+            columns={columns}
+            data={data|| []}
             dispatch={dispatchs}
-            skipReset={tableInfo.skipReset}
+            // skipReset={tableInfo.skipReset}
           /> }
         </div>
       </div>

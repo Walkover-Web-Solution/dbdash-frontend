@@ -10,6 +10,7 @@ import { getDbById } from "../api/dbApi";
 // import {  getTable1 } from '../store/allTable/allTableThunk';
 import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../store/allTable/allTableSlice";
+import { resetData } from "../store/table/tableSlice";
 function DbDetails() {
     var {dbId} = useParams();
     const dispatch = useDispatch()
@@ -20,6 +21,11 @@ function DbDetails() {
         if(dbId)
             getAllTableName(dbId);
     }, [dbId]);
+
+    useEffect(() => {
+        return ()=> dispatch (resetData())
+        
+    }, []);
     const getAllTableName = async (dbId) => {
 
         var object = {}

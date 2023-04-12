@@ -22,7 +22,7 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast"
 };
 
-export default function Table({ columns, data, dispatch: dataDispatch, skipReset,hasMore,update }) {
+export default function Table({ columns, data, dispatch: dataDispatch,hasMore,update }) {
 // console.log("update",update)
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
@@ -78,9 +78,9 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
       data,
       defaultColumn,
       dataDispatch,
-      autoResetSortBy: !skipReset,
-      autoResetFilters: !skipReset,
-      autoResetRowState: !skipReset,
+      // autoResetSortBy: !skipReset,
+      // autoResetFilters: !skipReset,
+      // autoResetRowState: !skipReset,
       sortTypes,
       cellIdSplitBy: '_',
       initialState: {
@@ -239,5 +239,4 @@ Table.propTypes = {
   update:PropTypes.any,
   data: PropTypes.any,
   dispatch: PropTypes.any,
-  skipReset: PropTypes.any
 };

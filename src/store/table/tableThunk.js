@@ -5,7 +5,7 @@ import {insertRow, uploadImage} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
 // reducer imports
-import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
+import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,setTableLoading,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
 import  {runQueryonTable}  from "../../api/filterApi";
 import { createView, deleteFieldInView } from "../../api/viewApi";
@@ -100,7 +100,8 @@ export const addColumns = createAsyncThunk(
 ) ;
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
-    async (payload,{getState}) =>{
+    async (payload,{getState,dispatch}) =>{
+            
         if(payload.filter != null)
         {
             const querydata = await runQueryonTable(
@@ -114,6 +115,7 @@ export const bulkAddColumns = createAsyncThunk(
                 "tableId":payload.tableName,
                 "dbId":payload.dbId
             }
+            dispatch (setTableLoading(false))
             return dataa;
         }
         else{
@@ -127,6 +129,8 @@ export const bulkAddColumns = createAsyncThunk(
                 "dbId":payload.dbId,
                 "pageNo" : data.pageNo
             }
+            dispatch (setTableLoading(false))
+            
             return dataa;
         }
     }

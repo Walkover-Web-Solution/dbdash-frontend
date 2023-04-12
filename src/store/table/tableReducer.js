@@ -11,7 +11,7 @@ export const initialState = {
   skipReset: false,
   status: "idle",
   pageNo : 0,
-  isTableLoading : false
+  isTableLoading : true
 };
 
 export const reducers = {
@@ -37,7 +37,17 @@ export const reducers = {
       state.skipReset = true;
     }
   },
-
+  resetData(){
+    return  {
+      columns: [],
+      data: [],
+      tableId: [],
+      dbId: [],
+      skipReset: false,
+      status: "idle",
+      pageNo : 0,
+      isTableLoading : true }
+  },
   deleteColumn(state, payload) {
     const action = payload.payload;
     if (action) {
@@ -124,7 +134,11 @@ export const reducers = {
     }
   },
 
-
+  setTableLoading (state,{payload}){
+    return {
+        ...state , isTableLoading : payload
+    }
+  },
   updateTableData(state, payload) {
 
     return {
@@ -342,14 +356,6 @@ export function extraReducers(builder) {
 
     .addCase(bulkAddColumns.pending, (state) => {
       state.status = "loading"
-      if( state.pageNo == 0  )
-      {
-        state.isTableLoading = true
-      }
-      else
-      {
-        state.isTableLoading = false
-      }
     })
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
@@ -358,13 +364,11 @@ export function extraReducers(builder) {
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId
         state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
-        state.isTableLoading = false
       }
       state.status = "succeeded";
 
     })
     .addCase(bulkAddColumns.rejected, (state) => {
-      state.isTableLoading = false
       state.status = "failed";
     })
 

@@ -10,21 +10,25 @@ import Tabs from '@mui/material/Tabs';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
-import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import { createTable1 } from '../../store/allTable/allTableThunk';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
 import CircularProgress from '@mui/material/CircularProgress';
+import { setTableLoading } from '../../store/table/tableSlice';
+import { useMemo } from 'react';
 
 // import { uploadCSV } from '../../api/rowApi';
 
 export default function TablesList({ dbData }) {
- console.log("list ");
- const isTableLoading=useSelector((state)=>state.table?.isTableLoading);
+  const isTableLoading=useSelector((state)=>state.table?.isTableLoading);
+  const columns=useSelector((state)=>state.table?.columns);
+  const columnMemo = useMemo(() => columns, [columns])
+  console.log("columns memo",columnMemo)
+  console.log("list ",isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const AllTableInfo = useSelector((state) =>state.tables.tables);
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
   // const [CSV,setCSV] = useState([])
@@ -36,13 +40,13 @@ export default function TablesList({ dbData }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false)
-  const [filter, setFilter] = useState(AllTableInfo.tables[params?.tableName]?.filters);
+  const [filter, setFilter] = useState(AllTableInfo[params?.tableName]?.filters);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false)
   const [filterId, setFilterId] = useState("")
   const [anchorEl, setAnchorEl] = useState(null);
-  const tableLength  = Object.keys(AllTableInfo?.tables).length
+  const tableLength  = Object.keys(AllTableInfo).length
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -91,7 +95,7 @@ export default function TablesList({ dbData }) {
     console.log("in use effect ")
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
-      
+      dispatch (setTableLoading(true))
       dispatch(bulkAddColumns({
         "dbId":dbData?.db?._id,
         "tableName": params?.tableName|| tableNames[0],
@@ -106,13 +110,7 @@ export default function TablesList({ dbData }) {
       // setFilter()
     }
   }, [])
-  // useEffect(()=>{
-  //   if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
-  //   {
-  //     setTableLength(Object.keys(AllTableInfo?.tables).length)
-  //   }
-  // },[AllTableInfo])
-
+  
   
   return (
     <>
@@ -125,7 +123,7 @@ export default function TablesList({ dbData }) {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
-            {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
+            {AllTableInfo && Object.entries(AllTableInfo).map((table, index) => (
               <Box key={index}  sx={{height:'57px'}} >
                 <SingleTable filter={filter} setFilter={setFilter} table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} value={value} setPage={setPage}/>
               </Box>
@@ -179,8 +177,8 @@ export default function TablesList({ dbData }) {
           
       </Box>
      { open &&  <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable}/> }
-      {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo={AllTableInfo} />}
-       { isTableLoading  ? <CircularProgress /> : <MainTable setPage ={setPage}  page = {page} />  }
+      {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} />}
+       { isTableLoading  ? <CircularProgress /> :  <MainTable setPage ={setPage}  page = {page} />  }
     </>
   );
 }
