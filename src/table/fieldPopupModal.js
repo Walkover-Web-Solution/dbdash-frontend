@@ -7,8 +7,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
 import Joi from 'joi';
-import { useParams } from 'react-router';
-
+import { useParams } from 'react-router-dom';
 export default function FieldPopupModal(props) {
  
   const [showSwitch, setShowSwitch] = useState(true);

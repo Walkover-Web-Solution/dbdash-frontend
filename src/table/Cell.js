@@ -56,12 +56,13 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
 
   const onChangeFile = (e, type) => {
     setDataType(type)
-    
-if (e.target.files[0] != null) {
+    console.log(e.target.files[0]);
+  if (e.target.files[0] != null) {
       setImageUpload(e.target.files[0])
     }
     e.target.value = null;
   };
+
   useEffect(() => {
     setValue({ value: initialValue, update: false });
   }, [initialValue]);

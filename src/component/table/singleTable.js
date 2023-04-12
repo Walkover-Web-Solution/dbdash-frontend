@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 // import { selectOrgandDb } from "../../store/database/databaseSelector";
-
+// import { uploadCSV } from '../../api/rowApi';
 
 
 export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter,value }) {
@@ -40,6 +40,15 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
       />
     </Box>
   );
+
+  // const submitCSV = async()=>{
+  //   const data = {
+  //     csvfile:CSV
+  //   }
+  //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
+  //   console.log(csv)
+  // }
+
   const renameTableName = async (db_id, tableName) => {
     const data1 = {
       newTableName: tableNa || table[0]
@@ -55,7 +64,6 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     } 
 
     const previousIndex = value - 1;
-    // console.log(previousIndex);
     navigate(`/db/${dbData.db._id}/table/${Object.keys(dbData?.db?.tables)[previousIndex]}`);
     
   };
@@ -81,11 +89,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
           border: '1px solid rgba(0, 0, 0, 0.2)',
           backgroundColor: '#fff',
           boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-          // minWidth: '175px',
-          // maxWidth: '200px',
-          // width: "135px",
           textAlign: 'center',
-          //textOverflow: 'ellipsis',
           overflow: 'hidden',
           whiteSpace: 'nowrap',
           transition: 'transform 0.2s ease-in-out',
@@ -100,9 +104,10 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
           }));
         }}
       >
-        {name && tabIndex == index ?
 
-          (<>
+        {name && tabIndex == index ?
+         
+         (<>
             <ClickAwayListener onClickAway={() => { setName(false) }} >
               <Box>
                 <TextField
@@ -145,7 +150,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
                 label={table[1]?.tableName || table[0]}
                 dropdown={<Dropdown setTabIndex={setTabIndex}
                   tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
-                  first="Rename" second="Delete" idToDelete={dbData?.db?._id}
+                  first="Rename" second="Delete" third="Upload csv" idToDelete={dbData?.db?._id}
                   deleteFunction={deleteTableName} setName={setName} />}
               />}
             </Box>:
