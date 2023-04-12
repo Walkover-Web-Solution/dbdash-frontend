@@ -50,7 +50,6 @@ export default function Table({
 }) {
   const params = useParams();
   console.log("columns ",columns)
-  // const [head, setHead] = useState();
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -118,23 +117,19 @@ export default function Table({
     useRowSelect,
     useColumnOrder
   );
+  console.log("columns",columns)
+
   // useEffect(() => {
   //   if (headerGroups) 
   //     setHead(headerGroups);
   // }, [headerGroups]);
   const reoder = useCallback(
     (item, newIndex) => {
-    var newOrder = Array.from(columns);
-
-      console.log("item",item)
-      console.log("newOrder",newOrder)
-      console.log("newOrder  === ",columns)
- 
+    var newOrder = Array.from(columns); 
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
       // setHead([...newOrder]);
-      console.log("columns ",columns)
       columns = newOrder
       dispatch(
         updateColumnOrder({
@@ -148,7 +143,7 @@ export default function Table({
       );
       //call redux make thunk and reducer pass new column order and update
     },
-    []
+    [columns]
   );
 
   useEffect(() => {
