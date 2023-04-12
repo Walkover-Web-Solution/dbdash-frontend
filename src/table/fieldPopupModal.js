@@ -20,6 +20,7 @@ import NotesIcon from '@mui/icons-material/Notes';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import NumbersIcon from '@mui/icons-material/Numbers';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 export default function FieldPopupModal(props) {
  
@@ -91,7 +92,7 @@ export default function FieldPopupModal(props) {
 
   const handleSelectChange = (event) => {
     console.log(event.target)
-
+    setOpenViewDropdown(false)
     setLookupField(false)
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
@@ -99,6 +100,7 @@ export default function FieldPopupModal(props) {
     setLookupField(false)
     props?.setShowFieldsDropdown(false)
     props?.setSelectedFieldName(false)
+    setOpenLinkedField(false)
 
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
@@ -272,7 +274,6 @@ export default function FieldPopupModal(props) {
           >
             <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{mr : 1}}/>long text</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
-            <MenuItem value="Text" >text</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{mr : 1}}/>Number</MenuItem>
             <MenuItem value="checkbox"><CheckIcon fontSize="2px" sx={{mr : 1}}/>Checkbox</MenuItem>
             <MenuItem value="datetime"><DateRangeIcon fontSize="2px" sx={{mr : 1}}/>Datetime</MenuItem>
@@ -282,7 +283,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="attachment"><AttachFileIcon fontSize="2px" sx={{mr : 1}}/>Attachment</MenuItem>
             <MenuItem value="link"><ReadMoreOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Link</MenuItem>
             <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Lookup</MenuItem>
-            <MenuItem value="id">id</MenuItem>
+            <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>id</MenuItem>
  
           </Select>
           {showNumericOptions && (
@@ -480,7 +481,7 @@ export default function FieldPopupModal(props) {
             onChange={(e) => props?.setSelectedFieldName(e.target.value)}
           >
             {
-              Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.map((fields) =>
+             AllTableInfo.tables[props?.selectedTable]?.fields &&  Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.map((fields) =>
                 (
                   <MenuItem key={fields[0]} value={fields[0]}>
                     {fields[1]?.fieldName}
