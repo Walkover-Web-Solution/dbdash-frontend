@@ -1,17 +1,29 @@
 import React, { useMemo, useEffect, useCallback, useState } from "react";
 import clsx from "clsx";
-import { useTable, useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useColumnOrder } from "react-table";
+import {
+  useTable,
+  useFlexLayout,
+  useResizeColumns,
+  useRowSelect,
+  useSortBy,
+  useColumnOrder,
+} from "react-table";
 import Cell from "./Cell";
 import Header from "./Header";
 import PlusIcon from "./img/Plus";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
-import { useCellRangeSelection } from 'react-table-plugins'
-import { addRows, deleteRows, updateCells, updateColumnOrder } from "../store/table/tableThunk";
+import { useCellRangeSelection } from "react-table-plugins";
+import {
+  addRows,
+  deleteRows,
+  updateCells,
+  updateColumnOrder,
+} from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { DndProvider }  from "react-dnd";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import Preview from "./Preview";
@@ -27,26 +39,34 @@ const defaultColumn = {
   maxWidth: 400,
   Cell: Cell,
   Header: Header,
-  sortType: "alphanumericFalsyLast"
+  sortType: "alphanumericFalsyLast",
 };
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
-export default function Table({ columns, data,dispatch:dataDispatch, skipReset }) {
+export default function Table({
+  columns,
+  data,
+  dispatch: dataDispatch,
+  skipReset,
+}) {
   const params = useParams();
-console.log("params",params);
-  console.log(columns)
-const[head,setHead] = useState()
+
+  const [head, setHead] = useState();
   const handleCopy = (event, value) => {
-    event.clipboardData.setData('text/plain', value);
+    event.clipboardData.setData("text/plain", value);
     event.preventDefault();
-    document.execCommand('copy');
+    document.execCommand("copy");
   };
-  const dispatch =useDispatch();
-  const handlePaste = (event,row,cell) => {
+  const dispatch = useDispatch();
+  const handlePaste = (event, row, cell) => {
     event.preventDefault();
-      const text = event.clipboardData.getData('text/plain');
-       dispatch(updateCells({
-        columnId: cell.column.id, rowIndex: cell.row.original.id, value: text
-      }))
+    const text = event.clipboardData.getData("text/plain");
+    dispatch(
+      updateCells({
+        columnId: cell.column.id,
+        rowIndex: cell.row.original.id,
+        value: text,
+      })
+    );
   };
   const sortTypes = useMemo(
     () => ({
@@ -63,13 +83,18 @@ const[head,setHead] = useState()
         return isNaN(rowA.values[columnId])
           ? rowA.values[columnId].localeCompare(rowB.values[columnId])
           : rowA.values[columnId] - rowB.values[columnId];
-      }
+      },
     }),
     []
   );
-  const { getTableProps, getTableBodyProps, headerGroups,rows, prepareRow,
-     selectedFlatRows,
-    state: { selectedCellIds, currentSelectedCellIds,},
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    selectedFlatRows,
+    state: { selectedCellIds, currentSelectedCellIds },
   } = useTable(
     {
       columns,
@@ -80,10 +105,10 @@ const[head,setHead] = useState()
       autoResetFilters: !skipReset,
       autoResetRowState: !skipReset,
       sortTypes,
-      cellIdSplitBy: '_',
+      cellIdSplitBy: "_",
       initialState: {
         selectedCellIds: {},
-        columnOrder: columns
+        columnOrder: columns,
       },
     },
     useCellRangeSelection,
@@ -94,25 +119,32 @@ const[head,setHead] = useState()
     useColumnOrder
   );
   useEffect(() => {
-    if(headerGroups)
-    console.log(headerGroups[0]?.headers)
-    setHead(headerGroups)
-  }, [headerGroups])
+    if (headerGroups) console.log(headerGroups[0]?.headers);
+    setHead(headerGroups);
+  }, [headerGroups]);
   const reoder = useCallback(
     (item, newIndex) => {
-      console.log(item, newIndex)
-      console.log(columns)
+    
       const newOrder = Array.from(columns);
-      console.log("newOrder",newOrder)
-    const { index: currentIndex } = item;
-    const [removedColumn] = newOrder.splice(currentIndex,  1);
-    console.log("removedColumn",item,newIndex)
-    newOrder.splice(newIndex, 0, removedColumn);
-//    console.log("currentIndex",currentIndex,newIndex)
+ 
+      const { index: currentIndex } = item;
+      const [removedColumn] = newOrder.splice(currentIndex, 1);
+      // console.log("removedColumn", item, newIndex);
+      newOrder.splice(newIndex, 0, removedColumn);
+      //    console.log("currentIndex",currentIndex,newIndex)
       // console.log("newOrder",newOrder)
       setHead([...newOrder]);
       // setColumns(newOrder)
-      dispatch(updateColumnOrder({columns: newOrder,oldIndex:item?.id,newIndex:newIndex,dbId:params.dbId,tableName:params.tableName}));
+      dispatch(
+        updateColumnOrder({
+          columns: newOrder,
+          oldIndex: item?.id,
+          newIndex: columns[newIndex].id,
+          dbId: params.dbId,
+          tableName: params.tableName,
+
+        })
+      );
       //call redux make thunk and reducer pass new column order and update
       // console.log(newOrder)
     },
@@ -120,24 +152,25 @@ const[head,setHead] = useState()
   );
   useEffect(() => {
     // console.log(head);
-  }, [head])
+  }, [head]);
   useEffect(() => {
-    if(Object.keys(selectedCellIds).length > 0) {
-      const newData = cloneDeep(data)
-      const firstValue = Object.keys(selectedCellIds)[0].split('_');
+    if (Object.keys(selectedCellIds).length > 0) {
+      const newData = cloneDeep(data);
+      const firstValue = Object.keys(selectedCellIds)[0].split("_");
       const newValueToReplace = newData[firstValue[1]][firstValue[0]];
       {
-        selectedCellIds >= 1 && Object.keys(selectedCellIds)?.forEach((key, i) => {
-          const keyName = key.split('_')[0]
-          const index = key.split('_')[1]
-          if (i === 0 || firstValue[0] != keyName) return;
-          newData[index][keyName] = newValueToReplace;
-        })
+        selectedCellIds >= 1 &&
+          Object.keys(selectedCellIds)?.forEach((key, i) => {
+            const keyName = key.split("_")[0];
+            const index = key.split("_")[1];
+            if (i === 0 || firstValue[0] != keyName) return;
+            newData[index][keyName] = newValueToReplace;
+          });
       }
-      dataDispatch(updateTableData(newData))
+      dataDispatch(updateTableData(newData));
     }
-  }, [selectedCellIds])
-  let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds }
+  }, [selectedCellIds]);
+  let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds };
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
       for (let column of headerGroup.headers) {
@@ -150,89 +183,116 @@ const[head,setHead] = useState()
   }
   return (
     <>
-      {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
-        dataDispatch(deleteRows(selectedFlatRows))
-      }}>delete selected rows</Button>}
-        <DndProvider backend={HTML5Backend}>
+      {selectedFlatRows?.length > 0 && (
+        <Button
+          sx={{ m: 2 }}
+          onClick={() => {
+            dataDispatch(deleteRows(selectedFlatRows));
+          }}
+        >
+          delete selected rows
+        </Button>
+      )}
+      <DndProvider backend={HTML5Backend}>
         <ScrollingComponent style={{ overflow: "auto", maxHeight: 450 }}>
-      <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
-        <div>
-          <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
-            {head && head[0].headers?.map((column,index) => {
-              // {console.log("hgf",column)}
-              return (
-                <React.Fragment key ={index}>
-               {/* {  column.render("Header")} */}
-               <DraggableHeader
-                reoder={reoder}
-                key={column.id}
-                columns={column}
-                index={index}
-              />
-                </React.Fragment>
-              )
-              // return(
-              // <DraggableHeader
-              //   reoder={reoder}
-              //   key={column.id}
-              //   columns={column}
-              //   index={index}
-              // />
-              // )
-            })}
-          </div>
-        </div>
-        </div>
-        <div {...getTableBodyProps()}>
-          {rows?.map((row, rowIndex ) => {
-            prepareRow(row);
-            return (
-              <div  key={rowIndex} {...row.getRowProps()} className= {'tr'+rowIndex}
-              style=
-              {
-                row.isSelected ? { ...row.getRowProps().style, backgroundColor: 'blue' } : {
-                  ...row.getRowProps().style
-                }
-              }>
-                {row.cells.map((cell,columnIndex) => {
-                  return (
-                    <div key={columnIndex}
-                    // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
-                    // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
-                    {...cell.getCellRangeSelectionProps()}
-                    {...cell.getCellProps(
-                      {
-                    onCopy: event => handleCopy(event, cell.value),
-                    onPaste : event => handlePaste(event, rowIndex, cell)
-                  }
-                  )}
-                  // suppressContentEditableWarning={true}
-                  // contentEditable
-                  style=
-                  {
-                    cellsSelected[cell.id]
-                      ? { ...cell.getCellProps().style,
-                        // backgroundColor: '#6beba80'
-                       userSelect: 'none',flex: 'none' ,}
-                      : {...cell.getCellProps().style, userSelect: 'none',flex: 'none',height:'30px' }
-                  }
-                  className='td'>
-                    {cell.render("Cell")}
-                  </div>
-                )})}
-              </div>
-            );
-          })}
-          <div className='tr add-row'
-          onClick={() => dataDispatch(addRows({ type: "add_row" }))}
+          <div
+            {...getTableProps()}
+            className={clsx("table", isTableResizing() && "noselect")}
+            style={{}}
           >
-            <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
-              <PlusIcon />
-            </span>
-            New
+            <div>
+              <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
+                {head &&
+                  head[0].headers?.map((column, index) => {
+                    // {console.log("hgf",column)}
+                    return (
+                      <React.Fragment key={index}>
+                        {/* {  column.render("Header")} */}
+                        <DraggableHeader
+                          reoder={reoder}
+                          key={column.id}
+                          columns={column}
+                          index={index}
+                        />
+                      </React.Fragment>
+                    );
+                    // return(
+                    // <DraggableHeader
+                    //   reoder={reoder}
+                    //   key={column.id}
+                    //   columns={column}
+                    //   index={index}
+                    // />
+                    // )
+                  })}
+              </div>
+            </div>
           </div>
-        </div>
-      </ScrollingComponent>
+          <div {...getTableBodyProps()}>
+            {rows?.map((row, rowIndex) => {
+              prepareRow(row);
+              return (
+                <div
+                  key={rowIndex}
+                  {...row.getRowProps()}
+                  className={"tr" + rowIndex}
+                  style={
+                    row.isSelected
+                      ? { ...row.getRowProps().style, backgroundColor: "blue" }
+                      : {
+                          ...row.getRowProps().style,
+                        }
+                  }
+                >
+                  {row.cells.map((cell, columnIndex) => {
+                    return (
+                      <div
+                        key={columnIndex}
+                        // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
+                        // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
+                        {...cell.getCellRangeSelectionProps()}
+                        {...cell.getCellProps({
+                          onCopy: (event) => handleCopy(event, cell.value),
+                          onPaste: (event) =>
+                            handlePaste(event, rowIndex, cell),
+                        })}
+                        // suppressContentEditableWarning={true}
+                        // contentEditable
+                        style={
+                          cellsSelected[cell.id]
+                            ? {
+                                ...cell.getCellProps().style,
+                                // backgroundColor: '#6beba80'
+                                userSelect: "none",
+                                flex: "none",
+                              }
+                            : {
+                                ...cell.getCellProps().style,
+                                userSelect: "none",
+                                flex: "none",
+                                height: "30px",
+                              }
+                        }
+                        className="td"
+                      >
+                        {cell.render("Cell")}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+            <div
+              className="tr add-row"
+              onClick={() => dataDispatch(addRows({ type: "add_row" }))}
+            >
+              <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+                <PlusIcon />
+              </span>
+              New
+            </div>
+          </div>
+        </ScrollingComponent>
         <Preview />
       </DndProvider>
       {/* <pre>
@@ -252,5 +312,5 @@ Table.propTypes = {
   // data:PropTypes.any,
   // dispatch:PropTypes.any,
   // skipReset:PropTypes.any,
-  setColumns:PropTypes.func
+  setColumns: PropTypes.func,
 };

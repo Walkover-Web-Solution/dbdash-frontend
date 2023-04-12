@@ -114,7 +114,7 @@ export const bulkAddColumns = createAsyncThunk(
                 "tableId":payload.tableName,
                 "dbId":payload.dbId
             }
-            console.log("data",dataa);
+            // console.log("data",dataa);
             return dataa;
         }
     }
@@ -150,7 +150,7 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async(payload,{dispatch,getState})=>{
-        console.log("updatapayload",payload)
+        // console.log("updatapayload",payload)
         const data={
             newFieldName:payload?.label,
             newFieldType:payload?.fieldType
@@ -212,7 +212,6 @@ export const addColumsToLeft = createAsyncThunk(
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
-        console.log(('hiii'));
         return payload;
     }
 )
@@ -268,20 +267,19 @@ export const updateColumnsType = createAsyncThunk(
 )
 export const updateColumnOrder = createAsyncThunk(
     "table/updateColumnOrder",
-    async(payload)=>{
-        console.log("payload oldIndex",payload?.oldIndex)
-        console.log("payload newIndex",payload?.newIndex)
+    async(payload,{dispatch,getState})=>{
+       
         const data={
             oldIndex:payload?.oldIndex,
             newIndex:payload?.newIndex
         }
         
         await updateField(payload?.dbId,payload?.tableName,payload?.oldIndex,data)
-        // dispatch( getTable1({dbId:payload?.dbId}))
-        // // dispatch(updateColumnHeader(payload));
-        // const {tableId, dbId} = getState().table
-        // // console.log("first",current(getState().table))
-        // dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
+        dispatch( getTable1({dbId:payload?.dbId}))
+        // dispatch(updateColumnHeader(payload));
+        const {tableId, dbId} = getState().table
+        // console.log("first",current(getState().table))
+        dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         // // // backend api call
         return payload;
     }

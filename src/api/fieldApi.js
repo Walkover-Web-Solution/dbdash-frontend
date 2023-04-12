@@ -11,8 +11,7 @@ const getAllfields = async (db_id, tableName) =>{
 // get field of particular table //added by hariomm22
 const updateField = async (db_id,tableName,fieldId,data) =>
 {
-    console.log("Update feild",fieldId)
-    console.log("data",data)
+   
     return await axios.patch(URL +`/dbs/${db_id}/${tableName}/${fieldId}/updatefield`,data)
 }
 const getQueryByAi = async (db_id,tableName,data) =>
