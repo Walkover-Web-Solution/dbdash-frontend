@@ -78,7 +78,6 @@ export default function FieldPopupModal(props) {
   }
 
   const handleSelectChange = (event) => {
-    // console.log(event.target)
 
     setLookupField(false)
     setShowNumericOptions(false);
@@ -339,7 +338,6 @@ export default function FieldPopupModal(props) {
                   inputProps={inputProps}
                   renderSuggestionsContainer={renderSuggestionsContainer}
                   // onChange={(e)=>{
-                  //   console.log(e.target.value)
                   //   setUserQuery(e.target.value)
                   //  }}
                 />
@@ -430,9 +428,7 @@ export default function FieldPopupModal(props) {
             }}
             onChange={(e) =>{ 
               
-              // console.log({
-              //   [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
-              // })
+             
               props?.setLinkedValueName({
                 [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
               })

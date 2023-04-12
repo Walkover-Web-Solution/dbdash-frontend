@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useCallback, useState } from "react";
+import React, { useMemo, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import {
   useTable,
@@ -50,7 +50,7 @@ export default function Table({
 }) {
   const params = useParams();
 
-  const [head, setHead] = useState();
+  // const [head, setHead] = useState();
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -118,23 +118,20 @@ export default function Table({
     useRowSelect,
     useColumnOrder
   );
-  useEffect(() => {
-    if (headerGroups) console.log(headerGroups[0]?.headers);
-    setHead(headerGroups);
-  }, [headerGroups]);
+  // useEffect(() => {
+  //   if (headerGroups) 
+  //     setHead(headerGroups);
+  // }, [headerGroups]);
   const reoder = useCallback(
     (item, newIndex) => {
-    
+      console.log("item",item)
       const newOrder = Array.from(columns);
  
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
-      // console.log("removedColumn", item, newIndex);
       newOrder.splice(newIndex, 0, removedColumn);
-      //    console.log("currentIndex",currentIndex,newIndex)
-      // console.log("newOrder",newOrder)
-      setHead([...newOrder]);
-      // setColumns(newOrder)
+      // setHead([...newOrder]);
+      columns = newOrder
       dispatch(
         updateColumnOrder({
           columns: newOrder,
@@ -146,13 +143,10 @@ export default function Table({
         })
       );
       //call redux make thunk and reducer pass new column order and update
-      // console.log(newOrder)
     },
-    [head, setHead]
+    []
   );
-  useEffect(() => {
-    // console.log(head);
-  }, [head]);
+
   useEffect(() => {
     if (Object.keys(selectedCellIds).length > 0) {
       const newData = cloneDeep(data);
@@ -202,9 +196,8 @@ export default function Table({
           >
             <div>
               <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
-                {head &&
-                  head[0].headers?.map((column, index) => {
-                    // {console.log("hgf",column)}
+                {
+                  headerGroups[0].headers?.map((column, index) => {
                     return (
                       <React.Fragment key={index}>
                         {/* {  column.render("Header")} */}

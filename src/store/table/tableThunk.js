@@ -114,7 +114,6 @@ export const bulkAddColumns = createAsyncThunk(
                 "tableId":payload.tableName,
                 "dbId":payload.dbId
             }
-            // console.log("data",dataa);
             return dataa;
         }
     }
@@ -150,7 +149,6 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async(payload,{dispatch,getState})=>{
-        // console.log("updatapayload",payload)
         const data={
             newFieldName:payload?.label,
             newFieldType:payload?.fieldType
@@ -267,7 +265,7 @@ export const updateColumnsType = createAsyncThunk(
 )
 export const updateColumnOrder = createAsyncThunk(
     "table/updateColumnOrder",
-    async(payload,{dispatch,getState})=>{
+    async(payload)=>{
        
         const data={
             oldIndex:payload?.oldIndex,
@@ -275,11 +273,7 @@ export const updateColumnOrder = createAsyncThunk(
         }
         
         await updateField(payload?.dbId,payload?.tableName,payload?.oldIndex,data)
-        dispatch( getTable1({dbId:payload?.dbId}))
         // dispatch(updateColumnHeader(payload));
-        const {tableId, dbId} = getState().table
-        // console.log("first",current(getState().table))
-        dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         // // // backend api call
         return payload;
     }

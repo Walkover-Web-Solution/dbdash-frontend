@@ -68,7 +68,6 @@ export default function TablesList({ dbData }) {
   //     csvfile:CSV
   //   }
   //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
-  //   console.log(csv)
   // }
   function onFilterClicked(filter, id) {
     setFilterId(id)

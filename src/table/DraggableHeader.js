@@ -39,7 +39,6 @@ export default function DraggableHeader({ columns,index, reoder, key})
   // drag(drop(ref));
 
   //const memoizedColumn = useMemo(() => columns.render("Header"), [columns]);
-  // console.log("columns", columns);
   // const opacity = isDragging ? 0 : 1;
 
   useEffect(() => {

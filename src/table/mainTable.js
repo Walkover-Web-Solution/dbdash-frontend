@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect } from "react";
 import "./style.css";
 import Table from "./table";
 // import { grey } from "./colors";
@@ -11,10 +11,7 @@ MainTable() {
   useEffect(() => {
 },[]);
   const tableInfo=useSelector((state)=>getTableInfo(state));
-  const columnData = tableInfo.columns
-  const [columns,setColumns] = useState(columnData)
   const dispatchs = useDispatch();
-  console.log(columns)
  
   return (
     <div
@@ -49,7 +46,6 @@ MainTable() {
             data={tableInfo.data|| []}
             dispatch={dispatchs}
             skipReset={tableInfo.skipReset}
-            setColumns={setColumns}
           />}
         </div>
       </div>
