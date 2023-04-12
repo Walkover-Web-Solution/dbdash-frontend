@@ -49,7 +49,7 @@ export default function Table({
   skipReset,
 }) {
   const params = useParams();
-
+  console.log("columns ",columns)
   // const [head, setHead] = useState();
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
@@ -124,13 +124,17 @@ export default function Table({
   // }, [headerGroups]);
   const reoder = useCallback(
     (item, newIndex) => {
+    var newOrder = Array.from(columns);
+
       console.log("item",item)
-      const newOrder = Array.from(columns);
+      console.log("newOrder",newOrder)
+      console.log("newOrder  === ",columns)
  
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
       // setHead([...newOrder]);
+      console.log("columns ",columns)
       columns = newOrder
       dispatch(
         updateColumnOrder({
