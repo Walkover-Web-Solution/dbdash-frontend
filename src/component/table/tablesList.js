@@ -16,16 +16,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
 import CircularProgress from '@mui/material/CircularProgress';
 import { setTableLoading } from '../../store/table/tableSlice';
-import { useMemo } from 'react';
 
 // import { uploadCSV } from '../../api/rowApi';
 
 export default function TablesList({ dbData }) {
   const isTableLoading=useSelector((state)=>state.table?.isTableLoading);
-  const columns=useSelector((state)=>state.table?.columns);
-  const columnMemo = useMemo(() => columns, [columns])
-  console.log("columns memo",columnMemo)
-  console.log("list ",isTableLoading);
+  // const columns=useSelector((state)=>state.table?.columns);
   const dispatch = useDispatch();
   const params = useParams();
   const AllTableInfo = useSelector((state) =>state.tables.tables);
@@ -92,7 +88,6 @@ export default function TablesList({ dbData }) {
     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
   useEffect(() => {
-    console.log("in use effect ")
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch (setTableLoading(true))

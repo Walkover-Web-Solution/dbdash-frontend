@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, memo } from "react";
 import clsx from "clsx";
 import { useTable, useFlexLayout, useResizeColumns, useRowSelect, useSortBy } from "react-table";
 import Cell from "./Cell";
@@ -22,8 +22,8 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast"
 };
 
-export default function Table({ columns, data, dispatch: dataDispatch,hasMore,update }) {
-// console.log("update",update)
+const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update }) => {
+
   const handleCopy = (event, value) => {
     event.clipboardData.setData('text/plain', value);
     event.preventDefault();
@@ -131,8 +131,6 @@ export default function Table({ columns, data, dispatch: dataDispatch,hasMore,up
     
   return (
     <>
-    {console.log("in table js ")}
-         {/* {console.log(data?.length)} */}
       {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
         dataDispatch(deleteRows(selectedFlatRows))
       }}>delete selected rows</Button>}
@@ -230,9 +228,10 @@ export default function Table({ columns, data, dispatch: dataDispatch,hasMore,up
       
     </>
   );
-}
+} )
 
-
+Table.displayName = 'Table'
+export default Table
 Table.propTypes = {
   columns: PropTypes.any,
   hasMore:PropTypes.any,

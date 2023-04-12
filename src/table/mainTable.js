@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import "./style.css";
 import Table from "./table";
 // import { grey } from "./colors";
@@ -6,17 +6,16 @@ import {  useDispatch ,useSelector } from "react-redux";
 // import { getTableInfo } from "../store/table/tableSelector";
 import { bulkAddColumns } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
-function MainTable({page,setPage}) {
+const  MainTable = memo ( ({page,setPage}) =>  {
   
   const columns=useSelector((state)=>state.table.columns);
   const data=useSelector((state)=>state.table.data);
   const dbId=useSelector((state)=>state.table.dbId);
   const tableId=useSelector((state)=>state.table.tableId);
   // const [page,setPage] = useState(2);
-  console.log("render main table ",data)
   const dispatchs = useDispatch();
-  // console.log("fetchMoreData",page)
   const fetchMoreData = () => {
+    // xonaso
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
@@ -77,8 +76,9 @@ function MainTable({page,setPage}) {
     </div>
   );
 }
-
-export default MainTable;
+)
+MainTable.displayName = 'MainTable';
+export default  MainTable;
 MainTable.propTypes = {
   page: PropTypes.any,
   setPage: PropTypes.any
