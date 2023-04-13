@@ -116,6 +116,7 @@ export default function Table({
     useRowSelect,
     useColumnOrder
   );
+
   // useEffect(() => {
   //   if (headerGroups) 
   //     setHead(headerGroups);
