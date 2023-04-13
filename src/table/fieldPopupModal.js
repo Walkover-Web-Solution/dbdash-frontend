@@ -7,7 +7,20 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
 import Joi from 'joi';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
+import CheckIcon from '@mui/icons-material/Check';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import FunctionsIcon from '@mui/icons-material/Functions';
+import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
+import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
+// import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
+import TextFormatIcon from '@mui/icons-material/TextFormat';
+import NotesIcon from '@mui/icons-material/Notes';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import NumbersIcon from '@mui/icons-material/Numbers';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 export default function FieldPopupModal(props) {
  
@@ -26,6 +39,8 @@ export default function FieldPopupModal(props) {
   const [showDecimalOptions , setShowDecimalOptions] = useState(false);
   const params = useParams();
 
+
+  
   useEffect(() => {
     if (AllTableInfo?.tables[params?.tableName] && searchValue.length == 0) {
 
@@ -78,22 +93,27 @@ export default function FieldPopupModal(props) {
   }
 
   const handleSelectChange = (event) => {
-
+    setOpenViewDropdown(false)
     setLookupField(false)
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
+    
     setOpenn(false);
     setLookupField(false)
     props?.setShowFieldsDropdown(false)
     props?.setSelectedFieldName(false)
+    setOpenLinkedField(false)
 
     if (event.target.value == "generatedcolumn") {
       setOpenn(true)
       setShowSwitch(false)
+      setOpenLinkedField(false);
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
       setLookupField(true)
+      setShowSwitch(false)
+      setOpenLinkedField(false);
       props?.setSelectValue(event.target.value);
       const firstTable = Object.keys(AllTableInfo.tables)[0];
       props?.setSelectedTable(firstTable);
@@ -116,13 +136,17 @@ export default function FieldPopupModal(props) {
     else if (event.target.value === 'integer') {
       props?.setSelectValue('numeric')
       setShowSwitch(true);
+      // setOpenLinkedField(false);
+     
     } 
     else if (event.target.value === 'decimal' && showNumericOptions) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
+      setOpenLinkedField(false);
     } else if (event.target.value === 'checkbox') {
       setShowSwitch(false);
+      setOpenLinkedField(false);
     }  
     else {
       props?.setShowFieldsDropdown(false)
@@ -132,10 +156,14 @@ export default function FieldPopupModal(props) {
       setShowDecimalOptions(false);
       setLookupField(false)
       setOpenn(false)
+      setShowSwitch(true);
+      setOpenLinkedField(false);
     }
   }
 
   const handleClose = () => {
+    setOpenLinkedField(false);
+    setLookupField(false);
     props?.setOpen(false);
     setOpenn(false);
     setLookupField(false)
@@ -257,19 +285,18 @@ export default function FieldPopupModal(props) {
               minWidth: 120,
             }}
           >
-            <MenuItem value="longtext" >long text</MenuItem>
-            <MenuItem value="singlelinetext">Single line text</MenuItem>
-            {/* <MenuItem value="Text" >text</MenuItem> */}
-            <MenuItem value="numeric">number</MenuItem>
-            <MenuItem value="checkbox">checkbox</MenuItem>
-            <MenuItem value="datetime">datetime</MenuItem>
-            <MenuItem value="createdby">created By</MenuItem>
-            <MenuItem value="createdat">created At</MenuItem>
-            <MenuItem value="generatedcolumn">generated column</MenuItem>
-            <MenuItem value="attachment">attachment</MenuItem>
-            <MenuItem value="link">Link to another record</MenuItem>
-            <MenuItem value="lookup">Lookup</MenuItem>
-            <MenuItem value="id">id</MenuItem>
+            <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{mr : 1}}/>long text</MenuItem>
+            <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
+            <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{mr : 1}}/>Number</MenuItem>
+            <MenuItem value="checkbox"><CheckIcon fontSize="2px" sx={{mr : 1}}/>Checkbox</MenuItem>
+            <MenuItem value="datetime"><DateRangeIcon fontSize="2px" sx={{mr : 1}}/>Datetime</MenuItem>
+            <MenuItem value="createdby"><PersonPinIcon fontSize="2px" sx={{mr : 1}}/>Created By</MenuItem>
+            <MenuItem value="createdat"><MoreTimeIcon fontSize="2px" sx={{mr : 1}}/>Created At</MenuItem>
+            <MenuItem value="generatedcolumn"><FunctionsIcon fontSize="2px" sx={{mr : 1}}/>Generated column</MenuItem>
+            <MenuItem value="attachment"><AttachFileIcon fontSize="2px" sx={{mr : 1}}/>Attachment</MenuItem>
+            <MenuItem value="link"><ReadMoreOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Link</MenuItem>
+            <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Lookup</MenuItem>
+            <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>id</MenuItem>
  
           </Select>
           {showNumericOptions && (
@@ -338,7 +365,6 @@ export default function FieldPopupModal(props) {
                   inputProps={inputProps}
                   renderSuggestionsContainer={renderSuggestionsContainer}
                   // onChange={(e)=>{
-                  //   console.log(e.target.value)
                   //   setUserQuery(e.target.value)
                   //  }}
                 />
@@ -363,7 +389,7 @@ export default function FieldPopupModal(props) {
             )
           }
             {/* show table name   */}
-          {lookupField && <Select
+          {/* {lookupField  && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 && <Select
             labelId="select-label"
             id="select"
             value={props?.selectedTable}
@@ -381,18 +407,41 @@ export default function FieldPopupModal(props) {
             {AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).map((table, index) => (
               <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
             ))}
-          </Select>}
-
-          {/* show fields that are uniquw  */}
-          {props?.showFieldsDropdown && (<Select
+          </Select>} */}
+{lookupField && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 ?(
+  <Select
+    labelId="select-label"
+    id="select"
+    value={props?.selectedTable}
+    onChange={(event) => {
+      props?.setSelectedTable(event.target.value);
+      props?.setShowFieldsDropdown(true)
+    }}
+    defaultValue={props?.selectedTable}
+    displayEmpty
+    sx={{
+      margin: 1,
+      minWidth: 120,
+    }}
+  >
+    {Object.entries(AllTableInfo.tables).map((table, index) => (
+      <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
+    ))}
+  </Select>
+):(lookupField && <span style={{color:'red'}}>No unique Keys here</span>)}
+          {/* show fields that are unique  */}
+ {props?.showFieldsDropdown &&    AllTableInfo.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
+      .filter((fields) => fields[1]?.metaData?.unique)
+      .map((fields) => (
+        <MenuItem key={fields[0]} value={fields[0]}>
+          {fields[1]?.fieldName}
+        </MenuItem>
+      ))
+      .length > 0   ? 
+(<Select
             labelId="select-label"
             id="select"
-            value={props?.selectedFieldName || Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
-              if (fields[1]?.metaData?.unique) {
-                return fields;
-              }
-            })[0][0]}
-            defaultValue="fields"
+            value={props?.selectedFieldName  }
             displayEmpty
             sx={{
               margin: 1,
@@ -401,7 +450,7 @@ export default function FieldPopupModal(props) {
             onChange={(e) => props?.setSelectedFieldName(e.target.value)}
           >
             {
-              Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
+           Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
                 if (fields[1]?.metaData?.unique) {
                   return fields;
                 }
@@ -414,24 +463,28 @@ export default function FieldPopupModal(props) {
                 ))
             }
           </Select>
-          )
-          }
+          ):(
+            props?.showFieldsDropdown && <Typography sx={{color:"red"}}>No unique key</Typography>
 
-    {openLinkedField && (<Select
+          )
+          } 
+         
+
+{openLinkedField && Object.entries(AllTableInfo?.tables[props?.tableId].fields)
+  .filter((fields) => fields[1]?.metaData?.foreignKey?.fieldId)
+  .length==0 && <span style={{color:'red'}}>Create Foreign key first.</span> }
+    {openLinkedField && Object.entries(AllTableInfo?.tables[props?.tableId].fields)
+  .filter((fields) => fields[1]?.metaData?.foreignKey?.fieldId)
+  .length > 0 && (<Select
             labelId="select-label"
             id="select"
             value={props?.selectedTable}
-            defaultValue="fields"
             displayEmpty
             sx={{
               margin: 1,
               minWidth: 120,
             }}
             onChange={(e) =>{ 
-              
-              // console.log({
-              //   [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
-              // })
               props?.setLinkedValueName({
                 [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
               })
@@ -441,7 +494,9 @@ export default function FieldPopupModal(props) {
             {
               Object.entries(AllTableInfo?.tables[props?.tableId].fields)?.filter((fields) => {
                 if (fields[1]?.metaData?.foreignKey?.fieldId) {
+                  props?.setSelectedFieldName(fields[1]?.metaData?.foreignKey?.fieldId)
                   return fields;
+
                 }
               })
                 .map((fields) =>
@@ -467,7 +522,7 @@ export default function FieldPopupModal(props) {
             onChange={(e) => props?.setSelectedFieldName(e.target.value)}
           >
             {
-              Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.map((fields) =>
+             AllTableInfo.tables[props?.selectedTable]?.fields &&  Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.map((fields) =>
                 (
                   <MenuItem key={fields[0]} value={fields[0]}>
                     {fields[1]?.fieldName}

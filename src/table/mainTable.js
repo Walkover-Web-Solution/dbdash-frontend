@@ -15,7 +15,6 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   // const [page,setPage] = useState(2);
   const dispatchs = useDispatch();
   const fetchMoreData = () => {
-    // xonaso
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
@@ -44,7 +43,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
         }}
       >
       </div>
-      <div style={{ overflow: "auto", display: "flex", width: "100vw"}}>
+      <div style={{  display: "flex", width: "100vw"}}>
         <div
           style={{
             padding: "1rem",

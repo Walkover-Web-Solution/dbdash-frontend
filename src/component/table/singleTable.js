@@ -7,7 +7,7 @@ import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
-import { resetData, setTableLoading } from '../../store/table/tableSlice';
+import { resetData } from '../../store/table/tableSlice';
 // import { selectOrgandDb } from "../../store/database/databaseSelector";
 
 
@@ -56,16 +56,13 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     } 
 
     const previousIndex = value - 1;
-    // console.log(previousIndex);
     navigate(`/db/${dbData.db._id}/table/${Object.keys(dbData?.db?.tables)[previousIndex]}`);
     
   };
-  // console.log(dbData?.db?.tables ?Object.keys(dbData?.db?.tables) : "");
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)
     setPage(1);
-    dispatch (setTableLoading(true))
     dispatch (resetData())
     dispatch(bulkAddColumns({
       //  "alldb":alldb,
@@ -98,12 +95,8 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
 
         onClick={() => {
           onTableClicked(table[0])
-          dispatch(bulkAddColumns({
-            "dbId": dbData?.db?._id,
-            "tableName": table[0],
-            "org_id":dbData?.db?.org_id,
-            "pageNo": 1
-          }));
+
+          
         }}
       >
         {name && tabIndex == index ?

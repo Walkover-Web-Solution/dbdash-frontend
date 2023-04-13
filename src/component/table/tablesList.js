@@ -6,6 +6,7 @@ import FilterModal from "../filterPopUp"
 import PropTypes from "prop-types";
 import SingleTable from './singleTable';
 import { useNavigate, useParams } from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
 import Tabs from '@mui/material/Tabs';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,22 +88,31 @@ export default function TablesList({ dbData }) {
     }
     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
+  
   useEffect(() => {
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch (setTableLoading(true))
-      dispatch(bulkAddColumns({
-        "dbId":dbData?.db?._id,
-        "tableName": params?.tableName|| tableNames[0],
-        "pageNo": 1
-      }));
-
+     
+        dispatch(bulkAddColumns({
+          "dbId":dbData?.db?._id,
+          "tableName": params?.tableName|| tableNames[0],
+          "pageNo": 1
+        }));
+        console.log({  "tableName": params?.tableName} )
+      
+      
       if(!(params?.tableName))
       {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+        
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+        // setFilter(AllTableInfo.tables[tableNames[0]]?.filters)
       }
-      // setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
-      // setFilter()
+      if(params?.tableName)
+      {
+        setFilter(AllTableInfo.tables?.[params?.tableName]?.filters) 
+      }
+      setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
     }
   }, [])
   
@@ -124,11 +134,17 @@ export default function TablesList({ dbData }) {
               </Box>
             ))
             }
+           {/* // <Button  variant="contained" sx={{margin:1, width: 'fit-content' ,height:40,mt:1.5,mr:1}} >
+         
+        </Button> */}
+        <AddIcon className="plus" onClick={() => handleOpen()} sx={{m:1,fontSize:50,'&:hover': {
+      color: '#454545 ',  // add any styles you want here
+      cursor: 'pointer'
+    }}}/>
           </Tabs>
+          
         </Box>
-        <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 ,height:40,mt:1.5,mr:1}} >
-          Add Table
-        </Button>
+        
       </Box>
       <Box display="flex" flexWrap="nowrap">
         {filter &&
