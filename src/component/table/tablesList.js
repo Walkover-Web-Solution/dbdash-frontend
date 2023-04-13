@@ -6,6 +6,7 @@ import FilterModal from "../filterPopUp"
 import PropTypes from "prop-types";
 import SingleTable from './singleTable';
 import { useNavigate, useParams } from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
 import Tabs from '@mui/material/Tabs';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +19,8 @@ import {deleteFilter} from "../../api/filterApi"
 // import { uploadCSV } from '../../api/rowApi';
 
 export default function TablesList({ dbData }) {
+
+
   const dispatch = useDispatch();
   const params = useParams();
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -127,11 +130,17 @@ export default function TablesList({ dbData }) {
               </Box>
             ))
             }
+           {/* // <Button  variant="contained" sx={{margin:1, width: 'fit-content' ,height:40,mt:1.5,mr:1}} >
+         
+        </Button> */}
+        <AddIcon className="plus" onClick={() => handleOpen()} sx={{m:1,fontSize:50,'&:hover': {
+      color: '#454545 ',  // add any styles you want here
+      cursor: 'pointer'
+    }}}/>
           </Tabs>
+          
         </Box>
-        <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 ,height:40,mt:1.5,mr:1}} >
-          Add Table
-        </Button>
+        
       </Box>
       <Box display="flex" flexWrap="nowrap">
         {filter &&

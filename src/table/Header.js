@@ -339,7 +339,7 @@ export default function Header({
         propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
       case "id":
-        propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
+        propertyIcon = <> <ManageSearchOutlinedIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /> </>;
       break;
     default:
       propertyIcon = <MultiIcon />;

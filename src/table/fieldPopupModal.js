@@ -7,7 +7,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
 import Joi from 'joi';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
