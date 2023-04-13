@@ -297,7 +297,9 @@ const createFilterJoi = (e) => {
 
                         <Box sx={{mr:1}}>
                           <Select sx={{width:150}}
-                          value={q?.selectedOption} key={q?.value}
+                          value={q?.selectedOption}
+                          defaultValue="LIKE"  
+                          key={q?.value}
                           onChange={(e)=>handleChangeSelectedOption(e,index)} >
                             <MenuItem value="LIKE">contains</MenuItem>
                             <MenuItem value="NOT LIKE">does not contain</MenuItem>
@@ -308,7 +310,7 @@ const createFilterJoi = (e) => {
 
                         <Box>
                         
-                        <TextField value={q?.value} sx={{ width: 150, height: 60, fontWeight: 'bold',}} placeholder="Enter the value" type="text" onChange={(e) => handleChangeValue(e,index)} />
+                        <TextField required  value={q?.value} sx={{ width: 150, height: 60, fontWeight: 'bold',}} placeholder="Enter the value" type="text" onChange={(e) => handleChangeValue(e,index)} />
                         </Box>
                       {index>=1 && <Button onClick={()=>{
                           handleRemove(index)

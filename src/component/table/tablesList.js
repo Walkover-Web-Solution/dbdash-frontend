@@ -108,12 +108,7 @@ export default function TablesList({ dbData }) {
     }
     }
   }, [dbData])
-  // useEffect(()=>{
-  //   if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
-  //   {
-  //     setTableLength(Object.keys(AllTableInfo?.tables).length)
-  //   }
-  // },[AllTableInfo])
+
 
   
   return (
