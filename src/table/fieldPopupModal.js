@@ -39,6 +39,8 @@ export default function FieldPopupModal(props) {
   const [showDecimalOptions , setShowDecimalOptions] = useState(false);
   const params = useParams();
 
+
+  
   useEffect(() => {
     if (AllTableInfo?.tables[params?.tableName] && searchValue.length == 0) {
 
