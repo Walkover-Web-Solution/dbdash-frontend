@@ -28,7 +28,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
-import { useParams } from "react-router";
 // import { useDrop, useDrag } from "react-dnd";
 // import { getEmptyImage } from "react-dnd-html5-backend";
 // import ItemTypes from "./ItemTypes";
@@ -48,7 +47,6 @@ export default function Table({
   dispatch: dataDispatch,
   skipReset,
 }) {
-  const params = useParams();
 
   // const [head, setHead] = useState();
   const handleCopy = (event, value) => {
@@ -124,27 +122,24 @@ export default function Table({
   // }, [headerGroups]);
   const reoder = useCallback(
     (item, newIndex) => {
-      console.log("item",item)
       const newOrder = Array.from(columns);
  
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
       // setHead([...newOrder]);
-      columns = newOrder
+      // columns = newOrder
       dispatch(
         updateColumnOrder({
           columns: newOrder,
-          oldIndex: item?.id,
-          newIndex: columns[newIndex].id,
-          dbId: params.dbId,
-          tableName: params.tableName,
-
+          id: item?.id,
+          oldIndex:item.index - 1 ,
+          newIndex : newIndex  - 1 
         })
       );
       //call redux make thunk and reducer pass new column order and update
     },
-    []
+    [columns]
   );
 
   useEffect(() => {

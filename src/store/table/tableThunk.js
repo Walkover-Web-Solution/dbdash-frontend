@@ -265,16 +265,16 @@ export const updateColumnsType = createAsyncThunk(
 )
 export const updateColumnOrder = createAsyncThunk(
     "table/updateColumnOrder",
-    async(payload)=>{
+    async(payload,{getState})=>{
        
         const data={
             oldIndex:payload?.oldIndex,
             newIndex:payload?.newIndex
         }
+         const {tableId, dbId} = getState().table
         
-        await updateField(payload?.dbId,payload?.tableName,payload?.oldIndex,data)
-        // dispatch(updateColumnHeader(payload));
-        // // // backend api call
+        await updateField(dbId,tableId,payload?.id,data)
+        
         return payload;
     }
 )
