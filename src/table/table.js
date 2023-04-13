@@ -180,7 +180,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
         </Button>
       )}
       <DndProvider backend={HTML5Backend}>
-        <ScrollingComponent style={{  maxHeight: 450 }}>
+        <ScrollingComponent style={{ overflow:"hidden", maxHeight: 450,minHeight: 350 }}>
           <div
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}

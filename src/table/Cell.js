@@ -134,7 +134,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
 
   let element;
   switch (dataType) {
-    case "generatedcolumn" : 
+    case "formula" : 
     element = (
       <input type="text"
         readOnly="readonly"
@@ -176,7 +176,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         />
       );
       break;
-      case "id":
+      case "rowid":
         element = (
           <input type="text"
             readOnly="readonly"
