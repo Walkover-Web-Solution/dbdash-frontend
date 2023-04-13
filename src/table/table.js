@@ -169,7 +169,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
   }
   return (
     <>
-    {console.log(" in table renderign ")}
       {selectedFlatRows?.length > 0 && (
         <Button
           sx={{ m: 2 }}

@@ -99,7 +99,6 @@ export default function TablesList({ dbData }) {
           "tableName": params?.tableName|| tableNames[0],
           "pageNo": 1
         }));
-        console.log({  "tableName": params?.tableName} )
       
       
       if(!(params?.tableName))
