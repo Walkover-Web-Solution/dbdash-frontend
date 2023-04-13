@@ -5,7 +5,7 @@ import {insertRow, uploadImage} from "../../api/rowApi";
 import { updateRow ,deleteRow} from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
 // reducer imports
-import { addColumnToLeft,    addOptionToColumn,addRow,deleteColumn,setTableLoading,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
+import {   addOptionToColumn,addRow,deleteColumn,setTableLoading,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
 import  {runQueryonTable}  from "../../api/filterApi";
 import { createView, deleteFieldInView } from "../../api/viewApi";
@@ -122,7 +122,7 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{
             var  columns = null
-            if((payload?.pageNo <=  1)  )
+            if((payload?.pageNo <=  1)  || !( payload?.pageNo) )
             {
                 columns =  await getHeaders(payload.dbId,payload.tableName)
             }
@@ -230,7 +230,7 @@ export const addColumsToLeft = createAsyncThunk(
         else
             await createField(payload?.dbId,payload?.tableId,data);
        dispatch(getTable1({dbId:payload?.dbId}))
-        dispatch(addColumnToLeft(payload));
+        // dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
         return payload;
