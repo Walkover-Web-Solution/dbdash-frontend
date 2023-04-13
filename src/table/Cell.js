@@ -202,6 +202,7 @@ if (e.target.files[0] != null) {
       element = (
         <input type="checkbox"
           checked={value.value}
+          
           onChange={() => {
             setValue(() => ({ value: !(value.value), update: true }))
           }}

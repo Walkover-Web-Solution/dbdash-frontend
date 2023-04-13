@@ -129,13 +129,10 @@ export default function TablesList({ dbData }) {
               </Box>
             ))
             }
-           {/* // <Button  variant="contained" sx={{margin:1, width: 'fit-content' ,height:40,mt:1.5,mr:1}} >
-         
-        </Button> */}
-        <AddIcon className="plus" onClick={() => handleOpen()} sx={{m:1,fontSize:50,'&:hover': {
-      color: '#454545 ',  // add any styles you want here
-      cursor: 'pointer'
-    }}}/>
+           <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:1, width: 'fit-content' ,height:40}} >
+         <AddIcon/>
+        </Button>
+     
           </Tabs>
           
         </Box>
