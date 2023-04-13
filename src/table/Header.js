@@ -28,6 +28,7 @@ import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import TextFormatIcon from '@mui/icons-material/TextFormat';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 export default function Header({
   column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },
   setSortBy,
@@ -159,7 +160,7 @@ export default function Header({
     },
     {
       onClick: () =>
-       {
+      {
         dispatch(deleteColumns({
           label: header,
           columnId: id,
@@ -169,7 +170,7 @@ export default function Header({
           dbId: tableInfo?.dbId
         }))
         setExpanded(false);
-
+        
       },
       icon: <TrashIcon />,
       label: "Delete"
@@ -181,49 +182,13 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "select"
-        }))
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <MultiIcon />,
-      label: "Select"
-    },
-    {
-      onClick: () => {
-        dispatch(updateColumnsType({
-          columnId: id,
           dataType: "text"
         }))
         setShowType(false);
         setExpanded(false);
       },
-      icon: <TextIcon />,
-      label: "long text"
-    },
-    {
-      onClick: () => {
-        dispatch(updateColumnsType({
-          columnId: id,
-          dataType: "text"
-        }))
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TextFormatIcon fontSize="2px"/>,
-      label: "singlelinetext"
-    },
-    {
-      onClick: () => {
-        dispatch(updateColumnsType({
-          columnId: id,
-          dataType: "numeric"
-        }))
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <HashIcon />,
-      label: "numeric"
+      icon: <AttachFileIcon fontSize="2px" />,
+      label: "attachment"
     },
     {
       onClick: () => {
@@ -258,18 +223,6 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      icon: <AttachFileIcon fontSize="2px" />,
-      label: "attachment"
-    },
-    {
-      onClick: () => {
-        dispatch(updateColumnsType({
-          columnId: id,
-          dataType: "text"
-        }))
-        setShowType(false);
-        setExpanded(false);
-      },
       icon: <ReadMoreOutlinedIcon fontSize="2px" />,
       label: "link"
     },
@@ -294,34 +247,81 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
+      icon: <TextIcon />,
+      label: "long text"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "numeric"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <HashIcon />,
+      label: "numeric"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
       icon: <ManageSearchOutlinedIcon fontSize="2px" />,
-      label: "id"
+      label: "rowid"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "select"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <MultiIcon />,
+      label: "Select"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <TextFormatIcon fontSize="2px"/>,
+      label: "singlelinetext"
     }
   ];
 
   let propertyIcon;
   switch (dataType) {
     case "singlelinetext":
-      propertyIcon = (  metadata?.unique  ? <><TextFormatIcon fontSize="2px" /> <KeyOutlinedIcon fontSize="2px" /></>  :<TextFormatIcon/>  );
+      propertyIcon = (  metadata?.unique  ? <><TextFormatIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextFormatIcon fontSize="2px"/>  );
       break;
-      case "generatedcolumn":
+      case "formula":
       propertyIcon = <FunctionsIcon fontSize="2px" />;
       break;
     case "datetime":
-  
       propertyIcon = <DateRangeIcon fontSize="2px" />;
       break;
     case "checkbox":
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
     case "numeric":
-      propertyIcon =(  metadata?.unique  ? <><TextIcon /> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
+      propertyIcon =(  metadata?.unique  ? <><TextIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
     case "longtext":
       propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
     case "select":
-      propertyIcon = <MultiIcon />;
+      propertyIcon = <MultiIcon fontSize="2px"/>;
       break;
     case "createdby":
       propertyIcon = <PersonPinIcon fontSize="2px"/>;
@@ -338,8 +338,8 @@ export default function Header({
       case "lookup":
         propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
-      case "id":
-        propertyIcon = <> <ManageSearchOutlinedIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /> </>;
+      case "rowid":
+        propertyIcon = <FormatListNumberedIcon fontSize="2px"/>;
       break;
     default:
       propertyIcon = <MultiIcon />;

@@ -42,10 +42,9 @@ export default function selectFilepopup(props) {
 
   return (
     <Box>
-
       <Modal
         disableRestoreFocus
-        open={props.open}
+        open={props?.open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -57,7 +56,8 @@ export default function selectFilepopup(props) {
               type="file"
               id="my-file-input"
               className={classes.input}
-              onChange={handleFileSelection}
+              onChange={(e)=>{
+                handleFileSelection(e)}}
             />
             <label htmlFor="my-file-input" className={classes.label}>Choose a file
             </label>

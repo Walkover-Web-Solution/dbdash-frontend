@@ -285,18 +285,18 @@ export default function FieldPopupModal(props) {
               minWidth: 120,
             }}
           >
-            <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{mr : 1}}/>long text</MenuItem>
-            <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
-            <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{mr : 1}}/>Number</MenuItem>
-            <MenuItem value="checkbox"><CheckIcon fontSize="2px" sx={{mr : 1}}/>Checkbox</MenuItem>
-            <MenuItem value="datetime"><DateRangeIcon fontSize="2px" sx={{mr : 1}}/>Datetime</MenuItem>
-            <MenuItem value="createdby"><PersonPinIcon fontSize="2px" sx={{mr : 1}}/>Created By</MenuItem>
-            <MenuItem value="createdat"><MoreTimeIcon fontSize="2px" sx={{mr : 1}}/>Created At</MenuItem>
-            <MenuItem value="generatedcolumn"><FunctionsIcon fontSize="2px" sx={{mr : 1}}/>Generated column</MenuItem>
             <MenuItem value="attachment"><AttachFileIcon fontSize="2px" sx={{mr : 1}}/>Attachment</MenuItem>
+            <MenuItem value="checkbox"><CheckIcon fontSize="2px" sx={{mr : 1}}/>Checkbox</MenuItem>
+            <MenuItem value="createdat"><MoreTimeIcon fontSize="2px" sx={{mr : 1}}/>Created at</MenuItem>
+            <MenuItem value="createdby"><PersonPinIcon fontSize="2px" sx={{mr : 1}}/>Created by</MenuItem>
+            <MenuItem value="datetime"><DateRangeIcon fontSize="2px" sx={{mr : 1}}/>Datetime</MenuItem>
+            <MenuItem value="formula"><FunctionsIcon fontSize="2px" sx={{mr : 1}}/>Formula</MenuItem>
             <MenuItem value="link"><ReadMoreOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Link</MenuItem>
+            <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{mr : 1}}/>Long text</MenuItem>
             <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Lookup</MenuItem>
-            <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>id</MenuItem>
+            <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{mr : 1}}/>Number</MenuItem>
+            <MenuItem value="rowid"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>Rowid</MenuItem>
+            <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
  
           </Select>
           {showNumericOptions && (
