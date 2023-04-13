@@ -84,7 +84,6 @@ export const addColumns = createAsyncThunk(
     "table/addColumns",
     async (payload,{dispatch}) =>{
         dispatch(addOptionToColumn(payload));
-
         return 5;
     }
 ) ;
@@ -136,7 +135,6 @@ export const deleteColumns = createAsyncThunk(
         }
         else
         {
-
             await deleteField(payload?.dbId,payload?.tableId,payload?.fieldName)
             //delte api call
                 dispatch(deleteColumn(payload));
@@ -183,9 +181,8 @@ export const addColumnrightandleft = createAsyncThunk(
         }
         if(payload?.fieldType == "lookup")
             await createView(payload?.dbId,payload?.tableId,data);
-        else 
+        else
             await createField(payload?.dbId,payload?.tableId,data);
-
      dispatch(getTable1({dbId:payload?.dbId}))
         const {tableId, dbId} = getState().table
         dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
@@ -205,12 +202,10 @@ export const addColumsToLeft = createAsyncThunk(
             linkedForeignKey:payload?.linkedValueName,
             foreignKey : payload?.foreignKey
         }
-
         if(payload?.fieldType == "lookup")
             await createView(payload?.dbId,payload?.tableId,data);
-        else 
+        else
             await createField(payload?.dbId,payload?.tableId,data);
-
        dispatch(getTable1({dbId:payload?.dbId}))
         dispatch(addColumnToLeft(payload));
         const {tableId, dbId} = getState().table
@@ -225,9 +220,8 @@ export const updateCells = createAsyncThunk(
        const value = payload.value
        const  columnId= payload.columnId;
        if(payload?.dataTypes == "file")
-       { 
+       {
         const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
-        
             payload.value = data?.data?.data;
             dispatch(updateCell(payload))
             return payload;
@@ -269,10 +263,18 @@ export const updateColumnsType = createAsyncThunk(
         return payload;
     }
 )
-
-
-
-
-
-
-
+export const updateColumnOrder = createAsyncThunk(
+    "table/updateColumnOrder",
+    async(payload,{getState})=>{
+       
+        const data={
+            oldIndex:payload?.oldIndex,
+            newIndex:payload?.newIndex
+        }
+         const {tableId, dbId} = getState().table
+        
+        await updateField(dbId,tableId,payload?.id,data)
+        
+        return payload;
+    }
+)

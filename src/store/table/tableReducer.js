@@ -1,5 +1,5 @@
 // import { current } from '@reduxjs/toolkit';
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft } from './tableThunk.js';
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 
 
@@ -437,6 +437,19 @@ export function extraReducers(builder) {
 
     })
     .addCase(updateColumnsType.rejected, (state) => {
+      state.status = "failed";
+    })
+
+    .addCase(updateColumnOrder.pending, (state) => {
+      state.status = "loading"
+
+    })
+    .addCase(updateColumnOrder.fulfilled, (state,{payload}) => {
+      state.columns = payload.columns
+      state.status = "succeeded";
+
+    })
+    .addCase(updateColumnOrder.rejected, (state) => {
       state.status = "failed";
     })
 }
