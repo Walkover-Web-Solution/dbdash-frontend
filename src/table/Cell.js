@@ -239,11 +239,11 @@ if (e.target.files[0] != null) {
 
     case "longtext":
       element = (
+      
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
           onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-
           className='data-input'
         />
       );
