@@ -40,6 +40,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
   const [open, setOpen] = useState(false);
+  const[imgUpload,setImageUpload] = useState(null);
   
   const handleImageClick = (imgLink) => {
     window.open(imgLink, '_blank');
@@ -50,27 +51,32 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
   };
    var rowProperties = row?.getToggleRowSelectedProps();
    rowProperties.indeterminate =  rowProperties.indeterminate?.toString();
-  const onChange = (e) => {
+   const onChange = (e) => {
     setValue({ value: e.target.value, update: false });
   };
 
   const onChangeFile = (e, type) => {
     setDataType(type)
     
-  if (e.target.files[0] != null) {
-    dispatch(updateCells({
-      columnId: id, rowIndex: row.original.id, value: e.target.files[0], dataTypes: "file"
-    })).then(() => {
-      toast.success('Image uploaded successfully!');
-    });
+if (e.target.files[0] != null) {
+      setImageUpload(e.target.files[0])
     }
     e.target.value = null;
   };
-  // useEffect(() => {
-  //   setValue({ value: initialValue, update: false });
-  // }, [initialValue]);
+  useEffect(() => {
+    setValue({ value: initialValue, update: false });
+  }, [initialValue]);
+  useEffect(() => {
+    if (imgUpload)
+    {
+      dispatch(updateCells({
+        columnId: id, rowIndex: row.original.id, value: imgUpload, dataTypes: dataTypes
+      })).then(() => {
+        toast.success('Image uploaded successfully!');
+      });
+    }
+  }, [imgUpload])
  
-
   useEffect(() => {
     if (value?.update &&  value.value!=null) {
       dispatch(updateCells({
