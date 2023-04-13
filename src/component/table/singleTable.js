@@ -55,11 +55,9 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     } 
 
     const previousIndex = value - 1;
-    // console.log(previousIndex);
     navigate(`/db/${dbData.db._id}/table/${Object.keys(dbData?.db?.tables)[previousIndex]}`);
     
   };
-  // console.log(dbData?.db?.tables ?Object.keys(dbData?.db?.tables) : "");
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)

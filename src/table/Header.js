@@ -67,7 +67,7 @@ export default function Header({
       dispatch(addColumsToLeft({
         columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
       }));
-      setSelectValue('text')
+      setSelectValue('longtext')
       setQueryByAi(false)
     }
    
@@ -85,7 +85,7 @@ export default function Header({
       fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:        
         selectValue,direction:directionAndId.direction,position:directionAndId.position ,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
     }));
-    setSelectValue('text')
+    setSelectValue('longtext')
 
   }
 

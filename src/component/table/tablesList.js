@@ -38,7 +38,6 @@ export default function TablesList({ dbData }) {
   const [filterId, setFilterId] = useState("")
   const [anchorEl, setAnchorEl] = useState(null);
   const [tableLength,setTableLength] = useState("")
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -68,7 +67,6 @@ export default function TablesList({ dbData }) {
   //     csvfile:CSV
   //   }
   //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
-  //   console.log(csv)
   // }
   function onFilterClicked(filter, id) {
     setFilterId(id)
@@ -85,6 +83,7 @@ export default function TablesList({ dbData }) {
     }
     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
+  
   useEffect(() => {
     setTableLength(Object.keys(AllTableInfo?.tables).length)
     if (dbData?.db?.tables) {
@@ -95,11 +94,15 @@ export default function TablesList({ dbData }) {
       }));
       if(!(params?.tableName))
       {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`); 
+          setFilter(AllTableInfo.tables[tableNames[0]]?.filters)
       }
     setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
-    setFilter(AllTableInfo.tables[params?.tableName]?.filters)
-      
+   
+    if(params?.tableName)
+    {
+      setFilter(AllTableInfo.tables[params?.tableName]?.filters) 
+    }
     }
   }, [dbData])
   // useEffect(()=>{

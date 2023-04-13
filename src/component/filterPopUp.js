@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
+import Joi  from "joi"
+import { useValidator } from "react-joi"
 import { Select, MenuItem, TextField } from '@mui/material';
 // import { getAllfields } from "../api/fieldApi";
 import { createFilter,updateQuery } from "../api/filterApi"
@@ -45,6 +47,36 @@ export default function FilterModal(props) {
     "selectedOption":"",
     "value":""
   }])
+
+  const { state, setData, setExplicitField, validate } = useValidator({
+      
+    initialData: {
+      filterName: null,
+    },
+    schema: Joi.object({
+      filterName: Joi.string().min(1).required(),
+    }),
+    explicitCheck: {
+      filterName: false,
+    },
+    validationOptions: {
+        abortEarly: true,
+    },
+})
+
+const createFilterJoi = (e) => {
+    
+  e.persist();
+  const value = e.target.value;
+  setFilterName(value);
+
+  setData((old) => ({
+      ...old,
+      filterName: value,
+  }));
+  validate();
+};
+
   const handleChangeSelectedOption = (event,index) => {
     var temp  = query;
     temp[index].selectedOption = event.target.value;
@@ -229,8 +261,17 @@ export default function FilterModal(props) {
           <Box style={{ display: "flex", flexDirection: "column"}}>
   
             <Box sx={{mb:2, display:'flex',justifyContent:'center',alignItems:'center'}}>
-              <TextField autoFocus sx={{ width: 150, height: 60, fontWeight: 'bold' }} value={filterName} type="text" placeholder="enter filter name" onChange={(e) => {setFilterName(e.target.value)}} />
+              <TextField error={
+              state?.$errors?.filterName.length === 0
+                  ? false
+                  : state.$errors?.filterName
+                      ? true
+                      : false
+          } autoFocus sx={{ width: 150, height: 60, fontWeight: 'bold' }} value={filterName} type="text" placeholder="enter filter name" onChange={(e) => {setFilterName(e.target.value); createFilterJoi(e);}} onBlur={() => setExplicitField("filterName", true)} />
             </Box>
+            <div style={{ color: "red", fontSize: "12px", paddingLeft: "172px" }}>
+                    {state.$errors?.filterName?.map((data) => data.$message).join(",")}
+                </div>
     
             <Box>
               { query.map((q,index)=>(<Box key={index} sx={{ display: "flex", flexDirection: "row" }}>
@@ -284,7 +325,8 @@ export default function FilterModal(props) {
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {props?.edit == false && <Box>
-              <Button variant="contained" onClick={() => {
+              <Button variant="contained" disabled={filterName.length < 1 || filterName.length >15} onClick={() => {
+                 validate();
                 getQueryData();
                 handleClose()
               }}>

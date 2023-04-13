@@ -390,6 +390,7 @@ if (e.target.files[0] != null) {
                   setOpen={setOpen}
                   onChangeFile={onChangeFile}
                 />
+                
               </div>
         </div>
       );
