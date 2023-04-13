@@ -50,12 +50,12 @@ export default function DraggableHeader({ columns,index, reoder, key})
 
   return (
 
-    <div key={key} {...columns.getHeaderProps()}  ref={typeof columns.id !== 'number' ? dropRef : null} >
-    {typeof columns.id !== 'number' && (<div   style={{ cursor: 'move' }} ref={dragRef}>
+    <div className='td bg-white border-radius-md' key={key} {...columns.getHeaderProps()} ref={typeof columns.id !== 'number' ? dropRef : null} >
+    {typeof columns.id !== 'number' && (<div style={{ cursor: 'move' }} ref={dragRef}>
         {columns.render('Header')}
       </div>)
     }
-    {typeof columns.id === 'number' && (<div   style={{ cursor: 'move' }}>
+    {typeof columns.id === 'number' && (<div style={{ cursor: 'move' }}>
         {columns.render('Header')}
       </div>)
     }
