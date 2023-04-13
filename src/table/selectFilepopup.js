@@ -32,19 +32,16 @@ const style = {
 };
 
 export default function selectFilepopup(props) {
-  console.log("props",props);
   const classes = useStyles();
   const handleClose = () => { props.setOpen(false); };
 
-  const handleFileSelection = () => {
-    console.log("kdhaskl")
-    // props.onChangeFile(e, "file");
-    // handleClose();
+  const handleFileSelection = (e) => {
+    props.onChangeFile(e, "file");
+    handleClose();
   }
 
   return (
     <Box>
-     { console.log(props)}
       <Modal
         disableRestoreFocus
         open={props?.open}
@@ -60,7 +57,6 @@ export default function selectFilepopup(props) {
               id="my-file-input"
               className={classes.input}
               onChange={(e)=>{
-                console.log("hello in on change ")
                 handleFileSelection(e)}}
             />
             <label htmlFor="my-file-input" className={classes.label}>Choose a file
