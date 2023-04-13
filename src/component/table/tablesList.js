@@ -79,7 +79,8 @@ export default function TablesList({ dbData }) {
       "dbId": dbData?.db?._id,
       "tableName": params?.tableName || Object.keys(dbData?.db?.tables)[0],
       "filter": filter,
-      "org_id":dbData?.db?.org_id
+      "org_id":dbData?.db?.org_id,
+      "pageNo" :  1
     }));
   }
   const deleteFilterInDb = async(filterId)=>{

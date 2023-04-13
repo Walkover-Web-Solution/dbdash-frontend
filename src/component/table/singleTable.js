@@ -67,7 +67,8 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     dispatch(bulkAddColumns({
       //  "alldb":alldb,
       "dbId": dbData?.db?._id,
-      "tableName": table[0]
+      "tableName": table[0],
+      "pageNo":1
     }));
 
     setTableButton(true);

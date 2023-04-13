@@ -122,7 +122,7 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{
             var  columns = null
-            if(payload?.pageNo == 1)
+            if((payload?.pageNo <=  1)  )
             {
                 columns =  await getHeaders(payload.dbId,payload.tableName)
             }
