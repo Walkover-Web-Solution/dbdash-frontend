@@ -230,7 +230,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
-          // onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
+          onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
           className='data-input'
         />
       );
@@ -248,10 +248,10 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
     case "numeric":
       element = (
         <input type="number"
-        // onChange={onChange}
+        onChange={onChange}
         defaultValue={(value?.value && value?.value?.toString()) || ""}
         onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-        // className='data-input'
+        className='data-input'
         style={{background: "none"}}
       />
       );
