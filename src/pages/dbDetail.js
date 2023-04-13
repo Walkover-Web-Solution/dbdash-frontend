@@ -7,8 +7,10 @@ import { Link } from 'react-router-dom'
 import { Divider } from "@mui/material";
 import MainNavbar from "../component/mainNavbar";
 import { getDbById } from "../api/dbApi";
-import {  getTable1 } from '../store/allTable/allTableThunk';
+// import {  getTable1 } from '../store/allTable/allTableThunk';
 import { useDispatch } from "react-redux";
+import { setAllTablesData } from "../store/allTable/allTableSlice";
+import { resetData } from "../store/table/tableSlice";
 function DbDetails() {
     var {dbId} = useParams();
     const dispatch = useDispatch()
@@ -16,25 +18,30 @@ function DbDetails() {
     const [tables, setTables] = useState(0);
     const [dbData, setDbData] = useState(null);
     useEffect(() => {
-        // if (location?.state) {
-        //     setDbData(location?.state);
-        // } else {
+        if(dbId)
             getAllTableName(dbId);
-            if(dbId)
-            dispatch(getTable1({ "dbId":dbId}));
-            // handle case where no data was passed
-        // }
     }, [dbId]);
+
+    useEffect(() => {
+        return ()=> dispatch (resetData())
+        
+    }, []);
     const getAllTableName = async (dbId) => {
 
         var object = {}
         const data = await getDbById(dbId)
         object.db=data.data.data
+        dispatch(setAllTablesData(
+            { 
+                "dbId":dbId,
+                "tables" :data.data.data.tables
+            }
+        ))
         setDbData(object);
       }
     return (
         <>
-        <Box>
+        <Box sx ={{ overflow: 'hidden'}}>
       <MainNavbar/>
     </Box>
             <Container sx={{height:'40px'}}>
@@ -57,7 +64,7 @@ function DbDetails() {
             </Container>
             <Divider color="black" variant="fullwidth" sx={{ mb: 2}}  />
             <Box align="center" >
-                <TablesList dbData={dbData} tables={tables} setTables={setTables} />
+            { dbData &&    <TablesList dbData={dbData} tables={tables} setTables={setTables} />}
             </Box>
         </>
     );

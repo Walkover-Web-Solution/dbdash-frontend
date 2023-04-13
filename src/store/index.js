@@ -6,19 +6,20 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 // reducer imports
 import rootReducer from "./combineReducer.js";
-
+const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25});
 const persistConfig = {
+  blacklist: ["table"],
   key: 'root',
   storage,
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-const composedEnhancer = composeWithDevTools(
-  applyMiddleware(thunkMiddleware)
-  // other store enhancers if any
-);
-
-export const store = createStore(persistedReducer, composedEnhancer);
+// const composedEnhancer = composeWithDevTools(
+//   applyMiddleware(thunkMiddleware),
+//   // other store enhancers if any
+//   { trace: true, traceLimit: 25}
+// );
+export const store = createStore(persistedReducer,   composeEnhancers(applyMiddleware(thunkMiddleware)));
 export const persistor = persistStore(store);
 

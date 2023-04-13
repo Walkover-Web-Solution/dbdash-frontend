@@ -1,5 +1,5 @@
 // import { current } from '@reduxjs/toolkit';
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft } from './tableThunk.js';
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 
 
@@ -10,6 +10,8 @@ export const initialState = {
   dbId: [],
   skipReset: false,
   status: "idle",
+  pageNo : 0,
+  isTableLoading : true
 };
 
 export const reducers = {
@@ -35,7 +37,17 @@ export const reducers = {
       state.skipReset = true;
     }
   },
-
+  resetData(){
+    return  {
+      columns: [],
+      data: [],
+      tableId: [],
+      dbId: [],
+      skipReset: false,
+      status: "idle",
+      pageNo : 0,
+      isTableLoading : true }
+  },
   deleteColumn(state, payload) {
     const action = payload.payload;
     if (action) {
@@ -122,7 +134,11 @@ export const reducers = {
     }
   },
 
-
+  setTableLoading (state,{payload}){
+    return {
+        ...state , isTableLoading : payload
+    }
+  },
   updateTableData(state, payload) {
 
     return {
@@ -343,16 +359,18 @@ export function extraReducers(builder) {
     })
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
-        state.columns = action.payload.columns;
+        if(action.payload.columns) state.columns = action.payload.columns;
         state.data = action.payload.row;
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId
+        state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
       }
       state.status = "succeeded";
 
     })
     .addCase(bulkAddColumns.rejected, (state) => {
       state.status = "failed";
+      state.isTableLoading = false
     })
 
 
@@ -437,6 +455,19 @@ export function extraReducers(builder) {
 
     })
     .addCase(updateColumnsType.rejected, (state) => {
+      state.status = "failed";
+    })
+
+    .addCase(updateColumnOrder.pending, (state) => {
+      state.status = "loading"
+
+    })
+    .addCase(updateColumnOrder.fulfilled, (state,{payload}) => {
+      state.columns = payload.columns
+      state.status = "succeeded";
+
+    })
+    .addCase(updateColumnOrder.rejected, (state) => {
       state.status = "failed";
     })
 }

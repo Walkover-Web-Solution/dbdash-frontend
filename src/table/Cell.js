@@ -19,12 +19,15 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { memo } from "react";
+import PropTypes from "prop-types";
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
-export default function Cell({ value: initialValue, row, column: { id, dataType, options }, dataDispatch }) {
+const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, options }, dataDispatch }) =>{
 
   const dispatch = useDispatch();
   const [value, setValue] = useState({ value: initialValue, update: false });
@@ -33,49 +36,40 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
   const [dataTypes, setDataType] = useState("")
-  const [imgUpload, setImageUpload] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
   const [open, setOpen] = useState(false);
   
-    const handleImageClick = (imgLink) => {
-      window.open(imgLink, '_blank');
-    };
+  const handleImageClick = (imgLink) => {
+    window.open(imgLink, '_blank');
+  };
 
   const handleUploadFileClick = () => {
     setOpen(true);
   };
    var rowProperties = row?.getToggleRowSelectedProps();
    rowProperties.indeterminate =  rowProperties.indeterminate?.toString();
-
-
   const onChange = (e) => {
     setValue({ value: e.target.value, update: false });
   };
 
   const onChangeFile = (e, type) => {
     setDataType(type)
-    console.log(e.target.files[0]);
+    
   if (e.target.files[0] != null) {
-      setImageUpload(e.target.files[0])
+    dispatch(updateCells({
+      columnId: id, rowIndex: row.original.id, value: e.target.files[0], dataTypes: "file"
+    })).then(() => {
+      toast.success('Image uploaded successfully!');
+    });
     }
     e.target.value = null;
   };
-
-  useEffect(() => {
-    setValue({ value: initialValue, update: false });
-  }, [initialValue]);
-  useEffect(() => {
-    if (imgUpload)
-    {
-      dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: imgUpload, dataTypes: dataTypes
-      })).then(() => {
-        toast.success('Image uploaded successfully!');
-      });
-    }
-  }, [imgUpload])
+  // useEffect(() => {
+  //   setValue({ value: initialValue, update: false });
+  // }, [initialValue]);
+ 
 
   useEffect(() => {
     if (value?.update &&  value.value!=null) {
@@ -83,16 +77,9 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
         columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
       }))
     }
-  }, [value, dispatch, id, row.index]);
+  }, [value, id, row.index]);
 
 
-  // useEffect(() => {
-  //   if (value?.update) {
-  //     dispatch(updateCells({
-  //       columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
-  //     }))
-  //   }
-  // }, [value, dispatch, id, row.index]);
 
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {
@@ -147,7 +134,7 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
 
   let element;
   switch (dataType) {
-    case "generatedcolumn" : 
+    case "formula" : 
     element = (
       <input type="text"
         readOnly="readonly"
@@ -189,7 +176,7 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
         />
       );
       break;
-      case "id":
+      case "rowid":
         element = (
           <input type="text"
             readOnly="readonly"
@@ -239,11 +226,11 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
 
     case "longtext":
       element = (
+      
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
           onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
-
           className='data-input'
         />
       );
@@ -261,7 +248,9 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
     case "numeric":
       element = (
         <input type="number"
+        onChange={onChange}
         defaultValue={(value?.value && value?.value?.toString()) || ""}
+        onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
         className='data-input'
         style={{background: "none"}}
       />
@@ -391,6 +380,7 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
                   setOpen={setOpen}
                   onChangeFile={onChangeFile}
                 />
+                
               </div>
         </div>
       );
@@ -401,4 +391,12 @@ export default function Cell({ value: initialValue, row, column: { id, dataType,
       break;
   }
   return element;
-}
+})
+Cell.displayName = 'Cell'
+export default Cell;
+Cell.propTypes = {
+  value: PropTypes.any,
+  column: PropTypes.any,
+  dataDispatch: PropTypes.any,
+  row: PropTypes.any,
+};

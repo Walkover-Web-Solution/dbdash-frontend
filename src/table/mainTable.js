@@ -1,26 +1,36 @@
-import React, { useEffect } from "react";
+import React, { memo } from "react";
 import "./style.css";
 import Table from "./table";
 // import { grey } from "./colors";
 import {  useDispatch ,useSelector } from "react-redux";
-import { getTableInfo } from "../store/table/tableSelector";
-
-function 
-MainTable() {
-
-  useEffect(() => {
-},[]);
-  const tableInfo=useSelector((state)=>getTableInfo(state));
-
+// import { getTableInfo } from "../store/table/tableSelector";
+import { bulkAddColumns } from "../store/table/tableThunk";
+import PropTypes from "prop-types";
+const  MainTable = memo ( ({page,setPage}) =>  {
+  
+  const columns=useSelector((state)=>state.table.columns);
+  const data=useSelector((state)=>state.table.data);
+  const dbId=useSelector((state)=>state.table.dbId);
+  const tableId=useSelector((state)=>state.table.tableId);
+  // const [page,setPage] = useState(2);
   const dispatchs = useDispatch();
+  const fetchMoreData = () => {
+    dispatchs(bulkAddColumns({
+      "dbId": dbId,
+      "tableName": tableId,
+      "pageNo":page+1
+    }));
+    setPage((page) => page + 1);
+  };
  
   return (
     <div
-      style={{
-        width: "98vw",
-        height: "100vh",
-        overflowX: "hidden"
-      }}
+      // style={{
+      //   width: "98vw",
+      //   height: "100vh",
+      //   overflowX: "hidden",
+      // }}
+      // id="scrollableDiv"
     >
       <div
         style={{
@@ -33,7 +43,7 @@ MainTable() {
         }}
       >
       </div>
-      <div style={{ overflow: "auto", display: "flex", width: "100vw"}}>
+      <div style={{  display: "flex", width: "100vw"}}>
         <div
           style={{
             padding: "1rem",
@@ -42,12 +52,14 @@ MainTable() {
             backgroundColor:'#fff',
           }}
         >
-          {tableInfo?.columns?.length>0 && <Table
-            columns={tableInfo.columns}
-            data={tableInfo.data|| []}
+          {columns?.length > 0 && <Table
+          update={fetchMoreData}
+          hasMore={true}
+            columns={columns}
+            data={data|| []}
             dispatch={dispatchs}
-            skipReset={tableInfo.skipReset}
-          />}
+            // skipReset={tableInfo.skipReset}
+          /> }
         </div>
       </div>
       <div
@@ -63,5 +75,11 @@ MainTable() {
     </div>
   );
 }
+)
+MainTable.displayName = 'MainTable';
+export default  MainTable;
+MainTable.propTypes = {
+  page: PropTypes.any,
+  setPage: PropTypes.any
+};
 
-export default MainTable;

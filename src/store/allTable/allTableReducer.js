@@ -5,7 +5,12 @@ export const initialState = {
   status : "idel"
 };
 export const reducers = {
-
+  setAllTablesData (state,{payload}){
+    return { ...state , 
+      tables : payload.tables,
+      dbId : payload.dbId
+    }
+  }
 };
 export function extraReducers(builder) {
      builder

@@ -6,38 +6,44 @@ import FilterModal from "../filterPopUp"
 import PropTypes from "prop-types";
 import SingleTable from './singleTable';
 import { useNavigate, useParams } from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
 import Tabs from '@mui/material/Tabs';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
-import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import { createTable1 } from '../../store/allTable/allTableThunk';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
+import CircularProgress from '@mui/material/CircularProgress';
+import { setTableLoading } from '../../store/table/tableSlice';
+
 // import { uploadCSV } from '../../api/rowApi';
 
 export default function TablesList({ dbData }) {
+  const isTableLoading=useSelector((state)=>state.table?.isTableLoading);
+  // const columns=useSelector((state)=>state.table?.columns);
   const dispatch = useDispatch();
   const params = useParams();
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const AllTableInfo = useSelector((state) =>state.tables.tables);
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
   // const [CSV,setCSV] = useState([])
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const [page,setPage]=useState(1);
   const [table, setTable] = useState();
   const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false)
-  const [filter, setFilter] = useState(false);
+  const [filter, setFilter] = useState(AllTableInfo[params?.tableName]?.filters);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false)
   const [filterId, setFilterId] = useState("")
   const [anchorEl, setAnchorEl] = useState(null);
-  const [tableLength,setTableLength] = useState("")
+  const tableLength  = Object.keys(AllTableInfo).length
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,8 +60,6 @@ export default function TablesList({ dbData }) {
     setOpen(false);
 
     dispatch(createTable1({ "dbId": dbData?.db?._id, "data": data }));
-
-   
   };
 
 
@@ -68,7 +72,6 @@ export default function TablesList({ dbData }) {
   //     csvfile:CSV
   //   }
   //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
-  //   console.log(csv)
   // }
   function onFilterClicked(filter, id) {
     setFilterId(id)
@@ -76,7 +79,8 @@ export default function TablesList({ dbData }) {
       "dbId": dbData?.db?._id,
       "tableName": params?.tableName || Object.keys(dbData?.db?.tables)[0],
       "filter": filter,
-      "org_id":dbData?.db?.org_id
+      "org_id":dbData?.db?.org_id,
+      "pageNo" :  1
     }));
   }
   const deleteFilterInDb = async(filterId)=>{
@@ -85,34 +89,37 @@ export default function TablesList({ dbData }) {
     }
     await deleteFilter(dbData?.db?._id,params?.tableName,data)
   }
+  
   useEffect(() => {
-    setTableLength(Object.keys(AllTableInfo?.tables).length)
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
-      dispatch(bulkAddColumns({
-        "dbId":dbData?.db?._id,
-        "tableName": params?.tableName|| tableNames[0]
-      }));
+      dispatch (setTableLoading(true))
+     
+        dispatch(bulkAddColumns({
+          "dbId":dbData?.db?._id,
+          "tableName": params?.tableName|| tableNames[0],
+          "pageNo": 1
+        }));
+      
+      
       if(!(params?.tableName))
       {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);   
+        
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+        // setFilter(AllTableInfo.tables[tableNames[0]]?.filters)
       }
-    setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
-    setFilter(AllTableInfo.tables[params?.tableName]?.filters)
-      
+      if(params?.tableName)
+      {
+        setFilter(AllTableInfo.tables?.[params?.tableName]?.filters) 
+      }
+      setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
     }
-  }, [dbData])
-  // useEffect(()=>{
-  //   if(AllTableInfo?.tables && Object.keys(AllTableInfo?.tables)?.length )
-  //   {
-  //     setTableLength(Object.keys(AllTableInfo?.tables).length)
-  //   }
-  // },[AllTableInfo])
-
+  }, [])
+  
   
   return (
     <>
-      <Box sx={{ width: "100%", display: "flex", height: "auto" }}>
+      <Box sx={{ width: "100%", display: "flex", height: "auto" , overflow: 'hidden' }}>
         <Box sx={{ display: 'flex', overflow: 'hidden', width: "100%", height: "auto" }} >
           <Tabs
             value={value}
@@ -121,17 +128,19 @@ export default function TablesList({ dbData }) {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
-            {AllTableInfo.tables && Object.entries(AllTableInfo.tables).map((table, index) => (
+            {AllTableInfo && Object.entries(AllTableInfo).map((table, index) => (
               <Box key={index}  sx={{height:'57px'}} >
-                <SingleTable filter={filter} setFilter={setFilter} table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} value={value}/>
+                <SingleTable filter={filter} setFilter={setFilter} table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} value={value} setPage={setPage}/>
               </Box>
             ))
             }
-          </Tabs>
-        </Box>
-        <Button onClick={() => handleOpen()} variant="contained" sx={{ width: 122 ,height:40,mt:1.5,mr:1}} >
-          Add Table
+        <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:1, width: 'fit-content' ,height:40}} >
+         <AddIcon/>
         </Button>
+          </Tabs>
+          
+        </Box>
+        
       </Box>
       <Box display="flex" flexWrap="nowrap">
         {filter &&
@@ -145,13 +154,13 @@ export default function TablesList({ dbData }) {
                 color="primary"
               >
                 {filter[1]?.filterName}
-                <IconButton onClick={handleClick}>
+                <IconButton onClick={(e)=>handleClick(e)}>
                   <MoreVertIcon sx={{ color: "#fff" }}/>
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
-                  onClose={handleClose}
+                  onClose={()=>handleClose()}
                 >
                   <MenuItem onClick={() => { handleEdit(); }}>Edit</MenuItem>
                   <MenuItem onClick={()=>{deleteFilterInDb(filter[0]); handleClose()}}>Delete</MenuItem>
@@ -174,9 +183,9 @@ export default function TablesList({ dbData }) {
         </div>
           
       </Box>
-      <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable}/>
-      {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} AllTableInfo={AllTableInfo} />}
-      <MainTable />
+     { open &&  <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable}/> }
+      {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} />}
+       { isTableLoading  ? <CircularProgress /> :  <MainTable setPage ={setPage}  page = {page} />  }
     </>
   );
 }

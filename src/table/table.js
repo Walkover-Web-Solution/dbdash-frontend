@@ -1,121 +1,162 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useCallback,memo } from "react";
 import clsx from "clsx";
-import { useTable, useFlexLayout, useResizeColumns, useRowSelect, useSortBy } from "react-table";
+import {
+  useTable,
+  useFlexLayout,
+  useResizeColumns,
+  useRowSelect,
+  useSortBy,
+  useColumnOrder,
+} from "react-table";
 import Cell from "./Cell";
 import Header from "./Header";
 import PlusIcon from "./img/Plus";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
-import { useCellRangeSelection } from 'react-table-plugins'
-import { addRows, deleteRows, updateCells } from "../store/table/tableThunk";
+import { useCellRangeSelection } from "react-table-plugins";
+import {
+  addRows,
+  deleteRows,
+  updateCells,
+  updateColumnOrder,
+} from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import withScrolling from "react-dnd-scrolling";
+import Preview from "./Preview";
+import DraggableHeader from "./DraggableHeader";
+// import { useDrop, useDrag } from "react-dnd";
+// import { getEmptyImage } from "react-dnd-html5-backend";
+// import ItemTypes from "./ItemTypes";
+const ScrollingComponent = withScrolling("div");
 const defaultColumn = {
   minWidth: 50,
   width: 150,
   maxWidth: 400,
   Cell: Cell,
   Header: Header,
-  sortType: "alphanumericFalsyLast"
+  sortType: "alphanumericFalsyLast",
 };
+// export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 
-export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
+const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update }) => {
 
   const handleCopy = (event, value) => {
-    event.clipboardData.setData('text/plain', value);
+    event.clipboardData.setData("text/plain", value);
     event.preventDefault();
-    document.execCommand('copy');
-
+    document.execCommand("copy");
   };
-
-
-  const dispatch =useDispatch();
-  const handlePaste = (event,row,cell) => {
+  const dispatch = useDispatch();
+  const handlePaste = (event, row, cell) => {
     event.preventDefault();
-
-      const text = event.clipboardData.getData('text/plain');
-       dispatch(updateCells({
-        columnId: cell.column.id, rowIndex: cell.row.original.id, value: text
-        
-      }))
-
+    const text = event.clipboardData.getData("text/plain");
+    dispatch(
+      updateCells({
+        columnId: cell.column.id,
+        rowIndex: cell.row.original.id,
+        value: text,
+      })
+    );
   };
-
-  
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA, rowB, columnId, desc) {
         if (!rowA.values[columnId] && !rowB.values[columnId]) {
           return 0;
         }
-
         if (!rowA.values[columnId]) {
           return desc ? -1 : 1;
         }
-
         if (!rowB.values[columnId]) {
           return desc ? 1 : -1;
         }
-
         return isNaN(rowA.values[columnId])
           ? rowA.values[columnId].localeCompare(rowB.values[columnId])
           : rowA.values[columnId] - rowB.values[columnId];
-      }
+      },
     }),
     []
   );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
     selectedFlatRows,
     state: { selectedCellIds, currentSelectedCellIds },
-
   } = useTable(
     {
       columns,
       data,
       defaultColumn,
       dataDispatch,
-      autoResetSortBy: !skipReset,
-      autoResetFilters: !skipReset,
-      autoResetRowState: !skipReset,
+      // autoResetSortBy: !skipReset,
+      // autoResetFilters: !skipReset,
+      // autoResetRowState: !skipReset,
       sortTypes,
-      cellIdSplitBy: '_',
+      cellIdSplitBy: "_",
       initialState: {
-        selectedCellIds: {}
-      }
+        selectedCellIds: {},
+        columnOrder: columns,
+      },
     },
     useCellRangeSelection,
     useFlexLayout,
     useResizeColumns,
     useSortBy,
-    useRowSelect
+    useRowSelect,
+    useColumnOrder
+  );
+  // useEffect(() => {
+  //   if (headerGroups) 
+  //     setHead(headerGroups);
+  // }, [headerGroups]);
+  const reoder = useCallback(
+    (item, newIndex) => {
+      const newOrder = Array.from(columns);
+ 
+      const { index: currentIndex } = item;
+      const [removedColumn] = newOrder.splice(currentIndex, 1);
+      newOrder.splice(newIndex, 0, removedColumn);
+      // setHead([...newOrder]);
+      // columns = newOrder
+      dispatch(
+        updateColumnOrder({
+          columns: newOrder,
+          id: item?.id,
+          oldIndex:item.index - 1 ,
+          newIndex : newIndex  - 1 
+        })
+      );
+      //call redux make thunk and reducer pass new column order and update
+    },
+    [columns]
   );
 
   useEffect(() => {
     if (Object.keys(selectedCellIds).length > 0) {
-      const newData = cloneDeep(data)
-      const firstValue = Object.keys(selectedCellIds)[0].split('_');
+      const newData = cloneDeep(data);
+      const firstValue = Object.keys(selectedCellIds)[0].split("_");
       const newValueToReplace = newData[firstValue[1]][firstValue[0]];
       {
-        selectedCellIds >= 1 && Object.keys(selectedCellIds)?.forEach((key, i) => {
-          const keyName = key.split('_')[0]
-          const index = key.split('_')[1]
-          if (i === 0 || firstValue[0] != keyName) return;
-
-
-          newData[index][keyName] = newValueToReplace;
-        })
+        selectedCellIds >= 1 &&
+          Object.keys(selectedCellIds)?.forEach((key, i) => {
+            const keyName = key.split("_")[0];
+            const index = key.split("_")[1];
+            if (i === 0 || firstValue[0] != keyName) return;
+            newData[index][keyName] = newValueToReplace;
+          });
       }
-      dataDispatch(updateTableData(newData))
-
+      dataDispatch(updateTableData(newData));
     }
-  }, [selectedCellIds])
-
-  let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds }
-
+  }, [selectedCellIds]);
+  let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds };
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
       for (let column of headerGroup.headers) {
@@ -124,30 +165,70 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
         }
       }
     }
-
     return false;
   }
-  
-    
   return (
     <>
-      {selectedFlatRows?.length > 0 && <Button sx={{ m: 2 }} onClick={() => {
-        dataDispatch(deleteRows(selectedFlatRows))
-      }}>delete selected rows</Button>}
-      <div {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} style={{}}>
-        <div>
-          <div {...headerGroups[0].getHeaderGroupProps()} className='tr'>
-            {headerGroups[0].headers.map((column, index) => {
-              return (
-                <React.Fragment key={index}>
-                  {column.render("Header")}
-                </React.Fragment>
-
-              )
-            })}
+      {selectedFlatRows?.length > 0 && (
+        <Button
+          sx={{ m: 2 }}
+          onClick={() => {
+            dataDispatch(deleteRows(selectedFlatRows));
+          }}
+        >
+          delete selected rows
+        </Button>
+      )}
+      <DndProvider backend={HTML5Backend}>
+        <ScrollingComponent style={{ overflow:"hidden", maxHeight: 450,minHeight: 350 }}>
+          <div
+            {...getTableProps()}
+            className={clsx("table", isTableResizing() && "noselect")}
+            style={{}}
+          >
+            <div>
+              <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
+                {
+                  headerGroups[0].headers?.map((column, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        {/* {  column.render("Header")} */}
+                        <DraggableHeader
+                          reoder={reoder}
+                          key={column.id}
+                          columns={column}
+                          index={index}
+                        />
+                      </React.Fragment>
+                    );
+                    // return(
+                    // <DraggableHeader
+                    //   reoder={reoder}
+                    //   key={column.id}
+                    //   columns={column}
+                    //   index={index}
+                    // />
+                    // )
+                  })}
+              </div>
+            </div>
           </div>
+          <div 
+        style={{
+          widht :"auto",
+        // width: "98vw",
+        height: "100vh",
+        overflowX: "hidden",
+      }}
+      id="scrollableDiv">
 
-        </div>
+        <InfiniteScroll
+          dataLength={data?.length}
+          next={update}
+          hasMore={hasMore}
+          // loader={<h4>Loading more 2 items...</h4>}
+          scrollableTarget="scrollableDiv"
+        >
           <div {...getTableBodyProps()}>
             {rows?.map((row, rowIndex) => {
               prepareRow(row);
@@ -188,6 +269,8 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
 
                         }
                         className='td'>
+                        {/* {console.log(cell.getCellProps())} */}
+
                         {cell.render("Cell")}
                       </div>
                     )
@@ -204,15 +287,32 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
               New
             </div>
           </div>
-      </div>
+        </InfiniteScroll>
+        </div>
+        </ScrollingComponent>
+        <Preview />
+      </DndProvider>
+      {/* <pre>
+        <code>
+        {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
+        </code>
+      </pre> */}
     </>
   );
-}
-
+})
+Table.displayName  = 'Table'
+export default Table
 
 Table.propTypes = {
   columns: PropTypes.any,
+  hasMore:PropTypes.any,
+  update:PropTypes.any,
   data: PropTypes.any,
   dispatch: PropTypes.any,
-  skipReset: PropTypes.any
+  skipReset: PropTypes.any,
+  // columns:PropTypes.any,
+  // data:PropTypes.any,
+  // dispatch:PropTypes.any,
+  // skipReset:PropTypes.any,
+  setColumns: PropTypes.func,
 };

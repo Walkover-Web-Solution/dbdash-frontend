@@ -7,11 +7,12 @@ import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
+import { resetData } from '../../store/table/tableSlice';
 // import { selectOrgandDb } from "../../store/database/databaseSelector";
 // import { uploadCSV } from '../../api/rowApi';
 
 
-export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter,value }) {
+export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter,value ,setPage}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
@@ -67,15 +68,18 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     navigate(`/db/${dbData.db._id}/table/${Object.keys(dbData?.db?.tables)[previousIndex]}`);
     
   };
-  // console.log(dbData?.db?.tables ?Object.keys(dbData?.db?.tables) : "");
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setFilter(table[1]?.filters)
+    setPage(1);
+    dispatch (resetData())
     dispatch(bulkAddColumns({
       //  "alldb":alldb,
       "dbId": dbData?.db?._id,
-      "tableName": table[0]
+      "tableName": table[0],
+      "pageNo":1
     }));
+
     setTableButton(true);
     highlightActiveTable()
   }
@@ -97,11 +101,8 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
 
         onClick={() => {
           onTableClicked(table[0])
-          dispatch(bulkAddColumns({
-            "dbId": dbData?.db?._id,
-            "tableName": table[0],
-            "org_id":dbData?.db?.org_id
-          }));
+
+          
         }}
       >
 
@@ -185,5 +186,6 @@ SingleTable.propTypes = {
   filter:PropTypes.any,
   setFilter :PropTypes.func,
   tableLength:PropTypes.any,
-  value:PropTypes.any
+  value:PropTypes.any,
+  setPage:PropTypes.any
 };
