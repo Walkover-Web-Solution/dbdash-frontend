@@ -406,18 +406,19 @@ export default function Header({
           className='th-content'
           style={{ display: "flex", justifyContent: "center", }}
           onClick={handleOpen}>
-          <span className='svg-icon-sm svg-gray'>
+          <span className='svg-icon-sm svg-gray'style={{marginTop:3.8}}>
             <PlusIcon />
           </span>
         </div> 
         <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn}  setDecimalSelectValue={setDecimalSelectValue}/>
 
       </div > :
-        <div  {...getHeaderProps({ style: { display: "inline-block" } })} className='th noselect'
-          style={{ display: "flex", justifyContent: "center"}}>
+        <div  {...getHeaderProps({ style: { display: "inline-block",flex:"none" } })} className='th noselect'
+          // style={{ display: "flex", justifyContent: "center"}}
+          >
           <div
-            className='th-content' style={{ paddingLeft: "25px" }}>
-            checkbox
+            className='th-content' >
+            <span className='svg-icon svg-gray icon-margin' style={{fontSize:"16px",margin:2.6}}> checkbox</span>
           </div>
         </div>}
     </>
