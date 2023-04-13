@@ -427,7 +427,7 @@ export default function FieldPopupModal(props) {
     ))}
   </Select>
 ):(lookupField && <span style={{color:'red'}}>No unique Keys here</span>)}
-          {/* show fields that are uniquw  */}
+          {/* show fields that are unique  */}
  {props?.showFieldsDropdown &&    AllTableInfo.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
       .filter((fields) => fields[1]?.metaData?.unique)
       .map((fields) => (
@@ -439,8 +439,7 @@ export default function FieldPopupModal(props) {
 (<Select
             labelId="select-label"
             id="select"
-            value={props?.selectedFieldName }
-            defaultValue="fields"
+            value={props?.selectedFieldName  }
             displayEmpty
             sx={{
               margin: 1,
@@ -478,15 +477,12 @@ export default function FieldPopupModal(props) {
             labelId="select-label"
             id="select"
             value={props?.selectedTable}
-            defaultValue="fields"
             displayEmpty
             sx={{
               margin: 1,
               minWidth: 120,
             }}
             onChange={(e) =>{ 
-              
-             
               props?.setLinkedValueName({
                 [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
               })
@@ -496,7 +492,9 @@ export default function FieldPopupModal(props) {
             {
               Object.entries(AllTableInfo?.tables[props?.tableId].fields)?.filter((fields) => {
                 if (fields[1]?.metaData?.foreignKey?.fieldId) {
+                  props?.setSelectedFieldName(fields[1]?.metaData?.foreignKey?.fieldId)
                   return fields;
+
                 }
               })
                 .map((fields) =>
