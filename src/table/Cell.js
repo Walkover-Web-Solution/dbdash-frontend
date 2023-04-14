@@ -35,12 +35,10 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
-  const [dataTypes, setDataType] = useState("")
   const [showAdd, setShowAdd] = useState(false);
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
   const [open, setOpen] = useState(false);
-  const[imgUpload,setImageUpload] = useState(null);
   
   const handleImageClick = (imgLink) => {
     window.open(imgLink, '_blank');
@@ -56,31 +54,24 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
   };
 
   const onChangeFile = (e, type) => {
-    setDataType(type)
-    
-if (e.target.files[0] != null) {
-      setImageUpload(e.target.files[0])
+    if (e.target.files[0] != null) {
+      dispatch(updateCells({
+        columnId: id, rowIndex: row.original.id, value: e.target.files[0], dataTypes: type
+      })).then(() => {
+        toast.success('Image uploaded successfully!');
+      });
     }
     e.target.value = null;
   };
   useEffect(() => {
     setValue({ value: initialValue, update: false });
   }, [initialValue]);
-  useEffect(() => {
-    if (imgUpload)
-    {
-      dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: imgUpload, dataTypes: dataTypes
-      })).then(() => {
-        toast.success('Image uploaded successfully!');
-      });
-    }
-  }, [imgUpload])
+
  
   useEffect(() => {
     if (value?.update &&  value.value!=null) {
       dispatch(updateCells({
-        columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: dataTypes
+        columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: "dataTypes"
       }))
     }
   }, [value, id, row.index]);
