@@ -11,9 +11,12 @@ import { Select, MenuItem, TextField } from '@mui/material';
 import { createFilter,updateQuery } from "../api/filterApi"
 import { getTableInfo } from "../store/table/tableSelector";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
-import { useSelector} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { cloneDeep } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
+// import { setAllTablesData } from "../store/allTable/allTableSlice";
+import { setAllTablesData } from "../store/allTable/allTableSlice";
+
 
 const style = {
   position: "absolute",
@@ -40,6 +43,7 @@ export default function FilterModal(props) {
   const [fieldData, setFieldData] = useState("");
   const [filterName, setFilterName] = useState('');
   const [editData,setEditData] = useState("");
+  const  dispatch = useDispatch();
 
   const [query,setQuery]=useState([{
     "andor":"",
@@ -207,7 +211,13 @@ const createFilterJoi = (e) => {
       filterName: filterName,
       query: queryToSend
     }
-     await createFilter(props?.dbId, props?.tableName, dataa)
+     const filter = await createFilter(props?.dbId, props?.tableName, dataa)
+     dispatch(setAllTablesData(
+      { 
+          "dbId":props?.dbId,
+          "tables" :filter.data.data.data1.tables
+      }
+  ))
   }
 
   const editQueryData = async () => {
@@ -238,7 +248,13 @@ const createFilterJoi = (e) => {
       filterName: filterName,
       query: queryToSend
     }
-     await updateQuery(props?.dbId, props?.tableName,dataa)
+    const updatedFilter = await updateQuery(props?.dbId, props?.tableName,dataa)
+    dispatch(setAllTablesData(
+      { 
+          "dbId":props?.dbId,
+          "tables" :updatedFilter.data.data.tables
+      }
+  ))
   }
   return (
     <Box >

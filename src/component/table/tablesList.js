@@ -17,6 +17,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
 import CircularProgress from '@mui/material/CircularProgress';
 import { setTableLoading } from '../../store/table/tableSlice';
+import { setAllTablesData } from '../../store/allTable/allTableSlice';
 
 // import { uploadCSV } from '../../api/rowApi';
 
@@ -37,7 +38,6 @@ export default function TablesList({ dbData }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false)
-  const [filter, setFilter] = useState(AllTableInfo[params?.tableName]?.filters);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false)
@@ -87,7 +87,13 @@ export default function TablesList({ dbData }) {
     const data={
       filterId: filterId,
     }
-    await deleteFilter(dbData?.db?._id,params?.tableName,data)
+   const deletedFilter = await deleteFilter(dbData?.db?._id,params?.tableName,data)
+   dispatch(setAllTablesData(
+    { 
+        "dbId":dbData?.db?._id,
+        "tables" :deletedFilter.data.data.tables
+    }
+   ))
   }
   
   useEffect(() => {
@@ -103,14 +109,8 @@ export default function TablesList({ dbData }) {
       
       
       if(!(params?.tableName))
-      {
-        
+      {        
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
-        // setFilter(AllTableInfo.tables[tableNames[0]]?.filters)
-      }
-      if(params?.tableName)
-      {
-        setFilter(AllTableInfo.tables?.[params?.tableName]?.filters) 
       }
       setValue(tableNames?.indexOf(params?.tableName)!== -1 ? tableNames?.indexOf(params?.tableName): 0 );
     }
@@ -130,7 +130,7 @@ export default function TablesList({ dbData }) {
           >
             {AllTableInfo && Object.entries(AllTableInfo).map((table, index) => (
               <Box key={index}  sx={{height:'57px'}} >
-                <SingleTable filter={filter} setFilter={setFilter} table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} value={value} setPage={setPage}/>
+                <SingleTable  table={table} tableLength={tableLength} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbData={dbData} highlightActiveTable={() => setValue(index)} value={value} setPage={setPage}/>
               </Box>
             ))
             }
@@ -143,8 +143,8 @@ export default function TablesList({ dbData }) {
         
       </Box>
       <Box display="flex" flexWrap="nowrap">
-        {filter &&
-          Object.entries(filter).map((filter, index) => (
+        {AllTableInfo[params?.tableName]?.filters &&
+          Object.entries(AllTableInfo[params?.tableName]?.filters).map((filter, index) => (
             <Box key={index} marginRight={1}  sx={{mt:4.5,ml:1}}>
               <Box sx={{ backgroundColor: "#4B4E5A", height: 30, width: 120, display: "flex", gap: "10px", alignItems: "center", justifyContent: "center",color:"#fff", borderRadius:3,p:1}}
                 onClick={() => {

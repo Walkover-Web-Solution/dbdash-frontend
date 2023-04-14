@@ -6,11 +6,6 @@ const createFilter = async (db_id,tableName,data) =>
     return await axios.post(URL +`/dbs/${db_id}/${tableName}/filter`,data)
 }
 
-const updateFilterName = async (db_id,tableName,data) =>
-{
-    return await axios.patch(URL +`/dbs/${db_id}/${tableName}/updateFilter`,data)
-}
-
 const deleteFilter = async (db_id,tableName,data) =>
 {
     return await axios.patch(URL +`/dbs/${db_id}/${tableName}/deleteFilter`,data)
@@ -28,7 +23,6 @@ const runQueryonTable = async(dbId,data)=>{
 
 export{
     createFilter,
-    updateFilterName,
     deleteFilter,
     updateQuery,
     runQueryonTable

@@ -12,7 +12,7 @@ import { resetData } from '../../store/table/tableSlice';
 // import { uploadCSV } from '../../api/rowApi';
 
 
-export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,setFilter,value ,setPage}) {
+export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,value ,setPage}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
@@ -70,7 +70,6 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
   };
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
-    setFilter(table[1]?.filters)
     setPage(1);
     dispatch (resetData())
     dispatch(bulkAddColumns({
@@ -183,8 +182,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
-  filter:PropTypes.any,
-  setFilter :PropTypes.func,
   tableLength:PropTypes.any,
   value:PropTypes.any,
   setPage:PropTypes.any
