@@ -25,11 +25,12 @@ const  MainTable = memo ( ({page,setPage}) =>  {
  
   return (
     <div
-      // style={{
-      //   width: "98vw",
-      //   height: "100vh",
-      //   overflowX: "hidden",
-      // }}
+      style={{
+        width: "98vw",
+        height: "100vh",
+        overflowX: "scroll",
+        maxHeight:500
+      }}
       // id="scrollableDiv"
     >
       <div
