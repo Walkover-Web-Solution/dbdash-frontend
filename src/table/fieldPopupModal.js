@@ -145,6 +145,7 @@ export default function FieldPopupModal(props) {
       setShowDecimalOptions(true);
       setOpenLinkedField(false);
     } else if (event.target.value === 'checkbox') {
+      props?.setSelectValue('checkbox')
       setShowSwitch(false);
       setOpenLinkedField(false);
     }  
