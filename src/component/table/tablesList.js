@@ -185,7 +185,10 @@ export default function TablesList({ dbData }) {
       </Box>
      { open &&  <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable}/> }
       {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} />}
-       { isTableLoading  ? <CircularProgress /> :  <MainTable setPage ={setPage}  page = {page} />  }
+       { isTableLoading  ? <CircularProgress /> :  <><MainTable setPage ={setPage}  page = {page} />
+       
+       </>  }
+
     </>
   );
 }
