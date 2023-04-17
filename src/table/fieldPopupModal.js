@@ -260,6 +260,14 @@ export default function FieldPopupModal(props) {
           type="text"
           value={props.textValue}
           onChange={handleTextChange}
+          onKeyDown={(e) => {
+            if(e.target.value.length >= 3 && e.target.value.length <= 15){
+              if (e.key === 'Enter') {
+                props.submitData(false);
+                // handleClose();
+              }
+            }               
+          }}
           sx={{width:'92%',mr:2,ml:2}}
         />
 
