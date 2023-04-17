@@ -28,6 +28,8 @@ import { useDispatch } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
+import 'simplebar-react/dist/simplebar.min.css';
+import SimpleBar from 'simplebar-react';
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
 // import { useDrop, useDrag } from "react-dnd";
@@ -184,8 +186,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           delete selected rows
         </Button>
       )}
+
       <DndProvider backend={HTML5Backend}>
-        <ScrollingComponent style={{ overflow:"hidden",height: "180vw"}}>
+        <ScrollingComponent style={{ overflow:"hidden"}}>
           <div
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
@@ -218,14 +221,8 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
               </div>
             </div>
           </div>
-          <div
-        style={{
-          widht :"auto",
-        // width: "98vw",
-        height: "100vh",
-        // overflowX: "hidden",
-      }}
-      id="scrollableDiv">
+          <SimpleBar id="scrollableDiv" style={{ maxHeight: 300 }}>
+          
         {/* <InfiniteScroll
           dataLength={data?.length}
           next={update}
@@ -288,7 +285,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
             </div>
           </div>
           </table>
-        </div>
+        </SimpleBar>
         </ScrollingComponent>
         <Preview />
       </DndProvider>

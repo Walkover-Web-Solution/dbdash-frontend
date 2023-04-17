@@ -87,11 +87,9 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     <>
       <Box
         sx={{
-          p: '5px',
-          borderRadius: '8px',
+          p: '2.5px',
           border: '1px solid rgba(0, 0, 0, 0.2)',
           backgroundColor: '#fff',
-          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
           textAlign: 'center',
           overflow: 'hidden',
           whiteSpace: 'nowrap',

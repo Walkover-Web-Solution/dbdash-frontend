@@ -63,7 +63,7 @@ function MainNavbar() {
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '30px', }}>
 
           <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <IconButton onClick={handleOpenUserMenu} sx={{ mb: "9px" }}>
               <Avatar alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL}/>
             </IconButton>
           </Tooltip>

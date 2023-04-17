@@ -47,10 +47,10 @@ function DbDetails() {
             <Container sx={{height:'40px'}}>
                 {dbData ? (
                     <>
-                    <Typography variant="body1" align="center">
+                    <Typography variant="body1" align="center" fontWeight={600} color="#333" >
                         {dbData?.db.name}
                     </Typography>
-                    <div style={{width: "60px",  right: "20px",   position: "absolute",top:"60px"}}>
+                    <div style={{width: "60px",  right: "20px",   position: "absolute",top:"59px"}}>
                       <Link to={{ pathname: `/apiDoc/db/${dbId}` }} style={{ textDecoration: "none" }}>
                           <Button variant="contained" color="primary" size="small">APIs</Button>
                   </Link>
@@ -62,7 +62,7 @@ function DbDetails() {
                     </Typography>
                 )}
             </Container>
-            <Divider color="black" variant="fullwidth" sx={{ mb: 2}}  />
+            <Divider color="black" variant="fullwidth" />
             <Box align="center" >
             { dbData &&    <TablesList dbData={dbData} tables={tables} setTables={setTables} />}
             </Box>

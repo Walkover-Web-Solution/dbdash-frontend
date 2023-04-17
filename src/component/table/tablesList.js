@@ -119,7 +119,7 @@ export default function TablesList({ dbData }) {
   
   return (
     <>
-      <Box sx={{ width: "100%", display: "flex", height: "auto" , overflow: 'hidden' }}>
+      <Box sx={{ width: "100%", display: "flex", height: "50px" , overflow: 'hidden',position: "sticky"}}>
         <Box sx={{ display: 'flex', overflow: 'hidden', width: "100%", height: "auto" }} >
           <Tabs
             value={value}
@@ -127,6 +127,7 @@ export default function TablesList({ dbData }) {
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
+            
           >
             {AllTableInfo && Object.entries(AllTableInfo).map((table, index) => (
               <Box key={index}  sx={{height:'57px'}} >
@@ -134,7 +135,7 @@ export default function TablesList({ dbData }) {
               </Box>
             ))
             }
-        <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:1, width: 'fit-content' ,height:40}} >
+        <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:.85, width: '25px' ,height:35}} >
          <AddIcon/>
         </Button>
           </Tabs>
@@ -169,7 +170,7 @@ export default function TablesList({ dbData }) {
             </Box>
           ))}
 
-        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 122,mt:4 ,ml:2 }} >
+        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 100,mt:1.5 ,ml:2, fontSize: "11px"}} >
           Add Filter
         </Button>
         <div>

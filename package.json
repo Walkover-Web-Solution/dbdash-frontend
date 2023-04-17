@@ -48,6 +48,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
+    "simplebar-react": "^3.2.4",
     "source-map-loader": "^4.0.1",
     "stream-browserify": "^3.0.0",
     "util": "^0.12.5",

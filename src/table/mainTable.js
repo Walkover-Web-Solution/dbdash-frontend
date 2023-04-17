@@ -28,7 +28,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
       style={{
         width: "98vw",
         height: "100vh",
-        overflowX: "scroll",
+        // overflowX: "scroll",
         maxHeight:1000
       }}
       // id="scrollableDiv"
@@ -66,6 +66,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
       </div>
       <div
         style={{
+          // height: 140,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
