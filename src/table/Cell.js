@@ -173,7 +173,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         />
       );
       break;
-      case "rowid":
+      case "id":
         element = (
           <input type="text"
             readOnly="readonly"

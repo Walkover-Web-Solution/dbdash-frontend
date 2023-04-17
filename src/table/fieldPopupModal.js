@@ -145,6 +145,7 @@ export default function FieldPopupModal(props) {
       setShowDecimalOptions(true);
       setOpenLinkedField(false);
     } else if (event.target.value === 'checkbox') {
+      props?.setSelectValue('checkbox')
       setShowSwitch(false);
       setOpenLinkedField(false);
     }  
@@ -261,6 +262,12 @@ export default function FieldPopupModal(props) {
           value={props.textValue}
           onChange={handleTextChange}
           sx={{width:'92%',mr:2,ml:2}}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              props.submitData(false);
+              handleClose();
+            }
+        }}
         />
 
         {errors.fieldName && (
@@ -295,7 +302,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{mr : 1}}/>Long text</MenuItem>
             <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Lookup</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{mr : 1}}/>Number</MenuItem>
-            <MenuItem value="rowid"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>Rowid</MenuItem>
+            <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>Row id</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
  
           </Select>
