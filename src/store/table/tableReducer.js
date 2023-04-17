@@ -1,4 +1,4 @@
-// import { current } from '@reduxjs/toolkit';
+import { current } from '@reduxjs/toolkit';
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 
@@ -11,7 +11,8 @@ export const initialState = {
   skipReset: false,
   status: "idle",
   pageNo : 0,
-  isTableLoading : true
+  isTableLoading : true,
+
 };
 
 export const reducers = {
@@ -46,6 +47,7 @@ export const reducers = {
       skipReset: false,
       status: "idle",
       pageNo : 0,
+      pageSize : 0,
       isTableLoading : true }
   },
   deleteColumn(state, payload) {
@@ -358,6 +360,7 @@ export function extraReducers(builder) {
       state.status = "loading"
     })
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
+      console.log(current(state))
       if (action.payload) {
         if(action.payload.columns) state.columns = action.payload.columns;
         state.data = action.payload.row;
@@ -365,6 +368,7 @@ export function extraReducers(builder) {
         state.dbId = action.payload.dbId
         state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
       }
+      console.log(current(state))
       state.status = "succeeded";
 
     })

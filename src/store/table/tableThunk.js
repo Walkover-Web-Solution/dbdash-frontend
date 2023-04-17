@@ -61,6 +61,7 @@ const getHeaders = async(dbId,tableName) =>{
 const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
     const data = await getTable(dbId,tableName,page);
     const obj = data.data.data?.rows ||  data.data.data ;
+    console.log("obj 1",obj)
     const userInfo = allOrg(getState());
     const tableInfo = getTableInfo(getState())
     const users = userInfo?.find((org)=>org?._id== org_id)?.users;
@@ -103,6 +104,7 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload,{getState,dispatch}) =>{
+        console.log(payload);
             
         if(payload.filter != null)
         {
@@ -130,13 +132,14 @@ export const bulkAddColumns = createAsyncThunk(
             const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.pageNo)
             const dataa = {
                 "columns":columns,
-                "row":data.rows,
-                "tableId":payload.tableName,
-                "dbId":payload.dbId,
-                "pageNo" : data.pageNo
+                "row":data?.rows,
+                "tableId":payload?.tableName,
+                "dbId":payload?.dbId,
+                "pageNo" : data?.pageNo,
             }
             dispatch (setTableLoading(false))
-            
+            console.log("sdfg",data)
+            console.log("first",dataa)
             return dataa;
         }
     }
