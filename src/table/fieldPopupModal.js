@@ -301,7 +301,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{mr : 1}}/>Long text</MenuItem>
             <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{mr : 1}}/>Lookup</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{mr : 1}}/>Number</MenuItem>
-            <MenuItem value="rowid"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>Rowid</MenuItem>
+            <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{mr : 1}}/>Row id</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
  
           </Select>
