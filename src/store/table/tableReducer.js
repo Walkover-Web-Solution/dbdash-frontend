@@ -1,4 +1,4 @@
-import { current } from '@reduxjs/toolkit';
+// import { current } from '@reduxjs/toolkit';
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 
@@ -367,7 +367,6 @@ export function extraReducers(builder) {
         state.dbId = action.payload.dbId
         state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
       }
-      console.log(current(state))
       state.status = "succeeded";
 
     })

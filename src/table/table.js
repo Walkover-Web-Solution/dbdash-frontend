@@ -44,7 +44,6 @@ const defaultColumn = {
 };
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
-  console.log(" in table js ")
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -125,14 +124,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
   );
  
 
-      console.log("pageIndex",pageIndex)
-  // useEffect(() => {
-  //   if(pageIndex !==0)
-  //   {
-  //     update(pageIndex)
-  //   }
-  // }, [ pageIndex]);
-
   const reoder = useCallback(
     (item, newIndex) => {
       const newOrder = Array.from(columns);
@@ -194,7 +185,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         </Button>
       )}
       <DndProvider backend={HTML5Backend}>
-        <ScrollingComponent style={{ overflow:"hidden",minHeight: 350 }}>
+        <ScrollingComponent style={{ overflow:"hidden",height: "180vw"}}>
           <div
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
@@ -232,7 +223,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           widht :"auto",
         // width: "98vw",
         height: "100vh",
-        overflowX: "hidden",
+        // overflowX: "hidden",
       }}
       id="scrollableDiv">
         {/* <InfiniteScroll
@@ -310,18 +301,14 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"<"}
         </button>{" "}
-       { console.log(data.length /100 , "pageindex" , pageIndex )}
-        <button onClick={() => {
+        <button  onClick={() => {
           if(data.length / 100  > pageIndex+1){
             nextPage()
-            
-            console.log("in else")
           }
           else{
             update(pageIndex) 
-            console.log("in updagte data"  )
           }
-          }} >
+          }}>
           {">"}
         </button>{" "}
           {/* {">>"} */}

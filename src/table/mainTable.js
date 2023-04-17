@@ -15,7 +15,6 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   // const [page,setPage] = useState(2);
   const dispatchs = useDispatch();
   const fetchMoreData = () => {
-    console.log("fetch more data")
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
@@ -30,7 +29,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
         width: "98vw",
         height: "100vh",
         overflowX: "scroll",
-        maxHeight:500
+        maxHeight:1000
       }}
       // id="scrollableDiv"
     >
@@ -67,7 +66,6 @@ const  MainTable = memo ( ({page,setPage}) =>  {
       </div>
       <div
         style={{
-          height: 140,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

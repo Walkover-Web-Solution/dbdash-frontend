@@ -61,7 +61,6 @@ const getHeaders = async(dbId,tableName) =>{
 const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
     const data = await getTable(dbId,tableName,page);
     const obj = data.data.data?.rows ||  data.data.data ;
-    console.log("obj 1",obj)
     const userInfo = allOrg(getState());
     const tableInfo = getTableInfo(getState())
     const users = userInfo?.find((org)=>org?._id== org_id)?.users;
