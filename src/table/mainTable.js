@@ -15,10 +15,11 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   // const [page,setPage] = useState(2);
   const dispatchs = useDispatch();
   const fetchMoreData = () => {
+    console.log("fetch more data")
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
-      "pageNo":page+1
+      "pageNo": page+1
     }));
     setPage((page) => page + 1);
   };
@@ -54,11 +55,12 @@ const  MainTable = memo ( ({page,setPage}) =>  {
           }}
         >
           {columns?.length > 0 && <Table
-          update={fetchMoreData}
-          hasMore={true}
+           update={fetchMoreData}
+           hasMore={true}
             columns={columns}
             data={data|| []}
             dispatch={dispatchs}
+            page = {page}
             // skipReset={tableInfo.skipReset}
           /> }
         </div>

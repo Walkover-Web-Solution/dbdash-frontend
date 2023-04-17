@@ -17,7 +17,6 @@ import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from "react-table-plugins";
 import {
   addRows,
-  bulkAddColumns,
   deleteRows,
   updateCells,
   updateColumnOrder,
@@ -31,7 +30,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
-import { useParams } from "react-router";
 // import { useDrop, useDrag } from "react-dnd";
 // import { getEmptyImage } from "react-dnd-html5-backend";
 // import ItemTypes from "./ItemTypes";
@@ -45,7 +43,8 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast",
 };
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
-const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
+const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
+  console.log(" in table js ")
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -91,14 +90,12 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
     selectedFlatRows,
     page,
     canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
+    // canNextPage,
     nextPage,
     previousPage,
+    gotoPage,
     // setPageSize,
-    state: { pageIndex },
+    state: { pageIndex  },
     state: { selectedCellIds, currentSelectedCellIds },
   } = useTable(
     {
@@ -111,10 +108,12 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
       // autoResetRowState: !skipReset,
       sortTypes,
       cellIdSplitBy: "_",
-      // initialState: {
-      //   selectedCellIds: {},
-      //   columnOrder: columns,
-      // },
+      initialState: {
+        selectedCellIds: {},
+        columnOrder: columns,
+        pageSize : 100,
+        pageIndex :pageNo - 1
+      },
     },
     useCellRangeSelection,
     useFlexLayout,
@@ -125,19 +124,14 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
     useRowSelect
   );
  
-const params = useParams();
 
-  useEffect(() => {
-    if(pageIndex !== 0)
-    {
-
-      dispatch(bulkAddColumns({
-        "dbId": params.dbId,
-        "tableName": params.tableName,
-          "pageNo":pageIndex+1,
-      }));
-    }
-  }, [ pageIndex]);
+      console.log("pageIndex",pageIndex)
+  // useEffect(() => {
+  //   if(pageIndex !==0)
+  //   {
+  //     update(pageIndex)
+  //   }
+  // }, [ pageIndex]);
 
   const reoder = useCallback(
     (item, newIndex) => {
@@ -160,7 +154,7 @@ const params = useParams();
     [columns]
   );
   useEffect(() => {
-    if (Object.keys(selectedCellIds).length > 0) {
+    if (Object.keys(selectedCellIds).length > 1) {
       const newData = cloneDeep(data);
       const firstValue = Object.keys(selectedCellIds)[0].split("_");
       const newValueToReplace = newData[firstValue[1]][firstValue[0]];
@@ -311,23 +305,31 @@ const params = useParams();
       <div className="pagination">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
-        </button>{" "}
+        </button>
+        {" "}
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"<"}
         </button>{" "}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+       { console.log(data.length /100 , "pageindex" , pageIndex )}
+        <button onClick={() => {
+          if(data.length / 100  > pageIndex+1){
+            nextPage()
+            
+            console.log("in else")
+          }
+          else{
+            update(pageIndex) 
+            console.log("in updagte data"  )
+          }
+          }} >
           {">"}
         </button>{" "}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {">>"}
-        </button>{" "}
+          {/* {">>"} */}
         <span>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{" "}
+          {/* Page{" "} */}
+        
         </span>
-        <span>
+        {/* <span>
           | Go to page:{" "}
           <input
             type="number"
@@ -338,19 +340,7 @@ const params = useParams();
             }}
             style={{ width: "100px" }}
           />
-        </span>{" "}
-        {/* <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 100].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
+        </span>{" "} */}
       </div>
      
     </>
@@ -370,4 +360,5 @@ Table.propTypes = {
   // dispatch:PropTypes.any,
   // skipReset:PropTypes.any,
   setColumns: PropTypes.func,
+  page:PropTypes.number
 };
