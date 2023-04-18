@@ -1,9 +1,6 @@
-import React from "react";
-import { useState } from "react";
+import React,{useState} from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
-// import { githubGist } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import { Button } from "@mui/material";
-// import { FaCopy } from "react-icons/fa";
 import PropTypes from 'prop-types';
 
 const CodeSnippet = ({ codeString }) => {

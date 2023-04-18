@@ -2,9 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { renameDb, deleteDb, createDb } from "../../api/dbApi";
 import { addUserInOrg, createOrg, deleteOrg, getAllOrgs, removeUserInOrg, updateOrg } from "../../api/orgApi";
 import { findUserByEmail } from "../../api/userApi";
-// import { UserAuth } from "../../context/authContext";
-// import { updateDb } from './databaseSlice';
-
 
 export const bulkAdd = createAsyncThunk(
     "organdDb/bulkAdd", async (payload) => {
@@ -23,8 +20,6 @@ export const bulkAdd = createAsyncThunk(
         return ans;
     }
 );
-
-
 
 export const createDbThunk = createAsyncThunk(
     "organdDb/createDbThunk", async (payload) => {

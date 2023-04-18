@@ -1,8 +1,6 @@
 import React from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import {Box,Modal,Button} from "@mui/material";
 import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({

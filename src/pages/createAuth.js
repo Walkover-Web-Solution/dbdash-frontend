@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthKeyHeader from "../component/authKeyComponents/authKeyHeader";
-import Box from "@mui/material/Box";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { TextField, Typography, Button } from "@mui/material";
+import {Box, TextField, Typography, Button } from "@mui/material";
 import AuthAccessDropDown from "../component/authKeyComponents/authAccessDropdown";
 // import AuthKeyPopup from "../component/authKeyComponents/authKeyPopup";
 import AuthKeyDropdown from "../component/authKeyComponents/authKeyDropdown";
@@ -13,7 +12,6 @@ import MainNavbar from "../component/mainNavbar";
 import AuthKeyPopup from "../component/authKeyComponents/authKeyPopup";
 import { useSelector } from "react-redux";
 import { selectActiveUser } from "../store/user/userSelector.js";
-// import { ContactlessOutlined } from "@mui/icons-material";
 
 export default function CreateAuthKey() {
   const location = useLocation();

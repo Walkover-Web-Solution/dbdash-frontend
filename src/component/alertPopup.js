@@ -21,9 +21,6 @@ export default function AlertPopup(props) {
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to delete the {props.title}?
           </DialogContentText>
-        //    <DialogContentText id="alert-dialog-description">
-        //    You cant delete the {props.title}?
-        //  </DialogContentText>
 }
         </DialogContent>
         <DialogActions>

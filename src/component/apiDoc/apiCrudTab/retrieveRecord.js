@@ -1,7 +1,5 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
-
-
 function RetrieveRecord(props) {
   return (
     <div>Retrieve Record</div>

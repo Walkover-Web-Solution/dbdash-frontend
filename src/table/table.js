@@ -11,7 +11,6 @@ import {addRows,deleteRows,updateCells,updateColumnOrder,} from "../store/table/
 // import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch,useSelector } from "react-redux";
-//import InfiniteScroll from "react-infinite-scroll-component";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
@@ -20,9 +19,7 @@ import SimpleBar from 'simplebar-react';
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
 import { getTableInfo } from "../store/table/tableSelector";
-// import { useDrop, useDrag } from "react-dnd";
-// import { getEmptyImage } from "react-dnd-html5-backend";
-// import ItemTypes from "./ItemTypes";
+
 const ScrollingComponent = withScrolling("div");
 const defaultColumn = {
   minWidth: 50,
@@ -94,9 +91,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       data,
       defaultColumn,
       dataDispatch,
-      // autoResetSortBy: !skipReset,
-      // autoResetFilters: !skipReset,
-      // autoResetRowState: !skipReset,
       sortTypes,
       cellIdSplitBy: "_",
       initialState: {
@@ -121,8 +115,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
-      // setHead([...newOrder]);
-      // columns = newOrder
       dispatch(
         updateColumnOrder({
           columns: newOrder,
@@ -198,7 +190,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                         />
                       </React.Fragment>
                     );
-                   
                   })}
               </div>
             </div>
@@ -209,14 +200,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         height: "calc(100% - 45px)",
         overflowX: "hidden" 
       }}>
-          
-        {/* <InfiniteScroll
-          dataLength={data?.length}
-          next={update}
-          hasMore={hasMore}
-          // loader={<h4>Loading more 2 items...</h4>}
-          scrollableTarget="scrollableDiv"
-        > */}
         <table>
           <div {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
@@ -232,8 +215,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                   {row.cells.map((cell, columnIndex) => {
                     return (
                       <div key={columnIndex}
-                        // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
-                        // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
                         // {...cell.getCellRangeSelectionProps()}
                         {...cell.getCellProps(
                           {
@@ -241,8 +222,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                             onPaste: event => handlePaste(event, rowIndex, cell)
                           }
                         )}
-                        // suppressContentEditableWarning={true}
-                        // contentEditable
                         style=
                         {
                           cellsSelected[cell.id]
@@ -313,10 +292,6 @@ Table.propTypes = {
   data: PropTypes.any,
   dispatch: PropTypes.any,
   skipReset: PropTypes.any,
-  // columns:PropTypes.any,
-  // data:PropTypes.any,
-  // dispatch:PropTypes.any,
-  // skipReset:PropTypes.any,
   setColumns: PropTypes.func,
   page:PropTypes.number
 };

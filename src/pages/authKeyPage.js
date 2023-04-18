@@ -3,11 +3,8 @@ import AuthKey from "../component/authKeyComponents/authKeyTable";
 import { Box, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import AuthKeyHeader from "../component/authKeyComponents/authKeyHeader";
-import { Link } from "react-router-dom";
+import { Link,useParams } from "react-router-dom";
 import MainNavbar from "../component/mainNavbar";
-import { useParams} from "react-router-dom";
-
-
 
 export default function AuthKeyPage() {
   // const location = useLocation();

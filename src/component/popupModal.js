@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import {Box,Button,TextField,Typography} from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import useValidator from "react-joi";
 import Joi from "joi";
-
-// import { createOrg } from "../api/orgApi";
 
 const style = {
   position: "absolute",
@@ -23,12 +18,9 @@ const style = {
 };
 
 export default function PopupModal(props) {
-  // const [org, setOrg] = React.useState();
   
   const handleClose = () => props.setOpen(false);
-
   const [textFieldValue, setTextFieldValue] = useState("");
-
 
   const { state, setData, setExplicitField,validate} = useValidator({
     initialData: {

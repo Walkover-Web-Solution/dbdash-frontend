@@ -10,7 +10,6 @@ import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, sh
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
-// import Joi from 'joi';
 
 export const OrgList = (props) => {
 

@@ -2,13 +2,7 @@
 import React, { useState } from 'react';
 import {useNavigate,useParams} from 'react-router-dom'
 import PropTypes from 'prop-types';
-import {
-  Typography,
-  Menu,
-  MenuItem,
-  Tooltip,
-  IconButton,
-} from '@mui/material';
+import {Typography,Menu,MenuItem,Tooltip,IconButton} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteAuthKeyPopup from './authKeyTablePopup/deleteAuthkeyPopup';
 import DisplayAuthKeyPopup from './authKeyTablePopup/displayAuthkeyPopup';
@@ -27,9 +21,7 @@ export default function AuthDropdown(props) {
     // event.stopPropagation();
     setAnchorElUser(null);
   };
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
+  
   return (
     <>
       <Tooltip>

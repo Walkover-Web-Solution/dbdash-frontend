@@ -350,20 +350,6 @@ export default function FieldPopupModal(props) {
             (
               <Box>
                 <Box>write query in human friendly way to manupulate the column and resultant query will be give to you !!!  and vie versa</Box>
-                {/* <TextField
-            autoFocus
-            margin="dense"
-            id="text-field"
-            label="Enter the query"
-            type="text"
-            // value={props?.textValue}
-            placeholder={"multiply column speed and distance"}
-           onChange={(e)=>{
-            setUserQuery(e.target.value)
-           }}
-            fullWidth
-          /> */}
-
                 <Autosuggest
                   autoFocus
                   suggestions={suggestions}
@@ -373,9 +359,6 @@ export default function FieldPopupModal(props) {
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps}
                   renderSuggestionsContainer={renderSuggestionsContainer}
-                  // onChange={(e)=>{
-                  //   setUserQuery(e.target.value)
-                  //  }}
                 />
                 <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >Ask AI</Button>
 
@@ -397,26 +380,7 @@ export default function FieldPopupModal(props) {
 
             )
           }
-            {/* show table name   */}
-          {/* {lookupField  && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 && <Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedTable}
-            onChange={(event) => {
-              props?.setSelectedTable(event.target.value);
-              props?.setShowFieldsDropdown(true)
-            }}
-            defaultValue={props?.selectedTable}
-            displayEmpty
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-          >
-            {AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).map((table, index) => (
-              <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
-            ))}
-          </Select>} */}
+          
 {lookupField && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 ?(
   <Select
     labelId="select-label"
