@@ -13,6 +13,7 @@ import PlusIcon from "./img/Plus";
 import { useDispatch, useSelector } from "react-redux";
 import { shortId } from "./utils";
 import PropTypes from 'prop-types';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 // import PopupModal from "../component/popupModal";
 import { getTableInfo } from "../store/table/tableSelector";
@@ -418,7 +419,7 @@ export default function Header({
           >
           <div
             className='th-content' >
-            <span className='svg-icon svg-gray icon-margin' style={{fontSize:"16px",margin:2.6}}> checkbox</span>
+            <span className='svg-icon svg-gray icon-margin' ><CheckCircleOutlineIcon style={{fontSize:"13.5px",marginTop:"1px"}}/></span>
           </div>
         </div>}
     </>

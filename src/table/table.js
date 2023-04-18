@@ -209,7 +209,12 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
               </div>
             </div>
           </div>
-          <SimpleBar id="scrollableDiv" style={{ maxHeight: 300 }}>
+          <SimpleBar id="scrollableDiv" style={{ 
+          widht :"auto",
+        // width: "98vw",
+        height: "47vh",
+        overflowX: "hidden" 
+      }}>
           
         {/* <InfiniteScroll
           dataLength={data?.length}
@@ -279,7 +284,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <Preview />
       </DndProvider>
 
-      <div className="pagination">
+      <div className="pagination"  style={{marginBottom:"5vh",marginTop:"3vh",textAlign:"left",marginLeft:"45vw",position:"fixed"}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
         </button>
