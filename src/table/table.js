@@ -224,7 +224,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
         style={{
           widht :"auto",
         // width: "98vw",
-        height: "43vh",
+        height: "45vh",
         overflowX: "hidden",
       }}
       id="scrollableDiv">
@@ -292,7 +292,10 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
           </table>
         </div>
         </ScrollingComponent>
-        <div className="pagination">
+        
+        <Preview />
+      </DndProvider>
+      <div className="pagination" style={{marginBottom:"4vh",textAlign:"left",marginLeft:"42vw",position:"fixed"}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
         </button>{" "}
@@ -311,23 +314,20 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
             {pageIndex + 1} of {pageOptions.length==0 ?"1":pageOptions.length}
           </strong>{" "}
         </span>
-        {/* <span>
-          | Go to page:{" "}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              gotoPage(page);
-            }}
-            style={{ width: "100px" }}
-          />
-        </span> */}
+        {/* <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select> */}
           
         </div>
-        <Preview />
-      </DndProvider>
-      
       {/* <pre>
         <code>
         {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
