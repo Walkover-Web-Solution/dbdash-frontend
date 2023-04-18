@@ -8,7 +8,6 @@ import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
 import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk } from "../../store/database/databaseThunk";
 import { useDispatch, useSelector } from "react-redux";
-// import {  removeUserInOrg } from "../../api/orgApi";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
 export const OrgList = (props) => {
@@ -16,18 +15,12 @@ export const OrgList = (props) => {
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
   const allorgss = useSelector((state) => allOrg(state)) 
-
-
-
   const [name, setName] = useState(false); // [show textfield and setshowtextfield]
-
-
   const [orgUsers, setOrgUsers] = useState([])
   const [orgName, setOrgName] = useState();
   const [db, setDb] = useState(false);
   const [open, setOpen] = useState(false); //popup model craeate db 
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
-
   const [orgId, setOrg] = useState();
 
   //shared model whaha hoga
@@ -71,12 +64,10 @@ export const OrgList = (props) => {
   const shareWorkspace = async (email) => {
     const adminId = localStorage.getItem("userid")
     dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
-    // await addUserInOrg(props?.orgId, adminId, data)
   }
   const removeUserFromWorkspace = async (email) => {
     const adminId = localStorage.getItem("userid")
     dispatch(removeUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
-    // await removeUserInOrg(props?.orgId, adminId, data)
   }
   return (
     <>

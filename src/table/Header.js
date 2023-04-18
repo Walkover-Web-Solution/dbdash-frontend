@@ -401,7 +401,7 @@ export default function Header({
   return id == 999999 || id == 9999991 ? (
     <>
 
-      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block", backgroundColor: '#E8E8E8' } })} className='th noselect'>
+      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block", backgroundColor: '#E8E8E8'} })} className='th noselect'>
         <div
           className='th-content'
           style={{ display: "flex", justifyContent: "center", }}

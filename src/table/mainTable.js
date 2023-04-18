@@ -18,7 +18,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
-      "pageNo":page+1
+      "pageNo": page+1
     }));
     setPage((page) => page + 1);
   };
@@ -26,12 +26,10 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   return (
     <div
       style={{
-        width: "fitcontent",
-        
-        overflowX: "scroll",
-        height:"65vh",
-        overflowY:"hidden",
-    
+        width: "98vw",
+        height: "100vh",
+        // overflowX: "scroll",
+        maxHeight:1000
       }}
       // id="scrollableDiv"
     >
@@ -52,15 +50,17 @@ const  MainTable = memo ( ({page,setPage}) =>  {
             padding: "1rem",
             marginLeft: "15px",
             marginRight: "30px",
+
             backgroundColor:'#fff',
           }}
         >
           {columns?.length > 0 && <Table
-          update={fetchMoreData}
-          hasMore={true}
+           update={fetchMoreData}
+           hasMore={true}
             columns={columns}
             data={data|| []}
             dispatch={dispatchs}
+            page = {page}
             // skipReset={tableInfo.skipReset}
           /> }
         </div>
@@ -68,7 +68,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
       </div>
       <div
         style={{
-          height: 140,
+          // height: 140,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

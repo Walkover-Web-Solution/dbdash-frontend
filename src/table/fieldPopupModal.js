@@ -270,12 +270,6 @@ export default function FieldPopupModal(props) {
             }               
           }}
           sx={{width:'92%',mr:2,ml:2}}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              props.submitData(false);
-              handleClose();
-            }
-        }}
         />
 
         {errors.fieldName && (

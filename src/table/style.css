@@ -12,6 +12,9 @@ html {
   padding: 0px;
   font-family: "Inter", sans-serif;
 }
+
+
+
 #root {
   margin: 0px;
   padding: 0px;
@@ -257,3 +260,4 @@ html {
 .tr:hover .checkbox-container {
   display: block;
 }
+

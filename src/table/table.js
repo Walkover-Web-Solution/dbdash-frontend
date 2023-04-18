@@ -1,35 +1,25 @@
 import React, { useMemo, useEffect, useCallback,memo } from "react";
 import clsx from "clsx";
-import {
-  useTable,
-  useFlexLayout,
-  useResizeColumns,
-  useSortBy,
-  useColumnOrder,
-  usePagination,
-  useRowSelect
-} from "react-table";
+import {useTable,useFlexLayout,useResizeColumns,useSortBy,useColumnOrder,usePagination,useRowSelect} from "react-table";
 import Cell from "./Cell";
 import Header from "./Header";
 import PlusIcon from "./img/Plus";
 import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from "react-table-plugins";
-import {
-  addRows,
-  deleteRows,
-  updateCells,
-  updateColumnOrder,
-} from "../store/table/tableThunk";
+import {addRows,deleteRows,updateCells,updateColumnOrder,} from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 //import InfiniteScroll from "react-infinite-scroll-component";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
+import 'simplebar-react/dist/simplebar.min.css';
+import SimpleBar from 'simplebar-react';
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
+import { getTableInfo } from "../store/table/tableSelector";
 // import { useDrop, useDrag } from "react-dnd";
 // import { getEmptyImage } from "react-dnd-html5-backend";
 // import ItemTypes from "./ItemTypes";
@@ -43,7 +33,7 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast",
 };
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
-const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
+const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -61,6 +51,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
       })
     );
   };
+
+  const tableInfo=useSelector((state)=>getTableInfo(state));
+  console.log(tableInfo.isMoreData)
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -84,19 +77,14 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-   // rows,
     prepareRow,
     selectedFlatRows,
     page,
     canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
     nextPage,
     previousPage,
- 
-    state: { pageIndex },
+    gotoPage,
+    state: { pageIndex  },
     state: { selectedCellIds, currentSelectedCellIds },
   } = useTable(
     {
@@ -112,6 +100,8 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
       initialState: {
         selectedCellIds: {},
         columnOrder: columns,
+        pageSize : 100,
+        pageIndex :pageNo - 1
       },
     },
     useCellRangeSelection,
@@ -122,10 +112,8 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
     usePagination,
     useRowSelect
   );
-  // useEffect(() => {
-  //   if (headerGroups)
-  //     setHead(headerGroups);
-  // }, [headerGroups]);
+ 
+
   const reoder = useCallback(
     (item, newIndex) => {
       const newOrder = Array.from(columns);
@@ -147,7 +135,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
     [columns]
   );
   useEffect(() => {
-    if (Object.keys(selectedCellIds).length > 0) {
+    if (Object.keys(selectedCellIds).length > 1) {
       const newData = cloneDeep(data);
       const firstValue = Object.keys(selectedCellIds)[0].split("_");
       const newValueToReplace = newData[firstValue[1]][firstValue[0]];
@@ -186,8 +174,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
           delete selected rows
         </Button>
       )}
+
       <DndProvider backend={HTML5Backend}>
-        <ScrollingComponent style={{ overflow:"hidden", maxHeight: "fit-content" }}>
+        <ScrollingComponent style={{ overflow:"hidden"}}>
           <div
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
@@ -220,14 +209,8 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
               </div>
             </div>
           </div>
-          <div
-        style={{
-          widht :"auto",
-        // width: "98vw",
-        height: "45vh",
-        overflowX: "hidden",
-      }}
-      id="scrollableDiv">
+          <SimpleBar id="scrollableDiv" style={{ maxHeight: 300 }}>
+          
         {/* <InfiniteScroll
           dataLength={data?.length}
           next={update}
@@ -290,49 +273,49 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
             </div>
           </div>
           </table>
-        </div>
+        </SimpleBar>
         </ScrollingComponent>
         
         <Preview />
       </DndProvider>
-      <div className="pagination" style={{marginBottom:"4vh",textAlign:"left",marginLeft:"42vw",position:"fixed"}}>
+
+      <div className="pagination">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
-        </button>{" "}
+        </button>
+        {" "}
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"<"}
         </button>{" "}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        <button disabled={tableInfo.isMoreData == false} onClick={() => {
+          if(data.length / 100  > pageIndex+1){
+            nextPage()
+          }
+          else{
+            update(pageIndex) 
+          }
+          }}>
           {">"}
         </button>{" "}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {">>"}
-        </button>{" "}
+          {/* {">>"} */}
         <span>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length==0 ?"1":pageOptions.length}
-          </strong>{" "}
+          {/* Page{" "} */}
+        
         </span>
-        {/* <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-          
-        </div>
-      {/* <pre>
-        <code>
-        {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
-        </code>
-      </pre> */}
+        {/* <span>
+          | Go to page:{" "}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              gotoPage(page);
+            }}
+            style={{ width: "100px" }}
+          />
+        </span>{" "} */}
+      </div>
+     
     </>
   );
 })
@@ -350,4 +333,5 @@ Table.propTypes = {
   // dispatch:PropTypes.any,
   // skipReset:PropTypes.any,
   setColumns: PropTypes.func,
+  page:PropTypes.number
 };

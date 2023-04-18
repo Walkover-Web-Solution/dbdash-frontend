@@ -122,6 +122,7 @@ export const bulkAddColumns = createAsyncThunk(
         }
         else{
             var  columns = null
+          
             if((payload?.pageNo <=  1)  || !( payload?.pageNo) )
             {
                 columns =  await getHeaders(payload.dbId,payload.tableName)
@@ -130,13 +131,14 @@ export const bulkAddColumns = createAsyncThunk(
             const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.pageNo)
             const dataa = {
                 "columns":columns,
-                "row":data.rows,
-                "tableId":payload.tableName,
-                "dbId":payload.dbId,
-                "pageNo" : data.pageNo
+                "row":data?.rows,
+                "tableId":payload?.tableName,
+                "dbId":payload?.dbId,
+                "pageNo" : data?.pageNo,
+                "isMoreData" : !(data?.offset == null)
             }
             dispatch (setTableLoading(false))
-            
+         
             return dataa;
         }
     }

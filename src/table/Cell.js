@@ -360,28 +360,26 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         break;
     case "attachment":
       element = (
+        < >
         <Tabs   variant="scrollable"
-        scrollButtons="fixed" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
+        scrollButtons="auto" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
             <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
           {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
            <Link key={index}  onClick={() => handleImageClick(imgLink)}>
            <img src={imgLink} alt="My Image" style={{ width: "50px", height: "25px" ,marginRight: "3px"}} />
          </Link>
 
-          ))}
-
-        
-              <div >
-                <SelectFilepopup
-                  title="uplaodfile"
-                  label="UploadFileIcon"
-                  open={open}
-                  setOpen={setOpen}
-                  onChangeFile={onChangeFile}
-                />
-                
-              </div>
+          ))}    
         </Tabs>
+          
+        <SelectFilepopup
+          title="uplaodfile"
+          label="UploadFileIcon"
+          open={open}
+          setOpen={setOpen}
+          onChangeFile={onChangeFile}
+        />
+         </>
       );
       break;
 
