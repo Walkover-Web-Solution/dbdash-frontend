@@ -377,7 +377,7 @@ export default function FieldPopupModal(props) {
                   //   setUserQuery(e.target.value)
                   //  }}
                 />
-                <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >Ask</Button>
+                <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >Ask AI</Button>
 
                  {props?.queryByAi && <TextField
                   autoFocus

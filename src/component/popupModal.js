@@ -35,7 +35,7 @@ export default function PopupModal(props) {
       [props?.id]: null,
     },
     schema: Joi.object({
-      [props?.id]: Joi.string().min(3).max(15).required(),
+      [props?.id]: Joi.string().min(3).max(25).required(),
     }),
     explicitCheck: {
       [props?.id]: false,
@@ -92,7 +92,7 @@ const createProjectJoi = (e) => {
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                if(textFieldValue.length >= 3 && textFieldValue.length <= 15){
+                if(textFieldValue.length >= 3 && textFieldValue.length <= 25){
                   if (e.key === 'Enter') {
                     props.submitData(e);
                     handleClose();
@@ -106,7 +106,7 @@ const createProjectJoi = (e) => {
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Button variant="contained" disabled={textFieldValue.length < 3 || textFieldValue.length >15} onClick={()=>{
+              <Button variant="contained" disabled={textFieldValue.length < 3 || textFieldValue.length >25} onClick={()=>{
                 validate();
                   props?.submitData();
               }}>
