@@ -135,6 +135,7 @@ export const bulkAddColumns = createAsyncThunk(
                 "tableId":payload?.tableName,
                 "dbId":payload?.dbId,
                 "pageNo" : data?.pageNo,
+                "isMoreData" : !(data?.offset == null)
             }
             dispatch (setTableLoading(false))
          

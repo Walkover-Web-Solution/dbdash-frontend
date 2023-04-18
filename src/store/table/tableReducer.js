@@ -12,6 +12,7 @@ export const initialState = {
   status: "idle",
   pageNo : 0,
   isTableLoading : true,
+  isMoreData : true
 
 };
 
@@ -48,7 +49,9 @@ export const reducers = {
       status: "idle",
       pageNo : 0,
       pageSize : 0,
-      isTableLoading : true }
+      isTableLoading : true , 
+      isMoreData : true
+    }
   },
   deleteColumn(state, payload) {
     const action = payload.payload;
@@ -366,6 +369,7 @@ export function extraReducers(builder) {
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId
         state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
+        state.isMoreData  = action.payload.isMoreData
       }
       state.status = "succeeded";
 
