@@ -134,10 +134,12 @@ export default function TablesList({ dbData }) {
               </Box>
             ))
             }
-        <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:1, width: 'fit-content' ,height:40}} >
+      
+          </Tabs>
+          <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:1, width: 'fit-content' ,height:40}} >
          <AddIcon/>
         </Button>
-          </Tabs>
+
           
         </Box>
         

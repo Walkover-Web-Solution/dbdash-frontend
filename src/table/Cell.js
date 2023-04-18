@@ -361,7 +361,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
     case "attachment":
       element = (
         <Tabs   variant="scrollable"
-        scrollButtons="auto" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
+        scrollButtons="fixed" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
             <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
           {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
            <Link key={index}  onClick={() => handleImageClick(imgLink)}>
