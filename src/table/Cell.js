@@ -348,7 +348,7 @@ const[val,setVal]=useState(0);
           />
         );
         break;
-        case "lookup":
+      case "lookup":
         element = (
           <input type="text"
           readOnly="readonly"
@@ -358,7 +358,7 @@ const[val,setVal]=useState(0);
         />
         );
         break;
-    case "attachment":
+      case "attachment":
       element = (
         <div style={{display:"flex"}}>
             <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />

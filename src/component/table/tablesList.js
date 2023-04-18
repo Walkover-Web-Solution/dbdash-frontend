@@ -148,7 +148,7 @@ export default function TablesList({ dbData }) {
       <Box display="flex" flexWrap="nowrap"  >
         {AllTableInfo[params?.tableName]?.filters &&
           Object.entries(AllTableInfo[params?.tableName]?.filters).map((filter, index) => (
-            <Box key={index} marginRight={1}  sx={{mt:4.5,ml:1}}>
+            <Box key={index}   sx={{mt:2,ml:1}}>
               <Box sx={{ backgroundColor: "#4B4E5A", height: 30, width: 120, display: "flex", gap: "10px", alignItems: "center", justifyContent: "center",color:"#fff", borderRadius:3,p:1}}
                 onClick={() => {
                   onFilterClicked(filter[1].query, filter[0]);
@@ -172,7 +172,7 @@ export default function TablesList({ dbData }) {
             </Box>
           ))}
 
-        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 100,mt:1.5 ,ml:2, fontSize: "11px"}} >
+        <Button onClick={() => handleOpenn()} variant="contained" sx={{ width: 100,mt:1.5 ,ml:1, fontSize: "11px"}} >
           Add Filter
         </Button>
         <div>

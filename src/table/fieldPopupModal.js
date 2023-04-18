@@ -104,7 +104,7 @@ export default function FieldPopupModal(props) {
     props?.setSelectedFieldName(false)
     setOpenLinkedField(false)
 
-    if (event.target.value == "generatedcolumn") {
+    if (event.target.value == "formula") {
       setOpenn(true)
       setShowSwitch(false)
       setOpenLinkedField(false);
