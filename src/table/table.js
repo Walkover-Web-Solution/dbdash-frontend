@@ -1,29 +1,16 @@
 import React, { useMemo, useEffect, useCallback,memo } from "react";
 import clsx from "clsx";
-import {
-  useTable,
-  useFlexLayout,
-  useResizeColumns,
-  useSortBy,
-  useColumnOrder,
-  usePagination,
-  useRowSelect
-} from "react-table";
+import {useTable,useFlexLayout,useResizeColumns,useSortBy,useColumnOrder,usePagination,useRowSelect} from "react-table";
 import Cell from "./Cell";
 import Header from "./Header";
 import PlusIcon from "./img/Plus";
 import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from "react-table-plugins";
-import {
-  addRows,
-  deleteRows,
-  updateCells,
-  updateColumnOrder,
-} from "../store/table/tableThunk";
+import {addRows,deleteRows,updateCells,updateColumnOrder,} from "../store/table/tableThunk";
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 //import InfiniteScroll from "react-infinite-scroll-component";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -32,6 +19,7 @@ import 'simplebar-react/dist/simplebar.min.css';
 import SimpleBar from 'simplebar-react';
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
+import { getTableInfo } from "../store/table/tableSelector";
 // import { useDrop, useDrag } from "react-dnd";
 // import { getEmptyImage } from "react-dnd-html5-backend";
 // import ItemTypes from "./ItemTypes";
@@ -63,6 +51,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       })
     );
   };
+
+  const tableInfo=useSelector((state)=>getTableInfo(state));
+  console.log(tableInfo.isMoreData)
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -86,16 +77,13 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
     getTableProps,
     getTableBodyProps,
     headerGroups,
-   // rows,
     prepareRow,
     selectedFlatRows,
     page,
     canPreviousPage,
-    // canNextPage,
     nextPage,
     previousPage,
     gotoPage,
-    // setPageSize,
     state: { pageIndex  },
     state: { selectedCellIds, currentSelectedCellIds },
   } = useTable(
@@ -298,7 +286,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"<"}
         </button>{" "}
-        <button  onClick={() => {
+        <button disabled={tableInfo.isMoreData == false} onClick={() => {
           if(data.length / 100  > pageIndex+1){
             nextPage()
           }
