@@ -18,7 +18,7 @@ const getHeaders = async(dbId,tableName) =>{
     let columns = [
         {
             id: 9999991,
-            width: 100,
+            width: 10,
             label: "check",
             disableResizing: true,
             dataType: "check",
