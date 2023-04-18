@@ -34,12 +34,7 @@ export default function SingleDatabase(props) {
     }
 
   };
-  return (  
-    // <Link
-    //   to={{ pathname: "/db/" + props.db._id }}
-    //   style={{ textDecoration: "none" }}
-    //   state={{ db: props.db }}
-    // >
+  return ( 
       <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2,cursor:'pointer' }} onClick={()=>{
     
         navigate("/db/"+ props.db._id , {state : { db: props.db }});

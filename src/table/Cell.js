@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,memo} from "react";
 import ContentEditable from "react-contenteditable";
 import Relationship from "./Relationship";
 import { usePopper } from "react-popper";
@@ -19,7 +19,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { memo } from "react";
 import PropTypes from "prop-types";
 
 
@@ -31,7 +30,6 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
 
   const dispatch = useDispatch();
   const [value, setValue] = useState({ value: initialValue, update: false });
-
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -75,8 +73,6 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
       }))
     }
   }, [value, id, row.index]);
-
-
 
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {
@@ -153,16 +149,6 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         />
       );
       break;
-      // case "integer":
-      //   element = (
-      //     <input type="text"
-      //       readOnly="readonly"
-      //       defaultValue={(value?.value && value?.value?.toString()) || ""}
-      //       className='data-input'
-      //       style={{background: "none"}}
-      //     />
-      //   );
-      //   break;
     case "createdat":
       element = (
         <input type="text"
@@ -220,10 +206,8 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
   );
   break;
 
-
     case "longtext":
       element = (
-      
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}

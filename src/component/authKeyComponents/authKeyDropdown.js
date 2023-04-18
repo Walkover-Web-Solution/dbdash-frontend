@@ -1,19 +1,13 @@
 import React from 'react'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import {InputLabel,MenuItem,FormControl,Select } from '@mui/material';
 import { Box } from '@mui/system';
 import PropTypes from "prop-types";
-
-
-
 export default function AuthKeyDropdown({scope,setScope}) {
 
   const handleChange = (event) => {
     setScope(event.target.value);
-
   }
+  
   return (
     <>
        <Box>

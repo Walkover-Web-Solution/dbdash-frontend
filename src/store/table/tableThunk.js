@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
-import {insertRow, uploadImage} from "../../api/rowApi";
-import { updateRow ,deleteRow} from "../../api/rowApi";
+import {insertRow, uploadImage,updateRow ,deleteRow} from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
 // reducer imports
 import {   addOptionToColumn,addRow,deleteColumn,setTableLoading,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";

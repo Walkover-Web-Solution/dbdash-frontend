@@ -1,11 +1,10 @@
 import React, { memo } from "react";
 import "./style.css";
 import Table from "./table";
-// import { grey } from "./colors";
 import {  useDispatch ,useSelector } from "react-redux";
-// import { getTableInfo } from "../store/table/tableSelector";
 import { bulkAddColumns } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
+
 const  MainTable = memo ( ({page,setPage}) =>  {
   
   const columns=useSelector((state)=>state.table.columns);

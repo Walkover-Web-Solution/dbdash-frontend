@@ -8,7 +8,6 @@ import { selectActiveUser } from '../store/user/userSelector.js';
 function MainNavbar() {
 
   const user = UserAuth();
-
   const logOut = user?.logOut;
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
@@ -18,10 +17,8 @@ function MainNavbar() {
     setAnchorElUser(event.currentTarget);
   };
 
-
   const handleLogOut = async () => {
     try {
-
       await logOut();
       localStorage.clear();
       navigate("/")
@@ -34,8 +31,6 @@ function MainNavbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-
 
   return (
     <Container sx={{bgcolor: "#212529", height: '55px'}} maxWidth="false" >
@@ -54,11 +49,8 @@ function MainNavbar() {
           </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: "white", ':hover': { color: 'black', cursor: 'pointer' } }}>
-
           </Box>
         </Box>
-
-
 
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '30px', }}>
 

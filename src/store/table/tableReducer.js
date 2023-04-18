@@ -198,8 +198,6 @@ export const reducers = {
 
   },
 
-
-
   addRow(state) {
     return {
       ...state,
@@ -207,8 +205,6 @@ export const reducers = {
       data: [...state.data, {}]
     };
   },
-
-
 
   updateColumnType(state, payload) {
     const action = payload.payload

@@ -1,13 +1,12 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
 import { Box } from '@mui/system';
-
 import CodeSnippet from '../codeSnippet';
 import { Typography } from "@mui/material";
 function UpdateRecord(props) {
+  
   return (
     <>
-    
        <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>Update Table Records</Typography>
         <span>
         To update {props.table} records, issue a request to the {props.table} endpoint.  A PATCH request will only update the fields

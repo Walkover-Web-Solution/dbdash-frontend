@@ -15,13 +15,12 @@ import { shortId } from "./utils";
 import PropTypes from 'prop-types';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
-// import PopupModal from "../component/popupModal";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
+import {getQueryByAi} from "../api/fieldApi"
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import {getQueryByAi} from "../api/fieldApi"
 import FunctionsIcon from '@mui/icons-material/Functions';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
