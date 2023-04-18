@@ -348,7 +348,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
           />
         );
         break;
-        case "lookup":
+      case "lookup":
         element = (
           <input type="text"
           readOnly="readonly"
@@ -358,7 +358,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         />
         );
         break;
-    case "attachment":
+      case "attachment":
       element = (
         < >
         <Tabs   variant="scrollable"
