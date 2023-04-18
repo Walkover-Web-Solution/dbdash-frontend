@@ -31,7 +31,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
 
   const dispatch = useDispatch();
   const [value, setValue] = useState({ value: initialValue, update: false });
-
+const[val,setVal]=useState(0);
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -360,12 +360,15 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         break;
     case "attachment":
       element = (
-        < >
-        <Tabs   variant="scrollable"
-        scrollButtons="auto" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
+        <div style={{display:"flex"}}>
             <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
+        <Tabs  value={val} TabIndicatorProps={{
+    style: { display: 'none' }
+  }} variant="scrollable"
+        scrollButtons="auto" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
+          
           {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
-           <Link key={index}  onClick={() => handleImageClick(imgLink)}>
+           <Link key={index}  onClick={() =>{ handleImageClick(imgLink);setVal(index);}}>
            <img src={imgLink} alt="My Image" style={{ width: "50px", height: "25px" ,marginRight: "3px"}} />
          </Link>
 
@@ -379,7 +382,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
           setOpen={setOpen}
           onChangeFile={onChangeFile}
         />
-         </>
+         </div>
       );
       break;
 
