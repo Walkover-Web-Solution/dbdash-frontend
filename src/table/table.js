@@ -4,9 +4,10 @@ import {
   useTable,
   useFlexLayout,
   useResizeColumns,
-  useRowSelect,
   useSortBy,
   useColumnOrder,
+  usePagination,
+  useRowSelect
 } from "react-table";
 import Cell from "./Cell";
 import Header from "./Header";
@@ -23,8 +24,7 @@ import {
 import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
-
+//import InfiniteScroll from "react-infinite-scroll-component";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
@@ -43,9 +43,7 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast",
 };
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
-
-const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update }) => {
-
+const  Table = memo ( ({ columns, data, dispatch: dataDispatch }) => {
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -86,9 +84,19 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+   // rows,
     prepareRow,
     selectedFlatRows,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+ 
+    state: { pageIndex },
     state: { selectedCellIds, currentSelectedCellIds },
   } = useTable(
     {
@@ -110,17 +118,17 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
     useFlexLayout,
     useResizeColumns,
     useSortBy,
-    useRowSelect,
-    useColumnOrder
+    useColumnOrder,
+    usePagination,
+    useRowSelect
   );
   // useEffect(() => {
-  //   if (headerGroups) 
+  //   if (headerGroups)
   //     setHead(headerGroups);
   // }, [headerGroups]);
   const reoder = useCallback(
     (item, newIndex) => {
       const newOrder = Array.from(columns);
- 
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
@@ -131,14 +139,13 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
           columns: newOrder,
           id: item?.id,
           oldIndex:item.index - 1 ,
-          newIndex : newIndex  - 1 
+          newIndex : newIndex  - 1
         })
       );
       //call redux make thunk and reducer pass new column order and update
     },
     [columns]
   );
-
   useEffect(() => {
     if (Object.keys(selectedCellIds).length > 0) {
       const newData = cloneDeep(data);
@@ -180,7 +187,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
         </Button>
       )}
       <DndProvider backend={HTML5Backend}>
-        <ScrollingComponent style={{ overflow:"hidden", maxHeight: 450,minHeight: 350 }}>
+        <ScrollingComponent style={{ overflow:"hidden", maxHeight: "fit-content" }}>
           <div
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
@@ -213,38 +220,36 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
               </div>
             </div>
           </div>
-          <div 
+          <div
         style={{
           widht :"auto",
         // width: "98vw",
-        height: "100vh",
+        height: "43vh",
         overflowX: "hidden",
       }}
       id="scrollableDiv">
-
-        <InfiniteScroll
+        {/* <InfiniteScroll
           dataLength={data?.length}
           next={update}
           hasMore={hasMore}
           // loader={<h4>Loading more 2 items...</h4>}
           scrollableTarget="scrollableDiv"
-        >
+        > */}
+        <table>
           <div {...getTableBodyProps()}>
-            {rows?.map((row, rowIndex) => {
+            {page?.map((row, rowIndex) => {
               prepareRow(row);
               return (
                 <div key={rowIndex} {...row.getRowProps()} className={`tr ${rowIndex}`}
                   style=
                   {
-                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#e0edf2' } : {
+                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#E0EDF2' } : {
                       ...row.getRowProps().style, backgroundColor: 'transparent'
                     }
                   }>
                   {row.cells.map((cell, columnIndex) => {
                     return (
-
                       <div key={columnIndex}
-                      
                         // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
                         // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
                         {...cell.getCellRangeSelectionProps()}
@@ -254,7 +259,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
                             onPaste: event => handlePaste(event, rowIndex, cell)
                           }
                         )}
-
                         // suppressContentEditableWarning={true}
                         // contentEditable
                         style=
@@ -266,11 +270,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
                               userSelect: 'none', flex: 'none',
                             }
                             : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '30px' }
-
                         }
                         className='td'>
                         {/* {console.log(cell.getCellProps())} */}
-
                         {cell.render("Cell")}
                       </div>
                     )
@@ -287,11 +289,45 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
               New
             </div>
           </div>
-        </InfiniteScroll>
+          </table>
         </div>
         </ScrollingComponent>
+        <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {"<<"}
+        </button>{" "}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {"<"}
+        </button>{" "}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {">"}
+        </button>{" "}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {">>"}
+        </button>{" "}
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length==0 ?"1":pageOptions.length}
+          </strong>{" "}
+        </span>
+        {/* <span>
+          | Go to page:{" "}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              gotoPage(page);
+            }}
+            style={{ width: "100px" }}
+          />
+        </span> */}
+          
+        </div>
         <Preview />
       </DndProvider>
+      
       {/* <pre>
         <code>
         {JSON.stringify({ selectedCellIds, currentSelectedCellIds }, null, 2)}
@@ -302,7 +338,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,hasMore,update })
 })
 Table.displayName  = 'Table'
 export default Table
-
 Table.propTypes = {
   columns: PropTypes.any,
   hasMore:PropTypes.any,

@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SelectFilepopup from './selectFilepopup';
 import { toast } from 'react-toastify';
-import { Link} from '@mui/material';
+import { Link, Tabs} from '@mui/material';
 import { DemoContainer} from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
@@ -360,15 +360,17 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         break;
     case "attachment":
       element = (
-        <div style={{display: "flex", flexDirection: "row"}}>
+        <Tabs   variant="scrollable"
+        scrollButtons="fixed" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
+            <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
           {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
-           <Link key={index} onClick={() => handleImageClick(imgLink)}>
-           <img src={imgLink} alt="My Image" style={{ width: "50px", height: "100%" ,marginRight: "3px" }} />
+           <Link key={index}  onClick={() => handleImageClick(imgLink)}>
+           <img src={imgLink} alt="My Image" style={{ width: "50px", height: "25px" ,marginRight: "3px"}} />
          </Link>
 
           ))}
 
-          <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
+        
               <div >
                 <SelectFilepopup
                   title="uplaodfile"
@@ -379,7 +381,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
                 />
                 
               </div>
-        </div>
+        </Tabs>
       );
       break;
 

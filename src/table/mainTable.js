@@ -26,10 +26,12 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   return (
     <div
       style={{
-        width: "98vw",
-        height: "100vh",
+        width: "fitcontent",
+        
         overflowX: "scroll",
-        maxHeight:500
+        height:"65vh",
+        overflowY:"hidden",
+        marginBottum:"10px"
       }}
       // id="scrollableDiv"
     >
@@ -62,6 +64,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
             // skipReset={tableInfo.skipReset}
           /> }
         </div>
+        
       </div>
       <div
         style={{
@@ -72,7 +75,9 @@ const  MainTable = memo ( ({page,setPage}) =>  {
           flexDirection: "column"
         }}  
       >
+           
       </div>
+
     </div>
   );
 }

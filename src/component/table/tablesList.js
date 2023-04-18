@@ -134,10 +134,12 @@ export default function TablesList({ dbData }) {
               </Box>
             ))
             }
-        <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:1, width: 'fit-content' ,height:40}} >
+      
+          </Tabs>
+          <Button  variant="outlined" onClick={() => handleOpen()} sx={{margin:1, width: 'fit-content' ,height:40}} >
          <AddIcon/>
         </Button>
-          </Tabs>
+
           
         </Box>
         
@@ -185,7 +187,10 @@ export default function TablesList({ dbData }) {
       </Box>
      { open &&  <PopupModal title="create table" label="Table Name" open={open} setOpen={setOpen} submitData={saveTable} setVariable={setTable}/> }
       {openn && <FilterModal open={openn} edit={edit} setOpen={setOpenn} filterId={filterId} dbId={dbData?.db?._id} tableName={params?.tableName} />}
-       { isTableLoading  ? <CircularProgress /> :  <MainTable setPage ={setPage}  page = {page} />  }
+       { isTableLoading  ? <CircularProgress /> :  <><MainTable setPage ={setPage}  page = {page} />
+       
+       </>  }
+
     </>
   );
 }
