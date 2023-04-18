@@ -339,7 +339,7 @@ export default function Header({
       case "lookup":
         propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
-      case "rowid":
+      case "id":
         propertyIcon = <FormatListNumberedIcon fontSize="2px"/>;
       break;
     default:

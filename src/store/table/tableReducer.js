@@ -435,8 +435,32 @@ export function extraReducers(builder) {
     .addCase(updateCells.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(updateCells.fulfilled, (state) => {
-      state.status = "succeeded";
+    .addCase(updateCells.fulfilled, (state , {payload}) => {
+      const action = payload
+      state.skipReset=true;
+      let arr= [];
+    
+      state.data.forEach((ele)=>{
+        if(ele.id!==action.rowIndex) {
+          arr=[...arr,{...ele}];
+        }
+        else{
+         
+          if(action?.dataTypes == "file")
+          {  
+          var arrr = ele?.[action?.columnId] == null ? 
+          [] : ele?.[action?.columnId]  ;
+          arrr.push(action.value)
+          arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
+          }
+          else
+          {
+            arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
+          }
+        }
+      });
+      state.data=arr;
+      state.status = "succeeded"
     })
     .addCase(updateCells.rejected, (state) => {
       state.status = "failed";

@@ -12,9 +12,11 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   const data=useSelector((state)=>state.table.data);
   const dbId=useSelector((state)=>state.table.dbId);
   const tableId=useSelector((state)=>state.table.tableId);
+  // const pageNo=useSelector((state)=>state.table.pageNo);
   // const [page,setPage] = useState(2);
   const dispatchs = useDispatch();
   const fetchMoreData = () => {
+    // console.log("pageNo == " , pageNo)
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,

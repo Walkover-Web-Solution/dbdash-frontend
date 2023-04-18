@@ -253,7 +253,7 @@ export const updateCells = createAsyncThunk(
        }
        else{
            await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
-           dispatch(updateCell(payload));
+        //    dispatch(updateCell(payload));
     }
         return payload;
     }

@@ -69,7 +69,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
 
  
   useEffect(() => {
-    if (value?.update &&  value.value!=null) {
+    if (value?.update &&  value.value!=null  && value.value !== initialValue && value.value.trim() !== "")  {
       dispatch(updateCells({
         columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: "dataTypes"
       }))
@@ -244,6 +244,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
       break;
     case "numeric":
       element = (
+        <>
         <input type="number"
         onChange={onChange}
         defaultValue={(value?.value && value?.value?.toString()) || ""}
@@ -251,6 +252,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         className='data-input'
         style={{background: "none"}}
       />
+        </>
       );
       break;
     case "select":
