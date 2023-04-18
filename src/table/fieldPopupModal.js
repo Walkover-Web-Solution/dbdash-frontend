@@ -50,7 +50,7 @@ export default function FieldPopupModal(props) {
   }, [AllTableInfo])
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(3).max(15).pattern(/^\S+$/).messages({
+    fieldName: Joi.string().min(1).max(15).pattern(/^\S+$/).messages({
       'string.pattern.base': 'Field name should not contain spaces',
     }).required(),
   });
@@ -262,7 +262,7 @@ export default function FieldPopupModal(props) {
           value={props.textValue}
           onChange={handleTextChange}
           onKeyDown={(e) => {
-            if(e.target.value.length >= 3 && e.target.value.length <= 15){
+            if(e.target.value.length >= 1 && e.target.value.length <= 15){
               if (e.key === 'Enter') {
                 props.submitData(false);
                 // handleClose();
@@ -545,7 +545,7 @@ export default function FieldPopupModal(props) {
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>}
         </DialogContent>
-        <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 3 ||
+        <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 1 ||
           props?.textValue?.length > 20} >Submit</Button>
       </Dialog>
     </div>

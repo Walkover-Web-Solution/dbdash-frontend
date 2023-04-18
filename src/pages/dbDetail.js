@@ -63,7 +63,7 @@ function DbDetails() {
                 )}
             </Container>
             <Divider color="black" variant="fullwidth" />
-            <Box align="center" >
+            <Box align="center" style={{height: "calc(100vh - 96px)"}} >
             { dbData &&    <TablesList dbData={dbData} tables={tables} setTables={setTables} />}
             </Box>
         </>

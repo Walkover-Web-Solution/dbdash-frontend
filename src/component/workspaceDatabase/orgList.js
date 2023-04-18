@@ -10,6 +10,8 @@ import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, sh
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
+// import Joi from 'joi';
+
 export const OrgList = (props) => {
 
   const handleOpen = () => setOpen(true);
@@ -22,10 +24,34 @@ export const OrgList = (props) => {
   const [open, setOpen] = useState(false); //popup model craeate db 
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
   const [orgId, setOrg] = useState();
+  // const [errors, setErrors] = useState({});
+
 
   //shared model whaha hoga
   const [isAdmin, setIsAdmin] = useState(false);
  
+  // const schema = Joi.object({
+  //   orgName: Joi.string()
+  //     .min(3)
+  //     .max(15)
+  //     .pattern(/^\S+$/)
+  //     .messages({
+  //       'string.pattern.base': 'Field name should not contain spaces',
+  //     })
+  //     .required(),
+  // });
+  
+  // const handleTextChange = (e) => {
+  //   const { error } = schema.validate({ orgName: e.target.value });
+  //   if (error) {
+  //     setErrors({ orgName: error.details[0].message });
+  //   } else {
+  //     setErrors({});
+  //   }
+  //   setOrgName(e.target.value);
+  // };
+
+
   const handleOpenShareOrg = () => {
     setShareOrg(true);
   };
@@ -74,9 +100,14 @@ export const OrgList = (props) => {
       <Box key={props?.orgId} sx={{ m: 3 }}>
         <ClickAwayListener onClickAway={() => { setName(false) }} >
           <Box sx={{ my: 7, display: "flex" }}>
+           
             {name ? (
               <>
+              <Box sx={{display:'flex', flexDirection:'column'}}>
+              <Box>
                 <TextField
+                id="orgName"
+                name="orgName"
                   autoFocus
                   sx={{ width: 120, fontWeight: "bold" }}
                   defaultValue={props.dbs[0]?.org_id?.name}
@@ -87,9 +118,19 @@ export const OrgList = (props) => {
                       setName(false);
                     }
                   }}
-                  onChange={(e) => setOrgName(e.target.value)}
+                  onChange={(e) => {setOrgName(e.target.value)}}
                   size="small"
                 />
+                </Box>
+
+                <Box>
+                {/* {errors.orgName && (
+                    <Typography variant="body2" color="error" fontSize={12}>
+                      {errors.orgName}
+                    </Typography>)} */}
+                </Box>
+                </Box>
+
                 <Button onClick={() => { renameWorkspace(props?.orgId);  setName(false); }}
                   variant="contained"
                   sx={{

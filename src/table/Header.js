@@ -425,7 +425,7 @@ export default function Header({
     </>
   ) : (
     <>
-      <div {...getHeaderProps({ style: { display: "inline-block", flex: 'none' } })} className='th noselect'>
+      <div {...getHeaderProps({ style: {  width: "100%" } })} className='th noselect'>
         <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
           <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
           {label}

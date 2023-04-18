@@ -22,30 +22,32 @@ const  MainTable = memo ( ({page,setPage}) =>  {
     }));
     setPage((page) => page + 1);
   };
+
+  // const handleGotoPage = () => {
+  //   tableRef.current.gotoPage(0)
+  // }
+
+  // const handlePreviousPage = () => {
+  //   tableRef.current.previousPage()
+  // }
  
+  // const handleNextPage = () => {
+  //   tableRef.current.nextPage()
+  // }
   return (
     <div
       style={{
         width: "fitcontent",
         
         overflowX: "scroll",
-        height:"70vh",
+        // Calculate the height of tab and button and replace with 130px
+        height:"calc(100% - 130px)",
         overflowY:"hidden",
+        marginTop: 20
       }}
       // id="scrollableDiv"
     >
-      <div
-        style={{
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-          type:"checkbox",
-        }}
-      >
-      </div>
-      <div style={{  display: "flex", width: "100vw"}}>
+      <div style={{  display: "flex", width: "100vw", height:"100%"}}>
         <div
           style={{
             padding: "1rem",
@@ -67,7 +69,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
         </div>
         
       </div>
-      <div
+      {/* <div
         style={{
           // height: 140,
           display: "flex",
@@ -77,7 +79,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
         }}  
       >
            
-      </div>
+      </div> */}
 
     </div>
   );

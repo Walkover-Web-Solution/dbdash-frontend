@@ -52,6 +52,8 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
     );
   };
 
+  
+
   const tableInfo=useSelector((state)=>getTableInfo(state));
   console.log(tableInfo.isMoreData)
   const sortTypes = useMemo(
@@ -175,14 +177,14 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         </Button>
       )}
 
-      <DndProvider backend={HTML5Backend}>
-        <ScrollingComponent style={{ overflow:"hidden"}}>
+      <DndProvider backend={HTML5Backend} >
+        <ScrollingComponent style={{ overflow:"hidden", height:"100%"}} key={headerGroups[0].headers.length}>
           <div
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
             style={{}}
           >
-            <div>
+            <div className="calculate">
               <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
                 {
                   headerGroups[0].headers?.map((column, index) => {
@@ -197,22 +199,15 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                         />
                       </React.Fragment>
                     );
-                    // return(
-                    // <DraggableHeader
-                    //   reoder={reoder}
-                    //   key={column.id}
-                    //   columns={column}
-                    //   index={index}
-                    // />
-                    // )
+                   
                   })}
               </div>
             </div>
           </div>
-          <SimpleBar id="scrollableDiv" style={{ 
-          widht :"auto",
+          <SimpleBar id="scrollableDiv" style={{
         // width: "98vw",
-        height: "47vh",
+        // 45px height replaced by hesder height
+        height: "calc(100% - 45px)",
         overflowX: "hidden" 
       }}>
           
@@ -224,7 +219,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           scrollableTarget="scrollableDiv"
         > */}
         <table>
-          <div {...getTableBodyProps()}>
+          <div {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
               return (
@@ -284,7 +279,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <Preview />
       </DndProvider>
 
-      <div className="pagination"  style={{marginBottom:"5vh",marginTop:"3vh",textAlign:"left",marginLeft:"45vw",position:"fixed"}}>
+      <div className="pagination"  style={{marginTop:"3vh",position:"fixed", left: '50%'}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
         </button>
@@ -292,7 +287,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"<"}
         </button>{" "}
-        <button disabled={tableInfo.isMoreData == false} onClick={() => {
+        <button disabled={tableInfo.isMoreData == false && pageIndex+1 == pageNo} onClick={() => {
           if(data.length / 100  > pageIndex+1){
             nextPage()
           }
