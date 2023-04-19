@@ -413,7 +413,7 @@ export default function Header({
         <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn}  setDecimalSelectValue={setDecimalSelectValue}/>
 
       </div > :
-        <div  {...getHeaderProps({ style: { display: "inline-block",flex:"none" } })} className='th noselect'
+        <div  {...getHeaderProps({ style: { display: "inline-block",flex:"none" ,width:"20px"} })}  className='th noselect'
           // style={{ display: "flex", justifyContent: "center"}}
           >
           <div

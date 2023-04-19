@@ -40,7 +40,7 @@ export default function SingleDatabase(props) {
         navigate("/db/"+ props.db._id , {state : { db: props.db }});
       }}>
         <CardContent sx={{ display: "flex" }}>
-          {name ? (
+          {name && props?.tabIndex==props?.index  ? (
             <>
           
             <ClickAwayListener onClickAway={handleOpen} >
@@ -111,6 +111,8 @@ export default function SingleDatabase(props) {
             </Typography>
             <Box sx={{ mt: -1 }}>
               <Dropdown
+              setTabIndex={props?.setTabIndex}
+              tabIndex={props?.index}
                 first={"Rename Database"}
                 second={"Delete Database"}
                 setName={setName}
@@ -132,4 +134,7 @@ SingleDatabase.propTypes = {
     org_id: PropTypes.any,
   }),
   getOrgAndDbs: PropTypes.func,
+  tabIndex:PropTypes.number,
+  index:PropTypes.any,
+  setTabIndex:PropTypes.func
 };

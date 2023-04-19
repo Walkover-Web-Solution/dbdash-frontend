@@ -5,10 +5,13 @@ import Button from '@mui/material/Button';
 import { OrgList } from './orgList';
 import { PropTypes } from 'prop-types';
 import { selectOrgandDb } from "../../store/database/databaseSelector.js"
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createOrgThunk } from '../../store/database/databaseThunk';
-export default function WorkspaceCombined() {
+import { toast } from 'react-toastify';
 
+
+export default function WorkspaceCombined() {
+const[tabIndex,setTabIndex]=useState(0);
   const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
   const dispatch = useDispatch();
   const [org, setOrg] = useState();
@@ -17,7 +20,9 @@ export default function WorkspaceCombined() {
 
   const saveOrgToDB = async () => {
     const userid = localStorage.getItem("userid");
-    dispatch(createOrgThunk({ name: org, user_id: userid }));
+    dispatch(createOrgThunk({ name: org, user_id: userid })).then(()=>{
+      toast.success('Organisation created successfully!');
+    });
     setOpen(false);
   };
   return (
@@ -30,9 +35,9 @@ export default function WorkspaceCombined() {
         </Box>
 
         <Box>
-          {Object.entries(alldbs).map(([orgId, dbs]) => (
+          {Object.entries(alldbs).map(([orgId, dbs],index) => (
             <Box key={orgId}>
-              <OrgList orgId={orgId}  dbs={dbs} />
+              <OrgList orgId={orgId}  tabIndex={tabIndex} setTabIndex={setTabIndex} index={index}  dbs={dbs} />
 
             </Box>
           ))

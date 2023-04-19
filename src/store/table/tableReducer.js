@@ -449,7 +449,8 @@ export function extraReducers(builder) {
     })
     .addCase(addRows.fulfilled, (state,{payload}) => {
       let arr = [...state.data]
-      arr.shift();
+      if(arr.length > 99)
+        arr.shift();
       state.data = [...arr , payload]
       state.pageSize = state.pageSize + 1;
       state.status = "succeeded";

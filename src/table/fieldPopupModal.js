@@ -150,7 +150,12 @@ export default function FieldPopupModal(props) {
       setShowSwitch(true);
       // setOpenLinkedField(false);
      
-    } 
+    }
+    else if(event.target.value === 'id'){
+      var data = props?.metaData;
+      data.unique = "true"
+      props?.setMetaData(data);
+    }
     else if (event.target.value === 'decimal' && showNumericOptions) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
@@ -420,17 +425,14 @@ export default function FieldPopupModal(props) {
           {/* show fields that are unique  */}
  {props?.showFieldsDropdown &&    AllTableInfo.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
       .filter((fields) => fields[1]?.metaData?.unique)
-      .map((fields) => (
-        <MenuItem key={fields[0]} value={fields[0]}>
-          {fields[1]?.fieldName}
-        </MenuItem>
-      ))
       .length > 0   ? 
 (<Select
             labelId="select-label"
             id="select"
-            value={props?.selectedFieldName  }
-            displayEmpty
+            value={props?.selectedFieldName}
+            defaultValue={Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
+              .filter((fields) => fields[1]?.metaData?.unique)[0][0]}
+            
             sx={{
               margin: 1,
               minWidth: 120,
@@ -439,7 +441,7 @@ export default function FieldPopupModal(props) {
           >
             {
            Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
-                if (fields[1]?.metaData?.unique) {
+                if (fields[1]?.metaData?.unique)  {
                   return fields;
                 }
               })

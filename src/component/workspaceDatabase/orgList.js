@@ -10,6 +10,7 @@ import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, sh
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
+import { toast } from "react-toastify";
 
 export const OrgList = (props) => {
 
@@ -24,6 +25,7 @@ export const OrgList = (props) => {
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
   const [orgId, setOrg] = useState();
   // const [errors, setErrors] = useState({});
+  const [tabIndex, setTabIndex] = useState(0);
 
 
   //shared model whaha hoga
@@ -73,7 +75,9 @@ export const OrgList = (props) => {
       name: db,
     };
     setOpen(false);
-    dispatch(createDbThunk({ orgId, data }));
+    dispatch(createDbThunk({ orgId, data })).then(()=>{
+      toast.success('Database created successfully!');
+    });
   };
   const renameWorkspace = async (orgId) => {
     const userid = localStorage.getItem("userid");
@@ -100,7 +104,7 @@ export const OrgList = (props) => {
         <ClickAwayListener onClickAway={() => { setName(false) }} >
           <Box sx={{ my: 7, display: "flex" }}>
            
-            {name ? (
+            {name && props?.tabIndex==props?.index ? (
               <>
               <Box sx={{display:'flex', flexDirection:'column'}}>
               <Box>
@@ -155,6 +159,8 @@ export const OrgList = (props) => {
                 </Typography>
                 {isAdmin && <Box sx={{ mt: -1 }}>
                   <Dropdown
+                  setTabIndex={props?.setTabIndex}
+                  tabIndex={props?.index}
                     first={"Rename workspace"}
                     second={"Delete workspace"}
                     setName={setName}
@@ -182,9 +188,9 @@ export const OrgList = (props) => {
         <Box sx={{ display: "flex" }}>
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
-              {props.dbs.map((db) => (
+              {props.dbs.map((db,index) => (
                 <Box key={db._id} sx={{ m: 4, display: "flex" }}>
-                  <SingleDatabase db={db} getOrgAndDbs={props?.getOrgAndDbs} />
+                  <SingleDatabase db={db} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
               ))}
               <Card sx={{ m: 4, minWidth: 250, minHeight: 200, boxShadow: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -217,4 +223,7 @@ OrgList.propTypes = {
   dbs: PropTypes.any,
   orgId: PropTypes.string,
   getOrgAndDbs: PropTypes.func,
+  tabIndex:PropTypes.number,
+  setTabIndex:PropTypes.func,
+  index:PropTypes.number
 };
