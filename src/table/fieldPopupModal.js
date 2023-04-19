@@ -155,6 +155,7 @@ export default function FieldPopupModal(props) {
       var data = props?.metaData;
       data.unique = "true"
       props?.setMetaData(data);
+      setShowSwitch(false);
     }
     else if (event.target.value === 'decimal' && showNumericOptions) {
       props?.setSelectValue('numeric')
