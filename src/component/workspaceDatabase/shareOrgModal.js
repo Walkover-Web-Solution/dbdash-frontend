@@ -21,10 +21,15 @@ export default function ShareOrgModal(props) {
 
   const handleSendInvite = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      toast.error("Email field cannot be empty");
+      return;
+    }
     if (!emailRegex.test(email)) {
       toast.error("Invalid email");
       return;
     }
+    
   
     props.shareWorkspace(email);
     handleClose();
