@@ -11,7 +11,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   const data=useSelector((state)=>state.table.data);
   const dbId=useSelector((state)=>state.table.dbId);
   const tableId=useSelector((state)=>state.table.tableId);
-  // const pageNo=useSelector((state)=>state.table.pageNo);
+  const pageSize=useSelector((state)=>state.table.pageSize);
   // const [page,setPage] = useState(2);
   const dispatchs = useDispatch();
   const fetchMoreData = () => {
@@ -58,13 +58,15 @@ const  MainTable = memo ( ({page,setPage}) =>  {
             backgroundColor:'#fff',
           }}
         >
-          {columns?.length > 0 && <Table
+          {columns?.length > 0 && 
+          <Table
            update={fetchMoreData}
            hasMore={true}
             columns={columns}
             data={data|| []}
             dispatch={dispatchs}
             page = {page}
+            pageSize = {pageSize}
             // skipReset={tableInfo.skipReset}
           /> }
         </div>

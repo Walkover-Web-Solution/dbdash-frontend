@@ -29,9 +29,7 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-// export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
-const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
-  // console.log("data",data)
+const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo ,pageSize}) => {
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -72,6 +70,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
     }),
     []
   );
+  console.log("pageSize",pageSize)
   const {
     getTableProps,
     getTableBodyProps,
@@ -96,7 +95,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       initialState: {
         selectedCellIds: {},
         columnOrder: columns,
-        pageSize : 100,
+        pageSize : pageSize,
         pageIndex :pageNo - 1
       },
     },
@@ -261,18 +260,20 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           {"home"}
         </button>
         {" "}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {"<"}
-        </button>{" "}
+      
         <button disabled={tableInfo.isMoreData == false  &&  pageIndex+1 == pageNo } onClick={() => {
-          if(data.length / 100  > pageIndex+1){
+          
+          if(   parseInt(data?.length / 100, 10)  > pageIndex+1){
             nextPage()
           }
           else{
             update(pageIndex) 
           }
           }}>
-          {">"}
+          {"previous"}
+        </button>{" "}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {"next"}
         </button>{" "}
           {/* {">>"} */}
         <span>
@@ -293,5 +294,6 @@ Table.propTypes = {
   dispatch: PropTypes.any,
   skipReset: PropTypes.any,
   setColumns: PropTypes.func,
-  page:PropTypes.number
+  page:PropTypes.number,
+  pageSize :PropTypes.number,
 };

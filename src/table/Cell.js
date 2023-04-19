@@ -362,13 +362,13 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
           ))}
         </Tabs>
           
-        <SelectFilepopup
+       { open &&  <SelectFilepopup
           title="uplaodfile"
           label="UploadFileIcon"
           open={open}
           setOpen={setOpen}
           onChangeFile={onChangeFile}
-        />
+        />}
          </div>
       );
       break;
