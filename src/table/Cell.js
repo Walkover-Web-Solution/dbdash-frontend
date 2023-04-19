@@ -132,7 +132,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
     element = (
       <input type="text"
         readOnly="readonly"
-        defaultValue={(value?.value && value?.value?.toString()) || ""}
+        value={(value?.value && value?.value?.toString()) || ""}
         className='data-input'
         style={{background: "none"}}
       />
@@ -144,7 +144,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
       element = (
         <input type="text"
           readOnly="readonly"
-          defaultValue={(value?.value && value?.value?.toString()) || ""}
+          value={(value?.value && value?.value?.toString()) || ""}
           className='data-input'
           style={{background: "none"}}
         />
@@ -154,7 +154,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
       element = (
         <input type="text"
           readOnly="readonly"
-          defaultValue={(value?.value && value?.value?.toString()) || ""}
+          value={(value?.value && value?.value?.toString()) || ""}
           className='data-input'
           style={{background: "none"}}
         />
@@ -164,7 +164,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         element = (
           <input type="text"
             readOnly="readonly"
-            defaultValue={(value?.value && value?.value?.toString()) || ""}
+            value={(value?.value && value?.value?.toString()) || ""}
             className='data-input'
             style={{background: "none"}}
           />
@@ -192,7 +192,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         type="text"
         className="data-input"
         readOnly="readonly"
-        defaultValue={value?.value && dayjs.utc(value.value).local().format("DD/MM/YYYY hh:mm A")}
+        value={value?.value && dayjs.utc(value.value).local().format("DD/MM/YYYY hh:mm A")}
         style={{
           display: inputBoxShow ? "none" : "block",
           background: "none",
@@ -231,8 +231,8 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
       element = (
         <>
         <input type="number"
+        value={(value?.value && value?.value?.toString()) || ""}
         onChange={onChange}
-        defaultValue={(value?.value && value?.value?.toString()) || ""}
         onBlur={() => setValue((old) => ({ value: old.value, update: true }))}
         className='data-input'
         style={{background: "none"}}
@@ -240,6 +240,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         </>
       );
       break;
+
     case "select":
       element = (
         <>
@@ -339,7 +340,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         element = (
           <input type="text"
           readOnly="readonly"
-          defaultValue={(value?.value && value?.value?.toString()) || ""}
+          value={(value?.value && value?.value?.toString()) || ""}
           className='data-input'
           style={{background: "none"}}
         />
