@@ -10,6 +10,8 @@ import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, sh
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
+import { toast } from "react-toastify";
+
 export const OrgList = (props) => {
 
   const handleOpen = () => setOpen(true);
@@ -48,7 +50,9 @@ export const OrgList = (props) => {
       name: db,
     };
     setOpen(false);
-    dispatch(createDbThunk({ orgId, data }));
+    dispatch(createDbThunk({ orgId, data })).then(()=>{
+      toast.success('Database created successfully!');
+    });
   };
   const renameWorkspace = async (orgId) => {
     const userid = localStorage.getItem("userid");

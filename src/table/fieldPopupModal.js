@@ -112,6 +112,7 @@ export default function FieldPopupModal(props) {
     }
     else if (event.target.value == "link") {
       setLookupField(true)
+      props?.setShowFieldsDropdown(true)
       setShowSwitch(false)
       setOpenLinkedField(false);
       props?.setSelectValue(event.target.value);
@@ -441,17 +442,14 @@ export default function FieldPopupModal(props) {
           {/* show fields that are unique  */}
  {props?.showFieldsDropdown &&    AllTableInfo.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
       .filter((fields) => fields[1]?.metaData?.unique)
-      .map((fields) => (
-        <MenuItem key={fields[0]} value={fields[0]}>
-          {fields[1]?.fieldName}
-        </MenuItem>
-      ))
       .length > 0   ? 
 (<Select
             labelId="select-label"
             id="select"
-            value={props?.selectedFieldName  }
-            displayEmpty
+            value={props?.selectedFieldName}
+            defaultValue={Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
+              .filter((fields) => fields[1]?.metaData?.unique)[0][0]}
+            
             sx={{
               margin: 1,
               minWidth: 120,

@@ -34,6 +34,8 @@ const defaultColumn = {
 };
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
+  
+  
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -301,12 +303,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           }
           }}>
           {">"}
-        </button>{" "}
-          {/* {">>"} */}
-        <span>
-          {/* Page{" "} */}
+        </button>
         
-        </span>
+        
         {/* <span>
           | Go to page:{" "}
           <input

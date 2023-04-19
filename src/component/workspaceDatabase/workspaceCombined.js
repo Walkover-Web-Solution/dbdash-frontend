@@ -8,6 +8,8 @@ import { selectOrgandDb } from "../../store/database/databaseSelector.js"
 import { useSelector } from 'react-redux';
 import { createOrgThunk } from '../../store/database/databaseThunk';
 import { useDispatch } from "react-redux";
+import { toast } from 'react-toastify';
+
 
 export default function WorkspaceCombined() {
 
@@ -20,7 +22,9 @@ export default function WorkspaceCombined() {
 
   const saveOrgToDB = async () => {
     const userid = localStorage.getItem("userid");
-    dispatch(createOrgThunk({ name: org, user_id: userid }));
+    dispatch(createOrgThunk({ name: org, user_id: userid })).then(()=>{
+      toast.success('Organisation created successfully!');
+    });
     setOpen(false);
   };
   return (
