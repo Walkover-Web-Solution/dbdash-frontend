@@ -11,11 +11,8 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   const data=useSelector((state)=>state.table.data);
   const dbId=useSelector((state)=>state.table.dbId);
   const tableId=useSelector((state)=>state.table.tableId);
-  const pageSize=useSelector((state)=>state.table.pageSize);
-  // const [page,setPage] = useState(2);
   const dispatchs = useDispatch();
   const fetchMoreData = () => {
-    // console.log("pageNo == " , pageNo)
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
@@ -24,17 +21,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
     setPage((page) => page + 1);
   };
 
-  // const handleGotoPage = () => {
-  //   tableRef.current.gotoPage(0)
-  // }
 
-  // const handlePreviousPage = () => {
-  //   tableRef.current.previousPage()
-  // }
- 
-  // const handleNextPage = () => {
-  //   tableRef.current.nextPage()
-  // }
   return (
     <div
       style={{
@@ -66,7 +53,6 @@ const  MainTable = memo ( ({page,setPage}) =>  {
             data={data|| []}
             dispatch={dispatchs}
             page = {page}
-            pageSize = {pageSize}
             // skipReset={tableInfo.skipReset}
           /> }
         </div>
