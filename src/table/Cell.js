@@ -346,10 +346,9 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
         />
         );
         break;
-      case "attachment":
+        case "attachment":
       element = (
         <div style={{display :"flex"}} >
-        
             <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
             <Tabs  value={0} TabIndicatorProps={{
     style: { display: 'none' }
@@ -372,7 +371,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
          </div>
       );
       break;
-
+      
     default:
       element = null;
       break;

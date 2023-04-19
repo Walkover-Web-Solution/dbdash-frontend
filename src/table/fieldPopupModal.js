@@ -24,7 +24,7 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 export default function FieldPopupModal(props) {
  
-  const [showSwitch, setShowSwitch] = useState(true);
+  const [showSwitch, setShowSwitch] = useState(false);
   const [openn, setOpenn] = useState(false);
   const [userQuery,setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -39,7 +39,9 @@ export default function FieldPopupModal(props) {
   const [showDecimalOptions , setShowDecimalOptions] = useState(false);
   const params = useParams();
 
-
+  useEffect(() => {
+    setShowSwitch(true);
+  }, []);
   
   useEffect(() => {
     if (AllTableInfo?.tables[params?.tableName] && searchValue.length == 0) {
@@ -48,6 +50,8 @@ export default function FieldPopupModal(props) {
       setsearchValue(data)
     }
   }, [AllTableInfo])
+
+  // { console.log("lookup",AllTableInfo.tables[props?.tableId].fields);}
 
   const schema = Joi.object({
     fieldName: Joi.string().min(1).max(15).pattern(/^\S+$/).messages({
@@ -103,31 +107,39 @@ export default function FieldPopupModal(props) {
     props?.setShowFieldsDropdown(false)
     props?.setSelectedFieldName(false)
     setOpenLinkedField(false)
-
     if (event.target.value == "formula") {
-      setOpenn(true)
       setShowSwitch(false)
+      setOpenn(true)
       setOpenLinkedField(false);
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
-      setLookupField(true)
       setShowSwitch(false)
+      setLookupField(true)
       setOpenLinkedField(false);
+      props?.setShowFieldsDropdown(true);
       props?.setSelectValue(event.target.value);
       const firstTable = Object.keys(AllTableInfo.tables)[0];
       props?.setSelectedTable(firstTable);
+      const firstField = Object.entries(
+        AllTableInfo.tables[firstTable].fields
+      ).find(([, field]) => field?.metaData?.unique)?.[0];
+      props?.setSelectedFieldName(firstField);
       props?.setLinkedValueName({
         [firstTable]: AllTableInfo.tables[firstTable].fields[0],
       });
-      
     }
     else if(event.target.value == "lookup"){
+      setShowSwitch(false)
       setOpenLinkedField(true)
-      
       props?.setSelectValue(event.target.value);
+      const first = Object.entries(AllTableInfo?.tables[props?.tableId].fields)
+      .find(([,field]) => field?.metaData?.foreignKey?.fieldName);
+      props?.setSelectedFieldName(first);
+      console.log("abc",first)
+      // props?.setOpenViewDropdown({[first]: AllTableInfo.tables.fieldsz[first]})
+      // console.log(selectedFieldName)
     }
-   
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
       setShowNumericOptions(true);
@@ -145,11 +157,15 @@ export default function FieldPopupModal(props) {
       setShowDecimalOptions(true);
       setOpenLinkedField(false);
     } else if (event.target.value === 'checkbox') {
-      props?.setSelectValue('checkbox')
       setShowSwitch(false);
+      props?.setSelectValue('checkbox')
       setOpenLinkedField(false);
-    }  
+    } 
+    else if(event.target.value === "singlelinetext" || event.target.value === "longtext" ){
+        setShowSwitch(true);
+    }
     else {
+      setShowSwitch(false);
       props?.setShowFieldsDropdown(false)
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
@@ -157,7 +173,6 @@ export default function FieldPopupModal(props) {
       setShowDecimalOptions(false);
       setLookupField(false)
       setOpenn(false)
-      setShowSwitch(true);
       setOpenLinkedField(false);
     }
   }
@@ -176,6 +191,8 @@ export default function FieldPopupModal(props) {
     props?.setMetaData({});
   };
 
+ 
+
   // Teach Autosuggest how to calculate suggestions for any given input value.
   const getSuggestions = (value) => {
     const inputValues = value?.trim()?.toLowerCase()?.split(" ");
@@ -190,7 +207,6 @@ export default function FieldPopupModal(props) {
   };
 
   const getSuggestionValue = (suggestion) => {
-
     const newVal = value?.split(" ");
     let newdata = "";
     for (let i = 0; i < newVal.length - 1; i++) {
@@ -287,7 +303,7 @@ export default function FieldPopupModal(props) {
             id="select"
             value={props?.selectValue}
             onChange={handleSelectChange}
-            defaultValue	 ="longtext"
+            defaultValue = "longtext"
             displayEmpty
             sx={{
               margin: 1,
@@ -380,7 +396,6 @@ export default function FieldPopupModal(props) {
 
             )
           }
-          
 {lookupField && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 ?(
   <Select
     labelId="select-label"
@@ -434,7 +449,7 @@ export default function FieldPopupModal(props) {
                     {fields[1]?.fieldName}
                   </MenuItem>
                 ))
-            }
+              }
           </Select>
           ):(
             props?.showFieldsDropdown && <Typography sx={{color:"red"}}>No unique key</Typography>
@@ -451,7 +466,7 @@ export default function FieldPopupModal(props) {
   .length > 0 && (<Select
             labelId="select-label"
             id="select"
-            value={props?.selectedTable}
+            value={props?.selectedFieldName}
             displayEmpty
             sx={{
               margin: 1,
