@@ -4,7 +4,7 @@ import { getTable } from "../../api/tableApi";
 import {insertRow, uploadImage,updateRow ,deleteRow} from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
 // reducer imports
-import {   addOptionToColumn,addRow,deleteColumn,setTableLoading,updateCell,updateColumnHeader, updateColumnType} from "./tableSlice";
+import {   addOptionToColumn,deleteColumn,setTableLoading,updateColumnHeader, updateColumnType} from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
 import  {runQueryonTable}  from "../../api/filterApi";
 import { createView, deleteFieldInView } from "../../api/viewApi";
@@ -239,7 +239,7 @@ export const addColumsToLeft = createAsyncThunk(
 )
 export const updateCells = createAsyncThunk(
     "table/updateCells",
-    async(payload,{dispatch,getState})=>{
+    async(payload,{getState})=>{
        const {tableId, dbId} = getState().table
        const value = payload.value
        const  columnId= payload.columnId;
@@ -247,7 +247,6 @@ export const updateCells = createAsyncThunk(
        {
         const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
             payload.value = data?.data?.data;
-            dispatch(updateCell(payload))
             return payload;
        }
        else{
@@ -259,12 +258,12 @@ export const updateCells = createAsyncThunk(
 )
 export const addRows = createAsyncThunk(
     "table/addRows",
-    async(payload,{dispatch,getState})=>{
+    async(_,{getState})=>{
+        console.log(" in add rowss",getState)
         const {tableId, dbId} = getState().table
-        await insertRow(dbId,tableId);
-        dispatch(addRow(payload));
-        dispatch(bulkAddColumns({tableName:tableId,dbId :dbId}));
-        return payload;
+        console.log(" in add rowss 2 ")
+        const newRow = await insertRow(dbId,tableId);
+        return newRow.data.data;
     }
 )
 export const deleteRows = createAsyncThunk(

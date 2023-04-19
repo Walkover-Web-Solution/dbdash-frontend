@@ -1,6 +1,7 @@
 // import { current } from '@reduxjs/toolkit';
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
+import { current } from '@reduxjs/toolkit';
 
 
 export const initialState = {
@@ -12,7 +13,8 @@ export const initialState = {
   status: "idle",
   pageNo : 0,
   isTableLoading : true,
-  isMoreData : true
+  isMoreData : true,
+  pageSize : 100
 
 };
 
@@ -48,9 +50,9 @@ export const reducers = {
       skipReset: false,
       status: "idle",
       pageNo : 0,
-      pageSize : 0,
       isTableLoading : true , 
-      isMoreData : true
+      isMoreData : true,
+      pageSize : 100
     }
   },
   deleteColumn(state, payload) {
@@ -180,31 +182,10 @@ export const reducers = {
       }
     });
     state.data=arr;
-    
-
-    // return {
-    //   ...state,
-    //   skipReset: true,
-    //   data: state.data.map((row, index) => {
-    //     if (index === action.rowIndex) {
-    //       return {
-    //         ...state.data[action.rowIndex],
-    //         [action.columnId.toLowerCase()]: action.value
-    //       };
-    //     }
-    //     return row;
-    //   })
-    // };
 
   },
 
-  addRow(state) {
-    return {
-      ...state,
-      skipReset: true,
-      data: [...state.data, {}]
-    };
-  },
+
 
   updateColumnType(state, payload) {
     const action = payload.payload
@@ -366,6 +347,7 @@ export function extraReducers(builder) {
         state.dbId = action.payload.dbId
         state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
         state.isMoreData  = action.payload.isMoreData
+        state.page = 100;
       }
       state.status = "succeeded";
 
@@ -462,11 +444,18 @@ export function extraReducers(builder) {
       state.status = "failed";
     })
 
-    .addCase(addRows.pending, (state) => {
+    .addCase(addRows.pending, (state ) => {
+     
       state.status = "loading"
+    
     })
-    .addCase(addRows.fulfilled, (state) => {
+    .addCase(addRows.fulfilled, (state,{payload}) => {
+      console.log("payload",payload)
+      console.log("state",current(state))
+      state.data = [...state.data , payload]
+      state.pageSize = state.pageSize + 1;
       state.status = "succeeded";
+      console.log("state",current(state))
 
     })
     .addCase(addRows.rejected, (state) => {
