@@ -29,7 +29,7 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo ,pageSize}) => {
+const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -70,7 +70,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
     }),
     []
   );
-  console.log("pageSize",pageSize)
   const {
     getTableProps,
     getTableBodyProps,
@@ -95,7 +94,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       initialState: {
         selectedCellIds: {},
         columnOrder: columns,
-        pageSize : pageSize,
+        pageSize : 100,
         pageIndex :pageNo - 1
       },
     },
@@ -295,5 +294,4 @@ Table.propTypes = {
   skipReset: PropTypes.any,
   setColumns: PropTypes.func,
   page:PropTypes.number,
-  pageSize :PropTypes.number,
 };
