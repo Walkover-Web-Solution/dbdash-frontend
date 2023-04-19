@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Box, Button, Typography, Container } from "@mui/material";
+import { Box, Button, Typography, Container ,Divider} from "@mui/material";
 import { useParams} from "react-router-dom";
 import TablesList from "../component/table/tablesList";
 import { Link } from 'react-router-dom'
-import { Divider } from "@mui/material";
 import MainNavbar from "../component/mainNavbar";
 import { getDbById } from "../api/dbApi";
 // import {  getTable1 } from '../store/allTable/allTableThunk';
@@ -63,7 +62,7 @@ function DbDetails() {
                 )}
             </Container>
             <Divider color="black" variant="fullwidth" />
-            <Box align="center" >
+            <Box align="center" style={{height: "calc(100vh - 96px)"}} >
             { dbData &&    <TablesList dbData={dbData} tables={tables} setTables={setTables} />}
             </Box>
         </>

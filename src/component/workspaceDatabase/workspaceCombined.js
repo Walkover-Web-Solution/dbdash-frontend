@@ -5,9 +5,8 @@ import Button from '@mui/material/Button';
 import { OrgList } from './orgList';
 import { PropTypes } from 'prop-types';
 import { selectOrgandDb } from "../../store/database/databaseSelector.js"
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createOrgThunk } from '../../store/database/databaseThunk';
-import { useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
 
 
@@ -15,7 +14,6 @@ export default function WorkspaceCombined() {
 
   const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
   const dispatch = useDispatch();
-
   const [org, setOrg] = useState();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -52,5 +50,4 @@ export default function WorkspaceCombined() {
 }
 WorkspaceCombined.propTypes = {
   dbs: PropTypes.string
-
 }

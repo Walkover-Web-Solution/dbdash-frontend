@@ -1,17 +1,16 @@
-import React, { useMemo, useEffect, useCallback,memo } from "react";
+import React, { useMemo , useCallback,memo } from "react";
 import clsx from "clsx";
 import {useTable,useFlexLayout,useResizeColumns,useSortBy,useColumnOrder,usePagination,useRowSelect} from "react-table";
 import Cell from "./Cell";
 import Header from "./Header";
 import PlusIcon from "./img/Plus";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
-import { useCellRangeSelection } from "react-table-plugins";
+// import { cloneDeep } from "lodash";
+// import { useCellRangeSelection } from "react-table-plugins";
 import {addRows,deleteRows,updateCells,updateColumnOrder,} from "../store/table/tableThunk";
-import { updateTableData } from "../store/table/tableSlice";
+// import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { useDispatch,useSelector } from "react-redux";
-//import InfiniteScroll from "react-infinite-scroll-component";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
@@ -20,9 +19,7 @@ import SimpleBar from 'simplebar-react';
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
 import { getTableInfo } from "../store/table/tableSelector";
-// import { useDrop, useDrag } from "react-dnd";
-// import { getEmptyImage } from "react-dnd-html5-backend";
-// import ItemTypes from "./ItemTypes";
+
 const ScrollingComponent = withScrolling("div");
 const defaultColumn = {
   minWidth: 50,
@@ -34,8 +31,7 @@ const defaultColumn = {
 };
 // export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
-  
-  
+  // console.log("data",data)
   const handleCopy = (event, value) => {
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
@@ -54,8 +50,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
     );
   };
 
+  
+
   const tableInfo=useSelector((state)=>getTableInfo(state));
-  console.log(tableInfo.isMoreData)
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -94,9 +91,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       data,
       defaultColumn,
       dataDispatch,
-      // autoResetSortBy: !skipReset,
-      // autoResetFilters: !skipReset,
-      // autoResetRowState: !skipReset,
       sortTypes,
       cellIdSplitBy: "_",
       initialState: {
@@ -106,7 +100,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         pageIndex :pageNo - 1
       },
     },
-    useCellRangeSelection,
     useFlexLayout,
     useResizeColumns,
     useSortBy,
@@ -122,8 +115,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
-      // setHead([...newOrder]);
-      // columns = newOrder
       dispatch(
         updateColumnOrder({
           columns: newOrder,
@@ -136,23 +127,23 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
     },
     [columns]
   );
-  useEffect(() => {
-    if (Object.keys(selectedCellIds).length > 1) {
-      const newData = cloneDeep(data);
-      const firstValue = Object.keys(selectedCellIds)[0].split("_");
-      const newValueToReplace = newData[firstValue[1]][firstValue[0]];
-      {
-        selectedCellIds >= 1 &&
-          Object.keys(selectedCellIds)?.forEach((key, i) => {
-            const keyName = key.split("_")[0];
-            const index = key.split("_")[1];
-            if (i === 0 || firstValue[0] != keyName) return;
-            newData[index][keyName] = newValueToReplace;
-          });
-      }
-      dataDispatch(updateTableData(newData));
-    }
-  }, [selectedCellIds]);
+  // useEffect(() => {
+  //   if (Object.keys(selectedCellIds).length > 1) {
+  //     const newData = cloneDeep(data);
+  //     const firstValue = Object.keys(selectedCellIds)[0].split("_");
+  //     const newValueToReplace = newData[firstValue[1]][firstValue[0]];
+  //     {
+  //       selectedCellIds >= 1 &&
+  //         Object.keys(selectedCellIds)?.forEach((key, i) => {
+  //           const keyName = key.split("_")[0];
+  //           const index = key.split("_")[1];
+  //           if (i === 0 || firstValue[0] != keyName) return;
+  //           newData[index][keyName] = newValueToReplace;
+  //         });
+  //     }
+  //     dataDispatch(updateTableData(newData));
+  //   }
+  // }, [selectedCellIds]);
   let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds };
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
@@ -177,14 +168,14 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         </Button>
       )}
 
-      <DndProvider backend={HTML5Backend}>
-        <ScrollingComponent style={{ overflow:"hidden"}}>
+      <DndProvider backend={HTML5Backend} >
+        <ScrollingComponent style={{ overflow:"hidden", height:"100%"}} key={headerGroups[0].headers.length}>
           <div
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
             style={{}}
           >
-            <div>
+            <div className="calculate">
               <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
                 {
                   headerGroups[0].headers?.map((column, index) => {
@@ -199,34 +190,18 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                         />
                       </React.Fragment>
                     );
-                    // return(
-                    // <DraggableHeader
-                    //   reoder={reoder}
-                    //   key={column.id}
-                    //   columns={column}
-                    //   index={index}
-                    // />
-                    // )
                   })}
               </div>
             </div>
           </div>
-          <SimpleBar id="scrollableDiv" style={{ 
-          widht :"auto",
+          <SimpleBar id="scrollableDiv" style={{
         // width: "98vw",
-        height: "47vh",
+        // 45px height replaced by hesder height
+        height: "calc(100% - 45px)",
         overflowX: "hidden" 
       }}>
-          
-        {/* <InfiniteScroll
-          dataLength={data?.length}
-          next={update}
-          hasMore={hasMore}
-          // loader={<h4>Loading more 2 items...</h4>}
-          scrollableTarget="scrollableDiv"
-        > */}
         <table>
-          <div {...getTableBodyProps()}>
+          <div {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
               return (
@@ -240,17 +215,13 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                   {row.cells.map((cell, columnIndex) => {
                     return (
                       <div key={columnIndex}
-                        // onMouseDown={() => handleCellMouseDown(rowIndex, columnIndex)}
-                        // onMouseOver={() => handleCellMouseOver(rowIndex, columnIndex)}
-                        {...cell.getCellRangeSelectionProps()}
+                        // {...cell.getCellRangeSelectionProps()}
                         {...cell.getCellProps(
                           {
                             onCopy: event => handleCopy(event, cell.value),
                             onPaste: event => handlePaste(event, rowIndex, cell)
                           }
                         )}
-                        // suppressContentEditableWarning={true}
-                        // contentEditable
                         style=
                         {
                           cellsSelected[cell.id]
@@ -262,7 +233,6 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                             : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '30px' }
                         }
                         className='td'>
-                        {/* {console.log(cell.getCellProps())} */}
                         {cell.render("Cell")}
                       </div>
                     )
@@ -270,14 +240,14 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                 </div>
               );
             })}
-            <div className='tr add-row'
+          {  pageIndex ==0 && <div className='tr add-row'
               onClick={() => dataDispatch(addRows({ type: "add_row" }))}
             >
               <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
                 <PlusIcon />
               </span>
               New
-            </div>
+            </div>}
           </div>
           </table>
         </SimpleBar>
@@ -286,15 +256,15 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <Preview />
       </DndProvider>
 
-      <div className="pagination"  style={{marginBottom:"5vh",marginTop:"3vh",textAlign:"left",marginLeft:"45vw",position:"fixed"}}>
+      <div className="pagination"  style={{marginTop:"3vh",position:"fixed", left: '50%'}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {"<<"}
+          {"home"}
         </button>
         {" "}
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"<"}
         </button>{" "}
-        <button disabled={tableInfo.isMoreData == false} onClick={() => {
+        <button disabled={tableInfo.isMoreData == false  &&  pageIndex+1 == pageNo } onClick={() => {
           if(data.length / 100  > pageIndex+1){
             nextPage()
           }
@@ -303,21 +273,11 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           }
           }}>
           {">"}
-        </button>
+        </button>{" "}
+          {/* {">>"} */}
+        <span>
         
-        
-        {/* <span>
-          | Go to page:{" "}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              gotoPage(page);
-            }}
-            style={{ width: "100px" }}
-          />
-        </span>{" "} */}
+        </span>
       </div>
      
     </>
@@ -332,10 +292,6 @@ Table.propTypes = {
   data: PropTypes.any,
   dispatch: PropTypes.any,
   skipReset: PropTypes.any,
-  // columns:PropTypes.any,
-  // data:PropTypes.any,
-  // dispatch:PropTypes.any,
-  // skipReset:PropTypes.any,
   setColumns: PropTypes.func,
   page:PropTypes.number
 };

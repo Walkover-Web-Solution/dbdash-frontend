@@ -15,13 +15,12 @@ import { shortId } from "./utils";
 import PropTypes from 'prop-types';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
-// import PopupModal from "../component/popupModal";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal";
+import {getQueryByAi} from "../api/fieldApi"
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import {getQueryByAi} from "../api/fieldApi"
 import FunctionsIcon from '@mui/icons-material/Functions';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
@@ -339,7 +338,7 @@ export default function Header({
       case "lookup":
         propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
-      case "rowid":
+      case "id":
         propertyIcon = <FormatListNumberedIcon fontSize="2px"/>;
       break;
     default:
@@ -425,7 +424,7 @@ export default function Header({
     </>
   ) : (
     <>
-      <div {...getHeaderProps({ style: { display: "inline-block", flex: 'none' } })} className='th noselect'>
+      <div {...getHeaderProps({ style: {  width: "100%" } })} className='th noselect'>
         <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
           <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
           {label}

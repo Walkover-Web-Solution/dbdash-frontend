@@ -4,8 +4,6 @@ import React from "react";
 import Navbar from "../component/apiDoc/navbarApi";
 import MainNavbar from "../component/mainNavbar";
 
-
-
 function ApiDocPage() {
 
     return (
@@ -14,7 +12,6 @@ function ApiDocPage() {
       <MainNavbar/>
     </Box>
         <Navbar/>
-       
    </>
     );
 }

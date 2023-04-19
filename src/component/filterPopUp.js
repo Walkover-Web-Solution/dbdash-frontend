@@ -1,22 +1,17 @@
  import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import {Box,Button,Typography} from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
 import Joi  from "joi"
 import { useValidator } from "react-joi"
 import { Select, MenuItem, TextField } from '@mui/material';
-// import { getAllfields } from "../api/fieldApi";
 import { createFilter,updateQuery } from "../api/filterApi"
 import { getTableInfo } from "../store/table/tableSelector";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
 import { useDispatch, useSelector} from "react-redux";
 import { cloneDeep } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
-// import { setAllTablesData } from "../store/allTable/allTableSlice";
 import { setAllTablesData } from "../store/allTable/allTableSlice";
-
 
 const style = {
   position: "absolute",

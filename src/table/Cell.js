@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,memo} from "react";
 import ContentEditable from "react-contenteditable";
 import Relationship from "./Relationship";
 import { usePopper } from "react-popper";
@@ -19,7 +19,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { memo } from "react";
 import PropTypes from "prop-types";
 
 
@@ -31,7 +30,6 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
 
   const dispatch = useDispatch();
   const [value, setValue] = useState({ value: initialValue, update: false });
-const[val,setVal]=useState(0);
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -39,6 +37,7 @@ const[val,setVal]=useState(0);
   const [addSelectRef, setAddSelectRef] = useState(null);
   const [inputBoxShow, setInputBoxShow] = useState(false);
   const [open, setOpen] = useState(false);
+
   
   const handleImageClick = (imgLink) => {
     window.open(imgLink, '_blank');
@@ -69,14 +68,12 @@ const[val,setVal]=useState(0);
 
  
   useEffect(() => {
-    if (value?.update &&  value.value!=null) {
+    if (value?.update &&  value.value!=null  && value.value !== initialValue && value.value.trim() !== "")  {
       dispatch(updateCells({
         columnId: id, rowIndex: row.original.id, value: value.value, dataTypes: "dataTypes"
       }))
     }
   }, [value, id, row.index]);
-
-
 
   function handleOptionKeyDown(e) {
     if (e.key === "Enter") {
@@ -153,16 +150,6 @@ const[val,setVal]=useState(0);
         />
       );
       break;
-      // case "integer":
-      //   element = (
-      //     <input type="text"
-      //       readOnly="readonly"
-      //       defaultValue={(value?.value && value?.value?.toString()) || ""}
-      //       className='data-input'
-      //       style={{background: "none"}}
-      //     />
-      //   );
-      //   break;
     case "createdat":
       element = (
         <input type="text"
@@ -220,10 +207,8 @@ const[val,setVal]=useState(0);
   );
   break;
 
-
     case "longtext":
       element = (
-      
         <ContentEditable
           html={(value?.value && value?.value?.toString()) || ""}
           onChange={onChange}
@@ -244,6 +229,7 @@ const[val,setVal]=useState(0);
       break;
     case "numeric":
       element = (
+        <>
         <input type="number"
         onChange={onChange}
         defaultValue={(value?.value && value?.value?.toString()) || ""}
@@ -251,6 +237,7 @@ const[val,setVal]=useState(0);
         className='data-input'
         style={{background: "none"}}
       />
+        </>
       );
       break;
     case "select":
@@ -360,19 +347,18 @@ const[val,setVal]=useState(0);
         break;
       case "attachment":
       element = (
-        <div style={{display:"flex"}}>
+        <div style={{display :"flex"}} >
+        
             <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
-        <Tabs  value={val} TabIndicatorProps={{
+            <Tabs  value={0} TabIndicatorProps={{
     style: { display: 'none' }
   }} variant="scrollable"
         scrollButtons="auto" style={{display: "flex", flexDirection: "row",overflowY:"hidden",overflowX:'hidden'}}>
-          
           {value?.value?.length > 0 && value?.value?.map((imgLink, index) => (
-           <Link key={index}  onClick={() =>{ handleImageClick(imgLink);setVal(index);}}>
+           <Link key={index}  onClick={() =>{ handleImageClick(imgLink);}}>
            <img src={imgLink} alt="My Image" style={{ width: "50px", height: "25px" ,marginRight: "3px"}} />
          </Link>
-
-          ))}    
+          ))}
         </Tabs>
           
         <SelectFilepopup

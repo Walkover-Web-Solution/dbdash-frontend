@@ -1,15 +1,5 @@
 import React, { useEffect, useState} from "react";
-import {
-  Table,
-  TableBody,
-  Box,
-  Paper,
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
-} from "@mui/material";
-
+import {Table,TableBody,Box,Paper,TableRow,TableHead,TableContainer,TableCell} from "@mui/material";
 import { PropTypes } from 'prop-types';
 import { getAuthkey,deleteAuthkey} from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
@@ -24,10 +14,7 @@ export default function AuthKey(props) {
   // const navigate = useNavigate();
 
   // const params = useParams();
-
-  
-
-  useEffect(  ()=>{
+useEffect(  ()=>{
     getAuthkeyFun()
   },[])
 

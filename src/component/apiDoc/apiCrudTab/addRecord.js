@@ -1,6 +1,5 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
-//import { Box } from '@mui/system';
 import CodeSnippet from '../codeSnippet';
 import { Typography } from '@mui/material';
 function AddRecord(props) {

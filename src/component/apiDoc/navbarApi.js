@@ -1,8 +1,7 @@
-import { Box } from '@mui/material'
-import { Link,useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react'
+import { Link,useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { Button, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
+import { Box,Button, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
 import ApiCrudTablist from './apiCrudTab/apiCrudTablist';
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
@@ -45,7 +44,6 @@ export default function Navbar() {
   useEffect(() => {
     filterDbsBasedOnOrg();
   }, [alldb])
- 
 
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
@@ -54,7 +52,6 @@ export default function Navbar() {
       setSelectTable(Object.keys(data.data.data.tables)[0])
       setLoading(true)
     }
-
   }
 
   return (

@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import {Box,Button,TextField,Typography} from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import useValidator from "react-joi";
 import Joi from "joi";
-
-// import { createOrg } from "../api/orgApi";
 
 const style = {
   position: "absolute",
@@ -23,19 +18,16 @@ const style = {
 };
 
 export default function PopupModal(props) {
-  // const [org, setOrg] = React.useState();
   
   const handleClose = () => props.setOpen(false);
-
   const [textFieldValue, setTextFieldValue] = useState("");
-
 
   const { state, setData, setExplicitField,validate} = useValidator({
     initialData: {
       [props?.id]: null,
     },
     schema: Joi.object({
-      [props?.id]: Joi.string().min(3).max(15).required(),
+      [props?.id]: Joi.string().min(3).max(25).required(),
     }),
     explicitCheck: {
       [props?.id]: false,
@@ -92,7 +84,7 @@ const createProjectJoi = (e) => {
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                if(textFieldValue.length >= 3 && textFieldValue.length <= 15){
+                if(textFieldValue.length >= 3 && textFieldValue.length <= 25){
                   if (e.key === 'Enter') {
                     props.submitData(e);
                     handleClose();
@@ -106,7 +98,7 @@ const createProjectJoi = (e) => {
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Button variant="contained" disabled={textFieldValue.length < 3 || textFieldValue.length >15} onClick={()=>{
+              <Button variant="contained" disabled={textFieldValue.length < 3 || textFieldValue.length >25} onClick={()=>{
                 validate();
                   props?.submitData();
               }}>

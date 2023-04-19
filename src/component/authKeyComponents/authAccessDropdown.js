@@ -27,12 +27,9 @@ const MenuProps = {
 
 export default function AuthAccessDropDown({ selected, setSelected, options, setOptions, dbId }) {
 
-  
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
-
     setOptions(data.data.data.tables || {});
-
   }
 
   const isAllSelected =
@@ -112,19 +109,14 @@ export default function AuthAccessDropDown({ selected, setSelected, options, set
               <Checkbox checked={selected?.includes(option[1].tableName)} value={option[1].tableName} onChange={(e) => {
                 if (!selected?.includes(e.target.value)) {
                   setSelected([...selected, e.target.value])
-
                 }
                 else {
-
                   setSelected(selected.filter((removeVal) => removeVal !== e.target.value))
-
                 }
               }}
-
               />
             </ListItemIcon>
             <ListItemText primary={option[1].tableName} />
-
           </MenuItem>
         })}
       </Select>

@@ -50,7 +50,7 @@ export default function FieldPopupModal(props) {
   }, [AllTableInfo])
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(3).max(15).pattern(/^\S+$/).messages({
+    fieldName: Joi.string().min(1).max(15).pattern(/^\S+$/).messages({
       'string.pattern.base': 'Field name should not contain spaces',
     }).required(),
   });
@@ -263,7 +263,7 @@ export default function FieldPopupModal(props) {
           value={props.textValue}
           onChange={handleTextChange}
           onKeyDown={(e) => {
-            if(e.target.value.length >= 3 && e.target.value.length <= 15){
+            if(e.target.value.length >= 1 && e.target.value.length <= 15){
               if (e.key === 'Enter') {
                 props.submitData(false);
                 // handleClose();
@@ -351,20 +351,6 @@ export default function FieldPopupModal(props) {
             (
               <Box>
                 <Box>write query in human friendly way to manupulate the column and resultant query will be give to you !!!  and vie versa</Box>
-                {/* <TextField
-            autoFocus
-            margin="dense"
-            id="text-field"
-            label="Enter the query"
-            type="text"
-            // value={props?.textValue}
-            placeholder={"multiply column speed and distance"}
-           onChange={(e)=>{
-            setUserQuery(e.target.value)
-           }}
-            fullWidth
-          /> */}
-
                 <Autosuggest
                   autoFocus
                   suggestions={suggestions}
@@ -374,11 +360,8 @@ export default function FieldPopupModal(props) {
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps}
                   renderSuggestionsContainer={renderSuggestionsContainer}
-                  // onChange={(e)=>{
-                  //   setUserQuery(e.target.value)
-                  //  }}
                 />
-                <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >Ask</Button>
+                <Button onClick={() => { props?.submitData(userQuery) }} color="primary" >Ask AI</Button>
 
                  {props?.queryByAi && <TextField
                   autoFocus
@@ -398,26 +381,7 @@ export default function FieldPopupModal(props) {
 
             )
           }
-            {/* show table name   */}
-          {/* {lookupField  && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 && <Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedTable}
-            onChange={(event) => {
-              props?.setSelectedTable(event.target.value);
-              props?.setShowFieldsDropdown(true)
-            }}
-            defaultValue={props?.selectedTable}
-            displayEmpty
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-          >
-            {AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).map((table, index) => (
-              <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
-            ))}
-          </Select>} */}
+          
 {lookupField && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 ?(
   <Select
     labelId="select-label"
@@ -543,7 +507,7 @@ export default function FieldPopupModal(props) {
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>}
         </DialogContent>
-        <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 3 ||
+        <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 1 ||
           props?.textValue?.length > 20} >Submit</Button>
       </Dialog>
     </div>
