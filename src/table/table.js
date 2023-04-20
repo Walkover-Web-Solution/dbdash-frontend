@@ -182,7 +182,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                         {/* {  column.render("Header")} */}
                         <DraggableHeader
                           reoder={reoder}
-                          key={column.id}
+                          // key={column.id}
                           columns={column}
                           index={index}
                         />
@@ -199,11 +199,11 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         overflowX: "hidden" 
       }}>
         <table>
-          <div {...getTableBodyProps()} >
+          <tbody {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
               return (
-                <div key={rowIndex} {...row.getRowProps()} className={`tr ${rowIndex}`}
+                <tr key={rowIndex} {...row.getRowProps()} className={`tr ${rowIndex}`}
                   style=
                   {
                     row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#E0EDF2' } : {
@@ -212,7 +212,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                   }>
                   {row.cells.map((cell, columnIndex) => {
                     return (
-                      <div key={columnIndex}
+                      <td key={columnIndex}
                         // {...cell.getCellRangeSelectionProps()}
                         {...cell.getCellProps(
                           {
@@ -232,21 +232,23 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                         }
                         className='td'>
                         {cell.render("Cell")}
-                      </div>
+                      </td>
                     )
                   })}
-                </div>
+                </tr>
               );
             })}
-          {  pageIndex ==0 && <div className='tr add-row'
+          {  pageIndex ==0 && <tr className='tr add-row'
               onClick={() => dataDispatch(addRows({ type: "add_row" }))}
             >
+              <td colSpan={headerGroups[0].headers.length}>
               <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
                 <PlusIcon />
               </span>
               New
-            </div>}
-          </div>
+              </td>
+            </tr>}
+          </tbody>
           </table>
         </SimpleBar>
         </ScrollingComponent>
