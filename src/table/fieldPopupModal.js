@@ -136,9 +136,6 @@ export default function FieldPopupModal(props) {
       const first = Object.entries(AllTableInfo?.tables[props?.tableId].fields)
       .find(([,field]) => field?.metaData?.foreignKey?.fieldName);
       props?.setSelectedFieldName(first);
-      console.log("abc",first)
-      // props?.setOpenViewDropdown({[first]: AllTableInfo.tables.fieldsz[first]})
-      // console.log(selectedFieldName)
     }
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
