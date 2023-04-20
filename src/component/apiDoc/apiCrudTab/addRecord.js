@@ -1,22 +1,30 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
+//import { Box } from '@mui/system';
 import CodeSnippet from '../codeSnippet';
 import { Typography } from '@mui/material';
 function AddRecord(props) {
+const data = `
+-data {
+  "fieldId1" : "value1",
+  "fieldId2" : "value2",
+  "fieldId3" : "value3",
+   ...
+     }
+`;
   return (
     <>
-    
         <Typography style={{fontWeight: 'bold' ,fontSize: '24px' }}>Add Table Records</Typography>
         <Typography>
-      To create new  Table records, use the create method.Note that table names and table ids can be used interchangeably.<br/>
-      Using table ids means table name changes do not require modifications to your API request.
+        <span>
+        To create {props.table} new records, issue a POST request to the {props.table} endpoint.
+        <br/> Your request body should include a json.These json should have field id and field value as a key value pair.
+        </span>
       </Typography>
-    
-    
-      <CodeSnippet  codeString={`https://localhost:5000/${props.db}/${props.table}`}/>
+      <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}/>
       <Typography>{`-H Authorization: Bearer YOUR_SECRET_API_TOKEN `}</Typography>
       <Typography>{`-H Content-Type: application/json` }</Typography>
-    
+      <Typography sx={{ whiteSpace: 'pre-wrap' }}>{data}</Typography>
     </>
   )
 }
