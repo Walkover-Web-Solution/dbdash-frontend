@@ -14,7 +14,6 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FunctionsIcon from '@mui/icons-material/Functions';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import ReadMoreOutlinedIcon from '@mui/icons-material/ReadMoreOutlined';
-// import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import TextFormatIcon from '@mui/icons-material/TextFormat';
 import NotesIcon from '@mui/icons-material/Notes';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
@@ -24,7 +23,7 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 export default function FieldPopupModal(props) {
  
-  const [showSwitch, setShowSwitch] = useState(false);
+  const [showSwitch, setShowSwitch] = useState(true);
   const [openn, setOpenn] = useState(false);
   const [userQuery,setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -39,9 +38,7 @@ export default function FieldPopupModal(props) {
   const [showDecimalOptions , setShowDecimalOptions] = useState(false);
   const params = useParams();
 
-  useEffect(() => {
-    setShowSwitch(true);
-  }, []);
+
   
   useEffect(() => {
     if (AllTableInfo?.tables[params?.tableName] && searchValue.length == 0) {
@@ -51,7 +48,7 @@ export default function FieldPopupModal(props) {
     }
   }, [AllTableInfo])
 
-  // { console.log("lookup",AllTableInfo.tables[props?.tableId].fields);}
+ 
 
   const schema = Joi.object({
     fieldName: Joi.string().min(1).max(15).pattern(/^\S+$/).messages({
@@ -101,20 +98,21 @@ export default function FieldPopupModal(props) {
     setLookupField(false)
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
-    
     setOpenn(false);
     setLookupField(false)
+    setShowSwitch(false)
     props?.setShowFieldsDropdown(false)
     props?.setSelectedFieldName(false)
     setOpenLinkedField(false)
+    const data1 = props?.metaData;
+     delete data1["unique"];
+      props?.setMetaData(data1);
     if (event.target.value == "formula") {
-      setShowSwitch(false)
       setOpenn(true)
       setOpenLinkedField(false);
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
-      setShowSwitch(false)
       setLookupField(true)
       setOpenLinkedField(false);
       props?.setShowFieldsDropdown(true);
@@ -130,15 +128,13 @@ export default function FieldPopupModal(props) {
       });
     }
     else if(event.target.value == "lookup"){
-      setShowSwitch(false)
       setOpenLinkedField(true)
       props?.setSelectValue(event.target.value);
       const first = Object.entries(AllTableInfo?.tables[props?.tableId].fields)
       .find(([,field]) => field?.metaData?.foreignKey?.fieldName);
       props?.setSelectedFieldName(first);
-      console.log("abc",first)
-      // props?.setOpenViewDropdown({[first]: AllTableInfo.tables.fieldsz[first]})
-      // console.log(selectedFieldName)
+      
+     
     }
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
@@ -152,6 +148,7 @@ export default function FieldPopupModal(props) {
      
     }
     else if(event.target.value === 'id'){
+      props?.setSelectValue('id')
       var data = props?.metaData;
       data.unique = "true"
       props?.setMetaData(data);
@@ -162,15 +159,14 @@ export default function FieldPopupModal(props) {
       setShowDecimalOptions(true);
       setOpenLinkedField(false);
     } else if (event.target.value === 'checkbox') {
-      setShowSwitch(false);
       props?.setSelectValue('checkbox')
       setOpenLinkedField(false);
     } 
     else if(event.target.value === "singlelinetext" || event.target.value === "longtext" ){
         setShowSwitch(true);
+        props?.setSelectValue(event.target.value);
     }
     else {
-      setShowSwitch(false);
       props?.setShowFieldsDropdown(false)
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
@@ -183,6 +179,7 @@ export default function FieldPopupModal(props) {
   }
 
   const handleClose = () => {
+    setShowSwitch(true);
     setOpenLinkedField(false);
     setLookupField(false);
     props?.setOpen(false);
@@ -354,7 +351,7 @@ export default function FieldPopupModal(props) {
           displayEmpty
           sx={{ margin: 1, minWidth: 120 }}
         >
-          <MenuItem value="Select">seledct decimal value </MenuItem>
+          <MenuItem value="Select">select decimal value </MenuItem>
 
           <MenuItem value="1">1.0</MenuItem>
           <MenuItem value="2">1.00</MenuItem>
@@ -441,7 +438,7 @@ export default function FieldPopupModal(props) {
           >
             {
            Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
-                if (fields[1]?.metaData?.unique)  {
+                if (fields[1]?.metaData?.unique || fields[1].fieldType == "id")  {
                   return fields;
                 }
               })
