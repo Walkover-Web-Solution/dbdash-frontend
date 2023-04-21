@@ -15,7 +15,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import 'simplebar-react/dist/simplebar.min.css';
-import SimpleBar from 'simplebar-react';
+//import SimpleBar from 'simplebar-react';
 import Preview from "./Preview";
 import DraggableHeader from "./DraggableHeader";
 import { getTableInfo } from "../store/table/tableSelector";
@@ -167,11 +167,19 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       )}
 
       <DndProvider backend={HTML5Backend} >
-        <ScrollingComponent style={{ overflow:"hidden", height:"100%"}} key={headerGroups[0].headers.length}>
-          <div
+        <ScrollingComponent style={{ overflowY:"scroll", height:"100%"}} key={headerGroups[0].headers.length}>
+        {/* <SimpleBar id="scrollableDiv" style={{
+        // width: "98vw",
+        // 45px height replaced by hesder height
+        height: "60vh",
+        overflowX: "hidden" ,
+   
+      }}> */}
+          <table>
+          <thead
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
-            style={{}}
+            
           >
             <div className="calculate">
               <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
@@ -191,15 +199,11 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                   })}
               </div>
             </div>
-          </div>
-          <SimpleBar id="scrollableDiv" style={{
-        // width: "98vw",
-        // 45px height replaced by hesder height
-        height: "calc(100% - 45px)",
-        overflowX: "hidden" 
-      }}>
-        <table>
-          <tbody {...getTableBodyProps()} >
+          </thead>
+          
+         
+      
+          <tbody  {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
               return (
@@ -228,7 +232,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                               // backgroundColor: '#6beba80'
                               userSelect: 'none', flex: 'none',
                             }
-                            : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '30px' }
+                            : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '35px' }
                         }
                         className='td'>
                         {cell.render("Cell")}
@@ -249,14 +253,16 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
               </td>
             </tr>}
           </tbody>
+         
           </table>
-        </SimpleBar>
+        {/* </SimpleBar> */}
+        
         </ScrollingComponent>
         
         <Preview />
       </DndProvider>
 
-      <div className="pagination"  style={{marginTop:"3vh",position:"fixed", left: '50%'}}>
+      <div className="pagination"  style={{marginTop:"5vh",position:"fixed", left: '45%'}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"home"}
         </button>

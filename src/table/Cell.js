@@ -174,6 +174,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
       element = (
         <input type="checkbox"
           checked={value.value}
+         
           onChange={() => {
             setValue(() => ({ value: !(value.value), update: true }))
           }}

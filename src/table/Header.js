@@ -417,7 +417,7 @@ export default function Header({
           // style={{ display: "flex", justifyContent: "center"}}
           >
           <div
-            className='th-content' >
+            className='th-content'>
             <span className='svg-icon svg-gray icon-margin' ><CheckCircleOutlineIcon style={{fontSize:"13.5px",marginTop:"1px"}}/></span>
           </div>
         </div>}

@@ -132,7 +132,9 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue(event.target.value);
       const first = Object.entries(AllTableInfo?.tables[props?.tableId].fields)
       .find(([,field]) => field?.metaData?.foreignKey?.fieldName);
+      console.log(first);
       props?.setSelectedFieldName(first);
+
       
      
     }
