@@ -29,7 +29,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
         
         overflowX: "scroll",
         // Calculate the height of tab and button and replace with 130px
-        height:"calc(100% - 130px)",
+        height:"78vh",
         overflowY:"hidden",
         marginTop: 20
       }}

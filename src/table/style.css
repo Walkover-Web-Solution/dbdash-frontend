@@ -153,6 +153,11 @@ html {
 .th:hover {
   background-color: #f5f5f5;
 }
+Table thead{
+  position: sticky;
+  z-index: 1;
+  top: 0;
+}
 .th-content {
   overflow-x: hidden;
   text-overflow: ellipsis;

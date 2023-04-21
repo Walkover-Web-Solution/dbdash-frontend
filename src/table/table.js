@@ -168,10 +168,18 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
 
       <DndProvider backend={HTML5Backend} >
         <ScrollingComponent style={{ overflow:"hidden", height:"100%"}} key={headerGroups[0].headers.length}>
-          <div
+        <SimpleBar id="scrollableDiv" style={{
+        // width: "98vw",
+        // 45px height replaced by hesder height
+        height: "60vh",
+        overflowX: "hidden" 
+      }}>
+        <table>
+          <thead
+         
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
-            style={{}}
+           
           >
             <div className="calculate">
               <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
@@ -191,14 +199,9 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                   })}
               </div>
             </div>
-          </div>
-          <SimpleBar id="scrollableDiv" style={{
-        // width: "98vw",
-        // 45px height replaced by hesder height
-        height: "calc(100% - 45px)",
-        overflowX: "hidden" 
-      }}>
-        <table>
+          </thead>
+          
+        
           <tbody {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
@@ -256,7 +259,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <Preview />
       </DndProvider>
 
-      <div className="pagination"  style={{marginTop:"3vh",position:"fixed", left: '50%'}}>
+      <div className="pagination"  style={{bottom:"4%",position:"fixed", left: '45%'}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"home"}
         </button>
