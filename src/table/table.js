@@ -1,56 +1,47 @@
-import React, { useMemo , useCallback,memo } from "react";
-import clsx from "clsx";
-import {useTable,useFlexLayout,useResizeColumns,useSortBy,useColumnOrder,usePagination,useRowSelect} from "react-table";
-import Cell from "./Cell";
+/* eslint-disable react/display-name */
+/* eslint-disable react/prop-types */
+import React, { useMemo, useEffect, useCallback,memo } from "react";
+import {
+  useTable,
+  useFlexLayout,
+  useResizeColumns,
+  useRowSelect,
+  useSortBy,
+  useColumnOrder,
+} from "react-table";
 import Header from "./Header";
-import PlusIcon from "./img/Plus";
 import PropTypes from "prop-types";
-// import { cloneDeep } from "lodash";
-// import { useCellRangeSelection } from "react-table-plugins";
-import {addRows,deleteRows,updateCells,updateColumnOrder,} from "../store/table/tableThunk";
-// import { updateTableData } from "../store/table/tableSlice";
+import { cloneDeep } from "lodash";
+import { useCellRangeSelection } from "react-table-plugins";
+import { FixedSizeList } from "react-window";
+import InfiniteLoader from "react-window-infinite-loader";
+import {
+  deleteRows,
+} from "../store/table/tableThunk";
+import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
-import { useDispatch,useSelector } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
-import 'simplebar-react/dist/simplebar.min.css';
-import SimpleBar from 'simplebar-react';
 import Preview from "./Preview";
-import DraggableHeader from "./DraggableHeader";
-import { getTableInfo } from "../store/table/tableSelector";
+import Cell from "./Cell";
+import { TableHeader } from "./TableHeader";
 
 const ScrollingComponent = withScrolling("div");
+
 const defaultColumn = {
   minWidth: 50,
   width: 150,
   maxWidth: 400,
   Cell: Cell,
+  // Cell: EditableCell,
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:pageNo }) => {
-  const handleCopy = (event, value) => {
-    event.clipboardData.setData("text/plain", value);
-    event.preventDefault();
-    document.execCommand("copy");
-  };
-  const dispatch = useDispatch();
-  const handlePaste = (event, row, cell) => {
-    event.preventDefault();
-    const text = event.clipboardData.getData("text/plain");
-    dispatch(
-      updateCells({
-        columnId: cell.column.id,
-        rowIndex: cell.row.original.id,
-        value: text,
-      })
-    );
-  };
+// export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 
-  
+const  Table = memo ( ({updateMyData,isNextPageLoading, columns, data, dispatch: dataDispatch,update,hasNextPage }) => {
 
-  const tableInfo=useSelector((state)=>getTableInfo(state));
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -74,85 +65,136 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    rows,
     prepareRow,
     selectedFlatRows,
-    page,
-    canPreviousPage,
-    nextPage,
-    previousPage,
-    gotoPage,
-    state: { pageIndex  },
+    // state: { selectedCellIds },
     state: { selectedCellIds, currentSelectedCellIds },
+
+    totalColumnsWidth
   } = useTable(
     {
       columns,
       data,
       defaultColumn,
       dataDispatch,
+      updateMyData,
       sortTypes,
       cellIdSplitBy: "_",
       initialState: {
         selectedCellIds: {},
         columnOrder: columns,
-        pageSize : 100,
-        pageIndex :pageNo - 1
       },
     },
+    useCellRangeSelection,
     useFlexLayout,
     useResizeColumns,
     useSortBy,
-    useColumnOrder,
-    usePagination,
-    useRowSelect
+    useRowSelect,
+    useColumnOrder
   );
- 
-
-  const reoder = useCallback(
-    (item, newIndex) => {
-      const newOrder = Array.from(columns);
-      const { index: currentIndex } = item;
-      const [removedColumn] = newOrder.splice(currentIndex, 1);
-      newOrder.splice(newIndex, 0, removedColumn);
-      dispatch(
-        updateColumnOrder({
-          columns: newOrder,
-          id: item?.id,
-          oldIndex:item.index - 1 ,
-          newIndex : newIndex  - 1
-        })
-      );
-      //call redux make thunk and reducer pass new column order and update
-    },
-    [columns]
-  );
-  // useEffect(() => {
-  //   if (Object.keys(selectedCellIds).length > 1) {
-  //     const newData = cloneDeep(data);
-  //     const firstValue = Object.keys(selectedCellIds)[0].split("_");
-  //     const newValueToReplace = newData[firstValue[1]][firstValue[0]];
-  //     {
-  //       selectedCellIds >= 1 &&
-  //         Object.keys(selectedCellIds)?.forEach((key, i) => {
-  //           const keyName = key.split("_")[0];
-  //           const index = key.split("_")[1];
-  //           if (i === 0 || firstValue[0] != keyName) return;
-  //           newData[index][keyName] = newValueToReplace;
-  //         });
-  //     }
-  //     dataDispatch(updateTableData(newData));
-  //   }
-  // }, [selectedCellIds]);
+  
   let cellsSelected = { ...currentSelectedCellIds, ...selectedCellIds };
-  function isTableResizing() {
-    for (let headerGroup of headerGroups) {
-      for (let column of headerGroup.headers) {
-        if (column.isResizing) {
-          return true;
-        }
+
+  useEffect(() => {
+    if (Object.keys(selectedCellIds).length > 0) {
+      const newData = cloneDeep(data);
+      const firstValue = Object.keys(selectedCellIds)[0].split("_");
+      const newValueToReplace = newData[firstValue[1]][firstValue[0]];
+      {
+        selectedCellIds >= 1 &&
+          Object.keys(selectedCellIds)?.forEach((key, i) => {
+            const keyName = key.split("_")[0];
+            const index = key.split("_")[1];
+            if (i === 0 || firstValue[0] != keyName) return;
+            newData[index][keyName] = newValueToReplace;
+          });
       }
+      dataDispatch(updateTableData(newData));
     }
-    return false;
-  }
+  }, [selectedCellIds]);
+
+  const itemCount = hasNextPage ? rows.length + 1 : rows.length;
+  const loadMoreItems = isNextPageLoading ? () => {} : update;
+  const isItemLoaded = useCallback(
+    (index) => !hasNextPage || index < rows.length,
+    [hasNextPage, rows]
+  );
+  const handleCopy = (event, value) => {
+    event.clipboardData.setData("text/plain", value);
+    event.preventDefault();
+    document.execCommand("copy");
+  };
+  const handlePaste = (event,
+    //  row, cell
+     ) => {
+    event.preventDefault();
+    const text = event.clipboardData.getData("text/plain");
+    console.log('text',text)
+    // dispatch(
+    //   updateCells({
+    //     columnId: cell.column.id,
+    //     rowIndex: cell.row.original.id,
+    //     value: text,
+    //   })
+    // );
+  };
+  const RenderRow = React.useCallback(
+    (rows) => ({ index, style }) => {
+      if (!isItemLoaded(index))
+        return (
+          <div className="tr">
+            <div className="td">Loading</div>
+          </div>
+        );
+      const row = rows[index];
+      prepareRow(row);
+      const { style: rowStyle, ...restRow } = row.getRowProps({ style });
+      return (
+        <div
+          {...restRow}
+          style=
+            {
+              row.isSelected ?
+               { ...rowStyle, backgroundColor: '#e0edf2', width: totalColumnsWidth  } : {
+                ...rowStyle, backgroundColor: 'transparent', width: totalColumnsWidth 
+              }
+            }
+            key={index}
+            className={`tr ${index}`}
+            id={`table-row-${index}`}
+        >
+          {row.cells.map((cell, key) => {
+            return (
+              <div key={key}
+              {...cell.getCellProps(
+                {
+                  onCopy: event => handleCopy(event, cell.value),
+                  onPaste: event => handlePaste(event, index, cell)
+                }
+              )}
+              style=
+              {
+                cellsSelected[cell.id]
+                  ? {
+                    ...cell.getCellProps().style,
+                    // backgroundColor: '#6beba80'
+                    userSelect: 'none', flex: 'none',
+                  }
+                  : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '30px' }
+              }
+              // {...cell.getCellProps()}    
+                            className="td">
+                {cell.render("Cell")}
+              </div>
+            );
+          })}
+        </div>
+      );
+    },
+    [prepareRow, isItemLoaded, totalColumnsWidth]
+  );
+
   return (
     <>
       {selectedFlatRows?.length > 0 && (
@@ -165,128 +207,58 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           delete selected rows
         </Button>
       )}
-
-      <DndProvider backend={HTML5Backend} >
-        <ScrollingComponent style={{ overflow:"hidden", height:"100%"}} key={headerGroups[0].headers.length}>
-          <div
-            {...getTableProps()}
-            className={clsx("table", isTableResizing() && "noselect")}
-            style={{}}
+      <DndProvider backend={HTML5Backend}>
+        <ScrollingComponent style={{ overflow:"hidden", maxHeight: 450,minHeight: 350 }}>
+          <TableHeader
+          getTableProps={getTableProps}
+          headerGroups ={headerGroups}
+          columns={columns}
+          />
+          <div 
+        style={{
+          widht :"auto",
+        height: "100vh",
+        overflowX: "hidden",
+      }}
+      id="scrollableDiv">sfsdfsddsd
+         <InfiniteLoader
+            isItemLoaded={isItemLoaded}
+            itemCount={itemCount}
+            loadMoreItems={loadMoreItems}
           >
-            <div className="calculate">
-              <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
-                {
-                  headerGroups[0].headers?.map((column, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        {/* {  column.render("Header")} */}
-                        <DraggableHeader
-                          reoder={reoder}
-                          // key={column.id}
-                          columns={column}
-                          index={index}
-                        />
-                      </React.Fragment>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
-          <SimpleBar id="scrollableDiv" style={{
-        // width: "98vw",
-        // 45px height replaced by hesder height
-        height: "calc(100% - 45px)",
-        overflowX: "hidden" 
-      }}>
-        <table>
-          <tbody {...getTableBodyProps()} >
-            {page?.map((row, rowIndex) => {
-              prepareRow(row);
-              return (
-                <tr key={rowIndex} {...row.getRowProps()} className={`tr ${rowIndex}`}
-                  style=
-                  {
-                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#E0EDF2' } : {
-                      ...row.getRowProps().style, backgroundColor: 'transparent'
-                    }
-                  }>
-                  {row.cells.map((cell, columnIndex) => {
-                    return (
-                      <td key={columnIndex}
-                        // {...cell.getCellRangeSelectionProps()}
-                        {...cell.getCellProps(
-                          {
-                            onCopy: event => handleCopy(event, cell.value),
-                            onPaste: event => handlePaste(event, rowIndex, cell)
-                          }
-                        )}
-                        style=
-                        {
-                          cellsSelected[cell.id]
-                            ? {
-                              ...cell.getCellProps().style,
-                              // backgroundColor: '#6beba80'
-                              userSelect: 'none', flex: 'none',
-                            }
-                            : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '30px' }
-                        }
-                        className='td'>
-                        {cell.render("Cell")}
-                      </td>
-                    )
-                  })}
-                </tr>
-              );
-            })}
-          {  pageIndex ==0 && <tr className='tr add-row'
-              onClick={() => dataDispatch(addRows({ type: "add_row" }))}
-            >
-              <td colSpan={headerGroups[0].headers.length}>
-              <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
-                <PlusIcon />
-              </span>
-              New
-              </td>
-            </tr>}
-          </tbody>
-          </table>
-        </SimpleBar>
+            {({ onItemsRendered, ref }) => (
+              <FixedSizeList
+                height={500}
+                itemCount={rows.length}
+                itemSize={35}
+                width={800}
+                onItemsRendered={onItemsRendered}
+                ref={ref}
+                innerElementType={({ children, style, ...rest }) => (
+                  <>
+                    <div style={{ position: "relative" }} className="body">
+                      <div {...getTableBodyProps()} {...rest} style={style}>
+                        {children}
+                      </div>
+                    </div>
+                  </>
+                )}
+              >
+                {RenderRow(rows)}
+              </FixedSizeList>
+            )}
+          </InfiniteLoader>
+     
+        </div>
         </ScrollingComponent>
-        
         <Preview />
       </DndProvider>
-
-      <div className="pagination"  style={{marginTop:"3vh",position:"fixed", left: '50%'}}>
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {"home"}
-        </button>
-        {" "}
-      
-        <button disabled={tableInfo.isMoreData == false  &&  pageIndex+1 == pageNo } onClick={() => {
-          
-          if(   parseInt(data?.length / 100, 10)  > pageIndex+1){
-            nextPage()
-          }
-          else{
-            update(pageIndex) 
-          }
-          }}>
-          {"previous"}
-        </button>{" "}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {"next"}
-        </button>{" "}
-          {/* {">>"} */}
-        <span>
-        
-        </span>
-      </div>
-     
     </>
   );
 })
 Table.displayName  = 'Table'
 export default Table
+
 Table.propTypes = {
   columns: PropTypes.any,
   hasMore:PropTypes.any,
@@ -294,6 +266,9 @@ Table.propTypes = {
   data: PropTypes.any,
   dispatch: PropTypes.any,
   skipReset: PropTypes.any,
+  // columns:PropTypes.any,
+  // data:PropTypes.any,
+  // dispatch:PropTypes.any,
+  // skipReset:PropTypes.any,
   setColumns: PropTypes.func,
-  page:PropTypes.number,
 };

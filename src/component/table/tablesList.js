@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
+import MainTables from '../../table2/mainTable';
 import { createTable1 } from '../../store/allTable/allTableThunk';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
@@ -186,6 +187,9 @@ export default function TablesList({ dbData }) {
        { isTableLoading  ? <CircularProgress /> :  <><MainTable setPage ={setPage}  page = {page} />
        
        </>  }
+       { isTableLoading  ? <CircularProgress /> :  <><MainTables setPage ={setPage}  page = {page} />
+       
+       </>}
 
     </>
   );

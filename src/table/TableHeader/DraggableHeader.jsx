@@ -4,7 +4,7 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import ItemTypes from "../ItemTypes";
 import PropTypes from "prop-types";
 
-function DraggableHeader({ columns, index, reoder, key }) {
+function DraggableHeader({ columns, index, reoder }) {
   const dropRef = React.useRef(null);
   const dragRef = React.useRef(null);
   const { id, label } = columns;
@@ -32,7 +32,6 @@ function DraggableHeader({ columns, index, reoder, key }) {
   return (
     <div
       className="td bg-white border-radius-md"
-      key={key}
       {...columns.getHeaderProps()}
       ref={isNotNumber ? dropRef : null}
     >
