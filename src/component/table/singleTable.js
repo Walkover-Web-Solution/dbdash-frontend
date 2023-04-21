@@ -6,7 +6,7 @@ import Dropdown from '../dropdown';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate} from 'react-router-dom';
-import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
+import { removeTableThunk, renameTableThunk } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 // import { selectOrgandDb } from "../../store/database/databaseSelector";
 // import { uploadCSV } from '../../api/rowApi';
@@ -48,14 +48,14 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     const data1 = {
       newTableName: tableNa || table[0]
     };
-    dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
+    dispatch(renameTableThunk({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
 
   const deleteTableName = async (tableid) => {
 
     if(Object.keys(dbData?.db?.tables).length >=2){
-      dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
+      dispatch(removeTableThunk({ "dbId": dbData?.db?._id, "tableid": tableid }));
     } 
 
     const previousIndex = value - 1;

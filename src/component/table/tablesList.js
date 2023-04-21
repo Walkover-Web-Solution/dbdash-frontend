@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import MainTable from '../../table/mainTable';
-import { createTable1 } from '../../store/allTable/allTableThunk';
+import { createTableThunk } from '../../store/allTable/allTableThunk';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {deleteFilter} from "../../api/filterApi"
 import { setTableLoading } from '../../store/table/tableSlice';
@@ -55,7 +55,7 @@ export default function TablesList({ dbData }) {
     }
     setOpen(false);
 
-    dispatch(createTable1({ "dbId": dbData?.db?._id, "data": data }));
+    dispatch(createTableThunk({ "dbId": dbData?.db?._id, "data": data }));
   };
 
 

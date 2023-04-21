@@ -1,4 +1,4 @@
-import { createTable1,updateTable1,getTable1, removeTable1 } from './allTableThunk';
+import { createTableThunk,renameTableThunk,getAllTableThunk, removeTableThunk } from './allTableThunk';
 export const initialState = {
   dbId  : "",
   tables : {},
@@ -14,58 +14,58 @@ export const reducers = {
 };
 export function extraReducers(builder) {
      builder
-     .addCase(createTable1.pending, (state) => {
+     .addCase(createTableThunk.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(createTable1.fulfilled, (state,action) => {
+    .addCase(createTableThunk.fulfilled, (state,action) => {
       if (action.payload) {
       state.tables = action.payload;
       }
       state.status = "succeeded";
     })
-    .addCase(createTable1.rejected, (state) => {
+    .addCase(createTableThunk.rejected, (state) => {
       state.status = "failed";
     })
 
-    .addCase(getTable1.pending, (state) => {
+    .addCase(getAllTableThunk.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(getTable1.fulfilled, (state, action) => {
+      .addCase(getAllTableThunk.fulfilled, (state, action) => {
         if (action.payload) {
           state.tables = action.payload.tables;
           state.dbId = action.payload._id
         }
         state.status = "succeeded";
       })
-      .addCase(getTable1.rejected, (state) => {
+      .addCase(getAllTableThunk.rejected, (state) => {
         state.status = "failed";
       })
 
 
-      .addCase(updateTable1.pending, (state) => {
+      .addCase(renameTableThunk.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(updateTable1.fulfilled, (state,action) => {
+      .addCase(renameTableThunk.fulfilled, (state,action) => {
         if (action.payload) {
           state.tables = action.payload;
           }
         state.status = "succeeded";
       })
-      .addCase(updateTable1.rejected, (state) => {
+      .addCase(renameTableThunk.rejected, (state) => {
         state.status = "failed";
       })
 
       
-      .addCase(removeTable1.pending, (state) => {
+      .addCase(removeTableThunk.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(removeTable1.fulfilled, (state,action) => {
+      .addCase(removeTableThunk.fulfilled, (state,action) => {
         if (action.payload) {
           state.tables = action.payload;
           }
         state.status = "succeeded";
       })
-      .addCase(removeTable1.rejected, (state) => {
+      .addCase(removeTableThunk.rejected, (state) => {
         state.status = "failed";
       })
   }
