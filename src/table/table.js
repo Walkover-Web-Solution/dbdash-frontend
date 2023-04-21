@@ -203,9 +203,8 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
             </div>
           </thead>
           
-         
-      
-          <tbody className={clsx("table", isTableResizing() && "noselect")} {...getTableBodyProps()} >
+        
+          <tbody {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
               return (
