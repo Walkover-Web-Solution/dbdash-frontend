@@ -262,21 +262,22 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         </button>
         {" "}
       
+        
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {"previous"}
+        </button>{" "}
         <button disabled={tableInfo.isMoreData == false  &&  pageIndex+1 == pageNo } onClick={() => {
           
           if(   parseInt(data?.length / 100, 10)  > pageIndex+1){
             nextPage()
           }
           else{
+
             update(pageIndex) 
           }
           }}>
-          {"previous"}
-        </button>{" "}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"next"}
         </button>{" "}
-          {/* {">>"} */}
         <span>
         
         </span>
