@@ -118,6 +118,7 @@ export default function TablesList({ dbData }) {
       <Box sx={{ width: "100%", display: "flex", height: "50px" , overflow: 'hidden',position: "sticky"}}>
         <Box sx={{ display: 'flex', overflow: 'hidden', width: "100%", height: "auto" }} >
           <Tabs
+
             value={value}
             onChange={handleChange}
             variant="scrollable"
@@ -145,7 +146,7 @@ export default function TablesList({ dbData }) {
         {AllTableInfo[params?.tableName]?.filters &&
           Object.entries(AllTableInfo[params?.tableName]?.filters).map((filter, index) => (
             <Box key={index}   sx={{mt:2,ml:1}}>
-              <Box sx={{ backgroundColor: "#4B4E5A", height: 30, width: 120, display: "flex", gap: "10px", alignItems: "center", justifyContent: "center",color:"#fff", borderRadius:3,p:1}}
+              <Box sx={{'&:hover':{cursor:"pointer"}, backgroundColor: "#4B4E5A", height: 30, width: 120, display: "flex", gap: "10px", alignItems: "center", justifyContent: "center",color:"#fff", borderRadius:3,p:1}}
                 onClick={() => {
                   onFilterClicked(filter[1].query, filter[0]);
                 }}
@@ -154,7 +155,7 @@ export default function TablesList({ dbData }) {
               >
                 {filter[1]?.filterName}
                 <IconButton onClick={(e)=>handleClick(e)}>
-                  <MoreVertIcon sx={{ color: "#fff" }}/>
+                  <MoreVertIcon sx={{'&:hover':{color:"grey"}, color: "#fff" }}/>
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}

@@ -167,7 +167,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
       )}
 
       <DndProvider backend={HTML5Backend} >
-        <ScrollingComponent style={{ overflowY:"scroll", height:"100%"}} key={headerGroups[0].headers.length}>
+        <ScrollingComponent style={{display:"flex", overflowY:"scroll", height:"100%",width:"97vw"}} key={headerGroups[0].headers.length}>
         {/* <SimpleBar id="scrollableDiv" style={{
         // width: "98vw",
         // 45px height replaced by hesder height
@@ -175,14 +175,16 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         overflowX: "hidden" ,
    
       }}> */}
-          <table>
+          <table  >
           <thead
+        
+         
             {...getTableProps()}
             className={clsx("table", isTableResizing() && "noselect")}
             
           >
             <div className="calculate">
-              <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
+              <div style={{}} {...headerGroups[0].getHeaderGroupProps()} className="tr">
                 {
                   headerGroups[0].headers?.map((column, index) => {
                     return (
@@ -203,7 +205,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           
          
       
-          <tbody  {...getTableBodyProps()} >
+          <tbody className={clsx("table", isTableResizing() && "noselect")} {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
               return (
@@ -262,7 +264,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         <Preview />
       </DndProvider>
 
-      <div className="pagination"  style={{marginTop:"5vh",position:"fixed", left: '45%'}}>
+      <div className="pagination"  style={{marginTop:"2.5vh",position:"fixed", left: '45%'}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"home"}
         </button>
