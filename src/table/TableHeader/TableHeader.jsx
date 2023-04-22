@@ -17,18 +17,18 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
     }
     return false;
   }
-  console.log("headerGroupsheaderGroups",isTableResizing(), headerGroups);
-
-console.log('isTableResizing()',)
   const reoder = useCallback(
     (item, newIndex) => {
       const newOrder = Array.from(columns);
+      const { index: currentIndex } = item;
+      const [removedColumn] = newOrder.splice(currentIndex, 1);
+      newOrder.splice(newIndex, 0, removedColumn);
       dispatch(
         updateColumnOrder({
-          columns:  newOrder.splice(newIndex, 0, newOrder.splice(item.index, 1)[0]),
+          columns: newOrder,
           id: item?.id,
-          oldIndex: item.index - 1,
-          newIndex: newIndex - 1,
+          oldIndex:item.index - 1 ,
+          newIndex : newIndex  - 1
         })
       );
       //call redux make thunk and reducer pass new column order and update
@@ -37,23 +37,14 @@ console.log('isTableResizing()',)
   );
 
   return (
-    <div
-      {...getTableProps()}
-      className={clsx("table", isTableResizing() && "noselect")}
-    >
+    <div {...getTableProps()}  className={clsx("table", isTableResizing() && "noselect")}>
       <div className="calculate">
         <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
-          {headerGroups[0].headers?.map((column, index) => {
-            return (
-              <React.Fragment key={index}>
-                <DraggableHeader
-                  reoder={reoder}
-                  columns={column}
-                  index={index}
-                />
-              </React.Fragment>
-            );
-          })}
+          {headerGroups[0].headers?.map((column, index) => (
+            <React.Fragment key={index}>
+              <DraggableHeader reoder={reoder} columns={column} index={index} />
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </div>
