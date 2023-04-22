@@ -83,11 +83,12 @@ export default function ShareOrgModal(props) {
     </Box>
     <Box >
     {Object.values(props.org.users).map((user) => {
+      {console.log(user.user_id.first_name + " " + user.user_id.last_name)}
   if (user.user_id._id !== userId || user.user_type !== "admin") {
     return (
       <Box key={user.user_id.email} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <Box sx={{ m: 1 }}>
-          <Typography>{user.user_id.email}</Typography>
+          <Typography>{user.user_id.first_name + ' ' + user.user_id.last_name}</Typography>
         </Box>
         <Box sx={{ alignItems: "center" }}>
           <IconButton aria-label="delete" onClick={() => handleRemoveUser(user.user_id.email)}>
