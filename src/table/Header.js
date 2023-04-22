@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 import { getTableInfo } from "../store/table/tableSelector";
-import FieldPopupModal from "./fieldPopupModal";
+import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import {getQueryByAi} from "../api/fieldApi"
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';

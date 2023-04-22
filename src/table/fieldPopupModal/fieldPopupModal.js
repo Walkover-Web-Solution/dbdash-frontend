@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Autosuggest from "react-autosuggest";
-import { Paper, Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Box, Switch } from '@mui/material';
-import { useSelector } from 'react-redux';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { getAllTableInfo } from '../store/allTable/allTableSelector';
+import { Paper, Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Box, Switch,FormGroup,FormControlLabel } from '@mui/material';
 import Joi from 'joi';
+import LinkDataType from './fieldDataType/linkDatatype.js';
+import Autosuggest from "react-autosuggest";
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -20,6 +18,8 @@ import PersonPinIcon from '@mui/icons-material/PersonPin';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import PropTypes from 'prop-types';
+import LoookupDataType from './fieldDataType/loookupDataType.js';
 
 export default function FieldPopupModal(props) {
  
@@ -27,19 +27,18 @@ export default function FieldPopupModal(props) {
   const [openn, setOpenn] = useState(false);
   const [userQuery,setUserQuery] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const [lookupField, setLookupField] = useState(false)
-  const [openViewDropdown,setOpenViewDropdown] = useState(false)
-  const [openLinkedField,setOpenLinkedField] = useState(false)
+  const [showLinkField, setShowLinkField] = useState(false)
+  // const [openViewDropdown,setOpenViewDropdown] = useState(false)
+  const [showLookupField,setShowLookupField] = useState(false)
   const [searchValue, setsearchValue] = useState([]);
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [errors, setErrors] = useState({});
   const [showNumericOptions, setShowNumericOptions] = useState(false);
   const [showDecimalOptions , setShowDecimalOptions] = useState(false);
+  const [queryResult,setQueryResult] = useState(false)
   const params = useParams();
 
-
-  
   useEffect(() => {
     if (AllTableInfo?.tables[params?.tableName] && searchValue.length == 0) {
 
@@ -48,15 +47,12 @@ export default function FieldPopupModal(props) {
     }
   }, [AllTableInfo])
 
- 
-
   const schema = Joi.object({
     fieldName: Joi.string().min(1).max(15).pattern(/^\S+$/).messages({
       'string.pattern.base': 'Field name should not contain spaces',
     }).required(),
   });
   
-  const [queryResult,setQueryResult] = useState(false)
   useEffect(()=>{
     var query  = props?.queryByAi
     try {
@@ -94,41 +90,33 @@ export default function FieldPopupModal(props) {
   }
 
   const handleSelectChange = (event) => {
-    setOpenViewDropdown(false)
-    setLookupField(false)
+    // setOpenViewDropdown(false)
+    setShowLinkField(false)
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
     setOpenn(false);
-    setLookupField(false)
     setShowSwitch(false)
-    props?.setShowFieldsDropdown(false)
+    // props?.setShowUniqueFieldsDropdown(false)
     props?.setSelectedFieldName(false)
-    setOpenLinkedField(false)
+    setShowLookupField(false)
     const data1 = props?.metaData;
      delete data1["unique"];
       props?.setMetaData(data1);
     if (event.target.value == "formula") {
       setOpenn(true)
-      setOpenLinkedField(false);
+      setShowLookupField(false);
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
-      setLookupField(true)
-      setOpenLinkedField(false);
-      props?.setShowFieldsDropdown(true);
+      setShowLinkField(true)
+      setShowLookupField(false);
+      // props?.setShowUniqueFieldsDropdown(true);
       props?.setSelectValue(event.target.value);
       const firstTable = Object.keys(AllTableInfo.tables)[0];
       props?.setSelectedTable(firstTable);
-      const firstField = Object.entries(
-        AllTableInfo.tables[firstTable].fields
-      ).find(([, field]) => field?.metaData?.unique)?.[0];
-      props?.setSelectedFieldName(firstField);
-      props?.setLinkedValueName({
-        [firstTable]: AllTableInfo.tables[firstTable].fields[0],
-      });
     }
     else if(event.target.value == "lookup"){
-      setOpenLinkedField(true)
+      setShowLookupField(true)
       props?.setSelectValue(event.target.value);
       const first = Object.entries(AllTableInfo?.tables[props?.tableId].fields)
       .find(([,field]) => field?.metaData?.foreignKey?.fieldName);
@@ -139,7 +127,7 @@ export default function FieldPopupModal(props) {
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
       setShowNumericOptions(true);
-      setOpenLinkedField(false)
+      setShowLookupField(false)
     }
     else if (event.target.value === 'integer') {
       props?.setSelectValue('numeric')
@@ -158,36 +146,36 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
-      setOpenLinkedField(false);
+      setShowLookupField(false);
     } else if (event.target.value === 'checkbox') {
       props?.setSelectValue('checkbox')
-      setOpenLinkedField(false);
+      setShowLookupField(false);
     } 
     else if(event.target.value === "singlelinetext" || event.target.value === "longtext" ){
         setShowSwitch(true);
         props?.setSelectValue(event.target.value);
     }
     else {
-      props?.setShowFieldsDropdown(false)
+      // props?.setShowUniqueFieldsDropdown(false)
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
       setShowNumericOptions(false);
       setShowDecimalOptions(false);
-      setLookupField(false)
+      setShowLinkField(false)
       setOpenn(false)
-      setOpenLinkedField(false);
+      setShowLookupField(false);
     }
   }
 
   const handleClose = () => {
     setShowSwitch(true);
-    setOpenLinkedField(false);
-    setLookupField(false);
+    setShowLookupField(false);
+    setShowLinkField(false);
     props?.setOpen(false);
     setOpenn(false);
-    setLookupField(false)
+    setShowLinkField(false)
     setUserQuery(false)
-    props?.setShowFieldsDropdown(false)
+    // props?.setShowUniqueFieldsDropdown(false)
     props?.setSelectedFieldName(false)
     props?.setSelectValue("longtext");
     props?.setTextValue("");
@@ -327,6 +315,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
  
           </Select>
+
           {showNumericOptions && (
               <Select
                 labelId="numeric-select-label"
@@ -399,126 +388,11 @@ export default function FieldPopupModal(props) {
 
             )
           }
-{lookupField && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 ?(
-  <Select
-    labelId="select-label"
-    id="select"
-    value={props?.selectedTable}
-    onChange={(event) => {
-      props?.setSelectedTable(event.target.value);
-      props?.setShowFieldsDropdown(true)
-    }}
-    defaultValue={props?.selectedTable}
-    displayEmpty
-    sx={{
-      margin: 1,
-      minWidth: 120,
-    }}
-  >
-    {Object.entries(AllTableInfo.tables).map((table, index) => (
-      <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
-    ))}
-  </Select>
-):(lookupField && <span style={{color:'red'}}>No unique Keys here</span>)}
-          {/* show fields that are unique  */}
- {props?.showFieldsDropdown &&    AllTableInfo.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
-      .filter((fields) => fields[1]?.metaData?.unique)
-      .length > 0   ? 
-(<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedFieldName}
-            defaultValue={Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
-              .filter((fields) => fields[1]?.metaData?.unique)[0][0]}
-            
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
-          >
-            {
-           Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
-                if (fields[1]?.metaData?.unique || fields[1].fieldType == "id")  {
-                  return fields;
-                }
-              })
-                .map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-              }
-          </Select>
-          ):(
-            props?.showFieldsDropdown && <Typography sx={{color:"red"}}>No unique key</Typography>
 
-          )
-          } 
-         
 
-{openLinkedField && Object.entries(AllTableInfo?.tables[props?.tableId].fields)
-  .filter((fields) => fields[1]?.metaData?.foreignKey?.fieldId)
-  .length==0 && <span style={{color:'red'}}>Create Foreign key first.</span> }
-    {openLinkedField && Object.entries(AllTableInfo?.tables[props?.tableId].fields)
-  .filter((fields) => fields[1]?.metaData?.foreignKey?.fieldId)
-  .length > 0 && (<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedFieldName}
-            displayEmpty
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) =>{ 
-              props?.setLinkedValueName({
-                [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
-              })
-              props?.setSelectedTable(AllTableInfo?.tables[props?.tableId].fields[e.target.value]?.metaData?.foreignKey?.tableId) ; 
-              setOpenViewDropdown(true)}}
-          >
-            {
-              Object.entries(AllTableInfo?.tables[props?.tableId].fields)?.filter((fields) => {
-                if (fields[1]?.metaData?.foreignKey?.fieldId) {
-                  props?.setSelectedFieldName(fields[1]?.metaData?.foreignKey?.fieldId)
-                  return fields;
-
-                }
-              })
-                .map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-            }
-          </Select>
-          )}
-          
-          {openViewDropdown && (<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedFieldName}
-            defaultValue="fields"
-            displayEmpty
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
-          >
-            {
-             AllTableInfo.tables[props?.selectedTable]?.fields &&  Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-            }
-          </Select>
-          )}
+{ showLinkField  && <LinkDataType selectedFieldName = {props?.selectedFieldName}  setSelectedFieldName = {props?.setSelectedFieldName}  setSelectedTable = {props.setSelectedTable} selectedTable={props.selectedTable}/>}
+  
+ {showLookupField && <LoookupDataType linkedValueName={props?.linkedValueName} setLinkedValueName={props?.setLinkedValueName} selectedFieldName = {props?.selectedFieldName}  setSelectedFieldName = {props?.setSelectedFieldName} setSelectedTable = {props.setSelectedTable} selectedTable={props.selectedTable} tableId={props.tableId}/>}
 
           {showSwitch && <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
@@ -545,9 +419,9 @@ FieldPopupModal.propTypes = {
   setQueryByAi: PropTypes.func,
   setMetaData: PropTypes.func,
   metaData: PropTypes.any,
-  setShowFieldsDropdown:PropTypes.func,
-  showFieldsDropdown:PropTypes.any,
-  setSelectedTable:PropTypes.func,
+  // setShowUniqueFieldsDropdown:PropTypes.func,
+  // showUniqueFieldsDropdown:PropTypes.any,
+  setSelectedTable:PropTypes.any,
   selectedTable:PropTypes.any,
   selectedFieldName:PropTypes.any,
   setSelectedFieldName:PropTypes.func,
