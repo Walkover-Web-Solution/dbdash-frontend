@@ -166,7 +166,7 @@ export default function FieldPopupModal(props) {
       setShowLookupField(false);
     }
   }
-
+console.log(6);
   const handleClose = () => {
     setShowSwitch(true);
     setShowLookupField(false);
