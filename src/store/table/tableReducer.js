@@ -1,6 +1,7 @@
 // import { current } from '@reduxjs/toolkit';
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
+// import { current } from '@reduxjs/toolkit';
 
 export const initialState = {
   columns: [],
@@ -345,7 +346,7 @@ export function extraReducers(builder) {
         state.dbId = action.payload.dbId
         state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
         state.isMoreData  = action.payload.isMoreData
-        state.page = 100;
+        // state.page = 100;
       }
       state.status = "succeeded";
 
@@ -447,7 +448,7 @@ export function extraReducers(builder) {
       state.status = "loading"
     
     })
-    .addCase(addRows.fulfilled, (state,{payload}) => {
+    .addCase(addRows.fulfilled, (state ,{payload}) => {
       let arr = [...state.data]
       state.data = [...arr , payload]
       state.pageSize = state.pageSize + 1;

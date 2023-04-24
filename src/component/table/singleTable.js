@@ -43,13 +43,6 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     </Box>
   );
 
-  // const submitCSV = async()=>{
-  //   const data = {
-  //     csvfile:CSV
-  //   }
-  //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
-  //   console.log(csv)
-  // }
 
   const renameTableName = async (db_id, tableName) => {
     const data1 = {

@@ -10,23 +10,6 @@ export default function Dropdown(props) {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
 
-    // const [csvfile,setCsvFile] = useState(null)
-    //  const [, setDataType] = useState("")
-    // const [uploadCsvClicked, setUploadCsvClicked] = useState(false);
-    // console.log("csv",csvfile);
-    
-    // console.log("setcsv",setCsvFile);
-
-    // const onChangeFiles = (e, type) => {
-    //   console.log("in onchange file")
-    //   setDataType(type)
-    //   console.log(e.target.files[0])
-    // if (e.target.files[0] != null) {
-    //   setCsvFile(e.target.files[0])
-    //   }
-    //   e.target.value = null;
-    // };
-
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
