@@ -184,10 +184,11 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
             
           >
             <div className="calculate">
-              <div style={{}} {...headerGroups[0].getHeaderGroupProps()} className="tr">
+              <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
                 {
                   headerGroups[0].headers?.map((column, index) => {
                     return (
+                      <th key={index} >
                       <React.Fragment key={index}>
                         {/* {  column.render("Header")} */}
                         <DraggableHeader
@@ -197,6 +198,7 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                           index={index}
                         />
                       </React.Fragment>
+                      </th>
                     );
                   })}
               </div>
@@ -207,14 +209,16 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
           <tbody {...getTableBodyProps()} >
             {page?.map((row, rowIndex) => {
               prepareRow(row);
+            
               return (
-                <tr key={rowIndex} {...row.getRowProps()} className={`tr ${rowIndex}`}
+                <tr key={row.getRowProps().key}  role="row"  className={`tr ${rowIndex}`}
                   style=
                   {
-                    row.isSelected ? { ...row.getRowProps().style, backgroundColor: '#E0EDF2' } : {
-                      ...row.getRowProps().style, backgroundColor: 'transparent'
+                    row.isSelected ? {display: 'flex', flex: '1 0 auto',backgroundColor: '#E0EDF2'} : {
+                      display: 'flex', flex: '1 0 auto', backgroundColor: 'transparent'
                     }
                   }>
+                 
                   {row.cells.map((cell, columnIndex) => {
                     return (
                       <td key={columnIndex}
@@ -227,19 +231,21 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
                         )}
                         style=
                         {
+
                           cellsSelected[cell.id]
                             ? {
                               ...cell.getCellProps().style,
-                              // backgroundColor: '#6beba80'
+                            
                               userSelect: 'none', flex: 'none',
                             }
-                            : { ...cell.getCellProps().style, userSelect: 'none', flex: 'none', height: '35px' }
+                            : { ...cell.getCellProps().style,userSelect: 'none', flex: 'none', height: '35px' }
                         }
                         className='td'>
                         {cell.render("Cell")}
                       </td>
                     )
                   })}
+                 
                 </tr>
               );
             })}
@@ -262,13 +268,11 @@ const  Table = memo ( ({ columns, data, dispatch: dataDispatch,update ,page:page
         
         <Preview />
       </DndProvider>
-
       <div className="pagination"  style={{marginTop:"2.5vh",position:"fixed", left: '45%'}}>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"home"}
         </button>
         {" "}
-      
         
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"previous"}

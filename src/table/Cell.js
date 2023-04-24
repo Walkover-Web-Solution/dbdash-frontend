@@ -173,7 +173,8 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
     case "checkbox":
       element = (
         <input type="checkbox"
-          checked={value.value}
+         
+          
          
           onChange={() => {
             setValue(() => ({ value: !(value.value), update: true }))
@@ -297,6 +298,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
                 )}
                 <div
                   className='cursor-pointer'
+                  
                   style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
                   onClick={handleAddOption}>
                   <Relationship
@@ -316,7 +318,7 @@ const Cell =  memo ( ({ value: initialValue, row, column: { id, dataType, option
       break;
       case "check":
         element = (
-          <div {...row.getRowProps()} className="tr">
+          <div key={row.getRowProps().key} style={{display: 'flex', flex: '1 0 auto'}} className="tr">
            {!row.isSelected && <div className="count" title="Check">
               {row.index + 1}
             </div>}
