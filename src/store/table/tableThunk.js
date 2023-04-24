@@ -77,7 +77,7 @@ const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
           });
     }
     obj.map((row)=>{
-        row.createdby =   userJson?.[row.createdby] ?  userJson?.[row.createdby]?.first_name +" " + userJson?.[row.createdby]?.last_name : row.createdby;
+        row.createdby =   userJson?.[row.createdby] ? ( userJson?.[row.createdby]?.first_name +" " + userJson?.[row.createdby]?.last_name ): row.createdby;
     })
     const dataAndPageNo = {}
     if(tableInfo.tableId== tableName && tableInfo.pageNo < page)
