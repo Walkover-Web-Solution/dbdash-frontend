@@ -29,7 +29,7 @@ const ScrollingComponent = withScrolling("div");
 const defaultColumn = {
   minWidth: 50,
   width: 150,
-  maxWidth: 400,
+  maxWidth: 1000,
   Cell: Cell,
   Header: Header,
   sortType: "alphanumericFalsyLast",
