@@ -40,8 +40,8 @@ const  MainTable = memo ( ({page,setPage}) =>  {
         <div
           style={{
             padding: "6px 0px",
-            marginLeft: "4px",
-            backgroundColor:'#fff',
+            marginLeft: "4px"
+            
           }}
         >
           {columns?.length > 0 && 

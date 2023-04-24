@@ -129,17 +129,20 @@ const Table = memo(
           </Button>
         )}
         <DndProvider backend={HTML5Backend}>
-          <ScrollingComponent
-            style={{ display:"flex",overflowY:"scroll",height:"100%",width:"99vw"}}
+           <ScrollingComponent
+            style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"65vh",width:"99vw"}}
           >
-            <table>
+            <table >
               
             <TableHeader
               getTableProps={getTableProps}
               headerGroups={headerGroups}
               columns={columns}
+              
             />
+     
             <TableBody 
+            style={{backgroundColor:"white"}}
               getTableBodyProps={getTableBodyProps}
               rows={rows}
               hasNextPage={hasNextPage}
@@ -150,8 +153,11 @@ const Table = memo(
               update={update}
              
             />
+
+      
             
-             <div className='tr add-row'
+             
+            <div className='tr add-row'
           onClick={() => dataDispatch(addRows({ type: "add_row" }))}
         >
           <span className='svg-icon svg-gray' style={{ marginRight: 4,mt:0,p:0 }}>
@@ -159,9 +165,12 @@ const Table = memo(
           </span>
           New
         </div>
-          
             </table>
+            
           </ScrollingComponent>
+          
+         
+
           <Preview />
         </DndProvider>
       </>

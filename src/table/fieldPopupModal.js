@@ -59,11 +59,7 @@ export default function FieldPopupModal(props) {
   const schema = Joi.object({
     fieldName: Joi.string()
       .min(1)
-      .max(15)
-      .pattern(/^\S+$/)
-      .messages({
-        "string.pattern.base": "Field name should not contain spaces",
-      })
+      .max(30)
       .required(),
   });
 
@@ -293,7 +289,7 @@ export default function FieldPopupModal(props) {
           value={props.textValue}
           onChange={handleTextChange}
           onKeyDown={(e) => {
-            if (e.target.value.length >= 1 && e.target.value.length <= 15) {
+            if (e.target.value.length >= 1 && e.target.value.length <= 30) {
               if (e.key === "Enter") {
                 props.submitData(false);
                 // handleClose();
@@ -627,7 +623,7 @@ export default function FieldPopupModal(props) {
           disabled={
             errors.fieldName ||
             props?.textValue?.length < 1 ||
-            props?.textValue?.length > 20
+            props?.textValue?.length > 30
           }
         >
           Submit
