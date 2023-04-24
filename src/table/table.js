@@ -1,4 +1,3 @@
-
 import React, { useMemo, memo } from "react";
 import {
   useTable,
@@ -12,7 +11,7 @@ import Header from "./Header";
 import PropTypes from "prop-types";
 // import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from "react-table-plugins";
-import { deleteRows } from "../store/table/tableThunk";
+import { addRows, deleteRows } from "../store/table/tableThunk";
 // import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { DndProvider } from "react-dnd";
@@ -22,6 +21,8 @@ import Preview from "./Preview";
 import Cell from "./Cell";
 import { TableHeader } from "./TableHeader";
 import { TableBody } from "./TableBody";
+import PlusIcon from './img/Plus'
+
 
 const ScrollingComponent = withScrolling("div");
 
@@ -63,6 +64,7 @@ const Table = memo(
       }),
       []
     );
+
     const {
       getTableProps,
       getTableBodyProps,
@@ -93,6 +95,8 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
+
+   
 
     // useEffect(() => {
     //   if (Object.keys(selectedCellIds).length > 0) {
@@ -126,14 +130,16 @@ const Table = memo(
         )}
         <DndProvider backend={HTML5Backend}>
           <ScrollingComponent
-            style={{ overflow: "hidden", maxHeight: 450, minHeight: 350 }}
+            style={{ display:"flex",overflowY:"scroll",height:"100%",width:"99vw"}}
           >
+            <table>
+              
             <TableHeader
               getTableProps={getTableProps}
               headerGroups={headerGroups}
               columns={columns}
             />
-            <TableBody
+            <TableBody 
               getTableBodyProps={getTableBodyProps}
               rows={rows}
               hasNextPage={hasNextPage}
@@ -142,7 +148,19 @@ const Table = memo(
               prepareRow={prepareRow}
               cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds }}
               update={update}
+             
             />
+            
+             <div className='tr add-row'
+          onClick={() => dataDispatch(addRows({ type: "add_row" }))}
+        >
+          <span className='svg-icon svg-gray' style={{ marginRight: 4,mt:0,p:0 }}>
+            <PlusIcon />
+          </span>
+          New
+        </div>
+          
+            </table>
           </ScrollingComponent>
           <Preview />
         </DndProvider>
@@ -163,5 +181,4 @@ Table.propTypes = {
   setColumns: PropTypes.func,
   isNextPageLoading:PropTypes.bool,
   hasNextPage: PropTypes.func,
-
 };

@@ -382,7 +382,7 @@ const Cell = memo(
         break;
       case "check":
         element = (
-          <div {...row.getRowProps()} className="tr">
+          <div key={row.getRowProps().key} style={{display: 'flex', flex: '1 0 auto'}}  role="row"  className="tr">
             {!row.isSelected && (
               <div className="count" title="Check">
                 {row.index + 1}

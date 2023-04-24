@@ -27,9 +27,10 @@ const  MainTable = memo ( ({page,setPage}) =>  {
       style={{
         width: "fitcontent",
         
-        overflowX: "scroll",
+        // overflowX: "scroll",
         // Calculate the height of tab and button and replace with 130px
-        height:"calc(100% - 130px)",
+        // height:"calc(100% - 130px)",
+        overflowX:"hidden",
         overflowY:"hidden",
         marginTop: 20
       }}
@@ -38,10 +39,8 @@ const  MainTable = memo ( ({page,setPage}) =>  {
       <div style={{  display: "flex", width: "100vw", height:"100%"}}>
         <div
           style={{
-            padding: "1rem",
-            marginLeft: "15px",
-            marginRight: "30px",
-
+            padding: "6px 0px",
+            marginLeft: "4px",
             backgroundColor:'#fff',
           }}
         >

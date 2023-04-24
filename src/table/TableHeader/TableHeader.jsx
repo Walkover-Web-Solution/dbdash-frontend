@@ -5,6 +5,7 @@ import { updateColumnOrder } from "../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import clsx from "clsx";
 
+
 function TableHeader({ getTableProps, headerGroups, columns }) {
   const dispatch = useDispatch();
   function isTableResizing() {
@@ -23,6 +24,7 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
       const { index: currentIndex } = item;
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
+
       dispatch(
         updateColumnOrder({
           columns: newOrder,
@@ -37,17 +39,19 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
   );
 
   return (
-    <div {...getTableProps()}  className={clsx("table", isTableResizing() && "noselect")}>
+    <thead {...getTableProps()}  className={clsx("table", isTableResizing() && "noselect")}>
       <div className="calculate">
         <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
           {headerGroups[0].headers?.map((column, index) => (
+            <th key={index}>
             <React.Fragment key={index}>
               <DraggableHeader reoder={reoder} columns={column} index={index} />
             </React.Fragment>
+            </th>
           ))}
         </div>
       </div>
-    </div>
+    </thead>
   );
 }
 export default memo(TableHeader);
