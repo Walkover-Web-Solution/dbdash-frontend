@@ -315,7 +315,7 @@ export default function Header({
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
     case "numeric":
-      propertyIcon =(  metadata?.unique  ? <><TextIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
+      propertyIcon =(  metadata?.unique  ? <><HashIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /></>  :<HashIcon/>  );
       break;
     case "longtext":
       propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
