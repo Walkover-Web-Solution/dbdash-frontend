@@ -140,7 +140,7 @@ const Table = memo(
               columns={columns}
               
             />
-      <tbody>
+     
             <TableBody 
             style={{backgroundColor:"white"}}
               getTableBodyProps={getTableBodyProps}
@@ -153,7 +153,7 @@ const Table = memo(
               update={update}
              
             />
-            </tbody>
+
       
             
              

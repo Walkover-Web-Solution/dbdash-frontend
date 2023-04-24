@@ -101,6 +101,7 @@ import {updateCells } from "../../store/table/tableThunk";
                           ...cell.getCellProps().style,
                           userSelect: "none",
                           flex: "none",
+                          backgroundColor:"white"
                          
 
                         }
@@ -109,6 +110,7 @@ import {updateCells } from "../../store/table/tableThunk";
                           userSelect: "none",
                           flex: "none",
                           height: "35px",
+                          backgroundColor:"white"
                          
 
                         }
