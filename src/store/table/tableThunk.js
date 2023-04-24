@@ -77,7 +77,7 @@ const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
           });
     }
     obj.map((row)=>{
-        row.createdby =   userJson?.[row.createdby] ?  userJson?.[row.createdby]?.first_name +" " + userJson?.[row.createdby]?.last_name : row.createdby;
+        row.createdby =   userJson?.[row.createdby] ? ( userJson?.[row.createdby]?.first_name +" " + userJson?.[row.createdby]?.last_name ): row.createdby;
     })
     const dataAndPageNo = {}
     if(tableInfo.tableId== tableName && tableInfo.pageNo < page)
@@ -216,7 +216,6 @@ export const addColumnrightandleft = createAsyncThunk(
 export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async(payload,{dispatch,getState})=>{
-        console.log(payload)
         const data={
             fieldName:payload?.fieldName,
             fieldType:payload?.fieldType,
@@ -260,9 +259,7 @@ export const updateCells = createAsyncThunk(
 export const addRows = createAsyncThunk(
     "table/addRows",
     async(_,{getState})=>{
-        console.log(" in add rowss",getState)
         const {tableId, dbId} = getState().table
-        console.log(" in add rowss 2 ")
         const newRow = await insertRow(dbId,tableId);
         return newRow.data.data;
     }
