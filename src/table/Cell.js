@@ -77,9 +77,9 @@ const Cell = memo(
     useEffect(() => {
       if (
         value?.update &&
-        value.value != null &&
-        value.value !== initialValue &&
-        value.value.trim() !== ""
+        value?.value != null &&
+        value?.value !== initialValue &&
+        value?.value !== ""
       ) {
         dispatch(
           updateCells({
