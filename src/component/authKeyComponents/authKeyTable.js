@@ -1,36 +1,47 @@
-import React, { useEffect, useState} from "react";
-import {Table,TableBody,Box,Paper,TableRow,TableHead,TableContainer,TableCell} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell } from "@mui/material";
 import { PropTypes } from 'prop-types';
-import { getAuthkey,deleteAuthkey} from "../../api/authkeyApi";
+import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
 import { useSelector } from "react-redux";
-import { selectActiveUser } from "../../store/user/userSelector";
-// import { useNavigate, useParams } from "react-router-dom";
+import { allOrg } from "../../store/database/databaseSelector"
 export default function AuthKey(props) {
 
   const adminId = localStorage.getItem("userid");
-  const[authKeys,setAuthKeys] = useState(null)
-  const user=useSelector((state)=>selectActiveUser(state));
-  // const navigate = useNavigate();
+  const [authKeys, setAuthKeys] = useState(null)
+  const [createdBy, setCreatedBy] = useState(null)
+  const user = useSelector((state) => allOrg(state));
 
-  // const params = useParams();
-useEffect(  ()=>{
-    getAuthkeyFun()
-  },[])
+  useEffect(async() => {
+    const arrayofUser = await getAuthkeyFun();
+    setCreatedBy(arrayofUser)
 
-  async function getAuthkeyFun(){
-  const data = await getAuthkey(props.dbId,adminId) 
-  setAuthKeys(data?.data?.data)
+  }, [])
+
+  async function getAuthkeyFun() {
+    const data = await getAuthkey(props.dbId, adminId)
+    setAuthKeys(data?.data?.data)
+    var array = [];
+    Object.entries(Object.values(data?.data?.data))?.map((key) => {
+      user[0]?.users?.map((id) => {
+        if (id?.user_id?._id == key[1].user) {
+          array.push(id?.user_id?.first_name +  " "  + id?.user_id?.last_name)
+        }
+      })
+    });
+    
+    return array;
+
   }
 
-  async function deleteAuthkeyFun(authKey){
-    const data = await deleteAuthkey(props.dbId,adminId,authKey)
-    const dataa = await getAuthkey(props.dbId,adminId)
+  async function deleteAuthkeyFun(authKey) {
+    const data = await deleteAuthkey(props.dbId, adminId, authKey)
+    const dataa = await getAuthkey(props.dbId, adminId)
     setAuthKeys(dataa?.data?.data)
     return data;
   }
 
- 
+
   return (
     <>
       <Box sx={{ border: 1, m: 1, boxShadow: 10 }}>
@@ -49,24 +60,22 @@ useEffect(  ()=>{
               </TableRow>
             </TableHead>
             <TableBody>
-              {authKeys && Object.keys(authKeys).map((keys) => (
+              {authKeys && Object.keys(authKeys).map((keys,index) => (
                 <TableRow
                   key={keys}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {/* {keys} */}
                     {authKeys[keys].name}
                   </TableCell>
-                  {/* <TableCell>{authKeys[keys].access}</TableCell> */}
-                  {/* <TableCell>{authKeys[keys].scope}</TableCell> */}
-                  <TableCell>{user?.first_name}</TableCell>
+              
+                   {createdBy && <TableCell>{createdBy[index]}</TableCell>}
+                  
+                 
                   <TableCell>{authKeys[keys].createDate}</TableCell>
-                  <TableCell>     
+                  <TableCell>
                   <TableMenuDropdown authData={authKeys[keys]} first={"Edit"} second={"Delete"} third={"Show AuthKey"} title={keys} deleteFunction={deleteAuthkeyFun}/>
                   </TableCell>
-                  {/* first={"Edit"} */}
-            
                 </TableRow>
               ))}
             </TableBody>
@@ -76,6 +85,7 @@ useEffect(  ()=>{
     </>
   );
 }
+
 
 AuthKey.propTypes = {
   dbId: PropTypes.string

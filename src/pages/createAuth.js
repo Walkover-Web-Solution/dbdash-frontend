@@ -85,7 +85,7 @@ export default function CreateAuthKey() {
         <MainNavbar />
       </Box>
       <Box>
-        <AuthKeyHeader />
+        <AuthKeyHeader id={id}/>
       </Box>
       <Box sx={{ mt: 4, ml: 1, mr: 1, border: 2, minHeight: 50 }}>
         <Box sx={{ display: "grid", justifyContent: "center" }}>
