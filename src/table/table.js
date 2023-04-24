@@ -119,14 +119,17 @@ const Table = memo(
     return (
       <>
         {selectedFlatRows?.length > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button
-            sx={{ m: 2 }}
+          sx={{marginRight: 'auto',mb:2}}
             onClick={() => {
               dataDispatch(deleteRows(selectedFlatRows));
             }}
+            variant="contained"
           >
             delete selected rows
           </Button>
+          </div>
         )}
         <DndProvider backend={HTML5Backend}>
            <ScrollingComponent
@@ -142,7 +145,6 @@ const Table = memo(
             />
      
             <TableBody 
-            style={{backgroundColor:"white"}}
               getTableBodyProps={getTableBodyProps}
               rows={rows}
               hasNextPage={hasNextPage}
