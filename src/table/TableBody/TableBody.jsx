@@ -22,10 +22,8 @@ import {updateCells } from "../../store/table/tableThunk";
    const dispatch =  useDispatch()
    const hasNextPage= useSelector((state)=>state.table.isMoreData);
   //  useSelector((state)=>getTableInfo(state.isMoreData));
-   console.log(hasNextPage)
   const itemCount = hasNextPage ? rows.length + 1 : rows.length;
   const loadMoreItems = isNextPageLoading ? () => {} : update;
-  console.log(isNextPageLoading,"isnectg")
   const isItemLoaded = useCallback(
     (index) => !hasNextPage || index < rows.length,
     [hasNextPage, rows]
