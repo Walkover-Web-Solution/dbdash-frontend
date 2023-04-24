@@ -265,6 +265,7 @@ html {
 
 
  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 html {
   box-sizing: border-box;
 }
@@ -449,6 +450,14 @@ Table thead{
 position:sticky;
 top:0;
 z-index: 2;
+
+}
+  td:first-child{
+
+  position:sticky;
+  left:0;
+    z-index:3;
+ 
 }
 th:first-child{
   position:sticky;
@@ -456,11 +465,8 @@ th:first-child{
   left:0;
   z-index:2;
 }
-td:first-child{
-  position:sticky;
-  left:0;
-  z-index: 1;
-}
+
+
 .td {
   color: #424242;
   align-items: stretch;

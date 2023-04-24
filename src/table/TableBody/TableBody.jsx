@@ -47,7 +47,7 @@ import {updateCells } from "../../store/table/tableThunk";
   };
   const RenderRow = React.useCallback(
     (rows) =>
-      ({ index,style}) => {
+      ({ index}) => {
         if (!isItemLoaded(index))
           return (
             <div className="tr">
@@ -56,25 +56,26 @@ import {updateCells } from "../../store/table/tableThunk";
           );
         const row = rows[index];
         prepareRow(row);
-        const { style: rowStyle, ...restRow } = row.getRowProps({ style });
+        // const { style: rowStyle, ...restRow } = row.getRowProps({ style });
         
         return (
           <>
           <tr
-          key={row.getRowProps().key}  role="row"  className={`tr ${index}`}
+          key={row.getRowProps().key}  role="row"  className={`tr  ${index}`}
          
 
 
-            {...restRow}
+           
             style={
               row.isSelected
                 ? {
-                    ...rowStyle,
+                  display: 'flex', flex: '1 0 auto',
                     backgroundColor: "#e0edf2",
+                    
                     width: totalColumnsWidth,
                   }
                 : {
-                    ...rowStyle,
+                  display: 'flex', flex: '1 0 auto',
                     backgroundColor: "transparent",
                     width: totalColumnsWidth,
                   }
@@ -84,7 +85,9 @@ import {updateCells } from "../../store/table/tableThunk";
           >
             {row.cells.map((cell, key) => {
               return (
-                <td
+             
+                <td 
+
                   key={key}
                   {...cell.getCellProps({
                     onCopy: (event) => handleCopy(event, cell.value),
@@ -96,29 +99,27 @@ import {updateCells } from "../../store/table/tableThunk";
                           ...cell.getCellProps().style,
                           userSelect: "none",
                           flex: "none",
+                         
+
                         }
                       : {
                           ...cell.getCellProps().style,
                           userSelect: "none",
                           flex: "none",
                           height: "35px",
+                         
+
                         }
                   }
                   className="td"
                 >
                   {cell.render("Cell")}
                 </td>
+              
               );
             })}
           </tr>
-         {/* <div className='tr add-row'
-          onClick={() => dataDispatch(addRows({ type: "add_row" }))}
-        >
-          <span className='svg-icon svg-gray' style={{ marginRight: 4 }}>
-            <PlusIcon />
-          </span>
-          New
-        </div> */}
+     
         </>
         );
       },
@@ -141,13 +142,15 @@ import {updateCells } from "../../store/table/tableThunk";
       >
         {({ onItemsRendered, ref }) => (
           <FixedSizeList
-            height={382}
+           height={35*rows.length}
             itemCount={rows.length}
             itemSize={35}
+         
+             style={{overflowY:"hidden"}}
             onItemsRendered={onItemsRendered}
             ref={ref}
             innerElementType={({ children, style, ...rest }) => (
-                <div style={{ position: "relative",overflow:'hidden' }} className="body">
+                <div style={{ position: "relative",overflow:"hidden" }} className="body">
                   <div {...getTableBodyProps()} {...rest} style={style}>
                     {children}
                   </div>
