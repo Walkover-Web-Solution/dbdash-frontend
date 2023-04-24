@@ -2,16 +2,16 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback } from "react";
 import { memo } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FixedSizeList } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 import {updateCells } from "../../store/table/tableThunk";
-
+// import { getTableInfo } from "../../store/table/tableSelector";
 
  function TableBody({
   getTableBodyProps,
   rows,
-  hasNextPage,
+  // hasNextPage,
   isNextPageLoading,
   cellsSelected,
   prepareRow,
@@ -20,8 +20,12 @@ import {updateCells } from "../../store/table/tableThunk";
   update = { update },
 }) {
    const dispatch =  useDispatch()
+   const hasNextPage= useSelector((state)=>state.table.isMoreData);
+  //  useSelector((state)=>getTableInfo(state.isMoreData));
+   console.log(hasNextPage)
   const itemCount = hasNextPage ? rows.length + 1 : rows.length;
   const loadMoreItems = isNextPageLoading ? () => {} : update;
+  console.log(isNextPageLoading,"isnectg")
   const isItemLoaded = useCallback(
     (index) => !hasNextPage || index < rows.length,
     [hasNextPage, rows]
@@ -138,6 +142,7 @@ import {updateCells } from "../../store/table/tableThunk";
         isItemLoaded={isItemLoaded}
         itemCount={itemCount}
         loadMoreItems={loadMoreItems}
+
       >
         {({ onItemsRendered, ref }) => (
           <FixedSizeList

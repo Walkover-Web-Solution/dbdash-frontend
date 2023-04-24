@@ -258,7 +258,6 @@ export default function FieldPopupModal(props) {
       marginTop: 10,
     },
   };
-
   const renderSuggestionsContainer = (options) => {
     const { containerProps, children } = options;
     return (
