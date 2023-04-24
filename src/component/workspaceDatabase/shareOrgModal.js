@@ -83,7 +83,7 @@ export default function ShareOrgModal(props) {
     </Box>
     <Box >
     {Object.values(props.org.users).map((user) => {
-  if (user.user_id._id !== userId || user.user_type !== "admin") {
+    if (user.user_id._id !== userId && (user.user_type !== "admin" || userId !== user.user_id._id)) {
     return (
       <Box key={user.user_id.email} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <Box sx={{ m: 1 }}>
