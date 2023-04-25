@@ -99,6 +99,7 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
+      setShowSwitch(true);
     } else if (event.target.value === 'checkbox') {
       props?.setSelectValue('checkbox')
     }
@@ -124,6 +125,7 @@ export default function FieldPopupModal(props) {
     setShowFormulaField(false);
     setShowLinkField(false);
     setShowNumericOptions(false);
+    setShowDecimalOptions(false);
     setShowSwitch(false);
     props?.setSelectedFieldName(false);
     props?.setSelectValue("longtext");
