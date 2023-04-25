@@ -24,7 +24,7 @@ import PropTypes from "prop-types";
 export default function FieldPopupModal(props) {
 
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const [showSwitch, setShowSwitch] = useState(true);
+  const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
   const [showLinkField, setShowLinkField] = useState(false);
@@ -85,6 +85,7 @@ export default function FieldPopupModal(props) {
       setShowNumericOptions(true);
     }
     else if (event.target.value === 'integer') {
+      setShowNumericOptions(true);
       props?.setSelectValue('numeric')
       setShowSwitch(true);
     }
@@ -101,7 +102,7 @@ export default function FieldPopupModal(props) {
     } else if (event.target.value === 'checkbox') {
       props?.setSelectValue('checkbox')
     }
-    else if (event.target.value === "singlelinetext" || event.target.value === "longtext") {
+    else if (event.target.value === "singlelinetext") {
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }
@@ -122,6 +123,8 @@ export default function FieldPopupModal(props) {
     props?.setOpen(false);
     setShowFormulaField(false);
     setShowLinkField(false);
+    setShowNumericOptions(false);
+    setShowSwitch(false);
     props?.setSelectedFieldName(false);
     props?.setSelectValue("longtext");
     props?.setTextValue("");
@@ -257,7 +260,7 @@ export default function FieldPopupModal(props) {
             </FormGroup>
           )}
         </DialogContent>
-        <Button
+        <Button sx={{textTransform: "none"}}
           onClick={() => {
             props?.submitData(false);
           }}
@@ -268,7 +271,7 @@ export default function FieldPopupModal(props) {
             props?.textValue?.length > 30
           }
         >
-          Submit
+          Create Column
         </Button>
       </Dialog>
     </div>
