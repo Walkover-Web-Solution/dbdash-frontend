@@ -452,20 +452,20 @@ background-color: #424242;
   background-color: #F5F5F5;
 }
 Table thead{
-position:sticky;
+position:sticky ;
 top:0;
 z-index: 2;
 
 }
   td:first-child{
 
-  position:sticky;
+  position:sticky !important;
   left:0;
     z-index:3;
  
 }
 th:first-child{
-  position:sticky;
+  position:stick;
   top:0;
   left:0;
   z-index:2;
@@ -557,15 +557,15 @@ th:first-child{
   background-color: #ECF3F3;
 }
 .count {
-  display: inline-block;
+  display: inline-block ;
   cursor: pointer;
 }
 .checkbox-container {
-  display: none;
+  display: none !important;
 }
 .tr:hover .count {
-  display: none;
+  display: none ;
 }
 .tr:hover .checkbox-container {
-  display: block;
+  display: block !important;
 }

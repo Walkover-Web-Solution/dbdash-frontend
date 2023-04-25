@@ -5,7 +5,6 @@ import { updateColumnOrder } from "../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import clsx from "clsx";
 
-
 function TableHeader({ getTableProps, headerGroups, columns }) {
   const dispatch = useDispatch();
   function isTableResizing() {
@@ -18,6 +17,7 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
     }
     return false;
   }
+  
   const reoder = useCallback(
     (item, newIndex) => {
       const newOrder = Array.from(columns);
