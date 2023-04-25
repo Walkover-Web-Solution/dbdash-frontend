@@ -8,6 +8,7 @@ export default function LinkDataType(props) {
 
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showUniqueFieldsDropdown, setShowUniqueFieldsDropdown] = useState(true);
+ 
   const uniqueFields = AllTableInfo.tables[props.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props.selectedTable]?.fields)?.filter((fields) => {
     if (fields[1]?.metaData?.unique) {
       return fields;
