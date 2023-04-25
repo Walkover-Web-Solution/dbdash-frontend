@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {  Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Switch } from '@mui/material';
+import {  Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Switch,FormGroup, FormControlLabel } from '@mui/material';
 import { useSelector } from 'react-redux';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 import Joi from 'joi';
 import CheckIcon from '@mui/icons-material/Check';
@@ -19,15 +17,17 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import FormulaDataType from './fieldDataType/formulaDataType';
+import LoookupDataType from './fieldDataType/loookupDataType.js';
+import LinkDataType from './fieldDataType/linkDatatype.js';
+import NumberDataType from './fieldDataType/numberDataType';
 
 export default function FieldPopupModal(props) {
  
-  const [showSwitch, setShowSwitch] = useState(false);
+  const [showSwitch, setShowSwitch] = useState(true);
   const [openn, setOpenn] = useState(false);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const [lookupField, setLookupField] = useState(false)
-  const [openViewDropdown,setOpenViewDropdown] = useState(false)
-  const [openLinkedField,setOpenLinkedField] = useState(false)
+  const [showLinkField, setShowLinkField] = useState(false)
+  const [showLookupField,setShowLookupField] = useState(false)
   const [errors, setErrors] = useState({});
   const [showNumericOptions, setShowNumericOptions] = useState(false);
   const [showDecimalOptions , setShowDecimalOptions] = useState(false);
@@ -62,64 +62,45 @@ export default function FieldPopupModal(props) {
     props?.setTextValue(event.target.value);
   };
 
-  const selectDecimalValue = (event) => {
-    const data= props?.metaData;
-    data.decimal = event.target.value
-    props?.setDecimalSelectValue(data)
-    props?.setDecimalSelectValue(event.target.value)
-  }
+ 
 
   const handleSelectChange = (event) => {
-    setOpenViewDropdown(false)
-    setLookupField(false)
+    setShowLinkField(false)
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
-    
     setOpenn(false);
-    setLookupField(false)
-    props?.setShowFieldsDropdown(false)
+    setShowSwitch(false)
     props?.setSelectedFieldName(false)
-    setOpenLinkedField(false)
+    setShowLookupField(false)
+    const data1 = props?.metaData;
+    delete data1["unique"];
+     props?.setMetaData(data1);
     if (event.target.value == "formula") {
       setShowSwitch(false)
       setOpenn(true)
-      setOpenLinkedField(false);
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
-      setShowSwitch(false)
-      setLookupField(true)
-      setOpenLinkedField(false);
-      props?.setShowFieldsDropdown(true);
+      setShowLinkField(true)
       props?.setSelectValue(event.target.value);
       const firstTable = Object.keys(AllTableInfo.tables)[0];
       props?.setSelectedTable(firstTable);
-      const firstField = Object.entries(
-        AllTableInfo.tables[firstTable].fields
-      ).find(([, field]) => field?.metaData?.unique)?.[0];
-      props?.setSelectedFieldName(firstField);
-      props?.setLinkedValueName({
-        [firstTable]: AllTableInfo.tables[firstTable].fields[0],
-      });
     }
     else if(event.target.value == "lookup"){
-      setShowSwitch(false)
-      setOpenLinkedField(true)
+      setShowLookupField(true)
       props?.setSelectValue(event.target.value);
-      const first = Object.entries(AllTableInfo?.tables[props?.tableId].fields)
-      .find(([,field]) => field?.metaData?.foreignKey?.fieldName);
-      props?.setSelectedFieldName(first);
     }
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
       setShowNumericOptions(true);
-      setOpenLinkedField(false)
+      setShowLookupField(false)
     }
     else if (event.target.value === 'integer') {
       props?.setSelectValue('numeric')
       setShowSwitch(true);     
     }
     else if(event.target.value === 'id'){
+      props?.setSelectValue('id')
       var data = props?.metaData;
       data.unique = "true"
       props?.setMetaData(data);
@@ -128,37 +109,32 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
-      setOpenLinkedField(false);
+      setShowLookupField(false);
     } else if (event.target.value === 'checkbox') {
-      setShowSwitch(false);
       props?.setSelectValue('checkbox')
-      setOpenLinkedField(false);
+      setShowLookupField(false);
     } 
     else if(event.target.value === "singlelinetext" || event.target.value === "longtext" ){
         setShowSwitch(true);
         props?.setSelectValue(event.target.value);
     }
     else {
-      setShowSwitch(false);
-      props?.setShowFieldsDropdown(false)
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
       setShowNumericOptions(false);
       setShowDecimalOptions(false);
-      setLookupField(false)
+      setShowLinkField(false)
       setOpenn(false)
-      setOpenLinkedField(false);
+      setShowLookupField(false);
     }
   }
 
   const handleClose = () => {
-    setOpenLinkedField(false);
-    setLookupField(false);
+    setShowLookupField(false);
+    setShowLinkField(false);
     props?.setOpen(false);
     setOpenn(false);
-    setLookupField(false)
-    // setUserQuery(false)
-    props?.setShowFieldsDropdown(false)
+    setShowLinkField(false)
     props?.setSelectedFieldName(false)
     props?.setSelectValue("longtext");
     props?.setTextValue("");
@@ -234,171 +210,21 @@ export default function FieldPopupModal(props) {
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{mr : 1}}/>Single line text</MenuItem>
  
           </Select>
-          {showNumericOptions && (
-              <Select
-                labelId="numeric-select-label"
-                id="numeric-select"
-                value={props.selectValue}
-                onChange={(e)=>handleSelectChange(e)}
-                defaultValue="value"
-                displayEmpty
-                sx={{ margin: 1, minWidth: 120 }}
-              >
-                <MenuItem value="value">Select Type</MenuItem>
-                <MenuItem value="integer">integer</MenuItem>
-                <MenuItem value="decimal">decimal</MenuItem>
-              </Select>
-            )}
-      {showDecimalOptions && (
-        <Select
-          labelId="decimal-select-label"
-          id="decimal-select"
-          value={props.decimalSelectValue}
-          onChange={(e)=>{selectDecimalValue(e)}}
-          defaultValue="1"
-          displayEmpty
-          sx={{ margin: 1, minWidth: 120 }}
-        >
-          <MenuItem value="Select">seledct decimal value </MenuItem>
 
-          <MenuItem value="1">1.0</MenuItem>
-          <MenuItem value="2">1.00</MenuItem>
-          <MenuItem value="3">1.000</MenuItem>
-          <MenuItem value="4">1.0000</MenuItem>
-          <MenuItem value="5">1.00000</MenuItem>
-          <MenuItem value="6">1.000000</MenuItem>
-          <MenuItem value="7">1.0000000</MenuItem>
-        </Select>
-      )}
+
+ <NumberDataType selectValue={props?.selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
 
 {openn && <FormulaDataType  queryByAi= {props?.queryByAi} submitData = {props?.submitData} queryResult={queryResult} setQueryResult={setQueryResult}/>}
-         
-{lookupField && AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 ?(
-  <Select
-    labelId="select-label"
-    id="select"
-    value={props?.selectedTable}
-    onChange={(event) => {
-      props?.setSelectedTable(event.target.value);
-      props?.setShowFieldsDropdown(true)
-    }}
-    defaultValue={props?.selectedTable}
-    displayEmpty
-    sx={{
-      margin: 1,
-      minWidth: 120,
-    }}
-  >
-    {Object.entries(AllTableInfo.tables).map((table, index) => (
-      <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
-    ))}
-  </Select>
-):(lookupField && <span style={{color:'red'}}>No unique Keys here</span>)}
-          {/* show fields that are unique  */}
- {props?.showFieldsDropdown &&    AllTableInfo.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
-      .filter((fields) => fields[1]?.metaData?.unique)
-      .length > 0   ? 
-(<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedFieldName}
-            defaultValue={Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)
-              .filter((fields) => fields[1]?.metaData?.unique)[0][0]}
-            
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
-          >
-            {
-           Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.filter((fields) => {
-                if (fields[1]?.metaData?.unique)  {
-                  return fields;
-                }
-              })
-                .map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-              }
-          </Select>
-          ):(
-            props?.showFieldsDropdown && <Typography sx={{color:"red"}}>No unique key</Typography>
 
-          )
-          } 
-         
-
-{openLinkedField && Object.entries(AllTableInfo?.tables[props?.tableId].fields)
-  .filter((fields) => fields[1]?.metaData?.foreignKey?.fieldId)
-  .length==0 && <span style={{color:'red'}}>Create Foreign key first.</span> }
-    {openLinkedField && Object.entries(AllTableInfo?.tables[props?.tableId].fields)
-  .filter((fields) => fields[1]?.metaData?.foreignKey?.fieldId)
-  .length > 0 && (<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedFieldName}
-            displayEmpty
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) =>{ 
-              props?.setLinkedValueName({
-                [e.target.value]:AllTableInfo?.tables[props?.tableId].fields[e.target.value]
-              })
-              props?.setSelectedTable(AllTableInfo?.tables[props?.tableId].fields[e.target.value]?.metaData?.foreignKey?.tableId) ; 
-              setOpenViewDropdown(true)}}
-          >
-            {
-              Object.entries(AllTableInfo?.tables[props?.tableId].fields)?.filter((fields) => {
-                if (fields[1]?.metaData?.foreignKey?.fieldId) {
-                  props?.setSelectedFieldName(fields[1]?.metaData?.foreignKey?.fieldId)
-                  return fields;
-
-                }
-              })
-                .map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-            }
-          </Select>
-          )}
-          
-          {openViewDropdown && (<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedFieldName}
-            defaultValue="fields"
-            displayEmpty
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
-          >
-            {
-             AllTableInfo.tables[props?.selectedTable]?.fields &&  Object.entries(AllTableInfo.tables[props?.selectedTable]?.fields)?.map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-            }
-          </Select>
-          )}
+{ showLinkField  && <LinkDataType selectedFieldName = {props?.selectedFieldName}  setSelectedFieldName = {props?.setSelectedFieldName}  setSelectedTable = {props.setSelectedTable} selectedTable={props.selectedTable}/>}
+  
+ {showLookupField && <LoookupDataType linkedValueName={props?.linkedValueName} setLinkedValueName={props?.setLinkedValueName} selectedFieldName = {props?.selectedFieldName}  setSelectedFieldName = {props?.setSelectedFieldName} setSelectedTable = {props.setSelectedTable} selectedTable={props.selectedTable} tableId={props.tableId}/>}
 
           {showSwitch && <FormGroup>
             <FormControlLabel control={<Switch checked={props?.metaData?.unique} onClick={(e) => { handleSwitchChange(e) }} />} label="Unique" />
           </FormGroup>}
         </DialogContent>
-        <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={!queryResult||errors.fieldName || props?.textValue?.length < 1 ||
+        <Button onClick={() => { props?.submitData(false) }} color="primary" disabled={errors.fieldName || props?.textValue?.length < 1 ||
           props?.textValue?.length > 20} >Submit</Button>
       </Dialog>
     </div>
@@ -408,8 +234,6 @@ export default function FieldPopupModal(props) {
 FieldPopupModal.propTypes = {
   setOpen: PropTypes.func,
   open: PropTypes.bool,
-  setOpenPopup: PropTypes.func,
-  openPopup: PropTypes.bool,
   textValue: PropTypes.any,
   selectValue: PropTypes.any,
   setTextValue: PropTypes.func,
@@ -419,16 +243,12 @@ FieldPopupModal.propTypes = {
   setQueryByAi: PropTypes.func,
   setMetaData: PropTypes.func,
   metaData: PropTypes.any,
-  setShowFieldsDropdown:PropTypes.func,
-  showFieldsDropdown:PropTypes.any,
-  setSelectedTable:PropTypes.func,
+  setSelectedTable:PropTypes.any,
   selectedTable:PropTypes.any,
   selectedFieldName:PropTypes.any,
   setSelectedFieldName:PropTypes.func,
-  setDecimalSelectValue:PropTypes.func,
-  decimalSelectValue:PropTypes.any,
   tableId:PropTypes.any,
   linkedValueName:PropTypes.any,
-  setLinkedValueName:PropTypes.func
+  setLinkedValueName:PropTypes.func,
 }
 

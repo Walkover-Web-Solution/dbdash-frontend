@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
 
-
 export default function FormulaDataType(props) {
     
     const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -24,10 +23,8 @@ export default function FormulaDataType(props) {
       }
   }, [AllTableInfo])
     
-    // const [queryResult,setQueryResult] = useState(false)
     useEffect(()=>{
     var query  = props?.queryByAi
-    console.log("query",query)
     try {
       query = JSON.parse(query)?.add_column?.new_column_name?.generated?.expression
     } catch (err) {
@@ -64,11 +61,9 @@ const getSuggestions = (value) => {
 
   const onChange = (event, { newValue }) => {
     let addVal = newValue;
-    console.log(newValue);
     setValue(addVal);
     setUserQuery(newValue)
   };
-  console.log(value)
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.

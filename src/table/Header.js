@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 import { getTableInfo } from "../store/table/tableSelector";
-import FieldPopupModal from "./fieldPopupModal";
+import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import {getQueryByAi} from "../api/fieldApi"
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -41,7 +41,6 @@ export default function Header({
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [metaData, setMetaData] = useState({});
   const [open, setOpen] = useState(false);
-  const [decimalSelectValue,setDecimalSelectValue] = useState(1 )
   const [directionAndId,setDirectionAndId]= useState({})
   const [selectedTable, setSelectedTable] = useState("");
   const [linkedValueName,setLinkedValueName] = useState("")
@@ -66,7 +65,7 @@ export default function Header({
 
       var queryToSend =  JSON.parse(queryByAi)?.add_column?.new_column_name?.data_type +  ` GENERATED ALWAYS AS (${JSON.parse(queryByAi)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       dispatch(addColumsToLeft({
-        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
+        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,
       }));
       setSelectValue('longtext')
       setQueryByAi(false)
@@ -84,7 +83,7 @@ export default function Header({
     setOpen(false);
     dispatch(addColumnrightandleft({
       fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:        
-        selectValue,direction:directionAndId.direction,position:directionAndId.position ,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,decimalSelectValue:decimalSelectValue
+        selectValue,direction:directionAndId.direction,position:directionAndId.position ,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,
     }));
     setSelectValue('longtext')
 
@@ -410,7 +409,7 @@ export default function Header({
             <PlusIcon />
           </span>
         </div> 
-        <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn}  setDecimalSelectValue={setDecimalSelectValue}/>
+        <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn} />
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block",flex:"none" ,width:"20px"} })}  className='th noselect'
@@ -431,7 +430,7 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName}  queryByAi ={queryByAi}  tableId = {tableInfo?.tableId}  selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable}  setSelectValue={setSelectValue} textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setShowFieldsDropdown={setShowFieldsDropdown} linkedValueName={linkedValueName}  setLinkedValueName={setLinkedValueName} showFieldsDropdown={showFieldsDropdown}  setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn}  setDecimalSelectValue={setDecimalSelectValue}/>
+      <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName}  queryByAi ={queryByAi}  tableId = {tableInfo?.tableId}  selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable}  setSelectValue={setSelectValue} textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setShowFieldsDropdown={setShowFieldsDropdown} linkedValueName={linkedValueName}  setLinkedValueName={setLinkedValueName} showFieldsDropdown={showFieldsDropdown}  setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn} />
       
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (

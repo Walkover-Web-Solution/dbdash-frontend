@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify'
 
-
-
 export default function ShareOrgModal(props) {
+
   const [email, setEmail] = useState("");
   const userId = localStorage.getItem("userid")
   
@@ -29,8 +28,10 @@ export default function ShareOrgModal(props) {
       toast.error("Invalid email");
       return;
     }
-    
-  
+    // if (email === props?.user?.email) {
+    //   toast.error("You cannot invite yourself");
+    //   return;
+    // }
     props.shareWorkspace(email);
     handleClose();
     toast.success("Invitation sent successfully");
@@ -83,7 +84,7 @@ export default function ShareOrgModal(props) {
     </Box>
     <Box >
     {Object.values(props.org.users).map((user) => {
-  if (user.user_id._id !== userId || user.user_type !== "admin") {
+   if (user.user_id._id !== userId && (user.user_type !== "admin" || userId !== user.user_id._id))  {
     return (
       <Box key={user.user_id.email} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <Box sx={{ m: 1 }}>
