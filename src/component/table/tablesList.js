@@ -253,7 +253,7 @@ export default function TablesList({ dbData }) {
       </Box>
       {open && (
         <PopupModal
-          title="create table"
+          title="Create Table"
           label="Table Name"
           open={open}
           setOpen={setOpen}

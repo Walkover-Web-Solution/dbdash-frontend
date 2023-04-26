@@ -67,7 +67,8 @@ function MainNavbar(props) {
 
                 <Box ml="auto">
          {shouldShowTypography && <Tooltip title="APIs">
-            <Button variant="outlined" component={Link} to={{ pathname: `/apiDoc/db/${dbId}` }} sx={{ textDecoration: 'none', color: '#fff', mb: '8px',fontWeight: 'bold', }}>APIs</Button>
+            <Button variant="outlined" component={Link} to={{ pathname: `/apiDoc/db/${dbId}` }} sx={{ textDecoration: 'none', color: '#fff', mb: '8px',fontWeight: 'bold',borderColor: 'green',  '&:hover': {
+          borderColor: '#7fc98d'} }}>APIs</Button>
           </Tooltip>}
 
           <Tooltip title="Open settings">
