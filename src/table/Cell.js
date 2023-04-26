@@ -268,6 +268,11 @@ const Cell = memo(
             onBlur={() =>
               setValue((old) => ({ value: old.value, update: true }))
             }
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+              }
+            }}
             className="data-input"
           />
         );
