@@ -24,6 +24,8 @@ import TextFormatIcon from '@mui/icons-material/TextFormat';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import EmailIcon from '@mui/icons-material/Email';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
@@ -212,6 +214,20 @@ export default function Header({
       icon: <DateRangeIcon fontSize="2px" />,
       label: "date and time"
     },
+
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "varchar"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <EmailIcon fontSize="2px" />,
+      label: "email"
+    },
+
     {
       onClick: () => {
         dispatch(updateColumnsType({
@@ -264,6 +280,18 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
+          dataType: "varchar"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <LocalPhoneIcon fontSize="2px" />,
+      label: "Phone number"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
           dataType: "text"
         }))
         setShowType(false);
@@ -296,6 +324,7 @@ export default function Header({
       icon: <TextFormatIcon fontSize="2px"/>,
       label: "singlelinetext"
     }
+
   ];
 
   let propertyIcon;
@@ -339,6 +368,13 @@ export default function Header({
       case "id":
         propertyIcon = <FormatListNumberedIcon fontSize="2px"/>;
       break;
+      case "email":
+      propertyIcon = <EmailIcon fontSize="2px" />;
+      break;
+      case "phone":
+      propertyIcon = <LocalPhoneIcon fontSize="2px" />;
+      break;
+
     default:
       propertyIcon = <MultiIcon />;
       break;

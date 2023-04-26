@@ -277,6 +277,55 @@ const Cell = memo(
           />
         );
         break;
+        
+        case "email":
+          element = (
+            <ContentEditable
+              html={(value?.value && value?.value?.toString()) || ""}
+              onChange={onChange}
+              onBlur={() =>
+                setValue((old) => ({ value: old.value, update: true }))
+              }
+              className="data-input"
+            />
+          );
+          break;
+
+          case "phone":
+          // element = (
+          //   <ContentEditable
+          //     html={(value?.value && value?.value?.toString()) || ""}
+          //     onChange={(event) => {
+          //       let newValue = event.target.value.replace(/[^\d+]/g, "");
+          //       if (newValue.length > 13) {
+          //         newValue = newValue.slice(0, 13);
+          //       }
+          //       onChange({ target: { value: newValue } });
+          //     }}
+          //     onBlur={() =>
+          //       setValue((old) => ({ value: old.value, update: true }))
+          //     }
+          //     className="data-input"
+          //   />
+          // );
+
+          element = (
+            <>
+              <input type="tel" id="phone" name="phone" maxLength="13"
+                value={(value?.value && value?.value?.toString()) || ""}
+                onChange={(event) => {
+                        let newValue = event.target.value.replace(/[^\d+]/g, "");
+                        onChange({ target: { value: newValue } });
+                      }}
+                onBlur={() =>
+                  setValue((old) => ({ value: old.value, update: true }))
+                }
+                className="data-input"
+                style={{ background: "none" }}
+              />
+            </>
+          );
+      break;
       case "numeric":
         element = (
           <>

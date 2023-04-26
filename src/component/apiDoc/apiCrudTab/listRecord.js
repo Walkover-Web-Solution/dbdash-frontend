@@ -26,7 +26,8 @@ function ListRecord(props) {
                              {/* before passing it as a value. You can use this tool to not only encode the formula but also create<br/> */}
                             {/* the entire url you need. */}
                             {/* <br/> */}
-                            {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }?fields=field1,field2,field3&filter=field1=!null AND field2=&quot;10&quot;<br/>
+                            {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }?fields=field1,field2,field3&filter=field1=!null AND field2=&lsquo;xyz&rsquo;<br/>
+
                             <br/>
                             <br/>
              <b>pageSize</b>&nbsp;The number of records returned in each request.Must be less than or equal to 200.<br/>
