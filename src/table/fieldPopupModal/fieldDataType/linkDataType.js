@@ -9,7 +9,7 @@ export default function LinkDataType(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showUniqueFieldsDropdown, setShowUniqueFieldsDropdown] = useState(true);
  
-  const uniqueFields = AllTableInfo.tables[props.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props.selectedTable]?.fields)?.filter((fields) => {
+  const uniqueFields = AllTableInfo?.tables[props.selectedTable]?.fields && Object.entries(AllTableInfo?.tables[props.selectedTable]?.fields)?.filter((fields) => {
     if (fields[1]?.metaData?.unique) {
       return fields;
     }
@@ -19,7 +19,7 @@ export default function LinkDataType(props) {
   return (
     <>
       {
-        AllTableInfo?.tables && Object.entries(AllTableInfo.tables).length > 0 ?
+        AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).length > 0 ?
           (
             <Select
             labelId="select-label"
@@ -29,8 +29,8 @@ export default function LinkDataType(props) {
             onChange={(event) => {
               const newSelectedTable = event.target.value;
               props.setSelectedTable(newSelectedTable);
-              const newTableInfo = AllTableInfo.tables[newSelectedTable];
-              const newUniqueFields = newTableInfo?.fields && Object.entries(newTableInfo.fields)?.filter((fields) => {
+              const newTableInfo = AllTableInfo?.tables[newSelectedTable];
+              const newUniqueFields = newTableInfo?.fields && Object.entries(newTableInfo?.fields)?.filter((fields) => {
                 if (fields[1]?.metaData?.unique) {
                   return fields;
                 }
@@ -40,7 +40,7 @@ export default function LinkDataType(props) {
               setShowUniqueFieldsDropdown(true);
             }}
           >
-            {Object.entries(AllTableInfo.tables).map((table, index) => (
+            {Object.entries(AllTableInfo?.tables).map((table, index) => (
               <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
             ))}
           </Select>
@@ -57,7 +57,7 @@ export default function LinkDataType(props) {
               margin: 1,
               minWidth: 120,
             }}
-            onChange={(e) => props.setSelectedFieldName(e.target.value)}
+            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
           >
             {
               uniqueFields  
