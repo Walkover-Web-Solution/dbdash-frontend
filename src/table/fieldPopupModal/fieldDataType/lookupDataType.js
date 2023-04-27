@@ -16,10 +16,16 @@ export default function LoookupDataType(props) {
     props?.setSelectedTable(foreignKey[0][1]?.metaData?.foreignKey?.tableId);
     props?.setSelectedFieldName(Object.entries(AllTableInfo?.tables[foreignKey[0][1]?.metaData?.foreignKey?.tableId]?.fields)[0][0]);
   }
-  console.log("table", foreignKey[0][1]?.metaData?.foreignKey?.tableId)
-  
-console.log("aaj karke jaenge",props?.selectedFieldName)
 
+  if(!(props?.linkedValueName)){
+    console.log("hello")
+    const selectedField = AllTableInfo.tables[props.tableId].fields[ foreignKey [0][0]];
+    props?.setLinkedValueName({
+      [foreignKey?.[0][0]]: selectedField
+    })
+
+  }
+console.log("linked",props?.linkedValueName)
   return (
     <>
     {foreignKey?.length==0 && <span style={{color:'red'}}>Create Foreign key first.</span> }
@@ -41,6 +47,9 @@ console.log("aaj karke jaenge",props?.selectedFieldName)
               props.setLinkedValueName({
                 [e.target.value]: selectedField
               });
+              console.log("selectedField",selectedField)
+              console.log("value",e.target.value)
+
               setOpenViewDropdown(true);
             }}
            

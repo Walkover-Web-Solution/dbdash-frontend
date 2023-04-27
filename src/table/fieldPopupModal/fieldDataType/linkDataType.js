@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import { MenuItem, Select, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
@@ -7,30 +7,37 @@ import PropTypes from 'prop-types';
 export default function LinkDataType(props) {
 
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const tableId=useSelector((state)=>state.table.tableId);
   const [showUniqueFieldsDropdown, setShowUniqueFieldsDropdown] = useState(true);
  
-  const uniqueFields = AllTableInfo?.tables[props.selectedTable]?.fields && Object.entries(AllTableInfo?.tables[props.selectedTable]?.fields)?.filter((fields) => {
+  const uniqueFields = AllTableInfo?.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo?.tables[props?.selectedTable]?.fields)?.filter((fields) => {
     if (fields[1]?.metaData?.unique) {
       return fields;
     }
   })
-  if(!(props?.selectedFieldName) ) props?.setSelectedFieldName(uniqueFields[0][0])
-  
+  if(!(props?.selectedFieldName) && uniqueFields?.length > 0)
+  {
+    const index= Object.entries(AllTableInfo?.tables)
+   const currentTableIndex = index.findIndex(([tableId]) => tableId === props.selectedTable);
+   console.log("ansh",currentTableIndex)
+    props.setSelectedTable( Object.entries(AllTableInfo?.tables)[currentTableIndex][0]);
+    props?.setSelectedFieldName(uniqueFields[0][1])
+  }
+
   return (
     <>
       {
-        AllTableInfo?.tables && Object.entries(AllTableInfo?.tables).length > 0 ?
-          (
+        AllTableInfo?.tables && Object.entries(AllTableInfo?.tables)?.length - 1 > 0 && uniqueFields.length > 0 &&
+          
             <Select
             labelId="select-label"
             id="select"
             value={props?.selectedTable}
             sx={{ margin: 1, minWidth: 120 }}
             onChange={(event) => {
-              const newSelectedTable = event.target.value;
-              props.setSelectedTable(newSelectedTable);
-              const newTableInfo = AllTableInfo?.tables[newSelectedTable];
-              const newUniqueFields = newTableInfo?.fields && Object.entries(newTableInfo?.fields)?.filter((fields) => {
+              props.setSelectedTable(event.target.value);
+              const newTableInfo = AllTableInfo?.tables[event.target.value];
+              const newUniqueFields = newTableInfo?.fields && Object.entries(newTableInfo.fields)?.filter((fields) => {
                 if (fields[1]?.metaData?.unique) {
                   return fields;
                 }
@@ -41,14 +48,14 @@ export default function LinkDataType(props) {
             }}
           >
             {Object.entries(AllTableInfo?.tables).map((table, index) => (
-              <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
+              tableId !== table[0] && <MenuItem key={index} value={table[0]}>{table[1]?.tableName}</MenuItem>
             ))}
           </Select>
-          ) :
-          (<span style={{ color: 'red' }}>No unique Keys here</span>)}
+          }
+
      
       {
-        showUniqueFieldsDropdown && uniqueFields.length > 0 ?
+        showUniqueFieldsDropdown && uniqueFields.length > 0 && props.selectedTable !== tableId ?
           (<Select
             labelId="select-label"
             id="select"
@@ -70,7 +77,7 @@ export default function LinkDataType(props) {
             }
           </Select>
           ) : (
-            showUniqueFieldsDropdown && <Typography sx={{ color: "red" }}>No unique key</Typography>
+            showUniqueFieldsDropdown && props.selectedTable !== tableId &&  <Typography sx={{ color: "red" }}>No unique key</Typography>
           )
       }
     </>
