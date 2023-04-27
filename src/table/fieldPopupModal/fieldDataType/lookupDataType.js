@@ -14,18 +14,16 @@ export default function LoookupDataType(props) {
   }
   if(foreignKey?.length > 0 && !(props?.selectedFieldName)) {
     props?.setSelectedTable(foreignKey[0][1]?.metaData?.foreignKey?.tableId);
-    props?.setSelectedFieldName(Object.entries(AllTableInfo?.tables[foreignKey[0][1]?.metaData?.foreignKey?.tableId]?.fields)[0][0]);
+    props?.setSelectedFieldName(Object.entries(AllTableInfo?.tables[foreignKey?.[0][1]?.metaData?.foreignKey?.tableId]?.fields)[0][0]);
   }
 
   if(!(props?.linkedValueName)){
-    console.log("hello")
-    const selectedField = AllTableInfo.tables[props.tableId].fields[ foreignKey [0][0]];
+    const selectedField = AllTableInfo.tables[props.tableId].fields[ foreignKey ?.[0][0]];
     props?.setLinkedValueName({
       [foreignKey?.[0][0]]: selectedField
     })
 
   }
-console.log("linked",props?.linkedValueName)
   return (
     <>
     {foreignKey?.length==0 && <span style={{color:'red'}}>Create Foreign key first.</span> }
@@ -41,14 +39,12 @@ console.log("linked",props?.linkedValueName)
             }}
             
             onChange={(e) =>{ 
-              const selectedField = AllTableInfo.tables[props.tableId].fields[e.target.value];
-              const selectedTable = selectedField.metaData.foreignKey.tableId;
+              const selectedField = AllTableInfo?.tables[props.tableId]?.fields[e.target.value];
+              const selectedTable = selectedField?.metaData?.foreignKey?.tableId;
               props.setSelectedTable(selectedTable);
               props.setLinkedValueName({
                 [e.target.value]: selectedField
               });
-              console.log("selectedField",selectedField)
-              console.log("value",e.target.value)
 
               setOpenViewDropdown(true);
             }}
