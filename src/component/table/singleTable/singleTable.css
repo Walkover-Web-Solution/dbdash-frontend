@@ -1,0 +1,42 @@
+.boxone{
+    display: flex !important;
+    align-items: center !important;
+   
+}
+.Tab{
+    
+    min-width: auto !important;
+    overflow-x: auto !important;
+    flex-direction: row !important;
+    text-transform: none !important;
+    height: 100%;
+    
+}
+.width100{
+    width:100px !important;
+}
+.boxing{
+    padding: 2.5px !important;
+    border:1px solid rgba(0, 0, 0, 0.2);
+    background-color: #fff !important;
+    text-align: center !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    transition:transform 0.2s ease-in-out;
+
+}
+.rename{
+    width: 75px !important;
+    font-weight: bold !important;
+
+}
+.submitbutton{
+  
+    width: 6px !important;
+    font-size: 10px !important;
+    margin-top: 5px !important;
+    
+}
+.mt-1{
+   margin-top: -6px !important;
+}

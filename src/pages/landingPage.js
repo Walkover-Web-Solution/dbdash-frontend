@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Box, Container} from '@mui/material'
-import MainNavbar from '../component/mainNavbar'
+import MainNavbar from '../component/mainNavbar/mainNavbar'
 import { useDispatch, useSelector } from 'react-redux';
 import WorkspaceCombined from '../component/workspaceDatabase/workspaceCombined';
 import "./css.css"

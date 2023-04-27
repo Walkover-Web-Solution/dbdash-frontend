@@ -1,0 +1,17 @@
+.onsubmitlogin{
+    width:auto !important;
+     height:auto !important;
+     display: flex !important;
+     flex-direction:column !important;
+    align-items: center !important;
+    
+    
+}
+.m2{
+    margin: 3px!important;
+    
+}
+.m1{
+    margin:1.5px !important;
+  
+}

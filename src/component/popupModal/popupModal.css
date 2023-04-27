@@ -1,0 +1,13 @@
+
+.error{
+    color:red !important;
+    font-size: 12px !important;
+    min-width: 300px;
+    
+    
+}
+.submitbox{
+    display: flex !important;
+    justify-content:space-between !important;
+    
+}

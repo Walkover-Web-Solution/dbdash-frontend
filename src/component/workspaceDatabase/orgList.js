@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Dropdown from "../dropdown";
-import PopupModal from "../popupModal";
+import Dropdown from "../dropdown/dropdown";
+import PopupModal from "../popupModal/popupModal";
 import SingleDatabase from "./singleDatabase";
 import Grid from "@mui/material/Grid";
 import { Box, Card, Typography, TextField, Button, IconButton, ClickAwayListener } from "@mui/material";

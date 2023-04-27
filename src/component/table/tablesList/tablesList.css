@@ -1,0 +1,51 @@
+.boxone{
+    width: 100% !important;
+    display: flex !important;
+    height: 10vh !important;
+    overflow: hidden !important;
+    position: sticky !important;
+    
+
+   
+}
+.boxtwo{
+    display: flex !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    height: auto !important;
+   justify-content: left !important;
+   margin-left: 10px !important;
+}
+.h57{
+    height: 8vh !important;
+}
+.buttonone{
+    margin: 1vh !important;
+    width: fit-content !important;
+    height: 6vh !important;
+    
+  
+}
+.filters{
+    background-color: #4B4E5A;
+    height: 4vh !important;
+    width: 120px !important;
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 1px !important;
+   
+}
+.white{
+    color: white !important;
+}
+.buttontwo{
+    width: 100px !important;
+    margin-top: 2vh !important;
+    margin-left: 10px !important;
+    font-size: 11px !important;
+   height: 4vh !important;
+}

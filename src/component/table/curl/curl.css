@@ -1,0 +1,9 @@
+.firstbox{
+    max-height: 400px;
+    overflow: auto;
+   
+}
+.secondbox{
+
+    color : hsla(0,0%,100%,0.5);
+}

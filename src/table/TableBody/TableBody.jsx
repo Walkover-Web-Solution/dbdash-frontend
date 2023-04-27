@@ -7,7 +7,7 @@ import { FixedSizeList } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 import {updateCells } from "../../store/table/tableThunk";
 // import { getTableInfo } from "../../store/table/tableSelector";
-
+import './TableBody.css'
  function TableBody({
   getTableBodyProps,
   rows,
@@ -63,22 +63,16 @@ import {updateCells } from "../../store/table/tableThunk";
         return (
           <>
           <tr
-          key={row.getRowProps().key}  role="row"  className={`tr  ${index}`}
+          key={row.getRowProps().key}  role="row"  className={`tr  ${index} flexo`}
          
 
 
            
             style={
-              row.isSelected
-                ? {
-                  display: 'flex', flex: '1 0 auto',
-                    backgroundColor: "#e0edf2",
-                    
-                    width: totalColumnsWidth,
+              row.isSelected ? { backgroundColor: "#e0edf2",
+                     width: totalColumnsWidth,
                   }
-                : {
-                  display: 'flex', flex: '1 0 auto',
-                    backgroundColor: "transparent",
+                : {backgroundColor: "transparent",
                     width: totalColumnsWidth,
                   }
             }
@@ -98,24 +92,19 @@ import {updateCells } from "../../store/table/tableThunk";
                   style={
                     cellsSelected[cell.id]
                       ? {
-                          ...cell.getCellProps().style,
-                          userSelect: "none",
-                          flex: "none",
-                          backgroundColor:"white"
+      ...cell.getCellProps().style,
+                          
                          
 
                         }
                       : {
                           ...cell.getCellProps().style,
-                          userSelect: "none",
-                          flex: "none",
-                          height: "35px",
-                          backgroundColor:"white"
+                          height:"35px"
                          
 
                         }
                   }
-                  className="td"
+                  className="td cellstyle"
                 >
                   {cell.render("Cell")}
                 </td>
@@ -132,11 +121,8 @@ import {updateCells } from "../../store/table/tableThunk";
 
   return (
     <div
-      style={{
-        widht: "auto",
-        // height: "100vh",
-        
-      }}
+    className="widthauto"
+      
       id="scrollableDiv"
     >
       <InfiniteLoader
@@ -155,7 +141,7 @@ import {updateCells } from "../../store/table/tableThunk";
             onItemsRendered={onItemsRendered}
             ref={ref}
             innerElementType={({ children, style, ...rest }) => (
-                <div style={{ position: "relative",overflow:"hidden" }} className="body">
+                <div className="body">
                   <div {...getTableBodyProps()} {...rest} style={style}>
                     {children}
                   </div>

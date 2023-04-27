@@ -1,0 +1,62 @@
+.firstbox{
+    margin-top: 4px !important;
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+    border: 2px solid !important;
+    min-height: 50px !important;
+ 
+}
+.secondbox{
+    display: grid !important;
+    justify-content: center !important;
+}
+.thirdbox{
+    display:flex !important;
+    justify-content: left !important;
+    margin-top: 120px !important;
+}
+.texto{
+    margin-right: 45px !important;
+    margin-top: 6px !important;
+   
+}
+.fourbox{
+    display: flex !important;
+    justify-content: center !important;
+    margin-top: 4px !important;
+
+}
+.scope{
+    margin-right: 40px !important;
+    margin-top: 30px !important;
+   
+}
+.mt10{
+    margin-top: 10px !important;
+}
+.fifthbox{
+    display: flex !important;
+    justify-content: center !important;
+}
+.access{
+    margin-right: 40px !important;
+    margin-top: 55px !important;
+   
+}
+.mt35{
+    margin-top: 35px !important;
+}
+.sixthbox{
+    display: flex !important;
+    position: relative !important;
+    justify-content: flex-end !important;
+    bottom: 10px !important;
+margin-right: 3px !important;
+    
+}
+.m1{
+    margin: 1px !important;
+}
+.dontdecorate{
+    text-decoration: none;
+}

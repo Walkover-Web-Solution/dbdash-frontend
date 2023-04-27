@@ -1,0 +1,49 @@
+.first{
+    background-color: #212529 !important;
+     height: 7vh !important;
+}
+.toolbar{
+    display: flex !important;
+     justify-content:space-between !important;
+     align-items: center !important;
+      height: 50px !important; 
+}
+.boxone{
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 20% !important;
+    height: 50px !important;
+    
+}
+.boxtwo{
+    display: flex !important;
+    justify-content:center !important;
+    align-items: center !important;
+    margin-bottom: 2vh !important;
+   
+}
+.boxthree{
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    color: white !important;
+
+}
+.boxthree:hover{
+    color: black !important;
+    cursor:pointer !important;
+}
+.boxfour{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 30px !important;
+    
+}
+.mb9{
+    margin-bottom: 2vh !important;
+}
+.mt45{
+    margin-top: 45px !important;
+}

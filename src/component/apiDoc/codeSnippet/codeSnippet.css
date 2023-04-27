@@ -1,0 +1,15 @@
+.flex{
+    display:flex;
+}
+.codeString{
+    text-decoration: none !important;
+    height: 100px !important;
+    width: 1000px !important;
+}
+.button
+{
+    margin-right: auto !important;
+    padding: 0.5rem !important;
+    cursor: pointer !important;
+  
+}

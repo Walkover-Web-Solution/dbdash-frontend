@@ -1,0 +1,46 @@
+
+.td {
+    color: #424242;
+    align-items: stretch;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    margin: 0;
+    border-bottom: 1px solid #E0E0E0;
+    border-right: 1px solid #E0E0E0;
+    position: relative;
+  }
+  .td-content {
+    display: block;
+  }
+  
+.td:last-child {
+    border-right: 0;
+  }
+  
+  .bg-white {
+    background-color: white;
+  }
+  .border-radius-md {
+    border-radius: 5px;
+  }
+  .move{
+    cursor:move !important;
+  }
+.resizer {
+    display: inline-block;
+    background: transparent;
+    width: 8px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(50%);
+    z-index: 1;
+    cursor: col-resize;
+    touch-action: none;
+  }
+  .resizer:hover {
+    background-color: #8ecae6;
+  }

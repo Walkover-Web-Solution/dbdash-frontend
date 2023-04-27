@@ -1,0 +1,18 @@
+.flexcentercenter{
+     display: flex !important;
+      justify-content: center !important;
+     align-items: center !important;
+}
+.button{
+    margin: 10px !important;
+    
+  
+}
+.dontdecorate{
+    text-decoration: none !important; 
+}
+.selectbox{
+    margin: 5px !important;
+    min-width: 140px !important;
+
+}

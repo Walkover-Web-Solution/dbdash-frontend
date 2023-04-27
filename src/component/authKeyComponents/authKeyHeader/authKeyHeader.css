@@ -1,0 +1,22 @@
+.box{
+    display: flex !important;
+    justify-content: center !important; 
+    
+        align-items: center !important;
+   
+  
+}
+.button{
+    /* text-decoration: none !important;
+    margin-left: 1px !important;
+    margin-right: 1px !important;
+  height: 23px !important; */
+
+    margin: 10px !important;
+    
+  
+
+}
+.dontdecorate{
+    text-decoration: none !important; 
+}

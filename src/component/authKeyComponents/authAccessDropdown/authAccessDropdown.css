@@ -1,0 +1,16 @@
+.formcontrol{
+margin: 1px !important;
+width:300px !important;
+height:50px !important;
+
+   
+}
+.selected{
+    background-color: rgba(0, 0, 0, 0.08);
+}
+.notselected:hover{
+    background-color: rgba(0, 0, 0, 0.08);
+}
+.listitem{
+    font-weight: 500;
+}

@@ -5,13 +5,13 @@ import Authpage from './pages/authPage';
 import LandingPage from './pages/landingPage';
 import { AuthContextProvider } from './context/authContext';
 import "./pages/css.css"
-import DbDetail from './pages/dbDetail';
+import DbDetail from './pages/dbDetail/dbDetail';
 import ApiDocPage from './pages/apidocPage';
-import Protected from './component/protected';
-import WithAuth from './component/withAuth';
-import Notfoundpage from './component/notFoundPage';
-import AuthKeyPage from './pages/authKeyPage';
-import CreateAuth from './pages/createAuth';
+import Protected from './component/protected/protected';
+import WithAuth from './component/withAuth/withAuth';
+import Notfoundpage from './component/notFoundPage/notFoundPage';
+import AuthKeyPage from './pages/authKeyPage/authKeyPage';
+import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

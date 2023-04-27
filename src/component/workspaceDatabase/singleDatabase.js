@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Box, TextField, Button } from "@mui/mate
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import Dropdown from "../dropdown";
+import Dropdown from "../dropdown/dropdown";
 import { useDispatch } from "react-redux";
 import { removeDbThunk, renameDBThunk } from "../../store/database/databaseThunk";
 

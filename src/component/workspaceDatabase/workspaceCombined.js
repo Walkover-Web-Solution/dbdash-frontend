@@ -1,6 +1,6 @@
 import React, {  useState } from 'react'
 import { Box } from '@mui/material'
-import PopupModal from '../popupModal';
+import PopupModal from '../popupModal/popupModal';
 import Button from '@mui/material/Button';
 import { OrgList } from './orgList';
 import { PropTypes } from 'prop-types';

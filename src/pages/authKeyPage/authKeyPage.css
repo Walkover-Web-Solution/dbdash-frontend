@@ -1,0 +1,14 @@
+.boxone{
+    display: flex !important;
+    justify-content: flex-end !important;
+    
+}
+.dontdecorate{
+    text-decoration: none !important;
+}
+.mt2{
+    margin-top: 2px !important;
+}
+Button{
+    margin-right: 5px !important;
+}

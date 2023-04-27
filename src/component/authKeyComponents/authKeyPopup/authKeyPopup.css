@@ -1,0 +1,17 @@
+.thirdbox{
+    display: flex;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+.button{
+    margin-top: 10px;
+}
+.forthbox{
+    margin-right: 4px;
+}
+.dontdecorate{
+    text-decoration: none;
+}
+.sixthbox{
+    margin-top: 1.3rem;
+}

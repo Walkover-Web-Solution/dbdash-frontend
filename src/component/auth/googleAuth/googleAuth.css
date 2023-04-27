@@ -1,0 +1,10 @@
+.button{
+    margin-top: 10px;
+    font-weight: bold;
+    border:2rem;
+    border-color: black;
+}
+.img{
+    width: 30px;
+    height: auto;
+}

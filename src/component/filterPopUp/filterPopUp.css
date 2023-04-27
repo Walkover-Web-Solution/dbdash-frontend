@@ -1,0 +1,70 @@
+.thirdclass{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 5px;
+   
+}
+.forthbox{
+    display: flex !important;
+    flex-direction: column !important;
+    
+}
+.fifthbox{
+    margin-bottom: 5px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    
+}
+.errorbox{
+ width: 150px !important;
+  height: 60px !important;
+   font-weight: bold !important;
+}
+.error{
+    color: red !important;
+    font-size: 12px !important;
+    padding-left: 172px !important;
+
+}
+.map{
+    display: flex !important;
+    flex-direction: row !important;
+  
+}
+.where{
+    margin-top: 16px !important;
+    margin-right: 3px !important;
+    color: blue !important;
+
+}
+.select{
+    width: 150px !important;
+    height :56px !important;
+}
+.mr1{
+    margin-right: 3px !important;
+}
+.textfield{
+    width:150px !important;
+    height:56px !important;
+    font-weight: bold !important;
+   
+}
+.marginbottomleft{
+    margin-bottom: 5px !important;
+    margin-left: 2.5px !important;
+  
+
+}
+.addBtnStyle  {
+    color:white;
+
+    background-color:#1976d2;
+  }
+  .create{
+    display: flex !important;
+    justify-content: space-between !important;
+   
+  }
