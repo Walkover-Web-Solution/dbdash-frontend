@@ -54,9 +54,7 @@ export default function FieldPopupModal(props) {
     }
     props?.setTextValue(event.target.value);
   };
-
   const handleSelectChange = (event) => {
-
     setShowLinkField(false)
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
@@ -70,6 +68,10 @@ export default function FieldPopupModal(props) {
 
     if (event.target.value == "formula") {
       setShowFormulaField(true)
+      props?.setSelectValue(event.target.value);
+    }
+    else if(event.target.value == "email"){
+      setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
@@ -105,7 +107,7 @@ export default function FieldPopupModal(props) {
     } else if (event.target.value === 'checkbox') {
       props?.setSelectValue('checkbox')
     }
-    else if (event.target.value === "singlelinetext") {
+    else if (event.target.value === "singlelinetext" || event.target.value === "longtext") {
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }
