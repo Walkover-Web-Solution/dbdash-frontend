@@ -46,8 +46,11 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
 
   const renameTableName = async (db_id, tableName) => {
     const data1 = {
-      newTableName: tableNa || table[0]
+      newTableName: tableNa !== null ? tableNa : table[0]
     };
+    if (tableName === data1.newTableName) {
+      return;
+    }
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
