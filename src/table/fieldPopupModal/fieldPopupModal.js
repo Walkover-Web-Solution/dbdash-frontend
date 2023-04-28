@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Switch,FormGroup,FormControlLabel} from "@mui/material";
-import { useSelector } from "react-redux";
-import { getAllTableInfo } from "../../store/allTable/allTableSelector";
+// import { useSelector } from "react-redux";
+// import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -25,7 +25,7 @@ import PropTypes from "prop-types";
 
 export default function FieldPopupModal(props) {
 
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
@@ -75,8 +75,8 @@ export default function FieldPopupModal(props) {
     else if (event.target.value == "link") {
       setShowLinkField(true)
       props?.setSelectValue(event.target.value);
-      const firstTable = Object.keys(AllTableInfo.tables)[0];
-      props?.setSelectedTable(firstTable);
+      // const firstTable = Object.keys(AllTableInfo.tables)[0];
+      // props?.setSelectedTable(firstTable);
     }
     else if (event.target.value == "lookup") {
       setShowLookupField(true)
