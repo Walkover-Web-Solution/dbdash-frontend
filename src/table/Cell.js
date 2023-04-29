@@ -41,6 +41,7 @@ const Cell = memo(
     const [addSelectRef, setAddSelectRef] = useState(null);
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
+    const [imageLink,setImageLink] = useState("")
 
     const handleImageClick = (imgLink) => {
       window.open(imgLink, "_blank");
@@ -54,7 +55,22 @@ const Cell = memo(
     const onChange = (e) => {
       setValue({ value: e.target.value, update: false });
     };
-
+    const onChangeUrl = (e,type)=>{
+      if (imageLink != null) {
+        dispatch(
+          updateCells({
+            columnId: id,
+            rowIndex: row.original.id,
+            value: null,
+            imageLink:imageLink,
+            dataTypes: type,
+          })
+        ).then(() => {
+          toast.success("Image uploaded successfully!");
+        });
+      }
+      e.target.value = null;
+    }
     const onChangeFile = (e, type) => {
       if (e.target.files[0] != null) {
         dispatch(
@@ -62,6 +78,7 @@ const Cell = memo(
             columnId: id,
             rowIndex: row.original.id,
             value: e.target.files[0],
+            imageLink:imageLink,
             dataTypes: type,
           })
         ).then(() => {
@@ -81,14 +98,14 @@ const Cell = memo(
         value?.value !== initialValue &&
         value?.value !== ""
       ) {
-        dispatch(
-          updateCells({
-            columnId: id,
-            rowIndex: row.original.id,
-            value: value.value,
-            dataTypes: "dataTypes",
-          })
-        );
+        // dispatch(
+        //   updateCells({
+        //     columnId: id,
+        //     rowIndex: row.original.id,
+        //     value: value.value,
+        //     dataTypes: "dataTypes",
+        //   })
+        // );
       }
     }, [value, id, row.index]);
 
@@ -515,7 +532,10 @@ const Cell = memo(
                 title="uplaodfile"
                 label="UploadFileIcon"
                 open={open}
+                setImageLink = {setImageLink}
+                onChangeUrl={onChangeUrl}
                 setOpen={setOpen}
+                imageLink={imageLink}
                 onChangeFile={onChangeFile}
               />
             )}

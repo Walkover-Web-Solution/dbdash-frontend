@@ -17,7 +17,7 @@ export default function LoookupDataType(props) {
     props?.setSelectedFieldName(Object.entries(AllTableInfo?.tables[foreignKey?.[0][1]?.metaData?.foreignKey?.tableId]?.fields)[0][0]);
   }
 
-  if (!(props?.linkedValueName)) {
+  if (!(props?.linkedValueName) && foreignKey?.length > 0 ) {
     const selectedField = AllTableInfo.tables[props.tableId].fields[foreignKey?.[0][0]];
     props?.setLinkedValueName({
       [foreignKey?.[0][0]]: selectedField
@@ -29,7 +29,8 @@ export default function LoookupDataType(props) {
       {foreignKey?.length == 0 && <span style={{ color: 'red' }}>Create Foreign key first.</span>}
 
       {
-        foreignKey?.length > 0 && (<Select
+        foreignKey?.length > 0 && (
+        <Select
           labelId="select-label"
           id="select"
           value={props?.linkedValueName ? Object.keys(props?.linkedValueName)[0] : foreignKey[0][0]}
@@ -67,7 +68,7 @@ export default function LoookupDataType(props) {
         </Select>
         )}
 
-      {openViewDropdown && (<Select
+      { foreignKey?.length > 0 && openViewDropdown && (<Select
         labelId="select-label"
         id="select"
         value={props?.selectedFieldName}
