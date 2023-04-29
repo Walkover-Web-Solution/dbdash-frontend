@@ -245,7 +245,7 @@ export const updateCells = createAsyncThunk(
        const  columnId= payload.columnId;
        if(payload?.dataTypes == "file")
        {
-        const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value)
+        const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value,payload?.imageLink)
             payload.value = data?.data?.data;
             return payload;
        }
