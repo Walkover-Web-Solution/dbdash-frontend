@@ -37,13 +37,16 @@ import {updateCells } from "../../store/table/tableThunk";
   ) => {
     event.preventDefault();
     const text = event.clipboardData.getData("text/plain");
-    dispatch(
-      updateCells({
-        columnId: cell.column.id,
-        rowIndex: cell.row.original.id,
-        value: text,
-      })
-    );
+    if(cell?.column?.dataType != "attachment"){
+      
+      dispatch(
+        updateCells({
+          columnId: cell.column.id,
+          rowIndex: cell.row.original.id,
+          value: text,
+        })
+      );
+    }
   };
 
   const RenderRow = React.useCallback(
