@@ -3,19 +3,24 @@ import PropTypes from 'prop-types';
 import { Typography, Menu, MenuItem, Tooltip, IconButton } from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from '../alertPopup/alertPopup';
+//import Movemodal from '../Movemodal';
 // import SelectFilepopup from '../table/selectFilepopup';
 import './dropdown.css'
 
 export default function Dropdown(props) {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
+   
+  
 
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
     const handleCloseUserMenu = (e) => {
       e.stopPropagation();
+    
       setAnchorElUser(null);
+    
     };
     const handleClickOpen = () => {
       setOpen(true);
@@ -55,11 +60,18 @@ export default function Dropdown(props) {
               }
               }}>{props?.first}</Typography>
             </MenuItem>
-            <MenuItem onClick={(e)=>{e.preventDefault();
+          {(props?.second==="Delete Database" || props?.second==="Delete" || props?.second==="Delete workspace") && <MenuItem onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e);setOpen(true);}}>
               <Typography  onClick={handleClickOpen} textAlign="center" >{props?.second}</Typography>
-            </MenuItem>
-            
+            </MenuItem>}
+           {props?.third==="Move" && <MenuItem onClick={handleCloseUserMenu}>
+              <Typography  onClick={(e)=>{e.preventDefault(); e.stopPropagation();
+              props?.setOpenmove(true);
+              if (typeof props?.setTabIndex === 'function') 
+              {
+                props?.setTabIndex(props?.tabIndex)
+              }}} textAlign="center" >{props?.third}</Typography>
+            </MenuItem> }
             {/* <MenuItem  onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e); setUploadCsvClicked(true); }}>
              <Typography>{props.third}</Typography>
@@ -68,8 +80,9 @@ export default function Dropdown(props) {
                   label="UploadFileIcon" open={uploadCsvClicked} setOpen={setUploadCsvClicked} onChangeFile={onChangeFiles} />} */}
           
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
-          </Menu>
-          
+        </Menu>
+         {/* <Movemodal orgid={props?.orgid} dbid={props?.dbid} openmove={openmove} setOpenmove={setOpenmove} selectedorg={selectedorg} setSelectedorg={setSelectedorg}/>
+        */}
     </>
   )
 }
@@ -83,5 +96,9 @@ Dropdown.propTypes = {
   deleteFunction : PropTypes.func, 
   setTabIndex:PropTypes.func,
   tabIndex:PropTypes.number,
-  tables:PropTypes.any
+  tables:PropTypes.any,
+  orgid:PropTypes.any,
+  dbid:PropTypes.any,
+  
+  setOpenmove:PropTypes.func
 };

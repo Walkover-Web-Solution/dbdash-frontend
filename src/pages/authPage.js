@@ -28,9 +28,9 @@ export default function Authpage() {
 
   }
   return (
-    <Container sx={{display: 'flex',  justifyContent: 'center', backgroundColor: "rgb(211, 211, 211,0.3)", padding:0, height:625 ,maxWidth:1360}} >
+    <Container sx={{display: 'flex',  justifyContent: 'center', backgroundColor: "rgb(211, 211, 211,0.3)", padding:0, height:700 ,maxWidth:1360}} >
     
-      <Box sx={{backgroundColor: "white", width: '35%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 3, borderRadius: 4, mt:2, mb:2,height:510 }}>
+      <Box sx={{backgroundColor: "white", width: '35%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 3, borderRadius: 4, mt:2, mb:2,height:600 }}>
 
         <Box sx={{m:2}}>
 
@@ -45,7 +45,7 @@ export default function Authpage() {
           <GoogleAuth />
         </Box>
 
-        <p  style={{marginTop:'15px'}}>or</p>
+        <p  style={{marginTop:'15px',marginBottom:"3px"}}>or</p>
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           {/* condition to show login page or signup page */}
           {isLogin === true ? <LoginInput loginHandleSubmit={loginHandleSubmit} /> : <SignupInput signupHandleSubmit={signupHandleSubmit} />}

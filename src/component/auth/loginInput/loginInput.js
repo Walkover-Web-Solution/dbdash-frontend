@@ -84,7 +84,7 @@ export default function LoginInput(props) {
 
     </Box>
 
-     <Button onClick={validate} type='submit' sx={{bgcolor: 'text.primary', width:"50%", my:2}} variant="contained">Login</Button>
+     <Button onClick={validate} type='submit' sx={{bgcolor: 'text.primary', width:"50%", mb:1,mt:6}} variant="contained">Login</Button>
      
 </Box>    
   )

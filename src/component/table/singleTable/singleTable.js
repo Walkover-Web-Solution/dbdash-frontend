@@ -42,7 +42,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
 
   const renameTableName = async (db_id, tableName) => {
     const data1 = {
-      newTableName: tableNa || table[0]
+      newTableName: tableNa || table[1]?.tableName
     };
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
@@ -93,7 +93,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
               <Box>
                 <TextField
                   // onBlur={handleOpen}
-                  defaultValue={table[1]?.tableName || table[0]}
+                  defaultValue={table[1]?.tableName}
                   className="rename"
                   autoFocus  value={tableNa}
                   onKeyDown={(e) => {

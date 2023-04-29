@@ -10,6 +10,6 @@ const databaseSlice = createSlice({
   });
 
 
-export const { bulkAdd, createOrg, renameOrg, deleteOrg, createDb, updateDb, deleteDb } = databaseSlice.actions;
+export const { bulkAdd, createOrg, renameOrg, deleteOrg, createDb, updateDb, deleteDb,moveDb } = databaseSlice.actions;
 
 export default databaseSlice.reducer;

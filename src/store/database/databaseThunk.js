@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { renameDb, deleteDb, createDb } from "../../api/dbApi";
+import { renameDb, deleteDb, createDb,moveDb } from "../../api/dbApi";
 import { addUserInOrg, createOrg, deleteOrg, getAllOrgs, removeUserInOrg, updateOrg } from "../../api/orgApi";
 import { findUserByEmail } from "../../api/userApi";
 
@@ -21,6 +21,16 @@ export const bulkAdd = createAsyncThunk(
     }
 );
 
+export const moveDbThunk=createAsyncThunk(
+    "organdDb/moveDbThunk",async({orgid,dbid,data})=>{
+        const response=await moveDb(orgid,dbid,data);
+       const moveData  = {
+             data1 : response?.data?.data,
+             orgId : orgid
+       }
+        return moveData ; 
+    }
+)
 export const createDbThunk = createAsyncThunk(
     "organdDb/createDbThunk", async (payload) => {
         const data = await createDb(payload.orgId, payload.data);
