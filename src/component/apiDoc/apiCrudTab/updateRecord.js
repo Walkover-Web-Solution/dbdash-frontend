@@ -20,7 +20,7 @@ function UpdateRecord(props) {
     <br/>
     <br/>
     <Box>
-      <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:id}`}/>
+      <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}`}/>
       <Typography>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</Typography>
       <Typography>{`-H Content-Type: application/json` }</Typography>
       <Typography sx={{ whiteSpace: 'pre-wrap' }}>{data}</Typography>
