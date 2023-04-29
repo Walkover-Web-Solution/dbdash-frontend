@@ -24,11 +24,13 @@ export default function SingleDatabase(props) {
     setOpenmove(false);
   }
 const handlemove = async (orgid, dbid) => {
+  
   const data={
       newOrgId:selectedorg._id
   }
 
 dispatch(moveDbThunk({orgid,dbid,data}))
+
 
 };
 const[openmove,setOpenmove]=useState(false);

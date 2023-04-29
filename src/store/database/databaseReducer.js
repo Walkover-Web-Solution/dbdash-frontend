@@ -16,6 +16,7 @@ export const reducers = {
       state.dbName = database_name;
     }
   },
+
   
 moveDb(state)
 {
@@ -31,6 +32,7 @@ moveDb(state)
 
 
   },
+  
 
   removeDb(state) {
     state.dbId = '';
@@ -55,7 +57,9 @@ export function extraReducers(builder) {
     let object = oldArr.find((obj) => obj._id === action.payload.data1._id);
     if (object) {
     oldArr = oldArr.filter((obj) => obj._id !== action.payload.data1._id);
-    object.org_id = action.payload.data1.org_id;
+    
+    object.org_id._id = action.payload.data1.org_id;
+    
     newArr.push(object);
     
      state.orgId = {
@@ -192,9 +196,17 @@ export function extraReducers(builder) {
     .addCase(deleteOrgThunk.fulfilled, (state, action) => {
 
       state.status = "succeeded";
-      let arr = state.orgId;
-      delete arr[action.payload];
-      state.orgId = { ...arr }
+      
+
+      const deletedOrgId = action.payload;
+  
+      // Remove the deleted organization from state.allOrg
+      state.allOrg = state.allOrg.filter(org => org.id !== deletedOrgId);
+      
+      // Remove the deleted organization from state.orgId
+      let orgIdArr = state.orgId;
+      delete orgIdArr[deletedOrgId];
+      state.orgId = { ...orgIdArr };
 
     })
     .addCase(deleteOrgThunk.rejected, (state) => {
