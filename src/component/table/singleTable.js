@@ -154,7 +154,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
                 label={table[1]?.tableName || table[0]}
                 dropdown={<Dropdown setTabIndex={setTabIndex}
                   tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
-                  first="Rename" idToDelete={dbData?.db?._id}
+                  first="Rename" second="" idToDelete={dbData?.db?._id}
                   deleteFunction={deleteTableName} setName={setName} />}
               />}
             </Box>

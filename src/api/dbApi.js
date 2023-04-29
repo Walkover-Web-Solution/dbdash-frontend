@@ -32,6 +32,11 @@ const deleteDb = async (orgId,id) =>
      return await axios.delete(URL +`/dbs/${orgId}/dbs/${id}`)
 }
 
+const moveDb=async(org_id,dbId,data)=>
+{
+
+return await axios.patch(URL+`/dbs/${org_id}/dbs/${dbId}/movedb`,data);
+}
 
 
 
@@ -41,5 +46,6 @@ export {
     getDbById,
     getDbByOrgId,
     renameDb,
-    deleteDb
+    deleteDb,
+    moveDb
 }

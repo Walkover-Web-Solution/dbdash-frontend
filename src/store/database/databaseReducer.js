@@ -1,5 +1,5 @@
 
-import { removeDbThunk, renameDBThunk, createDbThunk, bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk} from './databaseThunk';
+import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk} from './databaseThunk';
 export const initialState = {
   status: 'idle',
   orgId: {
@@ -16,6 +16,14 @@ export const reducers = {
       state.dbName = database_name;
     }
   },
+  
+moveDb(state)
+{
+
+  state.orgId='';
+  state.dbId='';
+  state.data='';
+},
   renameDb(state) {
     state.dbId = '';
     state.orgId = '';
@@ -35,6 +43,34 @@ export const reducers = {
 export function extraReducers(builder) {
   builder
     //    //   rename Db
+    .addCase(moveDbThunk.pending,(state)=>{
+      state.status="loading"
+    })
+    .addCase(moveDbThunk.fulfilled,(state,action)=>{
+    
+      state.status = "succeeded";
+    let oldArr = state.orgId[action.payload.orgId] || [];
+    let newArr = state.orgId[action.payload.data1.org_id] || [];
+    
+    let object = oldArr.find((obj) => obj._id === action.payload.data1._id);
+    if (object) {
+    oldArr = oldArr.filter((obj) => obj._id !== action.payload.data1._id);
+    object.org_id = action.payload.data1.org_id;
+    newArr.push(object);
+    
+     state.orgId = {
+    ...state.orgId,
+    [action.payload.orgId]: oldArr,
+    [action.payload.data1.org_id]: newArr,
+    };
+     }
+    })
+    .addCase(moveDbThunk.rejected, (state) => {
+    
+      state.status = "failed";
+     
+    })
+    
 
     .addCase(renameDBThunk.pending, (state) => {
 
