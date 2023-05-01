@@ -38,14 +38,16 @@ export default function CreateAuthKey() {
     // e.preventDefault();
     const adminId1 = localStorage.getItem("userid");
     const adminId = userDetails?.fullName;
-    const data = {
+    let data = {
       name: name,
       scope: scope,
       access: selected,
       userId: adminId1,
     };
-    if (!dbId) {
-     
+    if(selected?.length === Object.entries(options)?.length){
+      data.access = "1";
+    }
+    if (!dbId) {     
       const create = await createAuthkey(id, adminId, data);
       setOpen(true);
       setAuthKey(create?.data?.data?.authKey);
@@ -62,18 +64,29 @@ export default function CreateAuthKey() {
   const updateValueOnEdit = () => {
     if (dbId) {
       setName(dbId?.authData?.name);
-      setScope(Object.values(dbId?.authData?.access)[0]?.scope);
-      const tableIds = Object.keys(dbId?.authData?.access);
-      const optionList = Object.entries(options).map(([id, { tableName }]) => ({
-        id,
-        tableName,
-      }));
-
-      const selectedTables = optionList
-        .filter(({ id }) => tableIds.includes(id))
-        .map(({ tableName }) => tableName);
-      setSelected(selectedTables);
-    }
+      if(Object.values(dbId?.authData?.access)[0] == "1"){
+        setScope(Object.values(dbId?.authData)[3]);
+        let all = []
+        Object.entries(options).map((option) => {
+          all = [...all, option[1].tableName]
+        })
+        setSelected(all);
+      }
+      else
+      {
+        setScope(Object.values(dbId?.authData?.access)[0]?.scope);
+        const tableIds = Object.keys(dbId?.authData?.access);
+        const optionList = Object.entries(options).map(([id, { tableName }]) => ({
+          id,
+          tableName,
+        }));
+  
+        const selectedTables = optionList
+          .filter(({ id }) => tableIds.includes(id))
+          .map(({ tableName }) => tableName);
+        setSelected(selectedTables);
+      }
+      }
   };
  
   useEffect(() => {
