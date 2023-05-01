@@ -359,99 +359,209 @@ const Cell = memo(
           </>
         );
         break;
-
-      case "select":
-        element = (
-          <>
-            <div
-              ref={setSelectRef}
-              className="cell-padding d-flex cursor-default align-items-center flex-1"
-              onClick={() => setShowSelect(true)}
-            >
-              {value.value && (
-                <Relationship
-                  value={value.value}
-                  backgroundColor={getColor()}
-                />
-              )}
-            </div>
-            {showSelect && (
-              <div className="overlay" onClick={() => setShowSelect(false)} />
-            )}
-            {showSelect && (
+        case "singleselect":
+          element = (
+            <>
               <div
-                className="shadow-5 bg-white border-radius-md"
-                ref={setSelectPop}
-                {...attributes.popper}
-                style={{
-                  ...styles.popper,
-                  zIndex: 4,
-                  minWidth: 200,
-                  maxWidth: 320,
-                  padding: "0.75rem",
-                }}
+                ref={setSelectRef}
+                className="cell-padding d-flex cursor-default align-items-center flex-1"
+                onClick={() => setShowSelect(true)}
               >
+                {value.value && (
+                  <Relationship
+                    value={value.value}
+                    backgroundColor={getColor()}
+                  />
+                )}
+              </div>
+              {showSelect && (
+                <div className="overlay" onClick={() => setShowSelect(false)} />
+              )}
+              {showSelect && (
                 <div
-                  className="d-flex flex-wrap-wrap"
-                  style={{ marginTop: "-0.5rem" }}
+                  className="shadow-5 bg-white border-radius-md"
+                  ref={setSelectPop}
+                  {...attributes.popper}
+                  style={{
+                    ...styles.popper,
+                    zIndex: 4,
+                    minWidth: 200,
+                    maxWidth: 320,
+                    padding: "0.75rem",
+                  }}
                 >
-                  {options.map((option, index) => (
+                  <div
+                    className="d-flex flex-wrap-wrap"
+                    style={{ marginTop: "-0.5rem" }}
+                  >
+                    {options.map((option, index) => (
+                      <div
+                        key={index}
+                        className="cursor-pointer"
+                        style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                        onClick={() => {
+                          setValue({ value: option.label, update: true });
+                          setShowSelect(false);
+                        }}
+                      >
+                        <Relationship
+                          value={option.label}
+                          backgroundColor={option.backgroundColor}
+                        />
+                      </div>
+                    ))}
+                    {showAdd && (
+                      <div
+                        style={{
+                          marginRight: "0.5rem",
+                          marginTop: "0.5rem",
+                          width: 120,
+                          padding: "2px 4px",
+                          backgroundColor: grey(200),
+                          borderRadius: 4,
+                        }}
+                      >
+                        <input
+                          type="text"
+                          className="option-input"
+                          onBlur={handleOptionBlur}
+                          ref={setAddSelectRef}
+                          onKeyDown={handleOptionKeyDown}
+                        />
+                      </div>
+                    )}
                     <div
-                      key={index}
                       className="cursor-pointer"
                       style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                      onClick={() => {
-                        setValue({ value: option.label, update: true });
-                        setShowSelect(false);
-                      }}
+                      onClick={handleAddOption}
                     >
                       <Relationship
-                        value={option.label}
-                        backgroundColor={option.backgroundColor}
+                        value={
+                          <span className="svg-icon-sm svg-text">
+                            <PlusIcon />
+                          </span>
+                        }
+                        backgroundColor={grey(200)}
                       />
                     </div>
-                  ))}
-                  {showAdd && (
-                    <div
-                      style={{
-                        marginRight: "0.5rem",
-                        marginTop: "0.5rem",
-                        width: 120,
-                        padding: "2px 4px",
-                        backgroundColor: grey(200),
-                        borderRadius: 4,
-                      }}
-                    >
-                      <input
-                        type="text"
-                        className="option-input"
-                        onBlur={handleOptionBlur}
-                        ref={setAddSelectRef}
-                        onKeyDown={handleOptionKeyDown}
-                      />
-                    </div>
-                  )}
-                  <div
-                    className="cursor-pointer"
-                    style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                    onClick={handleAddOption}
-                  >
-                    <Relationship
-                      value={
-                        <span className="svg-icon-sm svg-text">
-                          <PlusIcon />
-                        </span>
-                      }
-                      backgroundColor={grey(200)}
-                    />
                   </div>
                 </div>
-              </div>
-            )}
-          </>
-        );
-        break;
-      case "check":
+              )}
+            </>
+          );
+          break;
+          case "multiselect":
+            element = (
+              <>
+                <div
+                  ref={setSelectRef}
+                  className="cell-padding d-flex cursor-default align-items-center flex-1"
+                  onClick={() => setShowSelect(true)}
+                >
+                  {value.length > 0 && (
+                    <div className="d-flex flex-wrap">
+                      {value.map((selectedOption, index) => (
+                        <div key={index} className="mr-1 mb-1">
+                          <Relationship
+                            value={selectedOption}
+                            backgroundColor={getColor(selectedOption)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {showSelect && (
+                  <div className="overlay" onClick={() => setShowSelect(false)} />
+                )}
+                {showSelect && (
+                  <div
+                    className="shadow-5 bg-white border-radius-md"
+                    ref={setSelectPop}
+                    {...attributes.popper}
+                    style={{
+                      ...styles.popper,
+                      zIndex: 4,
+                      minWidth: 200,
+                      maxWidth: 320,
+                      padding: "0.75rem",
+                    }}
+                  >
+                    <div
+                      className="d-flex flex-wrap-wrap"
+                      style={{ marginTop: "-0.5rem" }}
+                    >
+                      {options.map((option, index) => (
+                        <div
+                          key={index}
+                          className="cursor-pointer d-flex align-items-center"
+                          style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                        >
+                          <input
+                            type="checkbox"
+                            className="mr-2"
+                            checked={value.includes(option.label)}
+                            onChange={() => {
+                              const selectedValues = [...value];
+                              const optionIndex = selectedValues.indexOf(
+                                option.label
+                              );
+                              if (optionIndex > -1) {
+                                selectedValues.splice(optionIndex, 1);
+                              } else {
+                                selectedValues.push(option.label);
+                              }
+                              setValue(selectedValues);
+                            }}
+                          />
+                          <Relationship
+                            value={option.label}
+                            backgroundColor={option.backgroundColor}
+                          />
+                        </div>
+                      ))}
+                      {showAdd && (
+                        <div
+                          style={{
+                            marginRight: "0.5rem",
+                            marginTop: "0.5rem",
+                            width: 120,
+                            padding: "2px 4px",
+                            backgroundColor: grey(200),
+                            borderRadius: 4,
+                          }}
+                        >
+                          <input
+                            type="text"
+                            className="option-input"
+                            onBlur={handleOptionBlur}
+                            ref={setAddSelectRef}
+                            onKeyDown={handleOptionKeyDown}
+                          />
+                        </div>
+                      )}
+                      <div
+                        className="cursor-pointer d-flex align-items-center"
+                        style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                        onClick={handleAddOption}
+                      >
+                        <Relationship
+                          value={
+                            <span className="svg-icon-sm svg-text">
+                              <PlusIcon />
+                            </span>
+                          }
+                          backgroundColor={grey(200)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            );
+            break;
+          
+          case "check":
         element = (
           <div key={row.getRowProps().key} style={{display: 'flex', flex: '1 0 auto',position:'sticky'}}  role="row"  className="tr">
             {!row.isSelected && (

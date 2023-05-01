@@ -374,6 +374,12 @@ export default function Header({
       case "phone":
       propertyIcon = <LocalPhoneIcon fontSize="2px" />;
       break;
+      case "singleselect":
+        propertyIcon = <MultiIcon fontSize="2px" />;
+        break;
+        case "multipleselect":
+          propertyIcon = <MultiIcon fontSize="2px" />;
+          break;
 
     default:
       propertyIcon = <MultiIcon />;
