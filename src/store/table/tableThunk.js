@@ -201,7 +201,8 @@ export const addColumnrightandleft = createAsyncThunk(
             selectedTable:payload?.selectedTable,
             query:payload?.query,
             linkedForeignKey:payload?.linkedValueName,
-            foreignKey : payload?.foreignKey
+            foreignKey : payload?.foreignKey,
+            duplicateField: payload?.duplicateField
         }
         if(payload?.fieldType == "lookup")
             await createView(payload?.dbId,payload?.tableId,data);

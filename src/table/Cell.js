@@ -310,23 +310,6 @@ const Cell = memo(
           break;
 
           case "phone":
-          // element = (
-          //   <ContentEditable
-          //     html={(value?.value && value?.value?.toString()) || ""}
-          //     onChange={(event) => {
-          //       let newValue = event.target.value.replace(/[^\d+]/g, "");
-          //       if (newValue.length > 13) {
-          //         newValue = newValue.slice(0, 13);
-          //       }
-          //       onChange({ target: { value: newValue } });
-          //     }}
-          //     onBlur={() =>
-          //       setValue((old) => ({ value: old.value, update: true }))
-          //     }
-          //     className="data-input"
-          //   />
-          // );
-
           element = (
             <>
               <input type="tel" id="phone" name="phone" maxLength="13"
@@ -361,7 +344,7 @@ const Cell = memo(
         );
         break;
 
-      case "select":
+      case "singleselect":
         element = (
           <>
             <div

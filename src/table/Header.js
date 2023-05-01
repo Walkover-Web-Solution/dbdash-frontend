@@ -26,11 +26,13 @@ import PersonPinIcon from '@mui/icons-material/PersonPin';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import ContentCopySharpIcon from '@mui/icons-material/ContentCopySharp';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import {getQueryByAi} from "../api/fieldApi"
 import PropTypes from 'prop-types';
+import DuplicateFieldPopup from "./duplicateFieldPopup";
 export default function Header({
   column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy}) 
   {
@@ -41,16 +43,23 @@ export default function Header({
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [metaData, setMetaData] = useState({});
   const [open, setOpen] = useState(false);
+  const [showduplicate, setShowDuplicate] = useState(false);
   const [directionAndId,setDirectionAndId]= useState({})
   const [selectedTable, setSelectedTable] = useState("");
   const [linkedValueName,setLinkedValueName] = useState("")
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
-  
+  const [duplicateField,setDuplicateField] = useState(true);
+
   const handleOpen = () => {
     setOpen(true);
     setExpanded(false);
   }
+  const handleOpenDuplicate = () => {
+    setShowDuplicate(true)
+    setExpanded(false);
+  }
+
   const createColumn = async (userQuery) => {
     if(!userQuery)
     {
@@ -88,6 +97,12 @@ export default function Header({
     }));
     setSelectValue('longtext')
 
+  }
+  const duplicateFields = (props) => {
+    setShowDuplicate(false);
+    dispatch(addColumnrightandleft({dbId: tableInfo?.dbId,
+        tableId: tableInfo?.tableId,...props}));
+    setSelectValue();
   }
 
   const [expanded, setExpanded] = useState(created || false);
@@ -159,6 +174,22 @@ export default function Header({
       label: "Insert right"
     },
     {
+      onClick: () => {
+      
+        // setDirectionAndId({
+        //   direction: "right",
+        //   position: id,
+        //   duplicateField: true
+        // });
+        
+        
+        setExpanded(false);
+        handleOpenDuplicate();
+      },
+      icon: <ContentCopySharpIcon fontSize="1px" />,
+      label: "Duplicate Field"
+    },
+    {
       onClick: () =>
       {
         dispatch(deleteColumns({
@@ -170,7 +201,6 @@ export default function Header({
           dbId: tableInfo?.dbId
         }))
         setExpanded(false);
-        
       },
       icon: <TrashIcon />,
       label: "Delete"
@@ -304,13 +334,25 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "select"
+          dataType: "text"
         }))
         setShowType(false);
         setExpanded(false);
       },
       icon: <MultiIcon />,
-      label: "Select"
+      label: "singleselect"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <TextFormatIcon fontSize="2px"/>,
+      label: "multipleselect"
     },
     {
       onClick: () => {
@@ -347,7 +389,7 @@ export default function Header({
     case "longtext":
       propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
-    case "select":
+    case "singleselect":
       propertyIcon = <MultiIcon fontSize="2px"/>;
       break;
     case "createdby":
@@ -374,7 +416,9 @@ export default function Header({
       case "phone":
       propertyIcon = <LocalPhoneIcon fontSize="2px" />;
       break;
-
+      case "multipleselect":
+      propertyIcon = <LocalPhoneIcon fontSize="2px" />;
+      break;
     default:
       propertyIcon = <MultiIcon />;
       break;
@@ -431,9 +475,30 @@ export default function Header({
       }))
     }
   }
+  
+  const handleClose = () => {
+    setShowDuplicate(false);
+  };
 
-  return id == 999999 || id == 9999991 ? (
+  const handleDuplicate = () => {
+    duplicateFields({direction: "right", position: id, duplicateField: `${duplicateField}`
+  });
+  };
+
+  const handleUniqueChange = () => {
+    setDuplicateField((isDuplicate)=>
+    !isDuplicate
+    )};
+  
+  return <><DuplicateFieldPopup
+  open={showduplicate}
+  handleClose={handleClose}
+  handleDuplicate={handleDuplicate}
+  handleUniqueChange={handleUniqueChange}
+  duplicateField={duplicateField}
+/> {id == 999999 || id == 9999991 ? (
     <>
+ 
 
       {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block", backgroundColor: '#E8E8E8'} })} className='th noselect'>
         <div
@@ -444,7 +509,9 @@ export default function Header({
             <PlusIcon />
           </span>
         </div> 
-        <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn}/>
+        <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn}
+        />
+{/* <DuplicateFieldPopup  open={open} setOpen={setOpen}/>  */}
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block",flex:"none" ,width:"20px"} })}  className='th noselect'
@@ -465,8 +532,8 @@ export default function Header({
         </div>
         <div {...getResizerProps()} className='resizer' />
       </div>
-      <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName}  queryByAi ={queryByAi}  tableId = {tableInfo?.tableId}  selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable}  setSelectValue={setSelectValue} textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setShowFieldsDropdown={setShowFieldsDropdown} linkedValueName={linkedValueName}  setLinkedValueName={setLinkedValueName} showFieldsDropdown={showFieldsDropdown}  setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn}/>
-      
+      <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName}  queryByAi ={queryByAi}  tableId = {tableInfo?.tableId}  selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable}  setSelectValue={setSelectValue} textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setShowFieldsDropdown={setShowFieldsDropdown} linkedValueName={linkedValueName}  setLinkedValueName={setLinkedValueName} showFieldsDropdown={showFieldsDropdown}  setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn}
+      />      
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (
         <div ref={setPopperElement} style={{ ...styles.popper, zIndex: 3 }} {...attributes.popper}>
@@ -545,10 +612,8 @@ export default function Header({
       )}
     </>
 
-  );
-
-
-
+  )}
+  </>
 }
 
 Header.propTypes = {
