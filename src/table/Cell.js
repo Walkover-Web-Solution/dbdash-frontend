@@ -10,12 +10,13 @@ import { useDispatch } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-import { Link, Tabs } from "@mui/material";
+import {Tabs } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+// import { Document} from 'react-pdf';
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -43,9 +44,9 @@ const Cell = memo(
     const [open, setOpen] = useState(false);
     const [imageLink,setImageLink] = useState("")
 
-    const handleImageClick = (imgLink) => {
-      window.open(imgLink, "_blank");
-    };
+    // const handleImageClick = (imgLink) => {
+    //   window.open(imgLink, "_blank");
+    // };
 
     const handleUploadFileClick = () => {
       setOpen(true);
@@ -508,22 +509,10 @@ const Cell = memo(
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <Link
-                    key={index}
-                    onClick={() => {
-                      handleImageClick(imgLink);
-                    }}
-                  >
-                    <img
-                      src={imgLink}
-                      alt="My Image"
-                      style={{
-                        width: "50px",
-                        height: "25px",
-                        marginRight: "3px",
-                      }}
-                    />
-                  </Link>
+                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
+                    <embed src={imgLink} width="50px" onClick={()=>{null}}/>
+                    </a>
+                 
                 ))}
             </Tabs>
 
