@@ -20,7 +20,7 @@ function ListRecord(props) {
                     <br/>
                     <br/>
       <b>filterByFormula</b> &nbsp;A formula used to filter records. The formula will be evaluated for each record,and if the result is<br/>
-                               not 0, false, NaN, [] or #Error! the record will be included in the response.Get a row filter=id=1<br/>
+                               not 0, false, NaN, [] or #Error! the record will be included in the response.Get a row filter=id=rowId<br/>
                             {/* We recommend testing your formula in the Formula field UI before using it in your API request.If combined with the view parameter,<br/> */}
                             {/* only records in that view which satisfy the formula will be returned.The formula must be encoded first<br/> */}
                              {/* before passing it as a value. You can use this tool to not only encode the formula but also create<br/> */}
