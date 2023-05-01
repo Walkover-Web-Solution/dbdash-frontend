@@ -190,7 +190,7 @@ export const OrgList = (props) => {
             <Grid container spacing={2}>
               {props.dbs.map((db,index) => (
                 <Box key={db._id} sx={{ m: 4, display: "flex" }}>
-                  <SingleDatabase db={db} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
+                  <SingleDatabase db={db} dblength={props?.dbs?.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
               ))}
               <Card sx={{ m: 4, minWidth: 250, minHeight: 200, boxShadow: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>

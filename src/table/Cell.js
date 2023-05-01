@@ -1,51 +1,60 @@
 import React, { useEffect, useState, memo } from "react";
 import ContentEditable from "react-contenteditable";
-import Relationship from "./Relationship";
-import { usePopper } from "react-popper";
-import { grey } from "./colors";
-import PlusIcon from "./img/Plus";
-import { randomColor } from "./utils";
-import { addColumns, updateCells } from "../store/table/tableThunk";
-import { useDispatch } from "react-redux";
+// import Relationship from "./Relationship";
+// import { usePopper } from "react-popper";
+// import { grey } from "./colors";
+// import PlusIcon from "./img/Plus";
+// import { randomColor } from "./utils";
+import { updateCells } from "../store/table/tableThunk";
+import { useDispatch, useSelector } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-import { Link, Tabs } from "@mui/material";
+import {Tabs } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+// import { Document} from 'react-pdf';
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
+import TableCellSingleSelect from './TableCellSingleSelect'
+import TableCellMultiSelect from './TableCellMultiSelect'
+import { getTableInfo } from "../store/table/tableSelector";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
+const tableInfo=useSelector((state)=>getTableInfo(state));
+  console.log("tableInfo",tableInfo)
+
 const Cell = memo(
   ({
     value: initialValue,
     row,
-    column: { id, dataType, options },
-    dataDispatch,
+    column: { id, dataType },
+    
   }) => {
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
-    const [selectRef, setSelectRef] = useState(null);
-    const [selectPop, setSelectPop] = useState(null);
-    const [showSelect, setShowSelect] = useState(false);
-    const [showAdd, setShowAdd] = useState(false);
-    const [addSelectRef, setAddSelectRef] = useState(null);
+    // const [selectRef, setSelectRef] = useState(null);
+    // const [selectPop, setSelectPop] = useState(null);
+    // const [showSelect, setShowSelect] = useState(false);
+    // const [showAdd, setShowAdd] = useState(false);
+    // const [addSelectRef, setAddSelectRef] = useState(null);
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
     const [imageLink,setImageLink] = useState("")
+    const [selectArray, setSelectArray] = useState(false);
 
-    const handleImageClick = (imgLink) => {
-      window.open(imgLink, "_blank");
-    };
+  
+    // const handleImageClick = (imgLink) => {
+    //   window.open(imgLink, "_blank");
+    // };
 
     const handleUploadFileClick = () => {
       setOpen(true);
@@ -91,6 +100,10 @@ const Cell = memo(
       setValue({ value: initialValue, update: false });
     }, [initialValue]);
 
+    useEffect(()=>{
+      setSelectArray(tableInfo?.columns?.id?.metaData)
+     });
+
     useEffect(() => {
       if (
         value?.update &&
@@ -98,71 +111,71 @@ const Cell = memo(
         value?.value !== initialValue &&
         value?.value !== ""
       ) {
-        // dispatch(
-        //   updateCells({
-        //     columnId: id,
-        //     rowIndex: row.original.id,
-        //     value: value.value,
-        //     dataTypes: "dataTypes",
-        //   })
-        // );
+        dispatch(
+          updateCells({
+            columnId: id,
+            rowIndex: row.original.id,
+            value: value.value,
+            dataTypes: "dataTypes",
+          })
+        );
       }
     }, [value, id, row.index]);
 
-    function handleOptionKeyDown(e) {
-      if (e.key === "Enter") {
-        if (e.target.value !== "") {
-          dispatch(
-            addColumns({
-              option: e.target.value,
-              backgroundColor: randomColor(),
-              columnId: id,
-            })
-          );
-        }
-        setShowAdd(false);
-      }
-    }
+    // function handleOptionKeyDown(e) {
+    //   if (e.key === "Enter") {
+    //     if (e.target.value !== "") {
+    //       dispatch(
+    //         addColumns({
+    //           option: e.target.value,
+    //           backgroundColor: randomColor(),
+    //           columnId: id,
+    //         })
+    //       );
+    //     }
+    //     setShowAdd(false);
+    //   }
+    // }
 
-    function handleAddOption() {
-      setShowAdd(true);
-    }
+    // function handleAddOption() {
+    //   setShowAdd(true);
+    // }
 
-    function handleOptionBlur(e) {
-      if (e.target.value !== "") {
-        dispatch(
-          addColumns({
-            option: e.target.value,
-            backgroundColor: randomColor(),
-            columnId: id,
-          })
-        );
+    // function handleOptionBlur(e) {
+    //   if (e.target.value !== "") {
+    //     dispatch(
+    //       addColumns({
+    //         option: e.target.value,
+    //         backgroundColor: randomColor(),
+    //         columnId: id,
+    //       })
+    //     );
 
-        dataDispatch({
-          type: "add_option_to_column",
-          option: e.target.value,
-          backgroundColor: randomColor(),
-          columnId: id,
-        });
-      }
-      setShowAdd(false);
-    }
+    //     dataDispatch({
+    //       type: "add_option_to_column",
+    //       option: e.target.value,
+    //       backgroundColor: randomColor(),
+    //       columnId: id,
+    //     });
+    //   }
+    //   setShowAdd(false);
+    // }
 
-    const { styles, attributes } = usePopper(selectRef, selectPop, {
-      placement: "bottom-start",
-      strategy: "fixed",
-    });
+    // const { styles, attributes } = usePopper(selectRef, selectPop, {
+    //   placement: "bottom-start",
+    //   strategy: "fixed",
+    // });
 
-    function getColor() {
-      let match = options.find((option) => option.label === value.value);
-      return (match && match.backgroundColor) || grey(300);
-    }
+    // function getColor() {
+    //   let match = options.find((option) => option.label === value.value);
+    //   return (match && match.backgroundColor) || grey(300);
+    // }
 
-    useEffect(() => {
-      if (addSelectRef && showAdd) {
-        addSelectRef.focus();
-      }
-    }, [addSelectRef, showAdd]);
+    // useEffect(() => {
+    //   if (addSelectRef && showAdd) {
+    //     addSelectRef.focus();
+    //   }
+    // }, [addSelectRef, showAdd]);
 
     let element;
     switch (dataType) {
@@ -309,23 +322,6 @@ const Cell = memo(
           break;
 
           case "phone":
-          // element = (
-          //   <ContentEditable
-          //     html={(value?.value && value?.value?.toString()) || ""}
-          //     onChange={(event) => {
-          //       let newValue = event.target.value.replace(/[^\d+]/g, "");
-          //       if (newValue.length > 13) {
-          //         newValue = newValue.slice(0, 13);
-          //       }
-          //       onChange({ target: { value: newValue } });
-          //     }}
-          //     onBlur={() =>
-          //       setValue((old) => ({ value: old.value, update: true }))
-          //     }
-          //     className="data-input"
-          //   />
-          // );
-
           element = (
             <>
               <input type="tel" id="phone" name="phone" maxLength="13"
@@ -359,207 +355,219 @@ const Cell = memo(
           </>
         );
         break;
-        case "singleselect":
-          element = (
-            <>
-              <div
-                ref={setSelectRef}
-                className="cell-padding d-flex cursor-default align-items-center flex-1"
-                onClick={() => setShowSelect(true)}
-              >
-                {value.value && (
-                  <Relationship
-                    value={value.value}
-                    backgroundColor={getColor()}
-                  />
-                )}
-              </div>
-              {showSelect && (
-                <div className="overlay" onClick={() => setShowSelect(false)} />
-              )}
-              {showSelect && (
-                <div
-                  className="shadow-5 bg-white border-radius-md"
-                  ref={setSelectPop}
-                  {...attributes.popper}
-                  style={{
-                    ...styles.popper,
-                    zIndex: 4,
-                    minWidth: 200,
-                    maxWidth: 320,
-                    padding: "0.75rem",
-                  }}
-                >
-                  <div
-                    className="d-flex flex-wrap-wrap"
-                    style={{ marginTop: "-0.5rem" }}
-                  >
-                    {options.map((option, index) => (
-                      <div
-                        key={index}
-                        className="cursor-pointer"
-                        style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                        onClick={() => {
-                          setValue({ value: option.label, update: true });
-                          setShowSelect(false);
-                        }}
-                      >
-                        <Relationship
-                          value={option.label}
-                          backgroundColor={option.backgroundColor}
-                        />
-                      </div>
-                    ))}
-                    {showAdd && (
-                      <div
-                        style={{
-                          marginRight: "0.5rem",
-                          marginTop: "0.5rem",
-                          width: 120,
-                          padding: "2px 4px",
-                          backgroundColor: grey(200),
-                          borderRadius: 4,
-                        }}
-                      >
-                        <input
-                          type="text"
-                          className="option-input"
-                          onBlur={handleOptionBlur}
-                          ref={setAddSelectRef}
-                          onKeyDown={handleOptionKeyDown}
-                        />
-                      </div>
-                    )}
-                    <div
-                      className="cursor-pointer"
-                      style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                      onClick={handleAddOption}
-                    >
-                      <Relationship
-                        value={
-                          <span className="svg-icon-sm svg-text">
-                            <PlusIcon />
-                          </span>
-                        }
-                        backgroundColor={grey(200)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          );
-          break;
-          case "multiselect":
+        // case "singleselect":
+        //   element = (
+        //     <>
+        //       <div
+        //         ref={setSelectRef}
+        //         className="cell-padding d-flex cursor-default align-items-center flex-1"
+        //         onClick={() => setShowSelect(true)}
+        //       >
+        //         {value.value && (
+        //           <Relationship
+        //             value={value.value}
+        //             backgroundColor={getColor()}
+        //           />
+        //         )}
+        //       </div>
+        //       {showSelect && (
+        //         <div className="overlay" onClick={() => setShowSelect(false)} />
+        //       )}
+        //       {showSelect && (
+        //         <div
+        //           className="shadow-5 bg-white border-radius-md"
+        //           ref={setSelectPop}
+        //           {...attributes.popper}
+        //           style={{
+        //             ...styles.popper,
+        //             zIndex: 4,
+        //             minWidth: 200,
+        //             maxWidth: 320,
+        //             padding: "0.75rem",
+        //           }}
+        //         >
+        //           <div
+        //             className="d-flex flex-wrap-wrap"
+        //             style={{ marginTop: "-0.5rem" }}
+        //           >
+        //             {options.map((option, index) => (
+        //               <div
+        //                 key={index}
+        //                 className="cursor-pointer"
+        //                 style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+        //                 onClick={() => {
+        //                   setValue({ value: option.label, update: true });
+        //                   setShowSelect(false);
+        //                 }}
+        //               >
+        //                 <Relationship
+        //                   value={option.label}
+        //                   backgroundColor={option.backgroundColor}
+        //                 />
+        //               </div>
+        //             ))}
+        //             {showAdd && (
+        //               <div
+        //                 style={{
+        //                   marginRight: "0.5rem",
+        //                   marginTop: "0.5rem",
+        //                   width: 120,
+        //                   padding: "2px 4px",
+        //                   backgroundColor: grey(200),
+        //                   borderRadius: 4,
+        //                 }}
+        //               >
+        //                 <input
+        //                   type="text"
+        //                   className="option-input"
+        //                   onBlur={handleOptionBlur}
+        //                   ref={setAddSelectRef}
+        //                   onKeyDown={handleOptionKeyDown}
+        //                 />
+        //               </div>
+        //             )}
+        //             <div
+        //               className="cursor-pointer"
+        //               style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+        //               onClick={handleAddOption}
+        //             >
+        //               <Relationship
+        //                 value={
+        //                   <span className="svg-icon-sm svg-text">
+        //                     <PlusIcon />
+        //                   </span>
+        //                 }
+        //                 backgroundColor={grey(200)}
+        //               />
+        //             </div>
+        //           </div>
+        //         </div>
+        //       )}
+        //     </>
+        //   );
+        //   break;
+        //   case "multiselect":
+            // element = (
+            //   <>
+            //     <div
+            //       ref={setSelectRef}
+            //       className="cell-padding d-flex cursor-default align-items-center flex-1"
+            //       onClick={() => setShowSelect(true)}
+            //     >
+            //       {value.length > 0 && (
+            //         <div className="d-flex flex-wrap">
+            //           {value.map((selectedOption, index) => (
+            //             <div key={index} className="mr-1 mb-1">
+            //               <Relationship
+            //                 value={selectedOption}
+            //                 backgroundColor={getColor(selectedOption)}
+            //               />
+            //             </div>
+            //           ))}
+            //         </div>
+            //       )}
+            //     </div>
+            //     {showSelect && (
+            //       <div className="overlay" onClick={() => setShowSelect(false)} />
+            //     )}
+            //     {showSelect && (
+            //       <div
+            //         className="shadow-5 bg-white border-radius-md"
+            //         ref={setSelectPop}
+            //         {...attributes.popper}
+            //         style={{
+            //           ...styles.popper,
+            //           zIndex: 4,
+            //           minWidth: 200,
+            //           maxWidth: 320,
+            //           padding: "0.75rem",
+            //         }}
+            //       >
+            //         <div
+            //           className="d-flex flex-wrap-wrap"
+            //           style={{ marginTop: "-0.5rem" }}
+            //         >
+            //           {options.map((option, index) => (
+            //             <div
+            //               key={index}
+            //               className="cursor-pointer d-flex align-items-center"
+            //               style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+            //             >
+            //               <input
+            //                 type="checkbox"
+            //                 className="mr-2"
+            //                 checked={value.includes(option.label)}
+            //                 onChange={() => {
+            //                   const selectedValues = [...value];
+            //                   const optionIndex = selectedValues.indexOf(
+            //                     option.label
+            //                   );
+            //                   if (optionIndex > -1) {
+            //                     selectedValues.splice(optionIndex, 1);
+            //                   } else {
+            //                     selectedValues.push(option.label);
+            //                   }
+            //                   setValue(selectedValues);
+            //                 }}
+            //               />
+            //               <Relationship
+            //                 value={option.label}
+            //                 backgroundColor={option.backgroundColor}
+            //               />
+            //             </div>
+            //           ))}
+            //           {showAdd && (
+            //             <div
+            //               style={{
+            //                 marginRight: "0.5rem",
+            //                 marginTop: "0.5rem",
+            //                 width: 120,
+            //                 padding: "2px 4px",
+            //                 backgroundColor: grey(200),
+            //                 borderRadius: 4,
+            //               }}
+            //             >
+            //               <input
+            //                 type="text"
+            //                 className="option-input"
+            //                 onBlur={handleOptionBlur}
+            //                 ref={setAddSelectRef}
+            //                 onKeyDown={handleOptionKeyDown}
+            //               />
+            //             </div>
+            //           )}
+            //           <div
+            //             className="cursor-pointer d-flex align-items-center"
+            //             style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+            //             onClick={handleAddOption}
+            //           >
+            //             <Relationship
+            //               value={
+            //                 <span className="svg-icon-sm svg-text">
+            //                   <PlusIcon />
+            //                 </span>
+            //               }
+            //               backgroundColor={grey(200)}
+            //             />
+            //           </div>
+            //         </div>
+            //       </div>
+            //     )}
+            //   </>
+            // );
+            // break;
+            case "multiselect":
             element = (
-              <>
-                <div
-                  ref={setSelectRef}
-                  className="cell-padding d-flex cursor-default align-items-center flex-1"
-                  onClick={() => setShowSelect(true)}
-                >
-                  {value.length > 0 && (
-                    <div className="d-flex flex-wrap">
-                      {value.map((selectedOption, index) => (
-                        <div key={index} className="mr-1 mb-1">
-                          <Relationship
-                            value={selectedOption}
-                            backgroundColor={getColor(selectedOption)}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                {showSelect && (
-                  <div className="overlay" onClick={() => setShowSelect(false)} />
-                )}
-                {showSelect && (
-                  <div
-                    className="shadow-5 bg-white border-radius-md"
-                    ref={setSelectPop}
-                    {...attributes.popper}
-                    style={{
-                      ...styles.popper,
-                      zIndex: 4,
-                      minWidth: 200,
-                      maxWidth: 320,
-                      padding: "0.75rem",
-                    }}
-                  >
-                    <div
-                      className="d-flex flex-wrap-wrap"
-                      style={{ marginTop: "-0.5rem" }}
-                    >
-                      {options.map((option, index) => (
-                        <div
-                          key={index}
-                          className="cursor-pointer d-flex align-items-center"
-                          style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                        >
-                          <input
-                            type="checkbox"
-                            className="mr-2"
-                            checked={value.includes(option.label)}
-                            onChange={() => {
-                              const selectedValues = [...value];
-                              const optionIndex = selectedValues.indexOf(
-                                option.label
-                              );
-                              if (optionIndex > -1) {
-                                selectedValues.splice(optionIndex, 1);
-                              } else {
-                                selectedValues.push(option.label);
-                              }
-                              setValue(selectedValues);
-                            }}
-                          />
-                          <Relationship
-                            value={option.label}
-                            backgroundColor={option.backgroundColor}
-                          />
-                        </div>
-                      ))}
-                      {showAdd && (
-                        <div
-                          style={{
-                            marginRight: "0.5rem",
-                            marginTop: "0.5rem",
-                            width: 120,
-                            padding: "2px 4px",
-                            backgroundColor: grey(200),
-                            borderRadius: 4,
-                          }}
-                        >
-                          <input
-                            type="text"
-                            className="option-input"
-                            onBlur={handleOptionBlur}
-                            ref={setAddSelectRef}
-                            onKeyDown={handleOptionKeyDown}
-                          />
-                        </div>
-                      )}
-                      <div
-                        className="cursor-pointer d-flex align-items-center"
-                        style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                        onClick={handleAddOption}
-                      >
-                        <Relationship
-                          value={
-                            <span className="svg-icon-sm svg-text">
-                              <PlusIcon />
-                            </span>
-                          }
-                          backgroundColor={grey(200)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </>
-            );
-            break;
+              <div style={{display:'flex',overflowX:"auto"}}>
+              <TableCellMultiSelect chips={selectArray} /></div>)
+              break;
+      case "singleselect":
+        element = (
+          <>
+          <TableCellSingleSelect chips={['chip1','chip2','chip3']} />
+          </>
+        );
+        break;
           
           case "check":
         element = (
@@ -618,22 +626,10 @@ const Cell = memo(
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <Link
-                    key={index}
-                    onClick={() => {
-                      handleImageClick(imgLink);
-                    }}
-                  >
-                    <img
-                      src={imgLink}
-                      alt="My Image"
-                      style={{
-                        width: "50px",
-                        height: "25px",
-                        marginRight: "3px",
-                      }}
-                    />
-                  </Link>
+                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
+                    <embed src={imgLink} width="50px" onClick={()=>{null}}/>
+                    </a>
+                 
                 ))}
             </Tabs>
 

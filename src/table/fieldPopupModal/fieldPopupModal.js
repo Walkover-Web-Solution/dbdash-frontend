@@ -54,6 +54,7 @@ export default function FieldPopupModal(props) {
     }
     props?.setTextValue(event.target.value);
   };
+  
   const handleSelectChange = (event) => {
     setShowLinkField(false)
     setShowNumericOptions(false);
@@ -108,6 +109,15 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue('checkbox')
     }
     else if (event.target.value === "singlelinetext" || event.target.value === "longtext") {
+      setShowSwitch(true);
+      props?.setSelectValue(event.target.value);
+    }
+    else if (event.target.value === "email" || event.target.value === "phone") {
+      setShowSwitch(true);
+      props?.setSelectValue(event.target.value);
+    }
+    else if (event.target.value === "singleselect" || event.target.value === "multipleselect") {
+      console.log('inside this singel || multi')
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }
@@ -202,6 +212,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="link"><ReadMoreOutlinedIcon fontSize="2px" sx={{ mr: 1 }} /> Link </MenuItem>
             <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{ mr: 1 }} /> Long text </MenuItem>
             <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Lookup</MenuItem>
+            <MenuItem value="multipleselect"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{ mr: 1 }} /> Number</MenuItem>
             <MenuItem value="phone"><LocalPhoneIcon fontSize="2px" sx={{ mr: 1 }} />Phone number</MenuItem>
             <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{ mr: 1 }} /> Row id</MenuItem>

@@ -13,6 +13,7 @@ import { getTableInfo } from "./tableSelector";
 // const alldb = useSelector((state) => selectOrgandDb(state))
 const getHeaders = async(dbId,tableName) =>{
     const fields = await getAllfields(dbId,tableName);
+    // console.log('fields',fields)
     delete fields?.data?.data?.fields["fieldIds"]
     let columns = [
         {
@@ -25,6 +26,7 @@ const getHeaders = async(dbId,tableName) =>{
         },
     ]
    Object.entries(fields?.data?.data?.fields).forEach( (field) =>{
+    console.log("check",field[1].metaData)
        var json = {
            id: "",
         label: "",
@@ -44,10 +46,12 @@ const getHeaders = async(dbId,tableName) =>{
     if( field[1].fieldType == "createdat")
     json.accessor = "createdat" ;
     json.metadata = field[1].metaData ;
+    // console.log("checkoidn",field[1].metaData )
     json.dataType = field[1].fieldType?.toLowerCase();
     columns.push (json);
     }
     )
+    // console.log("columns",columns)
     columns.push({
              id: 999999,
              width: 20,
@@ -126,7 +130,7 @@ export const bulkAddColumns = createAsyncThunk(
             {
                 columns =  await getHeaders(payload.dbId,payload.tableName)
             }
-            
+            // console.log('columns',columns)
             const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.pageNo)
             const dataa = {
                 "columns":columns,
@@ -175,7 +179,8 @@ export const updateColumnHeaders = createAsyncThunk(
     async(payload,{dispatch,getState})=>{
         const data={
             newFieldName:payload?.label,
-            newFieldType:payload?.fieldType
+            newFieldType:payload?.fieldType,
+            metaData:payload?.metaData
         }
         await updateField(payload?.dbId,payload?.tableName,payload?.fieldName,data)
         dispatch( getTable1({dbId:payload?.dbId}))
@@ -201,7 +206,8 @@ export const addColumnrightandleft = createAsyncThunk(
             selectedTable:payload?.selectedTable,
             query:payload?.query,
             linkedForeignKey:payload?.linkedValueName,
-            foreignKey : payload?.foreignKey
+            foreignKey : payload?.foreignKey,
+            duplicateField: payload?.duplicateField
         }
         if(payload?.fieldType == "lookup")
             await createView(payload?.dbId,payload?.tableId,data);

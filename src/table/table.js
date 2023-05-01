@@ -19,7 +19,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import Preview from "./Preview";
 import Cell from "./Cell";
-import { TableHeader } from "./TableHeader";
+import TableHeader  from "./TableHeader/TableHeader";
 import { TableBody } from "./TableBody";
 import PlusIcon from './img/Plus'
 
@@ -133,7 +133,7 @@ const Table = memo(
         )}
         <DndProvider backend={HTML5Backend}>
            <ScrollingComponent
-            style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"65vh",width:"99vw"}}
+            style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"74.1vh",width:"99.6vw"}}
           >
             <table >
               

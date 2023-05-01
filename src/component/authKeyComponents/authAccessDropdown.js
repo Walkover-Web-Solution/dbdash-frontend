@@ -37,8 +37,10 @@ export default function AuthAccessDropDown({ selected, setSelected, options, set
 
   const handleChange = (event) => {
     const value = event.target.value;
-
-    if (value[value.length - 1] !== "all") { setSelected(value); }
+    if (value[value.length - 1] !== "all") 
+    { 
+      setSelected(value); 
+    }
 
   };
   useEffect(() => {
@@ -86,6 +88,7 @@ export default function AuthAccessDropDown({ selected, setSelected, options, set
                 all = [...all, option[1].tableName]
               })
               setSelected(all);
+              
               return;
             }}
 

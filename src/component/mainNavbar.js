@@ -42,12 +42,12 @@ function MainNavbar(props) {
   };
 
   return (
-    <Container sx={{bgcolor: "#212529", height: '55px'}} maxWidth="false" >
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '50px' }} disableGutters>
+    <Container sx={{bgcolor: "#212529", height: '8vh'}} maxWidth="false" >
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '8vh' }} disableGutters>
         <Box sx={{ display: 'flex', justifyContent: "space-between", alignItems: 'center', width: '20%', height: '50px' }}>
           <Box sx={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
             <Link to="/dashboard">
-              <img style={{ width: "100px", height: '20px' }}
+              <img style={{ width: "100px", height: '3vh' }}
                 src={dbDashLogo}
                 alt="Db Dash" /> 
             </Link>

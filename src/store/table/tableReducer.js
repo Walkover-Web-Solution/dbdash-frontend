@@ -72,6 +72,7 @@ export const reducers = {
   },
   updateColumnHeader(state, payload) {
     const action = payload.payload;
+    console.log('action',action)
     if (action) {
       var index = state.columns.findIndex(
         (column) => column.id === action.columnId
@@ -279,6 +280,78 @@ export const reducers = {
             }))
           };
         }
+        
+        case "singleselect":
+          if (state.columns[typeIndex].dataType === "singleselect") {
+            return {
+              ...state,
+              columns: [
+                ...state.columns.slice(0, typeIndex),
+                { ...state.columns[typeIndex], dataType: action.dataType },
+                ...state.columns.slice(typeIndex + 1, state.columns.length)
+              ],
+              skipReset: true
+            };
+          } else {
+            let options = [];
+            state.data.forEach((row) => {
+              if (row[action.columnId]) {
+                options.push({
+                  label: row[action.columnId],
+                  backgroundColor: randomColor()
+                });
+              }
+            });
+            return {
+              ...state,
+              columns: [
+                ...state.columns.slice(0, typeIndex),
+                {
+                  ...state.columns[typeIndex],
+                  dataType: action.dataType,
+                  options: [...state.columns[typeIndex].options, ...options]
+                },
+                ...state.columns.slice(typeIndex + 1, state.columns.length)
+              ],
+              skipReset: true
+            };
+          }
+          case "multiselect":
+          if (state.columns[typeIndex].dataType === "multiselect") {
+            return {
+              ...state,
+              columns: [
+                ...state.columns.slice(0, typeIndex),
+                { ...state.columns[typeIndex], dataType: action.dataType },
+                ...state.columns.slice(typeIndex + 1, state.columns.length)
+              ],
+              skipReset: true
+            };
+          } else {
+            let options = [];
+            state.data.forEach((row) => {
+              if (row[action.columnId]) {
+                options.push({
+                  label: row[action.columnId],
+                  backgroundColor: randomColor()
+                });
+              }
+            });
+            return {
+              ...state,
+              columns: [
+                ...state.columns.slice(0, typeIndex),
+                {
+                  ...state.columns[typeIndex],
+                  dataType: action.dataType,
+                  options: [...state.columns[typeIndex].options, ...options]
+                },
+                ...state.columns.slice(typeIndex + 1, state.columns.length)
+              ],
+              skipReset: true
+            };
+          }
+
       case "singlelinetext":
         if (state.columns[typeIndex].dataType === "text") {
           return state;

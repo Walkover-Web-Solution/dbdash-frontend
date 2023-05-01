@@ -48,6 +48,7 @@ export default function Dropdown(props) {
           >
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center" onClick={(e) =>{e.preventDefault();
+                            props?.setOpenmove(false);
               e.stopPropagation(); props?.setName (true);
               if (typeof props?.setTabIndex === 'function') 
               {
@@ -55,18 +56,20 @@ export default function Dropdown(props) {
               }
               }}>{props?.first}</Typography>
             </MenuItem>
-            <MenuItem onClick={(e)=>{e.preventDefault();
+            {props?.second!=="" && <MenuItem onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e);setOpen(true);}}>
               <Typography  onClick={handleClickOpen} textAlign="center" >{props?.second}</Typography>
-            </MenuItem>
-            
-            {/* <MenuItem  onClick={(e)=>{e.preventDefault();
-              e.stopPropagation();handleCloseUserMenu(e); setUploadCsvClicked(true); }}>
-             <Typography>{props.third}</Typography>
-            </MenuItem>
-             { <SelectFilepopup title="uplaodfile"
-                  label="UploadFileIcon" open={uploadCsvClicked} setOpen={setUploadCsvClicked} onChangeFile={onChangeFiles} />} */}
-          
+            </MenuItem>}
+           {props?.third==="Move" && <MenuItem onClick={handleCloseUserMenu}>
+              <Typography  onClick={(e)=>{e.preventDefault(); e.stopPropagation();
+              props?.setName(false);
+              props?.setOpenmove(true);
+              if (typeof props?.setTabIndex === 'function') 
+              {
+                props?.setTabIndex(props?.tabIndex)
+              }}} textAlign="center" >{props?.third}</Typography>
+            </MenuItem> }
+
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>
           
@@ -83,5 +86,7 @@ Dropdown.propTypes = {
   deleteFunction : PropTypes.func, 
   setTabIndex:PropTypes.func,
   tabIndex:PropTypes.number,
-  tables:PropTypes.any
+  tables:PropTypes.any,
+  
+  setOpenmove:PropTypes.func
 };

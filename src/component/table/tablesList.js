@@ -135,9 +135,10 @@ export default function TablesList({ dbData }) {
         sx={{
           width: "100%",
           display: "flex",
-          height: "50px",
+          height: "7vh",
           overflow: "hidden",
           position: "sticky",
+          marginTop:"0.5vh"
         }}
       >
         <Box
@@ -175,7 +176,7 @@ export default function TablesList({ dbData }) {
           <Button
             variant="outlined"
             onClick={() => handleOpen()}
-            sx={{ margin: 1, width: "fit-content", height: 40 }}
+            sx={{ margin: "0.5rem", width: "fit-content", height: "5vh" }}
           >
             <AddIcon />
           </Button>
@@ -185,7 +186,7 @@ export default function TablesList({ dbData }) {
         {AllTableInfo[params?.tableName]?.filters &&
           Object.entries(AllTableInfo[params?.tableName]?.filters).map(
             (filter, index) => (
-              <Box key={index} sx={{ mt: 2, ml: 1 }}>
+              <Box key={index} sx={{ mt: "1%", ml: 1 }}>
                 <Box
                   sx={{
                     backgroundColor: "#4B4E5A",
