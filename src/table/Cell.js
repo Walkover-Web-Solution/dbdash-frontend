@@ -509,8 +509,7 @@ const Cell = memo(
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">
-                    
+                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
                     <embed src={imgLink} width="50px" onClick={()=>{null}}/>
                     </a>
                  
