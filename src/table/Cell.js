@@ -98,14 +98,14 @@ const Cell = memo(
         value?.value !== initialValue &&
         value?.value !== ""
       ) {
-        // dispatch(
-        //   updateCells({
-        //     columnId: id,
-        //     rowIndex: row.original.id,
-        //     value: value.value,
-        //     dataTypes: "dataTypes",
-        //   })
-        // );
+        dispatch(
+          updateCells({
+            columnId: id,
+            rowIndex: row.original.id,
+            value: value.value,
+            dataTypes: "dataTypes",
+          })
+        );
       }
     }, [value, id, row.index]);
 
