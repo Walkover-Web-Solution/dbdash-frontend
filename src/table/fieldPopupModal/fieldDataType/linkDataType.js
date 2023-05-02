@@ -14,7 +14,7 @@ export default function LinkDataType(props) {
   const AllTableInfo = cloneDeep(allTables)
   delete AllTableInfo?.tables[tableId]
   const [showUniqueFieldsDropdown, setShowUniqueFieldsDropdown] = useState(true);
-  
+  console.log(AllTableInfo?.tables[props?.selectedTable]?.fields)
   let uniqueFields = AllTableInfo?.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo?.tables[props?.selectedTable]?.fields)?.filter((fields) => {
     if (fields[1]?.metaData?.unique) {
       return fields;
@@ -22,19 +22,19 @@ export default function LinkDataType(props) {
   })
   useEffect(()=>{
     if(uniqueFields?.length > 0){
-      props?.setSelectedFieldName(uniqueFields[0][0])
+      props?.setSelectedFieldName(uniqueFields?.[0][0])
     }
   },[props?.selectedTable])
 
-  if(!(props?.selectedTable)){
-    props.setSelectedTable(Object.entries(AllTableInfo?.tables)[0][0]);
+  if(!(props?.selectedTable) ){
+    props.setSelectedTable(Object.entries(AllTableInfo?.tables)?.[0]?.[0]);
   }
 
 
   return (
     <>
       {
-        AllTableInfo?.tables && Object.entries(AllTableInfo?.tables)?.length - 1 > 0 &&
+        AllTableInfo?.tables   &&
         <Select
           labelId="select-label"
           id="select"
@@ -42,14 +42,6 @@ export default function LinkDataType(props) {
           sx={{ margin: 1, minWidth: 120 }}
           onChange={(event) => {
             props.setSelectedTable(event.target.value);
-            // const newTableInfo = AllTableInfo?.tables[event.target.value];
-            // const newUniqueFields = newTableInfo?.fields && Object.entries(newTableInfo.fields)?.filter((fields) => {
-            //   if (fields[1]?.metaData?.unique) {
-            //     return fields;
-            //   }
-            // });
-            // const newSelectedUniqueKey = newTableInfo?.uniqueKey || (newUniqueFields?.length > 0 ? newUniqueFields[0][0] : '');
-            // props.setSelectedFieldName(newSelectedUniqueKey);
             setShowUniqueFieldsDropdown(true);
           }}
         >

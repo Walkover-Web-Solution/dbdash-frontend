@@ -26,7 +26,7 @@ import PropTypes from "prop-types";
 export default function FieldPopupModal(props) {
 
   // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const [showSwitch, setShowSwitch] = useState(false);
+  const [showSwitch, setShowSwitch] = useState(true);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
   const [showLinkField, setShowLinkField] = useState(false);
@@ -135,7 +135,7 @@ export default function FieldPopupModal(props) {
     setShowLinkField(false);
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
-    setShowSwitch(false);
+    setShowSwitch(true);
     props?.setSelectedFieldName(false);
     props?.setSelectValue("longtext");
     props?.setTextValue("");
