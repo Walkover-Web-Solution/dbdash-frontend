@@ -1,11 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import ContentEditable from "react-contenteditable";
-import Relationship from "./Relationship";
-import { usePopper } from "react-popper";
-import { grey } from "./colors";
-import PlusIcon from "./img/Plus";
-import { randomColor } from "./utils";
-import { addColumns, updateCells } from "../store/table/tableThunk";
+
+import {  updateCells } from "../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
@@ -21,6 +17,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
+import TableCellSingleSelect from './TableCellSingleSelect'
+import TableCellMultiSelect from './TableCellMultiSelect'
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -30,23 +28,22 @@ const Cell = memo(
   ({
     value: initialValue,
     row,
-    column: { id, dataType, options },
-    dataDispatch,
+    column: { id, dataType, 
+      //options
+     },
+   // dataDispatch,
   }) => {
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
-    const [selectRef, setSelectRef] = useState(null);
-    const [selectPop, setSelectPop] = useState(null);
-    const [showSelect, setShowSelect] = useState(false);
-    const [showAdd, setShowAdd] = useState(false);
-    const [addSelectRef, setAddSelectRef] = useState(null);
+    
+    const [showAdd,] = useState(false);
+    const [addSelectRef,] = useState(null);
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
     const [imageLink,setImageLink] = useState("")
-
-    // const handleImageClick = (imgLink) => {
-    //   window.open(imgLink, "_blank");
-    // };
+   
+    
+    
 
     const handleUploadFileClick = () => {
       setOpen(true);
@@ -110,54 +107,11 @@ const Cell = memo(
       }
     }, [value, id, row.index]);
 
-    function handleOptionKeyDown(e) {
-      if (e.key === "Enter") {
-        if (e.target.value !== "") {
-          dispatch(
-            addColumns({
-              option: e.target.value,
-              backgroundColor: randomColor(),
-              columnId: id,
-            })
-          );
-        }
-        setShowAdd(false);
-      }
-    }
+   
 
-    function handleAddOption() {
-      setShowAdd(true);
-    }
+    
 
-    function handleOptionBlur(e) {
-      if (e.target.value !== "") {
-        dispatch(
-          addColumns({
-            option: e.target.value,
-            backgroundColor: randomColor(),
-            columnId: id,
-          })
-        );
-
-        dataDispatch({
-          type: "add_option_to_column",
-          option: e.target.value,
-          backgroundColor: randomColor(),
-          columnId: id,
-        });
-      }
-      setShowAdd(false);
-    }
-
-    const { styles, attributes } = usePopper(selectRef, selectPop, {
-      placement: "bottom-start",
-      strategy: "fixed",
-    });
-
-    function getColor() {
-      let match = options.find((option) => option.label === value.value);
-      return (match && match.backgroundColor) || grey(300);
-    }
+   
 
     useEffect(() => {
       if (addSelectRef && showAdd) {
@@ -343,95 +297,18 @@ const Cell = memo(
           </>
         );
         break;
+        
 
+          case "multiselect":
+            element = (
+              <div style={{display:'flex',overflowX:"auto"}}>
+              <TableCellMultiSelect chips={['chip1','chip2','chip3']} /></div>)
+              break;
       case "singleselect":
         element = (
           <>
-            <div
-              ref={setSelectRef}
-              className="cell-padding d-flex cursor-default align-items-center flex-1"
-              onClick={() => setShowSelect(true)}
-            >
-              {value.value && (
-                <Relationship
-                  value={value.value}
-                  backgroundColor={getColor()}
-                />
-              )}
-            </div>
-            {showSelect && (
-              <div className="overlay" onClick={() => setShowSelect(false)} />
-            )}
-            {showSelect && (
-              <div
-                className="shadow-5 bg-white border-radius-md"
-                ref={setSelectPop}
-                {...attributes.popper}
-                style={{
-                  ...styles.popper,
-                  zIndex: 4,
-                  minWidth: 200,
-                  maxWidth: 320,
-                  padding: "0.75rem",
-                }}
-              >
-                <div
-                  className="d-flex flex-wrap-wrap"
-                  style={{ marginTop: "-0.5rem" }}
-                >
-                  {options.map((option, index) => (
-                    <div
-                      key={index}
-                      className="cursor-pointer"
-                      style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                      onClick={() => {
-                        setValue({ value: option.label, update: true });
-                        setShowSelect(false);
-                      }}
-                    >
-                      <Relationship
-                        value={option.label}
-                        backgroundColor={option.backgroundColor}
-                      />
-                    </div>
-                  ))}
-                  {showAdd && (
-                    <div
-                      style={{
-                        marginRight: "0.5rem",
-                        marginTop: "0.5rem",
-                        width: 120,
-                        padding: "2px 4px",
-                        backgroundColor: grey(200),
-                        borderRadius: 4,
-                      }}
-                    >
-                      <input
-                        type="text"
-                        className="option-input"
-                        onBlur={handleOptionBlur}
-                        ref={setAddSelectRef}
-                        onKeyDown={handleOptionKeyDown}
-                      />
-                    </div>
-                  )}
-                  <div
-                    className="cursor-pointer"
-                    style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                    onClick={handleAddOption}
-                  >
-                    <Relationship
-                      value={
-                        <span className="svg-icon-sm svg-text">
-                          <PlusIcon />
-                        </span>
-                      }
-                      backgroundColor={grey(200)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+          <TableCellSingleSelect chips={['chip1','chip2','chip3']} />
+            
           </>
         );
         break;
@@ -476,28 +353,32 @@ const Cell = memo(
         element = (
           <div style={{ display: "flex" }}>
             <UploadFileIcon fontSize="medium" onClick={handleUploadFileClick} />
-            <Tabs
-              value={0}
-              TabIndicatorProps={{
-                style: { display: "none" },
-              }}
-              variant="scrollable"
-              scrollButtons="auto"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                overflowY: "hidden",
-                overflowX: "hidden",
-              }}
-            >
-              {value?.value?.length > 0 &&
-                value?.value?.map((imgLink, index) => (
-                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
-                    <embed src={imgLink} width="50px" onClick={()=>{null}}/>
-                    </a>
-                 
-                ))}
-            </Tabs>
+
+<Tabs
+  value={0}
+  TabIndicatorProps={{
+    style: { display: "none" },
+  }}
+  variant="scrollable"
+  scrollButtons="auto"
+  style={{
+    display: "flex",
+    flexDirection: "row",
+    overflowY: "hidden",
+    overflowX: "scroll",
+  }}
+>
+  {value?.value?.length > 0 &&
+    value?.value?.map((imgLink, index) =>{
+      
+     
+      const fileName = imgLink.substring(imgLink.lastIndexOf('/') + 1);
+      return(
+      <a key={index} rel="noopener noreferrer" href={imgLink} style={{textDecoration:"none"}} target="_blank">
+        <img src={imgLink} alt={fileName} width="50px" style={{color:"maroon",}} onClick={()=>{null}}/>
+      </a>
+    )})}
+</Tabs>
 
             {open && (
               <SelectFilepopup

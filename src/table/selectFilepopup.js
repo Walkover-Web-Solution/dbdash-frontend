@@ -45,9 +45,7 @@ export default function selectFilepopup(props) {
   const handleSelectChange =(event)=>{
     setUploadOption(event.target.value)
   }
-  // const handleTextChange = (event)=>{
-  //   props?.setImageLink(event.target.value)
-  // }
+ 
   return (
     <Box>
       <Modal

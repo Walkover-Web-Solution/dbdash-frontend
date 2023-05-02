@@ -334,13 +334,25 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "text"
+          dataType: "singleselect"
         }))
         setShowType(false);
         setExpanded(false);
       },
       icon: <MultiIcon />,
       label: "singleselect"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "multiselect"
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <MultiIcon />,
+      label: "multiselect"
     },
     {
       onClick: () => {
@@ -392,6 +404,9 @@ export default function Header({
     case "singleselect":
       propertyIcon = <MultiIcon fontSize="2px"/>;
       break;
+      case "multiselect":
+        propertyIcon = <MultiIcon fontSize="2px"/>;
+        break;
     case "createdby":
       propertyIcon = <PersonPinIcon fontSize="2px"/>;
       break;
