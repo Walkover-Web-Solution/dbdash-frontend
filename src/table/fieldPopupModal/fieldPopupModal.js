@@ -116,6 +116,11 @@ export default function FieldPopupModal(props) {
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }
+    else if (event.target.value === "singleselect" || event.target.value === "multipleselect") {
+      console.log('inside this singel || multi')
+      setShowSwitch(true);
+      props?.setSelectValue(event.target.value);
+    }
     else {
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
@@ -213,7 +218,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{ mr: 1 }} /> Row id</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single line text</MenuItem>
             <MenuItem value="singleselect"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
-
+            <MenuItem value="multipleselect"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
             
           </Select>
 

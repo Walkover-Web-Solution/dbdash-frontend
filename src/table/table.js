@@ -25,7 +25,6 @@ import PlusIcon from './img/Plus'
 
 
 const ScrollingComponent = withScrolling("div");
-
 const defaultColumn = {
   minWidth: 50,
   width: 150,

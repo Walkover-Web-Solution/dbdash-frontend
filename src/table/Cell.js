@@ -1,11 +1,11 @@
 import React, { useEffect, useState, memo } from "react";
 import ContentEditable from "react-contenteditable";
-import Relationship from "./Relationship";
-import { usePopper } from "react-popper";
-import { grey } from "./colors";
-import PlusIcon from "./img/Plus";
-import { randomColor } from "./utils";
-import { addColumns, updateCells } from "../store/table/tableThunk";
+// import Relationship from "./Relationship";
+// import { usePopper } from "react-popper";
+// import { grey } from "./colors";
+// import PlusIcon from "./img/Plus";
+// import { randomColor } from "./utils";
+import { updateCells } from "../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
@@ -21,32 +21,48 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
+import TableCellSingleSelect from './TableCellSingleSelect'
+import TableCellMultiSelect from './TableCellMultiSelect'
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
+
+
 const Cell = memo(
   ({
     value: initialValue,
     row,
-    column: { id, dataType, options },
-    dataDispatch,
+    column: { id, dataType },
+    
   }) => {
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
-    const [selectRef, setSelectRef] = useState(null);
-    const [selectPop, setSelectPop] = useState(null);
-    const [showSelect, setShowSelect] = useState(false);
-    const [showAdd, setShowAdd] = useState(false);
-    const [addSelectRef, setAddSelectRef] = useState(null);
+    // const [selectRef, setSelectRef] = useState(null);
+    // const [selectPop, setSelectPop] = useState(null);
+    // const [showSelect, setShowSelect] = useState(false);
+    // const [showAdd, setShowAdd] = useState(false);
+    // const [addSelectRef, setAddSelectRef] = useState(null);
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
+  
     const [imageLink,setImageLink] = useState("")
+   
+
+    // console.log(tableInfo?.columns)
+    // const [selectArray,] = useState(tableInfo?.columns);
 
     // const handleImageClick = (imgLink) => {
     //   window.open(imgLink, "_blank");
     // };
+
+  // console.log("tableInfo",tableInfo?.columns)
+
+  // const handleArrayData = () => {
+  //   setSelectArray(tableInfo?.columns)
+  // }
+  // console.log("selectArray",selectArray,handleArrayData)
 
     const handleUploadFileClick = () => {
       setOpen(true);
@@ -92,6 +108,10 @@ const Cell = memo(
       setValue({ value: initialValue, update: false });
     }, [initialValue]);
 
+    // useEffect(()=>{
+    //   setSelectArray(tableInfo?.columns?.id?.metaData)
+    //  });
+
     useEffect(() => {
       if (
         value?.update &&
@@ -109,61 +129,6 @@ const Cell = memo(
         );
       }
     }, [value, id, row.index]);
-
-    function handleOptionKeyDown(e) {
-      if (e.key === "Enter") {
-        if (e.target.value !== "") {
-          dispatch(
-            addColumns({
-              option: e.target.value,
-              backgroundColor: randomColor(),
-              columnId: id,
-            })
-          );
-        }
-        setShowAdd(false);
-      }
-    }
-
-    function handleAddOption() {
-      setShowAdd(true);
-    }
-
-    function handleOptionBlur(e) {
-      if (e.target.value !== "") {
-        dispatch(
-          addColumns({
-            option: e.target.value,
-            backgroundColor: randomColor(),
-            columnId: id,
-          })
-        );
-
-        dataDispatch({
-          type: "add_option_to_column",
-          option: e.target.value,
-          backgroundColor: randomColor(),
-          columnId: id,
-        });
-      }
-      setShowAdd(false);
-    }
-
-    const { styles, attributes } = usePopper(selectRef, selectPop, {
-      placement: "bottom-start",
-      strategy: "fixed",
-    });
-
-    function getColor() {
-      let match = options.find((option) => option.label === value.value);
-      return (match && match.backgroundColor) || grey(300);
-    }
-
-    useEffect(() => {
-      if (addSelectRef && showAdd) {
-        addSelectRef.focus();
-      }
-    }, [addSelectRef, showAdd]);
 
     let element;
     switch (dataType) {
@@ -343,99 +308,21 @@ const Cell = memo(
           </>
         );
         break;
-
-      case "singleselect":
-        element = (
-          <>
-            <div
-              ref={setSelectRef}
-              className="cell-padding d-flex cursor-default align-items-center flex-1"
-              onClick={() => setShowSelect(true)}
-            >
-              {value.value && (
-                <Relationship
-                  value={value.value}
-                  backgroundColor={getColor()}
-                />
-              )}
-            </div>
-            {showSelect && (
-              <div className="overlay" onClick={() => setShowSelect(false)} />
-            )}
-            {showSelect && (
-              <div
-                className="shadow-5 bg-white border-radius-md"
-                ref={setSelectPop}
-                {...attributes.popper}
-                style={{
-                  ...styles.popper,
-                  zIndex: 4,
-                  minWidth: 200,
-                  maxWidth: 320,
-                  padding: "0.75rem",
-                }}
-              >
-                <div
-                  className="d-flex flex-wrap-wrap"
-                  style={{ marginTop: "-0.5rem" }}
-                >
-                  {options.map((option, index) => (
-                    <div
-                      key={index}
-                      className="cursor-pointer"
-                      style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                      onClick={() => {
-                        setValue({ value: option.label, update: true });
-                        setShowSelect(false);
-                      }}
-                    >
-                      <Relationship
-                        value={option.label}
-                        backgroundColor={option.backgroundColor}
-                      />
-                    </div>
-                  ))}
-                  {showAdd && (
-                    <div
-                      style={{
-                        marginRight: "0.5rem",
-                        marginTop: "0.5rem",
-                        width: 120,
-                        padding: "2px 4px",
-                        backgroundColor: grey(200),
-                        borderRadius: 4,
-                      }}
-                    >
-                      <input
-                        type="text"
-                        className="option-input"
-                        onBlur={handleOptionBlur}
-                        ref={setAddSelectRef}
-                        onKeyDown={handleOptionKeyDown}
-                      />
-                    </div>
-                  )}
-                  <div
-                    className="cursor-pointer"
-                    style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                    onClick={handleAddOption}
-                  >
-                    <Relationship
-                      value={
-                        <span className="svg-icon-sm svg-text">
-                          <PlusIcon />
-                        </span>
-                      }
-                      backgroundColor={grey(200)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        );
-        break;
-      case "check":
+        
+        case "multipleselect":
+          element = (
+            <div style={{display:'flex',overflowX:"auto"}}>
+         
+            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} /></div>)
+            break;
+case "singleselect":
+      element = (
+         <div style={{display:'flex',overflowX:"auto"}}>
+        <TableCellSingleSelect value={value?.value} rowid={row.original.id} colid={id}  />
+        </div>
+      );
+      break; 
+          case "check":
         element = (
           <div key={row.getRowProps().key} style={{display: 'flex', flex: '1 0 auto',position:'sticky'}}  role="row"  className="tr">
             {!row.isSelected && (

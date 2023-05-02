@@ -334,19 +334,34 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "text"
+          dataType: "singleselect",
+          metaData: metaData
         }))
         setShowType(false);
         setExpanded(false);
       },
       icon: <MultiIcon />,
-      label: "singleselect"
+      label: "single select"
     },
     {
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "text"
+          dataType: "multipleselect",
+          metaData: metaData
+        }))
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <MultiIcon />,
+      label: "Multiselect"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnsType({
+          columnId: id,
+          dataType: "text",
+          metaData:metaData
         }))
         setShowType(false);
         setExpanded(false);
@@ -389,9 +404,12 @@ export default function Header({
     case "longtext":
       propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
-    case "singleselect":
-      propertyIcon = <MultiIcon fontSize="2px"/>;
-      break;
+      case "singleselect":
+        propertyIcon = <MultiIcon fontSize="2px"/>;
+        break;
+        case "multiselect":
+          propertyIcon = <MultiIcon fontSize="2px"/>;
+          break;
     case "createdby":
       propertyIcon = <PersonPinIcon fontSize="2px"/>;
       break;
@@ -416,9 +434,10 @@ export default function Header({
       case "phone":
       propertyIcon = <LocalPhoneIcon fontSize="2px" />;
       break;
-      case "multipleselect":
-      propertyIcon = <LocalPhoneIcon fontSize="2px" />;
-      break;
+        case "multipleselect":
+          propertyIcon = <MultiIcon fontSize="2px" />;
+          break;
+
     default:
       propertyIcon = <MultiIcon />;
       break;
@@ -484,6 +503,8 @@ export default function Header({
     duplicateFields({direction: "right", position: id, duplicateField: `${duplicateField}`
   });
   };
+
+
 
   const handleUniqueChange = () => {
     setDuplicateField((isDuplicate)=>
