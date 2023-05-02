@@ -14,7 +14,6 @@ export default function LinkDataType(props) {
   const AllTableInfo = cloneDeep(allTables)
   delete AllTableInfo?.tables[tableId]
   const [showUniqueFieldsDropdown, setShowUniqueFieldsDropdown] = useState(true);
-  console.log(AllTableInfo?.tables[props?.selectedTable]?.fields)
   let uniqueFields = AllTableInfo?.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo?.tables[props?.selectedTable]?.fields)?.filter((fields) => {
     if (fields[1]?.metaData?.unique) {
       return fields;

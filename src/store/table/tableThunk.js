@@ -263,7 +263,6 @@ export const addRows = createAsyncThunk(
      const userInfo = allOrg(getState());
     const {tableId, dbId} = getState().table
     const newRow = await insertRow(dbId,tableId);
-    console.log(userInfo)
     userInfo.forEach(obj => {
         obj.users.forEach(user => {
         if( user?.user_id?._id == newRow?.data?.data?.createdby)

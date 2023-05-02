@@ -104,7 +104,6 @@ export default function TablesList({ dbData }) {
       })
     );
   };
-
   useEffect(() => {
     if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
@@ -117,15 +116,15 @@ export default function TablesList({ dbData }) {
           pageNo: 1,
         })
       );
-
-      if (!params?.tableName) {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
-      }
       setValue(
         tableNames?.indexOf(params?.tableName) !== -1
           ? tableNames?.indexOf(params?.tableName)
           : 0
       );
+      if (!params?.tableName) {
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+      }
+     
     }
   }, []);
 
