@@ -316,8 +316,8 @@ export const reducers = {
               skipReset: true
             };
           }
-          case "multiselect":
-          if (state.columns[typeIndex].dataType === "multiselect") {
+          case "multipleselect":
+          if (state.columns[typeIndex].dataType === "multipleselect") {
             return {
               ...state,
               columns: [

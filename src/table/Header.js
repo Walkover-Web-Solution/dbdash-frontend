@@ -347,14 +347,14 @@ export default function Header({
       onClick: () => {
         dispatch(updateColumnsType({
           columnId: id,
-          dataType: "multiselect",
+          dataType: "multipleselect",
           metaData: metaData
         }))
         setShowType(false);
         setExpanded(false);
       },
       icon: <MultiIcon />,
-      label: "multiselect"
+      label: "Multiselect"
     },
     {
       onClick: () => {
