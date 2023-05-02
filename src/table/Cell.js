@@ -309,22 +309,19 @@ const Cell = memo(
         );
         break;
         
-            case "multiselect":
-            element = (
-              <div style={{display:'flex',overflowX:"auto"}}>
-              <TableCellMultiSelect colId={id} chips={['chip1','chip2','chip3']} /></div>)
-              break;
-      case "singleselect":
-        element = (
-          
-           <div style={{display:'flex',overflowX:"auto"}}>
-          <TableCellSingleSelect value={value?.value} rowid={row.original.id} colid={id}  />
-          </div>
+        case "multipleselect":
+          element = (
+            <div style={{display:'flex',overflowX:"auto"}}>
          
-          
-        );
-        break;
-          
+            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} /></div>)
+            break;
+case "singleselect":
+      element = (
+         <div style={{display:'flex',overflowX:"auto"}}>
+        <TableCellSingleSelect value={value?.value} rowid={row.original.id} colid={id}  />
+        </div>
+      );
+      break; 
           case "check":
         element = (
           <div key={row.getRowProps().key} style={{display: 'flex', flex: '1 0 auto',position:'sticky'}}  role="row"  className="tr">
