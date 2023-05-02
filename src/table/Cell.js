@@ -318,8 +318,7 @@ const Cell = memo(
         element = (
           
            <div style={{display:'flex',overflowX:"auto"}}>
-          <TableCellSingleSelect  colid={id}  chips={['chip1','chip2']}/>
-          
+          <TableCellSingleSelect value={value?.value} rowid={row.original.id} colid={id}  />
           </div>
          
           
