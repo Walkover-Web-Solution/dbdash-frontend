@@ -29,8 +29,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
-const tableInfo=useSelector((state)=>getTableInfo(state));
-  console.log("tableInfo",tableInfo)
+
 
 const Cell = memo(
   ({
@@ -48,13 +47,25 @@ const Cell = memo(
     // const [addSelectRef, setAddSelectRef] = useState(null);
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const[colid,setColid]=useState(0);
     const [imageLink,setImageLink] = useState("")
-    const [selectArray, setSelectArray] = useState(false);
+    const tableInfo=useSelector((state)=>getTableInfo(state));
+    const metaDataArray = tableInfo?.columns.map(column => column?.metadata?.option);
+console.log(metaDataArray);
+    // console.log(tableInfo?.columns)
+    // const [selectArray,] = useState(tableInfo?.columns);
 
-  
     // const handleImageClick = (imgLink) => {
     //   window.open(imgLink, "_blank");
     // };
+
+  // console.log("tableInfo",tableInfo?.columns)
+
+  // const handleArrayData = () => {
+  //   setSelectArray(tableInfo?.columns)
+  // }
+  // console.log("selectArray",selectArray,handleArrayData)
 
     const handleUploadFileClick = () => {
       setOpen(true);
@@ -100,9 +111,9 @@ const Cell = memo(
       setValue({ value: initialValue, update: false });
     }, [initialValue]);
 
-    useEffect(()=>{
-      setSelectArray(tableInfo?.columns?.id?.metaData)
-     });
+    // useEffect(()=>{
+    //   setSelectArray(tableInfo?.columns?.id?.metaData)
+    //  });
 
     useEffect(() => {
       if (
@@ -559,12 +570,13 @@ const Cell = memo(
             case "multiselect":
             element = (
               <div style={{display:'flex',overflowX:"auto"}}>
-              <TableCellMultiSelect chips={selectArray} /></div>)
+              <TableCellMultiSelect colId={id} chips={['chip1','chip2','chip3']} /></div>)
               break;
       case "singleselect":
         element = (
           <>
-          <TableCellSingleSelect chips={['chip1','chip2','chip3']} />
+          
+          <TableCellSingleSelect isOpen={isOpen} setIsOpen={setIsOpen} chips={['chip1','chip2','chip3']} />
           </>
         );
         break;

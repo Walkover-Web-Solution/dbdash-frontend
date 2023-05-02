@@ -8,19 +8,18 @@ import { updateColumnHeaders } from "../store/table/tableThunk";
 
 function TableCellSingleSelect(props) {
     // console.log('props',props)
-  const [isOpen, setIsOpen] = useState(false);
+  
   const [searchText, setSearchText] = useState('');
   const [selectedChips, setSelectedChips] = useState([]);
   const anchorRef = useRef(null);
 const  dispatch = useDispatch();
   const handleClick = () => {
-    setIsOpen(!isOpen);
+    props?.setIsOpen(!props?.isOpen);
   };
   const handleKeyDown = (event) => {
     if (event.key === 'Backspace') {
       setSelectedChips([]);
     }
-    console.log(event.key)
   };
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
@@ -43,8 +42,8 @@ const  dispatch = useDispatch();
             updateColumnHeaders({
         dbId:"6448ccf237ab83c769ceca99",
         tableName:"tbltbtmfy",
-        fieldName:"fldq7ud1n",
-        columnId: "fldq7ud1n",
+        fieldName:"fldm9i68z",
+        columnId: "fldm9i68z",
               dataTypes: "text",
               metaData:["test1","mmmm","djkjdsds"]
             }))
@@ -78,8 +77,8 @@ const  dispatch = useDispatch();
       <div ref={anchorRef} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={0}>
         {selectedChips.length > 0 ?  <Chip key={selectedChips} label={selectedChips}  />: 'Select...'}
       </div>
-      <Popper open={isOpen} style={{backgroundColor:"white",zIndex:"10",overflowY:"auto"}} anchorEl={anchorRef.current} placement="bottom-start">
-        <ClickAwayListener onClickAway={() => setIsOpen(false)}>
+      <Popper open={props?.isOpen} style={{backgroundColor:"white",zIndex:"10",overflowY:"auto"}} anchorEl={anchorRef.current} placement="bottom-start">
+        <ClickAwayListener onClickAway={() => props?.setIsOpen(false)}>
           <div style={{ padding: '8px' }}>
             <TextField
               label="Search or add chips"
@@ -96,5 +95,8 @@ const  dispatch = useDispatch();
 }
 export default TableCellSingleSelect;
 TableCellSingleSelect.propTypes={
-    chips:PropTypes.any
+    chips:PropTypes.any,
+    colId:PropTypes.any,
+    isOpen:PropTypes.any,
+    setIsOpen:PropTypes.any
 }

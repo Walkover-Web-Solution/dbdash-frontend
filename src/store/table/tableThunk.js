@@ -26,7 +26,7 @@ const getHeaders = async(dbId,tableName) =>{
         },
     ]
    Object.entries(fields?.data?.data?.fields).forEach( (field) =>{
-    console.log("check",field[1].metaData)
+    // console.log("check",field[1].metaData)
        var json = {
            id: "",
         label: "",
