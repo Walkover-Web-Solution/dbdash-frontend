@@ -1,20 +1,29 @@
 import PropTypes from "prop-types";
 import React, { useState, useRef } from 'react';
 import { Popper, TextField,  Chip, ClickAwayListener } from '@material-ui/core';
+import { getTableInfo } from "../store/table/tableSelector";
 
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { updateColumnHeaders } from "../store/table/tableThunk";
 // import { getTableInfo } from "../store/table/tableSelector";
 
 function TableCellSingleSelect(props) {
-    // console.log('props',props)
-  
+  const tableInfo=useSelector((state)=>getTableInfo(state));
+  // console.log(props?.colid)
+  const metaDataArray = tableInfo?.columns.filter(obj=>{ return obj.id===props?.colid});
+  const[arr,setArr]=useState(metaDataArray[0]?.metadata?.option || []);
+ 
+  const[isOpen,setIsOpen]=useState(false);
   const [searchText, setSearchText] = useState('');
   const [selectedChips, setSelectedChips] = useState([]);
   const anchorRef = useRef(null);
 const  dispatch = useDispatch();
   const handleClick = () => {
-    props?.setIsOpen(!props?.isOpen);
+   setIsOpen(!isOpen);
+   
+
+ 
+    console.log(arr);
   };
   const handleKeyDown = (event) => {
     if (event.key === 'Backspace') {
@@ -23,8 +32,22 @@ const  dispatch = useDispatch();
   };
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
+
+  };const handleDeleteChip = (chip) => {
+    setArr(prevArr => prevArr.filter(x => x !== chip), () => {
+      console.log(arr); // logs the updated state of `arr` after the `chip` has been filtered out
+      
+      dispatch(updateColumnHeaders({
+        dbId: tableInfo?.dbId,
+        tableName: tableInfo?.tableId,
+        fieldName: props?.colid,
+        columnId: props?.colid,
+        dataTypes: "singleselect",
+        metaData: arr 
+      }));
+    });
   };
-  const handleChipClick = (chip) => {
+    const handleChipClick = (chip) => {
     setSelectedChips( chip);
     setSearchText('');
   };
@@ -35,24 +58,22 @@ const  dispatch = useDispatch();
 //       setSearchText('');
 //     }
 //   };
-  const handleSearchKeyDown = (event) => {
-    console.log('random',event.key)
-    if (event.key === 'Enter') {
-        dispatch(
-            updateColumnHeaders({
-        dbId:"6448ccf237ab83c769ceca99",
-        tableName:"tbltbtmfy",
-        fieldName:"fldm9i68z",
-        columnId: "fldm9i68z",
-              dataTypes: "text",
-              metaData:["test1","mmmm","djkjdsds"]
-            }))
-    //   handleAddChip();
-
-    }
-  };
+const handleSearchKeyDown = (event) => {
+  if (event.key === 'Enter') {
+    setArr(prevArr => [...prevArr, searchText]); // update the state using a callback function
+    setSelectedChips(searchText);
+    dispatch(updateColumnHeaders({
+      dbId: tableInfo?.dbId,
+      tableName: tableInfo?.tableId,
+      fieldName: props?.colid,
+      columnId: props?.colid,
+      dataTypes: "singleselect",
+      metaData: [...arr, searchText] // pass the updated value of `arr`
+    }))
+  }
+};
   const renderChips = () => {
-    return props.chips
+    return arr
       .filter((chip) => {
         return !selectedChips.includes(chip) && chip.toLowerCase().includes(searchText.toLowerCase());
       })
@@ -67,6 +88,9 @@ const  dispatch = useDispatch();
             onClick={()=>{
               handleChipClick(chip);
             }}
+            onDelete={()=>{
+              handleDeleteChip(chip);
+            }}
             style={{ margin: '4px' }}
           />
         );
@@ -77,8 +101,8 @@ const  dispatch = useDispatch();
       <div ref={anchorRef} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={0}>
         {selectedChips.length > 0 ?  <Chip key={selectedChips} label={selectedChips}  />: 'Select...'}
       </div>
-      <Popper open={props?.isOpen} style={{backgroundColor:"white",zIndex:"10",overflowY:"auto"}} anchorEl={anchorRef.current} placement="bottom-start">
-        <ClickAwayListener onClickAway={() => props?.setIsOpen(false)}>
+      <Popper open={isOpen} style={{backgroundColor:"white",zIndex:"10",overflowY:"auto"}} anchorEl={anchorRef.current} placement="bottom-start">
+        <ClickAwayListener onClickAway={() => setIsOpen(false)}>
           <div style={{ padding: '8px' }}>
             <TextField
               label="Search or add chips"
@@ -96,7 +120,9 @@ const  dispatch = useDispatch();
 export default TableCellSingleSelect;
 TableCellSingleSelect.propTypes={
     chips:PropTypes.any,
-    colId:PropTypes.any,
+    
     isOpen:PropTypes.any,
-    setIsOpen:PropTypes.any
+    setIsOpen:PropTypes.any,
+  
+    colid:PropTypes.any
 }
