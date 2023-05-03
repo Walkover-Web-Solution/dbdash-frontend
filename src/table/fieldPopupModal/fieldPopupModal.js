@@ -117,7 +117,6 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value === "singleselect" || event.target.value === "multipleselect") {
-      console.log('inside this singel || multi')
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }

@@ -8,7 +8,6 @@ import { updateColumnHeaders } from "../store/table/tableThunk";
 // import { getTableInfo } from "../store/table/tableSelector";
 function TableCellSingleSelect(props) {
   const tableInfo=useSelector((state)=>getTableInfo(state));
-  // console.log(props?.colid)
   const metaDataArray = tableInfo?.columns.filter(obj=>{ return obj.id===props?.colid});
   const[arr,setArr]=useState(metaDataArray[0]?.metadata?.option || []);
   const[isOpen,setIsOpen]=useState(false);
@@ -50,9 +49,7 @@ const  dispatch = useDispatch();
     });
   };
     const handleChipClick = (chip) => {
-      console.log('chip',chip)
       setSelectedChips( chip);
-    console.log(selectedChips);
       dispatch(
         updateCells({
           columnId:props?.colid,
@@ -82,7 +79,6 @@ const handleSearchKeyDown = (event) => {
     )
     setArr(prevArr => [...prevArr, searchText]); // update the state using a callback function
     setSelectedChips(searchText);
-    console.log(selectedChips);
     dispatch(updateColumnHeaders({
       dbId: tableInfo?.dbId,
       tableName: tableInfo?.tableId,

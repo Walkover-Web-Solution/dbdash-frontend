@@ -11,13 +11,11 @@ function TableCellMultiSelect(props) {
   const tableInfo=useSelector((state)=>getTableInfo(state));
   const metaDataArray = tableInfo?.columns?.filter(obj=>{ return obj?.id===props?.colid});
   const[arr,setArr]=useState(metaDataArray[0]?.metadata?.option || []);
-  
-  // console.log(arr);
+  console.log("in redux data",props)
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  const [selectedChips, setSelectedChips] = useState(props?.value && props?.value?.length>0 ? props?.value[0].split(','):[]);
-  console.log("value",props?.value)
+  const [selectedChips, setSelectedChips] = useState(props?.value && props?.value?.length>0 ? props?.value:[]);
   const anchorRef = useRef(null);
   const  dispatch = useDispatch();
   
@@ -57,8 +55,8 @@ function TableCellMultiSelect(props) {
       updateCells({
         columnId:props?.colid,
         rowIndex:props?.rowid,
-        value:[...selectedChips, chip],
-        dataTypes:"singleselect"
+        value:chip,
+        dataTypes:"multiselect"
       })
     )
   };
@@ -72,7 +70,7 @@ function TableCellMultiSelect(props) {
         tableName: tableInfo?.tableId,
         fieldName: props?.colid,
         columnId: props?.colid,
-        dataTypes: "singleselect",
+        dataTypes: "multiselect",
         metaData: [...arr, searchText] // pass the updated value of `arr`
       }))
       setSearchText('');
@@ -86,7 +84,7 @@ function TableCellMultiSelect(props) {
         tableName: tableInfo?.tableId,
         fieldName: props?.colid,
         columnId: props?.colid,
-        dataTypes: "singleselect",
+        dataTypes: "multiselect",
         metaData: updatedArr
       }));
       return updatedArr;

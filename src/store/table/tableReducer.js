@@ -72,7 +72,6 @@ export const reducers = {
   },
   updateColumnHeader(state, payload) {
     const action = payload.payload;
-    console.log('action',action)
     if (action) {
       var index = state.columns.findIndex(
         (column) => column.id === action.columnId
@@ -496,10 +495,9 @@ export function extraReducers(builder) {
         }
         else{
          
-          if(action?.dataTypes == "file")
+          if(action?.dataTypes == "file" || action?.dataTypes == "multiselect" )
           {  
-          var arrr = ele?.[action?.columnId] == null ? 
-          [] : ele?.[action?.columnId]  ;
+          var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
           arrr.push(action.value)
           arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
           }

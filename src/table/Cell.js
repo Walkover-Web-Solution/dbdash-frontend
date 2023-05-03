@@ -39,30 +39,18 @@ const Cell = memo(
   }) => {
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
-    // const [selectRef, setSelectRef] = useState(null);
-    // const [selectPop, setSelectPop] = useState(null);
-    // const [showSelect, setShowSelect] = useState(false);
-    // const [showAdd, setShowAdd] = useState(false);
-    // const [addSelectRef, setAddSelectRef] = useState(null);
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
-  
+    console.log("value ",value);
     const [imageLink,setImageLink] = useState("")
    
 
-    // console.log(tableInfo?.columns)
-    // const [selectArray,] = useState(tableInfo?.columns);
 
     // const handleImageClick = (imgLink) => {
     //   window.open(imgLink, "_blank");
     // };
 
-  // console.log("tableInfo",tableInfo?.columns)
 
-  // const handleArrayData = () => {
-  //   setSelectArray(tableInfo?.columns)
-  // }
-  // console.log("selectArray",selectArray,handleArrayData)
 
     const handleUploadFileClick = () => {
       setOpen(true);
