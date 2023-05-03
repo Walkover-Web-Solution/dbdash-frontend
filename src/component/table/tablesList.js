@@ -109,7 +109,6 @@ export default function TablesList({ dbData }) {
   useEffect(() => {
     if(params?.filterName){
       setUnderLine(params?.filterName)
-      console.log("if",AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query)
       dispatch(
         bulkAddColumns({
           dbId: dbData?.db?._id,
@@ -279,6 +278,7 @@ export default function TablesList({ dbData }) {
       )}
       {openn && (
         <FilterModal
+          dbData = {dbData}
           open={openn}
           edit={edit}
           setOpen={setOpenn}
