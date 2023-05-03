@@ -491,19 +491,18 @@ export function extraReducers(builder) {
     
       state.data.forEach((ele)=>{
         if(ele.id!==action.rowIndex) {
-          arr=[...arr,{...ele}];
-        }
+          arr=[...arr,{...ele}];     }
         else{
          
           if(action?.dataTypes == "file" || action?.dataTypes == "multiselect" )
           {  
-          var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
-          arrr.push(action.value)
-          arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
+            var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
+            arrr.push(action.value)
+            arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
           }
           else
           {
-            arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
+            arr=[...arr,action.newData];
           }
         }
       });

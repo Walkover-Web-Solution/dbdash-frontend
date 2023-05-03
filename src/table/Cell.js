@@ -16,7 +16,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-// import { Document} from 'react-pdf';
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -41,7 +40,6 @@ const Cell = memo(
     const [value, setValue] = useState({ value: initialValue, update: false });
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
-    console.log("value ",value);
     const [imageLink,setImageLink] = useState("")
    
 

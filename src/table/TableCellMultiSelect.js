@@ -11,7 +11,6 @@ function TableCellMultiSelect(props) {
   const tableInfo=useSelector((state)=>getTableInfo(state));
   const metaDataArray = tableInfo?.columns?.filter(obj=>{ return obj?.id===props?.colid});
   const[arr,setArr]=useState(metaDataArray[0]?.metadata?.option || []);
-  console.log("in redux data",props)
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
