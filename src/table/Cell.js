@@ -23,11 +23,11 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
 import TableCellSingleSelect from './TableCellSingleSelect'
 import TableCellMultiSelect from './TableCellMultiSelect'
-
+import { Link } from "react-scroll";
+// import { useNavigate } from "react-router";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
-
 
 
 const Cell = memo(
@@ -41,9 +41,9 @@ const Cell = memo(
     const [value, setValue] = useState({ value: initialValue, update: false });
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
-    console.log("value ",value);
+    // console.log("value ",value);
     const [imageLink,setImageLink] = useState("")
-   
+  //  const navigate = useNavigate();
 
 
     // const handleImageClick = (imgLink) => {
@@ -367,9 +367,11 @@ case "singleselect":
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
-                    <embed src={imgLink} width="50px" onClick={()=>{null}}/>
-                    </a>
+                  <Link to={imgLink} key={index}> 
+                  <div>                  
+                    <embed src={imgLink} width="50px" />
+                  </div>
+                  </Link>
                  
                 ))}
             </Tabs>

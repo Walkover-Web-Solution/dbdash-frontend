@@ -48,7 +48,7 @@ export default function TablesList({ dbData }) {
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const tableLength = Object.keys(AllTableInfo).length;
-
+  const [underLine,setUnderLine] = useState(null)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -77,6 +77,7 @@ export default function TablesList({ dbData }) {
   //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
   // }
   function onFilterClicked(filter, id) {
+    setUnderLine(id)
     setFilterId(id);
     dispatch(
       bulkAddColumns({
@@ -87,6 +88,7 @@ export default function TablesList({ dbData }) {
         pageNo: 1,
       })
     );
+    navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
   const deleteFilterInDb = async (filterId) => {
     const data = {
@@ -105,10 +107,23 @@ export default function TablesList({ dbData }) {
     );
   };
   useEffect(() => {
-    if (dbData?.db?.tables) {
+    if(params?.filterName){
+      setUnderLine(params?.filterName)
+      console.log("if",AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query)
+      dispatch(
+        bulkAddColumns({
+          dbId: dbData?.db?._id,
+          tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
+          filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+          org_id: dbData?.db?.org_id,
+          pageNo: 1,
+        })
+      );
+      // navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
+    }
+    else if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(setTableLoading(true));
-
       dispatch(
         bulkAddColumns({
           dbId: dbData?.db?._id,
@@ -200,8 +215,9 @@ export default function TablesList({ dbData }) {
                     p: 1,
                   }}
                   onClick={() => {
-                    onFilterClicked(filter[1].query, filter[0]);
+                    onFilterClicked(filter[1].query, filter[0],filter[1]);
                   }}
+                  style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
                   variant="contained"
                   color="primary"
                 >
