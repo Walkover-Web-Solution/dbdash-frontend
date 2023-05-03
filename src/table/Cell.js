@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-import {Tabs } from "@mui/material";
+import { Tabs } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -35,39 +35,41 @@ const Cell = memo(
     value: initialValue,
     row,
     column: { id, dataType },
-    
+
   }) => {
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
     const [inputBoxShow, setInputBoxShow] = useState(false);
     const [open, setOpen] = useState(false);
-    console.log("value ",value);
-    const [imageLink,setImageLink] = useState("")
-   
+    const [imageLink, setImageLink] = useState("")
+    const [isOpen, setIsOpen] = useState(false);
 
 
     // const handleImageClick = (imgLink) => {
     //   window.open(imgLink, "_blank");
     // };
 
-
-
     const handleUploadFileClick = () => {
       setOpen(true);
+    };
+
+    const handleCellClick = () => {
+      console.log("first")
+      setIsOpen(true);
     };
     var rowProperties = row?.getToggleRowSelectedProps();
     rowProperties.indeterminate = rowProperties.indeterminate?.toString();
     const onChange = (e) => {
       setValue({ value: e.target.value, update: false });
     };
-    const onChangeUrl = (e,type)=>{
+    const onChangeUrl = (e, type) => {
       if (imageLink != null) {
         dispatch(
           updateCells({
             columnId: id,
             rowIndex: row.original.id,
             value: null,
-            imageLink:imageLink,
+            imageLink: imageLink,
             dataTypes: type,
           })
         ).then(() => {
@@ -83,7 +85,7 @@ const Cell = memo(
             columnId: id,
             rowIndex: row.original.id,
             value: e.target.files[0],
-            imageLink:imageLink,
+            imageLink: imageLink,
             dataTypes: type,
           })
         ).then(() => {
@@ -248,38 +250,38 @@ const Cell = memo(
           />
         );
         break;
-        
-        case "email":
-          element = (
-            <ContentEditable
-              html={(value?.value && value?.value?.toString()) || ""}
-              onChange={onChange}
+
+      case "email":
+        element = (
+          <ContentEditable
+            html={(value?.value && value?.value?.toString()) || ""}
+            onChange={onChange}
+            onBlur={() =>
+              setValue((old) => ({ value: old.value, update: true }))
+            }
+            className="data-input"
+          />
+        );
+        break;
+
+      case "phone":
+        element = (
+          <>
+            <input type="tel" id="phone" name="phone" maxLength="13"
+              value={(value?.value && value?.value?.toString()) || ""}
+              onChange={(event) => {
+                let newValue = event.target.value.replace(/[^\d+]/g, "");
+                onChange({ target: { value: newValue } });
+              }}
               onBlur={() =>
                 setValue((old) => ({ value: old.value, update: true }))
               }
               className="data-input"
+              style={{ background: "none" }}
             />
-          );
-          break;
-
-          case "phone":
-          element = (
-            <>
-              <input type="tel" id="phone" name="phone" maxLength="13"
-                value={(value?.value && value?.value?.toString()) || ""}
-                onChange={(event) => {
-                        let newValue = event.target.value.replace(/[^\d+]/g, "");
-                        onChange({ target: { value: newValue } });
-                      }}
-                onBlur={() =>
-                  setValue((old) => ({ value: old.value, update: true }))
-                }
-                className="data-input"
-                style={{ background: "none" }}
-              />
-            </>
-          );
-      break;
+          </>
+        );
+        break;
       case "numeric":
         element = (
           <>
@@ -296,23 +298,23 @@ const Cell = memo(
           </>
         );
         break;
-        
-        case "multipleselect":
-          element = (
-            <div style={{display:'flex',overflowX:"auto"}}>
-         
-            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} /></div>)
-            break;
-case "singleselect":
-      element = (
-         <div style={{display:'flex',overflowX:"auto"}}>
-        <TableCellSingleSelect value={value?.value} rowid={row.original.id} colid={id}  />
-        </div>
-      );
-      break; 
-          case "check":
+
+      case "multipleselect":
         element = (
-          <div key={row.getRowProps().key} style={{display: 'flex', flex: '1 0 auto',position:'sticky'}}  role="row"  className="tr">
+          <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
+            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} /></div>)
+        break;
+
+      case "singleselect":
+        element = (
+          <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
+            <TableCellSingleSelect value={value?.value} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} />
+          </div>
+        );
+        break;
+      case "check":
+        element = (
+          <div key={row.getRowProps().key} style={{ display: 'flex', flex: '1 0 auto', position: 'sticky' }} role="row" className="tr">
             {!row.isSelected && (
               <div className="count" title="Check">
                 {row.index + 1}
@@ -367,10 +369,10 @@ case "singleselect":
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
-                    <embed src={imgLink} width="50px" onClick={()=>{null}}/>
-                    </a>
-                 
+                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">
+                    <embed src={imgLink} width="50px" onClick={() => { null }} />
+                  </a>
+
                 ))}
             </Tabs>
 
@@ -379,7 +381,7 @@ case "singleselect":
                 title="uplaodfile"
                 label="UploadFileIcon"
                 open={open}
-                setImageLink = {setImageLink}
+                setImageLink={setImageLink}
                 onChangeUrl={onChangeUrl}
                 setOpen={setOpen}
                 imageLink={imageLink}

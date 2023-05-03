@@ -495,7 +495,7 @@ export function extraReducers(builder) {
         }
         else{
          
-          if(action?.dataTypes == "file" || action?.dataTypes == "multiselect" )
+          if(action?.dataTypes == "file" || action?.dataTypes == "multipleselect" )
           {  
           var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
           arrr.push(action.value)
