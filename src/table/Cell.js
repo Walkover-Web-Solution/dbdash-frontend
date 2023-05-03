@@ -300,7 +300,7 @@ const Cell = memo(
 
       case "multipleselect":
         element = (
-          <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
+          <div onClick={handleCellClick} >
             <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} /></div>)
         break;
 

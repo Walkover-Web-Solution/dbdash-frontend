@@ -11,13 +11,13 @@ function TableCellSingleSelect(props) {
   const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
   const [arr, setArr] = useState(metaDataArray[0]?.metadata?.option || []);
   const [searchText, setSearchText] = useState('');
-  const [selectedChips, setSelectedChips] = useState(props?.value);
+  const [selectedChips, setSelectedChips] = useState(props?.value || "");
   const anchorRef = useRef(null);
   const dispatch = useDispatch();
   
   const handleKeyDown = (event) => {
     if (event.key === 'Backspace') {
-      setSelectedChips([]);
+      setSelectedChips("");
       dispatch(
         updateCells({
           columnId: props?.colid,
