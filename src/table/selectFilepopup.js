@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
 import { Select, MenuItem} from "@mui/material";
 
-
 const useStyles = makeStyles({
   input: {
     display: 'none', // hides the default file input
@@ -17,7 +16,6 @@ const useStyles = makeStyles({
     cursor: 'pointer',
   },
 });
-
 
 const style = {
   position: "absolute",
@@ -45,9 +43,9 @@ export default function selectFilepopup(props) {
   const handleSelectChange =(event)=>{
     setUploadOption(event.target.value)
   }
-  // const handleTextChange = (event)=>{
-  //   props?.setImageLink(event.target.value)
-  // }
+ 
+  const isUrlSelected = uploadOption === "url";
+
   return (
     <Box>
       <Modal
@@ -76,19 +74,7 @@ export default function selectFilepopup(props) {
             <MenuItem value="file">File</MenuItem>
             <MenuItem value="url">Url</MenuItem>
           </Select>
-           {uploadOption == "file" && 
-           <div>
-           <input
-              type="file"
-              id="my-file-input"
-              className={classes.input}
-              onChange={(e)=>{
-                handleFileSelection(e)}}
-            />
-            <label htmlFor="my-file-input" className={classes.label}>Choose a file
-            </label>
-            </div>
-            }
+           
 
             {uploadOption == "url" &&
             <div>
@@ -108,17 +94,34 @@ export default function selectFilepopup(props) {
                   }}
                   sx={{ width: "92%", mr: 2, ml: 2 }}
           />
-            <Button onClick={(e)=>{
-            handleClose()
-            props?.onChangeUrl(e,"file");
-          }}>Submit</Button>
             </div>
-
             }
             </div>
-            <Button variant="outlined" onClick={handleClose}>
-              cancel
-            </Button>
+          
+        <Box sx={{display:'flex',mt:3}}>
+          {isUrlSelected  && <Box>
+            <Button onClick={(e)=>{handleClose(); props?.onChangeUrl(e,"file")}}>Submit</Button>
+          </Box>}
+
+          {uploadOption == "file" && 
+           <div style={{ display:'flex'}}>
+           <input
+              type="file"
+              id="my-file-input"
+              className={classes.input}
+              onChange={(e)=>{
+                handleFileSelection(e)}}
+            />
+            <label htmlFor="my-file-input" className={classes.label}  style={{ marginRight: "8px" }} >Choose a file
+            </label>
+            </div>
+            }
+
+            <Box>
+            <Button variant="outlined" onClick={handleClose}>cancel</Button>
+            </Box>
+        </Box>
+
           </Box>
         </Box>
       </Modal>

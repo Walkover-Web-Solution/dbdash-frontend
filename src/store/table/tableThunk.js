@@ -250,10 +250,8 @@ export const updateCells = createAsyncThunk(
             payload.value = data?.data?.data;
             return payload;
        }
-       else{
-           await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
-        //    dispatch(updateCell(payload));
-        }
+          const data =  await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
+          payload.newData = data?.data?.data;
         return payload;
     }
 )

@@ -35,6 +35,8 @@ function App() {
       <Route exact path ="/authKeyCreate/:id" element ={<Protected><CreateAuth/></Protected>}/>
       <Route exact path ="/apiDoc/db/:dbId" element ={<Protected><ApiDocPage /></Protected>}/>
       <Route exact path="*" element={<Navigate to="/notFound" />} />
+      <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
+
     </Routes>
 
     </AuthContextProvider>
