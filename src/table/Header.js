@@ -27,6 +27,8 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ContentCopySharpIcon from '@mui/icons-material/ContentCopySharp';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
@@ -340,7 +342,7 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      icon: <MultiIcon />,
+      icon: <ExpandCircleDownOutlinedIcon fontSize="2px"/>,
       label: "single select"
     },
     {
@@ -366,7 +368,7 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      icon: <TextFormatIcon fontSize="2px"/>,
+      icon: <QueueOutlinedIcon fontSize="2px"/>,
       label: "multipleselect"
     },
     {
@@ -405,7 +407,7 @@ export default function Header({
       propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
       break;
       case "singleselect":
-        propertyIcon = <MultiIcon fontSize="2px"/>;
+        propertyIcon = <ExpandCircleDownOutlinedIcon fontSize="2px"/>;
         break;
         case "multiselect":
           propertyIcon = <MultiIcon fontSize="2px"/>;
@@ -435,7 +437,7 @@ export default function Header({
       propertyIcon = <LocalPhoneIcon fontSize="2px" />;
       break;
         case "multipleselect":
-          propertyIcon = <MultiIcon fontSize="2px" />;
+          propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
           break;
 
     default:

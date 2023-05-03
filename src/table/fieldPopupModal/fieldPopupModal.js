@@ -16,6 +16,8 @@ import NumbersIcon from "@mui/icons-material/Numbers";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import FormulaDataType from "./fieldDataType/formulaDataType";
 import LinkDataType from "./fieldDataType/linkDataType";
 import LoookupDataType from "./fieldDataType/lookupDataType";
@@ -116,10 +118,9 @@ export default function FieldPopupModal(props) {
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }
-    else if (event.target.value === "singleselect" || event.target.value === "multipleselect") {
-      setShowSwitch(true);
-      props?.setSelectValue(event.target.value);
-    }
+    // else if (event.target.value === "singleselect" || event.target.value === "multipleselect") {
+    //   props?.setSelectValue(event.target.value);
+    // }
     else {
       props?.setSelectedFieldName(false)
       props?.setSelectValue(event.target.value);
@@ -211,13 +212,12 @@ export default function FieldPopupModal(props) {
             <MenuItem value="link"><ReadMoreOutlinedIcon fontSize="2px" sx={{ mr: 1 }} /> Link </MenuItem>
             <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{ mr: 1 }} /> Long text </MenuItem>
             <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Lookup</MenuItem>
-            <MenuItem value="multipleselect"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
+            <MenuItem value="multipleselect"><QueueOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{ mr: 1 }} /> Number</MenuItem>
             <MenuItem value="phone"><LocalPhoneIcon fontSize="2px" sx={{ mr: 1 }} />Phone number</MenuItem>
             <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{ mr: 1 }} /> Row id</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single line text</MenuItem>
-            <MenuItem value="singleselect"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
-            <MenuItem value="multipleselect"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
+            <MenuItem value="singleselect"><ExpandCircleDownOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
             
           </Select>
 
