@@ -1,10 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getDbById } from "../../api/dbApi"
-import { createTable,updateTable,deleteTable } from "../../api/tableApi";
+import { updateTable,deleteTable } from "../../api/tableApi";
 export const createTable1 = createAsyncThunk (
     "tables/createTable1", async (payload) =>{
-        const data = await createTable(payload?.dbId,payload.data);
-        return data.data.data.tables
+        // const data = await createTable(payload?.dbId,payload.data);
+        console.log("pay",payload);
+        return payload?.tables
     }
 );
 export const getTable1 = createAsyncThunk (

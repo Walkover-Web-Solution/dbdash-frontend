@@ -2,22 +2,17 @@ import React, {useState} from 'react'
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../dropdown';
-// import {updateTable, deleteTable } from '../../api/tableApi';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
-// import { selectOrgandDb } from "../../store/database/databaseSelector";
-// import { uploadCSV } from '../../api/rowApi';
-
 
 export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,value ,setPage}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [, setTableButton] = useState(false);
   const [name, setName] = useState();
-  // const alldb = useSelector((state) => selectOrgandDb(state))
   
  
   const dispatch = useDispatch();
@@ -54,15 +49,31 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
-
+  console.log("tableToDelete", Object.entries(dbData?.db?.tables));
   const deleteTableName = async (tableid) => {
-
+    const tableNameToDelete = dbData?.db?.tables[tableid].tableName;
+    console.log("tableToDelete", tableNameToDelete,value);
+    
+const keys = Object.keys(dbData?.db?.tables)
+    let last = "";
+    
+    let i = 0
+    for (i; i < keys.length; i++) {
+      console.log("indexold",index);
+      console.log("keyssss",keys[i]);
+      console.log("tableid",tableid);
+      if(keys[i] == tableid){
+        break 
+      }
+    }
+    
+  
+    last =  keys[i-1]
     if(Object.keys(dbData?.db?.tables).length >=2){
       dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
     } 
-
-    const previousIndex = value - 1;
-    navigate(`/db/${dbData.db._id}/table/${Object.keys(dbData?.db?.tables)[previousIndex]}`);
+    
+    navigate(`/db/${dbData.db._id}/table/${last}`);
     
   };
   function onTableClicked() {
