@@ -11,21 +11,28 @@ import IconButton from '@mui/material/IconButton';
 // import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from "prop-types";
-import {saveAs} from "file-saver";
+// import {saveAs} from "file-saver";
 
 
 export default function PreviewAttachment(props) {
-
-    const downloadImage = (url) => {
-        console.log(url)
-        fetch(url, {
-            mode : 'no-cors',
-          })
-            .then(response => response.blob())
-            .then(blob => {
-                saveAs(blob,'chanchal.png');
-            })
-            .catch(error => console.error(error));
+        //     .catch(error => console.error(error));
+        const downloadImage = (fileLink) => {
+            console.log(fileLink)
+            fetch(fileLink)
+              .then((r) => r.blob())
+              .then((blob) => {
+                const element = document.createElement('a');
+                document.body.appendChild(element);
+                element.setAttribute('href', window.URL.createObjectURL(blob));
+                element.setAttribute('download', "chanchal.png");
+                element.style.display = '';
+        
+                element.click();
+        
+                document.body.removeChild(element);
+              })
+              .catch((err) =>
+                console.log("There is something wrong",err))
     };
 
 

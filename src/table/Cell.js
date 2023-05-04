@@ -38,7 +38,6 @@ const Cell = memo(
     const [imageLink, setImageLink] = useState("")
     const [isOpen, setIsOpen] = useState(false);
     const [previewModal,setPreviewModal] = useState(false)
-console.log(previewModal)
     const handleUploadFileClick = () => {
       setOpen(true);
     };
@@ -356,14 +355,15 @@ console.log(previewModal)
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <a key={index} >                   
+                  <React.Fragment key={index}>                   
                     <embed src={imgLink} width="50px" onClick={()=>{
+                      console.log("in");
                       setPreviewModal(true)
                   }}/>
                   {previewModal && (
                      <PreviewAttachment imageLink={imgLink} open={previewModal} setPreviewModal={setPreviewModal}/>
                    )}
-                    </a>
+                    </React.Fragment>
 
                 ))}
             </Tabs>
