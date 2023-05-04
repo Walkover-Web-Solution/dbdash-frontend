@@ -223,7 +223,7 @@ export default function TableCellMultiSelect(props) {
           {value.map((option, index) => (
             <StyledTag rowid={props?.rowid} colid={props?.colid} key={index} label={option} {...getTagProps({index})} />
           ))}
-
+         { console.log(getInputProps)}
           <input {...getInputProps()} />
         </InputWrapper>
       </div>

@@ -10,7 +10,6 @@ import { getTableInfo } from "../store/table/tableSelector";
 import {  useDispatch, useSelector } from "react-redux";
 import { updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 
-
 const Root = styled('div')(
   ({ theme }) => `
   color: ${
@@ -20,7 +19,13 @@ const Root = styled('div')(
 `,
 );
 
-const Input = styled('div')(
+const Label = styled('label')`
+  padding: 0 0 4px;
+  line-height: 1.5;
+  display: block;
+`;
+
+const InputWrapper = styled('div')(
   ({ theme }) => `
   width: 300px;
   border: 1px solid ${theme.palette.mode === 'dark' ? '#434343' : '#d9d9d9'};
@@ -58,25 +63,25 @@ const Input = styled('div')(
 );
 
 function Tag(props) {
-const dispatch = useDispatch();
-const handleDeleteChip = (value) => {
-  dispatch(
-    updateCells({
-      columnId: props?.colid,
-      rowIndex: props?.rowid,
-      value: null,
-      dataTypes: "singleselect"
-    })
-  )
-};
-  const { label, onDelete,rowid,colid, ...other } = props;
-  return (
-    <div {...other}>
-      <span>{label}</span>
-      <CloseIcon onClick={()=>{handleDeleteChip(label)}} />
-    </div>
-  );
-}
+  const dispatch = useDispatch();
+  const handleDeleteChip = (value) => {
+    dispatch(
+      updateCells({
+        columnId: props?.colid,
+        rowIndex: props?.rowid,
+        value: {delete: value},
+        dataTypes: "singleselect"
+      })
+    )
+  };
+    const { label, onDelete,rowid,colid, ...other } = props;
+    return (
+      <div {...other}>
+        <span>{label}</span>
+        <CloseIcon onClick={()=>{handleDeleteChip(label)}} />
+      </div>
+    );
+  }
 
 Tag.propTypes = {
   label: PropTypes.string.isRequired,
@@ -85,7 +90,7 @@ Tag.propTypes = {
 
 const StyledTag = styled(Tag)(
   ({ theme }) => `
- : display: flex;
+  display: flex;
   align-items: center;
   height: 24px;
   margin: 2px;
@@ -94,7 +99,7 @@ const StyledTag = styled(Tag)(
     theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#fafafa'
   };
   border: 1px solid ${theme.palette.mode === 'dark' ? '#303030' : '#e8e8e8'};
-  border-radius 2px;
+  border-radius: 2px;
   box-sizing: content-box;
   padding: 0 4px 0 10px;
   outline: 0;
@@ -121,12 +126,13 @@ const StyledTag = styled(Tag)(
 
 const Listbox = styled('ul')(
   ({ theme }) => `
+  width: 300px;
   margin: 2px 0 0;
   padding: 0;
   position: absolute;
   list-style: none;
   background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
-  overflow: hidden;
+  overflow: auto;
   max-height: 250px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -165,6 +171,8 @@ const Listbox = styled('ul')(
 `,
 );
 
+
+
 export default function TableCellSingleSelect(props) {
   const tableInfo = useSelector((state) => getTableInfo(state));
     const top100Films = props?.metaData?.option || []
@@ -193,12 +201,19 @@ export default function TableCellSingleSelect(props) {
     }
     const {
       getRootProps,
-      getInputProps,
-      getListboxProps,
-      getOptionProps,
-      groupedOptions,
+    getInputLabelProps,
+    getInputProps,
+    getTagProps,
+    getListboxProps,
+    getOptionProps,
+    groupedOptions,
+    value,
+    focused,
+    setAnchorEl,
       
     } = useAutocomplete({
+      freeSolo: true,
+      multiple: false,
       id: 'use-autocomplete-demo',
       options: top100Films,
       getOptionLabel: (option) => option,
@@ -209,7 +224,12 @@ export default function TableCellSingleSelect(props) {
       <div>
         <div {...getRootProps()}>
           
-          <Input {...getInputProps()} />
+      <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
+   {     console.log(value)}
+      {value && <StyledTag label={value} {...getTagProps(0)} />}
+     { console.log(getInputProps())}
+      <input {...getInputProps()} />
+</InputWrapper>
         </div>
         {groupedOptions.length > 0 ? (
           <Listbox {...getListboxProps()}>
