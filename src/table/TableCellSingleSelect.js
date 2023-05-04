@@ -213,7 +213,7 @@ export default function TableCellSingleSelect(props) {
       
     } = useAutocomplete({
       freeSolo: true,
-      multiple: false,
+      multiple: true,
       id: 'use-autocomplete-demo',
       options: top100Films,
       getOptionLabel: (option) => option,
@@ -226,9 +226,8 @@ export default function TableCellSingleSelect(props) {
           
       <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
    {     console.log(value)}
-      {value && <StyledTag label={value} {...getTagProps(0)} />}
-     { console.log(getInputProps())}
-      <input {...getInputProps()} />
+      { <StyledTag label={value} {...getTagProps(0)} />}
+      <input {...getInputProps()}  />
 </InputWrapper>
         </div>
         {groupedOptions.length > 0 ? (
