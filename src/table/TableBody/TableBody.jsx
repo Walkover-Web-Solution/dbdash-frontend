@@ -121,11 +121,12 @@ import {updateCells } from "../../store/table/tableThunk";
   return (
     <div
       style={{
-        widht: "auto",
+        width: "auto",
       }}
       id="scrollableDiv"
     >
       <InfiniteLoader
+      
         isItemLoaded={isItemLoaded}
         itemCount={itemCount}
         loadMoreItems={loadMoreItems}

@@ -102,29 +102,30 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload,{getState,dispatch}) =>{
+        var  columns = null
+        if((payload?.pageNo <=  1)  || !( payload?.pageNo) )
+        {
+            columns =  await getHeaders(payload.dbId,payload.tableName)
+        }
         if(payload.filter != null)
         {
             const querydata = await runQueryonTable(
                 payload.dbId,
                 payload?.filter
             )
-            const columns =  await getHeaders(payload.dbId,payload.tableName)
+            console.log("querydata",querydata.data.data.rows)
             const dataa = {
                 "columns":columns,
-                "row":querydata.data.data,
+                "row":querydata.data.data.rows,
                 "tableId":payload.tableName,
-                "dbId":payload.dbId
+                "dbId":payload.dbId,
+                "isMoreData" : !(querydata.data.data?.offset == null)
             }
             dispatch (setTableLoading(false))
             return dataa;
         }
         else{
-            var  columns = null
-          
-            if((payload?.pageNo <=  1)  || !( payload?.pageNo) )
-            {
-                columns =  await getHeaders(payload.dbId,payload.tableName)
-            }
+            
             const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.pageNo)
             const dataa = {
                 "columns":columns,

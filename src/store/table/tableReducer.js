@@ -8,12 +8,10 @@ export const initialState = {
   data: [],
   tableId: [],
   dbId: [],
-  skipReset: false,
   status: "idle",
   pageNo : 0,
   isTableLoading : true,
   isMoreData : true,
-  pageSize : 100
 
 };
 
@@ -46,7 +44,6 @@ export const reducers = {
       data: [],
       tableId: [],
       dbId: [],
-      skipReset: false,
       status: "idle",
       pageNo : 0,
       isTableLoading : true , 
@@ -63,7 +60,7 @@ export const reducers = {
     }
     return {
       ...state,
-      skipReset: true,
+    
       columns: [
         ...state.columns.slice(0, deleteIndex),
         ...state.columns.slice(deleteIndex + 1, state.columns.length)
@@ -81,7 +78,7 @@ export const reducers = {
 
     return {
       ...state,
-      skipReset: true,
+    
       columns: [
         ...state.columns.slice(0, index),
         { ...state.columns[index], label: action.label },
@@ -99,7 +96,7 @@ export const reducers = {
     var rightId = shortId();
     return {
       ...state,
-      skipReset: true,
+    
       columns: [
         ...state.columns.slice(0, rightIndex + 1),
         {
@@ -225,7 +222,6 @@ export const reducers = {
               { ...state.columns[typeIndex], dataType: action.dataType },
               ...state.columns.slice(typeIndex + 1, state.columns.length)
             ],
-            skipReset: true
           };
         } else {
           let options = [];
@@ -248,7 +244,6 @@ export const reducers = {
               },
               ...state.columns.slice(typeIndex + 1, state.columns.length)
             ],
-            skipReset: true
           };  
         }
       case "longtext":
@@ -257,7 +252,7 @@ export const reducers = {
         } else if (state.columns[typeIndex].dataType === "select") {
           return {
             ...state,
-            skipReset: true,
+          
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
@@ -267,7 +262,7 @@ export const reducers = {
         } else {
           return {
             ...state,
-            skipReset: true,
+          
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
@@ -289,7 +284,6 @@ export const reducers = {
                 { ...state.columns[typeIndex], dataType: action.dataType },
                 ...state.columns.slice(typeIndex + 1, state.columns.length)
               ],
-              skipReset: true
             };
           } else {
             let options = [];
@@ -312,7 +306,6 @@ export const reducers = {
                 },
                 ...state.columns.slice(typeIndex + 1, state.columns.length)
               ],
-              skipReset: true
             };
           }
           case "multipleselect":
@@ -324,7 +317,6 @@ export const reducers = {
                 { ...state.columns[typeIndex], dataType: action.dataType },
                 ...state.columns.slice(typeIndex + 1, state.columns.length)
               ],
-              skipReset: true
             };
           } else {
             let options = [];
@@ -347,7 +339,6 @@ export const reducers = {
                 },
                 ...state.columns.slice(typeIndex + 1, state.columns.length)
               ],
-              skipReset: true
             };
           }
 
@@ -357,7 +348,7 @@ export const reducers = {
         } else if (state.columns[typeIndex].dataType === "select") {
           return {
             ...state,
-            skipReset: true,
+          
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
@@ -367,7 +358,7 @@ export const reducers = {
         } else {
           return {
             ...state,
-            skipReset: true,
+          
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
