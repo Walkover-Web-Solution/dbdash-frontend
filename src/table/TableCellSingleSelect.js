@@ -1,136 +1,240 @@
-import PropTypes from "prop-types";
-import React, { useState, useRef } from 'react';
-import { Popper, TextField, Chip, ClickAwayListener } from '@mui/material';
-import { getTableInfo } from "../store/table/tableSelector";
-import { updateCells } from "../store/table/tableThunk";
-import { useDispatch, useSelector } from "react-redux";
-import { updateColumnHeaders } from "../store/table/tableThunk";
-function TableCellSingleSelect(props) {
 
-  const tableInfo = useSelector((state) => getTableInfo(state));
-  const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
-  const [arr, setArr] = useState(metaDataArray[0]?.metadata?.option || []);
-  const [searchText, setSearchText] = useState('');
-  const [selectedChips, setSelectedChips] = useState(props?.value);
-  const anchorRef = useRef(null);
-  const dispatch = useDispatch();
-  
-  const handleKeyDown = (event) => {
-    if (event.key === 'Backspace') {
-      setSelectedChips([]);
-      dispatch(
-        updateCells({
-          columnId: props?.colid,
-          rowIndex: props?.rowid,
-          value: "",
-          dataTypes: "singleselect"
-        })
-      )
-    }
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import useAutocomplete from '@mui/base/useAutocomplete';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { styled } from '@mui/material/styles';
+import { autocompleteClasses } from '@mui/material/Autocomplete';
+import { getTableInfo } from "../store/table/tableSelector";
+import {  useDispatch, useSelector } from "react-redux";
+import { updateCells } from "../store/table/tableThunk";
+
+
+
+const Root = styled('div')(
+  ({ theme }) => `
+  color: ${
+    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
   };
-  const handleSearchTextChange = (event) => {
-    setSearchText(event.target.value);
-  };
-  const handleDeleteChip = (chip) => {
-    setArr(prevArr => {
-      const updatedArr = prevArr.filter(x => x !== chip);
-      dispatch(updateColumnHeaders({
-        dbId: tableInfo?.dbId,
-        tableName: tableInfo?.tableId,
-        fieldName: props?.colid,
-        columnId: props?.colid,
-        dataTypes: "singleselect",
-        metaData: updatedArr
-      }));
-      return updatedArr;
-    });
-  };
-  const handleChipClick = (chip) => {
-    setSelectedChips(chip);
-    dispatch(
-      updateCells({
-        columnId: props?.colid,
-        rowIndex: props?.rowid,
-        value: chip,
-        dataTypes: "singleselect"
-      })
-    )
-    setSearchText('');
-  };
-  
-  const handleSearchKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      dispatch(
-        updateCells({
-          columnId: props?.colid,
-          rowIndex: props?.rowid,
-          value: searchText,
-          dataTypes: "singleselect"
-        })
-      )
-      setArr(prevArr => [...prevArr, searchText]); // update the state using a callback function
-      setSelectedChips(searchText);
-      dispatch(updateColumnHeaders({
-        dbId: tableInfo?.dbId,
-        tableName: tableInfo?.tableId,
-        fieldName: props?.colid,
-        columnId: props?.colid,
-        dataTypes: "singleselect",
-        metaData: [...arr, searchText] // pass the updated value of `arr`
-      }))
-    }
-  };
-  const renderChips = () => {
-    return arr
-      .filter((chip) => {
-        return selectedChips !== chip && chip.toLowerCase().includes(searchText.toLowerCase());
-      })
-      .map((chip) => {
-        const isSelected = selectedChips === chip;
-        return (
-          <Chip
-            key={chip}
-            label={chip}
-            clickable={!isSelected}
-            color={isSelected ? 'error' : 'success'}
-            onClick={() => {
-              handleChipClick(chip);
-            }}
-            onDelete={() => {
-              handleDeleteChip(chip);
-            }}
-            style={{ margin: '4px' }}
-          />
-        );
-      });
-  };
+  font-size: 14px;
+`,
+);
+
+// const Label = styled('label')`
+//   padding: 0 0 4px;
+//   line-height: 1.5;
+//   display: block;
+// `;
+
+const InputWrapper = styled('div')(
+  ({ theme }) => `
+  width: 300px;
+  border: 1px solid ${theme.palette.mode === 'dark' ? '#434343' : '#d9d9d9'};
+  background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
+  border-radius: 4px;
+  padding: 1px;
+  display: flex;
+  flex-wrap: wrap;
+
+  &:hover {
+    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+  }
+
+  &.focused {
+    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+
+  & input {
+    background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
+    color: ${
+      theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
+    };
+    height: 30px;
+    box-sizing: border-box;
+    padding: 4px 6px;
+    width: 0;
+    min-width: 30px;
+    flex-grow: 1;
+    border: 0;
+    margin: 0;
+    outline: 0;
+  }
+`,
+);
+
+function Tag(props) {
+  const { label, onDelete, ...other } = props;
   return (
-    <>
-      <div ref={anchorRef}  onKeyDown={handleKeyDown} tabIndex={0}>
-        {props?.value?.length > 0 ? <Chip key={selectedChips} label={selectedChips} /> : 'Select'}
-        </div>
-      <Popper open={props.isOpen} style={{ backgroundColor: "white", zIndex: "10", overflowY: "auto" }} anchorEl={anchorRef.current} placement="bottom-start">
-        <ClickAwayListener onClickAway={() => props.setIsOpen(false)}>
-          <div style={{ padding: '8px' }}>
-          <TextField
-              label="Search or add chips"
-              value={searchText}
-              onChange={handleSearchTextChange}
-              onKeyDown={handleSearchKeyDown}
-            />
-            <div style={{ marginTop: '2px' }}>{renderChips()}</div>
-          </div>
-        </ClickAwayListener>
-      </Popper>  
-    </>
+    <div {...other}>
+      <span>{label}</span>
+      <CloseIcon onClick={onDelete} />
+    </div>
   );
 }
-export default TableCellSingleSelect;
-TableCellSingleSelect.propTypes = {
-  chips: PropTypes.any,
-  isOpen: PropTypes.any,
-  setIsOpen: PropTypes.any,
-  colid: PropTypes.any,
-  rowid: PropTypes.any,
-  value: PropTypes.any
+
+Tag.propTypes = {
+  label: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
+const StyledTag = styled(Tag)(
+  ({ theme }) => `
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin: 2px;
+  line-height: 22px;
+  background-color: ${
+    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#fafafa'
+  };
+  border: 1px solid ${theme.palette.mode === 'dark' ? '#303030' : '#e8e8e8'};
+  border-radius: 2px;
+  box-sizing: content-box;
+  padding: 0 4px 0 10px;
+  outline: 0;
+  overflow: hidden;
+
+  &:focus {
+    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+    background-color: ${theme.palette.mode === 'dark' ? '#003b57' : '#e6f7ff'};
+  }
+
+  & span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  & svg {
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px;
+  }
+`,
+);
+
+const Listbox = styled('ul')(
+  ({ theme }) => `
+  margin: 2px 0 0;
+  padding: 0;
+  position: absolute;
+  list-style: none;
+  background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
+  overflow: hidden;
+  max-height: 250px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+
+  & li {
+    padding: 5px 12px;
+    display: flex;
+
+    & span {
+      flex-grow: 1;
+    }
+
+    & svg {
+      color: transparent;
+    }
+  }
+
+  & li[aria-selected='true'] {
+    background-color: ${theme.palette.mode === 'dark' ? '#2b2b2b' : '#fafafa'};
+    font-weight: 600;
+
+    & svg {
+      color: #1890ff;
+    }
+  }
+
+  & li.${autocompleteClasses.focused} {
+    background-color: ${theme.palette.mode === 'dark' ? '#003b57' : '#e6f7ff'};
+    cursor: pointer;
+
+    & svg {
+      color: currentColor;
+    }
+  }
+`,
+);
+
+export default function TableCellSingleSelect(props) {
+  const tableInfo = useSelector((state) => getTableInfo(state));
+    const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
+    // const [arr, setArr] = useState(metaDataArray[0]?.metadata?.option || []);
+    const top100Films = metaDataArray[0]?.metadata?.option || []
+    const dispatch = useDispatch();
+    const handleChipChange = (event, value) => {
+      console.log("new value",event.target.value)
+      // if (!top100Films.includes(newValue)) 
+      dispatch(
+                updateCells({
+                  columnId: props?.colid,
+                  rowIndex: props?.rowid,
+                  value: event.target.value,
+                  dataTypes: "singleselect"
+                })
+              )
+      // setChips(value);
+      // onChipChange?.(value); // call the onChipChange function if it exists
+      console.log("hi",value)
+    };
+  // const [searchText, setSearchText] = useState('');
+  const {
+    getRootProps,
+    // getInputLabelProps,
+    getInputProps,
+    getTagProps,
+    getListboxProps,
+    getOptionProps,
+    groupedOptions,
+    value,
+    focused,
+    setAnchorEl,
+  } = useAutocomplete({
+    id: 'customized-hook-demo',
+    freeSolo: true,
+    defaultValue: props?.value?.length>0 || [],
+    // onInputChange,
+    onChange: handleChipChange,
+    multiple: true,
+    options: top100Films,
+    getOptionLabel: (option) => option,
+  });
+console.log(props?.value)
+  
+  return (
+    <Root>
+      <div {...getRootProps()}>
+        <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
+          {/* {value.map((option, index) => ( */}
+            <StyledTag  label={value} {...getTagProps(0)} />
+          {/* ))} */}
+
+          <input {...getInputProps()} />
+        </InputWrapper>
+      </div>
+      {groupedOptions.length > 0 ? (
+        <Listbox {...getListboxProps()}>
+          {groupedOptions.map((option, index) => (
+            <li key={index} {...getOptionProps({ option, index })}>
+              <span>{option}</span>
+              <CheckIcon fontSize="small" />
+            </li>
+          ))}
+        </Listbox>
+      ) : null}
+    </Root>
+  );
 }
+
+TableCellSingleSelect.propTypes = {
+    setIsOpen: PropTypes.any,
+    colid: PropTypes.any,
+    rowid: PropTypes.any,
+    value: PropTypes.any
+  }
+  

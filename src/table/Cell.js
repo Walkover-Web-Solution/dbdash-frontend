@@ -53,7 +53,6 @@ const Cell = memo(
     };
 
     const handleCellClick = () => {
-      console.log("first")
       setIsOpen(true);
     };
     var rowProperties = row?.getToggleRowSelectedProps();
