@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import useAutocomplete from '@mui/base/useAutocomplete';
@@ -8,8 +8,7 @@ import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
 import { getTableInfo } from "../store/table/tableSelector";
 import {  useDispatch, useSelector } from "react-redux";
-import { updateCells } from "../store/table/tableThunk";
-
+import { updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 
 
 const Root = styled('div')(
@@ -21,13 +20,7 @@ const Root = styled('div')(
 `,
 );
 
-// const Label = styled('label')`
-//   padding: 0 0 4px;
-//   line-height: 1.5;
-//   display: block;
-// `;
-
-const InputWrapper = styled('div')(
+const Input = styled('div')(
   ({ theme }) => `
   width: 300px;
   border: 1px solid ${theme.palette.mode === 'dark' ? '#434343' : '#d9d9d9'};
@@ -65,11 +58,22 @@ const InputWrapper = styled('div')(
 );
 
 function Tag(props) {
-  const { label, onDelete, ...other } = props;
+const dispatch = useDispatch();
+const handleDeleteChip = (value) => {
+  dispatch(
+    updateCells({
+      columnId: props?.colid,
+      rowIndex: props?.rowid,
+      value: null,
+      dataTypes: "singleselect"
+    })
+  )
+};
+  const { label, onDelete,rowid,colid, ...other } = props;
   return (
     <div {...other}>
       <span>{label}</span>
-      <CloseIcon onClick={onDelete} />
+      <CloseIcon onClick={()=>{handleDeleteChip(label)}} />
     </div>
   );
 }
@@ -81,7 +85,7 @@ Tag.propTypes = {
 
 const StyledTag = styled(Tag)(
   ({ theme }) => `
-  display: flex;
+ : display: flex;
   align-items: center;
   height: 24px;
   margin: 2px;
@@ -90,7 +94,7 @@ const StyledTag = styled(Tag)(
     theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#fafafa'
   };
   border: 1px solid ${theme.palette.mode === 'dark' ? '#303030' : '#e8e8e8'};
-  border-radius: 2px;
+  border-radius 2px;
   box-sizing: content-box;
   padding: 0 4px 0 10px;
   outline: 0;
@@ -163,73 +167,61 @@ const Listbox = styled('ul')(
 
 export default function TableCellSingleSelect(props) {
   const tableInfo = useSelector((state) => getTableInfo(state));
-    const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
-    // const [arr, setArr] = useState(metaDataArray[0]?.metadata?.option || []);
-    const top100Films = metaDataArray[0]?.metadata?.option || []
+    const top100Films = props?.metaData?.option || []
     const dispatch = useDispatch();
+// console.log("meta",props?.metaData.option)
+    
     const handleChipChange = (event, value) => {
-      console.log("new value",event.target.value)
-      // if (!top100Films.includes(newValue)) 
-      dispatch(
-                updateCells({
-                  columnId: props?.colid,
-                  rowIndex: props?.rowid,
-                  value: event.target.value,
-                  dataTypes: "singleselect"
-                })
-              )
-      // setChips(value);
-      // onChipChange?.(value); // call the onChipChange function if it exists
-      console.log("hi",value)
-    };
-  // const [searchText, setSearchText] = useState('');
-  const {
-    getRootProps,
-    // getInputLabelProps,
-    getInputProps,
-    getTagProps,
-    getListboxProps,
-    getOptionProps,
-    groupedOptions,
-    value,
-    focused,
-    setAnchorEl,
-  } = useAutocomplete({
-    id: 'customized-hook-demo',
-    freeSolo: true,
-    defaultValue: props?.value?.length>0 || [],
-    // onInputChange,
-    onChange: handleChipChange,
-    multiple: true,
-    options: top100Films,
-    getOptionLabel: (option) => option,
-  });
-console.log(props?.value)
   
-  return (
-    <Root>
-      <div {...getRootProps()}>
-        <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
-          {/* {value.map((option, index) => ( */}
-            <StyledTag  label={value} {...getTagProps(0)} />
-          {/* ))} */}
+      if(event.target.value){
+    //     dispatch(updateColumnHeaders({
+    //               dbId: tableInfo?.dbId,
+    //               tableName: tableInfo?.tableId,
+    //               fieldName: props?.colid,
+    //               columnId: props?.colid,
+    //               dataTypes: "singleselect",
+    //               metaData: value,
+    //             }));
+    //   }
+    //   dispatch(updateCells({
+    //               columnId: props?.colid,
+    //               rowIndex: props?.rowid,
+    //               value: event.target.value,
+    //               dataTypes: "singleselect"
+    //             }))
+    };
+    }
+    const {
+      getRootProps,
+      getInputProps,
+      getListboxProps,
+      getOptionProps,
+      groupedOptions,
+      
+    } = useAutocomplete({
+      id: 'use-autocomplete-demo',
+      options: top100Films,
+      getOptionLabel: (option) => option,
+    });
 
-          <input {...getInputProps()} />
-        </InputWrapper>
+
+    return (
+      <div>
+        <div {...getRootProps()}>
+          
+          <Input {...getInputProps()} />
+        </div>
+        {groupedOptions.length > 0 ? (
+          <Listbox {...getListboxProps()}>
+            {(groupedOptions).map((option, index) => (
+              <li {...getOptionProps({ option, index })}>{option.title}</li>
+            ))}
+          </Listbox>
+        ) : null}
       </div>
-      {groupedOptions.length > 0 ? (
-        <Listbox {...getListboxProps()}>
-          {groupedOptions.map((option, index) => (
-            <li key={index} {...getOptionProps({ option, index })}>
-              <span>{option}</span>
-              <CheckIcon fontSize="small" />
-            </li>
-          ))}
-        </Listbox>
-      ) : null}
-    </Root>
-  );
-}
+    );
+  }
+
 
 TableCellSingleSelect.propTypes = {
     setIsOpen: PropTypes.any,
