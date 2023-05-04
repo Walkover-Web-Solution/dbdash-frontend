@@ -32,6 +32,7 @@ const addBtnStyle = {
 
 export default function FilterModal(props) {
 
+  // console.log(props?.dbData,"props")
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const handleClose = () => props.setOpen(false);
@@ -173,9 +174,18 @@ export default function FilterModal(props) {
     columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
     setFieldData(columns)
   }
+  console.log(Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length)
 
   const getQueryData = async () => {
-    let queryToSend = "select * from " + props?.tableName + " where ";
+    // var queryToSend = "select * from " + props?.tableName + " where ";
+    if(Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
+      // console.log("under")
+      const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
+      queryToSend = "select * from " + viewId + " where ";
+    }else
+    {
+    var queryToSend = "select * from " + props?.tableName + " where ";
+    }
     for (var i = 0; i < query?.length; i++) {
       switch (query[i]?.andor) {
         case "and":
@@ -196,7 +206,7 @@ export default function FilterModal(props) {
         queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
       }
     }
-
+    console.log(queryToSend,"query")
     const dataa = {
       filterName: filterName,
       query: queryToSend
@@ -211,7 +221,14 @@ export default function FilterModal(props) {
   }
 
   const editQueryData = async () => {
-    let queryToSend = "select * from " + props?.tableName + " where ";
+    if(Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
+      // console.log("under")
+      const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
+      queryToSend = "select * from " + viewId + " where ";
+    }else
+    {
+    var queryToSend = "select * from " + props?.tableName + " where ";
+    }
     for (var i = 0; i < query?.length; i++) {
       switch (query[i]?.andor) {
         case "and":
@@ -372,5 +389,6 @@ FilterModal.propTypes = {
   dbId: PropTypes.any,
   tableName: PropTypes.any,
   edit: PropTypes.any,
-  filterId: PropTypes.any
+  filterId: PropTypes.any,
+  dbData:PropTypes.any
 };

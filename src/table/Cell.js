@@ -22,7 +22,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
 import TableCellSingleSelect from './TableCellSingleSelect'
 import TableCellMultiSelect from './TableCellMultiSelect'
-import { Link } from "react-scroll";
+// import { Link } from "react-scroll";
 // import { useNavigate } from "react-router";
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -368,11 +368,9 @@ const Cell = memo(
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <Link to={imgLink} key={index}> 
-                  <div>                  
-                    <embed src={imgLink} width="50px" />
-                  </div>
-                  </Link>
+                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
+                    <embed src={imgLink} width="50px" onClick={()=>{null}}/>
+                    </a>
                  
                 ))}
             </Tabs>

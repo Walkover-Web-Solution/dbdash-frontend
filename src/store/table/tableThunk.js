@@ -102,7 +102,6 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload,{getState,dispatch}) =>{
-            
         if(payload.filter != null)
         {
             const querydata = await runQueryonTable(
