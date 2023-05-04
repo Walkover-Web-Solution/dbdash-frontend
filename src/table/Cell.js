@@ -1,10 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
 import ContentEditable from "react-contenteditable";
-// import Relationship from "./Relationship";
-// import { usePopper } from "react-popper";
-// import { grey } from "./colors";
-// import PlusIcon from "./img/Plus";
-// import { randomColor } from "./utils";
 import { updateCells } from "../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -22,8 +17,8 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
 import TableCellSingleSelect from './TableCellSingleSelect'
 import TableCellMultiSelect from './TableCellMultiSelect'
-// import { Link } from "react-scroll";
-// import { useNavigate } from "react-router";
+import PreviewAttachment from "./previewAttachment";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
@@ -42,12 +37,8 @@ const Cell = memo(
     const [open, setOpen] = useState(false);
     const [imageLink, setImageLink] = useState("")
     const [isOpen, setIsOpen] = useState(false);
-
-
-    // const handleImageClick = (imgLink) => {
-    //   window.open(imgLink, "_blank");
-    // };
-
+    const [previewModal,setPreviewModal] = useState(false)
+console.log(previewModal)
     const handleUploadFileClick = () => {
       setOpen(true);
     };
@@ -97,9 +88,6 @@ const Cell = memo(
       setValue({ value: initialValue, update: false });
     }, [initialValue]);
 
-    // useEffect(()=>{
-    //   setSelectArray(tableInfo?.columns?.id?.metaData)
-    //  });
 
     useEffect(() => {
       if (
@@ -368,10 +356,15 @@ const Cell = memo(
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
-                  <a key={index} rel="noopener noreferrer" href={imgLink} target="_blank">                   
-                    <embed src={imgLink} width="50px" onClick={()=>{null}}/>
+                  <a key={index} >                   
+                    <embed src={imgLink} width="50px" onClick={()=>{
+                      setPreviewModal(true)
+                  }}/>
+                  {previewModal && (
+                     <PreviewAttachment imageLink={imgLink} open={previewModal} setPreviewModal={setPreviewModal}/>
+                   )}
                     </a>
-                 
+
                 ))}
             </Tabs>
 
@@ -387,6 +380,9 @@ const Cell = memo(
                 onChangeFile={onChangeFile}
               />
             )}
+            {/* {previewModal && (
+                     <PreviewAttachment open={previewModal} setPreviewModal={setPreviewModal}/>
+                   )} */}
           </div>
         );
         break;

@@ -312,7 +312,7 @@ export default function FilterModal(props) {
                 </Box>}
 
                 <Box sx={{ mr: 1 }}>
-                  <Select value={q?.fields} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
+                  <Select value={q?.fields ||fieldData[0]?.id} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
                     {fieldData && Object.entries(fieldData)?.map((fields, index) => (
                       <MenuItem key={index} value={fields[1]?.id} >
                         {fields[1].label}
@@ -323,7 +323,7 @@ export default function FilterModal(props) {
 
                 <Box sx={{ mr: 1 }}>
                   <Select sx={{ width: 150 }}
-                    value={q?.selectedOption}
+                    value={q?.selectedOption || "LIKE"}
                     defaultValue="LIKE"
                     key={q?.value}
                     onChange={(e) => handleChangeSelectedOption(e, index)} >
