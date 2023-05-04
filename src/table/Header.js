@@ -446,12 +446,6 @@ export default function Header({
   }
 
   useEffect(() => {
-    if (created) {
-      setExpanded(true);
-    }
-  }, [created]);
-
-  useEffect(() => {
     setHeader(label);
   }, [label]);
 
@@ -549,7 +543,7 @@ export default function Header({
   ) : (
     <>
       <div {...getHeaderProps({ style: {  width: "100%" } })} className='th noselect'>
-        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
+        <div className='th-content' onDoubleClick={() => setExpanded(true)} ref={setReferenceElement}>
           <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
           {label}
         </div>
@@ -566,7 +560,7 @@ export default function Header({
               width: 240
             }}>
             <div style={{ paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem" }}>
-              <div className='is-fullwidth' style={{ marginBottom: 12 }}>
+              <div className='is-fullwidth' style={{ marginBottom: 12 }} >
                 <input
                   className='form-input'
                   ref={setInputRef}
