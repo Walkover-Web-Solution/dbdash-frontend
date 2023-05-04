@@ -35,7 +35,12 @@ export default function FilterModal(props) {
   // console.log(props?.dbData,"props")
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const handleClose = () => props.setOpen(false);
+  const handleClose = () =>
+  {
+    props?.setEdit(false)
+    props.setOpen(false);
+  } 
+    
   const [fieldData, setFieldData] = useState("");
   const [filterName, setFilterName] = useState('');
   const [lastValue, setLastValue] = useState("");
@@ -174,11 +179,11 @@ export default function FilterModal(props) {
     columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
     setFieldData(columns)
   }
-  console.log(Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length)
 
   const getQueryData = async () => {
     // var queryToSend = "select * from " + props?.tableName + " where ";
-    if(Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
+    if( props?.dbData?.db?.tables[props?.tableName]?.view && 
+      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
       // console.log("under")
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
       queryToSend = "select * from " + viewId + " where ";
@@ -206,7 +211,6 @@ export default function FilterModal(props) {
         queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
       }
     }
-    console.log(queryToSend,"query")
     const dataa = {
       filterName: filterName,
       query: queryToSend
@@ -221,8 +225,8 @@ export default function FilterModal(props) {
   }
 
   const editQueryData = async () => {
-    if(Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
-      // console.log("under")
+    if( props?.dbData?.db?.tables[props?.tableName]?.view && 
+      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
       queryToSend = "select * from " + viewId + " where ";
     }else
@@ -390,5 +394,6 @@ FilterModal.propTypes = {
   tableName: PropTypes.any,
   edit: PropTypes.any,
   filterId: PropTypes.any,
-  dbData:PropTypes.any
+  dbData:PropTypes.any,
+  setEdit:PropTypes.func
 };

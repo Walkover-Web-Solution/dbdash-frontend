@@ -281,6 +281,7 @@ export default function TablesList({ dbData }) {
           dbData = {dbData}
           open={openn}
           edit={edit}
+          setEdit ={setEdit}
           setOpen={setOpenn}
           filterId={filterId}
           dbId={dbData?.db?._id}
