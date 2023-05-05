@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import "./style.css";
 import Table from "./table";
 import {  useDispatch ,useSelector } from "react-redux";
+import { useParams} from 'react-router-dom';
 import { bulkAddColumns } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
 
@@ -11,12 +12,15 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   const data=useSelector((state)=>state.table.data);
   const dbId=useSelector((state)=>state.table.dbId);
   const tableId=useSelector((state)=>state.table.tableId);
+  const AllTableInfo = useSelector((state) => state.tables.tables);
   const dispatchs = useDispatch();
+ const params =  useParams();
   const fetchMoreData = () => {
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
-      "pageNo": page+1
+      "pageNo": page+1,
+      "filter": AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
     }));
     setPage((page) => page + 1);
   };

@@ -12,7 +12,7 @@ import MultiIcon from "./img/Multi";
 import HashIcon from "./img/Hash";
 import PlusIcon from "./img/Plus";
 import { shortId } from "./utils";
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+// import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -36,7 +36,8 @@ import {getQueryByAi} from "../api/fieldApi"
 import PropTypes from 'prop-types';
 import DuplicateFieldPopup from "./duplicateFieldPopup";
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy}) 
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy  }) 
+ 
   {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
@@ -536,7 +537,10 @@ export default function Header({
           >
           <div
             className='th-content' >
-            <span className='svg-icon svg-gray icon-margin' ><CheckCircleOutlineIcon style={{fontSize:"13.5px",marginTop:"1px"}}/></span>
+            <span className='svg-icon svg-gray icon-margin' >
+              <input type ="checkbox" ></input>
+              {/* <CheckCircleOutlineIcon style={{fontSize:"13.5px",marginTop:"1px"}}/> */}
+              </span>
           </div>
         </div>}
     </>
@@ -637,4 +641,5 @@ Header.propTypes = {
   column: PropTypes.any,
   setSortBy: PropTypes.any,
   dataDispatch: PropTypes.any,
+  row:PropTypes.any
 };
