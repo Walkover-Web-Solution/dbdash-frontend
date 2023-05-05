@@ -20,19 +20,12 @@ import {updateCells } from "../../store/table/tableThunk";
   const limit = 200;
   const hasNextPage = React.useMemo(() => rows.length <= limit, [rows, limit]) ; //true
   const itemCount = hasNextPage ? rows.length + 1 : rows.length;
-  // const isNextPageLoading = useSelector((state)=>state.table?.isTableLoading);//true when loading 
   const isNextPageLoading1= useSelector((state)=>state.table?.isMoreData);//true
   const loadMoreItems = !isNextPageLoading1 ? () => {} : update;
-    // const hasNextPage = React.useMemo(() =>isNextPageLoading ? !itemList.length<= limit : false, [itemList, limit]);
-    // const itemCount = !hasNextPage ? rows?.length + 1 : rows?.length;
-    // const loadMoreItems = !hasNextPage ? () => {} : update;
-
-    // console.log("data" ,data,"hasnextpage",hasNextPage ,"itemlist",itemList,"condtion",isNextPageLoading ? !itemList.length<= limit : false)
-    // console.log("isNextPageLoading",isNextPageLoading,"itemList",itemList)
+    
   const isItemLoaded = useCallback(
     (index) => 
     {
-      console.log(isNextPageLoading1 , "index", index  , "rows", rows)
       return  index+1 < rows.length || !isNextPageLoading1
     },
     [hasNextPage, rows]
@@ -140,7 +133,6 @@ import {updateCells } from "../../store/table/tableThunk";
       }}
       id="scrollableDiv"
     >
-      { console.log(itemCount)}
       <InfiniteLoader
       
         isItemLoaded={isItemLoaded}

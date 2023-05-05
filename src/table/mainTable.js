@@ -16,7 +16,6 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   const dispatchs = useDispatch();
  const params =  useParams();
   const fetchMoreData = () => {
-    // dispatchs(setTableLoading(true));
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,

@@ -36,10 +36,9 @@ import {getQueryByAi} from "../api/fieldApi"
 import PropTypes from 'prop-types';
 import DuplicateFieldPopup from "./duplicateFieldPopup";
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy , row }) 
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy  }) 
  
   {
-    console.log("row",row)
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi,setQueryByAi] = useState(false)

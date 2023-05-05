@@ -43,7 +43,6 @@ const Cell = memo(
     };
 
     const handleCellClick = () => {
-      console.log("first")
       setIsOpen(true);
     };
     var rowProperties = row?.getToggleRowSelectedProps();
@@ -357,7 +356,6 @@ const Cell = memo(
                 value?.value?.map((imgLink, index) => (
                   <React.Fragment key={index}>                   
                     <embed src={imgLink} width="50px" onClick={()=>{
-                      console.log("in");
                       setPreviewModal(true)
                   }}/>
                   {previewModal && (

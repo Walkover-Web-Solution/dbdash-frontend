@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 export default function PreviewAttachment(props) {
         //     .catch(error => console.error(error));
         const downloadImage = (fileLink) => {
-            console.log(fileLink)
             fetch(fileLink)
               .then((r) => r.blob())
               .then((blob) => {
