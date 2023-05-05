@@ -70,12 +70,7 @@ export default function TablesList({ dbData }) {
     setEdit(true);
     setOpenn(true);
   };
-  // const submitCSV = async()=>{
-  //   const data = {
-  //     csvfile:CSV
-  //   }
-  //   const csv = await uploadCSV("6427e76425f1f4ba2e3e7af8","tblo8jw0t",data)
-  // }
+
   function onFilterClicked(filter, id) {
     setUnderLine(id)
     setFilterId(id);
@@ -105,6 +100,7 @@ export default function TablesList({ dbData }) {
         tables: deletedFilter.data.data.tables,
       })
     );
+    navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
     if(params?.filterName){

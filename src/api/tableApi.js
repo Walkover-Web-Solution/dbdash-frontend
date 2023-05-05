@@ -10,7 +10,6 @@ const getTable = async (db_id , tableName,page) =>
 {
     // return await axios.get(URL +`/dbs/${db_id}/${tableName}/fetchtable`)
     return await axios.get(URL +`/${db_id}/${tableName}?page=${page || 1}&limit=100`)
-
 }
 
 const updateTable = async(db_id,tableName,data) =>

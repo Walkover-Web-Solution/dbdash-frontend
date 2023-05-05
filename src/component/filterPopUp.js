@@ -32,7 +32,6 @@ const addBtnStyle = {
 
 export default function FilterModal(props) {
 
-  // console.log(props?.dbData,"props")
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const handleClose = () =>
@@ -184,7 +183,6 @@ export default function FilterModal(props) {
     // var queryToSend = "select * from " + props?.tableName + " where ";
     if( props?.dbData?.db?.tables[props?.tableName]?.view && 
       Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
-      // console.log("under")
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
       queryToSend = "select * from " + viewId + " where ";
     }else
@@ -201,15 +199,39 @@ export default function FilterModal(props) {
           break;
       }
       queryToSend += query[i].fields + " "
+      let FieldDataType = ""
+      for(let j=0 ; j<1;j++){
+        for (let i = 0; i < tableInfo?.columns.length; i++) {
+          if(query[j]?.fields == tableInfo?.columns[i]?.id)
+          {
+            FieldDataType = tableInfo.columns[i]?.dataType
+            // return;           
+          }
+        }
+        j++;
+        // return;
+      }
+      
       if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
         queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
-        queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
+        if(FieldDataType == "numeric"){
+          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+        }else
+        {
+          queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
+        }
       }
       if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
-        queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
-      }
+        if(FieldDataType == "numeric"){
+          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+
+        }else
+        {
+          queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
+        }      
+    }
     }
     const dataa = {
       filterName: filterName,
@@ -244,6 +266,7 @@ export default function FilterModal(props) {
       }
       queryToSend += query[i].fields + " "
       if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
+        
         queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
@@ -312,7 +335,7 @@ export default function FilterModal(props) {
                 </Box>}
 
                 <Box sx={{ mr: 1 }}>
-                  <Select value={q?.fields} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
+                  <Select value={q?.fields ||fieldData[0]?.id} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
                     {fieldData && Object.entries(fieldData)?.map((fields, index) => (
                       <MenuItem key={index} value={fields[1]?.id} >
                         {fields[1].label}
@@ -323,8 +346,8 @@ export default function FilterModal(props) {
 
                 <Box sx={{ mr: 1 }}>
                   <Select sx={{ width: 150 }}
-                    value={q?.selectedOption}
-                    defaultValue="LIKE"
+                    value={  q?.selectedOption || "LIKE"}
+                    // defaultValue="LIKE"
                     key={q?.value}
                     onChange={(e) => handleChangeSelectedOption(e, index)} >
                     <MenuItem value="LIKE">contains</MenuItem>
