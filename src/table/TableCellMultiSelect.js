@@ -169,6 +169,7 @@ export default function TableCellMultiSelect(props) {
   const tableInfo = useSelector((state) => getTableInfo(state));
     const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
     const top100Films = metaDataArray[0]?.metadata?.option || []
+    
     const dispatch = useDispatch();
 
     const handleChipChange = (event, value) => {
@@ -223,7 +224,7 @@ export default function TableCellMultiSelect(props) {
           {value.map((option, index) => (
             <StyledTag rowid={props?.rowid} colid={props?.colid} key={index} label={option} {...getTagProps({index})} />
           ))}
-         { console.log(getInputProps)}
+         {/* { console.log(getInputProps)} */}
           <input {...getInputProps()} />
         </InputWrapper>
       </div>
