@@ -2,11 +2,14 @@ import React from 'react'
 import { PropTypes } from 'prop-types';
 import { Box } from '@mui/system';
 // import { getTable } from '../../../api/tableApi'
-import CodeSnippet from '../codeSnippet';
+// import CodeSnippet from '../codeSnippet';
 import { Typography } from '@mui/material';
+import CodeBlock from './Codeblock';
 function ListRecord(props) {
   return (
     <>
+     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
+     
         <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>List records</Typography>
         <Typography>
         To list records in {props.table} ,issue a GET request to the {props.table} endpoint using {props.table} ids<br/>
@@ -26,7 +29,7 @@ function ListRecord(props) {
                              {/* before passing it as a value. You can use this tool to not only encode the formula but also create<br/> */}
                             {/* the entire url you need. */}
                             {/* <br/> */}
-                            {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }?fields=field1,field2,field3&filter=field1=!null AND field2=&lsquo;xyz&rsquo;<br/>
+                            {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }<br/>?fields=field1,field2,field3&filter=field1=!null AND field2=&lsquo;xyz&rsquo;<br/>
 
                             <br/>
                             <br/>
@@ -40,11 +43,11 @@ function ListRecord(props) {
                      {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }?fields=field1,field2,field3&sort=field1,asc.
         </Typography>
         <br/>
-    <Box>
+    {/* <Box>
       <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
       />
       <p>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</p>
-    </Box>
+    </Box> */}
     <Box>
       <Typography></Typography>
     </Box>

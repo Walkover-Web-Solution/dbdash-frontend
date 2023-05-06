@@ -1,8 +1,9 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
 //import { Box } from '@mui/system';
-import CodeSnippet from '../codeSnippet';
+// import CodeSnippet from '../codeSnippet';
 import { Typography } from '@mui/material';
+import CodeBlock from './Codeblock';
 function AddRecord(props) {
 const data = `
 -data {
@@ -14,6 +15,8 @@ const data = `
 `;
   return (
     <>
+      <CodeBlock code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN ${<br/>} -H Content-Type: application/json`} body={data}/>
+    
         <Typography style={{fontWeight: 'bold' ,fontSize: '24px' }}>Add Table Records</Typography>
         <Typography>
         <span>
@@ -21,10 +24,10 @@ const data = `
         <br/> Your request body should include a json.These json should have field id and field value as a key value pair.
         </span>
       </Typography>
-      <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}/>
-      <Typography>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</Typography>
+      {/* <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}/> */}
+      {/* <Typography>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</Typography>
       <Typography>{`-H Content-Type: application/json` }</Typography>
-      <Typography sx={{ whiteSpace: 'pre-wrap' }}>{data}</Typography>
+      <Typography sx={{ whiteSpace: 'pre-wrap' }}>{data}</Typography> */}
     </>
   )
 }

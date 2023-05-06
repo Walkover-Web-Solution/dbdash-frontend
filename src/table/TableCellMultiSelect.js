@@ -22,13 +22,19 @@ const Root = styled('div')(
 
 const InputWrapper = styled('div')(
   ({ theme }) => `
-  width: 300px;
-  border: 1px solid ${theme.palette.mode === 'dark' ? '#434343' : '#d9d9d9'};
-  background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
-  border-radius: 4px;
+  width: 130px;
+  // border: 1px solid ${theme.palette.mode === 'dark' ? '#434343' : '#d9d9d9'};
+  // background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
+  // border-radius: 4px;
   padding: 1px;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-y:hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  
 
   &:hover {
     border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
@@ -44,7 +50,7 @@ const InputWrapper = styled('div')(
     color: ${
       theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
     };
-    height: 30px;
+    height: 28px;
     box-sizing: border-box;
     padding: 4px 6px;
     width: 0;
@@ -98,7 +104,14 @@ const StyledTag = styled(Tag)(
   box-sizing: content-box;
   padding: 0 4px 0 10px;
   outline: 0;
-  overflow: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  width:100px;
+  
+
+ 
 
   &:focus {
     border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
@@ -126,7 +139,11 @@ const Listbox = styled('ul')(
   position: absolute;
   list-style: none;
   background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
-  overflow: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+
   max-height: 250px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -218,8 +235,8 @@ export default function TableCellMultiSelect(props) {
 
   return (
     <Root>
-      <div {...getRootProps()}>
-        <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
+      <div  {...getRootProps()}>
+        <InputWrapper style={{display:"flex",flexWrap:"nowrap",overflowX:"auto"}} ref={setAnchorEl} className={focused ? 'focused' : ''}>
           {value.map((option, index) => (
             <StyledTag rowid={props?.rowid} colid={props?.colid} key={index} label={option} {...getTagProps({index})} />
           ))}

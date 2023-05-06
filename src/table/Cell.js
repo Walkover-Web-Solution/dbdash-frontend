@@ -286,7 +286,7 @@ const Cell = memo(
 
       case "multipleselect":
         element = (
-          <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
+          <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "hidden" ,overflowY:"hidden"}}>
             <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} /></div>)
         break;
 
@@ -301,6 +301,7 @@ const Cell = memo(
         element = (
           <div key={row.getRowProps().key} style={{ display: 'flex', flex: '1 0 auto', position: 'sticky' }} role="row" className="tr">
             {!row.isSelected && (
+
               <div className="count" title="Check">
                 {row.index + 1}
               </div>
