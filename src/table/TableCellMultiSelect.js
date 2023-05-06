@@ -7,15 +7,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
 import { getTableInfo } from "../store/table/tableSelector";
-import {  useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 
 
 const Root = styled('div')(
   ({ theme }) => `
-  color: ${
-    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
-  };
+  color: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
+    };
   font-size: 14px;
 `,
 );
@@ -23,28 +22,26 @@ const Root = styled('div')(
 const InputWrapper = styled('div')(
   ({ theme }) => `
   width: 300px;
-  border: 1px solid ${theme.palette.mode === 'dark' ? '#434343' : '#d9d9d9'};
-  background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
-  border-radius: 4px;
+  
   padding: 1px;
   display: flex;
-  flex-wrap: wrap;
-
-  &:hover {
-    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+  flex-wrap: nowrap;
+  overflow-y:hidden;
+  &::-webkit-scrollbar {
+    display: none;
   }
-
+  &:hover {
+    border-color: ${theme.palette.mode === 'dark' ? '#177DDC' : '#40A9FF'};
+  }
   &.focused {
-    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+    border-color: ${theme.palette.mode === 'dark' ? '#177DDC' : '#40A9FF'};
     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
   }
-
   & input {
     background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
-    color: ${
-      theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
+    color: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
     };
-    height: 30px;
+    height: 28px;
     box-sizing: border-box;
     padding: 4px 6px;
     width: 0;
@@ -58,22 +55,22 @@ const InputWrapper = styled('div')(
 );
 
 function Tag(props) {
-const dispatch = useDispatch();
-const handleDeleteChip = (value) => {
-  dispatch(
-    updateCells({
-      columnId: props?.colid,
-      rowIndex: props?.rowid,
-      value: {delete: value},
-      dataTypes: "multipleselect"
-    })
-  )
-};
-  const { label, onDelete,rowid,colid, ...other } = props;
+  const dispatch = useDispatch();
+  const handleDeleteChip = (value) => {
+    dispatch(
+      updateCells({
+        columnId: props?.colid,
+        rowIndex: props?.rowid,
+        value: { delete: value },
+        dataTypes: "multipleselect"
+      })
+    )
+  };
+  const { label, onDelete, rowid, colid, ...other } = props;
   return (
     <div {...other}>
       <span>{label}</span>
-      <CloseIcon onClick={()=>{handleDeleteChip(label)}} />
+      <CloseIcon onClick={() => { handleDeleteChip(label) }} />
     </div>
   );
 }
@@ -90,27 +87,26 @@ const StyledTag = styled(Tag)(
   height: 24px;
   margin: 2px;
   line-height: 22px;
-  background-color: ${
-    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#fafafa'
-  };
-  border: 1px solid ${theme.palette.mode === 'dark' ? '#303030' : '#e8e8e8'};
+  background-color: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#FAFAFA'
+    };
+  border: 1px solid ${theme.palette.mode === 'dark' ? '#303030' : '#E8E8E8'};
   border-radius 2px;
   box-sizing: content-box;
   padding: 0 4px 0 10px;
   outline: 0;
-  overflow: hidden;
-
-  &:focus {
-    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
-    background-color: ${theme.palette.mode === 'dark' ? '#003b57' : '#e6f7ff'};
+  &::-webkit-scrollbar {
+    display: none;
   }
-
+  width:fit-content;
+  &:focus {
+    border-color: ${theme.palette.mode === 'dark' ? '#177DDC' : '#40A9FF'};
+    background-color: ${theme.palette.mode === 'dark' ? '#003B57' : '#E6F7FF'};
+  }
   & span {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-
   & svg {
     font-size: 12px;
     cursor: pointer;
@@ -126,38 +122,33 @@ const Listbox = styled('ul')(
   position: absolute;
   list-style: none;
   background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
-  overflow: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   max-height: 250px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1;
-
   & li {
     padding: 5px 12px;
     display: flex;
-
     & span {
       flex-grow: 1;
     }
-
     & svg {
       color: transparent;
     }
   }
-
   & li[aria-selected='true'] {
-    background-color: ${theme.palette.mode === 'dark' ? '#2b2b2b' : '#fafafa'};
+    background-color: ${theme.palette.mode === 'dark' ? '#2B2B2B' : '#FAFAFA'};
     font-weight: 600;
-
     & svg {
-      color: #1890ff;
+      color: #1890FF;
     }
   }
-
   & li.${autocompleteClasses.focused} {
-    background-color: ${theme.palette.mode === 'dark' ? '#003b57' : '#e6f7ff'};
+    background-color: ${theme.palette.mode === 'dark' ? '#003B57' : '#E6F7FF'};
     cursor: pointer;
-
     & svg {
       color: currentColor;
     }
@@ -167,36 +158,44 @@ const Listbox = styled('ul')(
 
 export default function TableCellMultiSelect(props) {
   const tableInfo = useSelector((state) => getTableInfo(state));
-    const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
-    const top100Films = metaDataArray[0]?.metadata?.option || []
-    
-    const dispatch = useDispatch();
+  const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
+  const top100Films = metaDataArray[0]?.metadata?.option || []
+  const dispatch = useDispatch();
+  const handleChipChange = (event, value) => {
+    let diffArr = value.filter((elem) => !props?.value.includes(elem))
+      .concat(props?.value.filter((elem) => !value.includes(elem)));
 
-    const handleChipChange = (event, value) => {
-
-      let diffArr = value.filter((elem) => !props?.value.includes(elem))
-                .concat(props?.value.filter((elem) => !value.includes(elem)));
-  
-      if(event.target.value){
-        dispatch(updateColumnHeaders({
-                  dbId: tableInfo?.dbId,
-                  tableName: tableInfo?.tableId,
-                  fieldName: props?.colid,
-                  columnId: props?.colid,
-                  dataTypes: "multipleselect",
-                  metaData: value,
-                }));
-      }
+    if (!props?.value.includes(event.target.value)) {
+      const updatedMetadata = [...top100Films, event?.target?.value];
+      dispatch(updateColumnHeaders({
+        dbId: tableInfo?.dbId,
+        tableName: tableInfo?.tableId,
+        fieldName: props?.colid,
+        columnId: props?.colid,
+        dataTypes: "multipleselect",
+        metaData: updatedMetadata,
+      }));
       dispatch(
-                updateCells({
-                  columnId: props?.colid,
-                  rowIndex: props?.rowid,
-                  value: event.target.value || diffArr[0],
-                  dataTypes: "multipleselect"
-                })
-              )
-    };
-
+        updateCells({
+          columnId: props?.colid,
+          rowIndex: props?.rowid,
+          value: event.target.value || diffArr[0],
+          dataTypes: "multipleselect"
+        })
+      )
+    }
+    else if (top100Films.includes(event?.target?.value)) {
+      // top100Films.push(event?.target?.value)
+      dispatch(
+        updateCells({
+          columnId: props?.colid,
+          rowIndex: props?.rowid,
+          value: event.target.value || diffArr[0],
+          dataTypes: "multipleselect"
+        })
+      )
+    }
+  };
   const {
     getRootProps,
     getInputProps,
@@ -210,21 +209,19 @@ export default function TableCellMultiSelect(props) {
   } = useAutocomplete({
     id: 'customized-hook-demo',
     freeSolo: true,
-    defaultValue: props?.value?.length>0 ? props?.value : [],
+    defaultValue: props?.value?.length > 0 ? props?.value : [],
     onChange: handleChipChange,
     multiple: true,
     options: top100Films,
     getOptionLabel: (option) => option,
   });
-
   return (
     <Root>
       <div {...getRootProps()}>
-        <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
+        <InputWrapper style={{display:"flex",flexWrap:"nowrap",overflowX:"auto"}} ref={setAnchorEl} className={focused ? 'focused' : ''}>
           {value.map((option, index) => (
-            <StyledTag rowid={props?.rowid} colid={props?.colid} key={index} label={option} {...getTagProps({index})} />
+            <StyledTag rowid={props?.rowid} colid={props?.colid} key={index} label={option} {...getTagProps({ index })} />
           ))}
-         {/* { console.log(getInputProps)} */}
           <input {...getInputProps()} />
         </InputWrapper>
       </div>
@@ -243,9 +240,8 @@ export default function TableCellMultiSelect(props) {
 }
 
 TableCellMultiSelect.propTypes = {
-    setIsOpen: PropTypes.any,
-    colid: PropTypes.any,
-    rowid: PropTypes.any,
-    value: PropTypes.any
-  }
-  
+  setIsOpen: PropTypes.any,
+  colid: PropTypes.any,
+  rowid: PropTypes.any,
+  value: PropTypes.any
+}
