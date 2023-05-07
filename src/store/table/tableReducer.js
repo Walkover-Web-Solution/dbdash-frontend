@@ -1,4 +1,3 @@
-import { current } from '@reduxjs/toolkit';
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 // import { current } from '@reduxjs/toolkit';
