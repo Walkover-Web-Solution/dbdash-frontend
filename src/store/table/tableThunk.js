@@ -80,15 +80,15 @@ const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
         row.createdby =   userJson?.[row.createdby] ? ( userJson?.[row.createdby]?.first_name +" " + userJson?.[row.createdby]?.last_name ): row.createdby;
     })
     const dataAndPageNo = {}
+    dataAndPageNo.offset = data.data.data?.offset;
+
     if(tableInfo.tableId== tableName && tableInfo.pageNo < page)
     {
         dataAndPageNo.rows = [...tableInfo.data, ...obj  ];   
-        dataAndPageNo.offset = data.data.data?.offset;
         return dataAndPageNo;
     }
     dataAndPageNo.pageNo = 1;
     dataAndPageNo.rows = obj;
-    dataAndPageNo.offset = data.data.data?.offset;
 
     return dataAndPageNo;
 }
