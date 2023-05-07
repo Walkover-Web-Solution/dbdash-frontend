@@ -28,7 +28,7 @@ const Cell = memo(
   ({
     value: initialValue,
     row,
-    column: { id, dataType },
+    column: { id, dataType, metadata },
 
   }) => {
     const dispatch = useDispatch();
@@ -293,7 +293,7 @@ const Cell = memo(
       case "singleselect":
         element = (
           <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellSingleSelect value={value?.value} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} />
+            <TableCellSingleSelect metaData={metadata} value={value?.value} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} />
           </div>
         );
         break;
