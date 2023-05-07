@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
 import { getTableInfo } from "../store/table/tableSelector";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCells, updateColumnHeaders } from "../store/table/tableThunk";
+import { updateCells, updateMultiSelectOptions } from "../store/table/tableThunk";
 
 
 const Root = styled('div')(
@@ -21,25 +21,35 @@ const Root = styled('div')(
 
 const InputWrapper = styled('div')(
   ({ theme }) => `
-  width: 300px;
-  
+  width: 140px;
+  overflow:hidden;
+  // border: 1px solid ${theme.palette.mode === 'dark' ? '#434343' : '#D9D9D9'};
+  // background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
+  // border-radius: 4px;
   padding: 1px;
   display: flex;
   flex-wrap: nowrap;
-  overflow-y:hidden;
   &::-webkit-scrollbar {
     display: none;
   }
+
+
+
+
+
   &:hover {
     border-color: ${theme.palette.mode === 'dark' ? '#177DDC' : '#40A9FF'};
   }
+
   &.focused {
     border-color: ${theme.palette.mode === 'dark' ? '#177DDC' : '#40A9FF'};
     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
   }
+
   & input {
     background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
-    color: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
+    color: ${
+      theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
     };
     height: 28px;
     box-sizing: border-box;
@@ -87,8 +97,9 @@ const StyledTag = styled(Tag)(
   height: 24px;
   margin: 2px;
   line-height: 22px;
-  background-color: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#FAFAFA'
-    };
+  background-color: ${
+    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#FAFAFA'
+  };
   border: 1px solid ${theme.palette.mode === 'dark' ? '#303030' : '#E8E8E8'};
   border-radius 2px;
   box-sizing: content-box;
@@ -97,16 +108,26 @@ const StyledTag = styled(Tag)(
   &::-webkit-scrollbar {
     display: none;
   }
+
   width:fit-content;
+
+
+
+
+
+
+
   &:focus {
     border-color: ${theme.palette.mode === 'dark' ? '#177DDC' : '#40A9FF'};
     background-color: ${theme.palette.mode === 'dark' ? '#003B57' : '#E6F7FF'};
   }
+
   & span {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
   & svg {
     font-size: 12px;
     cursor: pointer;
@@ -125,30 +146,40 @@ const Listbox = styled('ul')(
   &::-webkit-scrollbar {
     display: none;
   }
+
+
+
   max-height: 250px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1;
+
   & li {
     padding: 5px 12px;
     display: flex;
+
     & span {
       flex-grow: 1;
     }
+
     & svg {
       color: transparent;
     }
   }
+
   & li[aria-selected='true'] {
     background-color: ${theme.palette.mode === 'dark' ? '#2B2B2B' : '#FAFAFA'};
     font-weight: 600;
+
     & svg {
       color: #1890FF;
     }
   }
+
   & li.${autocompleteClasses.focused} {
     background-color: ${theme.palette.mode === 'dark' ? '#003B57' : '#E6F7FF'};
     cursor: pointer;
+
     & svg {
       color: currentColor;
     }
@@ -165,9 +196,10 @@ export default function TableCellMultiSelect(props) {
     let diffArr = value.filter((elem) => !props?.value.includes(elem))
       .concat(props?.value.filter((elem) => !value.includes(elem)));
 
-    if (!props?.value.includes(event.target.value)) {
+      
+    if (event.target.value && !props?.value.includes(event.target.value)) {
       const updatedMetadata = [...top100Films, event?.target?.value];
-      dispatch(updateColumnHeaders({
+      dispatch(updateMultiSelectOptions({
         dbId: tableInfo?.dbId,
         tableName: tableInfo?.tableId,
         fieldName: props?.colid,
@@ -175,6 +207,7 @@ export default function TableCellMultiSelect(props) {
         dataTypes: "multipleselect",
         metaData: updatedMetadata,
       }));
+    }
       dispatch(
         updateCells({
           columnId: props?.colid,
@@ -183,18 +216,7 @@ export default function TableCellMultiSelect(props) {
           dataTypes: "multipleselect"
         })
       )
-    }
-    else if (top100Films.includes(event?.target?.value)) {
-      // top100Films.push(event?.target?.value)
-      dispatch(
-        updateCells({
-          columnId: props?.colid,
-          rowIndex: props?.rowid,
-          value: event.target.value || diffArr[0],
-          dataTypes: "multipleselect"
-        })
-      )
-    }
+    // }
   };
   const {
     getRootProps,
@@ -209,6 +231,7 @@ export default function TableCellMultiSelect(props) {
   } = useAutocomplete({
     id: 'customized-hook-demo',
     freeSolo: true,
+    filterSelectedOptions :true,
     defaultValue: props?.value?.length > 0 ? props?.value : [],
     onChange: handleChipChange,
     multiple: true,
