@@ -121,7 +121,6 @@ const Table = memo(
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
-     
       const firstColumnValue = tableData.data[lastRowIndex];
       const tableRowChildNodes =  document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
       if(tableRowChildNodes){

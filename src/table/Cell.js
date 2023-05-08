@@ -212,11 +212,13 @@ const Cell = memo(
           <input
             value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
-     
-           
             onBlur={() =>
               setValue((old) => ({ value: old.value, update: true }))
             }
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setValue((old) => ({ value: old.value, update: true }))
+                }}}
             className="data-input"
           />
         );
@@ -229,11 +231,11 @@ const Cell = memo(
             onBlur={() =>
               setValue((old) => ({ value: old.value, update: true }))
             }
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-              }
-            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setValue((old) => ({ value: old.value, update: true }))
+              event.preventDefault();
+              }}}
             className="data-input"
           />
         );
@@ -280,6 +282,10 @@ const Cell = memo(
               onBlur={() =>
                 setValue((old) => ({ value: old.value, update: true }))
               }
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setValue((old) => ({ value: old.value, update: true }))
+                }}}
               className="data-input"
               style={{ background: "none" }}
             />
@@ -322,6 +328,10 @@ const Cell = memo(
             onBlur={() =>
               setValue((old) => ({ value: old.value, update: true }))
             }
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setValue((old) => ({ value: old.value, update: true }))
+              }}}
             className="data-input"
           />
         );
