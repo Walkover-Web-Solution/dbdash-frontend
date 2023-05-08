@@ -93,7 +93,8 @@ const Cell = memo(
         value?.value != null &&
         value?.value !== initialValue &&
         value?.value !== ""
-      ) {
+      )
+       {
         dispatch(
           updateCells({
             columnId: id,
@@ -208,9 +209,11 @@ const Cell = memo(
 
       case "longtext":
         element = (
-          <ContentEditable
-            html={(value?.value && value?.value?.toString()) || ""}
+          <input
+            value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
+     
+           
             onBlur={() =>
               setValue((old) => ({ value: old.value, update: true }))
             }
@@ -220,8 +223,8 @@ const Cell = memo(
         break;
       case "singlelinetext":
         element = (
-          <ContentEditable
-            html={(value?.value && value?.value?.toString()) || ""}
+          <input
+            value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
             onBlur={() =>
               setValue((old) => ({ value: old.value, update: true }))

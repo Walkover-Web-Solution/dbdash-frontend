@@ -22,6 +22,8 @@ import Cell from "./Cell";
 import TableHeader  from "./TableHeader/TableHeader";
 import { TableBody } from "./TableBody";
 import PlusIcon from './img/Plus'
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 
 const ScrollingComponent = withScrolling("div");
@@ -95,6 +97,7 @@ const Table = memo(
       useColumnOrder
     );
 
+    
    
 
     // useEffect(() => {
@@ -115,6 +118,25 @@ const Table = memo(
     //   }
     // }, [selectedCellIds]);
 
+    const tableData= useSelector((state)=>state.table);//true
+    const lastRowIndex = tableData?.data?.length - 1;
+    useEffect(() => {
+     
+      const firstColumnValue = tableData.data[lastRowIndex];
+      const tableRowChildNodes =  document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
+      if(tableRowChildNodes){
+        const tableRowAttribute = tableRowChildNodes.getAttribute("data-id")
+        setTimeout(()=>{
+          const td = document.querySelector(`div[data-id="${tableRowAttribute}"]`);
+          const match =
+            (td && td?.querySelector("textarea")) || td?.querySelector("input");
+          if (match) {
+            match.focus();
+          }
+        },1000)
+      }
+    }, [lastRowIndex])
+
     return (
       <>
         {selectedFlatRows?.length > 0 && (
@@ -131,7 +153,8 @@ const Table = memo(
           </div>
         )}
         <DndProvider backend={HTML5Backend}>
-           <ScrollingComponent
+           <ScrollingComponent id="scroll"
+
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"74.1vh",width:"99.6vw"}}
           >
             <table >
@@ -173,6 +196,7 @@ const Table = memo(
          
 
           <Preview />
+        
         </DndProvider>
       </>
     );
