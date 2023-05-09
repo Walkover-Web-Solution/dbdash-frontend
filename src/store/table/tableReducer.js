@@ -1,5 +1,4 @@
-// import { current } from '@reduxjs/toolkit';
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder } from './tableThunk.js';
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 // import { current } from '@reduxjs/toolkit';
 
@@ -443,7 +442,27 @@ export function extraReducers(builder) {
     })
     .addCase(updateColumnHeaders.rejected, (state) => {
       state.status = "failed";
+    }) 
+    
+     // for change in options array 
+     .addCase(updateMultiSelectOptions.pending, (state) => {
+      state.status = "loading"
     })
+    .addCase(updateMultiSelectOptions.fulfilled, (state,{payload}) => {
+     
+      state.columns.forEach((column , index) => {
+        if(column.id == payload.columnId)
+        {
+          state.columns[index].metadata.option = payload.metaData;
+        }
+      });
+      state.status = "succeeded";
+
+    })
+    .addCase(updateMultiSelectOptions.rejected, (state) => {
+      state.status = "failed";
+    })
+   
 
 
     // for add column to right and left

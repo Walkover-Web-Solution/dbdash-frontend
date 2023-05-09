@@ -105,14 +105,14 @@ import {updateCells } from "../../store/table/tableThunk";
                       ...cell.getCellProps().style,
                       userSelect: "none",
                       flex: "none",
-                      // backgroundColor:"white"
+                       backgroundColor:"white"
                     }
                   : {
                       ...cell.getCellProps().style,
                       userSelect: "none",
                       flex: "none",
                       height: "35px",
-                      // backgroundColor:"white"               
+                       backgroundColor:"white"               
                     }
               }
                >

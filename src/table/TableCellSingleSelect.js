@@ -1,136 +1,106 @@
-import PropTypes from "prop-types";
-import React, { useState, useRef } from 'react';
-import { Popper, TextField, Chip, ClickAwayListener } from '@mui/material';
+/* eslint-disable */
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import { getTableInfo } from "../store/table/tableSelector";
-import { updateCells } from "../store/table/tableThunk";
-import { useDispatch, useSelector } from "react-redux";
-import { updateColumnHeaders } from "../store/table/tableThunk";
-function TableCellSingleSelect(props) {
+import {  useDispatch, useSelector } from "react-redux";
+import { updateCells, updateColumnHeaders } from "../store/table/tableThunk";
+import { cloneDeep } from 'lodash';
 
+export default function TableCellSingleSelect(props) {
   const tableInfo = useSelector((state) => getTableInfo(state));
   const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
-  const [arr, setArr] = useState(metaDataArray[0]?.metadata?.option || []);
-  const [searchText, setSearchText] = useState('');
-  const [selectedChips, setSelectedChips] = useState(props?.value);
-  const anchorRef = useRef(null);
+  const top100Films = cloneDeep(metaDataArray[0]?.metadata?.option || []);
+  const [value, setValue] = useState(props?.value);
   const dispatch = useDispatch();
-  
-  const handleKeyDown = (event) => {
-    if (event.key === 'Backspace') {
-      setSelectedChips([]);
+  const handleChipChange = (event, newValue) => {
+    if(newValue==null)
+    {
       dispatch(
         updateCells({
           columnId: props?.colid,
           rowIndex: props?.rowid,
-          value: "",
+          value: newValue || "",
           dataTypes: "singleselect"
         })
-      )
-    }
-  };
-  const handleSearchTextChange = (event) => {
-    setSearchText(event.target.value);
-  };
-  const handleDeleteChip = (chip) => {
-    setArr(prevArr => {
-      const updatedArr = prevArr.filter(x => x !== chip);
-      dispatch(updateColumnHeaders({
-        dbId: tableInfo?.dbId,
-        tableName: tableInfo?.tableId,
-        fieldName: props?.colid,
-        columnId: props?.colid,
-        dataTypes: "singleselect",
-        metaData: updatedArr
-      }));
-      return updatedArr;
-    });
-  };
-  const handleChipClick = (chip) => {
-    setSelectedChips(chip);
-    dispatch(
-      updateCells({
-        columnId: props?.colid,
-        rowIndex: props?.rowid,
-        value: chip,
-        dataTypes: "singleselect"
-      })
-    )
-    setSearchText('');
-  };
-  
-  const handleSearchKeyDown = (event) => {
-    if (event.key === 'Enter') {
+      );
+      return;}
+    setValue(newValue);
+    if (top100Films.includes(newValue)) {
       dispatch(
         updateCells({
           columnId: props?.colid,
           rowIndex: props?.rowid,
-          value: searchText,
+          value: newValue || "",
           dataTypes: "singleselect"
         })
-      )
-      setArr(prevArr => [...prevArr, searchText]); // update the state using a callback function
-      setSelectedChips(searchText);
-      dispatch(updateColumnHeaders({
-        dbId: tableInfo?.dbId,
-        tableName: tableInfo?.tableId,
-        fieldName: props?.colid,
-        columnId: props?.colid,
-        dataTypes: "singleselect",
-        metaData: [...arr, searchText] // pass the updated value of `arr`
-      }))
-    }
-  };
-  const renderChips = () => {
-    return arr
-      .filter((chip) => {
-        return selectedChips !== chip && chip.toLowerCase().includes(searchText.toLowerCase());
-      })
-      .map((chip) => {
-        const isSelected = selectedChips === chip;
-        return (
-          <Chip
-            key={chip}
-            label={chip}
-            clickable={!isSelected}
-            color={isSelected ? 'error' : 'success'}
-            onClick={() => {
-              handleChipClick(chip);
-            }}
-            onDelete={() => {
-              handleDeleteChip(chip);
-            }}
-            style={{ margin: '4px' }}
-          />
-        );
-      });
+      );
+    } else {
+      const updatedMetadata = [...top100Films, newValue];
+      dispatch(
+        updateColumnHeaders({
+          dbId: tableInfo?.dbId,
+          tableName: tableInfo?.tableId,
+          fieldName: props?.colid,
+          columnId: props?.colid,
+          dataTypes: "singleselect",
+          metaData: updatedMetadata,
+        })
+      );
+      dispatch(
+        updateCells({
+          columnId: props?.colid,
+          rowIndex: props?.rowid,
+          value: newValue || "",
+          dataTypes: "singleselect"
+        })
+      );
+  }
   };
   return (
-    <>
-      <div ref={anchorRef}  onKeyDown={handleKeyDown} tabIndex={0}>
-        {props?.value?.length > 0 ? <Chip key={selectedChips} label={selectedChips} /> : 'Select'}
-        </div>
-      <Popper open={props.isOpen} style={{ backgroundColor: "white", zIndex: "10", overflowY: "auto" }} anchorEl={anchorRef.current} placement="bottom-start">
-        <ClickAwayListener onClickAway={() => props.setIsOpen(false)}>
-          <div style={{ padding: '8px' }}>
-          <TextField
-              label="Search or add chips"
-              value={searchText}
-              onChange={handleSearchTextChange}
-              onKeyDown={handleSearchKeyDown}
-            />
-            <div style={{ marginTop: '2px' }}>{renderChips()}</div>
-          </div>
-        </ClickAwayListener>
-      </Popper>  
-    </>
+    <Autocomplete
+      id="country-select-demo"
+      value={value}
+   onChange={handleChipChange}
+      sx={{ width: 300 }}
+      options={top100Films}
+   freeSolo={true}
+    
+      getOptionLabel={(option) => option}
+      renderOption={(props, option) => (
+        <Box component="li"  {...props}>
+          {option}
+        </Box>
+      )}
+      
+      renderInput={(params) => (
+        <TextField
+        
+          {...params}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "& > fieldset": {
+                border: "none"
+              }
+            }
+          }}
+          inputProps={{
+            ...params.inputProps,
+            
+            style:{height:1},
+          }}
+        />
+      )}
+    />
   );
 }
-export default TableCellSingleSelect;
 TableCellSingleSelect.propTypes = {
-  chips: PropTypes.any,
-  isOpen: PropTypes.any,
-  setIsOpen: PropTypes.any,
-  colid: PropTypes.any,
-  rowid: PropTypes.any,
-  value: PropTypes.any
-}
+    setIsOpen: PropTypes.any,
+    colid: PropTypes.any,
+    rowid: PropTypes.any,
+    value: PropTypes.any,
+    metaData: PropTypes.any
+  }

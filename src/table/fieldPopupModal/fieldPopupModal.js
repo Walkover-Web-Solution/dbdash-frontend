@@ -247,6 +247,7 @@ export default function FieldPopupModal(props) {
         </DialogContent>
         <Button sx={{textTransform: "none"}}
           onClick={() => {
+            handleClose();
             props?.submitData(false);
           }}
           color="primary"

@@ -76,6 +76,7 @@ export default function Header({
        }
       setOpen(false);
 
+      
       var queryToSend =  JSON.parse(queryByAi)?.add_column?.new_column_name?.data_type +  ` GENERATED ALWAYS AS (${JSON.parse(queryByAi)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       dispatch(addColumsToLeft({
         columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,

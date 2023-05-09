@@ -79,7 +79,6 @@ const Table = memo(
         data,
         defaultColumn,
         dataDispatch,
-        // updateMyData,
         sortTypes,
         cellIdSplitBy: "_",
         initialState: {
@@ -94,26 +93,6 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
-
-   
-
-    // useEffect(() => {
-    //   if (Object.keys(selectedCellIds).length > 0) {
-    //     const newData = cloneDeep(data);
-    //     const firstValue = Object.keys(selectedCellIds)[0].split("_");
-    //     const newValueToReplace = newData[firstValue[1]][firstValue[0]];
-    //     {
-    //       selectedCellIds >= 1 &&
-    //         Object.keys(selectedCellIds)?.forEach((key, i) => {
-    //           const keyName = key.split("_")[0];
-    //           const index = key.split("_")[1];
-    //           if (i === 0 || firstValue[0] != keyName) return;
-    //           newData[index][keyName] = newValueToReplace;
-    //         });
-    //     }
-    //     dataDispatch(updateTableData(newData));
-    //   }
-    // }, [selectedCellIds]);
 
     return (
       <>
