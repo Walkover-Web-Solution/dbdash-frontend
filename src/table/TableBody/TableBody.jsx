@@ -15,7 +15,8 @@ import {updateCells } from "../../store/table/tableThunk";
   prepareRow,
   totalColumnsWidth,
   update = { update },
-}) {
+})
+ {
    const dispatch =  useDispatch()
   const limit = 200;
   const hasNextPage = React.useMemo(() => rows.length <= limit, [rows, limit]) ; //true
@@ -44,7 +45,6 @@ import {updateCells } from "../../store/table/tableThunk";
     event.preventDefault();
     const text = event.clipboardData.getData("text/plain");
     if(cell?.column?.dataType != "attachment"){
-      
       dispatch(
         updateCells({
           columnId: cell.column.id,
@@ -54,6 +54,8 @@ import {updateCells } from "../../store/table/tableThunk";
       );
     }
   };
+
+  // const [index , setIndex] = useState([])
 
   const RenderRow = React.useCallback(
     (rows) => ({ index , style}) => {
@@ -86,16 +88,18 @@ import {updateCells } from "../../store/table/tableThunk";
                   width: totalColumnsWidth,
                 }
           }
+          data-id={`table-new-row-${row?.original?.id}`}
           id={`table-row-${index}`}
         >
-          {row.cells.map((cell,index) => {
+          {row.cells.map((cell,key) => {
             return (
               <div 
               {...cell.getCellProps({
                 onCopy: (event) => handleCopy(event, cell.value),
-                onPaste: (event) => handlePaste(event, index, cell),
+                onPaste: (event) => handlePaste(event, key, cell),
               })}
-               key ={index} 
+               key ={key} 
+               data-id={`${index}-${key}`}
               //  {...cell.getCellProps()}
                 className="td" 
 

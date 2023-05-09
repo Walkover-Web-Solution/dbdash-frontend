@@ -20,7 +20,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
       "dbId": dbId,
       "tableName": tableId,
       "pageNo": page+1,
-      "filter": AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+      "filter": AllTableInfo?.[params?.tableName]?.filters?.[params?.filterName]?.query,
     }));
     setPage((page) => page + 1);
   };

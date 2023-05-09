@@ -45,7 +45,7 @@ const Cell = memo(
       // set the currently selected input element to the clicked input element
       setSelectedInput(event.target);
       // add a border to the clicked input element
-      event.target.style.border = "1px solid blue";
+      event.target.style.border = "2px solid blue";
     };
 
     const handleInputBlur = (event) => {
