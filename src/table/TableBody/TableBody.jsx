@@ -10,7 +10,7 @@ import {updateCells } from "../../store/table/tableThunk";
  function TableBody({
   getTableBodyProps,
   rows,
-  // isNextPageLoading,
+
   cellsSelected,
   prepareRow,
   totalColumnsWidth,
@@ -92,7 +92,9 @@ import {updateCells } from "../../store/table/tableThunk";
           id={`table-row-${index}`}
         >
           {row.cells.map((cell,key) => {
+                    
             return (
+ 
               <div 
               {...cell.getCellProps({
                 onCopy: (event) => handleCopy(event, cell.value),
@@ -121,6 +123,7 @@ import {updateCells } from "../../store/table/tableThunk";
               }
                >
                 {cell.render("Cell")}
+              
               </div>
             );
           })}

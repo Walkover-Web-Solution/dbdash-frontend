@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-import { Tabs } from "@mui/material";
+
+import { Button, ClickAwayListener, Popper, Tabs } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -16,8 +17,10 @@ import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
 import TableCellSingleSelect from './TableCellSingleSelect'
+// import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import TableCellMultiSelect from './TableCellMultiSelect'
 import PreviewAttachment from "./previewAttachment";
+import { OpenInFull } from "@mui/icons-material";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -36,7 +39,18 @@ const Cell = memo(
     const [isOpen, setIsOpen] = useState(false);
     const [previewModal, setPreviewModal] = useState(false)
     const [selectedInput, setSelectedInput] = useState(null);
-
+    const [popperOpen, setPopperOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const handleClickButton = (event) => {
+      setAnchorEl(event.currentTarget);
+      setPopperOpen(true);
+    };
+  
+    const handleClickAway = () => {
+      setPopperOpen(false);
+      setAnchorEl(null);
+    };
+  
     const handleInputClick = (event) => {
       // remove the border from the previously selected input element (if any)
       if (selectedInput) {
@@ -46,6 +60,8 @@ const Cell = memo(
       setSelectedInput(event.target);
       // add a border to the clicked input element
       event.target.style.border = "2px solid blue";
+      
+
     };
 
     const handleInputBlur = (event) => {
@@ -241,14 +257,16 @@ const Cell = memo(
 
       case "longtext":
         element = (
+          <>
           <input
             value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
+            onFocus={handleInputClick}
             onDoubleClick={()=>{
               setCursor(true);
             }}
             
-            style={!cursor?{caretColor:"transparent"}:{}}
+            style={!cursor?{caretColor:"transparent",paddingRight:"40px"}:{paddingRight:"40px"}}
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
@@ -257,6 +275,7 @@ const Cell = memo(
               }
               event.target.style.border = "none";
             }}
+
             onClick={handleInputClick}
             onKeyDown={(e) => {
               setCursor(true);
@@ -265,7 +284,26 @@ const Cell = memo(
               }
             }}
             className="data-input"
+
           />
+          <Button style={{fontSize:"10px", position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}><OpenInFull onClick={handleClickButton}/></Button>
+{popperOpen && <ClickAwayListener onClickAway={handleClickAway}>
+<Popper
+  open={popperOpen}
+  anchorEl={anchorEl}
+  placement="right"
+  style={{zIndex:20,margin:"5px",backgroundColor:"cadetblue",color:"white",width:'200px',height:"200px",whiteSpace:"pre-wrap",overflowX:"hidden",overflowY:"scroll",}}
+  onClickAway={handleClickAway}
+  
+  
+>
+
+  <div>
+    <p>{value?.value}</p>
+  </div>
+</Popper>
+</ClickAwayListener>}
+          </>
         );
         break;
         case "singlelinetext":
@@ -273,6 +311,7 @@ const Cell = memo(
           <input
             value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
+            onFocus={handleInputClick}
             onDoubleClick={()=>{
               setCursor(true);
             }}
@@ -304,8 +343,10 @@ const Cell = memo(
           <ContentEditable
             html={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
+            onFocus={handleInputClick}
             onDoubleClick={()=>{
               setCursor(true);
+
             }}
             onKeyDown={()=>{setCursor(true)}}
             style={!cursor?{caretColor:"transparent"}:{}}
@@ -328,6 +369,7 @@ const Cell = memo(
           <>
             <input type="tel" id="phone" name="phone" maxLength="13"
               value={(value?.value && value?.value?.toString()) || ""}
+              onFocus={handleInputClick}
               onDoubleClick={()=>{
                 setCursor(true);
               }}
@@ -359,6 +401,7 @@ const Cell = memo(
             <input
               type="number"
               value={(value?.value && value?.value?.toString()) || ""}
+              onFocus={handleInputClick}
               onChange={onChange}
               onDoubleClick={()=>{
                 setCursor(true);
@@ -419,6 +462,7 @@ const Cell = memo(
         element = (
           <ContentEditable
             html={(value?.value && value?.value?.toString()) || ""}
+            onFocus={handleInputClick}
             onDoubleClick={()=>{
               setCursor(true);
             }}
