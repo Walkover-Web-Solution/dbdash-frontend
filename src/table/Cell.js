@@ -23,8 +23,24 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
+const focusTableElement = ({ tableAxis, type = false }) => {
+  const tableElement = document.querySelector(
+    `div[data-id="${tableAxis.x}-${tableAxis.y}"]`
+  );
+  console.log('tableElementtableElementtableElement',tableElement)
+  if(!tableElement)return
+  if (type) {
+    tableElement.style.border = "3px solid cornflowerblue";
+    return;
+  }
+  /** Here removing preview focus table element  */
+  tableElement?.style.removeProperty("border");
+};
+
+let x = 1;
+let y = 0;
 const Cell = memo(
-  ({ value: initialValue, row, column: { id, dataType, metadata }, }) => {
+  ({ value: initialValue, visibleColumns, row, column: { id, dataType, metadata }, }) => {
   
     
     const dispatch = useDispatch();
@@ -35,23 +51,8 @@ const Cell = memo(
     const [imageLink, setImageLink] = useState("")
     const [isOpen, setIsOpen] = useState(false);
     const [previewModal, setPreviewModal] = useState(false)
-    const [selectedInput, setSelectedInput] = useState(null);
 
-    const handleInputClick = (event) => {
-      // remove the border from the previously selected input element (if any)
-      if (selectedInput) {
-        selectedInput.style.border = "none";
-      }
-      // set the currently selected input element to the clicked input element
-      setSelectedInput(event.target);
-      // add a border to the clicked input element
-      event.target.style.border = "2px solid blue";
-    };
 
-    const handleInputBlur = (event) => {
-      // remove the border from the input element
-      event.target.style.border = "none";
-    };
 
     const handleUploadFileClick = () => {
       setOpen(true);
@@ -119,6 +120,51 @@ const Cell = memo(
       }
     }, [value, id, row.index]);
 
+    const handleOnKeyDown = (event) => {
+      const keyObjet = {
+        ArrowUp: true,
+        ArrowDown: false,
+        ArrowRight: true,
+        ArrowLeft: false,
+      };
+      console.log("calll___3", x, y);
+      console.log("event.key ", event.keyCode, `div[data-id="${x}-${y}"]`);
+      focusTableElement({ tableAxis: { x, y } });
+
+      if ((event.key == "ArrowUp" || event.key == "ArrowDown") && x >= 0) {
+        x = keyObjet[event.key] ? x - 1 : x + 1;
+        if (x === -1) {
+          x = x + 1;
+          return;
+        }
+      }
+      if ((event.key == "ArrowLeft" || event.key == "ArrowRight") && y > 0) {
+        const totalColumns = visibleColumns.length;
+        y = keyObjet[event.key] ? y + 1 : y - 1;
+        if (event.key == "ArrowRight" && y > totalColumns - 2) {
+          y = totalColumns - 2;
+        }
+        if (y === 0) {
+          y = y + 1;
+          return;
+        }
+      }
+      focusTableElement({ tableAxis: { x, y }, type: true });
+      //  document.querySelector(`td[data-id="${x}-${y}"]`).style.border = "2px solid"
+      // const td  = document.querySelector(`div[data-id="${x}-${y}"]`).style.border = "3px solid cornflowerblue"
+      // console.log('tdtd',td)
+
+      //  .style.color = "blue"
+      // document.getElementById("demo").style.display = "none";
+      // border: 2px solid;
+      // const td = document.querySelector(`td[data-id="${x}-${y}"]`);
+      // const match =
+      //   (td && td?.querySelector("textarea")) || td?.querySelector("input");
+      // if (match) {
+      //   match.focus();
+      // }
+    };
+    
     let element;
     switch (dataType) {
       case "formula":
@@ -129,9 +175,9 @@ const Cell = memo(
             value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
-            onClick={handleInputClick}
-            onBlur={handleInputBlur}
-            onFocus={handleInputClick}
+            
+            
+            
           />
         );
         break;
@@ -144,9 +190,9 @@ const Cell = memo(
             value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
-            onClick={handleInputClick}
-            onBlur={handleInputBlur}
-            onFocus={handleInputClick}
+            
+            
+            
           />
         );
         break;
@@ -159,9 +205,9 @@ const Cell = memo(
             value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
-            onClick={handleInputClick}
-            onBlur={handleInputBlur}
-            onFocus={handleInputClick}
+            
+            
+            
           />
         );
         break;
@@ -174,9 +220,9 @@ const Cell = memo(
             value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
-            onClick={handleInputClick}
-            onBlur={handleInputBlur}
-            onFocus={handleInputClick}
+            
+            
+            
           />
         );
         break;
@@ -230,10 +276,9 @@ const Cell = memo(
                 if (e.detail == 2) {
                   setInputBoxShow(true);
                 }
-                handleInputClick(e);
               }}
-              onBlur={handleInputBlur}
-              onFocus={handleInputClick}
+              
+              
             />
           </>
         );
@@ -251,13 +296,8 @@ const Cell = memo(
             style={!cursor?{caretColor:"transparent"}:{}}
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
-              if (selectedInput === event.target) {
-                setSelectedInput(null);
-                setCursor(false);
-              }
-              event.target.style.border = "none";
             }}
-            onClick={handleInputClick}
+            
             onKeyDown={(e) => {
               setCursor(true);
               if (e.key === 'Enter') {
@@ -280,13 +320,8 @@ const Cell = memo(
             style={!cursor?{caretColor:"transparent"}:{}}
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
-              if (selectedInput === event.target) {
-                setSelectedInput(null);
-                setCursor(false);
-              }
-              event.target.style.border = "none";
             }}
-            onClick={handleInputClick}
+            
             onKeyDown={(e) => {
               setCursor(true);
               if (e.key === 'Enter') {
@@ -311,13 +346,8 @@ const Cell = memo(
             style={!cursor?{caretColor:"transparent"}:{}}
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
-              if (selectedInput === event.target) {
-                setSelectedInput(null);
-                setCursor(false);
-              }
-              event.target.style.border = "none";
             }}
-            onClick={handleInputClick}
+            
             className="data-input"
           />
         );
@@ -339,13 +369,8 @@ const Cell = memo(
               }}
               onBlur={() => {
                 setValue((old) => ({ value: old.value, update: true }));
-                if (selectedInput === event.target) {
-                  setSelectedInput(null);
-                  setCursor(false);
-                }
-                event.target.style.border = "none";
               }}
-              onClick={handleInputClick}
+              
               className="data-input"
              
 
@@ -367,13 +392,8 @@ const Cell = memo(
               style={!cursor?{caretColor:"transparent",background:"none"}:{background:"none"}}
               onBlur={() => {
                 setValue((old) => ({ value: old.value, update: true }));
-                if (selectedInput === event.target) {
-                  setSelectedInput(null);
-                  setCursor(false);
-                }
-                event.target.style.border = "none";
               }}
-              onClick={handleInputClick}
+              
               onKeyDown={(e) => {
                 setCursor(true);
                 if (e.key === 'Enter') {
@@ -429,13 +449,8 @@ const Cell = memo(
             onBlur={() => {
 
               setValue((old) => ({ value: old.value, update: true }));
-              if (selectedInput === event.target) {
-                setSelectedInput(null);
-                setCursor(false);
-              }
-              event.target.style.border = "none";
             }}
-            onClick={handleInputClick}
+            
             onKeyDown={(e) => {
               setCursor(true);
               if (e.key === 'Enter') {
@@ -454,9 +469,9 @@ const Cell = memo(
             value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
-            onClick={handleInputClick}
-            onBlur={handleInputBlur}
-            onFocus={handleInputClick}
+            
+            
+            
           />
         );
         break;
@@ -513,7 +528,29 @@ const Cell = memo(
         element = null;
         break;
     }
-    return element;
+    return  (
+      <div
+      className="data-input"
+        onKeyDown={handleOnKeyDown}
+        onClick={handleOnKeyDown}
+        onMouseDown={(e) => {
+          focusTableElement({ tableAxis: { x, y } });
+          console.log('e.target.parentNode',e.target.parentNode.parentNode
+          .closest("div")
+          .getAttribute("data-id"))
+          if(e.target.parentNode.parentNode){
+            const [a, b] = e.target.parentNode.parentNode
+            .closest("div")
+            .getAttribute("data-id")
+            .split("-");
+          x = parseInt(a);
+          y = parseInt(b);
+          }
+        }}
+      >
+        {element}
+      </div>
+    );
   }
 );
 Cell.displayName = "Cell";
@@ -523,4 +560,5 @@ Cell.propTypes = {
   column: PropTypes.any,
   dataDispatch: PropTypes.any,
   row: PropTypes.any,
+  visibleColumns: PropTypes.any,
 };
