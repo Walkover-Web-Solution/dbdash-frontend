@@ -24,7 +24,7 @@ export const OrgList = (props) => {
   const [open, setOpen] = useState(false); //popup model craeate db 
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
   const [orgId, setOrg] = useState();
-  // const [errors, setErrors] = useState({});
+  const[,setOpenmove]=useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
 
@@ -161,6 +161,7 @@ export const OrgList = (props) => {
                   <Dropdown
                   setTabIndex={props?.setTabIndex}
                   tabIndex={props?.index}
+                  setOpenmove={setOpenmove}
                     first={"Rename workspace"}
                     second={"Delete workspace"}
                     setName={setName}
