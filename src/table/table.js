@@ -9,10 +9,8 @@ import {
 } from "react-table";
 import Header from "./Header";
 import PropTypes from "prop-types";
-// import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from "react-table-plugins";
 import { addRows, deleteRows } from "../store/table/tableThunk";
-// import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -35,7 +33,6 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-// export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 
 const Table = memo(
   ({
@@ -95,27 +92,6 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
-
-    
-   
-
-    // useEffect(() => {
-    //   if (Object.keys(selectedCellIds).length > 0) {
-    //     const newData = cloneDeep(data);
-    //     const firstValue = Object.keys(selectedCellIds)[0].split("_");
-    //     const newValueToReplace = newData[firstValue[1]][firstValue[0]];
-    //     {
-    //       selectedCellIds >= 1 &&
-    //         Object.keys(selectedCellIds)?.forEach((key, i) => {
-    //           const keyName = key.split("_")[0];
-    //           const index = key.split("_")[1];
-    //           if (i === 0 || firstValue[0] != keyName) return;
-    //           newData[index][keyName] = newValueToReplace;
-    //         });
-    //     }
-    //     dataDispatch(updateTableData(newData));
-    //   }
-    // }, [selectedCellIds]);
 
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
@@ -196,11 +172,7 @@ const Table = memo(
             </table>
             
           </ScrollingComponent>
-          
-         
-
           <Preview />
-        
         </DndProvider>
       </>
     );

@@ -24,35 +24,10 @@ export const OrgList = (props) => {
   const [open, setOpen] = useState(false); //popup model craeate db 
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
   const [orgId, setOrg] = useState();
-  // const [errors, setErrors] = useState({});
   const [tabIndex, setTabIndex] = useState(0);
-
-
   //shared model whaha hoga
   const [isAdmin, setIsAdmin] = useState(false);
  
-  // const schema = Joi.object({
-  //   orgName: Joi.string()
-  //     .min(3)
-  //     .max(15)
-  //     .pattern(/^\S+$/)
-  //     .messages({
-  //       'string.pattern.base': 'Field name should not contain spaces',
-  //     })
-  //     .required(),
-  // });
-  
-  // const handleTextChange = (e) => {
-  //   const { error } = schema.validate({ orgName: e.target.value });
-  //   if (error) {
-  //     setErrors({ orgName: error.details[0].message });
-  //   } else {
-  //     setErrors({});
-  //   }
-  //   setOrgName(e.target.value);
-  // };
-
-
   const handleOpenShareOrg = () => {
     setShareOrg(true);
   };
@@ -79,10 +54,10 @@ export const OrgList = (props) => {
       toast.success('Database created successfully!');
     });
   };
-  const renameWorkspace = async (orgId) => {
+  const renameWorkspace = async (orgId,x) => {
     const userid = localStorage.getItem("userid");
     const data = {
-      name: orgName || name,
+      name: x || name,
     };
     dispatch(renameOrgThunk({ orgId, data, userid }))
   };
@@ -117,7 +92,7 @@ export const OrgList = (props) => {
                   value={orgName}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      renameWorkspace(props?.orgId);
+                      renameWorkspace(props?.orgId,orgName);
                       setName(false);
                     }
                   }}
@@ -125,16 +100,9 @@ export const OrgList = (props) => {
                   size="small"
                 />
                 </Box>
-
-                <Box>
-                {/* {errors.orgName && (
-                    <Typography variant="body2" color="error" fontSize={12}>
-                      {errors.orgName}
-                    </Typography>)} */}
-                </Box>
                 </Box>
 
-                <Button onClick={() => { renameWorkspace(props?.orgId);  setName(false); }}
+                <Button onClick={() => { renameWorkspace(props?.orgId,orgName);  setName(false); }}
                   variant="contained"
                   sx={{
                     width: "8rem",
@@ -212,6 +180,7 @@ export const OrgList = (props) => {
               label="Database Name"
               submitData={saveDb}
               setVariable={setDb}
+              joiMessage={"Database name"}
             />
           </Box>
         </Box>

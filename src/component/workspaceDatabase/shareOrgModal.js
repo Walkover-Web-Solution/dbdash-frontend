@@ -4,12 +4,11 @@ import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify'
 
-
-
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
-  const userId = localStorage.getItem("userid")
-  
+  const userId = localStorage.getItem("userid");
+  const { users } = props.org;
+
   const handleClose = () => {
     props.setShareOrg(false);
     setEmail("");
@@ -29,16 +28,24 @@ export default function ShareOrgModal(props) {
       toast.error("Invalid email");
       return;
     }
-    
-  
+
+    const existingUser = users.find(user => user.user_id.email === email);
+    if (existingUser) {
+      if (existingUser.user_id._id === userId) {
+        toast.error("You cannot invite yourself");
+      } else {
+        toast.error("User already exists");
+      }
+      return;
+    }
+
     props.shareWorkspace(email);
     handleClose();
     toast.success("Invitation sent successfully");
   };
-  
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSendInvite();
       handleClose();
     }
@@ -50,56 +57,68 @@ export default function ShareOrgModal(props) {
   };
 
   return (
-    
-      <Dialog open={props.shareOrg} onClose={handleClose} >
-        <DialogTitle sx={{width:500}}>Add User to Organization</DialogTitle>
-        <DialogContent sx={{flex:'none'}}>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Email Address"
-            type="email"
-            fullWidth
-            value={email}
-            onChange={handleEmailChange}
-            onKeyDown={handleKeyDown}
+    <Dialog open={props.shareOrg} onClose={handleClose}>
+      <DialogTitle sx={{ width: 500 }}>Add User to Organization</DialogTitle>
+      <DialogContent sx={{ flex: "none" }}>
+        <TextField
+          autoFocus
+          margin="dense"
+          label="Email Address"
+          type="email"
+          fullWidth
+          value={email}
+          onChange={handleEmailChange}
+          onKeyDown={handleKeyDown}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSendInvite}
+        >
+          Send Invite
+        </Button>
+      </DialogActions>
 
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSendInvite}
-          >
-            Send Invite
-          </Button>
-          
-        </DialogActions>
-
-    <Box sx={{m:1}}>
-         <Typography variant="h6"><strong>Shared with:</strong></Typography>
-    </Box>
-    <Box >
-    {Object.values(props.org.users).map((user) => {
-    if (user.user_id._id !== userId && (user.user_type !== "admin" || userId !== user.user_id._id)) {
-    return (
-      <Box key={user.user_id.email} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <Box sx={{ m: 1 }}>
-          <Typography>{user.user_id.email}</Typography>
-        </Box>
-        <Box sx={{ alignItems: "center" }}>
-          <IconButton aria-label="delete" onClick={() => handleRemoveUser(user.user_id.email)}>
-            <DeleteIcon />
-          </IconButton>
-        </Box>
+      <Box sx={{ m: 1 }}>
+        <Typography variant="h6">
+          <strong>Shared with:</strong>
+        </Typography>
       </Box>
-    );
-  } else {
-    return null; // don't render the user if they are an admin
-  }
-})}
+      <Box>
+        {users.map((user) => {
+          if (
+            user.user_id._id !== userId &&
+            (user.user_type !== "admin" || userId !== user.user_id._id)
+          ) {
+            return (
+              <Box
+                key={user.user_id.email}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box sx={{ m: 1 }}>
+                  <Typography>{user.user_id.email}</Typography>
+                </Box>
+                <Box sx={{ alignItems: "center" }}>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleRemoveUser(user.user_id.email)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+            );
+          } else {
+            return null; // don't render the user if they are an admin or the current user
+          }
+        })}
         </Box>
       </Dialog>
   );

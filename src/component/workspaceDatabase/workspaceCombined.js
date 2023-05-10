@@ -31,7 +31,8 @@ const[tabIndex,setTabIndex]=useState(0);
         <Box sx={{ display: 'flex', m: 3 }}>
           <Button onClick={handleOpen} variant="contained">Create Organisation</Button>
           <PopupModal title="create organisation" label="Organization Name" open={open} setOpen={setOpen}
-            submitData={saveOrgToDB} setVariable={setOrg} />
+            submitData={saveOrgToDB} setVariable={setOrg} joiMessage={"Organization name"}
+          />
         </Box>
 
         <Box>
