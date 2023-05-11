@@ -9,10 +9,8 @@ import {
 } from "react-table";
 import Header from "./Header";
 import PropTypes from "prop-types";
-// import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from "react-table-plugins";
 import { addRows, deleteRows } from "../store/table/tableThunk";
-// import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -35,7 +33,6 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-// export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 
 const Table = memo(
   ({
@@ -176,11 +173,7 @@ const Table = memo(
             </table>
             
           </ScrollingComponent>
-          
-         
-
           <Preview />
-        
         </DndProvider>
       </>
     );

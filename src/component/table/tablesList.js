@@ -270,6 +270,7 @@ export default function TablesList({ dbData }) {
           setOpen={setOpen}
           submitData={saveTable}
           setVariable={setTable}
+          joiMessage={"Table name"}
         />
       )}
       {openn && (

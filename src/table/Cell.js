@@ -6,7 +6,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 
-import { Button, ClickAwayListener, Popper, Tabs } from "@mui/material";
+import { Button, ClickAwayListener, Popper, Tabs, TextareaAutosize } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -33,6 +33,7 @@ const Cell = memo(
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
     const [inputBoxShow, setInputBoxShow] = useState(false);
+    const[textarea,setTextarea]=useState("");
     const[cursor,setCursor]=useState(false);
     const [open, setOpen] = useState(false);
     const [imageLink, setImageLink] = useState("")
@@ -48,6 +49,7 @@ const Cell = memo(
   
     const handleClickAway = () => {
       setPopperOpen(false);
+      setSelectedInput(null);
       setAnchorEl(null);
     };
   
@@ -270,7 +272,9 @@ const Cell = memo(
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
-                setSelectedInput(null);
+               if(!popperOpen)
+               { setSelectedInput(null);
+               }
                 setCursor(false);
               }
               event.target.style.border = "none";
@@ -286,23 +290,68 @@ const Cell = memo(
             className="data-input"
 
           />
-          <Button style={{fontSize:"10px", position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}><OpenInFull onClick={handleClickButton}/></Button>
-{popperOpen && <ClickAwayListener onClickAway={handleClickAway}>
+        {selectedInput && 
+    <div
+     onMouseDown={(e)=>{
+      e.preventDefault();
+   
+     }}
+      style={{
+        position: "absolute",
+        right: 0,
+        top: "50%",
+        transform: "translateY(-50%)",
+      }}
+    >
+      
+        <OpenInFull    onClick={handleClickButton} />
+  
+      </div>}
+    {popperOpen && <ClickAwayListener onClick={(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+  
+ }} onClickAway={handleClickAway}>
 <Popper
+
   open={popperOpen}
   anchorEl={anchorEl}
   placement="right"
-  style={{zIndex:20,margin:"5px",backgroundColor:"cadetblue",color:"white",width:'200px',height:"200px",whiteSpace:"pre-wrap",overflowX:"hidden",overflowY:"scroll",}}
-  onClickAway={handleClickAway}
+  style={{zIndex:20,margin:"5px",backgroundColor:"cadetblue",color:"white",width:"500px",height:"500px",whiteSpace:"pre-wrap",overflowX:"hidden",overflowY:"scroll",}}
+  onMouseDown={(e) => {
+    e.stopPropagation();
+  }}
   
   
 >
 
   <div>
-    <p>{value?.value}</p>
+  <TextareaAutosize
+style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1px"}}
+            value={(value?.value && value?.value?.toString()) || ""}
+            onChange={(e)=>{
+              setValue({value:e.target.value,update:false});
+               setTextarea(e.target.value)}}
+           
+            onKeyDown={(e)=>{
+
+              if(e.key=="Enter")
+              {
+                setValue({value:e.target.value,update:true});
+              }
+            }}
+            maxRows={100}
+            minRows={1}
+            />
+            <Button 
+            variant="outlined" style={{margin:"2px",color:"maroon",backgroundColor:"white"}}  onClick={()=>{
+              setValue({value:textarea,update:true});
+
+            }}>save</Button>
   </div>
 </Popper>
 </ClickAwayListener>}
+
           </>
         );
         break;
