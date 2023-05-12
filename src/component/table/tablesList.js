@@ -22,6 +22,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../api/filterApi";
 import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
+import { createTable } from "../../api/tableApi";
 
 // import { uploadCSV } from '../../api/rowApi';
 
@@ -36,6 +37,7 @@ export default function TablesList({ dbData }) {
   // const [CSV,setCSV] = useState([])
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    
   };
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
@@ -49,6 +51,8 @@ export default function TablesList({ dbData }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine,setUnderLine] = useState(null)
+  // const [idToNavigate,setIdToNavigate] = useState()
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -62,9 +66,27 @@ export default function TablesList({ dbData }) {
       tableName: table,
     };
     setOpen(false);
-
-    dispatch(createTable1({ dbId: dbData?.db?._id, data: data }));
+    const apiCreate = await createTable(dbData?.db?._id,data);
+    dispatch(createTable1({tables: apiCreate.data.data.tables}));
+    const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
+    return apiCreate?.data?.data?.tables[key].tableName === table;
+  });
+    
+  
+  if (matchedKey) {
+    navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
+  }
+  dispatch(bulkAddColumns({
+    //  "alldb":alldb,
+    "dbId": dbData?.db?._id,
+    "tableName": matchedKey,
+    "pageNo": 1
+  }));
+ 
+    const newTableIndex = Object.keys(AllTableInfo).length;
+  setValue(newTableIndex);
   };
+
 
   const handleEdit = async () => {
     setEdit(true);
@@ -137,7 +159,6 @@ export default function TablesList({ dbData }) {
      
     }
   }, []);
-
   return (
     <>
       <Box
@@ -178,6 +199,7 @@ export default function TablesList({ dbData }) {
                     highlightActiveTable={() => setValue(index)}
                     value={value}
                     setPage={setPage}
+                    setValue={setValue}
                   />
                 </Box>
               ))}

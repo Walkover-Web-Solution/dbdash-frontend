@@ -114,7 +114,7 @@ export const bulkAddColumns = createAsyncThunk(
                 payload?.filter
             )
             const dataa = {
-                "columns":columns,
+                "columns":columns || null,
                 "row":querydata.data.data.rows,
                 "tableId":payload.tableName,
                 "dbId":payload.dbId,
