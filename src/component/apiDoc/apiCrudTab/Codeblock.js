@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import './Codeblock.css'
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
+
 function CodeBlock(props) {
   const [isCopied, setIsCopied] = useState(false);
-
+const[but,setbut]=useState(false);
   function handleCopyClick() {
     navigator.clipboard.writeText(props.code);
     setIsCopied(true);
@@ -16,8 +17,16 @@ function CodeBlock(props) {
   }
 
   return (
-    <div className="code-block">
+    <> 
+   
+      <div className="code-block">
+      <div>
+    <button className={!but ? "black":"white"} onClick={()=>setbut(false)} >API</button>
+    <button className={!but ? "white":"black"} onClick={()=>setbut(true)} >Curl</button>
+    </div>
       <pre>
+        <br/>
+        <br/>
         <code>
           {props.code}
         </code>
@@ -34,6 +43,8 @@ function CodeBlock(props) {
         {isCopied ? 'Copied!' : <ContentPasteIcon/>}
       </button>
     </div>
+    </>
+ 
   );
 }
 

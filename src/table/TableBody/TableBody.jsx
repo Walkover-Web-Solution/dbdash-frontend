@@ -154,7 +154,7 @@ import {updateCells } from "../../store/table/tableThunk";
             // height={35*rows.length}
             itemCount={rows.length}
             itemSize={35}
-            // style={{overflowY:"hidden"}}
+             style={{overflowY:"hidden"}}
             onItemsRendered={onItemsRendered}
             ref={ref}
             innerElementType={({ children, style, ...rest }) => (

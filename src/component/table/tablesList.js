@@ -50,6 +50,7 @@ export default function TablesList({ dbData }) {
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine,setUnderLine] = useState(null)
   const handleClick = (event) => {
+
     setAnchorEl(event.currentTarget);
   };
 
@@ -184,7 +185,7 @@ export default function TablesList({ dbData }) {
           </Tabs>
           <Button
             variant="outlined"
-            onClick={() => handleOpen()}
+            onClick={(e) => {handleClick(e); handleOpen()}}
             sx={{ margin: "0.5rem", width: "fit-content", height: "5vh" }}
           >
             <AddIcon />
@@ -264,9 +265,11 @@ export default function TablesList({ dbData }) {
       </Box>
       {open && (
         <PopupModal
+        anchorEl={anchorEl}
           title="Create Table"
           label="Table Name"
           open={open}
+
           setOpen={setOpen}
           submitData={saveTable}
           setVariable={setTable}

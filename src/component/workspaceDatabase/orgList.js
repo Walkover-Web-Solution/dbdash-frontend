@@ -13,7 +13,7 @@ import { allOrg } from "../../store/database/databaseSelector";
 import { toast } from "react-toastify";
 
 export const OrgList = (props) => {
-
+  const [anchorEl, setAnchorEl] = useState(null);
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
   const allorgss = useSelector((state) => allOrg(state)) 
@@ -166,6 +166,7 @@ export const OrgList = (props) => {
 
                 <IconButton sx={{ color: "black" }}
                   onClick={(e) => {
+                    setAnchorEl(e.currentTarget);
                     handleOpen(e);
                     setOrg(props?.orgId);
                   }}
@@ -175,6 +176,8 @@ export const OrgList = (props) => {
               </Card>
             </Grid>
             <PopupModal
+            anchorEl={anchorEl}
+
               open={open}
               setOpen={setOpen}
               title="create Database"

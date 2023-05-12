@@ -1,6 +1,7 @@
 import { React, useContext, createContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -44,7 +45,11 @@ const dispatch = useDispatch();
       const token = await loginUser({ email: userInfo?.user?.email });
       if (token.data.data) {
         localStorage.setItem("accessToken", token.data.data);
-        await dispatch(saveUser());
+        await dispatch(saveUser()).then(()=>{
+          toast.success("logged in successfully!!!")
+        }).catch((e)=>{
+          toast.error(`sorry!${e}`)
+        });
         navigate("/dashboard")
       }
     } catch (error) {
@@ -62,14 +67,22 @@ const dispatch = useDispatch();
           "last_name": lastName
         }
         const token = await signUpUser(dataToSend)
-
+        
+       
         localStorage.setItem('accessToken', token.data.data)
-        await dispatch(saveUser());
+        
+        await dispatch(saveUser())
         navigate("/dashboard")
       }
     } catch (error) {
 
-      console.log(error);
+if(error.toString().includes('email-already-in-use'))
+{
+  toast.error('you already have an account');
+  return;
+}
+
+      toast.error(`sorry!${error}`)
     }
   }
 
@@ -79,14 +92,28 @@ const dispatch = useDispatch();
       const token = await loginUser({ email: email });
       if (token.data.data) {
         localStorage.setItem('accessToken', token.data.data);
-        await dispatch(saveUser());
+        await dispatch(saveUser())
         navigate("/dashboard")
       }
       
     } catch (error) {
-      console.log(error);
-    }
+      
+  
+      
+  if(error.toString().includes('wrong-password'))
+  {
+    toast.error(`Incorrect password`);
+    return;
   }
+  else if(error.toString().includes('user-not-found'))
+  {
+    toast.error('User not found');
+    return;
+  }
+  toast.error(`sorry!${error}`);
+    
+  }
+}
 
   const logOut = () => {
     signOut(auth);

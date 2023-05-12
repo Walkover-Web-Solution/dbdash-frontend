@@ -27,7 +27,7 @@ import PropTypes from "prop-types";
 
 export default function FieldPopupModal(props) {
 
-  // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const [decimalSelectValue,setDecimalSelectValue] = useState(1);
   const [showSwitch, setShowSwitch] = useState(true);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
@@ -90,6 +90,8 @@ export default function FieldPopupModal(props) {
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
       setShowNumericOptions(true);
+      props?.setSelectValue('numeric')
+      // props?.setSelectValue('numeric');
     }
     else if (event.target.value === 'integer') {
       setShowNumericOptions(true);
@@ -103,7 +105,8 @@ export default function FieldPopupModal(props) {
       props?.setMetaData(data);
     }
     else if (event.target.value === 'decimal' && showNumericOptions) {
-      props?.setSelectValue('numeric')
+     props?.setSelectValue(`decimal${decimalSelectValue}`)
+    // props?.setSelectValue("numeric")
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
       setShowSwitch(true);
@@ -221,7 +224,7 @@ export default function FieldPopupModal(props) {
             
           </Select>
 
-          <NumberDataType selectValue={props?.selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
+          <NumberDataType decimalSelectValue={decimalSelectValue} setDecimalSelectValue={setDecimalSelectValue} selectValue={props?.selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
 
           {showFormulaField && <FormulaDataType queryByAi={props?.queryByAi} submitData={props?.submitData} queryResult={queryResult} setQueryResult={setQueryResult} />}
 
@@ -247,11 +250,13 @@ export default function FieldPopupModal(props) {
         </DialogContent>
         <Button sx={{textTransform: "none"}}
           onClick={() => {
+            console.log(props?.selectValue);
             handleClose();
             props?.submitData(false);
           }}
           color="primary"
           disabled={
+            props?.selectValue==="attachment"||
             errors.fieldName ||
             props?.textValue?.length < 1 ||
             props?.textValue?.length > 30

@@ -27,7 +27,7 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 const Cell = memo(
-  ({ value: initialValue, row, column: { id, dataType, metadata }, }) => {
+  ({ value: initialValue, row, column: { id, dataType, metadata ,width}, }) => {
   
     
     const dispatch = useDispatch();
@@ -41,16 +41,16 @@ const Cell = memo(
     const [previewModal, setPreviewModal] = useState(false)
     const [selectedInput, setSelectedInput] = useState(null);
     const [popperOpen, setPopperOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const handleClickButton = (event) => {
-      setAnchorEl(event.currentTarget);
+    // const [anchorEl, setAnchorEl] = useState(null);
+    const handleClickButton = () => {
+      // setAnchorEl(event.currentTarget);
       setPopperOpen(true);
     };
   
     const handleClickAway = () => {
       setPopperOpen(false);
       setSelectedInput(null);
-      setAnchorEl(null);
+      // setAnchorEl(null);
     };
   
     const handleInputClick = (event) => {
@@ -260,15 +260,20 @@ const Cell = memo(
       case "longtext":
         element = (
           <>
-          <input
+          <TextareaAutosize
             value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
             onFocus={handleInputClick}
+            readOnly={!cursor?true:false}
+            
+            // inputProps={{ style: { width: `${width}` } }} 
             onDoubleClick={()=>{
+             
               setCursor(true);
             }}
-            
-            style={!cursor?{caretColor:"transparent",paddingRight:"40px"}:{paddingRight:"40px"}}
+
+        
+            style={!cursor?{caretColor:"transparent",paddingRight:"13px",height:"210px",overflowY:"hidden"}:{paddingRight:"13px",position:"absolute",zIndex:'20', WebkitOverflowScrolling: "touch",height:"210px",overflowY:"scroll",width:`${width}px`}}
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
@@ -298,13 +303,14 @@ const Cell = memo(
      }}
       style={{
         position: "absolute",
-        right: 0,
-        top: "50%",
+        right: "1%",
+        top: "32%",
+
         transform: "translateY(-50%)",
       }}
     >
       
-        <OpenInFull    onClick={handleClickButton} />
+        <OpenInFull style={{fontSize:"15px",color:"blue"}}   onClick={handleClickButton} />
   
       </div>}
     {popperOpen && <ClickAwayListener onClick={(e)=>{
@@ -315,10 +321,24 @@ const Cell = memo(
 <Popper
 
   open={popperOpen}
-  anchorEl={anchorEl}
-  placement="right"
-  style={{zIndex:20,margin:"5px",backgroundColor:"cadetblue",color:"white",width:"500px",height:"500px",whiteSpace:"pre-wrap",overflowX:"hidden",overflowY:"scroll",}}
-  onMouseDown={(e) => {
+  anchorEl={null}
+   placement="center"
+  style={{
+    zIndex: 20,
+    margin: "5px",
+    backgroundColor: "whitesmoke",
+    color: "white",
+    width: "500px",
+    height: "500px",
+    whiteSpace: "pre-wrap",
+    overflowX: "hidden",
+    overflowY: "scroll",
+    position: "fixed",
+    left: "50%",
+    top: "50%",
+    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+    transform: "translate(-50%, -50%)",
+  }} onMouseDown={(e) => {
     e.stopPropagation();
   }}
   
@@ -327,7 +347,8 @@ const Cell = memo(
 
   <div>
   <TextareaAutosize
-style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1px"}}
+  
+style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1px",WebkitOverflowScrolling: "touch"}}
             value={(value?.value && value?.value?.toString()) || ""}
             onChange={(e)=>{
               setValue({value:e.target.value,update:false});
@@ -358,6 +379,7 @@ style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1
         case "singlelinetext":
         element = (
           <input
+          readOnly={!cursor?true:false}
             value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
             onFocus={handleInputClick}
@@ -449,11 +471,17 @@ style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1
           <>
             <input
               type="number"
-              value={(value?.value && value?.value?.toString()) || ""}
+              step="1"
+              value={(value?.value && Math.floor(value?.value)?.toString()) || ""}
               onFocus={handleInputClick}
               onChange={onChange}
               onDoubleClick={()=>{
                 setCursor(true);
+              }}
+              onKeyPress={(e) => {
+                if (e.key === '.') {
+                  e.preventDefault();
+                }
               }}
               
               style={!cursor?{caretColor:"transparent",background:"none"}:{background:"none"}}
@@ -478,12 +506,45 @@ style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1
           </>
         );
         break;
+  //       case /^decimal\d?$/:
+  
+  // element = (
+  //   <>
+  //     <input
+  //       type="number"
+  //       value={(value?.value && value?.value.toFixed(parseInt(dataType.charAt(dataType.length - 1)))) || ""}
+  //       onFocus={handleInputClick}
+  //       onChange={onChange}
+  //       onDoubleClick={() => {
+  //         setCursor(true);
+  //       }}
+  //       style={!cursor ? { caretColor: "transparent", background: "none" } : { background: "none" }}
+  //       onBlur={() => {
+  //         setValue((old) => ({ value: old.value, update: true }));
+  //         if (selectedInput === event.target) {
+  //           setSelectedInput(null);
+  //           setCursor(false);
+  //         }
+  //         event.target.style.border = "none";
+  //       }}
+  //       onClick={handleInputClick}
+  //       onKeyDown={(e) => {
+  //         setCursor(true);
+  //         if (e.key === 'Enter') {
+  //           setValue((old) => ({ value: old.value, update: true }))
+  //         }
+  //       }}
+  //       className="data-input"
+  //     />
+  //   </>
+  // );
+  // break;
 
       case "multipleselect":
        
         element = (
           <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} /></div>)
+            <TableCellMultiSelect width={width} value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} /></div>)
         break;
 
       case "singleselect":
