@@ -1,10 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getDbById } from "../../api/dbApi"
-import { updateTable,deleteTable } from "../../api/tableApi";
+import { updateTable } from "../../api/tableApi";
 export const createTable1 = createAsyncThunk (
     "tables/createTable1", async (payload) =>{
         // const data = await createTable(payload?.dbId,payload.data);
-        console.log("pay",payload);
         return payload?.tables
     }
 );
@@ -23,7 +22,6 @@ export const updateTable1= createAsyncThunk (
 );
 export const removeTable1 = createAsyncThunk (
     "tables/removeTable1", async (payload) =>{
-        const data = await deleteTable(payload?.dbId,payload?.tableid);
-        return data.data.data.tables
+        return payload?.tableData;
     }
 );

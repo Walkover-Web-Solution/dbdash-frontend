@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
+import { deleteTable } from '../../api/tableApi';
 
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, highlightActiveTable, value, setPage ,setValue}) {
   const navigate = useNavigate();
@@ -70,10 +71,21 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
 
       setValue(i-1)
     }
+  //  let current = keys[i]
     last = keys[i - 1]
     if (Object.keys(dbData?.db?.tables).length >= 2) {
-      dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
+      var matchedKey = Object.keys(dbData?.db?.tables).find(key => {
+        return key === last;
+      });
+      const deleteTableData = await deleteTable(dbData?.db?._id,tableid);
+      dispatch(removeTable1({ "tableData": deleteTableData?.data?.data?.tables}));
     }
+    dispatch(bulkAddColumns({
+      //  "alldb":alldb,
+      "dbId": dbData?.db?._id,
+      "tableName": matchedKey,
+      "pageNo": 1
+    }));
     navigate(`/db/${dbData.db._id}/table/${last}`);
 
   };

@@ -67,20 +67,22 @@ export default function TablesList({ dbData }) {
     };
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id,data);
-  
-
-
-     dispatch(createTable1({tables: apiCreate.data.data.tables}));
-   
-
-  const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
+    dispatch(createTable1({tables: apiCreate.data.data.tables}));
+    const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
     return apiCreate?.data?.data?.tables[key].tableName === table;
   });
+    
   
   if (matchedKey) {
     navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
   }
-
+  dispatch(bulkAddColumns({
+    //  "alldb":alldb,
+    "dbId": dbData?.db?._id,
+    "tableName": matchedKey,
+    "pageNo": 1
+  }));
+ 
     const newTableIndex = Object.keys(AllTableInfo).length;
   setValue(newTableIndex);
   };
