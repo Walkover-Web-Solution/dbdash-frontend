@@ -157,7 +157,6 @@ export default function TablesList({ dbData }) {
      
     }
   }, []);
-
   return (
     <>
       <Box
@@ -198,6 +197,7 @@ export default function TablesList({ dbData }) {
                     highlightActiveTable={() => setValue(index)}
                     value={value}
                     setPage={setPage}
+                    setValue={setValue}
                   />
                 </Box>
               ))}

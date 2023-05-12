@@ -1,20 +1,19 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../dropdown';
 import { bulkAddColumns } from '../../store/table/tableThunk';
-import { useDispatch } from 'react-redux';
-import { useNavigate} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 
-export default function SingleTable({ dbData, table, setTabIndex,tableLength, index, tabIndex,highlightActiveTable,value ,setPage}) {
+export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, highlightActiveTable, value, setPage ,setValue}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
-  const [, setTableButton] = useState(false);
   const [name, setName] = useState();
-  
- 
+  const AllTableInfo = useSelector((state) => state.tables.tables);
+
   const dispatch = useDispatch();
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -31,7 +30,7 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
           minWidth: 'auto',
           overflowX: 'auto',
           flexDirection: 'row',
-          textTransform: 'none' 
+          textTransform: 'none'
         }}
         title={label}
       />
@@ -49,45 +48,46 @@ export default function SingleTable({ dbData, table, setTabIndex,tableLength, in
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
-  console.log("tableToDelete", Object.entries(dbData?.db?.tables));
+
+
   const deleteTableName = async (tableid) => {
-    const tableNameToDelete = dbData?.db?.tables[tableid].tableName;
-    console.log("tableToDelete", tableNameToDelete,value);
-    
-const keys = Object.keys(dbData?.db?.tables)
+
+    const keys = Object.keys(AllTableInfo)
     let last = "";
-    
+
     let i = 0
-    for (i; i < keys.length; i++) {
-      console.log("indexold",index);
-      console.log("keyssss",keys[i]);
-      console.log("tableid",tableid);
-      if(keys[i] == tableid){
-        break 
+    for (; i < keys.length; i++) {
+    
+      if (keys[i] == tableid) {
+        break
       }
     }
-    
-  
-    last =  keys[i-1]
-    if(Object.keys(dbData?.db?.tables).length >=2){
+    if(value == 0)
+    {
+      setValue(0)
+    }
+    else{
+
+      setValue(i-1)
+    }
+    last = keys[i - 1]
+    if (Object.keys(dbData?.db?.tables).length >= 2) {
       dispatch(removeTable1({ "dbId": dbData?.db?._id, "tableid": tableid }));
-    } 
-    
+    }
     navigate(`/db/${dbData.db._id}/table/${last}`);
-    
+
   };
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setPage(1);
-    dispatch (resetData())
+    dispatch(resetData())
     dispatch(bulkAddColumns({
       //  "alldb":alldb,
       "dbId": dbData?.db?._id,
       "tableName": table[0],
-      "pageNo":1
+      "pageNo": 1
     }));
 
-    setTableButton(true);
     highlightActiveTable()
   }
 
@@ -107,13 +107,13 @@ const keys = Object.keys(dbData?.db?.tables)
         onClick={() => {
           onTableClicked(table[0])
 
-          
+
         }}
       >
 
         {name && tabIndex == index ?
-         
-         (<>
+
+          (<>
             <ClickAwayListener onClickAway={() => { setName(false) }} >
               <Box>
                 <TextField
@@ -136,7 +136,7 @@ const keys = Object.keys(dbData?.db?.tables)
                   sx={{
                     width: 2,
                     fontSize: 8,
-                    mt: 1 
+                    mt: 1
                   }}
                   type='submit' onClick={(e) => {
                     e.preventDefault();
@@ -151,7 +151,7 @@ const keys = Object.keys(dbData?.db?.tables)
             </ClickAwayListener>
           </>) :
           (<>
-            {tableLength>=2 ?< Box sx={{ mt: -1 }}>
+            {tableLength >= 2 ? < Box sx={{ mt: -1 }}>
               {<TabWithDropdown sx={{ width: 100 }}
                 label={table[1]?.tableName || table[0]}
                 dropdown={<Dropdown setTabIndex={setTabIndex}
@@ -159,16 +159,16 @@ const keys = Object.keys(dbData?.db?.tables)
                   first="Rename" second="Delete" third="Upload csv" idToDelete={dbData?.db?._id}
                   deleteFunction={deleteTableName} setName={setName} />}
               />}
-            </Box>:
+            </Box> :
               < Box sx={{ mt: -1 }}>
-              {<TabWithDropdown sx={{ width: 100 }}
-                label={table[1]?.tableName || table[0]}
-                dropdown={<Dropdown setTabIndex={setTabIndex}
-                  tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
-                  first="Rename" second="" idToDelete={dbData?.db?._id}
-                  deleteFunction={deleteTableName} setName={setName} />}
-              />}
-            </Box>
+                {<TabWithDropdown sx={{ width: 100 }}
+                  label={table[1]?.tableName || table[0]}
+                  dropdown={<Dropdown setTabIndex={setTabIndex}
+                    tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
+                    first="Rename" second="" idToDelete={dbData?.db?._id}
+                    deleteFunction={deleteTableName} setName={setName} />}
+                />}
+              </Box>
             }
           </>)
         }
@@ -188,7 +188,8 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setTabIndex: PropTypes.func,
-  tableLength:PropTypes.any,
-  value:PropTypes.any,
-  setPage:PropTypes.any
+  tableLength: PropTypes.any,
+  value: PropTypes.any,
+  setPage: PropTypes.any,
+  setValue:PropTypes.any
 };
