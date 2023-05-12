@@ -5,11 +5,10 @@ import Joi  from "joi"
 import { useValidator } from "react-joi"
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
-
+import { toast } from 'react-toastify';
 export default function SignupInput(props) {
     // Joi implementation
     const { state, setData, setExplicitField, validate } = useValidator({
-      
         initialData: {
           firstName: null,
           lastName: null,
@@ -79,10 +78,8 @@ export default function SignupInput(props) {
             confirmPassword: e.target.value,
         }))
       }
-
     const onSubmitSignup = (e)=>{
       e.preventDefault();
-
       const userdata = {
         firstName : e.target.firstName.value,
         lastName : e.target.lastName.value,
@@ -94,58 +91,53 @@ export default function SignupInput(props) {
       {
         props?.signupHandleSubmit(userdata);
       }
+      else {
+        toast.error("confirmed password doesn't match")
+      }
     }
   return (
     <Box>
         <Box onSubmit={onSubmitSignup} component="form" sx={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center',backgroundColor:"white"}}>
-
         {/* First name and last name */}
         <Box sx={{ display: 'flex',flexDirection: 'row',justifyContent: 'center',alignItems: 'center',  px:2}} >
-          <Box sx={{m:1}}>
+          <Box sx={{m:1,height:"70px"}}>
             <TextField error={state?.$errors?.firstName.length === 0 ?false:state.$errors.firstName?true:false} required id="firstName" name='firstName' type="text" label="First Name" variant="outlined" onChange={updateFirstName}  onBlur={() => setExplicitField("firstName", true)}/>
-
             <Box sx={{color:'red', fontSize:'14px', padding:'3px'}}>
                 {state.$errors.firstName.map((data) =>data.$message).join(",")}
             </Box>
           </Box>
-
-          <Box sx={{m:1}}>
+          <Box sx={{m:1,height:"70px"}}>
             <TextField error={state?.$errors?.lastName.length === 0 ?false:state.$errors.lastName?true:false} required id="lastName" name='lastName' type="text" label="Last Name" variant="outlined" onChange={updateLastName}  onBlur={() => setExplicitField("lastName", true)} />
-            
             <Box sx={{color:'red', fontSize:'14px',padding:'3px'}}>
              {state.$errors.lastName.map((data) => data.$message).join(",")}
             </Box>
           </Box>
         </Box>
-
         {/* Email */}
-        <Box sx={{width:'100%', height:'100%',display: 'flex',flexDirection: 'row',justifyContent: '',alignItems: 'center',px:2}}>
+        <Box sx={{height:"70px",marginTop:"10px",width:'100%',justifyContent:"center",alignContent:"center"}}>
+        <Box sx={{marginTop:"18px", display: 'flex',flexDirection: 'row',alignItems: 'center',px:2}}>
           <TextField error={state?.$errors?.email.length === 0 ?false:state.$errors.email?true:false} sx={{mx:3,width:"100%", height:"auto"}} required id="email" name='email' type="email" label="Email" variant="outlined" onChange={updateEmail}  onBlur={() => setExplicitField("email", true)} />
         </Box>
             <Box sx={{color:'red', fontSize:'14px',padding:'3px'}}>
                 {state.$errors.email.map((data) => data.$message).join(",")}
             </Box>
-
+            </Box>
         {/* Password and confirm Password */}
-        <Box sx={{display: 'flex',flexDirection: 'row',justifyContent: 'center',alignItems: 'center',px:2 }}>
-          <Box sx={{m:1}}>
-            <TextField error={state?.$errors?.password.length === 0 ?false:state.$errors.password?true:false} required sx={{width:"auto", height:"auto"}}  id="password" name='password' type="password" label="Password" variant="outlined" onChange={updatePassword}  onBlur={() => setExplicitField("password", true)}/>
+        <Box sx={{marginTop:"20px",display: 'flex',flexDirection: 'row',justifyContent: 'center',alignItems: 'center',px:2 }}>
+          <Box sx={{my:1,height:'70px'}}>
+            <TextField error={state?.$errors?.password.length === 0 ?false:state.$errors.password?true:false} required sx={{width:"auto"}}  id="password" name='password' type="password" label="Password" variant="outlined" onChange={updatePassword}  onBlur={() => setExplicitField("password", true)}/>
               <Box style={{color:'red', fontSize:'14px',padding:'3px'}}>
                 {state.$errors.password.map((data) => data.$message).join(",")}
               </Box>
           </Box>
-
-          <Box sx={{m:1}}>
+          <Box sx={{my:1,height:'70px'}}>
             <TextField error={state?.$errors?.confirmPassword.length === 0 ?false:state.$errors.confirmPassword?true:false} required id="confirmPassword" name="confirmPassword" type="password" label="Confirm Password" variant="outlined" onChange={updateConfirmPassword}  onBlur={() => setExplicitField("confirmPassword", true)}/>
-
             <Box style={{color:'red', fontSize:'14px',padding:'3px'}}>
                 {state.$errors.confirmPassword.map((data) => data.$message).join(",")}
             </Box>
-
           </Box>
         </Box>
-
-        <Button type='submit' onClick={validate} sx={{bgcolor: 'text.primary', width:"50%", my:1}} variant="contained">Signup</Button>
+        <Button type='submit' onClick={validate} sx={{bgcolor: 'text.primary', width:"50%", mt:3,mb:1}} variant="contained">Signup</Button>
         </Box>
     </Box>
   )
