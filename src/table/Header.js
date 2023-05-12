@@ -12,7 +12,6 @@ import MultiIcon from "./img/Multi";
 import HashIcon from "./img/Hash";
 import PlusIcon from "./img/Plus";
 import { shortId } from "./utils";
-// import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -35,10 +34,27 @@ import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import {getQueryByAi} from "../api/fieldApi"
 import PropTypes from 'prop-types';
 import DuplicateFieldPopup from "./duplicateFieldPopup";
-export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy  }) 
- 
+
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => 
   {
+    const defaultRef = React.useRef()
+    const resolvedRef = ref || defaultRef
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
+
+    return (
+      <>
+        <input style={{marginTop : "8px"}} type="checkbox" ref={resolvedRef} {...rest} />
+      </>
+    )
+  }
+)
+export default function Header({
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy,getToggleAllRowsSelectedProps}) 
+ {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi,setQueryByAi] = useState(false)
@@ -53,7 +69,8 @@ export default function Header({
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [duplicateField,setDuplicateField] = useState(true);
-
+  
+  
   const handleOpen = () => {
     setOpen(true);
     setExpanded(false);
@@ -76,7 +93,6 @@ export default function Header({
        }
       setOpen(false);
 
-      
       var queryToSend =  JSON.parse(queryByAi)?.add_column?.new_column_name?.data_type +  ` GENERATED ALWAYS AS (${JSON.parse(queryByAi)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       dispatch(addColumsToLeft({
         columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,
@@ -84,15 +100,11 @@ export default function Header({
       setSelectValue('longtext')
       setQueryByAi(false)
     }
-   
-    else
-    {
+    else{
       const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
       setQueryByAi(response?.data?.data);
-    }
-   
+    }}
 
-  }
   const createLeftorRightColumn = () => {
     setOpen(false);
     dispatch(addColumnrightandleft({
@@ -179,14 +191,6 @@ export default function Header({
     },
     {
       onClick: () => {
-      
-        // setDirectionAndId({
-        //   direction: "right",
-        //   position: id,
-        //   duplicateField: true
-        // });
-        
-        
         setExpanded(false);
         handleOpenDuplicate();
       },
@@ -357,21 +361,8 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      icon: <MultiIcon />,
+      icon: <QueueOutlinedIcon fontSize="2px" />,
       label: "Multiselect"
-    },
-    {
-      onClick: () => {
-        dispatch(updateColumnsType({
-          columnId: id,
-          dataType: "text",
-          metaData:metaData
-        }))
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <QueueOutlinedIcon fontSize="2px"/>,
-      label: "multipleselect"
     },
     {
       onClick: () => {
@@ -502,8 +493,6 @@ export default function Header({
   });
   };
 
-
-
   const handleUniqueChange = () => {
     setDuplicateField((isDuplicate)=>
     !isDuplicate
@@ -518,7 +507,6 @@ export default function Header({
 /> {id == 999999 || id == 9999991 ? (
     <>
  
-
       {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block", backgroundColor: '#E8E8E8'} })} className='th noselect'>
         <div
           className='th-content'
@@ -530,17 +518,14 @@ export default function Header({
         </div> 
         <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn}
         />
-{/* <DuplicateFieldPopup  open={open} setOpen={setOpen}/>  */}
 
       </div > :
         <div  {...getHeaderProps({ style: { display: "inline-block",flex:"none" ,width:"20px"} })}  className='th noselect'
-          // style={{ display: "flex", justifyContent: "center"}}
           >
           <div
             className='th-content' >
-            <span className='svg-icon svg-gray icon-margin' >
-              <input type ="checkbox" ></input>
-              {/* <CheckCircleOutlineIcon style={{fontSize:"13.5px",marginTop:"1px"}}/> */}
+            <span className='svg-icon svg-gray icon-margin' style={{marginTop:"6.5px",marginBottom:"1px"}} >
+            <IndeterminateCheckbox  {...getToggleAllRowsSelectedProps()} /> 
               </span>
           </div>
         </div>}
@@ -638,9 +623,15 @@ export default function Header({
   </>
 }
 
+IndeterminateCheckbox.propTypes ={
+  indeterminate :PropTypes.any
+}
+IndeterminateCheckbox.displayName = 'IndeterminateCheckbox';
 Header.propTypes = {
+  rows:PropTypes.any,
   column: PropTypes.any,
   setSortBy: PropTypes.any,
   dataDispatch: PropTypes.any,
-  row:PropTypes.any
+  row:PropTypes.any,
+  getToggleAllRowsSelectedProps:PropTypes.any
 };
