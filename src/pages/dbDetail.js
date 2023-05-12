@@ -20,7 +20,6 @@ function DbDetails() {
 
     useEffect(() => {
         return ()=> dispatch (resetData())
-        
     }, []);
     const getAllTableName = async (dbId) => {
 

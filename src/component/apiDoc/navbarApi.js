@@ -65,6 +65,7 @@ export default function Navbar() {
           </Link>
         </Box>}
       </Box>
+      <Box sx={{display:"flex",flexDirection:"row"}}>
       <Box >
       {alldb && selectedDb && <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
@@ -80,8 +81,7 @@ export default function Navbar() {
           </Select>
         </FormControl>}
       </Box>
-      <br></br>
-
+      
       {Object.keys(tables).length >= 1 && <Box >
         <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
@@ -95,6 +95,7 @@ export default function Navbar() {
           </Select>
         </FormControl>
       </Box>}
+      </Box>
       <Box>
 
        {loading &&  <ApiCrudTablist db={selectedOption} table={selectTable} />}

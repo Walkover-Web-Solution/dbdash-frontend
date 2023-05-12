@@ -409,6 +409,7 @@ html {
   align-items: center;
   font-size: 0.875rem;
   cursor: pointer;
+  background-color: white;
 }
 .add-row:hover {
   background-color: #F5F5F5;

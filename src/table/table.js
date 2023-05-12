@@ -9,10 +9,8 @@ import {
 } from "react-table";
 import Header from "./Header";
 import PropTypes from "prop-types";
-// import { cloneDeep } from "lodash";
 import { useCellRangeSelection } from "react-table-plugins";
 import { addRows, deleteRows } from "../store/table/tableThunk";
-// import { updateTableData } from "../store/table/tableSlice";
 import { Button } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -22,6 +20,8 @@ import Cell from "./Cell";
 import TableHeader  from "./TableHeader/TableHeader";
 import { TableBody } from "./TableBody";
 import PlusIcon from './img/Plus'
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 
 const ScrollingComponent = withScrolling("div");
@@ -33,7 +33,6 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-// export default function Table({ columns, data, dispatch: dataDispatch, skipReset }) {
 
 const Table = memo(
   ({
@@ -79,7 +78,6 @@ const Table = memo(
         data,
         defaultColumn,
         dataDispatch,
-        // updateMyData,
         sortTypes,
         cellIdSplitBy: "_",
         initialState: {
@@ -95,25 +93,29 @@ const Table = memo(
       useColumnOrder
     );
 
-   
-
-    // useEffect(() => {
-    //   if (Object.keys(selectedCellIds).length > 0) {
-    //     const newData = cloneDeep(data);
-    //     const firstValue = Object.keys(selectedCellIds)[0].split("_");
-    //     const newValueToReplace = newData[firstValue[1]][firstValue[0]];
-    //     {
-    //       selectedCellIds >= 1 &&
-    //         Object.keys(selectedCellIds)?.forEach((key, i) => {
-    //           const keyName = key.split("_")[0];
-    //           const index = key.split("_")[1];
-    //           if (i === 0 || firstValue[0] != keyName) return;
-    //           newData[index][keyName] = newValueToReplace;
-    //         });
-    //     }
-    //     dataDispatch(updateTableData(newData));
-    //   }
-    // }, [selectedCellIds]);
+    const tableData= useSelector((state)=>state.table);//true
+    const lastRowIndex = tableData?.data?.length - 1;
+    useEffect(() => {
+      const firstColumnValue = tableData.data[lastRowIndex];
+      const tableRowChildNodes =  document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
+      if(tableRowChildNodes){
+        const tableRowAttribute = tableRowChildNodes.getAttribute("data-id")
+        setTimeout(()=>{
+          const td = document.querySelector(`div[data-id="${tableRowAttribute}"]`);
+          const match =
+            (td && td?.querySelector("textarea")) || td?.querySelector("input");
+            if (match) {
+              match.addEventListener("focus", () => {
+                match.style.border = "2px solid blue";
+              });
+              match.addEventListener("blur", () => {
+                match.style.border = "none";
+              });
+              match.focus();
+            }
+        },1000)
+      }
+    }, [lastRowIndex])
 
     return (
       <>
@@ -131,7 +133,8 @@ const Table = memo(
           </div>
         )}
         <DndProvider backend={HTML5Backend}>
-           <ScrollingComponent
+           <ScrollingComponent id="scroll"
+
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"74.1vh",width:"99.6vw"}}
           >
             <table >
@@ -169,9 +172,6 @@ const Table = memo(
             </table>
             
           </ScrollingComponent>
-          
-         
-
           <Preview />
         </DndProvider>
       </>

@@ -1,40 +1,32 @@
 import React, { useState } from "react";
-import { Card, CardContent, Typography, Box, Select,MenuItem,TextField, Button } from "@mui/material";
+import { Card, CardContent, Typography, Box, Select, MenuItem, TextField, Button } from "@mui/material";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../dropdown";
 import { useDispatch, useSelector } from "react-redux";
-
-import { removeDbThunk, renameDBThunk,moveDbThunk } from "../../store/database/databaseThunk";
+import { removeDbThunk, renameDBThunk, moveDbThunk } from "../../store/database/databaseThunk";
 import { allOrg } from "../../store/database/databaseSelector";
 export default function SingleDatabase(props) {
 
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState();
+  const [openmove, setOpenmove] = useState(false);
+  const [selectedorg, setSelectedorg] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const allorgss = useSelector((state) => allOrg(state))
-  let arr=Object.entries(allorgss).filter(x=>{ return x[1]?._id!==props?.db?.org_id?._id});
-  
- 
-  const[ selectedorg,setSelectedorg]=useState({});
+  let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
 
-  const handlingmove=()=>{
+  const handlingmove = () => {
     setOpenmove(false);
   }
-const handlemove = async (orgid, dbid) => {
-  
-  const data={
-      newOrgId:selectedorg._id
-  }
-
-dispatch(moveDbThunk({orgid,dbid,data}))
-
-
-};
-const[openmove,setOpenmove]=useState(false);
-
+  const handlemove = async (orgid, dbid) => {
+    const data = {
+      newOrgId: selectedorg._id
+    }
+    dispatch(moveDbThunk({ orgid, dbid, data }))
+  };
 
   const renameDatabase = async (orgId, id, name) => {
     const data = {
@@ -56,104 +48,89 @@ const[openmove,setOpenmove]=useState(false);
     }
 
   };
-  return ( 
-      <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2,cursor:'pointer' }} onClick={()=>{
-    
-        navigate("/db/"+ props.db._id , {state : { db: props.db }});
-      }}>
-        <CardContent sx={{ display: "flex" }}>
-          {openmove && props?.tabIndex==props?.index ? (     <ClickAwayListener onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
+  return (
+    <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2, cursor: 'pointer' }} onClick={() => {
 
-          }} onClickAway={handlingmove} >
-              <Box  >
-              <Typography id="title" variant="h6" component="h2">
-          Move {props.db.name} to
-        </Typography>
+      navigate("/db/" + props.db._id, { state: { db: props.db } });
+    }}>
+      <CardContent sx={{ display: "flex" }}>
+        {openmove && props?.tabIndex == props?.index ? (<ClickAwayListener onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
 
-        <Box    sx={{ display:"flex"}}>
-          <Box    sx={{mt: 2 }}>
-           {arr.length>0 ? <Select
-           onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-   
-           }}
-           MenuProps={{ disablePortal: true }}
-              labelId="select-label"
-     
-              id="select"
-              value={selectedorg}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handlemove(props.db.org_id?._id,
-                    props.db._id);
-                  e.preventDefault();
-                  e.stopPropagation();
-                  
-                  setOpenmove(false)
-                }}
-              }
-           
-              sx={{
-             marginBottom:1,
-                marginLeft:3,
-                minWidth: 120
-              }}
+        }} onClickAway={handlingmove} >
+          <Box  >
+            <Typography id="title" variant="h6" component="h2">
+              Move {props.db.name} to
+            </Typography>
 
-
-              onChange={(event)=>{
-            
-              
-                setSelectedorg(event.target.value);
-            
-              }
-            }
-            >
-             
-             { arr?.map((fields,index) =>( 
-                  <MenuItem key={index} value={fields[1]} >
-                    {fields[1].name}
-                  </MenuItem>
-))}
-            </Select> : <div style={{color:"red"}}>Only one org exists</div>}
-              </Box>
-           
-        </Box>
-                <Button
-                  type="submit"
+            <Box sx={{ display: "flex" }}>
+              <Box sx={{ mt: 2 }}>
+                {arr.length > 0 ? <Select
                   onClick={(e) => {
-                    handlemove(props.db.org_id?._id,
-                      props.db._id);
                     e.preventDefault();
                     e.stopPropagation();
-                    
-                    setOpenmove(false)
-                    
 
                   }}
-                  variant="contained"
-                  sx={{
-                    width: "8rem",
-                    backgroundColor: "#1C2833",
-                    fontSize: "12px",
-                    mx: 3,
-                    zIndex: "555",
-                    ":hover": {
-                      bgcolor: "#273746",
-                      color: "white",
-                      border: 0,
-                      borderColor: "#1C2833",
-                    },
+                  MenuProps={{ disablePortal: true }}
+                  labelId="select-label"
+
+                  id="select"
+                  value={selectedorg}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handlemove(props.db.org_id?._id,
+                        props.db._id);
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setOpenmove(false)
+                    }}
+                  }
+                  sx={{marginBottom: 1,marginLeft: 3,minWidth: 120}}
+                  onChange={(event) => {
+                    setSelectedorg(event.target.value);
                   }}
                 >
-                  Move
-                </Button>
+
+                  {arr?.map((fields, index) => (
+                    <MenuItem key={index} value={fields[1]} >
+                      {fields[1].name}
+                    </MenuItem>
+                  ))}
+                </Select> : <div style={{ color: "red" }}>Only one org exists</div>}
               </Box>
-            </ClickAwayListener>):name && props?.tabIndex==props?.index  ? (
-            <>
-          
+
+            </Box>
+            <Button
+              type="submit"
+              onClick={(e) => {
+                handlemove(props.db.org_id?._id,
+                  props.db._id);
+                e.preventDefault();
+                e.stopPropagation();
+                setOpenmove(false)
+              }}
+              variant="contained"
+              sx={{
+                width: "8rem",
+                backgroundColor: "#1C2833",
+                fontSize: "12px",
+                mx: 3,
+                zIndex: "555",
+                ":hover": {
+                  bgcolor: "#273746",
+                  color: "white",
+                  border: 0,
+                  borderColor: "#1C2833",
+                },
+              }}
+            >
+              Move
+            </Button>
+          </Box>
+        </ClickAwayListener>) : name && props?.tabIndex == props?.index ? (
+          <>
+
             <ClickAwayListener onClickAway={handleOpen} >
               <Box>
                 <TextField
@@ -221,9 +198,9 @@ const[openmove,setOpenmove]=useState(false);
               {props.db.name}{" "}
             </Typography>
             <Box sx={{ mt: -1 }}>
-            {props?.dblength>1 ?<Dropdown
-              setTabIndex={props?.setTabIndex}
-              tabIndex={props?.index}
+              {props?.dblength > 1 ? <Dropdown
+                setTabIndex={props?.setTabIndex}
+                tabIndex={props?.index}
                 first={"Rename Database"}
                 second={"Delete Database"}
                 third={"Move"}
@@ -234,16 +211,15 @@ const[openmove,setOpenmove]=useState(false);
                 idToDelete={props?.db?._id}
                 deleteFunction={deletDatabases}
                 title={"Database"}
-              />:<Dropdown
-              setTabIndex={props?.setTabIndex}
-              tabIndex={props?.index}
+              /> : <Dropdown
+                setTabIndex={props?.setTabIndex}
+                tabIndex={props?.index}
                 first={"Rename Database"}
                 second={""}
                 third={""}
                 orgid={props?.db?.org_id?._id}
                 dbid={props?.db?._id}
                 setName={setName}
-              
                 title={"Database"}
               />}
 
@@ -261,8 +237,8 @@ SingleDatabase.propTypes = {
     org_id: PropTypes.any,
   }),
   getOrgAndDbs: PropTypes.func,
-  tabIndex:PropTypes.number,
-  index:PropTypes.any,
-  setTabIndex:PropTypes.func,
-  dblength:PropTypes.number
+  tabIndex: PropTypes.number,
+  index: PropTypes.any,
+  setTabIndex: PropTypes.func,
+  dblength: PropTypes.number
 };

@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
 import { useDragLayer } from "react-dnd";
 
 const Preview = () => {
-  const { isDragging,currentOffset } = useDragLayer((monitor) => ({
+
+  const { isDragging, item, currentOffset } = useDragLayer((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     initialOffset: monitor.getInitialSourceClientOffset(),
@@ -11,17 +12,20 @@ const Preview = () => {
   }));
 
   return isDragging ? (
-    <div className="preview"
+    <div
+      className="preview"
       style={{
         position: "fixed",
         pointerEvents: "none",
         left: 0,
         top: 0,
-        transform: `translate(${currentOffset?.x}px, ${currentOffset?.y}px) rotate(25deg)`,
-        background: "red"
+        height: `${document.getElementById("scroll").clientHeight}px`,
+        width: `${document.getElementById("resizable-width").clientWidth}px`,
+        transform: `translate(${currentOffset?.x}px, ${currentOffset?.y}px)`,
+        background: "rgba(0, 0, 0, 0.25)"
       }}
     >
-      {/* {item.header} */}
+       {item.header}
     </div>
   ) : null;
 };

@@ -27,7 +27,12 @@ export default function PopupModal(props) {
       [props?.id]: null,
     },
     schema: Joi.object({
-      [props?.id]: Joi.string().min(3).max(30).required(),
+      [props?.id]: Joi.string().min(3).max(30).required()
+    .messages({
+      'string.min': `${props?.joiMessage} must be at least {#limit} characters long`,
+      'string.max': `${props?.joiMessage} must not exceed {#limit} characters`,
+      'string.empty' : `${props?.joiMessage} is required`
+        })
     }),
     explicitCheck: {
       [props?.id]: false,
@@ -125,4 +130,5 @@ PopupModal.propTypes = {
   submitData:PropTypes.func,
   setVariable:PropTypes.func,
   id: PropTypes.string,
+  joiMessage: PropTypes.string
 };

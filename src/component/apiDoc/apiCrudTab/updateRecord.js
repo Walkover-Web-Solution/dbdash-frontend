@@ -1,8 +1,10 @@
 import React from 'react'
 import { PropTypes } from 'prop-types';
 import { Box } from '@mui/system';
-import CodeSnippet from '../codeSnippet';
+//import CodeSnippet from '../codeSnippet';
+
 import { Typography } from "@mui/material";
+import CodeBlock from './Codeblock';
 function UpdateRecord(props) {
   const data = `
 -data {
@@ -11,6 +13,8 @@ function UpdateRecord(props) {
 `;
   return (
     <>
+      <CodeBlock code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN -H Content-Type: application/json `} body={data}/>
+    
        <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>Update Table Records</Typography>
         <span>
         To update {props.table} records, issue a request to the {props.table} endpoint.  A PATCH request will only update the fields
@@ -20,10 +24,10 @@ function UpdateRecord(props) {
     <br/>
     <br/>
     <Box>
-      <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}`}/>
-      <Typography>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</Typography>
+      {/* <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}`}/> */}
+      {/* <Typography>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</Typography>
       <Typography>{`-H Content-Type: application/json` }</Typography>
-      <Typography sx={{ whiteSpace: 'pre-wrap' }}>{data}</Typography>
+      <Typography sx={{ whiteSpace: 'pre-wrap' }}>{data}</Typography> */}
     </Box>
     </>
   )

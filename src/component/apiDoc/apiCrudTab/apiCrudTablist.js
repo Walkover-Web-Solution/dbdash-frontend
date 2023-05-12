@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 //import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material'
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -10,6 +11,35 @@ import ListRecord from './listRecord';
 import AddRecord from './addRecord';
 import UpdateRecord from './updateRecord';
 import DeleteRecord from './deleteRecord';
+const StyledTab = styled(Tab)(() => ({
+  minWidth: 0,
+  backgroundColor: '#9e9e9e',
+  color: '#fff',
+  position: 'relative',
+  padding: '10px 20px',
+  margin: '0 1px',
+  '&.Mui-selected': {
+    backgroundColor: '#fff',
+    color: '#000',
+  },
+  
+  
+  // '&::after': {
+  //   content: "''",
+  //   position: 'absolute',
+  //   top: 0,
+  //   right: 0,
+  //   width: 0,
+  //   height: 0,
+  //   borderStyle: 'solid',
+  //   borderWidth: '0 0 40px 20px',
+  //   borderColor: 'transparent transparent #9e9e9e transparent',
+  //   transform: 'skewX(70deg)',
+  // },
+}));
+
+
+
 
 
 function TabPanel(props) {
@@ -57,13 +87,18 @@ function ApiCrudTablist(props) {
     <>
      <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Basic stuff" {...a11yProps(0)} />
+        <Tabs TabIndicatorProps={{
+          style: {
+            display: 'none',
+          },
+          className: 'custom-tab-indicator',
+        }} value={value} onChange={handleChange} aria-label="basic tabs example">
+          <StyledTab label="Basic stuff" {...a11yProps(0)} />
           {/* <Tab label="Retrieve a record" {...a11yProps(1)} /> */}
-          <Tab label="List/Search records" {...a11yProps(1)} />
-          <Tab label="Add records" {...a11yProps(2)} />
-          <Tab label="Update records" {...a11yProps(3)} />
-          <Tab label="Delete records" {...a11yProps(4)} />
+          <StyledTab label="List/Search records" {...a11yProps(1)} />
+          <StyledTab label="Add records" {...a11yProps(2)} />
+          <StyledTab label="Update records" {...a11yProps(3)} />
+          <StyledTab label="Delete records" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>

@@ -80,15 +80,15 @@ const getRowData = async(dbId,tableName,{getState},org_id,page) =>{
         row.createdby =   userJson?.[row.createdby] ? ( userJson?.[row.createdby]?.first_name +" " + userJson?.[row.createdby]?.last_name ): row.createdby;
     })
     const dataAndPageNo = {}
+    dataAndPageNo.offset = data.data.data?.offset;
+
     if(tableInfo.tableId== tableName && tableInfo.pageNo < page)
     {
         dataAndPageNo.rows = [...tableInfo.data, ...obj  ];   
-        dataAndPageNo.offset = data.data.data?.offset;
         return dataAndPageNo;
     }
     dataAndPageNo.pageNo = 1;
     dataAndPageNo.rows = obj;
-    dataAndPageNo.offset = data.data.data?.offset;
 
     return dataAndPageNo;
 }
@@ -102,29 +102,29 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload,{getState,dispatch}) =>{
+        var  columns = null
+        if((payload?.pageNo <=  1)  || !( payload?.pageNo) )
+        {
+            columns =  await getHeaders(payload.dbId,payload.tableName)
+        }
         if(payload.filter != null)
         {
             const querydata = await runQueryonTable(
                 payload.dbId,
                 payload?.filter
             )
-            const columns =  await getHeaders(payload.dbId,payload.tableName)
             const dataa = {
                 "columns":columns,
-                "row":querydata.data.data,
+                "row":querydata.data.data.rows,
                 "tableId":payload.tableName,
-                "dbId":payload.dbId
+                "dbId":payload.dbId,
+                "isMoreData" : !(querydata.data.data?.offset == null)
             }
             dispatch (setTableLoading(false))
             return dataa;
         }
         else{
-            var  columns = null
-          
-            if((payload?.pageNo <=  1)  || !( payload?.pageNo) )
-            {
-                columns =  await getHeaders(payload.dbId,payload.tableName)
-            }
+            
             const data = await getRowData(payload.dbId,payload.tableName,{getState},payload.org_id,payload.pageNo)
             const dataa = {
                 "columns":columns,
@@ -243,6 +243,7 @@ export const updateCells = createAsyncThunk(
        const {tableId, dbId} = getState().table
        const value = payload.value
        const  columnId= payload.columnId;
+       const userInfo = allOrg(getState());
        if(payload?.dataTypes == "file")
        {
         const data = await uploadImage(dbId,tableId,payload.rowIndex,columnId,payload?.value,payload?.imageLink)
@@ -250,6 +251,15 @@ export const updateCells = createAsyncThunk(
             return payload;
        }
           const data =  await updateRow(dbId,tableId,payload.rowIndex,{[columnId]:value})
+          userInfo.forEach(obj => {
+            obj.users.forEach(user => {
+                if( user?.user_id?._id == data?.data?.data?.createdby)
+                {
+                    data.data.data.createdby =  user?.user_id?.first_name + " "+  user?.user_id?.last_name
+                    return;
+                }
+            });
+        })
           payload.newData = data?.data?.data;
         return payload;
     }
@@ -260,15 +270,15 @@ export const addRows = createAsyncThunk(
      const userInfo = allOrg(getState());
     const {tableId, dbId} = getState().table
     const newRow = await insertRow(dbId,tableId);
-    userInfo.forEach(obj => {
-        obj.users.forEach(user => {
-        if( user?.user_id?._id == newRow?.data?.data?.createdby)
-        {
-            newRow.data.data.createdby =  user?.user_id?.first_name + " "+  user?.user_id?.last_name
-            return;
-        }
-        });
-    })
+        userInfo.forEach(obj => {
+            obj.users.forEach(user => {
+                if( user?.user_id?._id == newRow?.data?.data?.createdby)
+                {
+                    newRow.data.data.createdby =  user?.user_id?.first_name + " "+  user?.user_id?.last_name
+                    return;
+                }
+            });
+        })
         return newRow?.data?.data;
     }
 )
@@ -305,5 +315,18 @@ export const updateColumnOrder = createAsyncThunk(
         await updateField(dbId,tableId,payload?.id,data)
         
         return payload;
+    }
+)
+export const updateMultiSelectOptions = createAsyncThunk(
+    "table/updateMultiSelectOptions",
+    async(payload)=>{
+        const data={
+            newFieldName:payload?.label,
+            newFieldType:payload?.fieldType,
+            metaData:payload?.metaData
+        }
+        await updateField(payload?.dbId,payload?.tableName,payload?.fieldName,data)
+        return payload;
+       
     }
 )
