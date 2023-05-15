@@ -570,3 +570,7 @@ th:first-child{
 .tr:hover .checkbox-container {
   display: block !important;
 }
+
+.data-input:focus{
+  border: 2px solid blue;
+}

@@ -323,7 +323,7 @@ export const updateMultiSelectOptions = createAsyncThunk(
         const data={
             newFieldName:payload?.label,
             newFieldType:payload?.fieldType,
-            metaData:payload?.metaData
+            metaData:{option:payload?.metaData}
         }
         await updateField(payload?.dbId,payload?.tableName,payload?.fieldName,data)
         return payload;
