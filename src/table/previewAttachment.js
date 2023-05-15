@@ -11,26 +11,43 @@ import IconButton from '@mui/material/IconButton';
 // import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from "prop-types";
+import { updateCells } from '../store/table/tableThunk';
+import { useDispatch } from 'react-redux';
+// import { updateRow } from '../api/rowApi';
 // import {saveAs} from "file-saver";
 
 
 export default function PreviewAttachment(props) {
-        const downloadImage = (fileLink) => {
-            fetch(fileLink)
-              .then((r) => r.blob())
-              .then((blob) => {
+    const dispatch = useDispatch();
+    const deleteImage = async(imageUrl)=>{
+        console.log(imageUrl)
+        dispatch(
+            updateCells({
+              columnId: props?.columnId,
+              rowIndex: props?.rowId,
+              value: {delete:imageUrl},
+              dataTypes: null
+            })
+        )
+        // const data = await updateRow(dbId, tableId, payload.rowIndex, { [columnId]: value })
+    }
+
+    const downloadImage = (fileLink) => {
+        fetch(fileLink)
+            .then((r) => r.blob())
+            .then((blob) => {
                 const element = document.createElement('a');
                 document.body.appendChild(element);
                 element.setAttribute('href', window.URL.createObjectURL(blob));
                 element.setAttribute('download', "chanchal.png");
                 element.style.display = '';
-        
+
                 element.click();
-        
+
                 document.body.removeChild(element);
-              })
-              .catch((err) =>
-                console.log("There is something wrong",err))
+            })
+            .catch((err) =>
+                console.log("There is something wrong", err))
     };
 
 
@@ -63,7 +80,10 @@ export default function PreviewAttachment(props) {
                         }}>
                             Download
                         </Button>
-                        <Button autoFocus color="inherit" onClick={handleClose}>
+                        <Button autoFocus color="inherit" onClick={()=>{
+                            deleteImage(props?.imageLink);
+                            handleClose()
+                        }}>
                             Delete
                         </Button>
                     </Toolbar>
@@ -80,5 +100,8 @@ export default function PreviewAttachment(props) {
 
 PreviewAttachment.propTypes = {
     imageLink: PropTypes.any,
-    setPreviewModal: PropTypes.func
+    setPreviewModal: PropTypes.func,
+    rowId:PropTypes.any,
+    columnId:PropTypes.any,
+    id:PropTypes.any
 };

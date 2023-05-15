@@ -3,14 +3,11 @@ import { createField, deleteField, getAllfields, updateField } from "../../api/f
 import { getTable } from "../../api/tableApi";
 import { insertRow, uploadImage, updateRow, deleteRow } from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
-// reducer imports
 import { addOptionToColumn, deleteColumn, setTableLoading, updateColumnHeader, updateColumnType } from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
 import { runQueryonTable } from "../../api/filterApi";
 import { createView, deleteFieldInView } from "../../api/viewApi";
 import { getTableInfo } from "./tableSelector";
-// import { useSelector } from "react-redux";
-// const alldb = useSelector((state) => selectOrgandDb(state))
 
 const replaceCreatedByIdWithName = async (userInfo, org_id) => {
     const users = userInfo?.find((org) => org?._id == org_id)?.users;
@@ -80,19 +77,8 @@ const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
     const obj = data.data.data?.rows || data.data.data;
     const userInfo = allOrg(getState());
     const tableInfo = getTableInfo(getState())
-    const users = userInfo?.find((org) => org?._id == org_id)?.users;
-    var userJson = {};
-    users?.forEach(user => {
-        userJson[user.user_id._id] = user?.user_id;
-    });
-    if (!users) {
-        userInfo.forEach(obj => {
-            obj.users.forEach(user => {
-                if (!(userJson?.[user.user_id._id]))
-                    userJson[user.user_id._id] = user?.user_id;
-            });
-        });
-    }
+    const userJson = replaceCreatedByIdWithName(userInfo,org_id)
+   
     obj.map((row) => {
         row.createdby = userJson?.[row.createdby] ? (userJson?.[row.createdby]?.first_name + " " + userJson?.[row.createdby]?.last_name) : row.createdby;
     })
@@ -256,7 +242,7 @@ export const updateCells = createAsyncThunk(
     "table/updateCells",
     async (payload, { getState }) => {
         const { tableId, dbId } = getState().table
-        const value = payload.value
+        const value = payload?.value
         const columnId = payload.columnId;
         const userInfo = allOrg(getState());
         if (payload?.dataTypes == "file") {
