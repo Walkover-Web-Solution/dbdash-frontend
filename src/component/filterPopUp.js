@@ -208,12 +208,17 @@ export default function FilterModal(props) {
       if (FieldDataType == "createdat" || FieldDataType == "createdby") {
         queryToSend += FieldDataType + " "
       }
+      else if(FieldDataType == "numeric")
+      {
+        queryToSend += "CAST" + "(" + query[i].fields + " as " +  "CHAR)" + " "
+      }
       else {
         queryToSend += query[i].fields + " "
       }
 
       if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
-        queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
+
+          queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
         if (FieldDataType == "numeric") {
