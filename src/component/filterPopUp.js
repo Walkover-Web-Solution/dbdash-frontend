@@ -241,7 +241,7 @@ export default function FilterModal(props) {
     dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
-        "tables": filter.data.data.data1.tables
+        "tables": filter.data.data.data.tables
       }
     ))
   }
