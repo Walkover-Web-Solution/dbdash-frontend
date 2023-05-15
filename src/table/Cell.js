@@ -486,7 +486,7 @@ const Cell = memo(
                       setPreviewModal(true)
                     }} />
                     {previewModal && (
-                      <PreviewAttachment imageLink={imgLink} open={previewModal} setPreviewModal={setPreviewModal} rowId={row.id} columnId={id}/>
+                      <PreviewAttachment imageLink={imgLink} open={previewModal} setPreviewModal={setPreviewModal} rowId={row.original.id} columnId={id}/>
                     )}
                   </React.Fragment>
 
