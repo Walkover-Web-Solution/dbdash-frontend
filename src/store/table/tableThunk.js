@@ -77,7 +77,7 @@ const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
     const obj = data.data.data?.rows || data.data.data;
     const userInfo = allOrg(getState());
     const tableInfo = getTableInfo(getState())
-    const userJson = replaceCreatedByIdWithName(userInfo,org_id)
+    const userJson = await replaceCreatedByIdWithName(userInfo,org_id)
    
     obj.map((row) => {
         row.createdby = userJson?.[row.createdby] ? (userJson?.[row.createdby]?.first_name + " " + userJson?.[row.createdby]?.last_name) : row.createdby;
