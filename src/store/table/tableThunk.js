@@ -107,19 +107,41 @@ export const bulkAddColumns = createAsyncThunk(
         {
             columns =  await getHeaders(payload.dbId,payload.tableName)
         }
-        if(payload.filter != null)
+        if(payload?.filter != null)
         {
+            console.log(payload?.filter,"filter")
             const querydata = await runQueryonTable(
                 payload.dbId,
                 payload?.filter
             )
-            const dataa = {
-                "columns":columns || null,
-                "row":querydata.data.data.rows,
-                "tableId":payload.tableName,
-                "dbId":payload.dbId,
-                "isMoreData" : !(querydata.data.data?.offset == null)
+            const userInfo = allOrg(getState());
+            const users = userInfo?.find((org)=>org?._id== payload.org_id)?.users;
+             var userJson= {};
+             users?.forEach(user => {
+            userJson[user.user_id._id]=user?.user_id;
+            });
+            if (!users) {
+                userInfo.forEach(obj => {
+                    obj.users.forEach(user => {
+                        if (!(userJson?.[user.user_id._id]))
+                            userJson[user.user_id._id] = user?.user_id;
+                    });
+                });
             }
+            console.log(querydata?.data?.data)
+            Object.values(querydata?.data?.data)[1].map((row) => {
+                console.log(row,"dkhfjkjsdh")
+                row.createdby = userJson?.[row.createdby] ? (userJson?.[row.createdby]?.first_name + " " + userJson?.[row.createdby]?.last_name) : row.createdby;
+            })
+            console.log(Object.values(querydata?.data?.data)[1])
+            const columns = await getHeaders(payload.dbId, payload.tableName)
+            const dataa = {
+                "columns": columns,
+                "row": Object.values(querydata?.data?.data)[1],
+                "tableId": payload?.tableName,
+                "dbId": payload.dbId
+            }
+            console.log(dataa,"data")
             dispatch (setTableLoading(false))
             return dataa;
         }
