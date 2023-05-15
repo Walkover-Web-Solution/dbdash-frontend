@@ -134,87 +134,6 @@ export default function Header({
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false)
 
-
-  const buttons = [
-    {
-      onClick: () => {
-        dispatch(updateColumnHeaders({
-          type: "updateColumnHeader",
-          columnId: id,
-          label: header
-        }))
-        setSortBy([{ id: id, desc: false }]);
-        setExpanded(false);
-      },
-      icon: <ArrowUpIcon />,
-      label: "Sort ascending"
-    },
-    {
-      onClick: () => {
-        dispatch(updateColumnHeaders({
-          type: "updateColumnHeader",
-          columnId: id,
-          label: header
-        }))
-        setSortBy([{ id: id, desc: true }]);
-        setExpanded(false);
-      },
-      icon: <ArrowDownIcon />,
-      label: "Sort descending"
-    },
-    {
-      onClick: () => {
-        handleOpen()
-        setDirectionAndId({
-          "direction": "left",
-          "position": id,
-
-        })
-        setExpanded(false);
-      },
-      icon: <ArrowLeftIcon />,
-      label: "Insert left"
-    },
-    {
-      onClick: () => {
-        setOpen(true);
-
-        setDirectionAndId({
-          "direction": "right",
-          "position": id,
-
-        })
-        setExpanded(false);
-      },
-      icon: <ArrowRightIcon />,
-      label: "Insert right"
-    },
-    {
-      onClick: () => {
-        setExpanded(false);
-        handleOpenDuplicate();
-      },
-      icon: <ContentCopySharpIcon fontSize="1px" />,
-      label: "Duplicate Field"
-    },
-    {
-      onClick: () =>
-      {
-        dispatch(deleteColumns({
-          label: header,
-          columnId: id,
-          fieldName: id,
-          fieldDataType:dataType,
-          tableId: tableInfo?.tableId,
-          dbId: tableInfo?.dbId
-        }))
-        setExpanded(false);
-      },
-      icon: <TrashIcon />,
-      label: "Delete"
-    }
-  ];
-
   const types = [
     {
       onClick: () => {
@@ -378,6 +297,87 @@ export default function Header({
     }
 
   ];
+
+  const buttons = [
+    {
+      onClick: () => {
+        dispatch(updateColumnHeaders({
+          type: "updateColumnHeader",
+          columnId: id,
+          label: header
+        }));
+        setSortBy([{ id: id, desc: false }]);
+        setExpanded(false);
+      },
+      icon: <ArrowUpIcon />,
+      label: "Sort ascending"
+    },
+    {
+      onClick: () => {
+        dispatch(updateColumnHeaders({
+          type: "updateColumnHeader",
+          columnId: id,
+          label: header
+        }));
+        setSortBy([{ id: id, desc: true }]);
+        setExpanded(false);
+      },
+      icon: <ArrowDownIcon />,
+      label: "Sort descending"
+    },
+    {
+      onClick: () => {
+        handleOpen();
+        setDirectionAndId({
+          direction: "left",
+          position: id
+        });
+        setExpanded(false);
+      },
+      icon: <ArrowLeftIcon />,
+      label: "Insert left"
+    },
+    {
+      onClick: () => {
+        setOpen(true);
+        setDirectionAndId({
+          direction: "right",
+          position: id
+        });
+        setExpanded(false);
+      },
+      icon: <ArrowRightIcon />,
+      label: "Insert right"
+    },
+    {
+      onClick: () => {
+        setExpanded(false);
+        handleOpenDuplicate();
+      },
+      icon: <ContentCopySharpIcon fontSize="1px" />,
+      label: "Duplicate Field"
+    }
+  ];
+  
+  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "id") {
+    buttons.push({
+      onClick: () => {
+        dispatch(deleteColumns({
+          label: header,
+          columnId: id,
+          fieldName: id,
+          fieldDataType: dataType,
+          tableId: tableInfo?.tableId,
+          dbId: tableInfo?.dbId
+        }));
+        setExpanded(false);
+      },
+      icon: <TrashIcon />,
+      label: "Delete"
+    });
+  }
+  
+  
 
   let propertyIcon;
   switch (dataType) {
