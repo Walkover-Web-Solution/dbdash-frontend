@@ -10,10 +10,10 @@ import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
 import ReadMoreOutlinedIcon from "@mui/icons-material/ReadMoreOutlined";
 import TextFormatIcon from "@mui/icons-material/TextFormat";
 import NotesIcon from "@mui/icons-material/Notes";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
-import MoreTimeIcon from "@mui/icons-material/MoreTime";
+// import PersonPinIcon from "@mui/icons-material/PersonPin";
+// import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+// import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
@@ -204,8 +204,8 @@ export default function FieldPopupModal(props) {
           >
             <MenuItem value="attachment"><AttachFileIcon fontSize="2px" sx={{ mr: 1 }} /> Attachment</MenuItem>
             <MenuItem value="checkbox"> <CheckIcon fontSize="2px" sx={{ mr: 1 }} />Checkbox</MenuItem>
-            <MenuItem value="createdat"> <MoreTimeIcon fontSize="2px" sx={{ mr: 1 }} />Created at</MenuItem>
-            <MenuItem value="createdby"><PersonPinIcon fontSize="2px" sx={{ mr: 1 }} />Created by </MenuItem>
+            {/* <MenuItem value="createdat"> <MoreTimeIcon fontSize="2px" sx={{ mr: 1 }} />Created at</MenuItem>
+            <MenuItem value="createdby"><PersonPinIcon fontSize="2px" sx={{ mr: 1 }} />Created by </MenuItem> */}
             <MenuItem value="datetime"><DateRangeIcon fontSize="2px" sx={{ mr: 1 }} /> Datetime </MenuItem>
             <MenuItem value="email"><EmailIcon fontSize="2px" sx={{ mr: 1 }} />Email</MenuItem>
             <MenuItem value="formula"><FunctionsIcon fontSize="2px" sx={{ mr: 1 }} />Formula  </MenuItem>
@@ -215,7 +215,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="multipleselect"><QueueOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{ mr: 1 }} /> Number</MenuItem>
             <MenuItem value="phone"><LocalPhoneIcon fontSize="2px" sx={{ mr: 1 }} />Phone number</MenuItem>
-            <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{ mr: 1 }} /> Row id</MenuItem>
+            {/* <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{ mr: 1 }} /> Row id</MenuItem> */}
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single line text</MenuItem>
             <MenuItem value="singleselect"><ExpandCircleDownOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
             
