@@ -17,7 +17,7 @@ const updateQuery = async (db_id,tableName,data) =>
 }
 
 const runQueryonTable = async(dbId,data,pageNo,limit)=>{
-    return await axios.post(URL +`/dbs/${dbId}/runQuery`,{filter:data,pageNo:pageNo||1,limit:limit||100})
+    return await axios.post(URL +`/dbs/${dbId}/runQuery`,{query:data,pageNo:pageNo||1,limit:limit||100})
 }
 
 
