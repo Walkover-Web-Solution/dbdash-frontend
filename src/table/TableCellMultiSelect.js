@@ -15,6 +15,9 @@ const Root = styled('div')(
   color: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
     };
   font-size: 14px;
+  overflow-y:hidden;
+ 
+
 `,
 );
 
@@ -26,8 +29,9 @@ const InputWrapper = styled('div')(
   padding: 1px;
   display: flex;
   flex-wrap: nowrap;
+
   &::-webkit-scrollbar {
-    display: none;
+    display: none !important;
   }
   &:hover {
     border-color: ${theme.palette.mode === 'dark' ? '#177DDC' : '#40A9FF'};
@@ -271,11 +275,11 @@ export default function TableCellMultiSelect(props) {
 
   });
   return (
-    <Root>
+    <Root id="root">
       <div {...getRootProps()}>
-        <InputWrapper style={{display:"flex",flexWrap:"nowrap",overflowX:"hidden",width:"400px"}} ref={setAnchorEl} className={focused ? 'focused' : ''}>
+        <InputWrapper style={{display:"flex",flexWrap:"nowrap",overflowX:"hidden",overflowY:'hidden',width:`${props?.width-10}px`}} ref={setAnchorEl} className={focused ? 'focused' : ''}>
           
-        <div style={{display:"flex",overflowX:"scroll",marginRight:"10px"}}>
+        <div style={{display:"flex",overflowX:"scroll",overflowY:"hidden",paddingBottom:"10px"}}>
           {value.map((option, index) => (
             <StyledTag rowid={props?.rowid} colid={props?.colid} style={{backgroundColor:`${top100Films.find(x=>x.value===option)?.color}`}} key={index} label={option} {...getTagProps({ index })} />
           ))}
@@ -303,5 +307,5 @@ TableCellMultiSelect.propTypes = {
   colid: PropTypes.any,
   rowid: PropTypes.any,
   value: PropTypes.any
- 
+ ,width:PropTypes.any
 }
