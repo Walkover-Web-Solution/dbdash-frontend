@@ -39,18 +39,23 @@ export default function FilterModal(props) {
     props.setOpen(false);
   }
 
-  const [fieldData, setFieldData] = useState("");
+  const [fieldData, setFieldData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [lastValue, setLastValue] = useState("");
   const dispatch = useDispatch();
 
   const [query, setQuery] = useState([{
     "andor": "",
-    "fields": "",
-    "selectedOption": "",
+    "fields": fieldData[0]?.id,
+    "selectedOption": "LIKE",
     "value": ""
   }])
-
+  useEffect(()=>{
+   if(fieldData.length){
+    query[0].fields = fieldData[0]?.id
+    setQuery(query)
+   }
+  },[fieldData])
   const { state, setData, setExplicitField, validate } = useValidator({
 
     initialData: {
@@ -108,14 +113,33 @@ export default function FilterModal(props) {
       for (var i = 0; i < conditions.length; i++) {
         if (conditions[i] == 'or' || conditions[i] == 'and') {
           let json = {}
+          let valuee = ""
           json.andor = conditions[i];
           const pqrs = conditions[i + 1].split(/\s+/);
-          json.fields = pqrs[0]
-          json.selectedOption = pqrs[1] == "NOT" ? pqrs[1] + " " + pqrs[2] : pqrs[1]
-          let valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
-          if (valuee.indexOf('%') !== -1) {
-            valuee = valuee.substring(1, valuee.length - 1);
+          if(pqrs[0].startsWith("CAST")){
+            json.fields = pqrs[0].substring(5);
+            json.selectedOption = pqrs[3] == "NOT" ? "NOT LIKE" :pqrs[3];
+            valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+            if (valuee.indexOf('%') !== -1) {
+              valuee = valuee.substring(1, valuee.length - 1);
+            }
           }
+          else{
+
+            json.fields = pqrs[0];
+              json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
+              valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+              if (valuee.indexOf('%') !== -1) {
+                valuee = valuee.substring(1, valuee.length - 1);
+              }
+          }
+
+          // json.fields = pqrs[0]
+          // json.selectedOption = pqrs[1] == "NOT" ? pqrs[1] + " " + pqrs[2] : pqrs[1]
+          // let valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+          // if (valuee.indexOf('%') !== -1) {
+          //   valuee = valuee.substring(1, valuee.length - 1);
+          // }
           json.value = valuee
           finalQuery.push(json)
           i++;
@@ -123,13 +147,51 @@ export default function FilterModal(props) {
         else {
           let json = {};
           json.andor = "";
+          let valuee=""
           const pqrs = conditions[0].trim().split(/\s+/);
-          json.fields = pqrs[0];
-          json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
-          let valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
-          if (valuee.indexOf('%') !== -1) {
-            valuee = valuee.substring(1, valuee.length - 1);
+          if(pqrs[0].startsWith("CAST")){
+            json.fields = pqrs[0].substring(5);
+            json.selectedOption = pqrs[3] == "NOT" ? "NOT LIKE" :pqrs[3];
+            valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+            if (valuee.indexOf('%') !== -1) {
+              valuee = valuee.substring(1, valuee.length - 1);
+            }
           }
+          else{
+            json.fields = pqrs[0];
+              json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
+              valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+              if (valuee.indexOf('%') !== -1) {
+                valuee = valuee.substring(1, valuee.length - 1);
+              }
+          }
+          // for (let i = 0; i < conditions.length; i++) {
+          //   if (conditions[i].includes("CAST")) {
+          //     console.log("consition",conditions)
+          //     json.fields = pqrs[0].substring(5);
+          //     json.selectedOption = pqrs[3] == "NOT" ? "NOT LIKE" :pqrs[3];
+          //     valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+          //     if (valuee.indexOf('%') !== -1) {
+          //       valuee = valuee.substring(1, valuee.length - 1);
+          //     }
+          //     console.log(json.fields,json.selectedOption,valuee)
+          //   }
+          // } 
+          // let doesNotContainCast = true;
+          // for (let i = 0; i < conditions.length; i++) {
+          //   if (conditions[i].includes("CAST")) {   
+          //     doesNotContainCast = false;
+          //     break;   
+          //   }}    
+          //   if(doesNotContainCast != false){
+          //     console.log("1")
+          //     json.fields = pqrs[0];
+          //     json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
+          //     valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+          //     if (valuee.indexOf('%') !== -1) {
+          //       valuee = valuee.substring(1, valuee.length - 1);
+          //     }
+          //   }         
           json.value = valuee
           finalQuery.push(json)
         }
@@ -165,9 +227,9 @@ export default function FilterModal(props) {
 
   const handleAddInput = () => {
     setQuery([...query, {
-      "andor": "",
-      "fields": "",
-      "selectedOption": "",
+      "andor": "and",
+      "fields": fieldData[0]?.id,
+      "selectedOption": "LIKE",
       "value": ""
     }])
   };
@@ -194,23 +256,22 @@ export default function FilterModal(props) {
           queryToSend = queryToSend + " and "
           break;
         case "or":
-          queryToSend = queryToSend + " or "
+          queryToSend = queryToSend + " or "     
           break;
       }
       var FieldDataType = ""
-      for (let j = 0; j < tableInfo?.columns.length; j++) {
-        if (query[i]?.fields == tableInfo?.columns[j]?.id) {
-          FieldDataType = tableInfo.columns[j]?.dataType
+     
+        for (let j = 0; j < tableInfo?.columns.length; j++) {
+          if (query[i]?.fields == tableInfo?.columns[j]?.id) {
+            FieldDataType = tableInfo.columns[j]?.dataType
+          }
         }
-      }
 
       if (FieldDataType == "createdat" || FieldDataType == "createdby") {
         queryToSend += FieldDataType + " "
       }
-      else if(query[i].selectedOption == "=" || query[i].selectedOption == "!="){
-        if(FieldDataType == "numeric"){
+      else if(query[i].selectedOption == "=" || query[i].selectedOption == "!="){  
           queryToSend += query[i].fields + " "
-        }
       }
       else if(FieldDataType == "numeric")
       {
@@ -220,8 +281,7 @@ export default function FilterModal(props) {
         queryToSend += query[i].fields + " "
       }
 
-      if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
-
+      if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {    
           queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
@@ -234,7 +294,6 @@ export default function FilterModal(props) {
       if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
         if (FieldDataType == "numeric") {
           queryToSend += query[i].selectedOption + " " + query[i].value + " "
-
         } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
         }
@@ -313,7 +372,7 @@ export default function FilterModal(props) {
                 {index == 0 && <Box><Typography sx={{ mt: 2, mr: 1, color: 'blue' }}>WHERE</Typography></Box>}
 
                 {index != 0 && <Box>
-                  <Select value={q?.andor}
+                  <Select value={q?.andor || "and"}
                     onChange={(e) => handleChangeAndOr(e, index)}>
                     <MenuItem value="and">and</MenuItem>
                     <MenuItem value="or">or</MenuItem>
@@ -369,7 +428,7 @@ export default function FilterModal(props) {
               <Button variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
                 validate();
                 getQueryData();
-                handleClose()
+                handleClose();
               }}>
                 Create
               </Button>
