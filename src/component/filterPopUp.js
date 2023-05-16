@@ -244,7 +244,6 @@ export default function FilterModal(props) {
   }
   const getQueryData = async () => {
    const data =  await updateFilter();
-   console.log("data",data)
     const dataa = {
       filterName: filterName,
       query: data
@@ -266,7 +265,6 @@ export default function FilterModal(props) {
       filterName: filterName,
       query: data
     }
-    console.log("data",data)
     const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa)
     dispatch(setAllTablesData(
       {
