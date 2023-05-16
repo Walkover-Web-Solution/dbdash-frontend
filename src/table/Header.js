@@ -349,15 +349,19 @@ export default function Header({
       icon: <ArrowRightIcon />,
       label: "Insert right"
     },
-    {
+   
+  ];
+
+  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "id") {
+    buttons.push({
       onClick: () => {
         setExpanded(false);
         handleOpenDuplicate();
       },
       icon: <ContentCopySharpIcon fontSize="1px" />,
       label: "Duplicate Field"
-    }
-  ];
+    });
+  }
   
   if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "id") {
     buttons.push({
