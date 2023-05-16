@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState } from 'react'
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../dropdown';
@@ -8,13 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 import { deleteTable } from '../../api/tableApi';
-
+// import { useParams } from 'react-router-dom';
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, highlightActiveTable, value, setPage ,setValue}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
   const AllTableInfo = useSelector((state) => state.tables.tables);
-
+  // const params = useParams();
   const dispatch = useDispatch();
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -38,6 +38,9 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     </Box>
   );
 
+    // useEffect(()=>{
+
+    // },[params?.tableName])
 
   const renameTableName = async (db_id, tableName) => {
     const data1 = {
@@ -63,29 +66,17 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
         break
       }
     }
-    if(value == 0)
+    if(value != 0)
     {
-      setValue(0)
+      setValue(i-1)    
     }
     else{
-
-      setValue(i-1)
+      setValue(0)
     }
-  //  let current = keys[i]
+
     last = keys[i - 1]
-    if (Object.keys(dbData?.db?.tables).length >= 2) {
-      var matchedKey = Object.keys(dbData?.db?.tables).find(key => {
-        return key === last;
-      });
       const deleteTableData = await deleteTable(dbData?.db?._id,tableid);
       dispatch(removeTable1({ "tableData": deleteTableData?.data?.data?.tables}));
-    }
-    dispatch(bulkAddColumns({
-      //  "alldb":alldb,
-      "dbId": dbData?.db?._id,
-      "tableName": matchedKey,
-      "pageNo": 1
-    }));
     navigate(`/db/${dbData.db._id}/table/${last}`);
 
   };

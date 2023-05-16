@@ -20,7 +20,6 @@ import { useDispatch } from 'react-redux';
 export default function PreviewAttachment(props) {
     const dispatch = useDispatch();
     const deleteImage = async(imageUrl)=>{
-        console.log(imageUrl)
         dispatch(
             updateCells({
               columnId: props?.columnId,
@@ -90,7 +89,7 @@ export default function PreviewAttachment(props) {
                 </AppBar>
                 <List>
                     <ListItem sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: "50px" }}>
-                        <img src={props?.imageLink} alt="Image description" width="700" height="800" />
+                        <img src={props?.imageLink} alt="Image description" width="700" height="600" />
                     </ListItem>
                 </List>
             </Dialog>
