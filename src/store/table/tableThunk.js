@@ -56,6 +56,10 @@ const getHeaders = async (dbId, tableName) => {
             json.accessor = "createdby";
         if (field[1].fieldType == "id")
             json.accessor = "id";
+        if (field[1].fieldType == "rowid")
+            json.accessor = "rowid";
+        if (field[1].fieldType == "autonumber")
+            json.accessor = "autonumber";
         if (field[1].fieldType == "createdat")
             json.accessor = "createdat";
         json.metadata = field[1].metaData;
