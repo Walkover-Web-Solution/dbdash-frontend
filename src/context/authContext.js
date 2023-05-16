@@ -15,15 +15,11 @@ import { signUpUser, loginUser } from "../api/userApi"
 import { useNavigate } from "react-router-dom";
 import { saveUser } from "../store/user/userThunk.js";
 import { useDispatch } from "react-redux";
-
 const AuthContext = createContext();
-
 export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState({});
-
 const navigate=useNavigate();
 const dispatch = useDispatch();
-
   const googleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -56,7 +52,6 @@ const dispatch = useDispatch();
       console.log(error);
     }
   };
-
   const signUp = async (email, password, firstName, lastName) => {
     try {
       const userInfo = await createUserWithEmailAndPassword(auth, email, password);
@@ -67,25 +62,19 @@ const dispatch = useDispatch();
           "last_name": lastName
         }
         const token = await signUpUser(dataToSend)
-        
-       
         localStorage.setItem('accessToken', token.data.data)
-        
         await dispatch(saveUser())
         navigate("/dashboard")
       }
     } catch (error) {
-
 if(error.toString().includes('email-already-in-use'))
 {
   toast.error('you already have an account');
   return;
 }
-
       toast.error(`sorry!${error}`)
     }
   }
-
   const signIn = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -95,11 +84,7 @@ if(error.toString().includes('email-already-in-use'))
         await dispatch(saveUser())
         navigate("/dashboard")
       }
-      
     } catch (error) {
-      
-  
-      
   if(error.toString().includes('wrong-password'))
   {
     toast.error(`Incorrect password`);
@@ -111,10 +96,8 @@ if(error.toString().includes('email-already-in-use'))
     return;
   }
   toast.error(`sorry!${error}`);
-    
   }
 }
-
   const logOut = () => {
     signOut(auth);
     // localStorage.clear();
@@ -122,31 +105,24 @@ if(error.toString().includes('email-already-in-use'))
       localStorage.removeItem(key);
     });
   };
-
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-
       setUser(currentUser);
     });
     return async () => {
       await unsubscribe();
     };
   }, []);
-
   return (
     <AuthContext.Provider value={{ user, signUp, logOut, signIn, googleSignIn }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
 export const UserAuth = () => {
   const res= useContext(AuthContext);
   return res;
 };
-
 AuthContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
 }
-

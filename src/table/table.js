@@ -22,6 +22,7 @@ import { TableBody } from "./TableBody";
 import PlusIcon from './img/Plus'
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import {  DeleteOutlined } from "@mui/icons-material";
 
 
 const ScrollingComponent = withScrolling("div");
@@ -123,13 +124,13 @@ const Table = memo(
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button
-          sx={{marginRight: 'auto',mb:2}}
+          sx={{position:"absolute",right:"1%",top:"16.5%"}}
             onClick={() => {
               dataDispatch(deleteRows(selectedFlatRows));
             }}
             variant="contained"
           >
-            delete selected rows
+            <DeleteOutlined style={{fontSize:"19px"}}/>
           </Button>
           </div>
         )}
@@ -161,15 +162,16 @@ const Table = memo(
 
       
             
-             
-            <div className='tr add-row'
+              <div className='tr add-row'  style={{ position: 'relative' ,bottom: 0,
+        left: 0}}
           onClick={() => dataDispatch(addRows({ type: "add_row" }))}
         >
           <span className='svg-icon svg-gray' style={{ marginRight: 4,mt:0,p:0 }}>
             <PlusIcon />
           </span>
           New
-        </div>
+        </div>   
+        
             </table>
             
           </ScrollingComponent>

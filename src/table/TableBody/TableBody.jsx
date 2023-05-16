@@ -104,6 +104,7 @@ import {updateCells } from "../../store/table/tableThunk";
                data-id={`${index}-${key}`}
               //  {...cell.getCellProps()}
                 className="td" 
+                
 
                style={
                 cellsSelected[cell.id]

@@ -29,7 +29,6 @@ dayjs.extend(localizedFormat);
 const Cell = memo(
   ({ value: initialValue, row, column: { id, dataType, metadata ,width}, }) => {
   
-    
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
     const [inputBoxShow, setInputBoxShow] = useState(false);
@@ -640,7 +639,7 @@ style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1
                       setPreviewModal(true)
                     }} />
                     {previewModal && (
-                      <PreviewAttachment imageLink={imgLink} open={previewModal} setPreviewModal={setPreviewModal} />
+                      <PreviewAttachment imageLink={imgLink} open={previewModal} setPreviewModal={setPreviewModal} rowId={row.original.id} columnId={id}/>
                     )}
                   </React.Fragment>
 

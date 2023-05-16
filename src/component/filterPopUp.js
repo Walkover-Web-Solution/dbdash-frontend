@@ -34,12 +34,11 @@ export default function FilterModal(props) {
 
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const handleClose = () =>
-  {
+  const handleClose = () => {
     props?.setEdit(false)
     props.setOpen(false);
-  } 
-    
+  }
+
   const [fieldData, setFieldData] = useState("");
   const [filterName, setFilterName] = useState('');
   const [lastValue, setLastValue] = useState("");
@@ -180,14 +179,13 @@ export default function FilterModal(props) {
   }
 
   const getQueryData = async () => {
-    // var queryToSend = "select * from " + props?.tableName + " where ";
-    if( props?.dbData?.db?.tables[props?.tableName]?.view && 
-      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
+    var queryToSend = " ";
+    if (props?.dbData?.db?.tables[props?.tableName]?.view &&
+      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
       queryToSend = "select * from " + viewId + " where ";
-    }else
-    {
-    var queryToSend = "select * from " + props?.tableName + " where ";
+    } else {
+      queryToSend = "select * from " + props?.tableName + " where ";
     }
     for (var i = 0; i < query?.length; i++) {
       switch (query[i]?.andor) {
@@ -198,40 +196,43 @@ export default function FilterModal(props) {
           queryToSend = queryToSend + " or "
           break;
       }
-      queryToSend += query[i].fields + " "
-      let FieldDataType = ""
-      for(let j=0 ; j<1;j++){
-        for (let i = 0; i < tableInfo?.columns.length; i++) {
-          if(query[j]?.fields == tableInfo?.columns[i]?.id)
-          {
-            FieldDataType = tableInfo.columns[i]?.dataType
-            // return;           
-          }
+      var FieldDataType = ""
+      for (let j = 0; j < tableInfo?.columns.length; j++) {
+        if (query[i]?.fields == tableInfo?.columns[j]?.id) {
+          FieldDataType = tableInfo.columns[j]?.dataType
         }
-        j++;
-        // return;
       }
-      
+
+      if (FieldDataType == "createdat" || FieldDataType == "createdby") {
+        queryToSend += FieldDataType + " "
+      }
+      else if(FieldDataType == "numeric")
+      {
+        queryToSend += "CAST" + "(" + query[i].fields + " as " +  "CHAR)" + " "
+      }
+      else {
+        queryToSend += query[i].fields + " "
+      }
+
       if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
-        queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
+
+          queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
-        if(FieldDataType == "numeric"){
+        if (FieldDataType == "numeric") {
           queryToSend += query[i].selectedOption + " " + query[i].value + " "
-        }else
-        {
+        } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
         }
       }
       if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
-        if(FieldDataType == "numeric"){
+        if (FieldDataType == "numeric") {
           queryToSend += query[i].selectedOption + " " + query[i].value + " "
 
-        }else
-        {
+        } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
-        }      
-    }
+        }
+      }
     }
     const dataa = {
       filterName: filterName,
@@ -241,19 +242,18 @@ export default function FilterModal(props) {
     dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
-        "tables": filter.data.data.data1.tables
+        "tables": filter.data.data.data.tables
       }
     ))
   }
 
   const editQueryData = async () => {
-    if( props?.dbData?.db?.tables[props?.tableName]?.view && 
-      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1){
+    if (props?.dbData?.db?.tables[props?.tableName]?.view &&
+      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
       queryToSend = "select * from " + viewId + " where ";
-    }else
-    {
-    var queryToSend = "select * from " + props?.tableName + " where ";
+    } else {
+      var queryToSend = "select * from " + props?.tableName + " where ";
     }
     for (var i = 0; i < query?.length; i++) {
       switch (query[i]?.andor) {
@@ -264,16 +264,35 @@ export default function FilterModal(props) {
           queryToSend = queryToSend + " or "
           break;
       }
-      queryToSend += query[i].fields + " "
+      let FieldDataType = ""
+      for (let j = 0; j < tableInfo?.columns.length; j++) {
+        if (query[i]?.fields == tableInfo?.columns[j]?.id) {
+          FieldDataType = tableInfo.columns[j]?.dataType
+        }
+      }
+      if (FieldDataType == "createdat" || FieldDataType == "createdby") {
+        queryToSend += FieldDataType + " "
+      }
+      else {
+        queryToSend += query[i].fields + " "
+      }
       if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
-        
         queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
-        queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
+        if (FieldDataType == "numeric") {
+          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+        } else {
+          queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
+        }
       }
       if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
-        queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
+        if (FieldDataType == "numeric") {
+          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+
+        } else {
+          queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
+        }
       }
     }
     const dataa = {
@@ -289,6 +308,11 @@ export default function FilterModal(props) {
       }
     ))
   }
+
+
+
+
+  
   return (
     <Box >
 
@@ -335,7 +359,7 @@ export default function FilterModal(props) {
                 </Box>}
 
                 <Box sx={{ mr: 1 }}>
-                  <Select value={q?.fields ||fieldData[0]?.id} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
+                  <Select value={q?.fields || fieldData[0]?.id} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
                     {fieldData && Object.entries(fieldData)?.map((fields, index) => (
                       <MenuItem key={index} value={fields[1]?.id} >
                         {fields[1].label}
@@ -346,7 +370,7 @@ export default function FilterModal(props) {
 
                 <Box sx={{ mr: 1 }}>
                   <Select sx={{ width: 150 }}
-                    value={  q?.selectedOption || "LIKE"}
+                    value={q?.selectedOption || "LIKE"}
                     // defaultValue="LIKE"
                     key={q?.value}
                     onChange={(e) => handleChangeSelectedOption(e, index)} >
@@ -417,6 +441,6 @@ FilterModal.propTypes = {
   tableName: PropTypes.any,
   edit: PropTypes.any,
   filterId: PropTypes.any,
-  dbData:PropTypes.any,
-  setEdit:PropTypes.func
+  dbData: PropTypes.any,
+  setEdit: PropTypes.func
 };
