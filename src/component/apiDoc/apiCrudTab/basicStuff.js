@@ -5,8 +5,11 @@ import { getAllfields } from '../../../api/fieldApi';
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import Grid from '@mui/material/Grid';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+
 
 function BasicStuff(props) {
+  console.log("props",props)
   const [fieldData, setFieldData] = useState(null)
   const tableData = async () => {
     const data = await getAllfields(props.db, props.table)
@@ -31,18 +34,27 @@ function BasicStuff(props) {
         <Grid item xs={4}>
           <Typography style={{ fontWeight: 'bold' }}>fieldId</Typography>
           {fieldData && Object.entries(fieldData).map((fields, index) => (
+            <div key={index} style={{display:"flex",flexDirection:"row"}}>
             <Typography key={index}>{fields[0]}</Typography>
+            <button style={{transition: "background-color 0.3s ease",backgroundColor:"transparent",color:"black",margin:"2px",border:"none"}} onMouseDown={(e) => {
+    e.target.style.backgroundColor = "gray";
+  }}
+  onMouseUp={(e) => {
+    e.target.style.backgroundColor = "transparent";
+  }}onClick={()=>{
+               navigator.clipboard.writeText(fields[0]);   
+
+            }}>
+       <ContentPasteIcon/>
+      </button>
+      </div>
+
           ))}
+          
         </Grid>
-        <Grid item xs={4}>
-          <Typography style={{ fontWeight: 'bold' }}>fieldType</Typography>
-          {fieldData && Object.entries(fieldData).map((fields, index) => (
-            <Typography key={index}>{fields[1].fieldType}</Typography>
-          ))}
-        </Grid>
+       
       </Grid>
 
-      {/* <CodeSnippet codeString="const myVar = 'Hello, world!';" /> */}
     </Box>
   )
 }

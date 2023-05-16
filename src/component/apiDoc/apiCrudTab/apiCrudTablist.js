@@ -11,6 +11,8 @@ import ListRecord from './listRecord';
 import AddRecord from './addRecord';
 import UpdateRecord from './updateRecord';
 import DeleteRecord from './deleteRecord';
+import Authentication from './authentication';
+
 const StyledTab = styled(Tab)(() => ({
   minWidth: 0,
   backgroundColor: '#9e9e9e',
@@ -24,18 +26,7 @@ const StyledTab = styled(Tab)(() => ({
   },
   
   
-  // '&::after': {
-  //   content: "''",
-  //   position: 'absolute',
-  //   top: 0,
-  //   right: 0,
-  //   width: 0,
-  //   height: 0,
-  //   borderStyle: 'solid',
-  //   borderWidth: '0 0 40px 20px',
-  //   borderColor: 'transparent transparent #9e9e9e transparent',
-  //   transform: 'skewX(70deg)',
-  // },
+
 }));
 
 
@@ -93,35 +84,36 @@ function ApiCrudTablist(props) {
           },
           className: 'custom-tab-indicator',
         }} value={value} onChange={handleChange} aria-label="basic tabs example">
-          <StyledTab label="Basic stuff" {...a11yProps(0)} />
-          {/* <Tab label="Retrieve a record" {...a11yProps(1)} /> */}
-          <StyledTab label="List/Search records" {...a11yProps(1)} />
-          <StyledTab label="Add records" {...a11yProps(2)} />
-          <StyledTab label="Update records" {...a11yProps(3)} />
-          <StyledTab label="Delete records" {...a11yProps(4)} />
+          <StyledTab label="Authentication" {...a11yProps(0)} />
+          <StyledTab label="Basic stuff" {...a11yProps(1)} />
+          <StyledTab label="List/Search records" {...a11yProps(2)} />
+          <StyledTab label="Add records" {...a11yProps(3)} />
+          <StyledTab label="Update records" {...a11yProps(4)} />
+          <StyledTab label="Delete records" {...a11yProps(5)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
+        <Authentication db={props.db} table={props.table} />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
         <Box>
         <BasicStuff db={props.db} table={props.table}/>
         </Box>
       </TabPanel>
-      {/* <TabPanel value={value} index={1}>
-        <RetrieveRecord db={props.db} table={props.table} />
-      </TabPanel> */}
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} index={2}>
         <ListRecord db={props.db} table={props.table}/>
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={3}>
        <AddRecord db={props.db} table={props.table}/>
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={4}>
        <UpdateRecord db={props.db} table={props.table}/>
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={5}>
        <DeleteRecord db={props.db} table={props.table}/>
       </TabPanel>
     </Box>
+
     </>
   )
 }
