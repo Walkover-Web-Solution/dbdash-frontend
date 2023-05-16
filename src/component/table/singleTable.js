@@ -74,7 +74,6 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
       setValue(0)
     }
   //  let current = keys[i]
-  console.log(keys[i])
     last = keys[i - 1]
     // if (Object.keys(dbData?.db?.tables).length >= 2) {
     //   var matchedKey = Object.keys(dbData?.db?.tables).find(key => {
@@ -92,7 +91,6 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     navigate(`/db/${dbData.db._id}/table/${last}`);
 
   };
-  console.log(value,"value");
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setPage(1);

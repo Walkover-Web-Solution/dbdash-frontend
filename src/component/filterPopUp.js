@@ -198,10 +198,8 @@ export default function FilterModal(props) {
       }
       var FieldDataType = ""
       for (let j = 0; j < tableInfo?.columns.length; j++) {
-        console.log(tableInfo?.columns.length, query[j]?.fields, tableInfo?.columns[i]?.id, i)
         if (query[i]?.fields == tableInfo?.columns[j]?.id) {
           FieldDataType = tableInfo.columns[j]?.dataType
-          console.log(tableInfo.columns[j]?.dataType, "abv");
         }
       }
 
@@ -268,10 +266,8 @@ export default function FilterModal(props) {
       }
       let FieldDataType = ""
       for (let j = 0; j < tableInfo?.columns.length; j++) {
-        console.log(tableInfo?.columns.length, query[j]?.fields, tableInfo?.columns[i]?.id, i)
         if (query[i]?.fields == tableInfo?.columns[j]?.id) {
           FieldDataType = tableInfo.columns[j]?.dataType
-          console.log(tableInfo.columns[j]?.dataType, "abv");
         }
       }
       if (FieldDataType == "createdat" || FieldDataType == "createdby") {
@@ -282,7 +278,6 @@ export default function FilterModal(props) {
       }
       if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
         queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
-        console.log(queryToSend)
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
         if (FieldDataType == "numeric") {
