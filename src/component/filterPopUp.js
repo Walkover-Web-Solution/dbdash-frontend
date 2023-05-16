@@ -86,7 +86,7 @@ export default function FilterModal(props) {
 
     setQuery([...temp]);
   };
-
+  
   useEffect(() => {
     if (props?.edit == true) {
       const editDataValues = AllTableInfo.tables[props?.tableName].filters[props?.filterId].query
@@ -178,7 +178,8 @@ export default function FilterModal(props) {
     setFieldData(columns)
   }
 
-  const getQueryData = async () => {
+  const updateFilter =async()=>{
+
     var queryToSend = " ";
     if (props?.dbData?.db?.tables[props?.tableName]?.view &&
       Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
@@ -205,6 +206,11 @@ export default function FilterModal(props) {
 
       if (FieldDataType == "createdat" || FieldDataType == "createdby") {
         queryToSend += FieldDataType + " "
+      }
+      else if(query[i].selectedOption == "=" || query[i].selectedOption == "!="){
+        if(FieldDataType == "numeric"){
+          queryToSend += query[i].fields + " "
+        }
       }
       else if(FieldDataType == "numeric")
       {
@@ -234,9 +240,14 @@ export default function FilterModal(props) {
         }
       }
     }
+    return queryToSend
+  }
+  const getQueryData = async () => {
+   const data =  await updateFilter();
+   console.log("data",data)
     const dataa = {
       filterName: filterName,
-      query: queryToSend
+      query: data
     }
     const filter = await createFilter(props?.dbId, props?.tableName, dataa)
     dispatch(setAllTablesData(
@@ -245,61 +256,17 @@ export default function FilterModal(props) {
         "tables": filter.data.data.data.tables
       }
     ))
+    return dataa;
   }
 
   const editQueryData = async () => {
-    if (props?.dbData?.db?.tables[props?.tableName]?.view &&
-      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
-      const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
-      queryToSend = "select * from " + viewId + " where ";
-    } else {
-      var queryToSend = "select * from " + props?.tableName + " where ";
-    }
-    for (var i = 0; i < query?.length; i++) {
-      switch (query[i]?.andor) {
-        case "and":
-          queryToSend = queryToSend + " and "
-          break;
-        case "or":
-          queryToSend = queryToSend + " or "
-          break;
-      }
-      let FieldDataType = ""
-      for (let j = 0; j < tableInfo?.columns.length; j++) {
-        if (query[i]?.fields == tableInfo?.columns[j]?.id) {
-          FieldDataType = tableInfo.columns[j]?.dataType
-        }
-      }
-      if (FieldDataType == "createdat" || FieldDataType == "createdby") {
-        queryToSend += FieldDataType + " "
-      }
-      else {
-        queryToSend += query[i].fields + " "
-      }
-      if (query[i].selectedOption == "LIKE" || query[i].selectedOption == "NOT LIKE") {
-        queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
-      }
-      if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
-        if (FieldDataType == "numeric") {
-          queryToSend += query[i].selectedOption + " " + query[i].value + " "
-        } else {
-          queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
-        }
-      }
-      if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
-        if (FieldDataType == "numeric") {
-          queryToSend += query[i].selectedOption + " " + query[i].value + " "
-
-        } else {
-          queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
-        }
-      }
-    }
+   const data = await updateFilter();
     const dataa = {
       filterId: props?.filterId,
       filterName: filterName,
-      query: queryToSend
+      query: data
     }
+    console.log("data",data)
     const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa)
     dispatch(setAllTablesData(
       {
@@ -308,9 +275,6 @@ export default function FilterModal(props) {
       }
     ))
   }
-
-
-
 
   
   return (
