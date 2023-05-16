@@ -12,6 +12,8 @@ import MultiIcon from "./img/Multi";
 import HashIcon from "./img/Hash";
 import PlusIcon from "./img/Plus";
 import { shortId } from "./utils";
+// import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtl';
+import PlusOneIcon from '@mui/icons-material/PlusOne';
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -349,17 +351,21 @@ export default function Header({
       icon: <ArrowRightIcon />,
       label: "Insert right"
     },
-    {
+   
+  ];
+
+  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
+    buttons.push({
       onClick: () => {
         setExpanded(false);
         handleOpenDuplicate();
       },
       icon: <ContentCopySharpIcon fontSize="1px" />,
       label: "Duplicate Field"
-    }
-  ];
+    });
+  }
   
-  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid") {
+  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
     buttons.push({
       onClick: () => {
         dispatch(deleteColumns({
@@ -432,9 +438,11 @@ export default function Header({
       case "multipleselect":
         propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
         break;
-      
+      case "autonumber":
+        propertyIcon = <PlusOneIcon fontSize="2px" />;
+        break;
 
-    default:
+     default:
       propertyIcon = <MultiIcon />;
       break;
   }
