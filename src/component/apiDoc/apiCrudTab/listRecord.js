@@ -7,13 +7,14 @@ import { MenuItem, Typography,Select,InputLabel,FormControl,Link,TextField } fro
 import CodeBlock from './Codeblock';
 
 function ListRecord(props) {
+  const[value,setValue]=useState('');
   const[age,setAge]=useState('')
   const handleChange=(e)=>{
     setAge(e.target.value);
   }
   return (
     <>
-     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
+     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
      <div style={{width:'700px',height:"60vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
         <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>List records</Typography>
         <Typography>
@@ -28,7 +29,7 @@ function ListRecord(props) {
           <Typography style={{ fontWeight: 'bold', fontSize: '17px' }}>Optional parameter</Typography>
           <Typography style={{ fontWeight: 'bold', fontSize: '17px' ,paddingTop:'10px'}}>Where</Typography>
           <Typography style={{paddingBottom:'15px'}}>To filter record based on certain</Typography>
-          <TextField id="outlined-basic" label=" " variant="outlined" style={{ height: '0px', width: 450 }} />
+          <TextField id="outlined-basic" value={value} label=" " onChange={(e)=>{setValue(e.target.value)}}variant="outlined" style={{ height: '0px', width: 450 }} />
           <br />
           <br />
           <br/>
