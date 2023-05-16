@@ -72,16 +72,15 @@ export default function TablesList({ dbData }) {
     return apiCreate?.data?.data?.tables[key].tableName === table;
   });
     
-  
   if (matchedKey) {
     navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
   }
-  dispatch(bulkAddColumns({
-    //  "alldb":alldb,
-    "dbId": dbData?.db?._id,
-    "tableName": matchedKey,
-    "pageNo": 1
-  }));
+  // dispatch(bulkAddColumns({
+  //   //  "alldb":alldb,
+  //   "dbId": dbData?.db?._id,
+  //   "tableName": matchedKey,
+  //   "pageNo": 1
+  // }));
  
     const newTableIndex = Object.keys(AllTableInfo).length;
   setValue(newTableIndex);
@@ -158,7 +157,7 @@ export default function TablesList({ dbData }) {
       }
      
     }
-  }, []);
+  }, [params?.tableName]);
   return (
     <>
       <Box
