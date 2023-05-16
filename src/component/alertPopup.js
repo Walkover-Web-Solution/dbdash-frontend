@@ -2,6 +2,7 @@ import React from 'react';
 import {Button,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle} from '@mui/material';
 import { PropTypes } from 'prop-types';
 export default function AlertPopup(props) {
+
   const handleClose = (e) => {
     e.stopPropagation()
     props.setOpen(false);
