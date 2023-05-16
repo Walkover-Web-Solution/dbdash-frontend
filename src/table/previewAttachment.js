@@ -20,7 +20,6 @@ import { useDispatch } from 'react-redux';
 export default function PreviewAttachment(props) {
     const dispatch = useDispatch();
     const deleteImage = async(imageUrl)=>{
-        console.log(imageUrl)
         dispatch(
             updateCells({
               columnId: props?.columnId,
