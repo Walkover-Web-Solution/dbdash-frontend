@@ -24,7 +24,7 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 const Cell = memo(
-  ({ value: initialValue, row, column: { id, dataType, metadata }, }) => {
+  ({ value: initialValue, row, column: { id, dataType, metadata ,width}, }) => {
   
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
@@ -404,7 +404,7 @@ const Cell = memo(
        
         element = (
           <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} /></div>)
+            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen}  widht ={width} /></div>)
         break;
 
       case "singleselect":
