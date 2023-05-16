@@ -359,7 +359,7 @@ export default function Header({
     }
   ];
   
-  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "id") {
+  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid") {
     buttons.push({
       onClick: () => {
         dispatch(deleteColumns({
@@ -420,7 +420,7 @@ export default function Header({
       case "lookup":
         propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
-      case "id":
+      case "rowid":
         propertyIcon = <FormatListNumberedIcon fontSize="2px"/>;
       break;
       case "email":
@@ -429,9 +429,10 @@ export default function Header({
       case "phone":
       propertyIcon = <LocalPhoneIcon fontSize="2px" />;
       break;
-        case "multipleselect":
-          propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
-          break;
+      case "multipleselect":
+        propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
+        break;
+      
 
     default:
       propertyIcon = <MultiIcon />;
