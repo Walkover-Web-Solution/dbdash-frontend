@@ -12,7 +12,6 @@ import MultiIcon from "./img/Multi";
 import HashIcon from "./img/Hash";
 import PlusIcon from "./img/Plus";
 import { shortId } from "./utils";
-// import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtl';
 import PlusOneIcon from '@mui/icons-material/PlusOne';
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -33,13 +32,12 @@ import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import {getQueryByAi} from "../api/fieldApi"
+import { getQueryByAi } from "../api/fieldApi"
 import PropTypes from 'prop-types';
 import DuplicateFieldPopup from "./duplicateFieldPopup";
 
 const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }, ref) => 
-  {
+  ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef()
     const resolvedRef = ref || defaultRef
 
@@ -49,30 +47,29 @@ const IndeterminateCheckbox = React.forwardRef(
 
     return (
       <>
-        <input style={{marginTop : "8px"}} type="checkbox" ref={resolvedRef} {...rest} />
+        <input style={{ marginTop: "8px" }} type="checkbox" ref={resolvedRef} {...rest} />
       </>
     )
   }
 )
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy,getToggleAllRowsSelectedProps}) 
- {
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps, metadata }, setSortBy, getToggleAllRowsSelectedProps }) {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
-  const [queryByAi,setQueryByAi] = useState(false)
+  const [queryByAi, setQueryByAi] = useState(false)
   const [selectValue, setSelectValue] = useState('longtext');
   const tableInfo = useSelector((state) => getTableInfo(state));
   const [metaData, setMetaData] = useState({});
   const [open, setOpen] = useState(false);
   const [showduplicate, setShowDuplicate] = useState(false);
-  const [directionAndId,setDirectionAndId]= useState({})
+  const [directionAndId, setDirectionAndId] = useState({})
   const [selectedTable, setSelectedTable] = useState("");
-  const [linkedValueName,setLinkedValueName] = useState("")
+  const [linkedValueName, setLinkedValueName] = useState("")
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
-  const [duplicateField,setDuplicateField] = useState(true);
-  
-  
+  const [duplicateField, setDuplicateField] = useState(true);
+
+
   const handleOpen = () => {
     setOpen(true);
     setExpanded(false);
@@ -83,43 +80,44 @@ export default function Header({
   }
 
   const createColumn = async (userQuery) => {
-    if(!userQuery)
-    {
-       var dataa = metaData;
-       if(selectValue == "link")
-       {
-         dataa.foreignKey={
-           fieldId : selectedFieldName,
-           tableId : selectedTable
-         }
-       }
+    if (!userQuery) {
+      var dataa = metaData;
+      if (selectValue == "link") {
+        dataa.foreignKey = {
+          fieldId: selectedFieldName,
+          tableId: selectedTable
+        }
+      }
       setOpen(false);
 
-      var queryToSend =  JSON.parse(queryByAi)?.add_column?.new_column_name?.data_type +  ` GENERATED ALWAYS AS (${JSON.parse(queryByAi)?.add_column?.new_column_name?.generated?.expression}) STORED;`
+      var queryToSend = JSON.parse(queryByAi)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryByAi)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       dispatch(addColumsToLeft({
-        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:selectValue ,query:queryToSend,metaData:metaData,selectedTable,selectedFieldName,linkedValueName,
+        columnId: 999999, focus: false, fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType: selectValue, query: queryToSend, metaData: metaData, selectedTable, selectedFieldName, linkedValueName,
       }));
       setSelectValue('longtext')
       setQueryByAi(false)
     }
-    else{
-      const response = await getQueryByAi( tableInfo?.dbId ,  tableInfo?.tableId , {userQuery  : userQuery})
+    else {
+      const response = await getQueryByAi(tableInfo?.dbId, tableInfo?.tableId, { userQuery: userQuery })
       setQueryByAi(response?.data?.data);
-    }}
+    }
+  }
 
   const createLeftorRightColumn = () => {
     setOpen(false);
     dispatch(addColumnrightandleft({
-      fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:        
-        selectValue,direction:directionAndId.direction,position:directionAndId.position ,metaData:metaData,selectedTable,selectedFieldName,linkedValueName
+      fieldName: textValue, dbId: tableInfo?.dbId, tableId: tableInfo?.tableId, fieldType:
+        selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
     }));
     setSelectValue('longtext')
 
   }
   const duplicateFields = (props) => {
     setShowDuplicate(false);
-    dispatch(addColumnrightandleft({dbId: tableInfo?.dbId,
-        tableId: tableInfo?.tableId,...props}));
+    dispatch(addColumnrightandleft({
+      dbId: tableInfo?.dbId,
+      tableId: tableInfo?.tableId, ...props
+    }));
     setSelectValue();
   }
 
@@ -269,7 +267,7 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      icon: <ExpandCircleDownOutlinedIcon fontSize="2px"/>,
+      icon: <ExpandCircleDownOutlinedIcon fontSize="2px" />,
       label: "single select"
     },
     {
@@ -294,7 +292,7 @@ export default function Header({
         setShowType(false);
         setExpanded(false);
       },
-      icon: <TextFormatIcon fontSize="2px"/>,
+      icon: <TextFormatIcon fontSize="2px" />,
       label: "singlelinetext"
     }
 
@@ -351,7 +349,7 @@ export default function Header({
       icon: <ArrowRightIcon />,
       label: "Insert right"
     },
-   
+
   ];
 
   if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
@@ -364,7 +362,7 @@ export default function Header({
       label: "Duplicate Field"
     });
   }
-  
+
   if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
     buttons.push({
       onClick: () => {
@@ -382,15 +380,15 @@ export default function Header({
       label: "Delete"
     });
   }
-  
-  
+
+
 
   let propertyIcon;
   switch (dataType) {
     case "singlelinetext":
-      propertyIcon = (  metadata?.unique  ? <><TextFormatIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextFormatIcon fontSize="2px"/>  );
+      propertyIcon = (metadata?.unique ? <><TextFormatIcon fontSize="2px" /> <KeyOutlinedIcon fontSize="2px" /></> : <TextFormatIcon fontSize="2px" />);
       break;
-      case "formula":
+    case "formula":
       propertyIcon = <FunctionsIcon fontSize="2px" />;
       break;
     case "datetime":
@@ -400,49 +398,49 @@ export default function Header({
       propertyIcon = <CheckIcon fontSize="2px" />;
       break;
     case "numeric":
-      propertyIcon =(  metadata?.unique  ? <><HashIcon fontSize="2px"/> <KeyOutlinedIcon fontSize="2px" /></>  :<HashIcon/>  );
+      propertyIcon = (metadata?.unique ? <><HashIcon fontSize="2px" /> <KeyOutlinedIcon fontSize="2px" /></> : <HashIcon />);
       break;
     case "longtext":
-      propertyIcon = (metadata?.unique  ? <><TextIcon/> <KeyOutlinedIcon fontSize="2px" /></>  :<TextIcon/>  );
+      propertyIcon = (metadata?.unique ? <><TextIcon /> <KeyOutlinedIcon fontSize="2px" /></> : <TextIcon />);
       break;
-      case "singleselect":
-        propertyIcon = <ExpandCircleDownOutlinedIcon fontSize="2px"/>;
-        break;
-        case "multiselect":
-          propertyIcon = <MultiIcon fontSize="2px"/>;
-          break;
+    case "singleselect":
+      propertyIcon = <ExpandCircleDownOutlinedIcon fontSize="2px" />;
+      break;
+    case "multiselect":
+      propertyIcon = <MultiIcon fontSize="2px" />;
+      break;
     case "createdby":
-      propertyIcon = <PersonPinIcon fontSize="2px"/>;
+      propertyIcon = <PersonPinIcon fontSize="2px" />;
       break;
     case "createdat":
-      propertyIcon = <MoreTimeIcon fontSize="2px"/>;
+      propertyIcon = <MoreTimeIcon fontSize="2px" />;
       break;
-      case "attachment":
+    case "attachment":
       propertyIcon = <AttachFileIcon fontSize="2px" />;
       break;
-      case "link":
-        propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon/> <ReadMoreOutlinedIcon fontSize="2px" /></>  :<TextIcon/> );
+    case "link":
+      propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon /> <ReadMoreOutlinedIcon fontSize="2px" /></> : <TextIcon />);
       break;
-      case "lookup":
-        propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
+    case "lookup":
+      propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
-      case "rowid":
-        propertyIcon = <FormatListNumberedIcon fontSize="2px"/>;
+    case "rowid":
+      propertyIcon = <FormatListNumberedIcon fontSize="2px" />;
       break;
-      case "email":
+    case "email":
       propertyIcon = <EmailIcon fontSize="2px" />;
       break;
-      case "phone":
+    case "phone":
       propertyIcon = <LocalPhoneIcon fontSize="2px" />;
       break;
-      case "multipleselect":
-        propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
-        break;
-      case "autonumber":
-        propertyIcon = <PlusOneIcon fontSize="2px" />;
-        break;
+    case "multipleselect":
+      propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
+      break;
+    case "autonumber":
+      propertyIcon = <PlusOneIcon fontSize="2px" />;
+      break;
 
-     default:
+    default:
       propertyIcon = <MultiIcon />;
       break;
   }
@@ -492,155 +490,158 @@ export default function Header({
       }))
     }
   }
-  
+
   const handleClose = () => {
     setShowDuplicate(false);
   };
 
   const handleDuplicate = () => {
-    duplicateFields({direction: "right", position: id, duplicateField: `${duplicateField}`
-  });
+    duplicateFields({
+      direction: "right", position: id, duplicateField: `${duplicateField}`
+    });
   };
 
   const handleUniqueChange = () => {
-    setDuplicateField((isDuplicate)=>
-    !isDuplicate
-    )};
-  
-  return <><DuplicateFieldPopup
-  open={showduplicate}
-  handleClose={handleClose}
-  handleDuplicate={handleDuplicate}
-  handleUniqueChange={handleUniqueChange}
-  duplicateField={duplicateField}
-/> {id == 999999 || id == 9999991 ? (
-    <>
- 
-      {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block", backgroundColor: '#E8E8E8'} })} className='th noselect'>
-        <div
-          className='th-content'
-          style={{ display: "flex", justifyContent: "center", }}
-          onClick={handleOpen}>
-          <span className='svg-icon-sm svg-gray'style={{marginTop:3.8}}>
-            <PlusIcon />
-          </span>
-        </div> 
-        <FieldPopupModal title="create column" label="Column Name"  queryByAi ={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId = {tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData}   setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen}  submitData={createColumn}
-        />
+    setDuplicateField((isDuplicate) =>
+      !isDuplicate
+    )
+  };
 
-      </div > :
-        <div  {...getHeaderProps({ style: { display: "inline-block",flex:"none" ,width:"20px"} })}  className='th noselect'
-          >
+  return <>
+    <DuplicateFieldPopup
+      open={showduplicate}
+      handleClose={handleClose}
+      handleDuplicate={handleDuplicate}
+      handleUniqueChange={handleUniqueChange}
+      duplicateField={duplicateField}
+    /> {id == 999999 || id == 9999991 ? (
+      <>
+
+        {id == 999999 ? <div {...getHeaderProps({ style: { display: "inline-block", backgroundColor: '#E8E8E8' } })} className='th noselect'>
           <div
-            className='th-content' >
-            <span className='svg-icon svg-gray icon-margin' style={{marginTop:"6.5px",marginBottom:"1px"}} >
-            <IndeterminateCheckbox  {...getToggleAllRowsSelectedProps()} /> 
-              </span>
+            className='th-content'
+            style={{ display: "flex", justifyContent: "center", }}
+            onClick={handleOpen}>
+            <span className='svg-icon-sm svg-gray' style={{ marginTop: 3.8 }}>
+              <PlusIcon />
+            </span>
           </div>
-        </div>}
-    </>
-  ) : (
-    <>
-      <div {...getHeaderProps({ style: {  width: "100%" } })} className='th noselect'>
-        <div className='th-content' onDoubleClick={() => setExpanded(true)} ref={setReferenceElement}>
-          <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
-          {label}
-        </div>
-        <div {...getResizerProps()} className='resizer' />
-      </div>
-      <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName}  queryByAi ={queryByAi}  tableId = {tableInfo?.tableId}  selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable}  setSelectValue={setSelectValue} textValue={textValue} metaData={metaData}  setMetaData={setMetaData} setShowFieldsDropdown={setShowFieldsDropdown} linkedValueName={linkedValueName}  setLinkedValueName={setLinkedValueName} showFieldsDropdown={showFieldsDropdown}  setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={ createLeftorRightColumn}
-      />      
-      {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
-      {expanded && (
-        <div ref={setPopperElement} style={{ ...styles.popper, zIndex: 3 }} {...attributes.popper}>
-          <div
-            className='bg-white shadow-5 border-radius-md'
-            style={{
-              width: 240
-            }}>
-            <div style={{ paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem" }}>
-              <div className='is-fullwidth' style={{ marginBottom: 12 }} >
-                <input
-                  className='form-input'
-                  ref={setInputRef}
-                  type='text'
-                  value={header}
-                  style={{ width: "100%" }}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-              <span className='font-weight-600 font-size-75' style={{ textTransform: "uppercase", color: grey(500) }}>
-                Property Type
+          <FieldPopupModal title="create column" label="Column Name" queryByAi={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId={tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn}
+          />
+
+        </div > :
+          <div  {...getHeaderProps({ style: { display: "inline-block", flex: "none", width: "20px" } })} className='th noselect'
+          >
+            <div
+              className='th-content' >
+              <span className='svg-icon svg-gray icon-margin' style={{ marginTop: "6.5px", marginBottom: "1px" }} >
+                <IndeterminateCheckbox  {...getToggleAllRowsSelectedProps()} />
               </span>
             </div>
-            <div style={{ padding: "4px 0px" }}>
-              <button
-                className='sort-button'
-                type='button'
-                onMouseEnter={() => setShowType(true)}
-                onMouseLeave={() => setShowType(false)}
-                ref={setTypeReferenceElement}>
-                <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
-                <span style={{ textTransform: "capitalize" }}>{dataType}</span>
-              </button>
-              {showType && (
-                <div
-                  className='shadow-5 bg-white border-radius-m'
-                  ref={setTypePopperElement}
+          </div>}
+      </>
+    ) : (
+      <>
+        <div {...getHeaderProps({ style: { width: "100%" } })} className='th noselect'>
+          <div className='th-content' onDoubleClick={() => setExpanded(true)} ref={setReferenceElement}>
+            <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
+            {label}
+          </div>
+          <div {...getResizerProps()} className='resizer' />
+        </div>
+        <FieldPopupModal title="create column" label="Column Name" setSelectedFieldName={setSelectedFieldName} queryByAi={queryByAi} tableId={tableInfo?.tableId} selectedFieldName={selectedFieldName} selectedTable={selectedTable} setSelectedTable={setSelectedTable} setSelectValue={setSelectValue} textValue={textValue} metaData={metaData} setMetaData={setMetaData} setShowFieldsDropdown={setShowFieldsDropdown} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} showFieldsDropdown={showFieldsDropdown} setTextValue={setTextValue} open={open} setOpen={setOpen} submitData={createLeftorRightColumn}
+        />
+        {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
+        {expanded && (
+          <div ref={setPopperElement} style={{ ...styles.popper, zIndex: 3 }} {...attributes.popper}>
+            <div
+              className='bg-white shadow-5 border-radius-md'
+              style={{
+                width: 240
+              }}>
+              <div style={{ paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem" }}>
+                <div className='is-fullwidth' style={{ marginBottom: 12 }} >
+                  <input
+                    className='form-input'
+                    ref={setInputRef}
+                    type='text'
+                    value={header}
+                    style={{ width: "100%" }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+                <span className='font-weight-600 font-size-75' style={{ textTransform: "uppercase", color: grey(500) }}>
+                  Property Type
+                </span>
+              </div>
+              <div style={{ padding: "4px 0px" }}>
+                <button
+                  className='sort-button'
+                  type='button'
                   onMouseEnter={() => setShowType(true)}
                   onMouseLeave={() => setShowType(false)}
-                  {...typePopper.attributes.popper}
-                  style={{
-                    ...typePopper.styles.popper,
-                    width: 200,
-                    backgroundColor: "white",
-                    zIndex: 4,
-                    padding: "4px 0px"
-                  }}>
-                  {types.map((type, index) => (
-                    <button key={index} className='sort-button' onClick={type.onClick}>
-                      <span key={index} className='svg-icon svg-text icon-margin'>{type.icon}</span>
-                      {type.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div
-              key={shortId()}
-              style={{
-                borderTop: `2px solid ${grey(200)}`,
-                padding: "4px 0px"
-              }}>
-              {buttons.map((button, index) => (
-                <button type='button' key={index} className='sort-button'
-                  onClick={() => button.onClick()}
-                >
-                  <span key={index} className='svg-icon svg-text icon-margin'>{button.icon}</span>
-                  {button.label}
+                  ref={setTypeReferenceElement}>
+                  <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
+                  <span style={{ textTransform: "capitalize" }}>{dataType}</span>
                 </button>
-              ))}
+                {showType && (
+                  <div
+                    className='shadow-5 bg-white border-radius-m'
+                    ref={setTypePopperElement}
+                    onMouseEnter={() => setShowType(true)}
+                    onMouseLeave={() => setShowType(false)}
+                    {...typePopper.attributes.popper}
+                    style={{
+                      ...typePopper.styles.popper,
+                      width: 200,
+                      backgroundColor: "white",
+                      zIndex: 4,
+                      padding: "4px 0px"
+                    }}>
+                    {types.map((type, index) => (
+                      <button key={index} className='sort-button' onClick={type.onClick}>
+                        <span key={index} className='svg-icon svg-text icon-margin'>{type.icon}</span>
+                        {type.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div
+                key={shortId()}
+                style={{
+                  borderTop: `2px solid ${grey(200)}`,
+                  padding: "4px 0px"
+                }}>
+                {buttons.map((button, index) => (
+                  <button type='button' key={index} className='sort-button'
+                    onClick={() => button.onClick()}
+                  >
+                    <span key={index} className='svg-icon svg-text icon-margin'>{button.icon}</span>
+                    {button.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </>
+        )}
+      </>
 
-  )}
+    )}
   </>
 }
 
-IndeterminateCheckbox.propTypes ={
-  indeterminate :PropTypes.any
+IndeterminateCheckbox.propTypes = {
+  indeterminate: PropTypes.any
 }
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox';
 Header.propTypes = {
-  rows:PropTypes.any,
+  rows: PropTypes.any,
   column: PropTypes.any,
   setSortBy: PropTypes.any,
   dataDispatch: PropTypes.any,
-  row:PropTypes.any,
-  getToggleAllRowsSelectedProps:PropTypes.any
+  row: PropTypes.any,
+  getToggleAllRowsSelectedProps: PropTypes.any
 };

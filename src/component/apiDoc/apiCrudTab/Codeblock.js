@@ -24,8 +24,8 @@ function CodeBlock(props) {
         {isCopied ? 'Copied!' : <ContentPasteIcon />}
       </button>
       <div style={{ position: "relative", bottom: 65 }} >
-        <button onClick={() => { setShowAPI(true) }} style={showAPI ? { backgroundColor: "black", color: "white", margin: "2px", fontSize: "15px" } : { margin: "2px", backgroundColor: "white", color: "black", fontSize: "15px" }}>API</button>
-        <button onClick={() => { setShowAPI(false) }} style={showAPI ? { backgroundColor: "white", color: "black", margin: "2px", fontSize: "15px" } : { margin: "2px", backgroundColor: "black", color: "white", fontSize: "15px" }}>CURL</button>
+        <button onClick={() => { setShowAPI(true) }} style={showAPI ? { backgroundColor: "black", color: "white",  fontSize: "15px" } : {  backgroundColor: "white", color: "black", fontSize: "15px" }}>API</button>
+        <button onClick={() => { setShowAPI(false) }} style={showAPI ? { backgroundColor: "white", color: "black", fontSize: "15px" } : {  backgroundColor: "black", color: "white", fontSize: "15px" }}>CURL</button>
       </div>
       <pre style={{ position: "relative", width: "400px", whiteSpace: "pre-wrap", overflowY: "scroll" }}>
         <br />
