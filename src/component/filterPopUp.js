@@ -13,7 +13,7 @@ import { cloneDeep } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
 import { setAllTablesData } from "../store/allTable/allTableSlice";
 import { bulkAddColumns } from "../store/table/tableThunk";
-
+import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -32,7 +32,7 @@ const addBtnStyle = {
 }
 
 export default function FilterModal(props) {
-
+  const navigate = useNavigate();
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const handleClose = () => {
@@ -309,6 +309,8 @@ export default function FilterModal(props) {
       query: data
     }
     const filter = await createFilter(props?.dbId, props?.tableName, dataa)
+    const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
+    const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName);
     dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
@@ -323,6 +325,8 @@ export default function FilterModal(props) {
         "tableName": props?.tableName
       }
     ))
+    props?.setUnderLine(filterKey)
+    navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
     return dataa;
   }
 
@@ -472,5 +476,6 @@ FilterModal.propTypes = {
   edit: PropTypes.any,
   filterId: PropTypes.any,
   dbData: PropTypes.any,
-  setEdit: PropTypes.func
+  setEdit: PropTypes.func,
+  setUnderLine:PropTypes.any
 };

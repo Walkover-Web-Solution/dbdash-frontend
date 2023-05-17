@@ -53,7 +53,6 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   // const [idToNavigate,setIdToNavigate] = useState()
-
   const handleClick = (event,id) => {
     setcurrentTable(id)
     setAnchorEl(event.currentTarget);
@@ -280,6 +279,7 @@ export default function TablesList({ dbData }) {
           filterId={filterId}
           dbId={dbData?.db?._id}
           tableName={params?.tableName}
+          setUnderLine = {setUnderLine}
         />
       )}
       <Menu
