@@ -4,7 +4,7 @@ import './Codeblock.css'
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 function CodeBlock(props) {
- console.log("hello",props.body);
+//  console.log("hello",props.body);
   const [isCopied, setIsCopied] = useState(false);
 const[showAPI,setShowAPI]=useState(true)
   function handleCopyClick() {
@@ -20,11 +20,14 @@ const[showAPI,setShowAPI]=useState(true)
     
    
     <div className="code-block" >
-       <div style={{position:"relative",bottom:37}} >
+      <button style={{marginLeft:"450px"}} className="copy-button" onClick={(handleCopyClick)}>
+        {isCopied ? 'Copied!' : <ContentPasteIcon/>}
+      </button>
+       <div style={{position:"relative",bottom:65}} >
       <button onClick={()=>{setShowAPI(true)}} style={showAPI?{backgroundColor:"black",color:"white",margin:"2px",fontSize:"15px"}:{margin:"2px",backgroundColor:"white",color:"black",fontSize:"15px"}}>API</button>
       <button onClick={()=>{setShowAPI(false)}} style={showAPI?{backgroundColor:"white",color:"black",margin:"2px",fontSize:"15px"}:{margin:"2px",backgroundColor:"black",color:"white",fontSize:"15px"}}>CURL</button>
       </div>
-      <pre style={{width:"400px",whiteSpace:"pre-wrap"}}>
+      <pre style={{position:"relative",width:"400px",whiteSpace:"pre-wrap",overflowY:"scroll"}}>
         <br/>
         <code style={{ whiteSpace: "pre-wrap", maxWidth: "400px", wordWrap: "break-word" }}>
     {props.code}
@@ -49,9 +52,7 @@ const[showAPI,setShowAPI]=useState(true)
   </code>
 )}
       </pre>
-      <button className="copy-button" onClick={(handleCopyClick)}>
-        {isCopied ? 'Copied!' : <ContentPasteIcon/>}
-      </button>
+      
     </div>
   );
 }

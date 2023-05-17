@@ -1,35 +1,43 @@
-// import React from 'react'
 import { PropTypes } from "prop-types";
 import { Box } from "@mui/system";
-// import CodeSnippet from '../codeSnippet';
 import { Typography } from "@mui/material";
 import CodeBlock from "./Codeblock";
-import React from "react";
+import React, {useState}from "react";
 import Records from "./records";
-// import Grid from "@mui/material/Grid";
-// import { getAllfields } from "../../../api/fieldApi";
-// import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import OptionalParameter from "./optionalParameter";
+import ResponseBox from "./responseBox";
 
 
 function DeleteRecord(props) {
-  // const [fieldData, setFieldData] = useState(null);
-  // const tableData = async () => {
-  //   const data = await getAllfields(props.db, props.table);
-  //   setFieldData(data?.data?.data?.fields);
-  // };
-  // useEffect(() => {
-  //   tableData();
-  // }, [props.db, props.table]);
-  
-
+  const[age,setAge]=useState('')
+const[value,setValue]=useState('');
+const[arr,setArr]=useState([]);
   return (
     <>
-    
-      <CodeBlock
-        code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}`}
-        header={`-H auth-key: YOUR_SECRET_API_TOKEN `}
+     <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          position: "fixed",
+          right: 0,
+          width: "44vw",
+          padding: "10px",
+          height: "65vh",
+          overflowY: "scroll",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+    <CodeBlock
+        code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}${value!="" ? `?${value}`:``}`}
+        header={`-H auth-key: AUTH_TOKEN `}
+        body={arr}
 
-      />
+
+      />  <ResponseBox response={"hello"}/>
+      </div>
+    
+      
+     <div style={{width:'700px',height:"65vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
 
       <Box>
         <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
@@ -37,14 +45,17 @@ function DeleteRecord(props) {
         </Typography>
         <Typography>
           <Box>
-            <br></br>
+            
+        <br/>
         
-            <Records db={props.db} table={props.table}/>
-          </Box>
-        </Typography>
+            <Records db={props.db} table={props.table} setArr={setArr} arr={arr}  />
+            <br/>
+            <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge}/>
 
-  
+          </Box>
+        </Typography>  
       </Box>
+      </div>
     </>
   );
 }

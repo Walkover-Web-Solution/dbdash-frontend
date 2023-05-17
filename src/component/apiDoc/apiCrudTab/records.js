@@ -33,14 +33,29 @@ useEffect(() => {
     ))}
   </Grid>
 
-    <Grid item xs={4}>
-          <Typography style={{ fontWeight: 'bold' }}>fieldType</Typography>
-          {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
-            <Typography key={index}>
-{   props.arr &&   !props.arr.find(x=>x==fields[0])  ?  <button onClick={()=>{props.setArr([...props.arr,fields[0]])}}>   <ControlPointIcon  fontSize="2px"/></button>:<button onClick={()=>{const arr1=props.arr.filter(x=>x!==fields[0]);props.setArr(arr1)}}><RemoveIcon fontSize="2px"/></button>}
-            </Typography>
-          ))}
-        </Grid>
+  <Grid item xs={4}>
+  <Typography style={{ fontWeight: 'bold' }}>Add/Remove</Typography>
+  {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
+    <Typography key={index}>
+      {props.arr && !props.arr.find(x => x === fields[0]) ? (
+        <button
+          style={{ backgroundColor: "transparent", border: "none", display: "inline-block" }}
+          onClick={() => { props.setArr([...props.arr, fields[0]]) }}
+        >
+          <ControlPointIcon fontSize="2px" />
+        </button>
+      ) : (
+        <button
+          style={{ backgroundColor: "transparent", border: "none", display: "inline-block" }}
+          onClick={() => { const arr1 = props.arr.filter(x => x !== fields[0]); props.setArr(arr1) }}
+        >
+          <RemoveIcon fontSize="2px" />
+        </button>
+      )}
+    </Typography>
+  ))}
+</Grid>
+
  
 </Grid>
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Link,useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { Box,Button, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
+import { Box, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
 import ApiCrudTablist from './apiCrudTab/apiCrudTablist';
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
@@ -56,7 +56,7 @@ export default function Navbar() {
 
   return (
     <>
-      <Box align="center">
+      {/* <Box align="center">
        
         {Object.keys(tables).length >= 1 && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Button variant="contained" color="primary" sx={{ m: 1 }} disabled>APIs Documentation</Button>
@@ -64,7 +64,7 @@ export default function Navbar() {
             <Button variant="contained" color="primary">Auth Key</Button>
           </Link>
         </Box>}
-      </Box>
+      </Box> */}
       <Box sx={{display:"flex",flexDirection:"row"}}>
       <Box >
       {alldb && selectedDb && <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -98,7 +98,7 @@ export default function Navbar() {
       </Box>
       <Box>
 
-       {loading &&  <ApiCrudTablist db={selectedOption} table={selectTable} />}
+       {loading &&  <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
       </Box>
     </>
   )
