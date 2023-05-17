@@ -34,22 +34,30 @@ function AddRecord(props) {
         />
         <ResponseBox response={`lorem1000`} />
       </div>
-      <div style={{width:'700px',height:"65vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
-    
-      <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
-        Add Table Records
-      </Typography>
+      <div
+        style={{
+          width: "700px",
+          height: "65vh",
+          overflowY: "scroll",
+          backgroundColor: "white",
+          whiteSpace: "pre-wrap",
+          padding: "2px",
+        }}
+      >
+        <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
+          Add Table Records
+        </Typography>
 
-      <Typography>
-        <Box>
-          <Records
-            db={props?.db}
-            setArr={setArr}
-            arr={arr}
-            table={props?.table}
-          />
-        </Box>
-      </Typography>
+        <Typography>
+          <Box>
+            <Records
+              db={props?.db}
+              setArr={setArr}
+              arr={arr}
+              table={props?.table}
+            />
+          </Box>
+        </Typography>
       </div>
     </>
   );

@@ -2,19 +2,19 @@ import { PropTypes } from "prop-types";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import CodeBlock from "./Codeblock";
-import React, {useState}from "react";
+import React, { useState } from "react";
 import Records from "./records";
 import OptionalParameter from "./optionalParameter";
 import ResponseBox from "./responseBox";
 
 
 function DeleteRecord(props) {
-  const[age,setAge]=useState('')
-const[value,setValue]=useState('');
-const[arr,setArr]=useState([]);
+  const [age, setAge] = useState('')
+  const [value, setValue] = useState('');
+  const [arr, setArr] = useState([]);
   return (
     <>
-     <div
+      <div
         style={{
           display: "flex",
           flexDirection: "column",
@@ -27,34 +27,34 @@ const[arr,setArr]=useState([]);
           whiteSpace: "pre-wrap",
         }}
       >
-    <CodeBlock
-        code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}${value!="" ? `?${value}`:``}`}
-        header={`-H auth-key: AUTH_TOKEN `}
-        body={arr}
+        <CodeBlock
+          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}${value != "" ? `?${value}` : ``}`}
+          header={`-H auth-key: AUTH_TOKEN `}
+          body={arr}
 
 
-      />  <ResponseBox response={"hello"}/>
+        />  <ResponseBox response={"hello"} />
       </div>
-    
-      
-     <div style={{width:'700px',height:"65vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
 
-      <Box>
-        <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
-          Delete Table Records
-        </Typography>
-        <Typography>
-          <Box>
-            
-        <br/>
-        
-            <Records db={props.db} table={props.table} setArr={setArr} arr={arr}  />
-            <br/>
-            <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge}/>
 
-          </Box>
-        </Typography>  
-      </Box>
+      <div style={{ width: '700px', height: "65vh", overflowY: "scroll", backgroundColor: "white", whiteSpace: "pre-wrap", padding: "2px" }}>
+
+        <Box>
+          <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
+            Delete Table Records
+          </Typography>
+          <Typography>
+            <Box>
+
+              <br />
+
+              <Records db={props.db} table={props.table} setArr={setArr} arr={arr} />
+              <br />
+              <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge} />
+
+            </Box>
+          </Typography>
+        </Box>
       </div>
     </>
   );
