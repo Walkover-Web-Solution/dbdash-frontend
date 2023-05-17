@@ -104,6 +104,7 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
+        console.log(payload,"payload")
         var columns = null
         if ((payload?.pageNo <= 1) || !(payload?.pageNo)) {
             columns = await getHeaders(payload.dbId, payload.tableName)

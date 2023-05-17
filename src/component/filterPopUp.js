@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
 import { setAllTablesData } from "../store/allTable/allTableSlice";
+import { bulkAddColumns } from "../store/table/tableThunk";
 
 const style = {
   position: "absolute",
@@ -52,7 +53,7 @@ export default function FilterModal(props) {
   }])
   useEffect(()=>{
    if(fieldData.length){
-    query[0].fields = fieldData[0]?.id
+    query[0].fields = query[0]?.fields ? query[0].fields : fieldData[0]?.id,
     setQuery(query)
    }
   },[fieldData])
@@ -286,20 +287,20 @@ export default function FilterModal(props) {
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
         if (FieldDataType == "numeric") {
-          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+          queryToSend += query[i].selectedOption + " " + query[i].value 
         } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
         }
       }
       if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
         if (FieldDataType == "numeric") {
-          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+          queryToSend += query[i].selectedOption + " " + query[i].value 
         } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
         }
       }
     }
-    return queryToSend
+    return queryToSend;
   }
   const getQueryData = async () => {
    const data =  await updateFilter();
@@ -312,6 +313,14 @@ export default function FilterModal(props) {
       {
         "dbId": props?.dbId,
         "tables": filter.data.data.data.tables
+      }
+    ))
+    dispatch(bulkAddColumns(
+      {
+        "dbId": props?.dbId,
+        "filter":data,
+        "pageNo":1,
+        "tableName": props?.tableName
       }
     ))
     return dataa;
