@@ -116,6 +116,14 @@ export default function TablesList({ dbData }) {
         tables: deletedFilter.data.data.tables,
       })
     );
+    dispatch(
+      bulkAddColumns({
+        dbId: dbData?.db?._id,
+        tableName: params?.tableName ,
+        org_id: dbData?.db?.org_id,
+        pageNo: 1,
+      })
+    );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {

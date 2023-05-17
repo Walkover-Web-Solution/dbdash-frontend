@@ -44,6 +44,7 @@ const Table = memo(
     update,
     hasNextPage,
   }) => {
+
     const sortTypes = useMemo(
       () => ({
         alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -71,7 +72,7 @@ const Table = memo(
       rows,
       prepareRow,
       selectedFlatRows,
-      state: { selectedCellIds, currentSelectedCellIds },
+      state: { selectedCellIds, currentSelectedCellIds},
       totalColumnsWidth,
     } = useTable(
       {
@@ -154,9 +155,8 @@ const Table = memo(
               isNextPageLoading={isNextPageLoading}
               totalColumnsWidth={totalColumnsWidth}
               prepareRow={prepareRow}
-              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds }}
+              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds}}
               update={update}
-             
             />
 
       
