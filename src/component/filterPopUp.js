@@ -166,33 +166,7 @@ export default function FilterModal(props) {
                 valuee = valuee.substring(1, valuee.length - 1);
               }
           }
-          // for (let i = 0; i < conditions.length; i++) {
-          //   if (conditions[i].includes("CAST")) {
-          //     console.log("consition",conditions)
-          //     json.fields = pqrs[0].substring(5);
-          //     json.selectedOption = pqrs[3] == "NOT" ? "NOT LIKE" :pqrs[3];
-          //     valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
-          //     if (valuee.indexOf('%') !== -1) {
-          //       valuee = valuee.substring(1, valuee.length - 1);
-          //     }
-          //     console.log(json.fields,json.selectedOption,valuee)
-          //   }
-          // } 
-          // let doesNotContainCast = true;
-          // for (let i = 0; i < conditions.length; i++) {
-          //   if (conditions[i].includes("CAST")) {   
-          //     doesNotContainCast = false;
-          //     break;   
-          //   }}    
-          //   if(doesNotContainCast != false){
-          //     console.log("1")
-          //     json.fields = pqrs[0];
-          //     json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
-          //     valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
-          //     if (valuee.indexOf('%') !== -1) {
-          //       valuee = valuee.substring(1, valuee.length - 1);
-          //     }
-          //   }         
+          
           json.value = valuee
           finalQuery.push(json)
         }

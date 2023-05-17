@@ -3,7 +3,37 @@ import { useDrop, useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import ItemTypes from "../ItemTypes";
 import PropTypes from 'prop-types';
+import  debounce  from 'lodash.debounce';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateColumnHeaders } from '../../store/table/tableThunk';
 export default function DraggableHeader({ columns,index, reoder, key}){
+  // const resize = columns?.isResizing ? columns : null
+ const params = useParams();
+ const dispatch = useDispatch();
+
+  const resizeWidth = debounce(async()=>{
+    dispatch(updateColumnHeaders({
+        dbId:params?.dbId,
+        tableName:params?.tableName,
+        fieldName:columns?.id,
+        columnId : columns?.id,
+        // label:columns?.label,
+        // fieldType:columns?.dataType,
+        metaData:{width:columns?.width}
+    }));
+    
+  },1000)
+
+  useEffect(()=>{
+    if(columns?.label != "check" && columns?.label != "+"){
+      if(!columns.isResizing ){
+        resizeWidth();
+      }
+    }
+
+  },[columns?.isResizing])
+
     const dropRef = React.useRef(null)
     const dragRef = React.useRef(null)
     const { id, label } = columns;
@@ -24,11 +54,10 @@ export default function DraggableHeader({ columns,index, reoder, key}){
       };
     },
 
-    collect: (monitor) => ({
+    collect: (monitor) => ({   
       isDragging: monitor.isDragging()
     })
   });
-
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);

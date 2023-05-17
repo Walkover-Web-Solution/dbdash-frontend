@@ -53,7 +53,7 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 )
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata },setSortBy,getToggleAllRowsSelectedProps}) 
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps,metadata},setSortBy,getToggleAllRowsSelectedProps}) 
  {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
@@ -69,6 +69,7 @@ export default function Header({
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [duplicateField,setDuplicateField] = useState(true);
+
   
   
   const handleOpen = () => {

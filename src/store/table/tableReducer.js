@@ -52,6 +52,7 @@ export const reducers = {
   },
   deleteColumn(state, payload) {
     const action = payload.payload;
+    if(!(action?.fieldName)) return ;
     if (action) {
       var deleteIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
@@ -74,15 +75,15 @@ export const reducers = {
       );
     }
 
-
     return {
       ...state,
     
       columns: [
         ...state.columns.slice(0, index),
-        { ...state.columns[index], label: action.label },
+        { ...state.columns[index], label: action?.label },
         ...state.columns.slice(index + 1, state.columns.length)
       ]
+     
     };
   },
   addColumnrightandleft(state, payload) {
