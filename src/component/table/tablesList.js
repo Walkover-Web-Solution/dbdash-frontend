@@ -37,7 +37,7 @@ export default function TablesList({ dbData }) {
   // const [CSV,setCSV] = useState([])
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    
+
   };
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
@@ -50,11 +50,12 @@ export default function TablesList({ dbData }) {
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const tableLength = Object.keys(AllTableInfo).length;
-  const [underLine,setUnderLine] = useState(null)
+  const [underLine, setUnderLine] = useState(null)
+  const [currentTable, setcurrentTable] = useState(null)
   // const [idToNavigate,setIdToNavigate] = useState()
 
-  const handleClick = (event) => {
-
+  const handleClick = (event,id) => {
+    setcurrentTable(id)
     setAnchorEl(event.currentTarget);
   };
 
@@ -67,24 +68,18 @@ export default function TablesList({ dbData }) {
       tableName: table,
     };
     setOpen(false);
-    const apiCreate = await createTable(dbData?.db?._id,data);
-    dispatch(createTable1({tables: apiCreate.data.data.tables}));
+    const apiCreate = await createTable(dbData?.db?._id, data);
+    dispatch(createTable1({ tables: apiCreate.data.data.tables }));
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
-    return apiCreate?.data?.data?.tables[key].tableName === table;
-  });
-    
-  if (matchedKey) {
-    navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
-  }
-  // dispatch(bulkAddColumns({
-  //   //  "alldb":alldb,
-  //   "dbId": dbData?.db?._id,
-  //   "tableName": matchedKey,
-  //   "pageNo": 1
-  // }));
- 
+      return apiCreate?.data?.data?.tables[key].tableName === table;
+    });
+
+    if (matchedKey) {
+      navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
+    }
+
     const newTableIndex = Object.keys(AllTableInfo).length;
-  setValue(newTableIndex);
+    setValue(newTableIndex);
   };
 
 
@@ -125,7 +120,7 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
-    if(params?.filterName){
+    if (params?.filterName) {
       setUnderLine(params?.filterName)
       dispatch(
         bulkAddColumns({
@@ -156,7 +151,7 @@ export default function TablesList({ dbData }) {
       if (!params?.tableName) {
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
       }
-     
+
     }
   }, [params?.tableName]);
   return (
@@ -168,7 +163,7 @@ export default function TablesList({ dbData }) {
           height: "7vh",
           overflow: "hidden",
           position: "sticky",
-          marginTop:"0.5vh"
+          marginTop: "0.5vh"
         }}
       >
         <Box
@@ -232,37 +227,17 @@ export default function TablesList({ dbData }) {
                     p: 1,
                   }}
                   onClick={() => {
-                    onFilterClicked(filter[1].query, filter[0],filter[1]);
+                    onFilterClicked(filter[1].query, filter[0], filter[1]);
                   }}
                   style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
                   variant="contained"
                   color="primary"
                 >
                   {filter[1]?.filterName}
-                  <IconButton onClick={(e) => handleClick(e)}>
+                  <IconButton onClick={(e) => handleClick(e,filter[0])}>
                     <MoreVertIcon sx={{ color: "#fff" }} />
                   </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={() => handleClose()}
-                  >
-                    <MenuItem
-                      onClick={() => {
-                        handleEdit();
-                      }}
-                    >
-                      Edit
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        deleteFilterInDb(filter[0]);
-                        handleClose();
-                      }}
-                    >
-                      Delete
-                    </MenuItem>
-                  </Menu>
+                  
                 </Box>
               </Box>
             )
@@ -299,16 +274,37 @@ export default function TablesList({ dbData }) {
       )}
       {openn && (
         <FilterModal
-          dbData = {dbData}
+          dbData={dbData}
           open={openn}
           edit={edit}
-          setEdit ={setEdit}
+          setEdit={setEdit}
           setOpen={setOpenn}
           filterId={filterId}
           dbId={dbData?.db?._id}
           tableName={params?.tableName}
         />
       )}
+      <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={() => handleClose()}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        handleEdit();
+                      }}
+                    >
+                      Edit
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        deleteFilterInDb(currentTable);
+                        handleClose();
+                      }}
+                    >
+                      Delete
+                    </MenuItem>
+                  </Menu>
       {isTableLoading ? (
         <CircularProgress />
       ) : (
