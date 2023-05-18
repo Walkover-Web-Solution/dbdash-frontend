@@ -295,91 +295,97 @@ export default function Header({
       icon: <TextFormatIcon fontSize="2px" />,
       label: "singlelinetext"
     }
+];
 
-  ];
+types.sort((a, b) => a.label.localeCompare(b.label));
 
-  const buttons = [
-    {
-      onClick: () => {
-        dispatch(updateColumnHeaders({
-          type: "updateColumnHeader",
-          columnId: id,
-          label: header
-        }));
-        setSortBy([{ id: id, desc: false }]);
-        setExpanded(false);
-      },
-      icon: <ArrowUpIcon />,
-      label: "Sort ascending"
+
+const buttons = [
+  {
+    onClick: () => {
+      dispatch(updateColumnHeaders({
+        type: "updateColumnHeader",
+        columnId: id,
+        label: header
+      }));
+      setSortBy([{ id: id, desc: false }]);
+      setExpanded(false);
     },
-    {
-      onClick: () => {
-        dispatch(updateColumnHeaders({
-          type: "updateColumnHeader",
-          columnId: id,
-          label: header
-        }));
-        setSortBy([{ id: id, desc: true }]);
-        setExpanded(false);
-      },
-      icon: <ArrowDownIcon />,
-      label: "Sort descending"
+    icon: <ArrowUpIcon />,
+    label: "Sort ascending"
+  },
+  {
+    onClick: () => {
+      dispatch(updateColumnHeaders({
+        type: "updateColumnHeader",
+        columnId: id,
+        label: header
+      }));
+      setSortBy([{ id: id, desc: true }]);
+      setExpanded(false);
     },
-    {
-      onClick: () => {
-        handleOpen();
-        setDirectionAndId({
-          direction: "left",
-          position: id
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowLeftIcon />,
-      label: "Insert left"
+    icon: <ArrowDownIcon />,
+    label: "Sort descending"
+  },
+  {
+    onClick: () => {
+      handleOpen();
+      setDirectionAndId({
+        direction: "left",
+        position: id
+      });
+      setExpanded(false);
     },
-    {
-      onClick: () => {
-        setOpen(true);
-        setDirectionAndId({
-          direction: "right",
-          position: id
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowRightIcon />,
-      label: "Insert right"
+    icon: <ArrowLeftIcon />,
+    label: "Insert left"
+  },
+  {
+    onClick: () => {
+      setOpen(true);
+      setDirectionAndId({
+        direction: "right",
+        position: id
+      });
+      setExpanded(false);
     },
+    icon: <ArrowRightIcon />,
+    label: "Insert right"
+  },
+];
 
-  ];
+if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
+  buttons.push({
+    onClick: () => {
+      setExpanded(false);
+      handleOpenDuplicate();
+    },
+    icon: <ContentCopySharpIcon fontSize="1px" />,
+    label: "Duplicate Field"
+  });
+}
 
-  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
-    buttons.push({
-      onClick: () => {
-        setExpanded(false);
-        handleOpenDuplicate();
-      },
-      icon: <ContentCopySharpIcon fontSize="1px" />,
-      label: "Duplicate Field"
-    });
-  }
+if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
+  buttons.push({
+    onClick: () => {
+      dispatch(deleteColumns({
+        label: header,
+        columnId: id,
+        fieldName: id,
+        fieldDataType: dataType,
+        tableId: tableInfo?.tableId,
+        dbId: tableInfo?.dbId
+      }));
+      setExpanded(false);
+    },
+    icon: <TrashIcon />,
+    label: "Delete"
+  });
+}
 
-  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
-    buttons.push({
-      onClick: () => {
-        dispatch(deleteColumns({
-          label: header,
-          columnId: id,
-          fieldName: id,
-          fieldDataType: dataType,
-          tableId: tableInfo?.tableId,
-          dbId: tableInfo?.dbId
-        }));
-        setExpanded(false);
-      },
-      icon: <TrashIcon />,
-      label: "Delete"
-    });
-  }
+buttons.sort((a, b) => a.label.localeCompare(b.label));
+
+// console.log(buttons);
+
 
 
 

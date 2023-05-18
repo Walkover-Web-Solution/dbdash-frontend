@@ -21,6 +21,7 @@ export default function PopupModal(props) {
   
   const handleClose = () => props.setOpen(false);
   const [textFieldValue, setTextFieldValue] = useState("");
+  console.log("text",textFieldValue)
 
   const { state, setData, setExplicitField,validate} = useValidator({
     initialData: {
@@ -46,11 +47,12 @@ const createProjectJoi = (e) => {
     
     e.persist();
     const value = e.target.value;
+    // const text =  value.trim();
     setTextFieldValue(value);
 
     setData((old) => ({
         ...old,
-        [props?.id]: value,
+        [props?.id]: value
     }));
     validate();
 };
