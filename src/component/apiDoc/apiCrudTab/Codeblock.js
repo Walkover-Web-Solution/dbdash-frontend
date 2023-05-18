@@ -44,9 +44,7 @@ function CodeBlock(props) {
           <code style={{ color: "white" }}>
             {"-data{\n"}
             {props.body.map((x, index) => (
-              <span style={{ margin: "1px" }} key={index}>{`"${x}":"`}
-                <input type="text" style={{ backgroundColor: "black", color: "white", border: "none", width: "fit-content" }} />
-                {`",\n`}</span>
+              <span style={{ margin: "1px" }} key={index}>{`"${x[0]}":"${x[1]}",\n`}</span>
             ))}
             {"}"}
           </code>

@@ -62,7 +62,7 @@ function BasicStuff(props) {
           <Typography style={{ fontWeight: "bold" }}>fieldName</Typography>
           {fieldData &&
             Object.entries(fieldData).map((fields, index) => (
-              <Typography key={index}>{fields[1].fieldName}</Typography>
+              <Typography style={{ fontSize:"20px"}} key={index}>{fields[1].fieldName}</Typography>
             ))}
         </Grid>
         <Grid item xs={4}>
@@ -71,7 +71,7 @@ function BasicStuff(props) {
             Object.entries(fieldData).map((fields, index) => (
               <div
                 key={index}
-                style={{ display: "flex", flexDirection: "row" }}
+                style={{ display: "flex", flexDirection: "row" , fontSize:"20px"}}
               >
                 <Typography key={index}>{fields[0]}</Typography>
                 {CopyButton(fields[0])}

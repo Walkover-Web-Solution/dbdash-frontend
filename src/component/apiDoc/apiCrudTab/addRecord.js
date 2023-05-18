@@ -32,7 +32,13 @@ function AddRecord(props) {
           )} -H Content-Type: application/json`}
           body={arr}
         />
-        <ResponseBox response={`lorem1000`} />
+        <ResponseBox response={`{
+"employee": {
+"name": "sonoo",
+"salary": 56000,
+"married": true.
+}
+}`} />
       </div>
       <div
         style={{
@@ -47,6 +53,9 @@ function AddRecord(props) {
         <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
           Add Table Records
         </Typography>
+        <br />
+        <br />
+
 
         <Typography>
           <Box>

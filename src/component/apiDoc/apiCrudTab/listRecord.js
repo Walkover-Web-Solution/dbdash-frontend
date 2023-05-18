@@ -25,7 +25,13 @@ function ListRecord(props) {
         }}
       >
      <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
-     <ResponseBox response={`lorem1000`} />
+     <ResponseBox response={`{
+"employee": {
+"name": "sonoo",
+"salary": 56000,
+"married": true.
+}
+}`} />
      </div>
      <div style={{width:'700px',height:"65vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
         <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>List records</Typography>
