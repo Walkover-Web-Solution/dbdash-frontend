@@ -20,7 +20,7 @@ const style = {
 export default function PopupModal(props) {
   const handleClose = () => props.setOpen(false);
   const [textFieldValue, setTextFieldValue] = useState("");
-  console.log("text", textFieldValue);
+  // console.log("text", textFieldValue);
 
   const { state, setData, setExplicitField, validate } = useValidator({
     initialData: {
