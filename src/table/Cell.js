@@ -24,7 +24,7 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 const Cell = memo(
-  ({ value: initialValue, row, column: { id, dataType, metadata }, }) => {
+  ({ value: initialValue, row, column: { id, dataType, metadata} }) => {
   
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
@@ -35,6 +35,10 @@ const Cell = memo(
     const [isOpen, setIsOpen] = useState(false);
     const [previewModal, setPreviewModal] = useState(false)
     const [selectedInput, setSelectedInput] = useState(null);
+
+
+    
+
 
     const handleInputClick = (event) => {
       // remove the border from the previously selected input element (if any)
@@ -536,4 +540,5 @@ Cell.propTypes = {
   column: PropTypes.any,
   dataDispatch: PropTypes.any,
   row: PropTypes.any,
+  headerGroups:PropTypes.any
 };
