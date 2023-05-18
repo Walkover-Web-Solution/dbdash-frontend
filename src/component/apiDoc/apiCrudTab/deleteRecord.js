@@ -33,7 +33,13 @@ function DeleteRecord(props) {
           body={arr}
 
 
-        />  <ResponseBox response={"hello"} />
+        />  <ResponseBox response={`{
+          "employee": {
+          "name": "sonoo",
+          "salary": 56000,
+          "married": true.
+          }
+          }`} />
       </div>
 
 
