@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Box,Button,TextField,Typography} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import useValidator from "react-joi";
@@ -18,22 +18,26 @@ const style = {
 };
 
 export default function PopupModal(props) {
-  
   const handleClose = () => props.setOpen(false);
   const [textFieldValue, setTextFieldValue] = useState("");
-  console.log("text",textFieldValue)
+  console.log("text", textFieldValue);
 
-  const { state, setData, setExplicitField,validate} = useValidator({
+  const { state, setData, setExplicitField, validate } = useValidator({
     initialData: {
       [props?.id]: null,
     },
     schema: Joi.object({
-      [props?.id]: Joi.string().min(3).max(30).required()
-    .messages({
-      'string.min': `${props?.joiMessage} must be at least {#limit} characters long`,
-      'string.max': `${props?.joiMessage} must not exceed {#limit} characters`,
-      'string.empty' : `${props?.joiMessage} is required`
-        })
+      [props?.id]: Joi.string()
+        .min(3)
+        .max(30)
+        .pattern(/^[^\s]+$/)
+        .required()
+        .messages({
+          "string.min": `${props?.joiMessage} must be at least {#limit} characters long`,
+          "string.max": `${props?.joiMessage} must not exceed {#limit} characters`,
+          "string.empty": `${props?.joiMessage} is required`,
+          "string.pattern.base": `${props?.joiMessage} must not contain spaces`,
+        }),
     }),
     explicitCheck: {
       [props?.id]: false,
@@ -43,25 +47,22 @@ export default function PopupModal(props) {
     },
   });
 
-const createProjectJoi = (e) => {
-    
+  const createProjectJoi = (e) => {
     e.persist();
     const value = e.target.value;
-    // const text =  value.trim();
     setTextFieldValue(value);
 
     setData((old) => ({
-        ...old,
-        [props?.id]: value
+      ...old,
+      [props?.id]: value,
     }));
     validate();
-};
-
+  };
 
   return (
     <Box>
       <Modal
-      disableRestoreFocus
+        disableRestoreFocus
         open={props.open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -73,14 +74,14 @@ const createProjectJoi = (e) => {
           </Typography>
           <Box sx={{ my: 2 }}>
             <TextField
-             error={
-              state?.$errors?.[props?.id].length === 0
+              error={
+                state?.$errors?.[props?.id].length === 0 && textFieldValue.includes(" ")
                   ? false
                   : state.$errors?.[props?.id]
-                      ? true
-                      : false
-          }
-             autoFocus
+                    ? true
+                    : false
+              }
+              autoFocus
               id={props?.id}
               name={props?.id}
               label={props.label}
@@ -91,29 +92,37 @@ const createProjectJoi = (e) => {
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                if(textFieldValue.length >= 3 && textFieldValue.length <= 30){
-                  if (e.key === 'Enter') {
+                if (textFieldValue.length >= 3 && textFieldValue.length <= 30 && textFieldValue.includes(" ")) {
+                  if (e.key === "Enter") {
                     props.submitData(e);
                     handleClose();
                   }
-                }               
+                }
               }}
             />
-             <div style={{ color: "red", fontSize: "12px" }}>
-                    {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
-                </div>
+            <div style={{ color: "red", fontSize: "12px" }}>
+              {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
+            </div>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Button variant="contained" disabled={textFieldValue.length < 3 || textFieldValue.length >30} onClick={()=>{
-                validate();
+              <Button
+                variant="contained"
+                disabled={
+                  textFieldValue.length < 3 ||
+                  textFieldValue.length > 30 ||
+                  textFieldValue.includes(" ")
+                }
+                onClick={() => {
+                  validate();
                   props?.submitData();
-              }}>
+                }}
+              >
                 Create
               </Button>
             </Box>
             <Box>
-              <Button variant="outlined" onClick={(e)=>handleClose(e)}>
+              <Button variant="outlined" onClick={handleClose}>
                 Cancel
               </Button>
             </Box>
@@ -129,8 +138,8 @@ PopupModal.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   label: PropTypes.string,
-  submitData:PropTypes.func,
-  setVariable:PropTypes.func,
+  submitData: PropTypes.func,
+  setVariable: PropTypes.func,
   id: PropTypes.string,
-  joiMessage: PropTypes.string
+  joiMessage: PropTypes.string,
 };
