@@ -8,7 +8,6 @@ import Grid from "@mui/material/Grid";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 
 function BasicStuff(props) {
-  console.log("props", props);
   const [fieldData, setFieldData] = useState(null);
   const tableData = async () => {
     const data = await getAllfields(props.db, props.table);
