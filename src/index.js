@@ -11,7 +11,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 
 Sentry.init({
-  dsn: "https://76cdde12fd65496480cf108375a67b13@o4505005456752640.ingest.sentry.io/4505204395737088",
+  dsn: process.env.REACT_APP_DSN,
   integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
   // Performance Monitoring
   tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
