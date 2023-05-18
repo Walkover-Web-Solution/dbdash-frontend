@@ -37,7 +37,7 @@ export const OrgList = (props) => {
     const userId = localStorage.getItem("userid")
     if (obj?.users) {
       Object.entries(obj?.users).map((user) => {
-        if (user[1].user_id._id == userId && user[1].user_type == "admin") {
+        if (user[1].user_id._id == userId && user[1].user_type == "owner") {
           setIsAdmin(true);
         }
       });

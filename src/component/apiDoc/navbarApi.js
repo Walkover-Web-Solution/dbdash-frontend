@@ -82,19 +82,22 @@ export default function Navbar() {
         </FormControl>}
       </Box>
       
-      {Object.keys(tables).length >= 1 && <Box >
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
-          <Select value={selectTable} label= "Tables-Name"
-            onChange={handleChangeTable} >
-            {Object.entries(tables)?.map((table) => (
-              <MenuItem key={table[0]} value={table[0]} >
-                {table[1].tableName || table[0]}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>}
+     {Object.keys(tables).length >= 1 && (
+  <Box>
+    <FormControl sx={{ m: 1, minWidth: 120 }}>
+      <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
+      <Select value={selectTable} label="Tables-Name" onChange={handleChangeTable}>
+        {Object.entries(tables)
+          ?.sort((a, b) => a[1].tableName.localeCompare(b[1].tableName)) // Sort by tableName
+          .map((table) => (
+            <MenuItem key={table[0]} value={table[0]}>
+              {table[1].tableName || table[0]}
+            </MenuItem>
+          ))}
+      </Select>
+    </FormControl>
+  </Box>
+)}
       </Box>
       <Box>
 
