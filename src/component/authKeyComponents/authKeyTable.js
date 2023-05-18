@@ -5,7 +5,10 @@ import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
 import { useSelector } from "react-redux";
 import { allOrg } from "../../store/database/databaseSelector"
+// import authKeyDropdown from './authKeyDropdown'
+
 export default function AuthKey(props) {
+  console.log("authkeytable",props)
 
   const adminId = localStorage.getItem("userid");
   const [authKeys, setAuthKeys] = useState(null)
@@ -13,6 +16,7 @@ export default function AuthKey(props) {
   const user = useSelector((state) => allOrg(state));
 
   useEffect(async() => {
+    console.log(props.scope,props.selected);
     const arrayofUser = await getAuthkeyFun();
     setCreatedBy(arrayofUser)
 
@@ -21,6 +25,7 @@ export default function AuthKey(props) {
   async function getAuthkeyFun() {
     const data = await getAuthkey(props.dbId, adminId)
     setAuthKeys(data?.data?.data)
+    console.log(data)
     var array = [];
     Object.entries(Object.values(data?.data?.data))?.map((key) => {
       user[0]?.users?.map((id) => {
@@ -37,6 +42,7 @@ export default function AuthKey(props) {
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props.dbId, adminId, authKey)
     const dataa = await getAuthkey(props.dbId, adminId)
+    
     setAuthKeys(dataa?.data?.data)
     return data;
   }
@@ -55,12 +61,15 @@ export default function AuthKey(props) {
                 <TableCell>Name</TableCell>
                 <TableCell>Created By</TableCell>
                 <TableCell>Created On</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell>Table Access</TableCell>
+                <TableCell>Scope</TableCell>
+
                 <TableCell> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {authKeys && Object.keys(authKeys).map((keys,index) => (
+                
                 <TableRow
                   key={keys}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -73,6 +82,8 @@ export default function AuthKey(props) {
                   
                  
                   <TableCell>{authKeys[keys].createDate}</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
                   <TableCell>
                   <TableMenuDropdown authData={authKeys[keys]} first={"Edit"} second={"Delete"} third={"Show AuthKey"} title={keys} deleteFunction={deleteAuthkeyFun}/>
                   </TableCell>
@@ -88,5 +99,6 @@ export default function AuthKey(props) {
 
 
 AuthKey.propTypes = {
-  dbId: PropTypes.string
+  dbId: PropTypes.string,
+  
 }
