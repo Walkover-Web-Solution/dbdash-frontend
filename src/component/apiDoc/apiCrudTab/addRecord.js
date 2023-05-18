@@ -1,38 +1,78 @@
-import React from 'react'
-import { PropTypes } from 'prop-types';
-//import { Box } from '@mui/system';
-// import CodeSnippet from '../codeSnippet';
-import { Typography } from '@mui/material';
-import CodeBlock from './Codeblock';
+import React, { useState } from "react";
+import { PropTypes } from "prop-types";
+import { Box } from "@mui/system";
+import { Typography } from "@mui/material";
+import CodeBlock from "./Codeblock";
+
+import Records from "./records";
+import ResponseBox from "./responseBox";
+
 function AddRecord(props) {
-const data = `
--data {
-  "fieldId1" : "value1",
-  "fieldId2" : "value2",
-  "fieldId3" : "value3",
-   ...
-     }
-`;
+  const [arr, setArr] = useState([]);
+
   return (
     <>
-      <CodeBlock code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN ${<br/>} -H Content-Type: application/json`} body={data}/>
-    
-        <Typography style={{fontWeight: 'bold' ,fontSize: '24px' }}>Add Table Records</Typography>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          position: "fixed",
+          right: 0,
+          width: "44vw",
+          padding: "10px",
+          height: "65vh",
+          overflowY: "scroll",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+        <CodeBlock
+          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
+          header={`-H auth-key: YOUR_SECRET_API_TOKEN ${(
+            <br />
+          )} -H Content-Type: application/json`}
+          body={arr}
+        />
+        <ResponseBox response={`{
+"employee": {
+"name": "sonoo",
+"salary": 56000,
+"married": true.
+}
+}`} />
+      </div>
+      <div
+        style={{
+          width: "700px",
+          height: "65vh",
+          overflowY: "scroll",
+          backgroundColor: "white",
+          whiteSpace: "pre-wrap",
+          padding: "2px",
+        }}
+      >
+        <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
+          Add Table Records
+        </Typography>
+        <br />
+        <br />
+
+
         <Typography>
-        <span>
-        To create {props.table} new records, issue a POST request to the {props.table} endpoint.
-        <br/> Your request body should include a json.These json should have field id and field value as a key value pair.
-        </span>
-      </Typography>
-      {/* <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}/> */}
-      {/* <Typography>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</Typography>
-      <Typography>{`-H Content-Type: application/json` }</Typography>
-      <Typography sx={{ whiteSpace: 'pre-wrap' }}>{data}</Typography> */}
+          <Box>
+            <Records
+              db={props?.db}
+              setArr={setArr}
+              arr={arr}
+              table={props?.table}
+            />
+          </Box>
+        </Typography>
+      </div>
     </>
-  )
+  );
 }
 AddRecord.propTypes = {
   db: PropTypes.string,
-  table:PropTypes.string
-}
-export default AddRecord
+  table: PropTypes.string,
+};
+export default AddRecord;

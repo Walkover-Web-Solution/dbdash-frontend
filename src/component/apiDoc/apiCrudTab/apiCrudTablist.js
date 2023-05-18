@@ -11,36 +11,20 @@ import ListRecord from './listRecord';
 import AddRecord from './addRecord';
 import UpdateRecord from './updateRecord';
 import DeleteRecord from './deleteRecord';
+// import Authentication from './authentication';
+
 const StyledTab = styled(Tab)(() => ({
   minWidth: 0,
   backgroundColor: '#9e9e9e',
   color: '#fff',
   position: 'relative',
-  padding: '10px 20px',
-  margin: '0 1px',
+  padding: '3px 35px',
+  // margin: '0 1px',
   '&.Mui-selected': {
     backgroundColor: '#fff',
     color: '#000',
   },
-  
-  
-  // '&::after': {
-  //   content: "''",
-  //   position: 'absolute',
-  //   top: 0,
-  //   right: 0,
-  //   width: 0,
-  //   height: 0,
-  //   borderStyle: 'solid',
-  //   borderWidth: '0 0 40px 20px',
-  //   borderColor: 'transparent transparent #9e9e9e transparent',
-  //   transform: 'skewX(70deg)',
-  // },
 }));
-
-
-
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -93,22 +77,22 @@ function ApiCrudTablist(props) {
           },
           className: 'custom-tab-indicator',
         }} value={value} onChange={handleChange} aria-label="basic tabs example">
+          {/* <StyledTab label="Authentication" {...a11yProps(0)} /> */}
           <StyledTab label="Basic stuff" {...a11yProps(0)} />
-          {/* <Tab label="Retrieve a record" {...a11yProps(1)} /> */}
-          <StyledTab label="List/Search records" {...a11yProps(1)} />
-          <StyledTab label="Add records" {...a11yProps(2)} />
-          <StyledTab label="Update records" {...a11yProps(3)} />
-          <StyledTab label="Delete records" {...a11yProps(4)} />
+          <StyledTab label="List/Search" {...a11yProps(1)} />
+          <StyledTab label="Add" {...a11yProps(2)} />
+          <StyledTab label="Update" {...a11yProps(3)} />
+          <StyledTab label="Delete" {...a11yProps(4)} />
         </Tabs>
       </Box>
+      {/* <TabPanel value={value} index={0}>
+        <Authentication db={props.db} table={props.table} />
+      </TabPanel> */}
       <TabPanel value={value} index={0}>
         <Box>
         <BasicStuff db={props.db} table={props.table}/>
         </Box>
       </TabPanel>
-      {/* <TabPanel value={value} index={1}>
-        <RetrieveRecord db={props.db} table={props.table} />
-      </TabPanel> */}
       <TabPanel value={value} index={1}>
         <ListRecord db={props.db} table={props.table}/>
       </TabPanel>
@@ -122,6 +106,7 @@ function ApiCrudTablist(props) {
        <DeleteRecord db={props.db} table={props.table}/>
       </TabPanel>
     </Box>
+
     </>
   )
 }

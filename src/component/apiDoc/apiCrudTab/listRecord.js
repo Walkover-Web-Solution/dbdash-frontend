@@ -1,56 +1,85 @@
-import React from 'react'
+import React ,{useState} from 'react'
 import { PropTypes } from 'prop-types';
-import { Box } from '@mui/system';
-// import { getTable } from '../../../api/tableApi'
-// import CodeSnippet from '../codeSnippet';
-import { Typography } from '@mui/material';
+import {Typography} from '@mui/material';
 import CodeBlock from './Codeblock';
+import OptionalParameter from './optionalParameter';
+import ResponseBox from './responseBox';
+
 function ListRecord(props) {
+  const[value,setValue]=useState('');
+  const[age,setAge]=useState('')
+ 
   return (
     <>
-     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
-     
+    <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          position: "fixed",
+          right: 0,
+          width: "44vw",
+          padding: "10px",
+          height: "65vh",
+          overflowY: "scroll",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
+     <ResponseBox response={`{
+"employee": {
+"name": "sonoo",
+"salary": 56000,
+"married": true.
+}
+}`} />
+     </div>
+     <div style={{width:'700px',height:"65vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
         <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>List records</Typography>
         <Typography>
         To list records in {props.table} ,issue a GET request to the {props.table} endpoint using {props.table} ids<br/>
         You can filter, sort, and format the results with the following query parameters.
         <br/>
         <br/>
-      <b>Specific fields</b> &nbsp;Only data for fields whose names are in this list will be included in the result.<br/>
-                    If you do not need every field, you can use this parameter to reduce the amount of<br/>
-                    data transferred.<br/>
-                    {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }?fields=field1,field2,field3<br/>
-                    <br/>
-                    <br/>
-      <b>filterByFormula</b> &nbsp;A formula used to filter records. The formula will be evaluated for each record,and if the result is<br/>
-                               not 0, false, NaN, [] or #Error! the record will be included in the response.Get a row filter=id=rowId<br/>
-                            {/* We recommend testing your formula in the Formula field UI before using it in your API request.If combined with the view parameter,<br/> */}
-                            {/* only records in that view which satisfy the formula will be returned.The formula must be encoded first<br/> */}
-                             {/* before passing it as a value. You can use this tool to not only encode the formula but also create<br/> */}
-                            {/* the entire url you need. */}
-                            {/* <br/> */}
-                            {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }<br/>?fields=field1,field2,field3&filter=field1=!null AND field2=&lsquo;xyz&rsquo;<br/>
+        <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge}/>
 
-                            <br/>
-                            <br/>
-             <b>pageSize</b>&nbsp;The number of records returned in each request.Must be less than or equal to 200.<br/>
-                                 Default is 200.
-                                 <br/>
-                                 {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }?page=1&limit=200
-                                 <br/>
-                                 <br/>
-                     <b>sort</b>&nbsp; A list of sort objects that specifies how the records will be ordered.<br/>
-                     {`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}` }?fields=field1,field2,field3&sort=field1,asc.
+        {/* <Box
+          component="div"
+          style={{ border: '2px solid black', borderRadius: '1px', padding: '10px', width: "54.5vw", backgroundColor: 'lightgrey' }}
+        >
+          <Typography style={{ fontWeight: 'bold', fontSize: '17px' }}>Optional parameter</Typography>
+          <Typography style={{ fontWeight: 'bold', fontSize: '17px' ,paddingTop:'10px'}}>Where</Typography>
+          <Typography style={{paddingBottom:'15px'}}>To filter record based on certain</Typography>
+          <TextField id="outlined-basic" value={value} label=" " onChange={(e)=>{setValue(e.target.value)}}variant="outlined" style={{ height: '0px', width: 450 }} />
+          <br />
+          <br />
+          <br/>
+          <Link href="#" style={{ontSize: '15px'}}>Learn more about the where clause</Link>
+          <Typography style={{ fontWeight: 'bold', fontSize: '17px' ,paddingBottom:'8px',paddingTop:'13px'}}>Limit</Typography>
+          <Typography>Limit Column/Field in response</Typography>
+          <div>
+            <FormControl sx={{ m: 1, minWidth: 60 }}>
+              <InputLabel id="demo-simple-select-helper-label" style={{fontSize:'15px', paddingbottom:'40px'}}>All</InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={age}
+                label="Age"
+                onChange={handleChange}
+                style={{height:'50px'}}
+              >
+                <MenuItem value=""><em>None</em></MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </Box> */}
         </Typography>
         <br/>
-    {/* <Box>
-      <CodeSnippet  codeString={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
-      />
-      <p>{`-H auth-key: YOUR_SECRET_API_TOKEN `}</p>
-    </Box> */}
-    <Box>
-      <Typography></Typography>
-    </Box>
+   
+   
+    </div>
     </>
   )
 }

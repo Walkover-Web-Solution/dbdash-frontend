@@ -169,7 +169,21 @@ const Cell = memo(
         );
         break;
 
-      case "id":
+      case "rowid":
+        element = (
+          <input
+            type="text"
+            readOnly="readonly"
+            value={(value?.value && value?.value?.toString()) || ""}
+            className="data-input"
+            style={{ background: "none" }}
+            onClick={handleInputClick}
+            onBlur={handleInputBlur}
+            onFocus={handleInputClick}
+          />
+        );
+        break;
+      case "autonumber":
         element = (
           <input
             type="text"

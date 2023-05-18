@@ -183,8 +183,8 @@ const Table = memo(
 
       
             
-              <div className='tr add-row'  style={{ position: 'relative' ,bottom: 0,
-        left: 0}}
+              <div className='tr add-row' 
+              style={{ position: 'sticky' ,bottom: 0,left: 0}}
           onClick={() => dataDispatch(addRows({ type: "add_row" }))}
         >
           <span className='svg-icon svg-gray' style={{ marginRight: 4,mt:0,p:0 }}>
