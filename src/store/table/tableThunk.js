@@ -84,7 +84,7 @@ const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
     const userInfo = allOrg(getState());
     const tableInfo = getTableInfo(getState())
     const userJson = await replaceCreatedByIdWithName(userInfo,org_id)
-    const createdby = "fld"+tableName.substring(3)+"createdby"
+    const createdby = "fld"+tableName.substring(4)+"createdby"
     obj.map((row) => {
         row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
     })
@@ -121,7 +121,7 @@ export const bulkAddColumns = createAsyncThunk(
             )
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
-            const createdby = "fld"+payload.tableName.substring(3)+"createdby"
+            const createdby = "fld"+payload.tableName.substring(4)+"createdby"
 
             querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
                 row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
@@ -260,7 +260,7 @@ export const updateCells = createAsyncThunk(
             return payload;
         }
         const data = await updateRow(dbId, tableId, payload.rowIndex, { [columnId]: value })
-        const createdby = "fld"+tableId.substring(3)+"createdby"
+        const createdby = "fld"+tableId.substring(4)+"createdby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {
                 if (user?.user_id?._id == data?.data?.data?.[createdby]) {
@@ -280,7 +280,7 @@ export const addRows = createAsyncThunk(
         const userInfo = allOrg(getState());
         const { tableId, dbId } = getState().table
         const newRow = await insertRow(dbId, tableId);
-        const createdby = "fld"+tableId.substring(3)+"createdby"
+        const createdby = "fld"+tableId.substring(4)+"createdby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {
                 if (user?.user_id?._id == newRow?.data?.data?.[createdby]) {
@@ -299,7 +299,7 @@ export const deleteRows = createAsyncThunk(
         const { tableId, dbId } = getState().table
 
         for (var index in payload) {
-            arr.push(payload[index].original.id || payload[index].original["fld"+tableId.substring(3)+"autonumber"] )
+            arr.push(payload[index].original.id || payload[index].original["fld"+tableId.substring(4)+"autonumber"] )
         }
         await deleteRow(dbId, tableId, { row_id: arr });
         dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));

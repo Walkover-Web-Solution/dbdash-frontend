@@ -77,7 +77,7 @@ const Cell = memo(
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
+            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(4)+"autonumber"],
             value: null,
             imageLink: imageLink,
             dataTypes: type,
@@ -94,7 +94,7 @@ const Cell = memo(
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
+            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(4)+"autonumber"],
             value: e.target.files[0],
             imageLink: imageLink,
             dataTypes: type,
@@ -115,7 +115,7 @@ const Cell = memo(
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex:   row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
+            rowIndex:   row.original.id || row.original?.["fld"+tableId.substring(4)+"autonumber"],
             value: value.value,
             dataTypes: "dataTypes",
           })

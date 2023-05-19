@@ -500,7 +500,7 @@ export function extraReducers(builder) {
       state.skipReset=true;
       let arr= [];
       state.data.forEach((ele)=>{
-        const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
+        const id  = ele.id ?  "id " :"fld"+state.tableId.substring(4)+"autonumber" 
         if(ele[id] !==action.rowIndex ) {
           arr=[...arr,{...ele}];     }
         else {

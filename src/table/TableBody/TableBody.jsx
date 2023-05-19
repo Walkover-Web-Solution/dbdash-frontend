@@ -49,7 +49,7 @@ import {updateCells } from "../../store/table/tableThunk";
       dispatch(
         updateCells({
           columnId: cell.column.id,
-          rowIndex: cell.row.original.id || cell.row.original?.["fld"+tableId.substring(3)+"autonumber"],
+          rowIndex: cell.row.original.id || cell.row.original?.["fld"+tableId.substring(4)+"autonumber"],
           value: text,
         })
       );

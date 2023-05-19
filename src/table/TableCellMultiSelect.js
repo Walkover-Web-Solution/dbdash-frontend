@@ -65,7 +65,7 @@ function Tag(props) {
     dispatch(
       updateCells({
         columnId: props?.colid,
-        rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
+        rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
         value: { delete: value },
         dataTypes: "multipleselect"
       })
@@ -203,7 +203,7 @@ export default function TableCellMultiSelect(props) {
       let delval=props?.value.slice(-1)[0];
       dispatch(updateCells({
         columnId: props?.colid,
-        rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
+        rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
         value: {delete:delval},
         dataTypes: "multipleselect"
      } ))
@@ -231,7 +231,7 @@ export default function TableCellMultiSelect(props) {
       dispatch(
         updateCells({
           columnId: props?.colid,
-          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
+          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
           value: event.target.value || diffArr[0],
           dataTypes: "multipleselect"
         })
@@ -245,7 +245,7 @@ export default function TableCellMultiSelect(props) {
        dispatch(
         updateCells({
           columnId: props?.colid,
-          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
+          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
           value:diffArr[0].value || "",
           dataTypes: "multipleselect"
         })
