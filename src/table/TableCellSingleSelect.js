@@ -12,6 +12,8 @@ import { cloneDeep } from 'lodash';
 
 export default function TableCellSingleSelect(props) {
   const tableInfo = useSelector((state) => getTableInfo(state));
+
+
   const metaDataArray = tableInfo?.columns.filter(obj => { return obj.id === props?.colid });
   const top100Films = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   const [value, setValue] = useState(props?.value);
@@ -22,7 +24,7 @@ export default function TableCellSingleSelect(props) {
       dispatch(
         updateCells({
           columnId: props?.colid,
-          rowIndex: props?.rowid,
+           rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
           value: newValue || "",
           dataTypes: "singleselect"
         })
@@ -33,7 +35,7 @@ export default function TableCellSingleSelect(props) {
       dispatch(
         updateCells({
           columnId: props?.colid,
-          rowIndex: props?.rowid,
+          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
           value: newValue || "",
           dataTypes: "singleselect"
         })
@@ -47,13 +49,13 @@ export default function TableCellSingleSelect(props) {
           fieldName: props?.colid,
           columnId: props?.colid,
           dataTypes: "singleselect",
-          metaData: updatedMetadata,
+          metaData: { option : updatedMetadata},
         })
       );
       dispatch(
         updateCells({
           columnId: props?.colid,
-          rowIndex: props?.rowid,
+          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
           value: newValue || "",
           dataTypes: "singleselect"
         })

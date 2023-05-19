@@ -1,7 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import ContentEditable from "react-contenteditable";
 import { updateCells } from "../store/table/tableThunk";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
@@ -25,6 +25,7 @@ dayjs.extend(localizedFormat);
 
 const Cell = memo(
   ({ value: initialValue, row, column: { id, dataType, metadata,width} }) => {
+   
   
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
@@ -35,7 +36,7 @@ const Cell = memo(
     const [isOpen, setIsOpen] = useState(false);
     const [previewModal, setPreviewModal] = useState(false)
     const [selectedInput, setSelectedInput] = useState(null);
-
+    const tableId = useSelector((state) => state.table.tableId)
 
     
 
@@ -76,7 +77,7 @@ const Cell = memo(
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex: row.original.id,
+            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
             value: null,
             imageLink: imageLink,
             dataTypes: type,
@@ -93,7 +94,7 @@ const Cell = memo(
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex: row.original.id,
+            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
             value: e.target.files[0],
             imageLink: imageLink,
             dataTypes: type,
@@ -114,7 +115,7 @@ const Cell = memo(
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex: row.original.id,
+            rowIndex:   row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
             value: value.value,
             dataTypes: "dataTypes",
           })
@@ -124,6 +125,7 @@ const Cell = memo(
 
     let element;
     switch (dataType) {
+    
       case "formula":
         element = (
           <input
@@ -136,6 +138,7 @@ const Cell = memo(
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
           />
+        
         );
         break;
 
@@ -408,13 +411,13 @@ const Cell = memo(
        
         element = (
           <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen}  width ={width} /></div>)
+            <TableCellMultiSelect  tableId = {tableId} row={row} value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen}  width ={width} /></div>)
         break;
 
       case "singleselect":
         element = (
           <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellSingleSelect metaData={metadata} value={value?.value} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} />
+            <TableCellSingleSelect   tableId = {tableId} row={row} metaData={metadata} value={value?.value} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} />
           </div>
         );
         break;
@@ -503,7 +506,7 @@ const Cell = memo(
                       setPreviewModal(true)
                     }} />
                     {previewModal && (
-                      <PreviewAttachment imageLink={imgLink} open={previewModal} setPreviewModal={setPreviewModal} rowId={row.original.id} columnId={id}/>
+                      <PreviewAttachment imageLink={imgLink} open={previewModal} tableId = {tableId}  setPreviewModal={setPreviewModal} rowId={row.original.id} columnId={id} row={row}/>
                     )}
                   </React.Fragment>
 
