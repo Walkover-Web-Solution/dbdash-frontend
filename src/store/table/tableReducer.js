@@ -499,11 +499,11 @@ export function extraReducers(builder) {
       const action = payload
       state.skipReset=true;
       let arr= [];
-    
       state.data.forEach((ele)=>{
-        if(ele.id!==action.rowIndex) {
+        const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
+        if(ele[id] !==action.rowIndex ) {
           arr=[...arr,{...ele}];     }
-        else{
+        else {
          
           if(action?.dataTypes == "file"  )
           {  

@@ -18,6 +18,7 @@ import {updateCells } from "../../store/table/tableThunk";
 })
  {
    const dispatch =  useDispatch()
+   const tableId = useSelector((state) => state.table.tableId)
   const limit = 200;
   const hasNextPage = React.useMemo(() => rows.length <= limit, [rows, limit]) ; //true
   const itemCount = hasNextPage ? rows.length + 1 : rows.length;
@@ -48,7 +49,7 @@ import {updateCells } from "../../store/table/tableThunk";
       dispatch(
         updateCells({
           columnId: cell.column.id,
-          rowIndex: cell.row.original.id,
+          rowIndex: cell.row.original.id || cell.row.original?.["fld"+tableId.substring(3)+"autonumber"],
           value: text,
         })
       );
