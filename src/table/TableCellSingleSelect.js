@@ -24,7 +24,7 @@ export default function TableCellSingleSelect(props) {
       dispatch(
         updateCells({
           columnId: props?.colid,
-           rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
+           rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
           value: newValue || "",
           dataTypes: "singleselect"
         })
@@ -35,7 +35,7 @@ export default function TableCellSingleSelect(props) {
       dispatch(
         updateCells({
           columnId: props?.colid,
-          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
+          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
           value: newValue || "",
           dataTypes: "singleselect"
         })
@@ -55,7 +55,7 @@ export default function TableCellSingleSelect(props) {
       dispatch(
         updateCells({
           columnId: props?.colid,
-          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
+          rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
           value: newValue || "",
           dataTypes: "singleselect"
         })

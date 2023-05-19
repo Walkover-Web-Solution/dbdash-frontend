@@ -23,7 +23,7 @@ export default function PreviewAttachment(props) {
         dispatch(
             updateCells({
               columnId: props?.columnId,
-              rowIndex: props?.row.original.id ||props?.row.original?.["fld"+props?.tableId.substring(4)+"autonumber"],
+              rowIndex: props?.row.original.id ||props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
               value: {delete:imageUrl},
               dataTypes: null
             })
