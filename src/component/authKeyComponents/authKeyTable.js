@@ -100,5 +100,7 @@ export default function AuthKey(props) {
 
 AuthKey.propTypes = {
   dbId: PropTypes.string,
+  scope:PropTypes.any,
+  selected:PropTypes.any
   
 }
