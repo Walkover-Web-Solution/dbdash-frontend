@@ -65,13 +65,18 @@ export default function Navbar() {
       {alldb && selectedDb && <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
           <Select id="grouped-select" label="Organization and dbs" value={selectedDb} onChange={handleChange}>
-            {Object.entries(alldb).map(([orgId, dbs]) => [
-              <ListSubheader key={`${orgId}-header`} name={orgId}>{dbs[0].org_id.name}</ListSubheader>,
-              dbs?.map((db,index) => (
-                <MenuItem key={index} value={db?._id}>{db?.name} </MenuItem>
-              ))
-            ]
-            )}
+          {Object.entries(alldb)
+  .sort(([, dbs1], [, dbs2]) => dbs1[0].org_id.name.localeCompare(dbs2[0].org_id.name))
+  .map(([orgId, dbs]) => [
+    <ListSubheader key={`${orgId}-header`} name={orgId}>
+      {dbs[0].org_id.name}
+    </ListSubheader>,
+    dbs?.map((db, index) => (
+      <MenuItem key={index} value={db?._id}>
+        {db?.name}
+      </MenuItem>
+    ))
+  ])}
             {/* defaultValue={selectedOption} */}
           </Select>
         </FormControl>}
