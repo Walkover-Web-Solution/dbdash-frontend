@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from "react";
+import React, {useMemo, memo } from "react";
 import {
   useTable,
   useFlexLayout,
@@ -44,6 +44,7 @@ const Table = memo(
     update,
     hasNextPage,
   }) => {
+
     const sortTypes = useMemo(
       () => ({
         alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -71,7 +72,7 @@ const Table = memo(
       rows,
       prepareRow,
       selectedFlatRows,
-      state: { selectedCellIds, currentSelectedCellIds },
+      state: { selectedCellIds, currentSelectedCellIds},
       totalColumnsWidth,
     } = useTable(
       {
@@ -93,6 +94,28 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
+    useEffect(() => {
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const { target, contentRect } = entry;
+          const columnId = target.getAttribute("data-column-id");
+    
+          // Handle column width change
+          console.log(`Column ${columnId} width has changed to ${contentRect.width}px`);
+        }
+      });
+    
+      const headerCells = document.querySelectorAll(".rt-th");
+      headerCells.forEach((headerCell) => {
+        resizeObserver.observe(headerCell, { box: "border-box" });
+      });
+    
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }, []);
+    
+    
 
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
@@ -154,9 +177,8 @@ const Table = memo(
               isNextPageLoading={isNextPageLoading}
               totalColumnsWidth={totalColumnsWidth}
               prepareRow={prepareRow}
-              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds }}
+              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds}}
               update={update}
-             
             />
 
       
