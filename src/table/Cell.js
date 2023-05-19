@@ -24,7 +24,7 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 const Cell = memo(
-  ({ value: initialValue, row, column: { id, dataType, metadata ,width}, }) => {
+  ({ value: initialValue, row, column: { id, dataType, metadata,width} }) => {
   
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
@@ -35,6 +35,10 @@ const Cell = memo(
     const [isOpen, setIsOpen] = useState(false);
     const [previewModal, setPreviewModal] = useState(false)
     const [selectedInput, setSelectedInput] = useState(null);
+
+
+    
+
 
     const handleInputClick = (event) => {
       // remove the border from the previously selected input element (if any)
@@ -404,7 +408,7 @@ const Cell = memo(
        
         element = (
           <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen}  widht ={width} /></div>)
+            <TableCellMultiSelect value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen}  width ={width} /></div>)
         break;
 
       case "singleselect":
@@ -536,4 +540,5 @@ Cell.propTypes = {
   column: PropTypes.any,
   dataDispatch: PropTypes.any,
   row: PropTypes.any,
+  headerGroups:PropTypes.any
 };
