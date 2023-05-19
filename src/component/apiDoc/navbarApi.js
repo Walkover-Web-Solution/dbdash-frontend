@@ -58,15 +58,10 @@ export default function Navbar() {
     <>
       <Box align="center">
        
-        {Object.keys(tables).length >= 1 && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Button variant="contained" color="primary" sx={{ m: 1 }} disabled>APIs Documentation</Button>
-          <Link to={`/authkeypage/${dbId}`} state={selectedOption} style={{ textDecoration: 'none' }}>
-            <Button variant="contained" color="primary">Auth Key</Button>
-          </Link>
-        </Box>}
+        
       </Box>
       <Box sx={{display:"flex",flexDirection:"row"}}>
-      <Box >
+      <Box  sx={{display:"flex",flexDirection:"row"}}>
       {alldb && selectedDb && <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
           <Select id="grouped-select" label="Organization and dbs" value={selectedDb} onChange={handleChange}>
@@ -80,6 +75,7 @@ export default function Navbar() {
             {/* defaultValue={selectedOption} */}
           </Select>
         </FormControl>}
+        
       </Box>
       
       {Object.keys(tables).length >= 1 && <Box >
@@ -95,10 +91,16 @@ export default function Navbar() {
           </Select>
         </FormControl>
       </Box>}
+      {Object.keys(tables).length >= 1 && <Box sx={{ display: 'flex',  alignItems: 'center',marginRight:"10px",position:"fixed",right:0,top:"10vh"}}>
+          
+          <Link to={`/authkeypage/${dbId}`} state={selectedOption} style={{ textDecoration: 'none' }}>
+            <Button variant="contained" color="primary">Auth Key</Button>
+          </Link>
+        </Box>}
       </Box>
       <Box>
 
-       {loading &&  <ApiCrudTablist db={selectedOption} table={selectTable} />}
+       {loading &&  <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
       </Box>
     </>
   )

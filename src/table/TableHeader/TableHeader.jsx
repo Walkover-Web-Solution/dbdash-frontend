@@ -5,7 +5,7 @@ import { updateColumnOrder } from "../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import clsx from "clsx";
 
-function TableHeader({ getTableProps, headerGroups, columns }) {
+function TableHeader({ getTableProps, headerGroups, columns,selectedColumnIndex,setSelectedColumnIndex }) {
   const dispatch = useDispatch();
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
@@ -17,7 +17,14 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
     }
     return false;
   }
-  
+  const handleHeaderClick = (columnIndex) => {
+
+    if(selectedColumnIndex==columnIndex) {
+      setSelectedColumnIndex(null);
+      return;
+    }
+    setSelectedColumnIndex(columnIndex);
+  };
   const reoder = useCallback(
     (item, newIndex) => {
       const newOrder = Array.from(columns);
@@ -43,7 +50,10 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
       <div className="calculate">
         <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
           {headerGroups[0].headers?.map((column, index) => (
-            <th key={index}>
+            <th key={index}
+            className={selectedColumnIndex!==null && index===selectedColumnIndex ? "selected" : ""}
+    onClick={() => handleHeaderClick(index)}
+            >
             <React.Fragment key={index}>
               <DraggableHeader reoder={reoder} columns={column} index={index} />
             </React.Fragment>

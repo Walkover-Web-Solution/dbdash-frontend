@@ -20,6 +20,7 @@ export default function AuthKey(props) {
 
   async function getAuthkeyFun() {
     const data = await getAuthkey(props.dbId, adminId)
+    
     setAuthKeys(data?.data?.data)
     var array = [];
     Object.entries(Object.values(data?.data?.data))?.map((key) => {

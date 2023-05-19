@@ -8,43 +8,20 @@ import Joi from "joi";
 export default function PopupModal(props) {
   
   
-  const anchorRect = props?.anchorEl?.getBoundingClientRect();
-  const modalWidth = 300;
-  const modalHeight = 200;
-  
+
   const style = { 
     position: 'absolute',
-    top: anchorRect ? anchorRect.bottom : "0%",
-    left: anchorRect ? anchorRect.left : "0%",
+    top: "40%",
+    left: "40%",
     transform: 'none',
-    width: modalWidth,
+    width: "300px",
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
   
-  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  
-  // Check if there's enough space on the right side of the anchor element to fit the modal
-  if (anchorRect && anchorRect.left + modalWidth <= viewportWidth) {
-    // Position the modal to the right of the anchor element
-    style.left = anchorRect.left;
-  } else if (anchorRect) {
-    // Position the modal to the left of the anchor element
-    style.left = anchorRect.right - modalWidth;
-  }
-  
-  // Check if there's enough space below the anchor element to fit the modal
-  if (anchorRect && anchorRect.bottom + modalHeight <= viewportHeight) {
-    // Position the modal below the anchor element
-    style.top = anchorRect.bottom;
-  } else if (anchorRect) {
-    // Position the modal above the anchor element
-    style.top = anchorRect.top - modalHeight;
-  }
-
+ 
   const handleClose = () => props.setOpen(false);
   const [textFieldValue, setTextFieldValue] = useState("");
 
@@ -87,7 +64,7 @@ const createProjectJoi = (e) => {
       <Modal
       disableRestoreFocus
         open={props.open}
-        anchorEl={props?.anchorEl}
+       
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -98,6 +75,7 @@ const createProjectJoi = (e) => {
           </Typography>
           <Box sx={{ my: 2 }}>
             <TextField
+            autofocus={true}
              error={
               state?.$errors?.[props?.id].length === 0
                   ? false
@@ -158,5 +136,5 @@ PopupModal.propTypes = {
   setVariable:PropTypes.func,
   id: PropTypes.string,
   joiMessage: PropTypes.string,
-  anchorEl:PropTypes.any
+ 
 };

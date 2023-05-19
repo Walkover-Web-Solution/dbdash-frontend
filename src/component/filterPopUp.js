@@ -12,7 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
 import { setAllTablesData } from "../store/allTable/allTableSlice";
-
+import { bulkAddColumns } from "../store/table/tableThunk";
+import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -31,7 +32,7 @@ const addBtnStyle = {
 }
 
 export default function FilterModal(props) {
-
+  const navigate = useNavigate();
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const handleClose = () => {
@@ -52,7 +53,7 @@ export default function FilterModal(props) {
   }])
   useEffect(()=>{
    if(fieldData.length){
-    query[0].fields = fieldData[0]?.id
+    query[0].fields = query[0]?.fields ? query[0].fields : fieldData[0]?.id,
     setQuery(query)
    }
   },[fieldData])
@@ -165,33 +166,7 @@ export default function FilterModal(props) {
                 valuee = valuee.substring(1, valuee.length - 1);
               }
           }
-          // for (let i = 0; i < conditions.length; i++) {
-          //   if (conditions[i].includes("CAST")) {
-          //     console.log("consition",conditions)
-          //     json.fields = pqrs[0].substring(5);
-          //     json.selectedOption = pqrs[3] == "NOT" ? "NOT LIKE" :pqrs[3];
-          //     valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
-          //     if (valuee.indexOf('%') !== -1) {
-          //       valuee = valuee.substring(1, valuee.length - 1);
-          //     }
-          //     console.log(json.fields,json.selectedOption,valuee)
-          //   }
-          // } 
-          // let doesNotContainCast = true;
-          // for (let i = 0; i < conditions.length; i++) {
-          //   if (conditions[i].includes("CAST")) {   
-          //     doesNotContainCast = false;
-          //     break;   
-          //   }}    
-          //   if(doesNotContainCast != false){
-          //     console.log("1")
-          //     json.fields = pqrs[0];
-          //     json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
-          //     valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
-          //     if (valuee.indexOf('%') !== -1) {
-          //       valuee = valuee.substring(1, valuee.length - 1);
-          //     }
-          //   }         
+          
           json.value = valuee
           finalQuery.push(json)
         }
@@ -286,20 +261,20 @@ export default function FilterModal(props) {
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
         if (FieldDataType == "numeric") {
-          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+          queryToSend += query[i].selectedOption + " " + query[i].value 
         } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
         }
       }
       if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
         if (FieldDataType == "numeric") {
-          queryToSend += query[i].selectedOption + " " + query[i].value + " "
+          queryToSend += query[i].selectedOption + " " + query[i].value 
         } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
         }
       }
     }
-    return queryToSend
+    return queryToSend;
   }
   const getQueryData = async () => {
    const data =  await updateFilter();
@@ -308,12 +283,24 @@ export default function FilterModal(props) {
       query: data
     }
     const filter = await createFilter(props?.dbId, props?.tableName, dataa)
+    const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
+    const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName);
     dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
         "tables": filter.data.data.data.tables
       }
     ))
+    dispatch(bulkAddColumns(
+      {
+        "dbId": props?.dbId,
+        "filter":data,
+        "pageNo":1,
+        "tableName": props?.tableName
+      }
+    ))
+    props?.setUnderLine(filterKey)
+    navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
     return dataa;
   }
 
@@ -463,5 +450,6 @@ FilterModal.propTypes = {
   edit: PropTypes.any,
   filterId: PropTypes.any,
   dbData: PropTypes.any,
-  setEdit: PropTypes.func
+  setEdit: PropTypes.func,
+  setUnderLine:PropTypes.any
 };

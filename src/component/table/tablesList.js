@@ -34,7 +34,7 @@ export default function TablesList({ dbData }) {
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  // const [CSV,setCSV] = useState([])
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
 
@@ -53,7 +53,6 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   // const [idToNavigate,setIdToNavigate] = useState()
-
   const handleClick = (event,id) => {
     setcurrentTable(id)
     setAnchorEl(event.currentTarget);
@@ -69,7 +68,9 @@ export default function TablesList({ dbData }) {
     };
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
-    dispatch(createTable1({ tables: apiCreate.data.data.tables }));
+    dispatch(createTable1({ tables: apiCreate.data.data.tables })).then(e=>{
+      console.log(e);
+    });
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
       return apiCreate?.data?.data?.tables[key].tableName === table;
     });
@@ -117,9 +118,18 @@ export default function TablesList({ dbData }) {
         tables: deletedFilter.data.data.tables,
       })
     );
+    dispatch(
+      bulkAddColumns({
+        dbId: dbData?.db?._id,
+        tableName: params?.tableName ,
+        org_id: dbData?.db?.org_id,
+        pageNo: 1,
+      })
+    );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
+
     if (params?.filterName) {
       setUnderLine(params?.filterName)
       dispatch(
@@ -134,6 +144,7 @@ export default function TablesList({ dbData }) {
       // navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
     }
     else if (dbData?.db?.tables) {
+      
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(setTableLoading(true));
       dispatch(
@@ -142,7 +153,7 @@ export default function TablesList({ dbData }) {
           tableName: params?.tableName || tableNames[0],
           pageNo: 1,
         })
-      );
+      ).then((e)=>{console.log(e)});
       setValue(
         tableNames?.indexOf(params?.tableName) !== -1
           ? tableNames?.indexOf(params?.tableName)
@@ -201,7 +212,7 @@ export default function TablesList({ dbData }) {
           </Tabs>
           <Button
             variant="outlined"
-            onClick={(e) => {handleClick(e); handleOpen()}}
+            onClick={() => { handleOpen()}}
             sx={{ margin: "0.5rem", width: "fit-content", height: "5vh" }}
           >
             <AddIcon />
@@ -261,7 +272,7 @@ export default function TablesList({ dbData }) {
       </Box>
       {open && (
         <PopupModal
-        anchorEl={anchorEl}
+  
           title="Create Table"
           label="Table Name"
           open={open}
@@ -282,6 +293,7 @@ export default function TablesList({ dbData }) {
           filterId={filterId}
           dbId={dbData?.db?._id}
           tableName={params?.tableName}
+          setUnderLine = {setUnderLine}
         />
       )}
       <Menu

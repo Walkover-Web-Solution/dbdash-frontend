@@ -1,24 +1,41 @@
+.response-box{
+  
+  color: white;
+  background-color: grey;
+  padding: 10px;
+  border-radius: 5px;
+  width: 500px;
+  height: 100%;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding-bottom: 4vh;
+}
+::-webkit-scrollbar{
+  display: none;
+}
 .code-block {
-    position: fixed;
+    
     background-color: black;
     color: white;
-    padding: 10px;
+    padding-bottom: 4vh;
+   
     border-radius: 5px;
     width:500px;
-    height:300px;
-    right:0;
+   
+   height: 100%;
     margin-right:20px;
-    margin-bottom:300px;
+  margin-top: 20px;
   }
   
   .code-block pre {
     margin: 1;
+    margin-left: 10px;
   }
   
   .copy-button {
-    position: absolute;
+
     top: 5px;
-    right: 5px;
+    right: 5px; 
     background-color: transparent;
     color: white;
     border: none;

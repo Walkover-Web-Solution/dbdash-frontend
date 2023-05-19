@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from "react";
+import React, { useMemo, memo,useState } from "react";
 import {
   useTable,
   useFlexLayout,
@@ -44,6 +44,7 @@ const Table = memo(
     update,
     hasNextPage,
   }) => {
+
     const sortTypes = useMemo(
       () => ({
         alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -71,7 +72,7 @@ const Table = memo(
       rows,
       prepareRow,
       selectedFlatRows,
-      state: { selectedCellIds, currentSelectedCellIds },
+      state: { selectedCellIds, currentSelectedCellIds},
       totalColumnsWidth,
     } = useTable(
       {
@@ -93,6 +94,7 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
+    const[selectedColumnIndex,setSelectedColumnIndex]=useState(null);
 
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
@@ -137,7 +139,7 @@ const Table = memo(
         <DndProvider backend={HTML5Backend}>
            <ScrollingComponent id="scroll"
 
-            style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"74.1vh",width:"99.6vw"}}
+            style={{ display:"flex",overflowY:"hidden",overflowX:"scroll",height:"74.1vh",width:"99.6vw"}}
           >
             <table >
               
@@ -145,6 +147,8 @@ const Table = memo(
               getTableProps={getTableProps}
               headerGroups={headerGroups}
               columns={columns}
+              selectedColumnIndex={selectedColumnIndex}
+              setSelectedColumnIndex={setSelectedColumnIndex}
               
             />
      
@@ -155,15 +159,17 @@ const Table = memo(
               isNextPageLoading={isNextPageLoading}
               totalColumnsWidth={totalColumnsWidth}
               prepareRow={prepareRow}
-              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds }}
+              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds}}
               update={update}
+              selectedColumnIndex={selectedColumnIndex}
+              
              
             />
 
       
             
-              <div className='tr add-row'  style={{ position: 'relative' ,bottom: 0,
-        left: 0}}
+              <div className='tr add-row' 
+              style={{ position: 'sticky' ,bottom: 0,left: 0}}
           onClick={() => dataDispatch(addRows({ type: "add_row" }))}
         >
           <span className='svg-icon svg-gray' style={{ marginRight: 4,mt:0,p:0 }}>

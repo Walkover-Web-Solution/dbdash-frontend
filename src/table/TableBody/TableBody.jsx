@@ -15,6 +15,7 @@ import {updateCells } from "../../store/table/tableThunk";
   prepareRow,
   totalColumnsWidth,
   update = { update },
+selectedColumnIndex
 })
  {
    const dispatch =  useDispatch()
@@ -92,6 +93,7 @@ import {updateCells } from "../../store/table/tableThunk";
           id={`table-row-${index}`}
         >
           {row.cells.map((cell,key) => {
+           
                     
             return (
  
@@ -103,9 +105,11 @@ import {updateCells } from "../../store/table/tableThunk";
                key ={key} 
                data-id={`${index}-${key}`}
               //  {...cell.getCellProps()}
-                className="td" 
+               
                 
-
+                className={`td ${
+                  selectedColumnIndex !== null && key ===selectedColumnIndex ? "selectedCol" : ""
+                }`}
                style={
                 cellsSelected[cell.id]
                   ? {
@@ -151,15 +155,15 @@ import {updateCells } from "../../store/table/tableThunk";
         {({ onItemsRendered, ref }) => (
           <FixedSizeList
           // width={800}
-            height={500}
+            height={440}
             // height={35*rows.length}
             itemCount={rows.length}
             itemSize={35}
-             style={{overflowY:"hidden"}}
+             style={{overflowY:"auto",overflowX:"hidden"}}
             onItemsRendered={onItemsRendered}
             ref={ref}
             innerElementType={({ children, style, ...rest }) => (
-                <div style={{ position: "relative",overflow:"hidden" }} className="body">
+                <div style={{ position: "relative"}} className="body">
                   <div {...getTableBodyProps()} {...rest} style={style}>
                     {children}
                   </div>

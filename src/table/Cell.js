@@ -27,7 +27,7 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 const Cell = memo(
-  ({ value: initialValue, row, column: { id, dataType, metadata ,width}, }) => {
+  ({ value: initialValue, row, column: { id, dataType, metadata,width} }) => {
   
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
@@ -45,13 +45,13 @@ const Cell = memo(
       // setAnchorEl(event.currentTarget);
       setPopperOpen(true);
     };
-  
+
     const handleClickAway = () => {
       setPopperOpen(false);
       setSelectedInput(null);
       // setAnchorEl(null);
     };
-  
+
     const handleInputClick = (event) => {
       // remove the border from the previously selected input element (if any)
       if (selectedInput) {
@@ -183,7 +183,21 @@ const Cell = memo(
         );
         break;
 
-      case "id":
+      case "rowid":
+        element = (
+          <input
+            type="text"
+            readOnly="readonly"
+            value={(value?.value && value?.value?.toString()) || ""}
+            className="data-input"
+            style={{ background: "none" }}
+            onClick={handleInputClick}
+            onBlur={handleInputBlur}
+            onFocus={handleInputClick}
+          />
+        );
+        break;
+      case "autonumber":
         element = (
           <input
             type="text"
@@ -676,4 +690,5 @@ Cell.propTypes = {
   column: PropTypes.any,
   dataDispatch: PropTypes.any,
   row: PropTypes.any,
+  headerGroups:PropTypes.any
 };

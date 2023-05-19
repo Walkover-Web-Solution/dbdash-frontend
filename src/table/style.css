@@ -439,6 +439,10 @@ html {
   cursor:grab;
 background-color: #424242;
 }
+.selectedCol{
+  background-color: cadetblue !important;
+  color: white;
+}
 ::-webkit-scrollbar-track-piece{
   color: #757575;
 }

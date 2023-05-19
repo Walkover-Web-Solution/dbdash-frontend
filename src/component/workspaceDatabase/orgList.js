@@ -13,17 +13,16 @@ import { allOrg } from "../../store/database/databaseSelector";
 import { toast } from "react-toastify";
 
 export const OrgList = (props) => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
   const allorgss = useSelector((state) => allOrg(state)) 
   const [name, setName] = useState(false); // [show textfield and setshowtextfield]
   const [orgUsers, setOrgUsers] = useState([])
-  const [orgName, setOrgName] = useState();
+  const [orgName, setOrgName] = useState(props.dbs[0]?.org_id?.name);
   const [db, setDb] = useState(false);
   const [open, setOpen] = useState(false); //popup model craeate db 
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
-  const [orgId, setOrg] = useState();
+  const [orgId, setOrg] = useState(props.orgId);
   const [tabIndex, setTabIndex] = useState(0);
   //shared model whaha hoga
   const [isAdmin, setIsAdmin] = useState(false);
@@ -166,7 +165,7 @@ export const OrgList = (props) => {
 
                 <IconButton sx={{ color: "black" }}
                   onClick={(e) => {
-                    setAnchorEl(e.currentTarget);
+                   
                     handleOpen(e);
                     setOrg(props?.orgId);
                   }}
@@ -176,7 +175,7 @@ export const OrgList = (props) => {
               </Card>
             </Grid>
             <PopupModal
-            anchorEl={anchorEl}
+           
 
               open={open}
               setOpen={setOpen}
