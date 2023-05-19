@@ -153,16 +153,20 @@ export function extraReducers(builder) {
       state.status = "loading"
     })
     .addCase(createOrgThunk.fulfilled, (state, action) => {
+      console.log("action", action);
       state.status = "succeeded";
-      let arr = state.orgId[action.payload.data.org_id._id] || [];
-      const newArr = [...arr, action.payload.data];
-      state.orgId = { ...state.orgId, [action.payload.org_id._id]: newArr };
-   
-      if (state.allOrg)
-      state.allOrg = [...state.allOrg , action.payload.allorgs[0]]
-      else
-      state.allOrg = [action.payload.allorgs[0]]
+      const orgId = action.payload.data.org_id._id;
+      state.orgId = {
+        ...state.orgId,
+        [orgId]: [...(state.orgId[orgId] || []), action.payload.data]
+      };
+      if (state.allOrg) {
+        state.allOrg = [...state.allOrg, action.payload.allorgs[0]];
+      } else {
+        state.allOrg = [action.payload.allorgs[0]];
+      }
     })
+    
     .addCase(createOrgThunk.rejected, (state) => {
 
       state.status = "failed";
