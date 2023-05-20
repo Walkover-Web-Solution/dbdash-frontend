@@ -12,7 +12,7 @@ export default function WorkspaceCombined() {
 const[tabIndex,setTabIndex]=useState(0);
   const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
   const [addedelement,setAddedelement]=useState(null);
-  console.log(Object.entries(alldbs))
+ 
   const dispatch = useDispatch();
   const [org, setOrg] = useState();
   const [open, setOpen] = useState(false);

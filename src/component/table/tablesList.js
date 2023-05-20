@@ -92,6 +92,7 @@ export default function TablesList({ dbData }) {
   function onFilterClicked(filter, id) {
     setUnderLine(id)
     setFilterId(id);
+    setPage(1);
     dispatch(
       bulkAddColumns({
         dbId: dbData?.db?._id,
@@ -99,6 +100,7 @@ export default function TablesList({ dbData }) {
         filter: filter,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
+        filterId : id
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
@@ -138,6 +140,7 @@ export default function TablesList({ dbData }) {
           filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
           org_id: dbData?.db?.org_id,
           pageNo: 1,
+          filterId : params?.filterName
         })
       );
       // navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
@@ -258,6 +261,13 @@ export default function TablesList({ dbData }) {
           sx={{ width: 100, mt: 1.5, ml: 1, fontSize: "11px" }}
         >
           Add Filter
+        </Button>
+        <Button
+          onClick={() => handleOpenn()}
+          variant="contained"
+          sx={{ width: 100, mt: 1.5, ml: 1, fontSize: "8px" }}
+        >
+          Hidden fields
         </Button>
         <div>
           {/* <input

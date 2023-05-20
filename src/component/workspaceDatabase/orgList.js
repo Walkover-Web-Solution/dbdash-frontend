@@ -15,6 +15,7 @@ import { createDb } from "../../api/dbApi";
 import { useNavigate } from "react-router-dom";
 
 export const OrgList = (props) => {
+  const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
@@ -29,6 +30,9 @@ export const OrgList = (props) => {
   const [tabIndex, setTabIndex] = useState(0);
   //shared model whaha hoga
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+
+  
    
   const handleOpenShareOrg = () => {
     setShareOrg(true);
@@ -39,7 +43,10 @@ export const OrgList = (props) => {
     const userId = localStorage.getItem("userid")
     if (obj?.users) {
       Object.entries(obj?.users).map((user) => {
-        if (user[1].user_id._id == userId && user[1].user_type == "admin") {
+        if (user[1]?.user_id?._id == userId && user[1]?.user_type == "owner") {
+          setIsOwner(true);
+        }
+        if (user[1]?.user_id?._id == userId && user[1]?.user_type == "admin") {
           setIsAdmin(true);
         }
       });
@@ -71,9 +78,13 @@ export const OrgList = (props) => {
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({ orgId: props?.orgId, userid }))
   };
-  const shareWorkspace = async (email) => {
+  const shareWorkspace = async (email,user_type) => {
     const adminId = localStorage.getItem("userid")
-    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
+    const data={
+      email:email,
+      user_type:user_type
+    }
+    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, data:data }))
   }
   const removeUserFromWorkspace = async (email) => {
     const adminId = localStorage.getItem("userid")
@@ -84,31 +95,30 @@ export const OrgList = (props) => {
       <Box key={props?.orgId} sx={{ m: 3 }}>
         <ClickAwayListener onClickAway={() => { setName(false) }} >
           <Box sx={{ my: 7, display: "flex" }}>
-           
-            {name && props?.tabIndex==props?.index ? (
+            {name && props?.tabIndex === props?.index ? (
               <>
-              <Box sx={{display:'flex', flexDirection:'column'}}>
-              <Box>
-                <TextField
-                id="orgName"
-                name="orgName"
-                  autoFocus
-                  sx={{ width: 120, fontWeight: "bold" }}
-                  defaultValue={props.dbs[0]?.org_id?.name}
-                  value={orgName}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      renameWorkspace(props?.orgId,orgName);
-                      setName(false);
-                    }
-                  }}
-                  onChange={(e) => {setOrgName(e.target.value)}}
-                  size="small"
-                />
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Box>
+                    <TextField
+                      id="orgName"
+                      name="orgName"
+                      autoFocus
+                      sx={{ width: 120, fontWeight: "bold" }}
+                      defaultValue={props.dbs[0]?.org_id?.name}
+                      value={orgName}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          renameWorkspace(props?.orgId, orgName);
+                          setName(false);
+                        }
+                      }}
+                      onChange={(e) => { setOrgName(e.target.value) }}
+                      size="small"
+                    />
+                  </Box>
                 </Box>
-                </Box>
-
-                <Button onClick={() => { renameWorkspace(props?.orgId,orgName);  setName(false); }}
+                <Button
+                  onClick={() => { renameWorkspace(props?.orgId, orgName); setName(false); }}
                   variant="contained"
                   sx={{
                     width: "8rem",
@@ -131,34 +141,48 @@ export const OrgList = (props) => {
                 <Typography sx={{ fontWeight: "bold" }}>
                   {props.dbs[0]?.org_id?.name}{" "}
                 </Typography>
-                {isAdmin && <Box sx={{ mt: -1 }}>
-                  <Dropdown
-                  setTabIndex={props?.setTabIndex}
-                  tabIndex={props?.index}
-                    first={"Rename workspace"}
-                    second={"Delete workspace"}
-                    setName={setName}
-                    idToDelete={props?.orgId}
-                    deleteFunction={deleteOrganization}
-                    title="Organization"
-                  />
-                </Box>}
+                {isOwner || isAdmin ? (
+                  <>
+                    <Box sx={{ mt: -1 }}>
+                      <Dropdown
+                        setTabIndex={props?.setTabIndex}
+                        tabIndex={props?.index}
+                        first={"Rename workspace"}
+                        second={"Delete workspace"}
+                        setName={setName}
+                        idToDelete={props?.orgId}
+                        deleteFunction={deleteOrganization}
+                        title="Organization"
+                      />
+                    </Box>
+                    <Box>
+                      <Box sx={{ right: "10px", display: "flex" }}>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="success"
+                          sx={{ display: "flex" }}
+                          onClick={handleOpenShareOrg}
+                        >
+                          Share
+                        </Button>
+                      </Box>
+                      <ShareOrgModal
+                      userType={userType}
+                      setUserType={setUserType}
+                        shareOrg={shareOrg}
+                        org={orgUsers}
+                        setShareOrg={setShareOrg}
+                        shareWorkspace={shareWorkspace}
+                        removeUserFromWorkspace={removeUserFromWorkspace}
+                      />
+                    </Box>
+                  </>
+                ) : null}
               </>
             )}
-            {isAdmin && <Box>
-              <Box sx={{ right: "10px", display: "flex" }}>
-                <Button
-                  variant="contained" size="small" color="success" sx={{ display: "flex" }} onClick={handleOpenShareOrg}>
-                  Share
-                </Button>
-              </Box>
-              <ShareOrgModal
-                shareOrg={shareOrg} org={orgUsers} setShareOrg={setShareOrg} shareWorkspace={shareWorkspace}
-                removeUserFromWorkspace={removeUserFromWorkspace} />
-            </Box>
-            }
           </Box>
-        </ClickAwayListener>
+          </ClickAwayListener>
         <Box sx={{ display: "flex" }}>
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>

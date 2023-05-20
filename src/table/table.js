@@ -95,26 +95,25 @@ const Table = memo(
       useColumnOrder
     );
     const[selectedColumnIndex,setSelectedColumnIndex]=useState(null);
-    useEffect(() => {
-      const resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          const { target, contentRect } = entry;
-          const columnId = target.getAttribute("data-column-id");
+    // useEffect(() => {
+    //   const resizeObserver = new ResizeObserver((entries) => {
+    //     for (const entry of entries) {
+    //       const { target, contentRect } = entry;
+    //       const columnId = target.getAttribute("data-column-id");
     
-          // Handle column width change
-          console.log(`Column ${columnId} width has changed to ${contentRect.width}px`);
-        }
-      });
+         
+    //     }
+    //   });
     
-      const headerCells = document.querySelectorAll(".rt-th");
-      headerCells.forEach((headerCell) => {
-        resizeObserver.observe(headerCell, { box: "border-box" });
-      });
+    //   const headerCells = document.querySelectorAll(".rt-th");
+    //   headerCells.forEach((headerCell) => {
+    //     resizeObserver.observe(headerCell, { box: "border-box" });
+    //   });
     
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }, []);
+    //   return () => {
+    //     resizeObserver.disconnect();
+    //   };
+    // }, []);
     
     
 

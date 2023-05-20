@@ -7,7 +7,7 @@ import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 import { Tabs,ClickAwayListener,Popper,Button } from "@mui/material";
 import { OpenInFull } from "@mui/icons-material";
-import { EditorState, convertToRaw,convertFromHTML,ContentState } from 'draft-js';
+import {  EditorState,convertToRaw,convertFromHTML,ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
@@ -23,7 +23,6 @@ import PropTypes from "prop-types";
 import TableCellSingleSelect from './TableCellSingleSelect'
 import TableCellMultiSelect from './TableCellMultiSelect'
 import PreviewAttachment from "./previewAttachment";
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
@@ -43,8 +42,6 @@ const Cell = memo(
     const [selectedInput, setSelectedInput] = useState(null);
     const tableId = useSelector((state) => state.table.tableId)
     
-    
-
 
     const handleInputClick = (event) => {
       

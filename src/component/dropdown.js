@@ -68,6 +68,11 @@ export default function Dropdown(props) {
               <Typography   textAlign="center" >{props?.third}</Typography>
             </MenuItem> }
 
+            {props?.exportCSV==="Export CSV" && <MenuItem onClick={(e)=>{e.preventDefault();
+              e.stopPropagation();handleCloseUserMenu(e); props?.exportCSVTable(props?.tableId)}}>
+              <Typography  textAlign="center" >{props?.exportCSV}</Typography>
+            </MenuItem>}
+
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>
           
@@ -85,5 +90,8 @@ Dropdown.propTypes = {
   setTabIndex:PropTypes.func,
   tabIndex:PropTypes.number,
   tables:PropTypes.any,
-  setOpenmove:PropTypes.func
+  setOpenmove:PropTypes.func,
+  exportCSV: PropTypes.any,
+  exportCSVTable: PropTypes.any
+  
 };

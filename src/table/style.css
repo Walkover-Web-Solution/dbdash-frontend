@@ -433,8 +433,10 @@ html {
   background-color: #F5F5F5;
 }
 .selectedCol{
-  background-color: #000000 !important;
-  color:white;
+  background-color: lightblue !important;
+  color:white !important;
+  border-left: 1px darkblue solid !important;
+   border-right: 1px darkblue solid !important;
 }
 ::-webkit-scrollbar-thumb{
   background-color: #000000;
