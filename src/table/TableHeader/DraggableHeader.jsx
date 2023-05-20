@@ -27,7 +27,7 @@ export default function DraggableHeader({ columns,index, reoder, key}){
 
   useEffect(()=>{
     if(columns?.label != "check" && columns?.label != "+"){
-      if(!columns.isResizing ){
+      if(!columns.isResizing && !( columns?.width == "150")){
         resizeWidth();
       }
     }
