@@ -5,50 +5,36 @@ import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
 import { useSelector } from "react-redux";
 import { allOrg } from "../../store/database/databaseSelector";
-
 export default function AuthKey(props) {
-  console.log("authkeytable",props)
-
+  // console.log("authkeytable", props);
   const adminId = localStorage.getItem("userid");
   const [authKeys, setAuthKeys] = useState(null);
   const [createdBy, setCreatedBy] = useState(null);
   const user = useSelector((state) => allOrg(state));
-
-  useEffect(async() => {
+  useEffect(async () => {
     
     const arrayofUser = await getAuthkeyFun();
     setCreatedBy(arrayofUser);
   }, []);
-
   async function getAuthkeyFun() {
-    const data = await getAuthkey(props?.dbId, adminId);
+    const data = await getAuthkey(props.dbId, adminId);
     setAuthKeys(data?.data?.data);
     var array = [];
-  
-    if (data?.data?.data) {
-      Object.entries(data.data.data).map((key) => {
-        user[0]?.users?.map((id) => {
-          if (id?.user_id?._id == key[1].user) {
-            array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
-          }
-        });
+    Object.entries(Object.values(data?.data?.data)).map((key) => {
+      user[0]?.users?.map((id) => {
+        if (id?.user_id?._id == key[1].user) {
+          array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
+        }
       });
-    }
-  
+    });
     return array;
   }
-  
-
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props.dbId, adminId, authKey);
     const dataa = await getAuthkey(props.dbId, adminId);
-
     setAuthKeys(dataa?.data?.data);
-
     return data;
   }
-
-
   return (
     <>
       <Box sx={{ border: 1, m: 1, boxShadow: 10 }}>
@@ -62,7 +48,6 @@ export default function AuthKey(props) {
                 <TableCell>Auth Key</TableCell>
                 <TableCell>Table Access</TableCell>
                 <TableCell>Scope</TableCell>
-
                 <TableCell> </TableCell>
               </TableRow>
             </TableHead>
@@ -70,15 +55,11 @@ export default function AuthKey(props) {
               {authKeys &&
                 Object.keys(authKeys).map((keys, index) => (
                   <TableRow key={keys} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-
                     <TableCell component="th" scope="row">
                       {authKeys[keys].name}
                     </TableCell>
-
                     {createdBy && <TableCell>{createdBy[index]}</TableCell>}
-
                     <TableCell>{authKeys[keys].createDate}</TableCell>
-
                     {/* <TableCell component="th" scope="row">
                     {`${keys.substring(0, 3)}***${keys.substring(keys.length - 3)}`}
                       </TableCell> */}
@@ -86,8 +67,6 @@ export default function AuthKey(props) {
                     <TableCell component="th" scope="row">
                       {keys.substring(0, 3) + "*".repeat(keys.length - 6) + keys.substring(keys.length - 3)}
                     </TableCell>
-
-
 
                     <TableCell>
                       {authKeys[keys].access === '1' ? (
@@ -98,7 +77,7 @@ export default function AuthKey(props) {
                         ))
                       )}
                     </TableCell>
-
+                    
                     {/* <TableCell>
                       {authKeys[keys].access === '1' ? (
                         <div>all</div>
@@ -115,11 +94,9 @@ export default function AuthKey(props) {
                       ) : (
                         <div>{Object.values(authKeys[keys].access)[0]?.scope}</div>
                       )}
+
                     </TableCell>
-
-
                     <TableCell>
-
                       <TableMenuDropdown
                         authData={authKeys[keys]}
                         first={"Edit"}
@@ -138,7 +115,6 @@ export default function AuthKey(props) {
     </>
   );
 }
-
 AuthKey.propTypes = {
   dbId: PropTypes.string,
   scope: PropTypes.any,
