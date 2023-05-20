@@ -296,8 +296,8 @@ export default function Header({
       label: "singlelinetext"
     }
 ];
+types.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
 
-types.sort((a, b) => a.label.localeCompare(b.label));
 
 
 const buttons = [
@@ -382,7 +382,8 @@ if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid"
   });
 }
 
-buttons.sort((a, b) => a.label.localeCompare(b.label));
+buttons.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
+
 
 // console.log(buttons);
 
