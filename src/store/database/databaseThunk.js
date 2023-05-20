@@ -94,11 +94,7 @@ export const createOrgThunk = createAsyncThunk(
 
     export const shareUserInOrgThunk = createAsyncThunk(
         "organdDb/shareUserInOrgThunk", async (payload) => {
-           const data={
-            email:payload.data.email,
-            user_type:payload.data.user_type
-           }
-             await addUserInOrg(payload.orgId, payload.adminId,payload.data);
+            await addUserInOrg(payload.orgId, payload.adminId,payload.data);
             const allorgs = await getAllOrgs(payload.orgId)
             const allData= {
                 allorgs:allorgs?.data?.data
