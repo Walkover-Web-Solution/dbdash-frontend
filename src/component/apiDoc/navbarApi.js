@@ -76,16 +76,22 @@ export default function Navbar() {
                       ? dbs1[0].org_id.name.localeCompare(dbs2[0].org_id.name)
                       : 0
                   )
-                  .map(([orgId, dbs]) => [
-                    <ListSubheader key={`${orgId}-header`} name={orgId}>
-                      {dbs[0]?.org_id?.name}
-                    </ListSubheader>,
-                    dbs?.map((db, index) => (
-                      <MenuItem key={index} value={db?._id}>
-                        {db?.name}
-                      </MenuItem>
-                    )),
-                  ])}
+                  .map(([orgId, dbs]) => {
+                    const sortedDbs = [...dbs].sort((db1, db2) =>
+                      db1.name.localeCompare(db2.name)
+                    );
+
+                    return [
+                      <ListSubheader key={`${orgId}-header`} name={orgId}>
+                        {dbs[0]?.org_id?.name}
+                      </ListSubheader>,
+                      sortedDbs.map((db, index) => (
+                        <MenuItem key={index} value={db?._id}>
+                          {db?.name}
+                        </MenuItem>
+                      )),
+                    ];
+                  })}
               </Select>
             </FormControl>
           )}
