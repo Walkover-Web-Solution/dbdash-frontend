@@ -178,9 +178,9 @@ export function extraReducers(builder) {
     .addCase(createDbThunk.fulfilled, (state, action) => {
       state.status = "succeeded";
       console.log(action)
-      let arr = state.orgId[action.payload.org_id] || [];
+      let arr = state.orgId[action?.payload?.org_id] || [];
       const newArr = [...arr, action.payload];
-      state.orgId = { ...state.orgId, [action.payload.org_id]: newArr };
+      state.orgId = { ...state.orgId, [action?.payload?.org_id]: newArr };
 
     })
     .addCase(createDbThunk.rejected, (state) => {

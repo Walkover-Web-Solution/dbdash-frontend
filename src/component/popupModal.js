@@ -75,7 +75,7 @@ export default function PopupModal(props) {
           <Box sx={{ my: 2 }}>
             <TextField
               error={
-                state?.$errors?.[props?.id].length === 0 && textFieldValue.includes(" ")
+                state?.$errors?.[props?.id].length === 0 || textFieldValue.includes(" ")
                   ? false
                   : state.$errors?.[props?.id]
                     ? true
@@ -92,7 +92,7 @@ export default function PopupModal(props) {
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                if (textFieldValue.length >= 3 && textFieldValue.length <= 30 && textFieldValue.includes(" ")) {
+                if (textFieldValue.length >= 3 && textFieldValue.length <= 30 || textFieldValue.includes(" ")) {
                   if (e.key === "Enter") {
                     props.submitData(e);
                     handleClose();
