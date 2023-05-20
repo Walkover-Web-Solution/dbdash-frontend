@@ -115,9 +115,11 @@ export const bulkAddColumns = createAsyncThunk(
             columns = await getHeaders(payload.dbId, payload.tableName)
         }
         if (payload?.filter != null) {
+            const tableInfo = getTableInfo(getState())
             const querydata = await runQueryonTable(
                 payload.dbId,
-                payload?.filter
+                payload?.filter,
+                payload?.pageNo
             )
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
@@ -126,11 +128,23 @@ export const bulkAddColumns = createAsyncThunk(
             querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
                 row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
             })
+            if (tableInfo.filterId == payload?.filterId && tableInfo.pageNo <  payload?.pageNo) {
+                querydata.data.data.rows = [
+                    ...(tableInfo?.data ?? []),
+                    ...(querydata?.data?.data?.rows ?? []),
+                  ];
+            }
+            else{
+                querydata.data.data.pageNo = 1;
+            }
             const dataa = {
                 "columns": columns,
                 "row": querydata?.data?.data?.rows,
                 "tableId": payload?.tableName,
-                "dbId": payload.dbId
+                "dbId": payload.dbId,
+                "pageNo":  querydata?.data?.data?.pageNo,
+                "isMoreData": !( querydata?.data?.data?.offset == null),
+                "filterId" : payload?.filterId
             }
             dispatch(setTableLoading(false))
             return dataa;

@@ -5,12 +5,13 @@ import { randomColor, shortId } from "../../table/utils";
 export const initialState = {
   columns: [],
   data: [],
-  tableId: [],
-  dbId: [],
+  tableId: null,
+  dbId: null,
   status: "idle",
   pageNo : 0,
   isTableLoading : true,
   isMoreData : true,
+  filterId : null
 
 };
 
@@ -41,13 +42,13 @@ export const reducers = {
     return  {
       columns: [],
       data: [],
-      tableId: [],
-      dbId: [],
+      tableId: null,
+      dbId: null,
       status: "idle",
       pageNo : 0,
-      isTableLoading : true , 
+      isTableLoading : true,
       isMoreData : true,
-      pageSize : 100
+      filterId : null 
     }
   },
   deleteColumn(state, payload) {
@@ -406,9 +407,10 @@ export function extraReducers(builder) {
         if(action.payload.columns) state.columns = action.payload.columns;
         state.data = action.payload.row;
         state.tableId = action.payload.tableId;
-        state.dbId = action.payload.dbId
+        state.dbId = action.payload.dbId;
         state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
-        state.isMoreData  = action.payload.isMoreData
+        state.isMoreData  = action?.payload?.isMoreData;
+        state.filterId  = action?.payload?.filterId;
         // state.page = 100;
       }
       state.status = "succeeded";
@@ -532,7 +534,6 @@ export function extraReducers(builder) {
     .addCase(addRows.fulfilled, (state ,{payload}) => {
       let arr = [...state.data]
       state.data = [...arr , payload]
-      state.pageSize = state.pageSize + 1;
       state.status = "succeeded";
 
     })
