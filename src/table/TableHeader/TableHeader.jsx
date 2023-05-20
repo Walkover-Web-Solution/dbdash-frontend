@@ -4,9 +4,9 @@ import DraggableHeader from "./DraggableHeader";
 import { updateColumnOrder } from "../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import clsx from "clsx";
-
-function TableHeader({ getTableProps, headerGroups, columns }) {
+function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex, setSelectedColumnIndex }) {
   const dispatch = useDispatch();
+
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
       for (let column of headerGroup.headers) {
@@ -17,7 +17,17 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
     }
     return false;
   }
-  
+
+  const handleHeaderClick = (columnIndex) => {
+    console.log("colin",selectedColumnIndex,columnIndex);
+    if (selectedColumnIndex === columnIndex) {
+      setSelectedColumnIndex(null);
+    } else {
+      setSelectedColumnIndex(columnIndex);
+      
+    }
+  };
+
   const reoder = useCallback(
     (item, newIndex) => {
       const newOrder = Array.from(columns);
@@ -29,24 +39,29 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
         updateColumnOrder({
           columns: newOrder,
           id: item?.id,
-          oldIndex:item.index - 1 ,
-          newIndex : newIndex  - 1
+          oldIndex: item.index - 1,
+          newIndex: newIndex - 1,
         })
       );
-      //call redux make thunk and reducer pass new column order and update
     },
     [columns]
   );
 
+  
+
   return (
-    <thead {...getTableProps()}  className={clsx("table", isTableResizing() && "noselect")}>
+    <thead {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} >
       <div className="calculate">
         <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
           {headerGroups[0].headers?.map((column, index) => (
-            <th key={index}>
-            <React.Fragment key={index}>
-              <DraggableHeader reoder={reoder} columns={column} index={index} />
-            </React.Fragment>
+            <th
+              key={index}
+              className={selectedColumnIndex !== null && index === selectedColumnIndex ? "selected" : ""}
+              onClick={() => handleHeaderClick(index)}
+            >
+              <React.Fragment key={index}>
+                <DraggableHeader reoder={reoder} columns={column} index={index} />
+              </React.Fragment>
             </th>
           ))}
         </div>
@@ -54,4 +69,5 @@ function TableHeader({ getTableProps, headerGroups, columns }) {
     </thead>
   );
 }
+
 export default memo(TableHeader);

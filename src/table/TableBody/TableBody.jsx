@@ -10,13 +10,15 @@ import {updateCells } from "../../store/table/tableThunk";
  function TableBody({
   getTableBodyProps,
   rows,
-  // isNextPageLoading,
+
   cellsSelected,
   prepareRow,
   totalColumnsWidth,
   update = { update },
+selectedColumnIndex
 })
  {
+  console.log("messge",selectedColumnIndex);
    const dispatch =  useDispatch()
    const tableId = useSelector((state) => state.table.tableId)
   const limit = 200;
@@ -93,7 +95,10 @@ import {updateCells } from "../../store/table/tableThunk";
           id={`table-row-${index}`}
         >
           {row.cells.map((cell,key) => {
+           
+                    console.log("key",key,"selected",selectedColumnIndex)
             return (
+ 
               <div 
               {...cell.getCellProps({
                 onCopy: (event) => handleCopy(event, cell.value),
@@ -101,10 +106,15 @@ import {updateCells } from "../../store/table/tableThunk";
               })}
                key ={key} 
                data-id={`${index}-${key}`}
+               data-column-id={cell.column.id}
+               data-row-id={cell.row.original.id}
+               
               //  {...cell.getCellProps()}
-                className="td" 
+               
                 
-
+                className={`td ${
+                  selectedColumnIndex && key ===selectedColumnIndex ? "selectedCol" : ""
+                }`}
                style={
                 cellsSelected[cell.id]
                   ? {
@@ -123,13 +133,14 @@ import {updateCells } from "../../store/table/tableThunk";
               }
                >
                 {cell.render("Cell")}
+              
               </div>
             );
           })}
         </div>
       );
     },
-    [prepareRow, isItemLoaded, totalColumnsWidth]
+    [prepareRow, isItemLoaded, totalColumnsWidth,selectedColumnIndex]
   );
 
   return (
@@ -149,15 +160,15 @@ import {updateCells } from "../../store/table/tableThunk";
         {({ onItemsRendered, ref }) => (
           <FixedSizeList
           // width={800}
-            height={500}
+            height={440}
             // height={35*rows.length}
             itemCount={rows.length}
             itemSize={35}
-            // style={{overflowY:"hidden"}}
+             style={{overflowY:"auto"}}
             onItemsRendered={onItemsRendered}
             ref={ref}
             innerElementType={({ children, style, ...rest }) => (
-                <div style={{ position: "relative",overflow:"hidden" }} className="body">
+                <div style={{ position: "relative" }} className="body">
                   <div {...getTableBodyProps()} {...rest} style={style}>
                     {children}
                   </div>

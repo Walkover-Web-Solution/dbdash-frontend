@@ -69,3 +69,4 @@ const sortAndRenderOrgList = () => {
 WorkspaceCombined.propTypes = {
   dbs: PropTypes.string
 }
+

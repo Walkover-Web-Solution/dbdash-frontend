@@ -432,6 +432,10 @@ html {
   height:6px;
   background-color: #F5F5F5;
 }
+.selectedCol{
+  background-color: #000000 !important;
+  color:white;
+}
 ::-webkit-scrollbar-thumb{
   background-color: #000000;
 }

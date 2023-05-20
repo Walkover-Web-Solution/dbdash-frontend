@@ -1,4 +1,4 @@
-import React, {useMemo, memo } from "react";
+import React, { useMemo, memo,useState } from "react";
 import {
   useTable,
   useFlexLayout,
@@ -94,6 +94,7 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
+    const[selectedColumnIndex,setSelectedColumnIndex]=useState(null);
     useEffect(() => {
       const resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
@@ -120,6 +121,7 @@ const Table = memo(
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
+      
       const firstColumnValue = tableData.data[lastRowIndex];
       const tableRowChildNodes =  document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
       if(tableRowChildNodes){
@@ -159,7 +161,7 @@ const Table = memo(
         <DndProvider backend={HTML5Backend}>
            <ScrollingComponent id="scroll"
 
-            style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"74.1vh",width:"99.6vw"}}
+            style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"84%",width:"99.6vw"}}
           >
             <table >
               
@@ -167,6 +169,8 @@ const Table = memo(
               getTableProps={getTableProps}
               headerGroups={headerGroups}
               columns={columns}
+              selectedColumnIndex={selectedColumnIndex}
+              setSelectedColumnIndex={setSelectedColumnIndex}
               
             />
      
@@ -179,11 +183,18 @@ const Table = memo(
               prepareRow={prepareRow}
               cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds}}
               update={update}
+              selectedColumnIndex={selectedColumnIndex}
+              
+             
             />
 
       
             
-              <div className='tr add-row' 
+             
+            </table>
+            
+          </ScrollingComponent>
+          <div className='tr add-row' 
               style={{ position: 'sticky' ,bottom: 0,left: 0}}
           onClick={() => dataDispatch(addRows({ type: "add_row" }))}
         >
@@ -193,9 +204,6 @@ const Table = memo(
           New
         </div>   
         
-            </table>
-            
-          </ScrollingComponent>
           <Preview />
         </DndProvider>
       </>
