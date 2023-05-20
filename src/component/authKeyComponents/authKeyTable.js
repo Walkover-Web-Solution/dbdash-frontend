@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell } from "@mui/material";
+import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell, Tooltip } from "@mui/material";
 import { PropTypes } from 'prop-types';
 import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
 import { useSelector } from "react-redux";
 import { allOrg } from "../../store/database/databaseSelector";
+
 export default function AuthKey(props) {
-  // console.log("authkeytable", props);
   const adminId = localStorage.getItem("userid");
   const [authKeys, setAuthKeys] = useState(null);
   const [createdBy, setCreatedBy] = useState(null);
   const user = useSelector((state) => allOrg(state));
+
   useEffect(async () => {
-    // console.log(props.scope, props.selected);
     const arrayofUser = await getAuthkeyFun();
     setCreatedBy(arrayofUser);
   }, []);
+
   async function getAuthkeyFun() {
     const data = await getAuthkey(props.dbId, adminId);
     setAuthKeys(data?.data?.data);
@@ -29,42 +30,40 @@ export default function AuthKey(props) {
     });
     return array;
   }
+
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props.dbId, adminId, authKey);
     const dataa = await getAuthkey(props.dbId, adminId);
     setAuthKeys(dataa?.data?.data);
     return data;
   }
+
   function formatDateTime(dateTimeString) {
-    const currentDate = new Date();
-    const dateTime = new Date(dateTimeString);
-  
-    const timeDifference = currentDate.getTime() - dateTime.getTime();
-    const seconds = Math.floor(timeDifference / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const weeks = Math.floor(days / 7);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
-  
-    if (seconds < 60) {
-      return seconds + " seconds ago";
-    } else if (minutes < 60) {
-      return minutes + " minutes ago";
-    } else if (hours < 24) {
-      return hours + " hours ago";
-    } else if (days < 7) {
-      return days + " days ago";
-    } else if (weeks < 4) {
-      return weeks + " weeks ago";
-    } else if (months < 12) {
-      return months + " months ago";
+    const date = new Date(dateTimeString);
+    const now = new Date();
+    const diff = now - date;
+
+    if (diff < 60 * 60 * 1000) {
+      const minutes = Math.floor(diff / (60 * 1000));
+      return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+    } else if (diff < 24 * 60 * 60 * 1000) {
+      const hours = Math.floor(diff / (60 * 60 * 1000));
+      return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+    } else if (diff < 7 * 24 * 60 * 60 * 1000) {
+      const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+      return `${days} day${days !== 1 ? "s" : ""} ago`;
+    } else if (diff < 4 * 7 * 24 * 60 * 60 * 1000) {
+      const weeks = Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
+      return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
+    } else if (diff < 12 * 30 * 24 * 60 * 60 * 1000) {
+      const months = Math.floor(diff / (30 * 24 * 60 * 60 * 1000));
+      return `${months} month${months !== 1 ? "s" : ""} ago`;
     } else {
-      return years + " years ago";
+      const years = Math.floor(diff / (12 * 30 * 24 * 60 * 60 * 1000));
+      return `${years} year${years !== 1 ? "s" : ""} ago`;
     }
   }
-  // console.log("DE DE  YRR.", authKeys);
+
   return (
     <>
       <Box sx={{ border: 1, m: 1, boxShadow: 10 }}>
@@ -88,13 +87,13 @@ export default function AuthKey(props) {
                     <TableCell component="th" scope="row">
                       {authKeys[keys].name}
                     </TableCell>
-
                     {createdBy && <TableCell>{createdBy[index]}</TableCell>}
 
-                    <TableCell>{formatDateTime(authKeys[keys].createDate)}</TableCell>
-                    {/* <TableCell component="th" scope="row">
-                    {`${keys.substring(0, 3)}***${keys.substring(keys.length - 3)}`}
-                      </TableCell> */}
+                    <TableCell>
+                      <Tooltip title={authKeys[keys].createDate} placement="top">
+                        <span>{formatDateTime(authKeys[keys].createDate)}</span>
+                      </Tooltip>
+                    </TableCell>
 
                     <TableCell component="th" scope="row">
                       {keys.substring(0, 3) + "*".repeat(keys.length - 6) + keys.substring(keys.length - 3)}
@@ -147,6 +146,7 @@ export default function AuthKey(props) {
     </>
   );
 }
+
 AuthKey.propTypes = {
   dbId: PropTypes.string,
   scope: PropTypes.any,
