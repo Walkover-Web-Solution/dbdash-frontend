@@ -16,7 +16,6 @@ export default function SingleDatabase(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const allorgss = useSelector((state) => allOrg(state))
-  console.log(allorgss,"org")
   let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
 
   const handlingmove = () => {

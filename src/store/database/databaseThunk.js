@@ -82,7 +82,6 @@ export const deleteOrgThunk = createAsyncThunk(
 export const createOrgThunk = createAsyncThunk(
     "organdDb/createOrgThunk", async (payload) => {
         const data = await createOrg({ name: payload.name, user_id: payload.user_id });
-
         const allorgs = await getAllOrgs(data.data.data.org_id._id)
       
         const allData= {
@@ -99,7 +98,6 @@ export const createOrgThunk = createAsyncThunk(
             email:payload.data.email,
             user_type:payload.data.user_type
            }
-           console.log("data",data);
              await addUserInOrg(payload.orgId, payload.adminId,payload.data);
             const allorgs = await getAllOrgs(payload.orgId)
             const allData= {
