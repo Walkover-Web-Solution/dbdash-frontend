@@ -21,6 +21,10 @@ const deleteTable = async (db_id,tableName,data) =>
 {
     return await axios.delete(URL +`/dbs/${db_id}/${tableName}/deletetable`,data)
 }
+const exportCSV = async (db_id,tableName,data) =>
+{
+    return await axios.post(URL +`/dbs/${db_id}/${tableName}/downloadcsv`,data)
+}
 
 
 
@@ -30,5 +34,6 @@ export{
     createTable,
     getTable,
     updateTable,
-    deleteTable
+    deleteTable,
+    exportCSV 
 }
