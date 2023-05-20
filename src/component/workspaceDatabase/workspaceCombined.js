@@ -29,31 +29,18 @@ export default function WorkspaceCombined() {
             return -1;
           }
         }
-
-        const nameA = dbsA[0].org_id.name?.toUpperCase();
-        const nameB = dbsB[0].org_id.name?.toUpperCase();
-        if (nameA < nameB) {
-          return -1;
-        } else if (nameA > nameB) {
-          return 1;
-        } else {
-          return 0;
-        }
+  
+        const orgA = dbsA[0]?.org_id?.name?.toUpperCase();
+        const orgB = dbsB[0]?.org_id?.name?.toUpperCase();
+        return orgA.localeCompare(orgB);
       })
       .map(([orgId, dbs], index) => {
         const sortedDbs = [...dbs].sort((dbA, dbB) => {
-          // Compare and sort databases within an organization based on a property (e.g., name)
-          const nameA = dbA.name?.toUpperCase();
-          const nameB = dbB.name?.toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          } else if (nameA > nameB) {
-            return 1;
-          } else {
-            return 0;
-          }
+          const dbsA = dbA.name?.toUpperCase();
+          const dbsB = dbB.name?.toUpperCase();
+          return dbsA.localeCompare(dbsB);
         });
-
+  
         return (
           <Box key={orgId}>
             <OrgList orgId={orgId} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbs={sortedDbs} />
@@ -61,6 +48,7 @@ export default function WorkspaceCombined() {
         );
       });
   };
+  
 
   const saveOrgToDB = async () => {
     const userid = localStorage.getItem("userid");
