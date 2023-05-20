@@ -18,15 +18,17 @@ export default function AuthKeyPage() {
     </Box>
     
      <Box>
-     <AuthKeyHeader id ={ id}/>
+     
      </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "end", m: 1 }}>
-        <Link to ={`/authKeyCreate/${id}`}  style={{textDecoration:'none'}} >
+      <Box sx={{ display: "flex", justifyContent: "end", m: 1}}>
+        <Link  to ={`/authKeyCreate/${id}`}  style={{textDecoration:'none',marginRight:"5px"}} >
         <Button variant="contained" startIcon={<AddIcon/>}>
           Create Authkey
         </Button>
+        
         </Link>
+        <AuthKeyHeader id ={ id}/>
       </Box>
 
       <Box sx={{ mt: 2 }}>

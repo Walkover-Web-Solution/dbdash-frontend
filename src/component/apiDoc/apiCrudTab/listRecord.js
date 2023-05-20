@@ -17,7 +17,7 @@ function ListRecord(props) {
           flexDirection: "column",
           position: "fixed",
           right: 0,
-          width: "44vw",
+          width: "36vw",
           padding: "10px",
           height: "65vh",
           overflowY: "scroll",
@@ -33,7 +33,7 @@ function ListRecord(props) {
 }
 }`} />
      </div>
-     <div style={{width:'700px',height:"65vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
+     <div style={{width:'700px',height:"65vh",overflowY:"scroll",whiteSpace:"pre-wrap",padding:"2px"}}>
         <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>List records</Typography>
         <Typography>
         To list records in {props.table} ,issue a GET request to the {props.table} endpoint using {props.table} ids<br/>

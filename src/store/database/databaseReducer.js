@@ -153,7 +153,7 @@ export function extraReducers(builder) {
       state.status = "loading"
     })
     .addCase(createOrgThunk.fulfilled, (state, action) => {
-      console.log("action", action);
+     
       state.status = "succeeded";
       const orgId = action.payload.data.org_id._id;
       state.orgId = {

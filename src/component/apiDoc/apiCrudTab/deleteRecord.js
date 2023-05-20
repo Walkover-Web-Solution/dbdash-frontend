@@ -20,7 +20,7 @@ function DeleteRecord(props) {
           flexDirection: "column",
           position: "fixed",
           right: 0,
-          width: "44vw",
+          width: "36vw",
           padding: "10px",
           height: "65vh",
           overflowY: "scroll",
@@ -43,7 +43,7 @@ function DeleteRecord(props) {
       </div>
 
 
-      <div style={{ width: '700px', height: "65vh", overflowY: "scroll", backgroundColor: "white", whiteSpace: "pre-wrap", padding: "2px" }}>
+      <div style={{ width: '700px', height: "65vh", overflowY: "scroll", whiteSpace: "pre-wrap", padding: "2px" }}>
 
         <Box>
           <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>

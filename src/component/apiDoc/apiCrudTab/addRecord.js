@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import CodeBlock from "./Codeblock";
 
+
 import Records from "./records";
 import ResponseBox from "./responseBox";
 
@@ -13,13 +14,16 @@ function AddRecord(props) {
   return (
     <>
       <div
+    
         style={{
+          position: "absolute",
           display: "flex",
           flexDirection: "column",
-          position: "fixed",
+       
           right: 0,
-          width: "44vw",
+          width: "36vw",
           padding: "10px",
+         
           height: "65vh",
           overflowY: "scroll",
           whiteSpace: "pre-wrap",
@@ -45,7 +49,7 @@ function AddRecord(props) {
           width: "700px",
           height: "65vh",
           overflowY: "scroll",
-          backgroundColor: "white",
+      
           whiteSpace: "pre-wrap",
           padding: "2px",
         }}

@@ -19,7 +19,7 @@ function UpdateRecord(props) {
           flexDirection: "column",
           position: "fixed",
           right: 0,
-          width: "44vw",
+          width: "36vw",
           padding: "10px",
           height: "65vh",
           overflowY: "scroll",
@@ -35,7 +35,7 @@ function UpdateRecord(props) {
 }
 }`}/>
       </div>   
-       <div style={{width:'700px',height:"65vh",overflowY:"scroll",backgroundColor:"white",whiteSpace:"pre-wrap",padding:"2px"}}>
+       <div style={{width:'700px',height:"65vh",overflowY:"scroll",whiteSpace:"pre-wrap",padding:"2px"}}>
        <Typography style={{fontWeight: 'bold',fontSize: '20px'}}>To Update records in the</Typography>
        <br/>
 

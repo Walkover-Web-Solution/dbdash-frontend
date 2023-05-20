@@ -97,7 +97,7 @@ export default function CreateAuthKey() {
       <Box>
         <MainNavbar />
       </Box>
-      <Box>
+      <Box sx={{m:1}}>
         <AuthKeyHeader id={id}/>
       </Box>
       <Box sx={{ mt: 4, ml: 1, mr: 1, border: 2, minHeight: 50 }}>

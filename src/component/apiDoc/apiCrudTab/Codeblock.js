@@ -4,7 +4,7 @@ import './Codeblock.css'
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 function CodeBlock(props) {
-  //  console.log("hello",props.body);
+  
   const [isCopied, setIsCopied] = useState(false);
   const [showAPI, setShowAPI] = useState(true)
   function handleCopyClick() {
@@ -15,7 +15,24 @@ function CodeBlock(props) {
       setIsCopied(false);
     }, 2000);
   }
-
+const dummy=(type)=>{
+  switch(type){
+    case "number":
+      return 123;
+      case "rowid":
+        return "row34";
+        case "createdat":
+          return new Date().toISOString();
+          case "longtext":
+            return "it is a long long text";
+            case "autonumber":
+              return 4563;
+              case "createdby":
+                 return "chirag devlani";
+            default :
+            return "hello";
+  }
+}
   return (
 
 
@@ -27,7 +44,7 @@ function CodeBlock(props) {
         <button onClick={() => { setShowAPI(true) }} style={showAPI ? { backgroundColor: "black", color: "white",  fontSize: "15px" } : {  backgroundColor: "white", color: "black", fontSize: "15px" }}>API</button>
         <button onClick={() => { setShowAPI(false) }} style={showAPI ? { backgroundColor: "white", color: "black", fontSize: "15px" } : {  backgroundColor: "black", color: "white", fontSize: "15px" }}>CURL</button>
       </div>
-      <pre style={{ position: "relative", width: "400px", whiteSpace: "pre-wrap", overflowY: "scroll" }}>
+      <pre style={{ position: "relative", width: "400px", whiteSpace: "pre-wrap" }}>
         <br />
         <code style={{ whiteSpace: "pre-wrap", maxWidth: "400px", wordWrap: "break-word" }}>
           {props.code}
@@ -44,7 +61,8 @@ function CodeBlock(props) {
           <code style={{ color: "white" }}>
             {"-data{\n"}
             {props.body.map((x, index) => (
-              <span style={{ margin: "1px" }} key={index}>{`"${x[0]}":"${x[1]}",\n`}</span>
+              
+              <span style={{ margin: "1px" }} key={index}>{`"${x[0]}":"${dummy(x[1])}",\n`}</span>
             ))}
             {"}"}
           </code>

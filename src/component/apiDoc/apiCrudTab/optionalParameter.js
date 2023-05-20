@@ -50,7 +50,7 @@ function OptionalParameter(props) {
           border: '2px solid black',
           borderRadius: '1px',
           padding: '10px',
-          width: '54.5vw',
+          width: '34.5vw',
           backgroundColor: 'lightgrey',
         }}
       >

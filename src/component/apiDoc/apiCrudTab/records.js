@@ -3,10 +3,10 @@ import { getAllfields } from '../../../api/fieldApi';
 import Grid from '@mui/material/Grid';
 import { PropTypes } from 'prop-types';
 // import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
-import RemoveIcon from '@mui/icons-material/Remove';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 function Records(props) {
 const [rowfieldData, setRowFieldData] = useState(null)
@@ -20,26 +20,28 @@ useEffect(() => {
   return (
     <div>
         <Grid container spacing={2}>
-  <Grid item xs={2}>
+  <Grid item xs={3.2}>
     <Typography style={{ fontWeight: 'bold' }}>fieldName</Typography>
-    {rowfieldData && Object?.entries(rowfieldData) && Object?.entries(rowfieldData).map((fields, index) => (
-      <Typography style={{fontSize:"18px"}} key={index}>{fields[1].fieldName}</Typography>
-    ))}
+  {rowfieldData && Object?.entries(rowfieldData) && Object?.entries(rowfieldData).map((fields, index) => 
+    (
+    
+    <Typography style={{fontSize:"18px"}} key={index}>{fields[1].fieldName}</Typography>
+  ))}
   </Grid>
-  <Grid item xs={2}>
+  <Grid item xs={3.2}>
     <Typography style={{ fontWeight: 'bold' }}>fieldId</Typography>
     {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
       <Typography style={{fontSize:"18px"}} key={index}>{fields[0]}</Typography>
     ))}
   </Grid>
-  <Grid item xs={2}>
+  <Grid item xs={3.2}>
           <Typography style={{ fontWeight: 'bold' }}>fieldType</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
             <Typography style={{fontSize:"18px"}} key={index}>{fields[1].fieldType}</Typography>
           ))}
         </Grid>
 
-  <Grid item xs={4}>
+  <Grid item xs={2}>
   <Typography style={{ fontWeight: 'bold',paddingBottom:"7px" }}>Add/Remove</Typography>
   
   {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
@@ -50,14 +52,14 @@ useEffect(() => {
           style={{fontSize:"18px", backgroundColor: "transparent", border: "none", display: "inline-block" }}
           onClick={() => { props.setArr([...props.arr, [fields[0],fields[1].fieldType]]) }}
         >
-          <ControlPointIcon fontSize="2px" />
+          <CheckBoxOutlineBlankIcon fontSize="2px" />
         </button>
       ) : (
         <button
           style={{ fontSize:"18px",backgroundColor: "transparent", border: "none", display: "inline-block" }}
           onClick={() => { const arr1 = props.arr.filter(x => x[0] !== fields[0]); props.setArr(arr1) }}
         >
-          <RemoveIcon fontSize="2px" />
+          <CheckBoxIcon fontSize="2px" />
         </button>
       )}
       
