@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { allOrg } from "../../store/database/databaseSelector";
 
 export default function AuthKey(props) {
-  // console.log("authkeytable", props);
 
   const adminId = localStorage.getItem("userid");
   const [authKeys, setAuthKeys] = useState(null);
@@ -15,7 +14,6 @@ export default function AuthKey(props) {
   const user = useSelector((state) => allOrg(state));
 
   useEffect(async () => {
-    // console.log(props.scope, props.selected);
     const arrayofUser = await getAuthkeyFun();
     setCreatedBy(arrayofUser);
   }, []);
@@ -48,7 +46,6 @@ export default function AuthKey(props) {
     return data;
   }
 
-  // console.log("DE DE  YRR.", authKeys);
 
   return (
     <>

@@ -177,7 +177,6 @@ export function extraReducers(builder) {
     })
     .addCase(createDbThunk.fulfilled, (state, action) => {
       state.status = "succeeded";
-      console.log(action)
       let arr = state.orgId[action?.payload?.org_id] || [];
       const newArr = [...arr, action.payload];
       state.orgId = { ...state.orgId, [action?.payload?.org_id]: newArr };
@@ -280,5 +279,4 @@ export function extraReducers(builder) {
 
 
 }
-
 

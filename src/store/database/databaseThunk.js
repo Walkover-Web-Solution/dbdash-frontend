@@ -8,9 +8,14 @@ export const bulkAdd = createAsyncThunk(
         const data = await findUserByEmail(payload?.email);
         localStorage.setItem("userid", data?.data?.data?._id);
         var result = {};
-        data?.data?.data?.dbs.map((item) => {
-            result[item.org_id._id] = result[item.org_id._id] ? [...result[item.org_id._id], item] : [item]
-        })
+        try {
+            data?.data?.data?.dbs.map((item) => {
+                result[item.org_id._id] = result[item.org_id._id] ? [...result[item.org_id._id], item] : [item]
+            })
+        } catch (error) {
+            console.log(error)
+        }
+       
         const orgIds = Object.keys(result);
         const allorgs = await getAllOrgs(orgIds)
         const ans = {
@@ -77,7 +82,6 @@ export const deleteOrgThunk = createAsyncThunk(
 export const createOrgThunk = createAsyncThunk(
     "organdDb/createOrgThunk", async (payload) => {
         const data = await createOrg({ name: payload.name, user_id: payload.user_id });
-
         const allorgs = await getAllOrgs(data.data.data.org_id._id)
       
         const allData= {
@@ -90,7 +94,7 @@ export const createOrgThunk = createAsyncThunk(
 
     export const shareUserInOrgThunk = createAsyncThunk(
         "organdDb/shareUserInOrgThunk", async (payload) => {
-             await addUserInOrg(payload.orgId, payload.adminId,{email:payload.email});
+            await addUserInOrg(payload.orgId, payload.adminId,payload.data);
             const allorgs = await getAllOrgs(payload.orgId)
             const allData= {
                 allorgs:allorgs?.data?.data

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
-import { deleteTable } from '../../api/tableApi';
+import { deleteTable, exportCSV } from '../../api/tableApi';
 // import { useParams } from 'react-router-dom';
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, highlightActiveTable, value, setPage ,setValue}) {
   const navigate = useNavigate();
@@ -80,6 +80,14 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     navigate(`/db/${dbData.db._id}/table/${last}`);
 
   };
+
+  const exportCSVTable = async(tableid)=>{
+    const data = {
+      query: `select * from ${tableid}`
+    }
+    await exportCSV(dbData?.db?._id,tableid,data);
+  }
+
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setPage(1);
@@ -159,8 +167,8 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                 label={table[1]?.tableName || table[0]}
                 dropdown={<Dropdown setTabIndex={setTabIndex}
                   tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
-                  first="Rename" second="Delete" third="Upload csv" idToDelete={dbData?.db?._id}
-                  deleteFunction={deleteTableName} setName={setName} />}
+                  first="Rename" second="Delete" exportCSV="Export CSV" idToDelete={dbData?.db?._id}
+                  deleteFunction={deleteTableName} setName={setName}  exportCSVTable={exportCSVTable}/>}
               />}
             </Box> :
               < Box sx={{ mt: -1 }}>
@@ -168,8 +176,8 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                   label={table[1]?.tableName || table[0]}
                   dropdown={<Dropdown setTabIndex={setTabIndex}
                     tables={dbData?.db?.tables} tableId={table[0]} title={table[1]?.tableName || table[0]} tabIndex={index}
-                    first="Rename" second="" idToDelete={dbData?.db?._id}
-                    deleteFunction={deleteTableName} setName={setName} />}
+                    first="Rename" second="" exportCSV="Export CSV" idToDelete={dbData?.db?._id}
+                    deleteFunction={deleteTableName} setName={setName} exportCSVTable={exportCSVTable}/>}
                 />}
               </Box>
             }
