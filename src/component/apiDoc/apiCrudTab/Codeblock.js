@@ -4,7 +4,6 @@ import './Codeblock.css'
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 function CodeBlock(props) {
-  //  console.log("hello",props.body);
   const [isCopied, setIsCopied] = useState(false);
   const [showAPI, setShowAPI] = useState(true)
   function handleCopyClick() {

@@ -91,7 +91,7 @@ export default function ShareOrgModal(props) {
         {users.map((user) => {
           if (
             user.user_id._id !== userId &&
-            (user.user_type !== "admin" || userId !== user.user_id._id)
+            (user.user_type !== "owner" || user.user_type !== "admin" || userId !== user.user_id._id)
           ) {
             return (
               <Box
