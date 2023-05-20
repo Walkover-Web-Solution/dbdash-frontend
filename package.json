@@ -18,6 +18,12 @@
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "dayjs": "^1.11.7",
+<<<<<<< Updated upstream
+=======
+    "draftjs-to-html": "^0.9.1",
+    "faker": "^6.6.6",
+    "file-saver": "^2.0.5",
+>>>>>>> Stashed changes
     "firebase": "^9.17.1",
     "force": "^0.0.3",
     "joi": "^17.7.0",
@@ -32,6 +38,7 @@
     "react-dnd-html5-backend": "^14.0.0",
     "react-dnd-scrolling": "^1.3.3",
     "react-dom": "^17.0.0",
+    "react-draft-wysiwyg": "^1.15.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-joi": "^1.3.0",
     "react-popper": "^2.3.0",

@@ -15,6 +15,7 @@ import { createDb } from "../../api/dbApi";
 import { useNavigate } from "react-router-dom";
 
 export const OrgList = (props) => {
+  const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
@@ -42,10 +43,10 @@ export const OrgList = (props) => {
     const userId = localStorage.getItem("userid")
     if (obj?.users) {
       Object.entries(obj?.users).map((user) => {
-        if (user[1].user_id._id == userId && user[1].user_type == "owner") {
+        if (user[1]?.user_id?._id == userId && user[1]?.user_type == "owner") {
           setIsOwner(true);
         }
-        if (user[1].user_id._id == userId && user[1].user_type == "admin") {
+        if (user[1]?.user_id?._id == userId && user[1]?.user_type == "admin") {
           setIsAdmin(true);
         }
       });
@@ -77,9 +78,13 @@ export const OrgList = (props) => {
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({ orgId: props?.orgId, userid }))
   };
-  const shareWorkspace = async (email) => {
+  const shareWorkspace = async (email,user_type) => {
     const adminId = localStorage.getItem("userid")
-    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
+    const data={
+      email:email,
+      user_type:user_type
+    }
+    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, data:data }))
   }
   const removeUserFromWorkspace = async (email) => {
     const adminId = localStorage.getItem("userid")
@@ -163,6 +168,8 @@ export const OrgList = (props) => {
                         </Button>
                       </Box>
                       <ShareOrgModal
+                      userType={userType}
+                      setUserType={setUserType}
                         shareOrg={shareOrg}
                         org={orgUsers}
                         setShareOrg={setShareOrg}

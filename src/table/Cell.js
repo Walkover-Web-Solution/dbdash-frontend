@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-import { Tabs } from "@mui/material";
+import {Button, ClickAwayListener, Popper, Tabs} from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -18,7 +18,11 @@ import PropTypes from "prop-types";
 import TableCellSingleSelect from './TableCellSingleSelect'
 import TableCellMultiSelect from './TableCellMultiSelect'
 import PreviewAttachment from "./previewAttachment";
-
+import { OpenInFull } from "@mui/icons-material";
+import { EditorState, convertToRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
@@ -37,9 +41,25 @@ const Cell = memo(
     const [previewModal, setPreviewModal] = useState(false)
     const [selectedInput, setSelectedInput] = useState(null);
     const tableId = useSelector((state) => state.table.tableId)
-
+    const [popperOpen, setPopperOpen] = useState(false);
+    const [textarea, setTextarea] = useState(value?.value && value?.value?.toString() || "");
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
+    const handleClickButton = () => {
+      setPopperOpen(true);
+    };
+    const handleClickAway = () => {
+      setPopperOpen(false);
+      setSelectedInput(null);
+    };
 
+    const onEditorStateChange = (newEditorState) => {
+      setEditorState(newEditorState);
+      const contentState = newEditorState.getCurrentContent();
+      const rawContentState = convertToRaw(contentState);
+      const html = draftToHtml(rawContentState);
+      setTextarea(html);
+    };
 
     const handleInputClick = (event) => {
       // remove the border from the previously selected input element (if any)
@@ -259,35 +279,102 @@ const Cell = memo(
         );
         break;
 
-      case "longtext":
-        element = (
-          <input
-            value={(value?.value && value?.value?.toString()) || ""}
-            onChange={onChange}
-            onDoubleClick={()=>{
-              setCursor(true);
-            }}
-            
-            style={!cursor?{caretColor:"transparent"}:{}}
-            onBlur={() => {
-              setValue((old) => ({ value: old.value, update: true }));
-              if (selectedInput === event.target) {
-                setSelectedInput(null);
-                setCursor(false);
-              }
-              event.target.style.border = "none";
-            }}
-            onClick={handleInputClick}
-            onKeyDown={(e) => {
-              setCursor(true);
-              if (e.key === 'Enter') {
-                setValue((old) => ({ value: old.value, update: true }))
-              }
-            }}
-            className="data-input"
-          />
-        );
-        break;
+        case "longtext":
+          element = (
+            <>
+            {/* <TextareaAutosize
+                value={(value?.value && value?.value?.toString()) || ""}
+                onChange={onChange}
+                onFocus={handleInputClick}
+                readOnly={!cursor ? true : false}
+                // inputProps={{ style: { width: `${width}` } }}
+                onDoubleClick={() => {
+                  setCursor(true);
+                }}
+                style={!cursor ? { caretColor: "transparent", paddingRight: "13px", height: "210px", overflowY: "hidden" } : { paddingRight: "13px", position: "absolute", zIndex: '20', WebkitOverflowScrolling: "touch", height: "210px", overflowY: "scroll", width: `${width}px` }}
+                onBlur={() => {
+                  setValue((old) => ({ value: old.value, update: true }));
+                  if (selectedInput === event.target) {
+                    if (!popperOpen) {
+                      setSelectedInput(null);
+                    }
+                    setCursor(false);
+                  }
+                  event.target.style.border = "none";
+                }}
+                onClick={handleInputClick}
+                onKeyDown={(e) => {
+                  setCursor(true);
+                  if (e.key === 'Enter') {
+                    setValue((old) => ({ value: old.value, update: true }))
+                  }
+                }}
+                className="data-input"
+              /> */}
+             <div dangerouslySetInnerHTML={{ __html: value?.value}}></div>
+  
+              {selectedInput &&
+                <div
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                  }}
+                  style={{
+                    position: "absolute",
+                    right: "1%",
+                    top: "32%",
+                    transform: "translateY(-50%)",
+                  }}
+                >
+  
+                  <OpenInFull style={{ fontSize: "15px", color: "blue" }} onClick={handleClickButton} />
+  
+                </div>}
+              {popperOpen && <ClickAwayListener onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+  
+              }} onClickAway={handleClickAway}>
+                <Popper
+                  open={popperOpen}
+                  anchorEl={null}
+                  placement="center"
+                  style={{
+                    zIndex: 20,
+                    margin: "5px",
+                    backgroundColor: "whitesmoke",
+                    color: "white",
+                    width: "500px",
+                    height: "500px",
+                    whiteSpace: "pre-wrap",
+                    overflowX: "hidden",
+                    overflowY: "scroll",
+                    position: "fixed",
+                    left: "50%",
+                    top: "50%",
+                    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+  
+                  <div>
+                    <Editor
+                      editorState={editorState}
+                      onEditorStateChange={onEditorStateChange}
+                      editorStyle={{ color: "black" }}
+                    />
+                    <Button
+                      variant="outlined" style={{ margin: "2px", color: "maroon", backgroundColor: "white" }} onClick={() => {
+                        setValue({ value: textarea, update: true });
+  
+                      }}>save</Button>
+                  </div>
+                </Popper>
+              </ClickAwayListener>}
+  
+            </>
+          );
+          break;
+  
         case "singlelinetext":
         element = (
           <input
