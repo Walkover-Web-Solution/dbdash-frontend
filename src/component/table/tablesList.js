@@ -262,21 +262,7 @@ export default function TablesList({ dbData }) {
         >
           Add Filter
         </Button>
-        <Button
-          onClick={() => handleOpenn()}
-          variant="contained"
-          sx={{ width: 100, mt: 1.5, ml: 1, fontSize: "8px" }}
-        >
-          Hidden fields
-        </Button>
-        <div>
-          {/* <input
-              type="file"
-              id="my-file-input"
-              onChange={(e)=>{setCSV(e.target.files[0])}}
-            />
-        <Button onClick={()=>{submitCSV()}}>Submit</Button> */}
-        </div>
+  
       </Box>
       {open && (
         <PopupModal
