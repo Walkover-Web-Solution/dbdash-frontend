@@ -12,6 +12,9 @@ import MainNavbar from "../component/mainNavbar";
 import AuthKeyPopup from "../component/authKeyComponents/authKeyPopup";
 import { useSelector } from "react-redux";
 import { selectActiveUser } from "../store/user/userSelector.js";
+// import authKeyTable from "../component/authKeyComponents/authKeyTable"
+
+
 
 export default function CreateAuthKey() {
   const location = useLocation();
@@ -116,7 +119,7 @@ export default function CreateAuthKey() {
             />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-            <Typography sx={{ mr: "40px", mt: "30px" }}>Scope</Typography>
+            <Typography sx={{ mr: "40px", mt: "30px" }}>Table Access</Typography>
             <Box sx={{ mt: "10px" }}>
               <AuthAccessDropDown
                 dbIds={dbId}
@@ -129,10 +132,11 @@ export default function CreateAuthKey() {
             </Box>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Typography sx={{ mr: "40px", mt: "55px" }}>Access</Typography>
+            <Typography sx={{ mr: "40px", mt: "55px" }}>Scope</Typography>
             <Box sx={{ mt: "35px" }}>
               <AuthKeyDropdown scope={scope} setScope={setScope} />
             </Box>
+
           </Box>
         </Box>
         <Box
@@ -169,6 +173,9 @@ export default function CreateAuthKey() {
               <Button variant="outlined">Cancel</Button>
             </Link>
           </Box>
+          {/* <Box sx={{ mt: "35px" }}>
+              <authKeyTable scope={scope} setScope={setScope} />
+            </Box> */}
         </Box>
       </Box>
     </>

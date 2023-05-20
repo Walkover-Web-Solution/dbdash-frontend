@@ -3,18 +3,22 @@ import React from 'react';
 import {Button,Dialog,DialogActions,DialogTitle} from '@mui/material';
 import { PropTypes } from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
+//import { string } from 'joi';
 export default function DisplayAuthKeyPopup(props) {
   const { id } = useParams();
   const handleClose = () => {
     props.setDisplay(false);
   };
-
+//const authKeydata=props.title;
   const [isCopied, setIsCopied] = React.useState(false);
   const copyToClipboard = () => {
     navigator.clipboard.writeText(props?.title);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
+
+  
+// console.log(hiddenAuthKey);
 
   return (  
     <>
@@ -24,7 +28,7 @@ export default function DisplayAuthKeyPopup(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{ props.title}</DialogTitle>
 
         <DialogActions>
           <Button onClick={(e) => { e.preventDefault(); e.stopPropagation(); copyToClipboard() }}>

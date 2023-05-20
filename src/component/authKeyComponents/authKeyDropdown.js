@@ -6,7 +6,10 @@ export default function AuthKeyDropdown({scope,setScope}) {
 
   const handleChange = (event) => {
     setScope(event.target.value);
+    
   }
+
+
   
   return (
     <>
@@ -34,6 +37,8 @@ AuthKeyDropdown.propTypes = {
   scope: PropTypes.any,
   setScope:PropTypes.func
 };
+
+
 
 
 
