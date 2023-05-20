@@ -38,12 +38,14 @@ export default function AuthKey(props) {
     return data;
   }
 
-  function formatDateTime(dateTimeString) {
-    const date = new Date(dateTimeString);
-    const now = new Date();
-    const diff = now - date;
-
-    if (diff < 60 * 60 * 1000) {
+  const formatDateTime = (dateTime) => {
+    const currentDate = new Date();
+    const createdDate = new Date(dateTime);
+    const diff = currentDate - createdDate;
+  
+    if (diff < 60 * 1000) {
+      return "Just now";
+    } else if (diff < 60 * 60 * 1000) {
       const minutes = Math.floor(diff / (60 * 1000));
       return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
     } else if (diff < 24 * 60 * 60 * 1000) {
@@ -51,7 +53,11 @@ export default function AuthKey(props) {
       return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
     } else if (diff < 7 * 24 * 60 * 60 * 1000) {
       const days = Math.floor(diff / (24 * 60 * 60 * 1000));
-      return `${days} day${days !== 1 ? "s" : ""} ago`;
+      if (days === 1) {
+        return "Yesterday";
+      } else {
+        return `${days} day${days !== 1 ? "s" : ""} ago`;
+      }
     } else if (diff < 4 * 7 * 24 * 60 * 60 * 1000) {
       const weeks = Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
       return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
@@ -62,7 +68,7 @@ export default function AuthKey(props) {
       const years = Math.floor(diff / (12 * 30 * 24 * 60 * 60 * 1000));
       return `${years} year${years !== 1 ? "s" : ""} ago`;
     }
-  }
+  };
 
   return (
     <>
