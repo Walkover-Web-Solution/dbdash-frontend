@@ -29,6 +29,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ContentCopySharpIcon from '@mui/icons-material/ContentCopySharp';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { addColumnrightandleft, addColumsToLeft, deleteColumns, updateColumnHeaders, updateColumnsType } from "../store/table/tableThunk";
 import { getTableInfo } from "../store/table/tableSelector";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
@@ -53,7 +54,7 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 )
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps, metadata }, setSortBy, getToggleAllRowsSelectedProps }) {
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps, metadata }, setSortBy, getToggleAllRowsSelectedProps}) {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi, setQueryByAi] = useState(false)
@@ -295,93 +296,113 @@ export default function Header({
       icon: <TextFormatIcon fontSize="2px" />,
       label: "singlelinetext"
     }
+];
 
-  ];
+types.sort((a, b) => a.label.localeCompare(b.label));
 
-  const buttons = [
-    {
-      onClick: () => {
-        dispatch(updateColumnHeaders({
-          type: "updateColumnHeader",
-          columnId: id,
-          label: header
-        }));
-        setSortBy([{ id: id, desc: false }]);
-        setExpanded(false);
-      },
-      icon: <ArrowUpIcon />,
-      label: "Sort ascending"
-    },
-    {
-      onClick: () => {
-        dispatch(updateColumnHeaders({
-          type: "updateColumnHeader",
-          columnId: id,
-          label: header
-        }));
-        setSortBy([{ id: id, desc: true }]);
-        setExpanded(false);
-      },
-      icon: <ArrowDownIcon />,
-      label: "Sort descending"
-    },
-    {
-      onClick: () => {
-        handleOpen();
-        setDirectionAndId({
-          direction: "left",
-          position: id
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowLeftIcon />,
-      label: "Insert left"
-    },
-    {
-      onClick: () => {
-        setOpen(true);
-        setDirectionAndId({
-          direction: "right",
-          position: id
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowRightIcon />,
-      label: "Insert right"
-    },
 
-  ];
+const buttons = [
+  {
+    onClick: () => {
+      dispatch(updateColumnHeaders({
+        type: "updateColumnHeader",
+        columnId: id,
+        label: header
+      }));
+      setSortBy([{ id: id, desc: false }]);
+      setExpanded(false);
+    },
+    icon: <ArrowUpIcon />,
+    label: "Sort ascending"
+  },
+  {
+    onClick: () => {
+      dispatch(updateColumnHeaders({
+        type: "updateColumnHeader",
+        columnId: id,
+        label: header
+      }));
+      setSortBy([{ id: id, desc: true }]);
+      setExpanded(false);
+    },
+    icon: <ArrowDownIcon />,
+    label: "Sort descending"
+  },
+  {
+    onClick: () => {
+      handleOpen();
+      setDirectionAndId({
+        direction: "left",
+        position: id
+      });
+      setExpanded(false);
+    },
+    icon: <ArrowLeftIcon />,
+    label: "Insert left"
+  },
+  {
+    onClick: () => {
+      setOpen(true);
+      setDirectionAndId({
+        direction: "right",
+        position: id
+      });
+      setExpanded(false);
+    },
+    icon: <ArrowRightIcon />,
+    label: "Insert right"
+  },
+];
 
-  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
+
+buttons.sort((a, b) => a.label.localeCompare(b.label));
+
+// console.log(buttons);
+
+
+  if (
+    dataType !== "createdat" &&
+    dataType !== "createdby" &&
+    dataType !== "rowid" &&
+    dataType !== "autonumber"
+  ) {
+    buttons.push({
+      onClick: () => {
+        setExpanded(false);
+        // handleOpenDuplicate();
+      },
+      icon: <VisibilityOffIcon fontSize="1px" />,
+      label: "Hide Field",
+    });
+  
     buttons.push({
       onClick: () => {
         setExpanded(false);
         handleOpenDuplicate();
       },
       icon: <ContentCopySharpIcon fontSize="1px" />,
-      label: "Duplicate Field"
+      label: "Duplicate Field",
     });
-  }
-
-  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") {
+  
     buttons.push({
       onClick: () => {
-        dispatch(deleteColumns({
-          label: header,
-          columnId: id,
-          fieldName: id,
-          fieldDataType: dataType,
-          tableId: tableInfo?.tableId,
-          dbId: tableInfo?.dbId
-        }));
+        dispatch(
+          deleteColumns({
+            label: header,
+            columnId: id,
+            fieldName: id,
+            fieldDataType: dataType,
+            tableId: tableInfo?.tableId,
+            dbId: tableInfo?.dbId,
+          })
+        );
         setExpanded(false);
       },
       icon: <TrashIcon />,
-      label: "Delete"
+      label: "Delete",
     });
   }
-
-
+  
 
   let propertyIcon;
   switch (dataType) {
@@ -535,7 +556,7 @@ export default function Header({
             <div
               className='th-content' >
               <span className='svg-icon svg-gray icon-margin' style={{ marginTop: "6.5px", marginBottom: "1px" }} >
-                <IndeterminateCheckbox  {...getToggleAllRowsSelectedProps()} />
+                <IndeterminateCheckbox  {...getToggleAllRowsSelectedProps()} /> 
               </span>
             </div>
           </div>}
@@ -643,5 +664,6 @@ Header.propTypes = {
   setSortBy: PropTypes.any,
   dataDispatch: PropTypes.any,
   row: PropTypes.any,
-  getToggleAllRowsSelectedProps: PropTypes.any
+  getToggleAllRowsSelectedProps: PropTypes.any,
+  getToggleHideAllColumnsProps: PropTypes.any
 };

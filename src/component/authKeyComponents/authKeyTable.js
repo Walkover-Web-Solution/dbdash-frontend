@@ -13,7 +13,7 @@ export default function AuthKey(props) {
   const user = useSelector((state) => allOrg(state));
 
   useEffect(async () => {
-    const arrayofUser = await getAuthkeyFun();
+     const arrayofUser = await getAuthkeyFun();
     setCreatedBy(arrayofUser);
   }, []);
 

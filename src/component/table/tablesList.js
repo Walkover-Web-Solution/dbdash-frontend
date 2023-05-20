@@ -260,6 +260,13 @@ export default function TablesList({ dbData }) {
         >
           Add Filter
         </Button>
+        <Button
+          onClick={() => handleOpenn()}
+          variant="contained"
+          sx={{ width: 100, mt: 1.5, ml: 1, fontSize: "8px" }}
+        >
+          Hidden fields
+        </Button>
         <div>
           {/* <input
               type="file"
