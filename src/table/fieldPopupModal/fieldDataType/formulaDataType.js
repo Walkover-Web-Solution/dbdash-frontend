@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { Box, Button, CircularProgress, MenuItem, TextField } from '@mui/material';
-import Paper from '@mui/material/Paper'; // Add this import statement
+import Paper from '@mui/material/Paper'; 
 
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
@@ -33,7 +33,7 @@ useEffect(() => {
   try {
     query = JSON.parse(query)?.add_column?.new_column_name?.generated?.expression;
     props.setQueryResult(query);
-    setIsLoading(false); // Move setIsLoading inside the try block
+    setIsLoading(false); 
   } catch (err) {
     query = 'enter valid query';
   }
@@ -123,6 +123,11 @@ useEffect(() => {
       <Button onClick={handleClick} color="primary">
         Ask AI
       </Button>
+      {isLoading && <Box sx={{ display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center', }}>
+      <CircularProgress />
+    </Box>}
 
       {props.queryByAi && (
         <TextField
@@ -138,11 +143,7 @@ useEffect(() => {
         />
       )}
 
-      {isLoading && <Box sx={{ display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center', }}>
-      <CircularProgress />
-    </Box>}
+    
     </Box>
   );
 }
