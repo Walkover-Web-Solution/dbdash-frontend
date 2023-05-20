@@ -1,18 +1,23 @@
 import React, { useState } from "react";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify'
 
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
+  const [userType, setUserType] = useState("");
   const userId = localStorage.getItem("userid");
   const { users } = props.org;
-
+  
   const handleClose = () => {
-    props.setShareOrg(false);
-    setEmail("");
-  };
+      props.setShareOrg(false);
+      setEmail("");
+      setUserType("user"); // Reset user type state
+    };
+    const handleUserTypeChange = (event) => {
+      setUserType(event.target.value);
+    };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -29,7 +34,7 @@ export default function ShareOrgModal(props) {
       return;
     }
 
-    const existingUser = users.find(user => user.user_id.email === email);
+    const existingUser = users.find(user => user.user_id?.email === email);
     if (existingUser) {
       if (existingUser.user_id._id === userId) {
         toast.error("You cannot invite yourself");
@@ -39,7 +44,7 @@ export default function ShareOrgModal(props) {
       return;
     }
 
-    props.shareWorkspace(email);
+    props.shareWorkspace(email,userType);
     handleClose();
     toast.success("Invitation sent successfully");
   };
@@ -59,18 +64,26 @@ export default function ShareOrgModal(props) {
   return (
     <Dialog open={props.shareOrg} onClose={handleClose}>
       <DialogTitle sx={{ width: 500 }}>Add User to Organization</DialogTitle>
-      <DialogContent sx={{ flex: "none" }}>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Email Address"
-          type="email"
-          fullWidth
-          value={email}
-          onChange={handleEmailChange}
-          onKeyDown={handleKeyDown}
-        />
-      </DialogContent>
+      <DialogContent sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+  <TextField
+    autoFocus
+    margin="dense"
+    label="Email Address"
+    type="email"
+    fullWidth
+    value={email}
+    onChange={handleEmailChange}
+    onKeyDown={handleKeyDown}
+    sx={{ flex: "3", marginRight: "1rem" }} 
+  />
+  <FormControl sx={{ flex: "1.2", marginLeft: "1" }}> 
+    <InputLabel>User Type</InputLabel>
+    <Select value={userType} onChange={handleUserTypeChange}>
+      <MenuItem value="user">User</MenuItem>
+      <MenuItem value="admin">Admin</MenuItem>
+    </Select>
+  </FormControl>
+</DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button
@@ -90,12 +103,12 @@ export default function ShareOrgModal(props) {
       <Box>
         {users.map((user) => {
           if (
-            user.user_id._id !== userId &&
-            (user.user_type !== "owner" || user.user_type !== "admin" || userId !== user.user_id._id)
+            user?.user_id?._id !== userId &&
+            (user?.user_type !== "owner" || user?.user_type !== "admin" || userId !== user?.user_id?._id)
           ) {
             return (
               <Box
-                key={user.user_id.email}
+                key={user?.user_id?.email}
                 sx={{
                   display: "flex",
                   flexDirection: "row",
@@ -103,12 +116,12 @@ export default function ShareOrgModal(props) {
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <Typography>{user.user_id.email}</Typography>
+                  <Typography>{user?.user_id?.email}</Typography>
                 </Box>
                 <Box sx={{ alignItems: "center" }}>
                   <IconButton
                     aria-label="delete"
-                    onClick={() => handleRemoveUser(user.user_id.email)}
+                    onClick={() => handleRemoveUser(user?.user_id?.email)}
                   >
                     <DeleteIcon />
                   </IconButton>
