@@ -154,7 +154,6 @@ export function extraReducers(builder) {
     })
     .addCase(createOrgThunk.fulfilled, (state, action) => {
       state.status = "succeeded";
-      console.log(action.payload.allorgs[0]._id)
       let arr = state.orgId[action.payload.allorgs[0]._id] || [];
       const newArr = [...arr, action.payload.data];
       state.orgId = { ...state.orgId, [action.payload.allorgs[0]._id]: newArr };

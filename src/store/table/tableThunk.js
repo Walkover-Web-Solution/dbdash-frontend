@@ -270,7 +270,6 @@ export const updateCells = createAsyncThunk(
             });
         })
         payload.newData = data?.data?.data;
-        console.log("payload",payload)
         return payload;
     }
 )
