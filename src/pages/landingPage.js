@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Box, Container} from '@mui/material'
+import { Box, Container } from '@mui/material'
 import MainNavbar from '../component/mainNavbar'
 import { useDispatch, useSelector } from 'react-redux';
 import WorkspaceCombined from '../component/workspaceDatabase/workspaceCombined';
@@ -9,28 +9,28 @@ import { selectActiveUser } from '../store/user/userSelector';
 
 export default function LandingPage() {
    const dispatch = useDispatch();
-  const emailId=useSelector((state)=>selectActiveUser(state));
+   const emailId = useSelector((state) => selectActiveUser(state));
 
-   useEffect(()=>{
-      if(emailId?.email)
-      dispatch(bulkAdd({email:emailId.email}))
-   },[])
-  return (
-    <Container maxWidth='true'>
+   useEffect(() => {
+      if (emailId?.email)
+         dispatch(bulkAdd({ email: emailId.email }))
+   }, [])
+   return (
+      <Container maxWidth='true'>
 
-    <Box >
+         <Box >
 
-       <Box>
-          <MainNavbar/>
-       </Box>
+            <Box>
+               <MainNavbar />
+            </Box>
 
-       <Box>
-            <WorkspaceCombined/>
-       </Box>
+            <Box>
+               <WorkspaceCombined />
+            </Box>
 
-    </Box>
+         </Box>
 
-    </Container>
-  
-    )
+      </Container>
+
+   )
 }

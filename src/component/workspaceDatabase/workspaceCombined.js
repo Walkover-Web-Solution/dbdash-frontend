@@ -29,8 +29,8 @@ const[tabIndex,setTabIndex]=useState(0);
           }
         }
         
-        const nameA = dbsA[0].org_id.name.toUpperCase();
-        const nameB = dbsB[0].org_id.name.toUpperCase();
+        const nameA = dbsA[0].org_id.name?.toUpperCase();
+        const nameB = dbsB[0].org_id.name?.toUpperCase();
         if (nameA < nameB) {
           return -1;
         } else if (nameA > nameB) {

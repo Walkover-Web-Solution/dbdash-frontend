@@ -14,13 +14,14 @@ const  MainTable = memo ( ({page,setPage}) =>  {
   const tableId=useSelector((state)=>state.table.tableId);
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const dispatchs = useDispatch();
- const params =  useParams();
+  const params =  useParams();
   const fetchMoreData = () => {
     dispatchs(bulkAddColumns({
       "dbId": dbId,
       "tableName": tableId,
       "pageNo": page+1,
       "filter": AllTableInfo?.[params?.tableName]?.filters?.[params?.filterName]?.query,
+      "filterId" : params?.filterName
     }));
     setPage((page) => page + 1);
   };
