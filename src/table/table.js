@@ -158,7 +158,7 @@ const Table = memo(
         <DndProvider backend={HTML5Backend}>
            <ScrollingComponent id="scroll"
 
-            style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"74.1vh",width:"99.6vw"}}
+            style={{ display:"flex",overflowY:"scroll",overflowX:"auto",height:"74.1vh",width:"99.6vw"}}
           >
             <table >
               
