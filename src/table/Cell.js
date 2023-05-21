@@ -52,7 +52,7 @@ const Cell = memo(
       // set the currently selected input element to the clicked input element
       setSelectedInput(event.target);
       // add a border to the clicked input element
-      event.target.style.border = "2px solid blue";
+      // event.target.style.border = "2px solid blue";
     };
 
     const [popperOpen, setPopperOpen] = useState(false);
@@ -290,36 +290,6 @@ const Cell = memo(
         case "longtext":
           element = (
             <>
-            {/* <input
-               // value={(value?.value && value?.value?.toString()) || ""}
-                onChange={onChange}
-                dangerouslySetInnerHTML={value?.value && value?.value?.toString()|| ""}
-                onFocus={handleInputClick}
-                readOnly={!cursor ? true : false}
-          
-                onDoubleClick={() => {
-                  setCursor(true);
-                }}
-                style={!cursor ? { caretColor: "transparent", paddingRight: "13px",  overflowY: "hidden" } : { paddingRight: "13px", position: "absolute", zIndex: '20', WebkitOverflowScrolling: "touch",  overflowY: "scroll", width: `${width}px` }}
-                onBlur={() => {
-                  setValue((old) => ({ value: old.value, update: true }));
-                  if (selectedInput === event.target) {
-                    if (!popperOpen) {
-                      setSelectedInput(null);
-                    }
-                    setCursor(false);
-                  }
-                  event.target.style.border = "none";
-                }}
-                onClick={handleInputClick}
-                onKeyDown={(e) => {
-                  setCursor(true);
-                  if (e.key === 'Enter') {
-                    setValue((old) => ({ value: old.value, update: true }))
-                  }
-                }}
-                className="data-input"
-              /> */}
              <div contentEditable="true"   onClick={handleInputClick}
              style={{height:"35px",borderColor:"transparent",border:0}}
              className="data-input"
@@ -332,9 +302,7 @@ const Cell = memo(
                   setSelectedInput(null);
                   setCursor(false);
                 }
-                
               }
-              console.log("hello")
               event.target.style.border = "none";
             }}
                 onKeyDown={(e) => {

@@ -54,7 +54,7 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 )
 export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps, metadata }, setSortBy, getToggleAllRowsSelectedProps}) {
+  column: { id, created, label, dataType, getResizerProps, getHeaderProps, metadata }, setSortBy, getToggleAllRowsSelectedProps,}) {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
   const [queryByAi, setQueryByAi] = useState(false)
@@ -69,7 +69,8 @@ export default function Header({
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
-
+  const columns=useSelector((state)=>state.table?.columns);
+console.log("columns",columns.map(columns=> (columns.id)))
 
   const handleOpen = () => {
     setOpen(true);
@@ -121,6 +122,21 @@ export default function Header({
     }));
     setSelectValue();
   }
+
+  const handleHideField = () => {
+    <div>
+        {columns.map(column => (
+          <div key={column.id}>
+            <label>
+              <input type="checkbox" {...column.getToggleHiddenProps} />{' '}
+              {column.id}
+            </label>
+          </div>
+        ))}
+        <br />
+      </div>
+  }
+
 
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -352,30 +368,22 @@ const buttons = [
     icon: <ArrowRightIcon />,
     label: "Insert right"
   },
+ {
+    onClick: () => {
+      setExpanded(false);
+      handleHideField();
+    },
+    icon: <VisibilityOffIcon fontSize="1px" />,
+    label: "Hide Field",
+  }
 ];
 
 
 buttons.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
 
 
-// console.log(buttons);
-
-
-  if (
-    dataType !== "createdat" &&
-    dataType !== "createdby" &&
-    dataType !== "rowid" &&
-    dataType !== "autonumber"
-  ) {
-    buttons.push({
-      onClick: () => {
-        setExpanded(false);
-        // handleOpenDuplicate();
-      },
-      icon: <VisibilityOffIcon fontSize="1px" />,
-      label: "Hide Field",
-    });
-  
+  if (dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" &&dataType !== "autonumber") 
+  {
     buttons.push({
       onClick: () => {
         setExpanded(false);
@@ -550,7 +558,21 @@ buttons.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
           </div>
           <FieldPopupModal title="create column" label="Column Name" queryByAi={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId={tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn}
           />
-
+          {/* <div>
+        <div>
+          <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
+          All
+        </div>
+        {columns?.slice(1, -1).map((column, index) => (
+          <div key={index}>
+            <label>
+              <input type="checkbox" {...column.getToggleHiddenProps} />{' '}
+              {column.id}
+            </label>
+          </div>
+        ))}
+        <br />
+      </div> */}
         </div > :
           <div  {...getHeaderProps({ style: { display: "inline-block", flex: "none", width: "20px" } })} className='th noselect'
           >

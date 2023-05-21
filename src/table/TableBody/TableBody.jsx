@@ -18,7 +18,6 @@ import {updateCells } from "../../store/table/tableThunk";
 selectedColumnIndex
 })
  {
-  console.log("messge",selectedColumnIndex);
    const dispatch =  useDispatch()
    const tableId = useSelector((state) => state.table.tableId)
   const limit = 200;
@@ -96,7 +95,6 @@ selectedColumnIndex
         >
           {row.cells.map((cell,key) => {
            
-                    console.log("key",key,"selected",selectedColumnIndex)
             return (
  
               <div 
