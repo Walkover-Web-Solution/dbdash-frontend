@@ -113,6 +113,7 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
+        // console.log("working or not1")
         var columns = null
         if ((payload?.pageNo <= 1) || !(payload?.pageNo)) {
             columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
@@ -152,6 +153,7 @@ export const bulkAddColumns = createAsyncThunk(
             return dataa;
         }
         else {
+            // console.log("working or not2")
 
             const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
             const dataa = {
@@ -232,13 +234,15 @@ export const addColumnrightandleft = createAsyncThunk(
             foreignKey: payload?.foreignKey,
             duplicateField: payload?.duplicateField
         }
+        let createdfield;
         if (payload?.fieldType == "lookup")
-            await createView(payload?.dbId, payload?.tableId, data);
+           createdfield= await createView(payload?.dbId, payload?.tableId, data);
         else
-            await createField(payload?.dbId, payload?.tableId, data);
-        dispatch(getTable1({ dbId: payload?.dbId }))
-        const { tableId, dbId } = getState().table
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+           createdfield= await createField(payload?.dbId, payload?.tableId, data);
+            dispatch(getTable1({ dbId: payload?.dbId }))
+            // dispatch(addColumnToLeft(payload));
+            const { tableId, dbId } = getState().table
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId ,fields:createdfield?.data?.data}));
         return payload;
     }
 )
@@ -255,14 +259,15 @@ export const addColumsToLeft = createAsyncThunk(
             linkedForeignKey: payload?.linkedValueName,
             foreignKey: payload?.foreignKey
         }
+        let createdfield;
         if (payload?.fieldType == "lookup")
-            await createView(payload?.dbId, payload?.tableId, data);
+           createdfield= await createView(payload?.dbId, payload?.tableId, data);
         else
-            await createField(payload?.dbId, payload?.tableId, data);
+           createdfield= await createField(payload?.dbId, payload?.tableId, data);
             dispatch(getTable1({ dbId: payload?.dbId }))
             // dispatch(addColumnToLeft(payload));
             const { tableId, dbId } = getState().table
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId ,fields:createdfield?.data?.data}));
         return payload;
     }
 )
