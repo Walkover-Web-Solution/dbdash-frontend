@@ -25,7 +25,8 @@ selectedColumnIndex
   const itemCount = hasNextPage ? rows.length + 1 : rows.length;
   const isNextPageLoading1= useSelector((state)=>state.table?.isMoreData);//true
   const loadMoreItems = !isNextPageLoading1 ? () => {} : update;
-    
+
+
   const isItemLoaded = useCallback(
     (index) => 
     {
@@ -40,20 +41,26 @@ selectedColumnIndex
     document.execCommand("copy");
   };
 
-  const handlePaste = (
-    event,
-     row, cell
-  ) => {
+  
+  
+  const handlePaste = ( event,row, cell) => {
     event.preventDefault();
+   
     const text = event.clipboardData.getData("text/plain");
-    if(cell?.column?.dataType != "attachment"){
-      dispatch(
-        updateCells({
-          columnId: cell.column.id,
-          rowIndex: cell.row.original.id || cell.row.original?.["fld"+tableId.substring(3)+"autonumber"],
-          value: text,
-        })
-      );
+    const arr = text.split('.?.?.')
+
+    for (let i = 0; i < arr.length; i++) {
+      const updatedRowIndex = cell.row.original?.["fld" + tableId.substring(3) + "autonumber"] + i;
+      if(cell?.column?.dataType != "attachment"){
+        dispatch(
+          updateCells({
+            columnId: cell.column.id,
+            rowIndex: updatedRowIndex,
+            value: arr[i],
+          })
+        );
+    }
+   
     }
   };
 

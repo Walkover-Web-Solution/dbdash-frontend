@@ -30,7 +30,7 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 
 const getHeaders = async (dbId, tableName, payloadfields) => {
     const fields = payloadfields || await getAllfields(dbId, tableName);
-    const columns = [
+    let columns = [
         {
             id: 9999991,
             width: 10,
@@ -171,12 +171,14 @@ export const bulkAddColumns = createAsyncThunk(
 export const deleteColumns = createAsyncThunk(
     "table/deleteColumns",
     async (payload, { dispatch, getState }) => {
+
         if (payload?.fieldDataType == "lookup") {
             const data = {
                 viewFieldId: payload?.fieldName
             }
             await deleteFieldInView(payload?.dbId, payload?.tableId, data)
             dispatch(getTable1({ dbId: payload?.dbId }))
+            
             dispatch(deleteColumn(payload));
             const { tableId, dbId } = getState().table
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
@@ -184,16 +186,15 @@ export const deleteColumns = createAsyncThunk(
         }
         else {
            const deletedfield= await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
-            // console.log("")
-            //delte api call
+           
             dispatch(deleteColumn(payload));
+            console.log("delete");
             dispatch(getTable1({ dbId: payload?.dbId }))
 
             const { tableId, dbId } = getState().table
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields:deletedfield.data?.data }));
             return 2;
         }
-        // return response of api;
     }
 )
 export const updateColumnHeaders = createAsyncThunk(
@@ -205,7 +206,7 @@ export const updateColumnHeaders = createAsyncThunk(
             metaData: payload?.metaData
         }
         await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
-        if (payload?.metaData?.width) return;
+        if(payload?.metaData?.width || payload?.metaData?.hide) return;
         dispatch(getTable1({ dbId: payload?.dbId }))
         dispatch(updateColumnHeader(payload));
         const { tableId, dbId } = getState().table
@@ -258,10 +259,10 @@ export const addColumsToLeft = createAsyncThunk(
             await createView(payload?.dbId, payload?.tableId, data);
         else
             await createField(payload?.dbId, payload?.tableId, data);
-        dispatch(getTable1({ dbId: payload?.dbId }))
-        // dispatch(addColumnToLeft(payload));
-        const { tableId, dbId } = getState().table
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+            dispatch(getTable1({ dbId: payload?.dbId }))
+            // dispatch(addColumnToLeft(payload));
+            const { tableId, dbId } = getState().table
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
         return payload;
     }
 )

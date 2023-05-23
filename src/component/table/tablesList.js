@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Tabs,
-  IconButton,
-  Menu,
-  MenuItem,
-  CircularProgress,
-} from "@mui/material";
+import {Box,Button,Tabs,IconButton,Menu,MenuItem,CircularProgress,} from "@mui/material";
 import PopupModal from "../popupModal";
 import FilterModal from "../filterPopUp";
 import PropTypes from "prop-types";
@@ -23,20 +15,18 @@ import { deleteFilter } from "../../api/filterApi";
 import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
-
-// import { uploadCSV } from '../../api/rowApi';
+// import HideFieldDropdown from "./hidefieldDropdown";
 
 export default function TablesList({ dbData }) {
-  const params = useParams();
-
+  
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
+  const params = useParams();
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
-
   };
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
@@ -51,10 +41,16 @@ export default function TablesList({ dbData }) {
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
-  // const [idToNavigate,setIdToNavigate] = useState()
- 
- 
-  const handleClick = (event,id) => {
+
+  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+
+  // const handleMenuOpen = (event) => {
+  //   setMenuAnchorEl(event.currentTarget);
+  // };
+
+  
+
+  const handleClick = (event, id) => {
     setcurrentTable(id)
     setAnchorEl(event.currentTarget);
   };
@@ -128,7 +124,7 @@ export default function TablesList({ dbData }) {
     dispatch(
       bulkAddColumns({
         dbId: dbData?.db?._id,
-        tableName: params?.tableName ,
+        tableName: params?.tableName,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
         fields:dbData?.db?.tables[params?.tableName]?.fields
@@ -153,7 +149,6 @@ export default function TablesList({ dbData }) {
           
         })
       );
-      // navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
     }
     else if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
@@ -257,10 +252,10 @@ export default function TablesList({ dbData }) {
                   color="primary"
                 >
                   {filter[1]?.filterName}
-                  <IconButton onClick={(e) => handleClick(e,filter[0])}>
+                  <IconButton onClick={(e) => handleClick(e, filter[0])}>
                     <MoreVertIcon sx={{ color: "#fff" }} />
                   </IconButton>
-                  
+
                 </Box>
               </Box>
             )
@@ -273,8 +268,9 @@ export default function TablesList({ dbData }) {
         >
           Add Filter
         </Button>
-  
       </Box>
+      {/* <Button onClick={handleMenuOpen}>Hide Fields</Button>
+      <HideFieldDropdown columns={columns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} /> */}
       {open && (
         <PopupModal
           title="Create Table"
@@ -296,30 +292,30 @@ export default function TablesList({ dbData }) {
           filterId={filterId}
           dbId={dbData?.db?._id}
           tableName={params?.tableName}
-          setUnderLine = {setUnderLine}
+          setUnderLine={setUnderLine}
         />
       )}
       <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={() => handleClose()}
-                  >
-                    <MenuItem
-                      onClick={() => {
-                        handleEdit();
-                      }}
-                    >
-                      Edit
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        deleteFilterInDb(currentTable);
-                        handleClose();
-                      }}
-                    >
-                      Delete
-                    </MenuItem>
-                  </Menu>
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => handleClose()}
+      >
+        <MenuItem
+          onClick={() => {
+            handleEdit();
+          }}
+        >
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            deleteFilterInDb(currentTable);
+            handleClose();
+          }}
+        >
+          Delete
+        </MenuItem>
+      </Menu>
       {isTableLoading ? (
         <CircularProgress />
       ) : (
