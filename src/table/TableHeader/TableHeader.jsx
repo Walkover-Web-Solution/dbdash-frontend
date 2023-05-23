@@ -107,8 +107,8 @@ function copyArrayToClipboard() {
   return (
     <thead {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} >
       <div className="calculate">
-      <div ref={headerRef} {...headerGroups[0].getHeaderGroupProps()} className="tr">
-          {headerGroups[0].headers?.map((column, index) => (
+      <div ref={headerRef} {...headerGroups[0]?.getHeaderGroupProps()} className="tr">
+          {headerGroups[0]?.headers?.map((column, index) => (
             <th
               key={index}
               className={selectedColumnIndex !== null && index === selectedColumnIndex ? "selected" : ""}
