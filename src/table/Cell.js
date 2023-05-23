@@ -297,9 +297,9 @@ const Cell = memo(
       <div
         contentEditable="true"
         onInput={handleInputChange}
-        onClick={(event) => {
+        onClick={() => {
           setCursor(true);
-          handleInputClick(event);
+          // handleInputClick(event);
         }}
         style={{ height: "35px", borderColor: "transparent", border: 0 }}
         className="data-input"
@@ -313,7 +313,7 @@ const Cell = memo(
           }
           event.target.style.border = "none";
         }}
-        onFocus={handleInputClick}
+        // onFocus={handleInputClick}
 
         dangerouslySetInnerHTML={{ __html: value?.value }}
       ></div>

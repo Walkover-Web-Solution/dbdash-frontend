@@ -22,7 +22,9 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
   const handleHeaderClick = (columnIndex) => {
     if (selectedColumnIndex === columnIndex) {
       setSelectedColumnIndex(null);
-    } else {
+    } else  {
+
+      
       setSelectedColumnIndex(columnIndex);
       
     }
@@ -83,6 +85,9 @@ if(selectedColumnIdToGetData in item){
         }
       }
     };
+    
+    
+    
 
     document.body.addEventListener("click", handleClickOutsideHeader);
     document.addEventListener('keydown', handleKeyDown);
@@ -96,8 +101,8 @@ if(selectedColumnIdToGetData in item){
   
 
 
-function copyArrayToClipboard() {
-  const text = ref.current.join(' ');
+function copyArrayToClipboard() { 
+  const text = ref.current.join('.?.?.');
   navigator.clipboard.writeText(text)
 } 
 
@@ -106,12 +111,14 @@ function copyArrayToClipboard() {
     <thead {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} >
       <div className="calculate">
       <div ref={headerRef} {...headerGroups[0]?.getHeaderGroupProps()} className="tr">
-          {headerGroups[0]?.headers?.map((column, index) => (
+          {headerGroups[0]?.headers?.map((column, index) =>(
             <th
               key={index}
               className={selectedColumnIndex !== null && index === selectedColumnIndex ? "selected" : ""}
               onClick={() => {
-                handleHeaderClick(index);
+                if(column.label!="+" && column.label!="check")
+                {
+                handleHeaderClick(index);}
               }}
             >
               <React.Fragment key={index}>

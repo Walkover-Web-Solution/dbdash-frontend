@@ -29,6 +29,8 @@ const dummy=(type)=>{
               return 4563;
               case "createdby":
                  return "chirag devlani";
+                 case "checkbox":
+                  return true;
             default :
             return "hello";
   }
@@ -58,14 +60,24 @@ const dummy=(type)=>{
         <br />
         <br />
         {props.body && typeof props.body === "object" && props.body.length > 0 && (
-          <code style={{ color: "white" }}>
-            {"-data{\n"}
-            {props.body.map((x, index) => (
-              
-              <span style={{ margin: "1px" }} key={index}>{`"${x[0]}":"${dummy(x[1])}",\n`}</span>
-            ))}
-            {"}"}
-          </code>
+         <code style={{ color: "white" }}>
+         {"-data{\n"}
+         {props.body.map((x, index) => (
+           <span key={index}>
+             <span style={{ color: "cyan", margin: "1px" }}>{`"${x[0]}"`}</span>
+             <span style={{ color: "yellow", margin: "1px" }}>:</span>
+             {x[1] === "number" || x[1] === "autonumber" ? (
+               <span style={{ color: "green", margin: "1px" }}>{`${dummy(x[1])}`}</span>
+             ) : (
+               <span style={{ color: "magenta", margin: "1px" }}>{`"${dummy(x[1])}"`}</span>
+             )}
+             <span style={{ color: "yellow", margin: "1px" }}>,</span>
+             <br />
+           </span>
+         ))}
+         {"}"}
+       </code>
+       
         )}
       </pre>
 

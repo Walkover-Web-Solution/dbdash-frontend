@@ -47,7 +47,7 @@ selectedColumnIndex
     event.preventDefault();
    
     const text = event.clipboardData.getData("text/plain");
-    const arr = text.split(' ')
+    const arr = text.split('.?.?.')
 
     for (let i = 0; i < arr.length; i++) {
       const updatedRowIndex = cell.row.original?.["fld" + tableId.substring(3) + "autonumber"] + i;
