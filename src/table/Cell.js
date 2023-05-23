@@ -409,7 +409,7 @@ const Cell = memo(
               setCursor(true);
             }}
             
-            style={!cursor?{caretColor:"transparent"}:{}}
+            style={!cursor?{caretColor:"transparent",backgroundColor:"transparent"}:{backgroundColor:"transparent"}}
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
