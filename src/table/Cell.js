@@ -69,7 +69,6 @@ const Cell = memo(
     
     
     const handleInputChange = (event) => {
-      event.preventDefault();
       const newValue = event.target.innerHTML;
       setValue({ value: newValue, update: true });
     };

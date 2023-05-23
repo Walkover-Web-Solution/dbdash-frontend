@@ -35,7 +35,7 @@ const  MainTable = memo ( ({page,setPage}) =>  {
         
         overflowX:"hidden",
         overflowY:"hidden",
-        marginTop: 20
+        marginTop: -3
       }}
       // id="scrollableDiv"
     >
