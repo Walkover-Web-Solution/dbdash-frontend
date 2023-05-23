@@ -162,7 +162,7 @@ const Table = memo(
 
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"84%",width:"99.6vw"}}
           >
-            <table >
+            <table {...getTableProps()} >
               
             <TableHeader
               getTableProps={getTableProps}
