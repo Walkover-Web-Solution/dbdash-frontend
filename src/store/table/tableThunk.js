@@ -169,21 +169,25 @@ export const bulkAddColumns = createAsyncThunk(
 export const deleteColumns = createAsyncThunk(
     "table/deleteColumns",
     async (payload, { dispatch, getState }) => {
+
         if (payload?.fieldDataType == "lookup") {
             const data = {
                 viewFieldId: payload?.fieldName
             }
             await deleteFieldInView(payload?.dbId, payload?.tableId, data)
             dispatch(getTable1({ dbId: payload?.dbId }))
+            
             dispatch(deleteColumn(payload));
             const { tableId, dbId } = getState().table
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
             return 2;
         }
         else {
-            await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
+           const dttt= await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
+           console.log("dttt",dttt);
             //delte api call
             dispatch(deleteColumn(payload));
+            console.log("delete");
             dispatch(getTable1({ dbId: payload?.dbId }))
             const { tableId, dbId } = getState().table
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));

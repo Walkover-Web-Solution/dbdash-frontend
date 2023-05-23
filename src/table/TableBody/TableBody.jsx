@@ -79,12 +79,10 @@ selectedColumnIndex
     event.preventDefault();
    
     const text = event.clipboardData.getData("text/plain");
-    const arr = text.split(' ')
+    const arr = text.split('.?.?.')
 
     for (let i = 0; i < arr.length; i++) {
-      console.log(cell,"id")
       const updatedRowIndex = cell.row.original?.["fld" + tableId.substring(3) + "autonumber"] + i;
-      console.log("index",arr[i])
       if(cell?.column?.dataType != "attachment"){
         dispatch(
           updateCells({
