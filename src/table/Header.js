@@ -69,8 +69,6 @@ export default function Header({
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
-//   const columns=useSelector((state)=>state.table?.columns);
-// console.log("columns",columns.map(columns=> (columns.id)))
 
   const handleOpen = () => {
     setOpen(true);

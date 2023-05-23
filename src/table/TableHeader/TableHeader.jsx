@@ -53,13 +53,11 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
   // const[part, setpart] = useState([])
   let selectedColumnId= AllTableInfo?.table?.columns;
   let selectedColumnIdToGetData  =  selectedColumnId[selectedColumnIndex]?.id
-  console.log("uuuu",selectedColumnIndex)
   useEffect(() => {
     let particularData = [];
   AllTableInfo?.table?.data.forEach((item)=>{
 if(selectedColumnIdToGetData in item){
   const value = item[selectedColumnIdToGetData]
-  // console.log(`Value': ${value}`);
   particularData.push(value);
 }
   })
@@ -99,8 +97,6 @@ if(selectedColumnIdToGetData in item){
 
 
 function copyArrayToClipboard() {
-  console.log("ref",ref)
-  // console.log("para",part)
   const text = ref.current.join(' ');
   navigator.clipboard.writeText(text)
 } 
