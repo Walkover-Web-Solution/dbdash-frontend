@@ -143,7 +143,6 @@ export default function TablesList({ dbData }) {
           filterId : params?.filterName
         })
       );
-      // navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
     }
     else if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);

@@ -6,6 +6,7 @@ import { findUserByEmail } from "../../api/userApi";
 export const bulkAdd = createAsyncThunk(
     "organdDb/bulkAdd", async (payload) => {
         const data = await findUserByEmail(payload?.email);
+        console.log(data?.data?.data)
         localStorage.setItem("userid", data?.data?.data?._id);
         var result = {};
         try {
@@ -22,6 +23,7 @@ export const bulkAdd = createAsyncThunk(
             result:result,
             allorgs:allorgs?.data?.data
         }
+        console.log(allorgs,"ans")
         return ans;
     }
 );

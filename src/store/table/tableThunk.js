@@ -254,10 +254,10 @@ export const addColumsToLeft = createAsyncThunk(
             await createView(payload?.dbId, payload?.tableId, data);
         else
             await createField(payload?.dbId, payload?.tableId, data);
-        dispatch(getTable1({ dbId: payload?.dbId }))
-        // dispatch(addColumnToLeft(payload));
-        const { tableId, dbId } = getState().table
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+            dispatch(getTable1({ dbId: payload?.dbId }))
+            // dispatch(addColumnToLeft(payload));
+            const { tableId, dbId } = getState().table
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
         return payload;
     }
 )
