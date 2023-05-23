@@ -23,6 +23,7 @@ import PlusIcon from './img/Plus'
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import {  DeleteOutlined } from "@mui/icons-material";
+import HideFieldDropdown from "../component/table/hidefieldDropdown";
 
 
 const ScrollingComponent = withScrolling("div");
@@ -72,8 +73,10 @@ const Table = memo(
       rows,
       prepareRow,
       selectedFlatRows,
+      getToggleHideAllColumnsProps,
       state: { selectedCellIds, currentSelectedCellIds},
       totalColumnsWidth,
+      allColumns
     } = useTable(
       {
         columns,
@@ -95,26 +98,13 @@ const Table = memo(
       useColumnOrder
     );
     const[selectedColumnIndex,setSelectedColumnIndex]=useState(null);
-    // useEffect(() => {
-    //   const resizeObserver = new ResizeObserver((entries) => {
-    //     for (const entry of entries) {
-    //       const { target, contentRect } = entry;
-    //       const columnId = target.getAttribute("data-column-id");
     
-         
-    //     }
-    //   });
-    
-    //   const headerCells = document.querySelectorAll(".rt-th");
-    //   headerCells.forEach((headerCell) => {
-    //     resizeObserver.observe(headerCell, { box: "border-box" });
-    //   });
-    
-    //   return () => {
-    //     resizeObserver.disconnect();
-    //   };
-    // }, []);
-    
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+
+    const handleMenuOpen = (event) => {
+      setMenuAnchorEl(event.currentTarget);
+    };
+  
     
 
     const tableData= useSelector((state)=>state.table);//true
@@ -144,6 +134,8 @@ const Table = memo(
 
     return (
       <>
+       <Button onClick={handleMenuOpen}>Hide Fields</Button>
+      <HideFieldDropdown  getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button
@@ -162,8 +154,8 @@ const Table = memo(
 
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"84%",width:"99.6vw"}}
           >
-            <table >
-              
+            <table  {...getTableProps()} >
+           
             <TableHeader
               getTableProps={getTableProps}
               headerGroups={headerGroups}

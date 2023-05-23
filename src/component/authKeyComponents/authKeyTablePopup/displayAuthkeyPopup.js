@@ -9,7 +9,6 @@ export default function DisplayAuthKeyPopup(props) {
   const handleClose = () => {
     props.setDisplay(false);
   };
-//const authKeydata=props.title;
   const [isCopied, setIsCopied] = React.useState(false);
   const copyToClipboard = () => {
     navigator.clipboard.writeText(props?.title);
@@ -18,8 +17,6 @@ export default function DisplayAuthKeyPopup(props) {
   };
 
   
-// console.log(hiddenAuthKey);
-
   return (  
     <>
       <Dialog

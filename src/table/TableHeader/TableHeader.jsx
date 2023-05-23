@@ -51,8 +51,8 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
   return (
     <thead {...getTableProps()} className={clsx("table", isTableResizing() && "noselect")} >
       <div className="calculate">
-        <div {...headerGroups[0].getHeaderGroupProps()} className="tr">
-          {headerGroups[0].headers?.map((column, index) => (
+        <div {...headerGroups[0]?.getHeaderGroupProps()} className="tr">
+          {headerGroups[0]?.headers?.map((column, index) => (
             <th
               key={index}
               className={selectedColumnIndex !== null && index === selectedColumnIndex ? "selected" : ""}

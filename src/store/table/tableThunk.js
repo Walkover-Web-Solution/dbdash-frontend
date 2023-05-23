@@ -200,8 +200,9 @@ export const updateColumnHeaders = createAsyncThunk(
             newFieldType: payload?.fieldType,
             metaData: payload?.metaData
         }
+        console.log(payload)
         await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
-        if(payload?.metaData?.width) return;
+        if(payload?.metaData?.width || payload?.metaData?.hide) return;
         dispatch(getTable1({ dbId: payload?.dbId }))
         dispatch(updateColumnHeader(payload));
         const { tableId, dbId } = getState().table
