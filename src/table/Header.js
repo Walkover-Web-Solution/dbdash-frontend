@@ -69,8 +69,8 @@ export default function Header({
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
-  const columns=useSelector((state)=>state.table?.columns);
-console.log("columns",columns.map(columns=> (columns.id)))
+//   const columns=useSelector((state)=>state.table?.columns);
+// console.log("columns",columns.map(columns=> (columns.id)))
 
   const handleOpen = () => {
     setOpen(true);
@@ -124,17 +124,11 @@ console.log("columns",columns.map(columns=> (columns.id)))
   }
 
   const handleHideField = () => {
-    <div>
-        {columns.map(column => (
-          <div key={column.id}>
-            <label>
-              <input type="checkbox" {...column.getToggleHiddenProps} />{' '}
-              {column.id}
-            </label>
-          </div>
-        ))}
-        <br />
-      </div>
+   <div>
+        {/* {columns?.slice(1, -1).map((column, index) => (  
+          <input type="checkbox"{...column?.getToggleHiddenProps()} />{' '}
+        ))} */}
+    </div>
   }
 
 

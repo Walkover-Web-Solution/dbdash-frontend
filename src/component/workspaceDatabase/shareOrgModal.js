@@ -13,7 +13,7 @@ export default function ShareOrgModal(props) {
   const handleClose = () => {
       props.setShareOrg(false);
       setEmail("");
-      setUserType("user"); // Reset user type state
+      setUserType(""); // Reset user type state
     };
     const handleUserTypeChange = (event) => {
       setUserType(event.target.value);
@@ -60,7 +60,6 @@ export default function ShareOrgModal(props) {
     props.removeUserFromWorkspace(email);
     toast.success("User removed successfully");
   };
-
   return (
     <Dialog open={props.shareOrg} onClose={handleClose}>
       <DialogTitle sx={{ width: 500 }}>Add User to Organization</DialogTitle>
@@ -106,6 +105,7 @@ export default function ShareOrgModal(props) {
             user?.user_id?._id !== userId &&
             (user?.user_type !== "owner" || user?.user_type !== "admin" || userId !== user?.user_id?._id)
           ) {
+
             return (
               <Box
                 key={user?.user_id?.email}
@@ -117,6 +117,9 @@ export default function ShareOrgModal(props) {
               >
                 <Box sx={{ m: 1 }}>
                   <Typography>{user?.user_id?.email}</Typography>
+                </Box>
+                <Box sx={{ m: 1 }}>
+                  <Typography fontWeight="bold">{user?.user_type}</Typography>
                 </Box>
                 <Box sx={{ alignItems: "center" }}>
                   <IconButton

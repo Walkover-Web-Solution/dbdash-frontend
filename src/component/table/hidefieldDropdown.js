@@ -1,8 +1,10 @@
 import React from 'react';
-// import { Checkbox } from '@mui/material';
 import PropTypes from 'prop-types';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { updateColumnHeaders } from '../../store/table/tableThunk';
+import { useParams } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -22,23 +24,28 @@ const IndeterminateCheckbox = React.forwardRef(
 )
 
 export default function HideFieldDropdown(props) {
-  console.log(props,"props")
-  // const [selectedColumns, setSelectedColumns] = useState([]);
+  const params = useParams();
+  const dispatch = useDispatch();
 
   const handleMenuClose = () => {
     props?.setMenuAnchorEl(null);
   };
 
-  // const handleCheckboxChange = (column) => (event) => {
-  //   if (event.target.checked) {
-  //     setSelectedColumns((prevSelectedColumns) => [...prevSelectedColumns, column]);
-  //   } else {
-  //     setSelectedColumns((prevSelectedColumns) => prevSelectedColumns.filter((col) => col !== column));
-  //   }
-  // };
+  const hideColumn = async (columnId, isChecked) => {
+  const metaData = { hide: isChecked ? "true" : "false" };
+
+    dispatch(updateColumnHeaders({
+      dbId: params?.dbId,
+      tableName: params?.tableName,
+      fieldName: columnId,
+      columnId: columnId,
+      metaData: metaData
+    }));
+
+  }
 
   return (
-    
+
     <div>
       <Menu
         anchorEl={props?.menuAnchorEl}
@@ -60,23 +67,25 @@ export default function HideFieldDropdown(props) {
           },
         }}
       >
+        <div>
+          <IndeterminateCheckbox {...props?.getToggleHideAllColumnsProps()} /> Hide All
+        </div>
+
         {props?.columns?.slice(1, -1).map((column, index) => (
           <MenuItem
             key={index}
-            onClick={handleMenuClose}
+            onClick={() => {
+              handleMenuClose();
+            }}
             sx={{
               fontSize: '12px',
               minHeight: 'auto',
               padding: '2px 8px',
             }}
           >
-            {/* <Checkbox
-              checked={selectedColumns?.includes(column)}
-              onChange={handleCheckboxChange(column)}
-              size="small"
-            /> */}
-            {console.log("getToggleHiddenProps",column.props?.getToggleHiddenProps())}
-             <input type="checkbox" {...column.props?.getToggleHiddenProps()} />{' '}
+            <input type="checkbox" onClick={(event) => {
+              hideColumn(column?.id, event.target.checked);
+            }} {...column?.getToggleHiddenProps()} />{' '}
             {column.label}
           </MenuItem>
         ))}
@@ -94,5 +103,5 @@ HideFieldDropdown.propTypes = {
   setMenuAnchorEl: PropTypes.any,
   menuAnchorEl: PropTypes.any,
   columns: PropTypes.any,
-  getToggleHideAllColumnsProps: PropTypes.any
+  getToggleHideAllColumnsProps: PropTypes.any,
 };
