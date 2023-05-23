@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { updateColumnHeaders } from '../../store/table/tableThunk';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 const IndeterminateCheckbox = React.forwardRef(
@@ -33,7 +33,7 @@ export default function HideFieldDropdown(props) {
 
   const hideColumn = async (columnId, isChecked) => {
   const metaData = { hide: isChecked ? "true" : "false" };
-
+    console.log(params,"dbtable")
     dispatch(updateColumnHeaders({
       dbId: params?.dbId,
       tableName: params?.tableName,
