@@ -28,7 +28,6 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 
 const getHeaders = async (dbId, tableName) => {
     const fields = await getAllfields(dbId, tableName);
-    delete fields?.data?.data?.fields["fieldIds"]
     let columns = [
         {
             id: 9999991,
