@@ -334,7 +334,6 @@ const Cell = memo(
                 }
                 
               }
-              console.log("hello")
               event.target.style.border = "none";
             }}
                 onKeyDown={(e) => {

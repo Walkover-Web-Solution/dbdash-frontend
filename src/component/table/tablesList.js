@@ -27,14 +27,13 @@ import { createTable } from "../../api/tableApi";
 // import { uploadCSV } from '../../api/rowApi';
 
 export default function TablesList({ dbData }) {
-  const isTableLoading = useSelector((state) => state.table?.isTableLoading);
-  // const columns=useSelector((state)=>state.table?.columns);
-  const dispatch = useDispatch();
   const params = useParams();
+
+  const isTableLoading = useSelector((state) => state.table?.isTableLoading);
+  const dispatch = useDispatch();
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  // const [CSV,setCSV] = useState([])
   const handleChange = (event, newValue) => {
     setValue(newValue);
 
@@ -53,6 +52,8 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   // const [idToNavigate,setIdToNavigate] = useState()
+ 
+ 
   const handleClick = (event,id) => {
     setcurrentTable(id)
     setAnchorEl(event.currentTarget);
@@ -100,11 +101,15 @@ export default function TablesList({ dbData }) {
         filter: filter,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
-        filterId : id
+        filterId : id,
+        fields:dbData?.db?.tables[params?.tableName]?.fields
+        
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
+
+  
   const deleteFilterInDb = async (filterId) => {
     const data = {
       filterId: filterId,
@@ -126,6 +131,8 @@ export default function TablesList({ dbData }) {
         tableName: params?.tableName ,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
+        fields:dbData?.db?.tables[params?.tableName]?.fields
+
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
@@ -140,7 +147,10 @@ export default function TablesList({ dbData }) {
           filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
           org_id: dbData?.db?.org_id,
           pageNo: 1,
-          filterId : params?.filterName
+          filterId : params?.filterName,
+          fields:dbData?.db?.tables[params?.tableName]?.fields
+
+          
         })
       );
       // navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
@@ -153,6 +163,7 @@ export default function TablesList({ dbData }) {
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
           pageNo: 1,
+          fields:dbData?.db?.tables[params?.tableName]?.fields
         })
       );
       setValue(

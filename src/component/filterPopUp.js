@@ -32,6 +32,8 @@ const addBtnStyle = {
 }
 
 export default function FilterModal(props) {
+
+  // console.log("================================",props.dbData.db.tables)
   const navigate = useNavigate();
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -296,9 +298,13 @@ export default function FilterModal(props) {
         "dbId": props?.dbId,
         "filter":data,
         "pageNo":1,
-        "tableName": props?.tableName
+        "tableName": props?.tableName,
+        "tables": props?.dbData?.db?.tables
+        
       }
     ))
+
+
     props?.setUnderLine(filterKey)
     navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
     return dataa;

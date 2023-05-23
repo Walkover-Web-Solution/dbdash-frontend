@@ -19,7 +19,6 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
   }
 
   const handleHeaderClick = (columnIndex) => {
-    console.log("colin",selectedColumnIndex,columnIndex);
     if (selectedColumnIndex === columnIndex) {
       setSelectedColumnIndex(null);
     } else {

@@ -4,17 +4,18 @@ import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../dropdown';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../api/tableApi';
 // import { useParams } from 'react-router-dom';
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, highlightActiveTable, value, setPage ,setValue}) {
+ 
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
   const AllTableInfo = useSelector((state) => state.tables.tables);
-  // const params = useParams();
+  const params = useParams();
   const dispatch = useDispatch();
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -38,9 +39,6 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     </Box>
   );
 
-    // useEffect(()=>{
-
-    // },[params?.tableName])
 
   const renameTableName = async (db_id, tableName) => {
     const data1 = {
@@ -96,9 +94,9 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
       //  "alldb":alldb,
       "dbId": dbData?.db?._id,
       "tableName": table[0],
-      "pageNo": 1
+      "pageNo": 1,
+      "fields":dbData?.db?.tables[params?.tableName]?.fields
     }));
-
     highlightActiveTable()
   }
 

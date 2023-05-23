@@ -8,6 +8,7 @@ import { getDbById } from "../api/dbApi";
 import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../store/allTable/allTableSlice";
 import { resetData } from "../store/table/tableSlice";
+
 function DbDetails() {
     var {dbId} = useParams();
     const dispatch = useDispatch()
