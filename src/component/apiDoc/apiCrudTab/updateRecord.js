@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import { PropTypes } from 'prop-types';
 // import { Box } from '@mui/system';
 import OptionalParameter from './optionalParameter';
@@ -38,7 +37,6 @@ function UpdateRecord(props) {
        <div style={{width:'700px',height:"65vh",overflowY:"scroll",whiteSpace:"pre-wrap",padding:"2px"}}>
        <Typography style={{fontWeight: 'bold',fontSize: '20px'}}>To Update records in the</Typography>
        <br/>
-
 <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table}/>
 <br/>
 <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge}/>

@@ -35,7 +35,6 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-
 const Table = memo(
   ({
     isNextPageLoading,
@@ -45,7 +44,6 @@ const Table = memo(
     update,
     hasNextPage,
   }) => {
-
     const sortTypes = useMemo(
       () => ({
         alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -65,7 +63,6 @@ const Table = memo(
       }),
       []
     );
-
     const {
       getTableProps,
       getTableBodyProps,
@@ -110,91 +107,82 @@ const Table = memo(
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
-      
       const firstColumnValue = tableData.data[lastRowIndex];
-      const tableRowChildNodes =  document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
-      if(tableRowChildNodes){
+      const tableRowChildNodes = document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
+      if (tableRowChildNodes) {
         const tableRowAttribute = tableRowChildNodes.getAttribute("data-id")
-        setTimeout(()=>{
+        setTimeout(() => {
           const td = document.querySelector(`div[data-id="${tableRowAttribute}"]`);
           const match =
             (td && td?.querySelector("textarea")) || td?.querySelector("input");
-            if (match) {
-              match.addEventListener("focus", () => {
-                match.style.border = "2px solid blue";
-              });
-              match.addEventListener("blur", () => {
-                match.style.border = "none";
-              });
-              match.focus();
-            }
-        },1000)
+          if (match) {
+            match.addEventListener("focus", () => {
+              match.style.border = "2px solid blue";
+            });
+            match.addEventListener("blur", () => {
+              match.style.border = "none";
+            });
+            match.focus();
+          }
+        }, 1000)
       }
     }, [lastRowIndex])
-
     return (
       <>
        <Button onClick={handleMenuOpen}>Hide Fields</Button>
       <HideFieldDropdown  getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Button
-          sx={{position:"absolute",right:"1%",top:"16.5%"}}
-            onClick={() => {
-              dataDispatch(deleteRows(selectedFlatRows));
-            }}
-            variant="contained"
-          >
-            <DeleteOutlined style={{fontSize:"19px"}}/>
-          </Button>
+            <Button
+              sx={{ position: "absolute", right: "1%", top: "16.5%" }}
+              onClick={() => {
+                dataDispatch(deleteRows(selectedFlatRows));
+              }}
+              variant="contained"
+            >
+              <DeleteOutlined style={{ fontSize: "19px" }} />
+            </Button>
           </div>
         )}
+        {/* <div >  */}
         <DndProvider backend={HTML5Backend}>
-           <ScrollingComponent id="scroll"
+          <ScrollingComponent id="scroll"
 
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"84%",width:"99.6vw"}}
           >
-            <table {...getTableProps()} >
-              
-            <TableHeader
-              getTableProps={getTableProps}
-              headerGroups={headerGroups}
-              columns={columns}
-              selectedColumnIndex={selectedColumnIndex}
-              setSelectedColumnIndex={setSelectedColumnIndex}
-              
-            />
-     
-            <TableBody 
-              getTableBodyProps={getTableBodyProps}
-              rows={rows}
-              hasNextPage={hasNextPage}
-              isNextPageLoading={isNextPageLoading}
-              totalColumnsWidth={totalColumnsWidth}
-              prepareRow={prepareRow}
-              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds}}
-              update={update}
-              selectedColumnIndex={selectedColumnIndex}
-              
-             
-            />
+            <table  {...getTableProps()} >
+           
+              <TableHeader
+                getTableProps={getTableProps}
+                headerGroups={headerGroups}
+                columns={columns}
+                selectedColumnIndex={selectedColumnIndex}
+                setSelectedColumnIndex={setSelectedColumnIndex}
+              />
+              <TableBody
+                getTableBodyProps={getTableBodyProps}
+                rows={rows}
+                hasNextPage={hasNextPage}
+                isNextPageLoading={isNextPageLoading}
+                totalColumnsWidth={totalColumnsWidth}
+                prepareRow={prepareRow}
+                cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds }}
+                update={update}
+                selectedColumnIndex={selectedColumnIndex}
+              />
 
-      
-            
-             
             </table>
-            
           </ScrollingComponent>
           <div className='tr add-row' 
               style={{ position: 'sticky' ,bottom: 0,left: 0}}
-          onClick={() => dataDispatch(addRows({ type: "add_row" }))}
-        >
+            onClick={() => dataDispatch(addRows({ type: "add_row" }))}
+          >
           <span className='svg-icon svg-gray' style={{ marginRight: 4,mt:0,p:0 }}>
-            <PlusIcon />
-          </span>
-          New
-        </div>   
-        
+              <PlusIcon />
+            </span>
+            New
+          </div>
+         
           <Preview />
         </DndProvider>
       </>
@@ -203,7 +191,6 @@ const Table = memo(
 );
 Table.displayName = "Table";
 export default Table;
-
 Table.propTypes = {
   columns: PropTypes.any,
   hasMore: PropTypes.any,
@@ -212,6 +199,6 @@ Table.propTypes = {
   dispatch: PropTypes.any,
   skipReset: PropTypes.any,
   setColumns: PropTypes.func,
-  isNextPageLoading:PropTypes.bool,
+  isNextPageLoading: PropTypes.bool,
   hasNextPage: PropTypes.func,
 };

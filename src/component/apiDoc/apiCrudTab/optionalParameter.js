@@ -63,7 +63,7 @@ function OptionalParameter(props) {
           label=" "
           onChange={handleTextChange}
           variant="outlined"
-          style={{ height: '0px', width: 450 }}
+          style={{ height: '0px', width: 420 }}
         />
         <br />
         <br />

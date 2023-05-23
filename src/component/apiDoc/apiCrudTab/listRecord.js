@@ -4,7 +4,6 @@ import {Typography} from '@mui/material';
 import CodeBlock from './Codeblock';
 import OptionalParameter from './optionalParameter';
 import ResponseBox from './responseBox';
-
 function ListRecord(props) {
   const[value,setValue]=useState('');
   const[age,setAge]=useState('')
@@ -41,7 +40,6 @@ function ListRecord(props) {
         <br/>
         <br/>
         <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge}/>
-
         {/* <Box
           component="div"
           style={{ border: '2px solid black', borderRadius: '1px', padding: '10px', width: "54.5vw", backgroundColor: 'lightgrey' }}

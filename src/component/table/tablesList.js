@@ -63,8 +63,10 @@ export default function TablesList({ dbData }) {
     const data = {
       tableName: table,
     };
+    
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
+    
     
     dispatch(createTable1({ tables: apiCreate.data.data.tables }));
 
@@ -128,6 +130,8 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
+    console.log(dbData);
+ 
     if (params?.filterName) {
       setUnderLine(params?.filterName)
       dispatch(
@@ -138,7 +142,9 @@ export default function TablesList({ dbData }) {
           org_id: dbData?.db?.org_id,
           pageNo: 1,
           filterId: params?.filterName
+         
         })
+        
       );
     }
     else if (dbData?.db?.tables) {

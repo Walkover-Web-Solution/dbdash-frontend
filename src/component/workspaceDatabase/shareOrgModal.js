@@ -119,7 +119,7 @@ export default function ShareOrgModal(props) {
                   <Typography>{user?.user_id?.email}</Typography>
                 </Box>
                 <Box sx={{ m: 1 }}>
-                  <Typography fontWeight="bold">{user?.user_type}</Typography>
+                  <Typography>{user?.user_type}</Typography>
                 </Box>
                 <Box sx={{ alignItems: "center" }}>
                   <IconButton
