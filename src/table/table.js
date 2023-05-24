@@ -23,6 +23,7 @@ import PlusIcon from './img/Plus'
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import {  DeleteOutlined } from "@mui/icons-material";
+import HideFieldDropdown from "../component/table/hidefieldDropdown";
 
 
 const ScrollingComponent = withScrolling("div");
@@ -72,8 +73,10 @@ const Table = memo(
       rows,
       prepareRow,
       selectedFlatRows,
+      getToggleHideAllColumnsProps,
       state: { selectedCellIds, currentSelectedCellIds},
       totalColumnsWidth,
+      allColumns
     } = useTable(
       {
         columns,
@@ -94,29 +97,24 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
+    useEffect(() => {
+      // Hide the specified columns
+      allColumns.forEach(column => {
+        if(column?.metadata?.hide == "false" )
+        {
+            column.toggleHidden(true);
+        }
+        });
+    }, [allColumns]);
+   
     const[selectedColumnIndex,setSelectedColumnIndex]=useState(null);
-    // useEffect(() => {
-    //   const resizeObserver = new ResizeObserver((entries) => {
-    //     for (const entry of entries) {
-    //       const { target, contentRect } = entry;
-    //       const columnId = target.getAttribute("data-column-id");
     
-         
-    //     }
-    //   });
-    
-    //   const headerCells = document.querySelectorAll(".rt-th");
-    //   headerCells.forEach((headerCell) => {
-    //     resizeObserver.observe(headerCell, { box: "border-box" });
-    //   });
-    
-    //   return () => {
-    //     resizeObserver.disconnect();
-    //   };
-    // }, []);
-    
-    
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
+    const handleMenuOpen = (event) => {
+      setMenuAnchorEl(event.currentTarget);
+    };
+  
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
@@ -144,6 +142,10 @@ const Table = memo(
 
     return (
       <>
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+       <Button sx={{fontSize: "11px"}} onClick={handleMenuOpen}>Hide Fields</Button>
+      <HideFieldDropdown  getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+        </div>
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button
@@ -162,7 +164,7 @@ const Table = memo(
 
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:"84%",width:"99.6vw"}}
           >
-            <table >
+            <table {...getTableProps()} >
               
             <TableHeader
               getTableProps={getTableProps}

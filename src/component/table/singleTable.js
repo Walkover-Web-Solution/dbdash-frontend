@@ -8,12 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../api/tableApi';
+import { selectActiveUser } from '../../store/user/userSelector.js';
 // import { useParams } from 'react-router-dom';
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, highlightActiveTable, value, setPage ,setValue}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
   const AllTableInfo = useSelector((state) => state.tables.tables);
+  const userDetails = useSelector((state) => selectActiveUser(state));
   // const params = useParams();
   const dispatch = useDispatch();
   const TabWithDropdown = ({ label, dropdown }) => (
@@ -83,7 +85,8 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
 
   const exportCSVTable = async(tableid)=>{
     const data = {
-      query: `select * from ${tableid}`
+      query: `select * from ${tableid}`,
+      userName:userDetails?.fullName
     }
     await exportCSV(dbData?.db?._id,tableid,data);
   }

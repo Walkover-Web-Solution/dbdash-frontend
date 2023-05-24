@@ -41,7 +41,7 @@ function DbDetails() {
       <MainNavbar dbData={dbData}/>
     </Box>
            
-            <Box align="center" style={{height: "calc(100vh - 96px)"}} >
+            <Box align="center" style={{height: "95%"}} >
             { dbData && <TablesList dbData={dbData} tables={tables} setTables={setTables} />}
             </Box> 
         </>

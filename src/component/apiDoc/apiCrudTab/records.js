@@ -37,7 +37,7 @@ useEffect(() => {
   <Grid item xs={3.2}>
           <Typography style={{ fontWeight: 'bold' }}>fieldType</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
-            <Typography style={{fontSize:"18px"}} key={index}>{fields[1].fieldType}</Typography>
+            <Typography style={{fontSize:"18px"}} key={index}>{fields[1].fieldType=="checkbox" ? "boolean":fields[1].fieldType}</Typography>
           ))}
         </Grid>
 
