@@ -4,7 +4,7 @@ import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../dropdown';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../api/tableApi';
@@ -17,7 +17,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const [name, setName] = useState();
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const userDetails = useSelector((state) => selectActiveUser(state));
-  const params = useParams();
+  // const params = useParams();
 
   const dispatch = useDispatch();
   const TabWithDropdown = ({ label, dropdown }) => (
@@ -99,7 +99,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
       "dbId": dbData?.db?._id,
       "tableName": table[0],
       "pageNo": 1,
-      "fields":dbData?.db?.tables[params?.tableName]?.fields
+      // "fields":dbData?.db?.tables[params?.tableName]?.fields
     }));
     highlightActiveTable()
   }

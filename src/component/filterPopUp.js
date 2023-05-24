@@ -137,12 +137,6 @@ export default function FilterModal(props) {
               }
           }
 
-          // json.fields = pqrs[0]
-          // json.selectedOption = pqrs[1] == "NOT" ? pqrs[1] + " " + pqrs[2] : pqrs[1]
-          // let valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
-          // if (valuee.indexOf('%') !== -1) {
-          //   valuee = valuee.substring(1, valuee.length - 1);
-          // }
           json.value = valuee
           finalQuery.push(json)
           i++;
@@ -250,7 +244,7 @@ export default function FilterModal(props) {
       else if(query[i].selectedOption == "=" || query[i].selectedOption == "!="){  
           queryToSend += query[i].fields + " "
       }
-      else if(FieldDataType == "numeric")
+      else if(FieldDataType == "numeric" || FieldDataType == "autonumber")
       {
         queryToSend += "CAST" + "(" + query[i].fields + " as " +  "CHAR)" + " "
       }
@@ -262,14 +256,14 @@ export default function FilterModal(props) {
           queryToSend += " " + query[i].selectedOption + " '%" + query[i].value + "%'"
       }
       if (query[i].selectedOption == "and" || query[i].selectedOption == "or") {
-        if (FieldDataType == "numeric") {
+        if (FieldDataType == "numeric" || FieldDataType == "autonumber") {
           queryToSend += query[i].selectedOption + " " + query[i].value 
         } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"
         }
       }
       if (query[i].selectedOption == "=" || query[i].selectedOption == "!=") {
-        if (FieldDataType == "numeric") {
+        if (FieldDataType == "numeric" || FieldDataType == "autonumber") {
           queryToSend += query[i].selectedOption + " " + query[i].value 
         } else {
           queryToSend += query[i].selectedOption + " '" + query[i].value + "'"

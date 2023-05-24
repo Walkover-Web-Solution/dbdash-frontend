@@ -60,8 +60,8 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
         json.metadata = field[1].metaData;
         json.dataType = field[1].fieldType?.toLowerCase();
         columns.push(json);
-        
-        }
+
+    }
     )
     columns.push({
         id: 999999,
@@ -78,8 +78,8 @@ const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
     const obj = data.data.data?.rows || data.data.data;
     const userInfo = allOrg(getState());
     const tableInfo = getTableInfo(getState())
-    const userJson = await replaceCreatedByIdWithName(userInfo,org_id)
-    const createdby = "fld"+tableName.substring(3)+"createdby"
+    const userJson = await replaceCreatedByIdWithName(userInfo, org_id)
+    const createdby = "fld" + tableName.substring(3) + "createdby"
     obj.map((row) => {
         row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
     })
@@ -103,7 +103,6 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
-        // console.log("working or not1")
         var columns = null
         if ((payload?.pageNo <= 1) || !(payload?.pageNo)) {
             columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
@@ -117,7 +116,7 @@ export const bulkAddColumns = createAsyncThunk(
             )
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
-            const createdby = "fld"+payload.tableName.substring(3)+"createdby"
+            const createdby = "fld" + payload.tableName.substring(3) + "createdby"
             querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
                 row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
             })
@@ -170,21 +169,21 @@ export const deleteColumns = createAsyncThunk(
             }
             await deleteFieldInView(payload?.dbId, payload?.tableId, data)
             dispatch(getTable1({ dbId: payload?.dbId }))
-            
+
             dispatch(deleteColumn(payload));
             const { tableId, dbId } = getState().table
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
             return 2;
         }
         else {
-           const deletedfield= await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
-           
+            const deletedfield = await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
+
             dispatch(deleteColumn(payload));
             console.log("delete");
             dispatch(getTable1({ dbId: payload?.dbId }))
 
             const { tableId, dbId } = getState().table
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields:deletedfield.data?.data }));
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: deletedfield.data?.data }));
             return 2;
         }
     }
@@ -198,7 +197,7 @@ export const updateColumnHeaders = createAsyncThunk(
             metaData: payload?.metaData
         }
         await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
-        if(payload?.metaData?.width || payload?.metaData?.hide) return;
+        if (payload?.metaData?.width || payload?.metaData?.hide) return;
         dispatch(getTable1({ dbId: payload?.dbId }))
         dispatch(updateColumnHeader(payload));
         const { tableId, dbId } = getState().table
@@ -226,13 +225,13 @@ export const addColumnrightandleft = createAsyncThunk(
         }
         let createdfield;
         if (payload?.fieldType == "lookup")
-           createdfield= await createView(payload?.dbId, payload?.tableId, data);
+            createdfield = await createView(payload?.dbId, payload?.tableId, data);
         else
-           createdfield= await createField(payload?.dbId, payload?.tableId, data);
+            createdfield = await createField(payload?.dbId, payload?.tableId, data);
             dispatch(getTable1({ dbId: payload?.dbId }))
-            // dispatch(addColumnToLeft(payload));
+        // dispatch(addColumnToLeft(payload));
             const { tableId, dbId } = getState().table
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId ,fields:createdfield?.data?.data}));
+        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data }));
         return payload;
     }
 )
@@ -251,14 +250,14 @@ export const addColumsToLeft = createAsyncThunk(
         }
         let createdfield;
         if (payload?.fieldType == "lookup")
-           createdfield= await createView(payload?.dbId, payload?.tableId, data);
+            createdfield = await createView(payload?.dbId, payload?.tableId, data);
         else
-           createdfield= await createField(payload?.dbId, payload?.tableId, data);
+            createdfield = await createField(payload?.dbId, payload?.tableId, data);
             dispatch(getTable1({ dbId: payload?.dbId }))
-            // dispatch(addColumnToLeft(payload));
+        // dispatch(addColumnToLeft(payload));
             const { tableId, dbId } = getState().table
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId ,fields:createdfield?.data?.data}));
-        return payload;
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data }));
+            return payload;
     }
 )
 export const updateCells = createAsyncThunk(

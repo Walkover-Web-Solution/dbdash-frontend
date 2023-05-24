@@ -98,8 +98,7 @@ export default function TablesList({ dbData }) {
         org_id: dbData?.db?.org_id,
         pageNo: 1,
         filterId : id,
-        fields:dbData?.db?.tables[params?.tableName]?.fields
-        
+        fields:dbData?.db?.tables[params?.tableName]?.fields 
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
@@ -144,9 +143,7 @@ export default function TablesList({ dbData }) {
           org_id: dbData?.db?.org_id,
           pageNo: 1,
           filterId : params?.filterName,
-          fields:dbData?.db?.tables[params?.tableName]?.fields
-
-          
+          fields:dbData?.db?.tables[params?.tableName]?.fields         
         })
       );
     }
