@@ -580,3 +580,6 @@ th:first-child{
 .data-input:focus{
   border: 2px solid blue;
 }
+.tablebody{
+  height: 100%!important;
+}
