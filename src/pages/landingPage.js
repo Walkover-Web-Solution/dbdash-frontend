@@ -6,11 +6,21 @@ import WorkspaceCombined from '../component/workspaceDatabase/workspaceCombined'
 import "./css.css"
 import { bulkAdd } from '../store/database/databaseThunk';
 import { selectActiveUser } from '../store/user/userSelector';
+import { selectOrgandDb } from '../store/database/databaseSelector';
+import SingleDatabase from '../component/workspaceDatabase/singleDatabase';
 
 export default function LandingPage() {
    const dispatch = useDispatch();
    const emailId = useSelector((state) => selectActiveUser(state));
-
+   const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
+   const dbs = [];
+   Object.entries(alldbs).forEach(([, value]) => {
+      if (value !== null) {
+        const filteredElements = value.filter(element => "deleted" in element);
+        dbs.push(...filteredElements);
+      }
+    });
+   
    useEffect(() => {
       if (emailId?.email)
          dispatch(bulkAdd({ email: emailId.email }))
@@ -26,6 +36,14 @@ export default function LandingPage() {
 
             <Box>
                <WorkspaceCombined />
+            </Box>
+
+             <Box>
+            {dbs.map((db, index) => (
+                <Box key={db._id} sx={{ m: 4, display: "flex" }}>
+                  <SingleDatabase db={db} orgId={db.org_id} dblength={dbs?.length} index={index} />
+               </Box>
+            ))}
             </Box>
 
          </Box>
