@@ -97,6 +97,16 @@ const Table = memo(
       useRowSelect,
       useColumnOrder
     );
+    useEffect(() => {
+      // Hide the specified columns
+      allColumns.forEach(column => {
+        if(column?.metadata?.hide == "false" )
+        {
+            column.toggleHidden(true);
+        }
+        });
+    }, [allColumns]);
+   
     const[selectedColumnIndex,setSelectedColumnIndex]=useState(null);
     
     const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
@@ -105,8 +115,6 @@ const Table = memo(
       setMenuAnchorEl(event.currentTarget);
     };
   
-    
-
     const tableData= useSelector((state)=>state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
@@ -134,8 +142,10 @@ const Table = memo(
 
     return (
       <>
-       <Button onClick={handleMenuOpen}>Hide Fields</Button>
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+       <Button sx={{fontSize: "11px"}} onClick={handleMenuOpen}>Hide Fields</Button>
       <HideFieldDropdown  getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+        </div>
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button

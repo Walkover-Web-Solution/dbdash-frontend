@@ -57,9 +57,17 @@ export default function ShareOrgModal(props) {
   };
 
   const handleRemoveUser = (email) => {
+    const currentUser = users.find((user) => user.user_id?.email === email);
+
+    if (currentUser && currentUser.user_type === "owner") {
+      toast.error("You cannot remove an owner");
+      return;
+    }
+
     props.removeUserFromWorkspace(email);
     toast.success("User removed successfully");
   };
+
   return (
     <Dialog open={props.shareOrg} onClose={handleClose}>
       <DialogTitle sx={{ width: 500 }}>Add User to Organization</DialogTitle>
