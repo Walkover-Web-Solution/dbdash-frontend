@@ -74,11 +74,11 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     else{
       setValue(0)
     }
-
-    last = keys[i - 1]
+    last = i>0 ? keys[i - 1] :keys[i+1];
       const deleteTableData = await deleteTable(dbData?.db?._id,tableid);
       dispatch(removeTable1({ "tableData": deleteTableData?.data?.data?.tables}));
     navigate(`/db/${dbData.db._id}/table/${last}`);
+    last=""
 
   };
 

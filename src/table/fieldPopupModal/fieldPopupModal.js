@@ -36,7 +36,7 @@ export default function FieldPopupModal(props) {
   const [showNumericOptions, setShowNumericOptions] = useState(false);
   const [showDecimalOptions, setShowDecimalOptions] = useState(false);
   const [queryResult, setQueryResult] = useState(false);
-
+  const[singleline,setSingleline]=useState(false);
   const schema = Joi.object({
     fieldName: Joi.string().min(1).max(30).required(),
   });
@@ -67,37 +67,45 @@ export default function FieldPopupModal(props) {
     setShowLookupField(false)
     const data1 = props?.metaData;
     delete data1["unique"];
+    
     props?.setMetaData(data1);
 
     if (event.target.value == "formula") {
       setShowFormulaField(true)
+      setSingleline(false);
       props?.setSelectValue(event.target.value);
     }
     else if(event.target.value == "email"){
       setShowSwitch(true);
+      setSingleline(false);
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
       setShowLinkField(true)
       props?.setSelectValue(event.target.value);
+      setSingleline(false);
       // const firstTable = Object.keys(AllTableInfo.tables)[0];
       // props?.setSelectedTable(firstTable);
     }
     else if (event.target.value == "lookup") {
+      setSingleline(false);
       setShowLookupField(true)
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
+      setSingleline(false);
       setShowNumericOptions(true);
     }
     else if (event.target.value === 'integer') {
       setShowNumericOptions(true);
+      setSingleline(false);
       props?.setSelectValue('numeric')
       setShowSwitch(true);
     }
     else if (event.target.value === 'id') {
       props?.setSelectValue('id')
+      setSingleline(false);
       var data = props?.metaData;
       data.unique = "true"
       props?.setMetaData(data);
@@ -106,17 +114,22 @@ export default function FieldPopupModal(props) {
       props?.setSelectValue('numeric')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
+      setSingleline(false);
       setShowSwitch(true);
     } else if (event.target.value === 'checkbox') {
+      setSingleline(false);
       props?.setSelectValue('checkbox')
     }
-    else if (event.target.value === "singlelinetext" || event.target.value === "longtext") {
+    else if (event.target.value === "singlelinetext" ) {
       setShowSwitch(true);
+      setSingleline(true);
+
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value === "email" || event.target.value === "phone") {
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
+      setSingleline(false);
     }
     // else if (event.target.value === "singleselect" || event.target.value === "multipleselect") {
     //   props?.setSelectValue(event.target.value);
@@ -129,10 +142,12 @@ export default function FieldPopupModal(props) {
       setShowLinkField(false)
       setShowFormulaField(false)
       setShowLookupField(false);
+      setSingleline(false);
     }
   }
 
   const handleClose = () => {
+    setSingleline(false);
     setShowLinkField(false);
     setShowLookupField(false);
     props?.setOpen(false);
@@ -222,7 +237,7 @@ export default function FieldPopupModal(props) {
           </Select>
 
           <NumberDataType selectValue={props?.selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
-
+          {singleline && <div style={{color:"blue"}}>upto 255 letters are expected.</div>}              
           {showFormulaField && <FormulaDataType queryByAi={props?.queryByAi} submitData={props?.submitData} queryResult={queryResult} setQueryResult={setQueryResult} />}
 
           {showLinkField && <LinkDataType selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} />}
