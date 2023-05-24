@@ -23,8 +23,6 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
     if (selectedColumnIndex === columnIndex) {
       setSelectedColumnIndex(null);
     } else  {
-
-      
       setSelectedColumnIndex(columnIndex);
       
     }
