@@ -60,7 +60,6 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
   AllTableInfo?.table?.data.forEach((item)=>{
 if(selectedColumnIdToGetData in item){
   const value = item[selectedColumnIdToGetData]
-  // console.log(`Value': ${value}`);
   particularData.push(value);
 }
   })
@@ -102,8 +101,7 @@ if(selectedColumnIdToGetData in item){
   
 
 
-function copyArrayToClipboard() {
-  
+function copyArrayToClipboard() { 
   const text = ref.current.join('.?.?.');
   navigator.clipboard.writeText(text)
 } 

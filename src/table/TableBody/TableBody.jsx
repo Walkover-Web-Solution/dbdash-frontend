@@ -26,38 +26,6 @@ selectedColumnIndex
   const isNextPageLoading1= useSelector((state)=>state.table?.isMoreData);//true
   const loadMoreItems = !isNextPageLoading1 ? () => {} : update;
 
-//   const AllTableInfo = useSelector((state) => state);
-
-//   let selectedColumnId= AllTableInfo?.table?.columns;
-//   let selectedColumnIdToGetData  =  selectedColumnId[selectedColumnIndex]?.id
-
-//   let particularData = [];
-//   AllTableInfo?.table?.data.forEach((item)=>{
-// if(selectedColumnIdToGetData in item){
-//   const value = item[selectedColumnIdToGetData]
-//   // console.log(`Value': ${value}`);
-//   particularData.push(value);
-// }
-//   })
-// console.log("data",particularData)
-
-// function copyArrayToClipboard(arr) {
-//   const text = JSON.stringify(arr);
-
-//   navigator.clipboard.writeText(text)
-// }
-
-// document.addEventListener('keydown', (event) => {
-//   if (event.ctrlKey && event.key === 'c') {
-//     console.log("hiiiiiiiiiiii")
-//     // Perform the copy action here
-//     const copiedData = particularData.slice();
-   
-//     console.log('Data copied:', copiedData);
-//   }
-// });
-
-
 
   const isItemLoaded = useCallback(
     (index) => 

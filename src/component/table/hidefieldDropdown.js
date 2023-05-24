@@ -33,7 +33,6 @@ export default function HideFieldDropdown(props) {
 
   const hideColumn = async (columnId, isChecked) => {
   const metaData = { hide: isChecked ? "true" : "false" };
-    console.log(params,"dbtable")
     dispatch(updateColumnHeaders({
       dbId: params?.dbId,
       tableName: params?.tableName,

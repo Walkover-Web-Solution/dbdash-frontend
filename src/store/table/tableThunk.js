@@ -39,34 +39,23 @@ const getHeaders = async (dbId, tableName) => {
         },
     ]
     Object.entries(fields?.data?.data?.fields).forEach((field) => {
-        var json = {
-            id: "",
-            label: "",
-            accessor: "",
-            minWidth: 100,
-            dataType: "",
-            options: [],
-            metadata: {},
-            width:field[1].metaData?.width ? field[1].metaData?.width : 150
+            var json = {
+                id: "",
+                label: "",
+                accessor: "",
+                minWidth: 100,
+                dataType: "",
+                options: [],
+                metadata: {},
+                width:field[1].metaData?.width ? field[1].metaData?.width : 150
+            }
+            json.id = field[0];
+            json.label = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
+            json.accessor = field[0]?.toLowerCase();
+            json.metadata = field[1].metaData;
+            json.dataType = field[1].fieldType?.toLowerCase();
+            columns.push(json);
         }
-        json.id = field[0];
-        json.label = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
-        // json.width = field[1].metaData?.width 
-        json.accessor = field[0]?.toLowerCase();
-        // if (field[1].fieldType == "createdby")
-        //     json.accessor = "createdby";
-        // if (field[1].fieldType == "id")
-        //     json.accessor = "id";
-        // if (field[1].fieldType == "rowid")
-        //     json.accessor = "rowid";
-        // if (field[1].fieldType == "autonumber")
-        //     json.accessor = "autonumber";
-        // if (field[1].fieldType == "createdat")
-        //     json.accessor = "createdat";
-        json.metadata = field[1].metaData;
-        json.dataType = field[1].fieldType?.toLowerCase();
-        columns.push(json);
-    }
     )
     columns.push({
         id: 999999,
@@ -203,7 +192,6 @@ export const updateColumnHeaders = createAsyncThunk(
             newFieldType: payload?.fieldType,
             metaData: payload?.metaData
         }
-        console.log(payload)
         await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
         if(payload?.metaData?.width || payload?.metaData?.hide) return;
         dispatch(getTable1({ dbId: payload?.dbId }))
