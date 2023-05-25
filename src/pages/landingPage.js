@@ -38,7 +38,6 @@ export default function LandingPage() {
                <WorkspaceCombined />
             </Box>
                <Box>
-               {console.log("length", dbs?.length)}
                {dbs.length > 0 && (
                   <Typography variant="h5" sx={{ ml: 1, fontWeight: "bold" }}>
                      Deleted DataBase

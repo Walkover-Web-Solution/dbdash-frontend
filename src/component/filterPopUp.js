@@ -33,7 +33,6 @@ const addBtnStyle = {
 
 export default function FilterModal(props) {
 
-  // console.log("================================",props.dbData.db.tables)
   const navigate = useNavigate();
   const tableInfo = useSelector((state) => getTableInfo(state));
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));

@@ -368,7 +368,6 @@ const buttons = [
   },
  {
     onClick: () => {
-      console.log("id",id)
       setExpanded(false);
       hideColumn(id);
       const matchedObject = allColumns.filter(column => column.id === id);
