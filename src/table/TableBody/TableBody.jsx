@@ -18,6 +18,7 @@ import {updateCells } from "../../store/table/tableThunk";
 selectedColumnIndex
 })
  {
+  const height=(window.screen.height*51)/100;
    const dispatch =  useDispatch()
    const tableId = useSelector((state) => state.table.tableId)
   const limit = 200;
@@ -45,21 +46,23 @@ selectedColumnIndex
   
   const handlePaste = ( event,row, cell) => {
     event.preventDefault();
-   
     const text = event.clipboardData.getData("text/plain");
-    const arr = text.split('.?.?.')
-
+    const arr = text.split(', ');
+    
     for (let i = 0; i < arr.length; i++) {
       const updatedRowIndex = cell.row.original?.["fld" + tableId.substring(3) + "autonumber"] + i;
-      if(cell?.column?.dataType != "attachment"){
+      if (cell?.column?.dataType !== "attachment") {
+        const value = arr[i].replace(/(^"|"$)/g, ''); // Remove inverted commas
         dispatch(
           updateCells({
             columnId: cell.column.id,
             rowIndex: updatedRowIndex,
-            value: arr[i],
+            value: value,
           })
         );
-    }
+      }
+    
+    
    
     }
   };
@@ -165,7 +168,7 @@ selectedColumnIndex
         {({ onItemsRendered, ref }) => (
           <FixedSizeList
           // width={800}
-            height={440}
+            height={height}
             // height={35*rows.length}
             itemCount={rows.length}
             itemSize={35}

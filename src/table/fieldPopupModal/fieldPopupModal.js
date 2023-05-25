@@ -28,7 +28,7 @@ import PropTypes from "prop-types";
 export default function FieldPopupModal(props) {
 
   // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  const [showSwitch, setShowSwitch] = useState(true);
+  const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
   const [showLinkField, setShowLinkField] = useState(false);
@@ -110,8 +110,9 @@ export default function FieldPopupModal(props) {
     } else if (event.target.value === 'checkbox') {
       props?.setSelectValue('checkbox')
     }
-    else if (event.target.value === "singlelinetext" || event.target.value === "longtext") {
+    else if (event.target.value === "singlelinetext") {
       setShowSwitch(true);
+    
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value === "email" || event.target.value === "phone") {
@@ -140,7 +141,7 @@ export default function FieldPopupModal(props) {
     setShowLinkField(false);
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
-    setShowSwitch(true);
+    setShowSwitch(false);
     props?.setSelectedFieldName(false);
     props?.setSelectValue("longtext");
     props?.setTextValue("");

@@ -23,6 +23,7 @@ import PropTypes from "prop-types";
 import TableCellSingleSelect from './TableCellSingleSelect'
 import TableCellMultiSelect from './TableCellMultiSelect'
 import PreviewAttachment from "./previewAttachment";
+import './Cell.css'
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
@@ -66,16 +67,28 @@ const Cell = memo(
         return EditorState.createEmpty();
       }
     });
+
+
+
+ 
+
+  
+
+
+
+
+
+
+
+
     
     
     const handleInputChange = (event) => {
       const newValue = event.target.innerHTML;
-      setValue({ value: newValue, update: true });
+      setValue({ value: newValue, update: false });
     };
 
-    const handleClickButton = () => {
-      setPopperOpen(true);
-    };
+    
     const handleClickAway = () => {
       setPopperOpen(false);
       setSelectedInput(null);
@@ -88,6 +101,7 @@ const Cell = memo(
       const rawContentState = convertToRaw(contentState);
       const html = draftToHtml(rawContentState);
       setTextarea(html);
+      setValue({value:textarea,update:false});
     };
     const handleInputBlur = (event) => {
       event.target.style.border = "none";
@@ -293,29 +307,55 @@ const Cell = memo(
         case "longtext":
   element = (
     <>
-      <div
-        contentEditable="true"
-        onInput={handleInputChange}
-        onClick={() => {
-          setCursor(true);
-          // handleInputClick(event);
-        }}
-        style={{ height: "35px", borderColor: "transparent", border: 0 }}
-        className="data-input"
-        onBlur={(event) => {
-          setValue((old) => ({ value: old.value, update: true }));
-          if (selectedInput === event.target) {
-            if (!popperOpen) {
-              setSelectedInput(null);
-              setCursor(false);
-            }
-          }
-          event.target.style.border = "none";
-        }}
-        // onFocus={handleInputClick}
+  <div
+  contentEditable="true"
+  onInput={handleInputChange}
+  onClick={handleInputClick}
+  onDoubleClick={() => {
+    setCursor(true);
+  }}
+  onKeyDown={(e) => {
+    setCursor(true);
+    if (e.key === "Enter") {
+      setValue((old) => ({ value: old.value, update: true }));
+    }
+  }}
+  // onFocus={handleInputClick}
+  style={
+    !cursor
+      ? {
+          border: "none",
+          caretColor: "transparent",
+          paddingRight: "13px",
+          height: "210px",
+          overflowY: "hidden",
+        }
+      : {
+          border: "none",
+          backgroundColor: "white",
+          paddingRight: "13px",
+          position: "absolute",
+          zIndex: "20",
+          WebkitOverflowScrolling: "touch",
+          height: "210px",
+          overflowY: "scroll",
+          width: `${width}px`,
+        }
+  }
+  className="data-input"
+  onBlur={(event) => {
+    if (selectedInput === event.target) {
+      if (!popperOpen) {
+        setValue((old) => ({ value: old.value, update: true }));
+        setSelectedInput(null);
+        setCursor(false);
+      }
+    }
+    event.target.style.border = "none";
+  }}
+  dangerouslySetInnerHTML={{ __html: value?.value }}
+></div>
 
-        dangerouslySetInnerHTML={{ __html: value?.value }}
-      ></div>
 
       {cursor && (
         <div
@@ -327,17 +367,31 @@ const Cell = memo(
             right: "1%",
             top: "32%",
             transform: "translateY(-50%)",
+            zIndex:"20"
           }}
+       
         >
           <OpenInFull
             style={{ fontSize: "15px", color: "blue" }}
-            onClick={handleClickButton}
+            onClick={()=>{
+              setValue((old) => ({ value: old.value, update: false }));
+             setEditorState( () => {
+                if (value?.value) {
+                  const contentState = convertFromHTML(value?.value?.toString().trim());
+                  return EditorState.createWithContent(ContentState.createFromBlockArray(contentState));
+                } else {
+                  return EditorState.createEmpty();
+                }
+              })
+              setPopperOpen(true);
+
+            }}
           />
         </div>
       )}
 
       {cursor && popperOpen && (
-        <ClickAwayListener onClick={(e) => e.stopPropagation()} onClickAway={handleClickAway}>
+        <ClickAwayListener  onClickAway={handleClickAway}>
           <Popper
             open={popperOpen}
             anchorEl={null}
@@ -358,10 +412,7 @@ const Cell = memo(
               boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
               transform: "translate(-50%, -50%)",
             }}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
+          
           >
             <div>
             
@@ -370,14 +421,7 @@ const Cell = memo(
                 onEditorStateChange={onEditorStateChange}
                 editorStyle={{ color: "black" }}
                 autoFocus
-                // toolbar={{
-                //   inline: { inDropdown: true },
-                //   list: { inDropdown: true },
-                //   textAlign: { inDropdown: true },
-                //   link: { inDropdown: true },
-                //   history: { inDropdown: true },
-                //   image: { uploadCallback: uploadImageCallBack},
-                // }}
+                wrapperClassName="editor-wrapper"
                 
               />
     

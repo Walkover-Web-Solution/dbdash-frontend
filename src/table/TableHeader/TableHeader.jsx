@@ -100,11 +100,11 @@ if(selectedColumnIdToGetData in item){
  
   
 
-
-function copyArrayToClipboard() { 
-  const text = ref.current.join('.?.?.');
-  navigator.clipboard.writeText(text)
-} 
+  function copyArrayToClipboard() {
+    const text = ref.current.map(item => `"${item}"`).join(', ');
+    navigator.clipboard.writeText(text);
+  }
+  
 
 
   return (
