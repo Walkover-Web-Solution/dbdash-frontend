@@ -207,13 +207,18 @@ export const updateColumnHeaders = createAsyncThunk(
         
         if(payload?.metaData?.width) return;
        
+        const { tableId, dbId } = getState().table
+        if(payload?.metaData?.hide){
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+            return;
+        }else{
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+        }
+        dispatch(getTable1({ dbId: payload?.dbId }))
         if(payload?.metaData?.hide){
             return;
         }
-        dispatch(getTable1({ dbId: payload?.dbId }))
         dispatch(updateColumnHeader(payload));
-        const { tableId, dbId } = getState().table
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
         return 2;
     }
 )
