@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createField, deleteField, getAllfields, updateField } from "../../api/fieldApi";
+import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
 import { insertRow, uploadImage, updateRow, deleteRow } from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
@@ -179,7 +179,6 @@ export const deleteColumns = createAsyncThunk(
             const deletedfield = await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
 
             dispatch(deleteColumn(payload));
-            console.log("delete");
             dispatch(getTable1({ dbId: payload?.dbId }))
 
             const { tableId, dbId } = getState().table
@@ -196,8 +195,21 @@ export const updateColumnHeaders = createAsyncThunk(
             newFieldType: payload?.fieldType,
             metaData: payload?.metaData
         }
-        await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
-        if (payload?.metaData?.width || payload?.metaData?.hide) return;
+        
+        if(payload?.metaData?.isAllHide){
+            await hideAllField(payload?.dbId, payload?.tableName,payload?.metaData)
+            return;   
+        }  
+        else{
+
+            await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
+        }
+        
+        if(payload?.metaData?.width) return;
+       
+        if(payload?.metaData?.hide){
+            return;
+        }
         dispatch(getTable1({ dbId: payload?.dbId }))
         dispatch(updateColumnHeader(payload));
         const { tableId, dbId } = getState().table
@@ -205,6 +217,7 @@ export const updateColumnHeaders = createAsyncThunk(
         return 2;
     }
 )
+
 export const addColumnrightandleft = createAsyncThunk(
     "table/addColmunsrightandleft",
     async (payload,
