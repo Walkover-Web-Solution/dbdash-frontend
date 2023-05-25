@@ -559,21 +559,6 @@ buttons.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
           </div>
           <FieldPopupModal title="create column" label="Column Name" queryByAi={queryByAi} setSelectedFieldName={setSelectedFieldName} selectedFieldName={selectedFieldName} setShowFieldsDropdown={setShowFieldsDropdown} tableId={tableInfo?.tableId} showFieldsDropdown={showFieldsDropdown} selectedTable={selectedTable} setSelectedTable={setSelectedTable} textValue={textValue} metaData={metaData} linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} setMetaData={setMetaData} setTextValue={setTextValue} setSelectValue={setSelectValue} open={open} setOpen={setOpen} submitData={createColumn}
           />
-          {/* <div>
-        <div>
-          <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
-          All
-        </div>
-        {columns?.slice(1, -1).map((column, index) => (
-          <div key={index}>
-            <label>
-              <input type="checkbox" {...column.getToggleHiddenProps} />{' '}
-              {column.id}
-            </label>
-          </div>
-        ))}
-        <br />
-      </div> */}
         </div > :
           <div  {...getHeaderProps({ style: { display: "inline-block", flex: "none", width: "20px" } })} className='th noselect'
           >

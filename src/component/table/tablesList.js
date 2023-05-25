@@ -15,7 +15,6 @@ import { deleteFilter } from "../../api/filterApi";
 import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
-// import HideFieldDropdown from "./hidefieldDropdown";
 
 export default function TablesList({ dbData }) {
   
@@ -41,14 +40,6 @@ export default function TablesList({ dbData }) {
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
-
-  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-
-  // const handleMenuOpen = (event) => {
-  //   setMenuAnchorEl(event.currentTarget);
-  // };
-
-  
 
   const handleClick = (event, id) => {
     setcurrentTable(id)
@@ -79,7 +70,6 @@ export default function TablesList({ dbData }) {
     setValue(newTableIndex);
   };
 
-
   const handleEdit = async () => {
     setEdit(true);
     setOpenn(true);
@@ -103,7 +93,6 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
 
-  
   const deleteFilterInDb = async (filterId) => {
     const data = {
       filterId: filterId,
@@ -177,7 +166,6 @@ export default function TablesList({ dbData }) {
           height: "5vh",
           overflow: "hidden",
           position: "sticky",
-          marginTop: "0.5vh"
         }}
       >
         <Box
@@ -260,13 +248,11 @@ export default function TablesList({ dbData }) {
         <Button
           onClick={() => handleOpenn()}
           variant="contained"
-          sx={{ width: 100, mt: 1.5, ml: 1, fontSize: "11px" }}
+          sx={{ width: 100, mt: 1, ml: 1, fontSize: "11px" }}
         >
           Add Filter
         </Button>
       </Box>
-      {/* <Button onClick={handleMenuOpen}>Hide Fields</Button>
-      <HideFieldDropdown columns={columns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} /> */}
       {open && (
         <PopupModal
           title="Create Table"

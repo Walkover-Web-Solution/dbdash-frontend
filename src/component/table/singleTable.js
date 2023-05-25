@@ -10,7 +10,6 @@ import { resetData } from '../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../api/tableApi';
 import { selectActiveUser } from '../../store/user/userSelector.js';
 import { toast } from 'react-toastify';
-// import { useParams } from 'react-router-dom';
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
  
   const navigate = useNavigate();
@@ -18,7 +17,6 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const [name, setName] = useState();
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const userDetails = useSelector((state) => selectActiveUser(state));
-  // const params = useParams();
 
   const dispatch = useDispatch();
   const TabWithDropdown = ({ label, dropdown }) => (
@@ -84,7 +82,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
       email:userDetails?.email
     }
     await exportCSV(dbData?.db?._id,tableid,data);
-    toast.success("YOur CSV file has mailed successfully")
+    toast.success("Your CSV file has mailed successfully")
   }
 
   function onTableClicked() {
@@ -116,8 +114,6 @@ const tablePath = pathSegments.slice(-2).join('/'); // Extract the last two segm
         whiteSpace: 'nowrap',
         transition: 'transform 0.2s ease-in-out',
       }}
-      
-
         onClick={() => {
           onTableClicked(table[0])
         }}
