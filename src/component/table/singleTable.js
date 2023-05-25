@@ -9,6 +9,7 @@ import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../api/tableApi';
 import { selectActiveUser } from '../../store/user/userSelector.js';
+import { toast } from 'react-toastify';
 // import { useParams } from 'react-router-dom';
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
  
@@ -82,6 +83,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
       email:userDetails?.email
     }
     await exportCSV(dbData?.db?._id,tableid,data);
+    toast.success("YOur CSV file has mailed successfully")
   }
 
   function onTableClicked() {
