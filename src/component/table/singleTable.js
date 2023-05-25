@@ -85,7 +85,8 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const exportCSVTable = async(tableid)=>{
     const data = {
       query: `select * from ${tableid}`,
-      userName:userDetails?.fullName
+      userName:userDetails?.fullName,
+      email:userDetails?.email
     }
     await exportCSV(dbData?.db?._id,tableid,data);
   }
