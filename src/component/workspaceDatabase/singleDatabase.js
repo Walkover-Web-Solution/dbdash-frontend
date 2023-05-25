@@ -203,40 +203,44 @@ export default function SingleDatabase(props) {
               {props.db.name}{" "}
             </Typography>
             <Box sx={{ mt: -1 }}>
-              {arr1.length > 1 && !props?.db?.deleted ? (
-                <Dropdown
-                  setTabIndex={props?.setTabIndex}
-                  tabIndex={props?.index}
-                  first={"Rename Database"}
-                  second={"Delete Database"}
-                  third={"Move"}
-                  setOpenmove={setOpenmove}
-                  orgid={props?.db?.org_id?._id}
-                  dbid={props?.db?._id}
-                  setName={setName}
-                  idToDelete={props?.db?._id}
-                  deleteFunction={deletDatabases}
-                  title={"Database"}
-                />
-              ) : !props?.db?.deleted ? (
-                <Dropdown
-                  setTabIndex={props?.setTabIndex}
-                  tabIndex={props?.index}
-                  first={"Rename Database"}
-                  second={""}
-                  third={""}
-                  orgid={props?.db?.org_id?._id}
-                  dbid={props?.db?._id}
-                  setName={setName}
-                  title={"Database"}
-                />
-              ) : (
-                <Button onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  restoreDb(orgIdForRestore, props.db._id);
-                }}>restore</Button>
-              )}
+            {arr1.length > 1 && !props?.db?.deleted ? (
+  <Dropdown
+    setTabIndex={props?.setTabIndex}
+    tabIndex={props?.index}
+    first={"Rename Database"}
+    second={"Delete Database"}
+    third={"Move"}
+    setOpenmove={setOpenmove}
+    orgid={props?.db?.org_id?._id}
+    dbid={props?.db?._id}
+    setName={setName}
+    idToDelete={props?.db?._id}
+    deleteFunction={deletDatabases}
+    title={"Database"}
+  />
+) :  !props?.db?.deleted ? (
+  <Dropdown
+    setTabIndex={props?.setTabIndex}
+    tabIndex={props?.index}
+    first={"Rename Database"}
+    second={""}
+    third={""}
+    orgid={props?.db?.org_id?._id}
+    dbid={props?.db?._id}
+    setName={setName}
+    title={"Database"}
+  />
+) : (
+  <Button    onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    restoreDb(orgIdForRestore,props.db._id);
+  }}
+    variant="contained"
+    size="small"
+    sx={{ display: "flex" }}
+  >restore</Button>
+)}
             </Box>
           </>
         )}
