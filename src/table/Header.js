@@ -36,6 +36,7 @@ import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import { getQueryByAi } from "../api/fieldApi"
 import PropTypes from 'prop-types';
 import DuplicateFieldPopup from "./duplicateFieldPopup";
+import { useParams } from "react-router-dom";
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -53,7 +54,7 @@ const IndeterminateCheckbox = React.forwardRef(
     )
   }
 )
-export default function Header({
+export default function Header({allColumns,
   column: { id, created, label, dataType, getResizerProps, getHeaderProps, metadata }, setSortBy, getToggleAllRowsSelectedProps,}) {
   const dispatch = useDispatch();
   const [textValue, setTextValue] = useState('');
@@ -70,6 +71,7 @@ export default function Header({
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
 
+  
   const handleOpen = () => {
     setOpen(true);
     setExpanded(false);
@@ -121,14 +123,18 @@ export default function Header({
     setSelectValue();
   }
 
-  const handleHideField = () => {
-   <div>
-        {/* {columns?.slice(1, -1).map((column, index) => (  
-          <input type="checkbox"{...column?.getToggleHiddenProps()} />{' '}
-        ))} */}
-    </div>
-  }
+  const params = useParams()
 
+  const hideColumn = async (columnId) => {
+    const metaData = { hide:"true" };
+      dispatch(updateColumnHeaders({
+        dbId: params?.dbId,
+        tableName: params?.tableName,
+        fieldName: columnId,
+        columnId: columnId,
+        metaData: metaData
+      }));
+    }
 
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -362,8 +368,12 @@ const buttons = [
   },
  {
     onClick: () => {
+      console.log("id",id)
       setExpanded(false);
-      handleHideField();
+      hideColumn(id);
+      const matchedObject = allColumns.filter(column => column.id === id);
+      matchedObject?.getToggleHiddenProps
+
     },
     icon: <VisibilityOffIcon fontSize="1px" />,
     label: "Hide Field",
@@ -680,5 +690,6 @@ Header.propTypes = {
   dataDispatch: PropTypes.any,
   row: PropTypes.any,
   getToggleAllRowsSelectedProps: PropTypes.any,
-  getToggleHideAllColumnsProps: PropTypes.any
+  getToggleHideAllColumnsProps: PropTypes.any,
+  allColumns: PropTypes.any,
 };

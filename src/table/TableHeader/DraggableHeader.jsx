@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateColumnHeaders } from '../../store/table/tableThunk';
 export default function DraggableHeader({ columns,index, reoder, key}){
+  console.log(columns?.isResizing,"resize")
   // const resize = columns?.isResizing ? columns : null
  const params = useParams();
  const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export default function DraggableHeader({ columns,index, reoder, key}){
 
   useEffect(()=>{
     if(columns?.label != "check" && columns?.label != "+"){
-      if(!columns.isResizing && !( columns?.width == "150")){
+      if(columns.isResizing){
         resizeWidth();
       }
     }

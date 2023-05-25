@@ -1,12 +1,5 @@
-import React, { useMemo, memo,useState } from "react";
-import {
-  useTable,
-  useFlexLayout,
-  useResizeColumns,
-  useRowSelect,
-  useSortBy,
-  useColumnOrder,
-} from "react-table";
+import React, { useMemo, memo, useState } from "react";
+import {useTable,useFlexLayout,useResizeColumns,useRowSelect,useSortBy,useColumnOrder} from "react-table";
 import Header from "./Header";
 import PropTypes from "prop-types";
 import { useCellRangeSelection } from "react-table-plugins";
@@ -17,12 +10,12 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import Preview from "./Preview";
 import Cell from "./Cell";
-import TableHeader  from "./TableHeader/TableHeader";
+import TableHeader from "./TableHeader/TableHeader";
 import { TableBody } from "./TableBody";
 import PlusIcon from './img/Plus'
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import {  DeleteOutlined } from "@mui/icons-material";
+import { DeleteOutlined } from "@mui/icons-material";
 import HideFieldDropdown from "../component/table/hidefieldDropdown";
 
 
@@ -100,63 +93,62 @@ const Table = memo(
     useEffect(() => {
       // Hide the specified columns
       allColumns.forEach(column => {
-        if(column?.metadata?.hide == "false" )
-        {
-            column.toggleHidden(true);
-        }
-        });
-    }, [allColumns]);
-   
-    const[selectedColumnIndex,setSelectedColumnIndex]=useState(null);
-    
+        if (column?.metadata?.hide == "true") {
+          column.toggleHidden(true);
+       }
+      });
+  }, [allColumns]);
+
+    const [selectedColumnIndex, setSelectedColumnIndex] = useState(null);
+
     const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
     const handleMenuOpen = (event) => {
       setMenuAnchorEl(event.currentTarget);
     };
-  
-    const tableData= useSelector((state)=>state.table);//true
+
+    const tableData = useSelector((state) => state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
-      
+
       const firstColumnValue = tableData.data[lastRowIndex];
-      const tableRowChildNodes =  document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
-      if(tableRowChildNodes){
+      const tableRowChildNodes = document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
+      if (tableRowChildNodes) {
         const tableRowAttribute = tableRowChildNodes.getAttribute("data-id")
-        setTimeout(()=>{
+        setTimeout(() => {
           const td = document.querySelector(`div[data-id="${tableRowAttribute}"]`);
           const match =
             (td && td?.querySelector("textarea")) || td?.querySelector("input");
-            if (match) {
-              match.addEventListener("focus", () => {
-                match.style.border = "2px solid blue";
-              });
-              match.addEventListener("blur", () => {
-                match.style.border = "none";
-              });
-              match.focus();
-            }
-        },1000)
+          if (match) {
+            match.addEventListener("focus", () => {
+              match.style.border = "2px solid blue";
+            });
+            match.addEventListener("blur", () => {
+              match.style.border = "none";
+            });
+            match.focus();
+          }
+        }, 1000)
       }
     }, [lastRowIndex])
 
     return (
       <>
-          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-       <Button sx={{fontSize: "11px"}} onClick={handleMenuOpen}>Hide Fields</Button>
-      <HideFieldDropdown  getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
+          <HideFieldDropdown getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         </div>
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Button
-          sx={{position:"absolute",right:"1%",top:"16.5%"}}
-            onClick={() => {
-              dataDispatch(deleteRows(selectedFlatRows));
-            }}
-            variant="contained"
-          >
-            <DeleteOutlined style={{fontSize:"19px"}}/>
-          </Button>
+            <Button
+              sx={{ position: "absolute", right: "1%", top: "16.5%" }}
+              onClick={() => {
+                dataDispatch(deleteRows(selectedFlatRows));
+              }}
+              variant="contained"
+            >
+              <DeleteOutlined style={{ fontSize: "19px" }} />
+            </Button>
           </div>
         )}
         <DndProvider backend={HTML5Backend}>
@@ -164,52 +156,48 @@ const Table = memo(
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:(window.screen.height*57)/100,width:"99.6vw"}}
           >
             <table {...getTableProps()} >
-              
-            <TableHeader
-              getTableProps={getTableProps}
-              headerGroups={headerGroups}
-              columns={columns}
-              selectedColumnIndex={selectedColumnIndex}
-              setSelectedColumnIndex={setSelectedColumnIndex}
-              
-            />
-     
-            <TableBody 
-              getTableBodyProps={getTableBodyProps}
-              rows={rows}
-              hasNextPage={hasNextPage}
-              isNextPageLoading={isNextPageLoading}
-              totalColumnsWidth={totalColumnsWidth}
-              prepareRow={prepareRow}
-              cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds}}
-              update={update}
-              selectedColumnIndex={selectedColumnIndex}
-              
-             
-            />
 
-      
-            
-             
+              <TableHeader
+                getTableProps={getTableProps}
+                headerGroups={headerGroups}
+                columns={columns}
+                selectedColumnIndex={selectedColumnIndex}
+                setSelectedColumnIndex={setSelectedColumnIndex}
+
+              />
+
+              <TableBody
+                getTableBodyProps={getTableBodyProps}
+                rows={rows}
+                hasNextPage={hasNextPage}
+                isNextPageLoading={isNextPageLoading}
+                totalColumnsWidth={totalColumnsWidth}
+                prepareRow={prepareRow}
+                cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds }}
+                update={update}
+                selectedColumnIndex={selectedColumnIndex}
+              />
             </table>
-            
+
           </ScrollingComponent>
-          <div className='tr add-row' 
-              style={{ position: 'sticky' ,bottom: 0,left: 0}}
-          onClick={() => dataDispatch(addRows({ type: "add_row" }))}
-        >
-          <span className='svg-icon svg-gray' style={{ marginRight: 4,mt:0,p:0 }}>
-            <PlusIcon />
-          </span>
-          New
-        </div>   
-        
+          <div className='tr add-row'
+            style={{ position: 'sticky', bottom: 0, left: 0 }}
+            onClick={() => dataDispatch(addRows({ type: "add_row" }))}
+          >
+
+            <span className='svg-icon svg-gray' style={{ marginRight: 4, mt: 0, p: 0 }}>
+              <PlusIcon />
+            </span>
+            New
+          </div>
+
           <Preview />
         </DndProvider>
       </>
     );
   }
 );
+
 Table.displayName = "Table";
 export default Table;
 
@@ -221,6 +209,6 @@ Table.propTypes = {
   dispatch: PropTypes.any,
   skipReset: PropTypes.any,
   setColumns: PropTypes.func,
-  isNextPageLoading:PropTypes.bool,
+  isNextPageLoading: PropTypes.bool,
   hasNextPage: PropTypes.func,
 };
