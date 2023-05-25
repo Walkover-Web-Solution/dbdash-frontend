@@ -234,7 +234,11 @@ const orgIdForRestore = props.db?.org_id._id || props.db?.org_id;
     e.preventDefault();
     e.stopPropagation();
     restoreDb(orgIdForRestore,props.db._id);
-  }}>restore</Button>
+  }}
+    variant="contained"
+    size="small"
+    sx={{ display: "flex" }}
+  >restore</Button>
 )}
             </Box>
           </>
