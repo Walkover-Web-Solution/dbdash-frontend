@@ -71,7 +71,6 @@ export default function TablesList({ dbData }) {
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
       return apiCreate?.data?.data?.tables[key].tableName === table;
     });
-    console.log("sfdshjhjdshjsg",matchedKey)
     if (matchedKey) {
       navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
     }
