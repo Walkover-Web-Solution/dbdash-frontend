@@ -33,7 +33,12 @@ export const OrgList = (props) => {
   const [isOwner, setIsOwner] = useState(false);
 
   
-   
+  const Dbs = [];
+Object.entries(props?.dbs).forEach(([, value]) => {
+  if (!("deleted" in value)) {
+    Dbs.push(value);
+  }
+});
   const handleOpenShareOrg = () => {
     setShareOrg(true);
   };
@@ -90,6 +95,7 @@ export const OrgList = (props) => {
     const adminId = localStorage.getItem("userid")
     dispatch(removeUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
   }
+
   return (
     <>
       <Box key={props?.orgId} sx={{ m: 3 }}>
@@ -186,9 +192,9 @@ export const OrgList = (props) => {
         <Box sx={{ display: "flex" }}>
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
-              {props.dbs.map((db,index) => (
+              {Dbs.map((db,index) => (
                 <Box key={db._id} sx={{ m: 4, display: "flex" }}>
-                  <SingleDatabase db={db} dblength={props?.dbs?.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
+                  <SingleDatabase db={db} dblength={Dbs.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
               ))}
               <Card sx={{ m: 4, minWidth: 250, minHeight: 200, boxShadow: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -215,7 +221,9 @@ export const OrgList = (props) => {
           </Box>
         </Box>
       </Box>
+      
     </>
+    
   );
 };
 OrgList.propTypes = {
