@@ -174,7 +174,7 @@ export default function TablesList({ dbData }) {
         sx={{
           width: "100%",
           display: "flex",
-          height: "7vh",
+          height: "5vh",
           overflow: "hidden",
           position: "sticky",
           marginTop: "0.5vh"
@@ -185,7 +185,7 @@ export default function TablesList({ dbData }) {
             display: "flex",
             overflow: "hidden",
             width: "100%",
-            height: "auto",
+            height: "5vh",
           }}
         >
           <Tabs
@@ -216,7 +216,7 @@ export default function TablesList({ dbData }) {
           <Button
             variant="outlined"
             onClick={() => handleOpen()}
-            sx={{ margin: "0.5rem", width: "fit-content", height: "5vh" }}
+            sx={{ marginLeft: "0.5rem", marginTop:"4px" ,width: "fit-content", height: "4vh" }}
           >
             <AddIcon />
           </Button>

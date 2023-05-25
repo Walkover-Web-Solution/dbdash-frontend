@@ -36,7 +36,8 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
           minWidth: 'auto',
           overflowX: 'auto',
           flexDirection: 'row',
-          textTransform: 'none'
+          textTransform: 'none',
+          height:'10px'
         }}
         title={label}
       />
