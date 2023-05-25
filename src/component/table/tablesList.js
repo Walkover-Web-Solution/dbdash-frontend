@@ -192,13 +192,16 @@ export default function TablesList({ dbData }) {
           <Tabs
             value={value}
             onChange={handleChange}
+            TabIndicatorProps={{
+              style: { display: "none" },
+            }}
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
             {AllTableInfo &&
               Object.entries(AllTableInfo).map((table, index) => (
-                <Box key={index} sx={{ height: "57px" }}>
+                <Box key={index} >
                   <SingleTable
                     table={table}
                     tableLength={tableLength}
@@ -206,10 +209,7 @@ export default function TablesList({ dbData }) {
                     setTabIndex={setTabIndex}
                     index={index}
                     dbData={dbData}
-                    highlightActiveTable={() => setValue(index)}
-                    value={value}
                     setPage={setPage}
-                    setValue={setValue}
                   />
                 </Box>
               ))}

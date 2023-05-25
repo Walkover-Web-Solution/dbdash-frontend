@@ -4,13 +4,13 @@ import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../dropdown';
 import { bulkAddColumns } from '../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate,useLocation} from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
 import { resetData } from '../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../api/tableApi';
 import { selectActiveUser } from '../../store/user/userSelector.js';
 // import { useParams } from 'react-router-dom';
-export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, highlightActiveTable, value, setPage ,setValue}) {
+export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
  
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
@@ -58,24 +58,17 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const deleteTableName = async (tableid) => {
 
     const keys = Object.keys(AllTableInfo)
-    let last = "";
 
     let i = 0
     for (; i < keys.length; i++) {
     
       if (keys[i] == tableid) {
-        break
+        break;
       }
     }
-    if(value != 0)
-    {
-      setValue(i-1)    
-    }
-    else{
-      setValue(0)
-    }
+    i=(i==(keys.length-1))?0:i+1;
+    let last=keys[i]
 
-    last = keys[i - 1]
       const deleteTableData = await deleteTable(dbData?.db?._id,tableid);
       dispatch(removeTable1({ "tableData": deleteTableData?.data?.data?.tables}));
     navigate(`/db/${dbData.db._id}/table/${last}`);
@@ -102,21 +95,25 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
       "pageNo": 1,
       // "fields":dbData?.db?.tables[params?.tableName]?.fields
     }));
-    highlightActiveTable()
   }
+
+  const location = useLocation();
+const pathSegments = location.pathname.split('/'); // Split the pathname by '/'
+const tablePath = pathSegments.slice(-2).join('/'); // Extract the last two segments and join them with '/'
 
   return (
     <>
       <Box
-        sx={{
-          p: '2.5px',
-          border: '1px solid rgba(0, 0, 0, 0.2)',
-          backgroundColor: '#fff',
-          textAlign: 'center',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          transition: 'transform 0.2s ease-in-out',
-        }}
+       sx={{
+        p: '2.5px',
+        border: '1px solid rgba(0, 0, 0, 0.2)',
+        backgroundColor: `${tablePath === `table/${table[0]}` ? 'white' : '#E8E8E8'}`,
+        textAlign: 'center',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        transition: 'transform 0.2s ease-in-out',
+      }}
+      
 
         onClick={() => {
           onTableClicked(table[0])

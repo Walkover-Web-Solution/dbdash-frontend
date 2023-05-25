@@ -332,15 +332,17 @@ const Cell = memo(
           overflowY: "hidden",
         }
       : {
-          border: "none",
-          backgroundColor: "white",
-          paddingRight: "13px",
-          position: "absolute",
-          zIndex: "20",
-          WebkitOverflowScrolling: "touch",
-          height: "210px",
-          overflowY: "scroll",
-          width: `${width}px`,
+        border: "none",
+        backgroundColor: "white",
+        paddingRight: "13px",
+        position: "absolute",
+        zIndex: "20",
+        WebkitOverflowScrolling: "touch",
+        maxHeight: "210px",
+        overflowY: "auto",
+        width: `${width}px`,
+        bottom: "auto",
+        top: "auto",
         }
   }
   className="data-input"
