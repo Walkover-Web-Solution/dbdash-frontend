@@ -20,13 +20,11 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
   }
 
   const handleHeaderClick = (columnIndex) => {
+    if(isTableResizing()) return;
     if (selectedColumnIndex === columnIndex) {
       setSelectedColumnIndex(null);
     } else  {
-
-      
       setSelectedColumnIndex(columnIndex);
-      
     }
   };
 
@@ -52,7 +50,6 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
   const AllTableInfo = useSelector((state) => state);
   const ref = useRef()
   const headerRef = useRef(null);
-  // const[part, setpart] = useState([])
   let selectedColumnId= AllTableInfo?.table?.columns;
   let selectedColumnIdToGetData  =  selectedColumnId[selectedColumnIndex]?.id
   useEffect(() => {
@@ -63,7 +60,6 @@ if(selectedColumnIdToGetData in item){
   particularData.push(value);
 }
   })
-  // setpart(particularData)
   ref.current = particularData
   
   }, [selectedColumnIdToGetData])
@@ -72,9 +68,8 @@ if(selectedColumnIdToGetData in item){
   
   useEffect(() => {
     const handleClickOutsideHeader = (event) => {
-      // Check if the clicked element is a header cell
       if (headerRef.current && !headerRef.current.contains(event.target)) {
-        setSelectedColumnIndex(null); // Unselect the column
+        setSelectedColumnIndex(null);
       }
     };
 
@@ -86,9 +81,6 @@ if(selectedColumnIdToGetData in item){
       }
     };
     
-    
-    
-
     document.body.addEventListener("click", handleClickOutsideHeader);
     document.addEventListener('keydown', handleKeyDown);
 
@@ -114,9 +106,9 @@ if(selectedColumnIdToGetData in item){
           {headerGroups[0]?.headers?.map((column, index) =>(
             <th
               key={index}
-              className={selectedColumnIndex !== null && index === selectedColumnIndex ? "selected" : ""}
-              onClick={() => {
-                if(column.label!="+" && column.label!="check")
+              className={selectedColumnIndex !== null && index === selectedColumnIndex && !isTableResizing() ? "selected" : ""}
+              onClick={(event) => {
+                if(column.label!="+" && column.label!="check" && event.target.className=="th-content")
                 {
                 handleHeaderClick(index);}
               }}

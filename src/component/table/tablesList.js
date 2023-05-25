@@ -18,8 +18,8 @@ import { createTable } from "../../api/tableApi";
 // import HideFieldDropdown from "./hidefieldDropdown";
 
 export default function TablesList({ dbData }) {
+  
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
-  // const columns=useSelector((state)=>state.table?.columns.map(columns=> (columns.label)));
   const dispatch = useDispatch();
   const params = useParams();
   const AllTableInfo = useSelector((state) => state.tables.tables);
@@ -71,7 +71,7 @@ export default function TablesList({ dbData }) {
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
       return apiCreate?.data?.data?.tables[key].tableName === table;
     });
-
+    console.log("sfdshjhjdshjsg",matchedKey)
     if (matchedKey) {
       navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
     }
@@ -97,11 +97,14 @@ export default function TablesList({ dbData }) {
         filter: filter,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
-        filterId: id
+        filterId : id,
+        fields:dbData?.db?.tables[params?.tableName]?.fields 
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
+
+  
   const deleteFilterInDb = async (filterId) => {
     const data = {
       filterId: filterId,
@@ -123,6 +126,8 @@ export default function TablesList({ dbData }) {
         tableName: params?.tableName,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
+        fields:dbData?.db?.tables[params?.tableName]?.fields
+
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
@@ -137,7 +142,8 @@ export default function TablesList({ dbData }) {
           filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
           org_id: dbData?.db?.org_id,
           pageNo: 1,
-          filterId: params?.filterName
+          filterId : params?.filterName,
+          fields:dbData?.db?.tables[params?.tableName]?.fields         
         })
       );
     }
@@ -149,6 +155,7 @@ export default function TablesList({ dbData }) {
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
           pageNo: 1,
+          fields:dbData?.db?.tables[params?.tableName]?.fields
         })
       );
       setValue(

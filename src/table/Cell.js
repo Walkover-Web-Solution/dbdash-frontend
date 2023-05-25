@@ -311,6 +311,7 @@ const Cell = memo(
   contentEditable="true"
   onInput={handleInputChange}
   onClick={handleInputClick}
+  onFocus={handleInputClick}
   onDoubleClick={() => {
     setCursor(true);
   }}

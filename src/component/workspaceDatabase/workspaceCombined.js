@@ -18,7 +18,6 @@ export default function WorkspaceCombined() {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
-
   const sortAndRenderOrgList = () => {
     return Object.entries(alldbs)
       .sort(([orgIdA, dbsA], [orgIdB, dbsB]) => {
@@ -32,19 +31,22 @@ export default function WorkspaceCombined() {
   
         const orgA = dbsA[0]?.org_id?.name?.toUpperCase();
         const orgB = dbsB[0]?.org_id?.name?.toUpperCase();
-        return orgA.localeCompare(orgB);
+        return orgA?.localeCompare(orgB);
       })
+
       .map(([orgId, dbs], index) => {
         const sortedDbs = [...dbs].sort((dbA, dbB) => {
           const dbsA = dbA.name?.toUpperCase();
           const dbsB = dbB.name?.toUpperCase();
-          return dbsA.localeCompare(dbsB);
+          return dbsA?.localeCompare(dbsB);
         });
   
         return (
+          <>
           <Box key={orgId}>
             <OrgList orgId={orgId} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbs={sortedDbs} />
           </Box>
+          </>
         );
       });
   };

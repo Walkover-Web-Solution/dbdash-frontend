@@ -38,7 +38,15 @@ const moveDb=async(org_id,dbId,data)=>
 return await axios.patch(URL+`/dbs/${org_id}/dbs/${dbId}/movedb`,data);
 }
 
+const restoreDbForUser = async(orgId,id)=>
+{
+    return await axios.patch(URL+`/dbs/${orgId}/${id}/restore/db`);  
+}
 
+const deleteDbForUser = async(orgId,id)=>
+{
+    return await axios.patch(URL+`/dbs/${orgId}/dbs/${id}/delete`);  
+}
 
 export {
     createDb,
@@ -47,5 +55,7 @@ export {
     getDbByOrgId,
     renameDb,
     deleteDb,
-    moveDb
+    moveDb,
+    restoreDbForUser,
+    deleteDbForUser
 }
