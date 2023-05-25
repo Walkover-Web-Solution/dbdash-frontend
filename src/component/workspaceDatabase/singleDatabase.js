@@ -49,8 +49,8 @@ export default function SingleDatabase(props) {
       dispatch(deleteDbThunk({ orgId: props?.db?.org_id, dbId: props?.db?._id }));
     }
   };
-const arr1 = !props?.db?.deleted ? Array(props?.dblength).fill(props.db) : [];
-const orgIdForRestore = props.db?.org_id._id || props.db?.org_id;
+  const arr1 = !props?.db?.deleted ? Array(props?.dblength).fill(props.db) : [];
+  const orgIdForRestore = props.db?.org_id._id || props.db?.org_id;
 
   return (
     <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2, cursor: 'pointer' }} onClick={() => {
@@ -88,9 +88,10 @@ const orgIdForRestore = props.db?.org_id._id || props.db?.org_id;
                       e.preventDefault();
                       e.stopPropagation();
                       setOpenmove(false)
-                    }}
+                    }
                   }
-                  sx={{marginBottom: 1,marginLeft: 3,minWidth: 120}}
+                  }
+                  sx={{ marginBottom: 1, marginLeft: 3, minWidth: 120 }}
                   onChange={(event) => {
                     setSelectedorg(event.target.value);
                   }}
@@ -252,13 +253,13 @@ SingleDatabase.propTypes = {
     name: PropTypes.string,
     _id: PropTypes.string,
     org_id: PropTypes.any,
-    deleted:PropTypes.any
+    deleted: PropTypes.any
   }),
   getOrgAndDbs: PropTypes.func,
   tabIndex: PropTypes.number,
   index: PropTypes.any,
   setTabIndex: PropTypes.func,
   dblength: PropTypes.number,
-  orgId:PropTypes.any
+  orgId: PropTypes.any
 
 };
