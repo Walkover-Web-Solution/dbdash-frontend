@@ -504,7 +504,7 @@ const Cell = memo(
             }}
 
         
-            style={!cursor?{caretColor:"transparent",paddingRight:"13px",height:"35px",overflowY:"hidden"}:{paddingRight:"13px",position:"absolute",zIndex:'20', WebkitOverflowScrolling: "touch",height:"175px",overflowY:"scroll",width:`${width}px`}}
+            style={!cursor?{caretColor:"transparent",backgroundColor:"transparent",paddingRight:"13px",height:"35px",overflowY:"hidden"}:{paddingRight:"13px",position:"absolute",zIndex:'20', WebkitOverflowScrolling: "touch",height:"175px",overflowY:"scroll",width:`${width}px`}}
             onBlur={(event) => {
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
