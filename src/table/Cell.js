@@ -67,21 +67,6 @@ const Cell = memo(
         return EditorState.createEmpty();
       }
     });
-
-
-
- 
-
-  
-
-
-
-
-
-
-
-
-    
     
     const handleInputChange = (event) => {
       const newValue = event.target.innerHTML;
@@ -189,60 +174,88 @@ const Cell = memo(
 
       case "createdby":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+            }
+          }}
+          tabIndex={0}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
 
       case "createdat":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          tabIndex={0}
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+              
+            }
+          }}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
+            
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
 
       case "rowid":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+              
+            }
+          }}
+          tabIndex={0}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
       case "autonumber":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+              
+            }
+          }}
+          tabIndex={0}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
 

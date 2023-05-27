@@ -37,12 +37,17 @@ selectedColumnIndex
   );
 
   const handleCopy = (event, value) => {
+    
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
     document.execCommand("copy");
   };
 
-  
+  // document.addEventListener('keydown', function(event) {
+  //   if (event.key === 'Backspace' && selectedColumnIndex) {
+  //     console.log("backspace, we will add function here to clear column");
+  //   }
+  // });
   
   const handlePaste = ( event,row, cell) => {
     event.preventDefault();
@@ -104,10 +109,11 @@ selectedColumnIndex
           id={`table-row-${index}`}
         >
           {row.cells.map((cell,key) => {
-           
+            
             return (
  
               <div 
+            
               {...cell.getCellProps({
                 onCopy: (event) => handleCopy(event, cell.value),
                 onPaste: (event) => handlePaste(event, key, cell),
