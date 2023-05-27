@@ -10,6 +10,7 @@ import { resetData } from '../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../api/tableApi';
 import { selectActiveUser } from '../../store/user/userSelector.js';
 import { toast } from 'react-toastify';
+
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
  
   const navigate = useNavigate();

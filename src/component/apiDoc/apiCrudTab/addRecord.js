@@ -30,7 +30,7 @@ function AddRecord(props) {
         }}
       >
         <CodeBlock
-          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
+          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table[0]}`}
           header={`-H auth-key: YOUR_SECRET_API_TOKEN ${(
             <br />
           )} -H Content-Type: application/json`}
@@ -77,6 +77,6 @@ function AddRecord(props) {
 }
 AddRecord.propTypes = {
   db: PropTypes.string,
-  table: PropTypes.string,
+  table: PropTypes.any,
 };
 export default AddRecord;

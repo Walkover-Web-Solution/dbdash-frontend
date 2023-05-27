@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { getAllfields } from '../../../api/fieldApi';
+// import { getAllfields } from '../../../api/fieldApi';
 import Grid from '@mui/material/Grid';
 import { PropTypes } from 'prop-types';
 // import ContentPasteIcon from '@mui/icons-material/ContentPaste';
@@ -9,14 +9,14 @@ import { useState } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 function Records(props) {
-const [rowfieldData, setRowFieldData] = useState(null)
+const [rowfieldData, setRowFieldData] = useState(props.table[1].fields)
 const tableData = async () => {
-  const data = await getAllfields(props.db, props.table)
-  setRowFieldData(data?.data?.data?.fields)
+  // const data = await getAllfields(props.db, props.table)
+  setRowFieldData(props.table[1].fields)
 }
 useEffect(() => {
   tableData();
-}, [props.db, props.table]);
+}, [props.db, props.table[0]]);
   return (
     <div>
         <Grid container spacing={2}>

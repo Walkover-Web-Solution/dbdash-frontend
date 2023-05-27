@@ -14,21 +14,20 @@ export default function Navbar() {
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb, setSelectedDb] = useState(false);
-  const [selectTable, setSelectTable] = useState(false);
+  const [selectTable, setSelectTable] = useState( false);
   const alldb = useSelector((state) => selectOrgandDb(state));
   const [loading, setLoading] = useState(false);
-
   const handleChange = async (event) => {
     setSelectedDb(event.target.value);
     setSelectedOption(event.target.value);
     setDbId(event.target.value);
     setLoading(false);
     await getAllTableName(event.target.value);
-    navigate(`/apiDoc/db/${selectedDb}`);
+    navigate(`/apiDoc/db/${event.target.value}`);
   };
 
   const handleChangeTable = async (event) => {
-    setSelectTable(event.target.value);
+    setSelectTable(Object.entries(tables).find(x=>x[0]===event.target.value));
   };
 
   const filterDbsBasedOnOrg = async () => {
@@ -50,9 +49,11 @@ export default function Navbar() {
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId);
     setTables(data.data.data.tables || {});
+    
     if (data.data.data.tables) {
-      setSelectTable(Object.keys(data.data.data.tables)[0]);
+      setSelectTable(Object.entries(data.data.data.tables)[0]);
       setLoading(true);
+
     }
   };
 
@@ -96,19 +97,22 @@ export default function Navbar() {
             </FormControl>
           )}
         </Box>
-        {Object.keys(tables).length >= 1 && (
+        {Object.keys(tables).length >= 1 && loading && (
           <Box>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
+              <InputLabel htmlFor="grouped-select">Tables</InputLabel>
               <Select
-                value={selectTable}
+                value={selectTable[0] }
                 label="Tables-Name"
+                defaultValue={ Object.entries(tables)[0][0]}
                 onChange={handleChangeTable}
               >
+
                 {Object.entries(tables)?.map((table) => (
                   <MenuItem key={table[0]} value={table[0]}>
                     {table[1].tableName || table[0]}
                   </MenuItem>
+
                 ))}
               </Select>
             </FormControl>
@@ -123,7 +127,7 @@ export default function Navbar() {
         )}
       </Box>
       <Box>
-        {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
+        {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable || Object.entries(tables)[0]} />}
       </Box>
     </>
   );

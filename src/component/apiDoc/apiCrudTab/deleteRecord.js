@@ -28,7 +28,7 @@ function DeleteRecord(props) {
         }}
       >
         <CodeBlock
-          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}${value != "" ? `?${value}` : ``}`}
+          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table[0]}/{:rowId}${value != "" ? `?${value}` : ``}`}
           header={`-H auth-key: AUTH_TOKEN `}
           body={arr}
 
@@ -67,6 +67,6 @@ function DeleteRecord(props) {
 }
 DeleteRecord.propTypes = {
   db: PropTypes.string,
-  table: PropTypes.string,
+  table: PropTypes.any,
 };
 export default DeleteRecord;

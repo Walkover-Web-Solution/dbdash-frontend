@@ -86,7 +86,7 @@ function ApiCrudTablist(props) {
         </Tabs>
       </Box>
       {/* <TabPanel value={value} index={0}>
-        <Authentication db={props.db} table={props.table} />
+        <Authentication db={props.db} table={props.table[0]} />
       </TabPanel> */}
       <TabPanel value={value} index={0}>
         <Box>
@@ -94,7 +94,7 @@ function ApiCrudTablist(props) {
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ListRecord db={props.db} table={props.table}/>
+        <ListRecord db={props.db} table={props.table[0]}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
        <AddRecord db={props.db} table={props.table}/>
@@ -113,7 +113,7 @@ function ApiCrudTablist(props) {
 
 ApiCrudTablist.propTypes = {
   db: PropTypes.string,
-  table:PropTypes.string
+  table:PropTypes.any
 }
 
 export default ApiCrudTablist

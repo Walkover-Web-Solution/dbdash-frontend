@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { PropTypes } from "prop-types";
-import { getAllfields } from "../../../api/fieldApi";
+// import { getAllfields } from "../../../api/fieldApi";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 
 function BasicStuff(props) {
-  const [fieldData, setFieldData] = useState(null);
+  const [fieldData, setFieldData] = useState(props.table[1].fields);
   const [copiedIndex, setCopiedIndex] = useState(null);
 
-  const tableData = async () => {
-    const data = await getAllfields(props.db, props.table);
-    setFieldData(data?.data?.data?.fields);
+  const tableData = async () => { 
+    setFieldData(props.table[1].fields);
   };
 
   const CopyButton = (text, index) => {
@@ -65,7 +64,7 @@ function BasicStuff(props) {
 
   useEffect(() => {
     tableData();
-  }, [props.db, props.table]);
+  }, [props.db, props.table[0]]);
 
   return (
     <Box>
@@ -73,7 +72,7 @@ function BasicStuff(props) {
         Database Id - {props.db} {CopyButton(props.db, -1)}
       </Typography>
       <Typography style={{ fontWeight: "bold" }}>
-        Table Id - {props.table} {CopyButton(props.table, -2)}
+        Table Id - {props.table[0]} {CopyButton(props.table[0], -2)}
       </Typography>
       <br />
       <Grid container spacing={2}>
@@ -117,7 +116,7 @@ function BasicStuff(props) {
 
 BasicStuff.propTypes = {
   db: PropTypes.string,
-  table: PropTypes.string
+  table: PropTypes.any
 };
 
 export default BasicStuff;

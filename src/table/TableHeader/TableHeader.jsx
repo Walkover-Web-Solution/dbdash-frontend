@@ -35,14 +35,15 @@ function TableHeader({ getTableProps, headerGroups, columns, selectedColumnIndex
       const [removedColumn] = newOrder.splice(currentIndex, 1);
       newOrder.splice(newIndex, 0, removedColumn);
 
-      dispatch(
+  if (currentIndex !== newIndex)
+      {dispatch(
         updateColumnOrder({
           columns: newOrder,
           id: item?.id,
           oldIndex: item.index - 1,
           newIndex: newIndex - 1,
         })
-      );
+      );}
     },
     [columns]
   );

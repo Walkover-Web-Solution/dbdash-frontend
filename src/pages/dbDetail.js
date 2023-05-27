@@ -23,7 +23,6 @@ function DbDetails() {
         return ()=> dispatch (resetData())
     }, []);
     const getAllTableName = async (dbId) => {
-
         var object = {}
         const data = await getDbById(dbId)
         object.db=data.data.data
