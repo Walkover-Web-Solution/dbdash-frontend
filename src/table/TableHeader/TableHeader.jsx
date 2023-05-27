@@ -107,6 +107,7 @@ if(selectedColumnIdToGetData in item){
           {headerGroups[0]?.headers?.map((column, index) =>(
             <th
               key={index}
+             
               className={selectedColumnIndex !== null && index === selectedColumnIndex && !isTableResizing() ? "selected" : ""}
               onClick={(event) => {
                 if(column.label!="+" && column.label!="check" && event.target.className=="th-content")
