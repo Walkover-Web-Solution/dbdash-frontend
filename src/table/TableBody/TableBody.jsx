@@ -18,7 +18,7 @@ import {updateCells } from "../../store/table/tableThunk";
 selectedColumnIndex
 })
  {
-  const height=(window.screen.height*51)/100;
+  const height=(window.screen.height*65)/100;
    const dispatch =  useDispatch()
    const tableId = useSelector((state) => state.table.tableId)
   const limit = 200;
@@ -109,11 +109,13 @@ selectedColumnIndex
           id={`table-row-${index}`}
         >
           {row.cells.map((cell,key) => {
-            
+
+
+            console.log("first",cell.getCellRangeSelectionProps())
             return (
  
-              <div 
-            
+              <td 
+              {...cell.getCellRangeSelectionProps()}
               {...cell.getCellProps({
                 onCopy: (event) => handleCopy(event, cell.value),
                 onPaste: (event) => handlePaste(event, key, cell),
@@ -129,13 +131,14 @@ selectedColumnIndex
                 className={`td ${
                   selectedColumnIndex && key ===selectedColumnIndex ? "selectedCol" : ""
                 }`}
+              
                style={
                 cellsSelected[cell.id]
                   ? {
                       ...cell.getCellProps().style,
                       userSelect: "none",
                       flex: "none",
-                       backgroundColor:"white"
+                       backgroundColor:"green"
                     }
                   : {
                       ...cell.getCellProps().style,
@@ -146,15 +149,15 @@ selectedColumnIndex
                     }
               }
                >
-                {cell.render("Cell")}
+                        {cell.render('Cell')}
               
-              </div>
+              </td>
             );
           })}
         </div>
       );
     },
-    [prepareRow, isItemLoaded, totalColumnsWidth,selectedColumnIndex]
+    [prepareRow, isItemLoaded, totalColumnsWidth,selectedColumnIndex,cellsSelected]
   );
 
   return (
