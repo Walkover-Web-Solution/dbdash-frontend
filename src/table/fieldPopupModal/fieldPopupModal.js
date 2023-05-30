@@ -112,7 +112,6 @@ export default function FieldPopupModal(props) {
     }
     else if (event.target.value === "singlelinetext") {
       setShowSwitch(true);
-    
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value === "email" || event.target.value === "phone") {

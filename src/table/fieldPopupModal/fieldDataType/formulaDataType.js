@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import Autosuggest from 'react-autosuggest';
-import { Box, Button, CircularProgress, MenuItem, TextField } from '@mui/material';
-import Paper from '@mui/material/Paper'; 
+// import Autosuggest from 'react-autosuggest';
+import { Box, Button, CircularProgress, TextField } from '@mui/material';
+// import Paper from '@mui/material/Paper';
 
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
-
-
-
-
-
+import CustomAutoSuggest from '../../../component/customAutoSuggest/customAutoSuggest'
 export default function FormulaDataType(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const columns = useSelector((state) => state.table.columns);
   const params = useParams();
   const [searchValue, setSearchValue] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, ] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    makeSuggestion()
+  }, [columns])
+
+
+  const makeSuggestion = () => {
+    let arr = [];
+    columns.map((obj) => {
+      arr.push({name : obj.label, content : obj.id});
+    })
+    setSuggestions(arr);
+  }
+
 
   useEffect(() => {
     if (AllTableInfo?.tables[params?.tableName] && searchValue.length === 0) {
@@ -27,91 +38,91 @@ export default function FormulaDataType(props) {
     }
   }, [AllTableInfo])
 
-  
-useEffect(() => {
-  let query = props?.queryByAi;
-  try {
-    query = JSON.parse(query)?.add_column?.new_column_name?.generated?.expression;
-    props.setQueryResult(query);
-    setIsLoading(false); 
-  } catch (err) {
-    query = 'enter valid query';
-  }
-}, [props?.queryByAi, props.setQueryResult]);
 
-  const getSuggestions = (value) => {
-    const inputValues = value.trim().toLowerCase().split(' ');
-    const inputLength = inputValues.length;
-    const searchTerm = inputValues[inputLength - 1];
-
-    let response = [];
-    if (searchTerm.length !== 0) {
-      response = Object.entries(searchValue.fields).filter((lang) =>
-        lang[1]?.fieldName?.toLowerCase().startsWith(searchTerm)
-      );
+  useEffect(() => {
+    let query = props?.queryByAi;
+    try {
+      query = JSON.parse(query)?.add_column?.new_column_name?.generated?.expression;
+      props.setQueryResult(query);
+      setIsLoading(false);
+    } catch (err) {
+      query = 'enter valid query';
     }
-    return response;
-  };
+  }, [props?.queryByAi, props.setQueryResult]);
 
-  const getSuggestionValue = (suggestion) => {
-    const newVal = value.split(' ');
-    let newdata = '';
-    for (let i = 0; i < newVal.length - 1; i++) {
-      newdata += newVal[i] + ' ';
-    }
-    newdata = newdata ? newdata + suggestion[1].fieldName : suggestion[1]?.fieldName;
-    return newdata;
-  };
+  // const getSuggestions = (value) => {
+  //   const inputValues = value.trim().toLowerCase().split(' ');
+  //   const inputLength = inputValues.length;
+  //   const searchTerm = inputValues[inputLength - 1];
 
-  const renderSuggestion = (suggestion) => <MenuItem>{suggestion[1].fieldName}</MenuItem>;
+  //   let response = [];
+  //   if (searchTerm.length !== 0) {
+  //     response = Object.entries(searchValue.fields).filter((lang) =>
+  //       lang[1]?.fieldName?.toLowerCase().startsWith(searchTerm)
+  //     );
+  //   }
+  //   return response;
+  // };
 
-  const onChange = (event, { newValue }) => {
-    setValue(newValue);
-  };
+  // const getSuggestionValue = (suggestion) => {
+  //   const newVal = value.split(' ');
+  //   let newdata = '';
+  //   for (let i = 0; i < newVal.length - 1; i++) {
+  //     newdata += newVal[i] + ' ';
+  //   }
+  //   newdata = newdata ? newdata + suggestion[1].fieldName : suggestion[1]?.fieldName;
+  //   return newdata;
+  // };
 
-  const onSuggestionsFetchRequested = ({ value }) => {
-    setSuggestions(getSuggestions(value));
-  };
+  // const renderSuggestion = (suggestion) => <MenuItem>{suggestion[1].fieldName}</MenuItem>;
 
-  const onSuggestionsClearRequested = () => {
-    setSuggestions([]);
-  };
+  // const onChange = (event, { newValue }) => {
+  //   setValue(newValue);
+  // };
 
-  const inputProps = {
-    placeholder: 'ask a query to ai',
-    value,
-    onChange,
-    style: {
-      width: '360px',
-      height: '50px',
-      border: '1px solid black',
-      borderRadius: '5px',
-      marginTop: 10,
-    },
-  };
+  // const onSuggestionsFetchRequested = ({ value }) => {
+  //   setSuggestions(getSuggestions(value));
+  // };
+
+  // const onSuggestionsClearRequested = () => {
+  //   setSuggestions([]);
+  // };
+
+  // const inputProps = {
+  //   placeholder: 'ask a query to ai',
+  //   value,
+  //   onChange,
+  //   style: {
+  //     width: '360px',
+  //     height: '50px',
+  //     border: '1px solid black',
+  //     borderRadius: '5px',
+  //     marginTop: 10,
+  //   },
+  // };
 
   const handleClick = () => {
     setIsLoading(true);
-  
+
     setTimeout(() => {
-      props.submitData(value);
+      props?.submitData(value);
     }, 2000);
   };
-  const renderSuggestionsContainer = (options) => {
-    const { containerProps, children } = options;
-    return (
-      <Paper {...containerProps} square style={{ maxHeight: "100px", overflowY: "auto" }}>
-        {children}
-      </Paper>
-    );
-  };
+  // const renderSuggestionsContainer = (options) => {
+  //   const { containerProps, children } = options;
+  //   return (
+  //     <Paper {...containerProps} square style={{ maxHeight: "100px", overflowY: "auto" }}>
+  //       {children}
+  //     </Paper>
+  //   );
+  // };
 
   return (
     <Box>
       <Box>
         Write a query in a human-friendly way to manipulate the column, and the resultant query will be given to you!
       </Box>
-      <Autosuggest
+      {/* <Autosuggest
         suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionsClearRequested={onSuggestionsClearRequested}
@@ -119,15 +130,20 @@ useEffect(() => {
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         renderSuggestionsContainer={renderSuggestionsContainer}
-      />
+      /> */}
+
+      <CustomAutoSuggest suggestion={suggestions} />
+
       <Button onClick={handleClick} color="primary">
         Ask AI
       </Button>
-      {isLoading && <Box sx={{ display: 'flex',
+      {isLoading && <Box sx={{
+        display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center', }}>
-      <CircularProgress />
-    </Box>}
+        alignItems: 'center',
+      }}>
+        <CircularProgress />
+      </Box>}
 
       {props.queryByAi && (
         <TextField
@@ -143,7 +159,7 @@ useEffect(() => {
         />
       )}
 
-    
+
     </Box>
   );
 }

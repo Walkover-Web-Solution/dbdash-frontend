@@ -84,7 +84,6 @@ const Cell = memo(
     // });
 
     // const handleInputChange = (event) => {
-    //   console.log("hello idris", event.target.innerHTML);
     //   const newValue = event.target.innerHTML;
     //   setValue({ value: newValue, update: false });
     // };

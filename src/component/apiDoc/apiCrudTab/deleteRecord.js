@@ -56,7 +56,7 @@ function DeleteRecord(props) {
 
               <Records db={props.db} table={props.table} setArr={setArr} arr={arr} />
               <br />
-              <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge} />
+              <OptionalParameter  db={props.db} table={props.table}  setValue={setValue} age={age} value={value} setAge={setAge} />
 
             </Box>
           </Typography>

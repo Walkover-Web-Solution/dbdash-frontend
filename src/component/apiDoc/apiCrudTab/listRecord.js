@@ -40,7 +40,7 @@ function ListRecord(props) {
         You can filter, sort, and format the results with the following query parameters.
         <br/>
         <br/>
-        <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge}/>
+        <OptionalParameter  db={props.db} table={props.table}  setValue={setValue} age={age} value={value} setAge={setAge}/>
 
         {/* <Box
           component="div"

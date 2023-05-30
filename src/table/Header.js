@@ -70,7 +70,6 @@ export default function Header({allColumns,
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
-
   
   const handleOpen = () => {
     setOpen(true);
