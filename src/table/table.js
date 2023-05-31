@@ -109,16 +109,15 @@ const Table = memo(
 
     const tableData = useSelector((state) => state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
+    
     useEffect(() => {
-
       const firstColumnValue = tableData.data[lastRowIndex];
-      const tableRowChildNodes = document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
+      const tableRowChildNodes = document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1];
       if (tableRowChildNodes) {
-        const tableRowAttribute = tableRowChildNodes.getAttribute("data-id")
+        const tableRowAttribute = tableRowChildNodes.getAttribute("data-id");
         setTimeout(() => {
           const td = document.querySelector(`div[data-id="${tableRowAttribute}"]`);
-          const match =
-            (td && td?.querySelector("textarea")) || td?.querySelector("input");
+          const match = (td && td?.querySelector("textarea")) || td?.querySelector("input");
           if (match) {
             match.addEventListener("focus", () => {
               match.style.border = "2px solid blue";
@@ -128,9 +127,10 @@ const Table = memo(
             });
             match.focus();
           }
-        }, 1000)
+        }, 1000);
       }
-    }, [lastRowIndex])
+    }, [lastRowIndex]);
+    
 
     return (
       <>

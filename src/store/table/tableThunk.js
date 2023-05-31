@@ -197,6 +197,8 @@ export const updateColumnHeaders = createAsyncThunk(
         
         if(payload?.metaData?.isAllHide){
             await hideAllField(payload?.dbId, payload?.tableName,payload?.metaData)
+            const { tableId, dbId } = getState().table
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
             return;   
         }  
         else{
