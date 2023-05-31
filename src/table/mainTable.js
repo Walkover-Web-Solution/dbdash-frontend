@@ -14,7 +14,6 @@ export default function MainTable() {
   const dataa = useSelector((state) => state.table.data);
   const [, setColumns] = useState(fields);
   const [data, setData] = useState(dataa);
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
@@ -65,8 +64,9 @@ export default function MainTable() {
   }, [dataa, fields]);
 
   const handleRowMoved = useCallback((from, to) => {
-    reorderRows(from, to, data, setData);
-  }, [data, setData]);
+    setData( reorderRows(from, to, data));
+  }, [data]);
+
   return (
     <div className="table-container">
       <DataEditor
@@ -80,6 +80,7 @@ export default function MainTable() {
             <button onClick={onAddCol}>+</button>
           </div>
         }
+
       />
     </div>
   );
