@@ -75,11 +75,11 @@ export default function MainTable() {
         rows={dataa.length}
         rowMarkers="both"
         onRowMoved={handleRowMoved}
-        rightElement={
-          <div className="addCol">
-            <button onClick={onAddCol}>+</button>
-          </div>
-        }
+        // rightElement={
+        //   <div className="addCol">
+        //     <button onClick={onAddCol}>+</button>
+        //   </div>
+        // }
       />
     </div>
   );
