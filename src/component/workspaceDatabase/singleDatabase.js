@@ -15,12 +15,20 @@ export default function SingleDatabase(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const allorgss = useSelector((state) => allOrg(state))
-  let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
+  let arr = Object.entries(allorgss).filter(x => {
+    
+    
+   if (props?.db?.org_id?._id)
+    {
+    return x[1]?._id !== props?.db?.org_id?._id }
+  else {return x[1]?._id!==props?.db?.org_id;}
+  });
+  // console.log(arr,"arr")
   const handlingmove = () => {
     setOpenmove(false);
   }
-  const restoreDb = async (orgId, dbId) => {
-    dispatch(restoreDbThunk({ orgId, dbId }))
+  const restoreDb = async (orgId, dbId,orgName) => {
+    dispatch(restoreDbThunk({ orgId, dbId ,orgName}))
   };
 
   const handlemove = async (orgid, dbid) => {
@@ -43,10 +51,10 @@ export default function SingleDatabase(props) {
 
   const deletDatabases = async () => {
     if (props?.db?.org_id?._id) {
-      dispatch(deleteDbThunk({ orgId: props?.db?.org_id?._id, dbId: props?.db?._id }));
+      dispatch(deleteDbThunk({ orgId: props?.db?.org_id?._id, dbId: props?.db?._id,orgName:props?.db?.org_id?.name ||props?.db?.orgName}));
     }
     else if (props?.db?.org_id) {
-      dispatch(deleteDbThunk({ orgId: props?.db?.org_id, dbId: props?.db?._id }));
+      dispatch(deleteDbThunk({ orgId: props?.db?.org_id, dbId: props?.db?._id ,orgName:props?.db?.org_id?.name||props?.db?.orgName}));
     }
   };
   const arr1 = !props?.db?.deleted ? Array(props?.dblength).fill(props.db) : [];
@@ -83,7 +91,7 @@ export default function SingleDatabase(props) {
                   value={selectedorg}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      handlemove(props.db.org_id?._id,
+                      handlemove(props.db.org_id?._id || props.db.org_id,
                         props.db._id);
                       e.preventDefault();
                       e.stopPropagation();
@@ -109,7 +117,7 @@ export default function SingleDatabase(props) {
             <Button
               type="submit"
               onClick={(e) => {
-                handlemove(props.db.org_id?._id,
+                handlemove(props.db.org_id?._id || props.db.org_id,
                   props.db._id);
                 e.preventDefault();
                 e.stopPropagation();
@@ -147,7 +155,7 @@ export default function SingleDatabase(props) {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       renameDatabase(
-                        props.db.org_id?._id,
+                        props.db.org_id?._id || props.db.org_id,
                         props.db._id,
                         props.db.name
 
@@ -234,7 +242,7 @@ export default function SingleDatabase(props) {
   <Button    onClick={(e) => {
     e.preventDefault();
     e.stopPropagation();
-    restoreDb(orgIdForRestore,props.db._id);
+    restoreDb(orgIdForRestore,props.db._id,props.db.org_id.name || props.db.orgName);
   }}
     variant="contained"
     size="small"
@@ -253,7 +261,8 @@ SingleDatabase.propTypes = {
     name: PropTypes.string,
     _id: PropTypes.string,
     org_id: PropTypes.any,
-    deleted: PropTypes.any
+    deleted: PropTypes.any,
+    orgName:PropTypes.any
   }),
   getOrgAndDbs: PropTypes.func,
   tabIndex: PropTypes.number,

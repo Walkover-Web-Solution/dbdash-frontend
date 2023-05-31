@@ -95,7 +95,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
     const adminId = localStorage.getItem("userid")
     dispatch(removeUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
   }
-
+console.log("dbsss",props.dbs);
   return (
     <>
       <Box key={props?.orgId} sx={{ m: 3 }}>
@@ -110,7 +110,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                       name="orgName"
                       autoFocus
                       sx={{ width: 120, fontWeight: "bold" }}
-                      defaultValue={props.dbs[0]?.org_id?.name}
+                      defaultValue={props.dbs[0]?.org_id?.name || props.dbs[0]?.orgName}
                       value={orgName}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -145,7 +145,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
             ) : (
               <>
                 <Typography sx={{ fontWeight: "bold" }}>
-                  {props.dbs[0]?.org_id?.name}{" "}
+                  {props.dbs[0]?.org_id?.name || props.dbs[0]?.orgName}{" "}
                 </Typography>
                 {isOwner || isAdmin ? (
                   <>

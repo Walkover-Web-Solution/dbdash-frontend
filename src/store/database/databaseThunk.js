@@ -67,14 +67,22 @@ export const removeDbThunk = createAsyncThunk(
 export const deleteDbThunk = createAsyncThunk(
     "organdDb/deleteDbThunk", async (payload) => {
         const data =   await deleteDbForUser(payload.orgId, payload.dbId);
-        return data?.data?.data;
+        const responso={
+            data:data?.data?.data,
+            orgName:payload.orgName
+        }
+        return responso;
     }
 );
 
 export const restoreDbThunk = createAsyncThunk(
     "organdDb/restoreDbThunk", async (payload) => {
         const data = await restoreDbForUser(payload.orgId, payload.dbId);
-        return data?.data?.data;
+        const responsa={
+            data:data?.data?.data,
+            orgName:payload.orgName
+        }
+        return responsa;
     }
 );
 export const renameOrgThunk = createAsyncThunk(

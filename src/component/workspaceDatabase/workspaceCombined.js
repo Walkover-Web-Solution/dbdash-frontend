@@ -28,13 +28,14 @@ export default function WorkspaceCombined() {
             return -1;
           }
         }
-  
+        
         const orgA = dbsA[0]?.org_id?.name?.toUpperCase();
         const orgB = dbsB[0]?.org_id?.name?.toUpperCase();
         return orgA?.localeCompare(orgB);
       })
 
       .map(([orgId, dbs], index) => {
+        console.log(orgId);
         const sortedDbs = [...dbs].sort((dbA, dbB) => {
           const dbsA = dbA.name?.toUpperCase();
           const dbsB = dbB.name?.toUpperCase();

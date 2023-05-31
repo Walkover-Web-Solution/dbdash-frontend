@@ -1,5 +1,6 @@
 export const selectOrgandDb = (state) =>{
        const alldata = state.dataBase.orgId
+    //    console.log("alldata",alldata)
     return alldata;
 }
 
