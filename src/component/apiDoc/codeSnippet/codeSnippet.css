@@ -1,0 +1,16 @@
+.code-snippet-container {
+    display: flex !important ;
+  }
+  
+  .code-highlighter {
+    text-decoration: none !important ;
+    height: 200px !important ;
+    width: 1000px !important ;
+  }
+  
+  .copy-button {
+    margin-right: auto !important ;
+    padding: 0.5rem !important ;
+    cursor: pointer !important ;
+  }
+  

@@ -1,5 +1,5 @@
 import React,{useState,useCallback} from "react";
-// import "./style.css";
+import "./style.css";
 // import Table from "./table";
 // import {useDispatch } from "react-redux";
 import {DataEditor,
@@ -35,7 +35,7 @@ const data = [
 ]
 const [rowData, setRowData] = useState(data);
 const getData=useCallback((cell)=>{
-  console.log("cell",cell)
+  // console.log("cell",cell)
   const [col, row] = cell;
     const dataRow = rowData[row];
     const indexes = ["firstName", "lastName"];
@@ -49,7 +49,7 @@ const getData=useCallback((cell)=>{
 },[rowData])
 
 const reorderRows = useCallback((from, to) => {
-  console.log(from,to,12432);
+  // console.log(from,to,12432);
           setRowData(cv => {
             const d = [...cv];
             const removed = d.splice(from, 1);
@@ -61,13 +61,16 @@ const reorderRows = useCallback((from, to) => {
 
 
   return (
-        <DataEditor
-        getCellContent={getData}
-        columns={columns}
-        rows={data?.length}
-        rowMarkers={"both"}
-        onRowMoved={reorderRows}
-      />
+    <div className="table-container">
+    <DataEditor
+      getCellContent={getData}
+      columns={columns}
+      rows={data?.length}
+      rowMarkers={"both"}
+      onRowMoved={reorderRows}
+    />
+  </div>
+
 )
   }
 

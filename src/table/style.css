@@ -269,7 +269,7 @@ Table thead{
 
 
 
- @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+ /* @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 html {
   box-sizing: border-box;
@@ -582,4 +582,9 @@ th:first-child{
 }
 .tablebody{
   height: 100%!important;
+} */
+
+.table-container {
+  display: flex;
+  justify-content: flex-start;
 }

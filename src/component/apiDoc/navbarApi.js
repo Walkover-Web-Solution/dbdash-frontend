@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
-import ApiCrudTablist from './apiCrudTab/apiCrudTablist';
+import ApiCrudTablist from '.././apiDoc/apiCrudTab/apiCrudTablist/apiCrudTablist';
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
 import { selectOrgandDb } from '../../store/database/databaseSelector.js';

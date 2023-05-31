@@ -1,0 +1,51 @@
+.response-box{
+  
+  color: white !important;
+  background-color: grey !important;
+  padding: 10px !important;
+  border-radius: 5px !important;
+  width: 500px !important;
+  height: 100% !important;
+  margin-bottom: 20px !important;
+  margin-top: 10px !important;
+  padding-bottom: 4vh !important;
+}
+
+.code-block {
+    
+    background-color: black !important;
+    color: white !important;
+    padding-bottom: 4vh !important;
+   
+    border-radius: 5px !important;
+    width:500px !important;
+   
+   height: 100% !important;
+    margin-right:20px !important;
+  margin-top: 20px !important;
+  }
+  
+  .code-block pre {
+    margin: 1 !important;
+    margin-left: 10px !important;
+  }
+  
+  .copy-button {
+
+    top: 5px !important;
+    right: 5px !important; 
+    background-color: transparent !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 5px 10px !important;
+    cursor: pointer !important;
+  }
+  
+  .copy-button:hover {
+    opacity: 0.8 !important;
+  }
+  .code-block code {
+    white-space: pre-wrap !important;
+  }
+  
