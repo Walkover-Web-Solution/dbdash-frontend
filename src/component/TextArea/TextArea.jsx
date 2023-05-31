@@ -28,12 +28,13 @@ const TextArea = ({ onMessageSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div style={{backgroundColor : "#dadada"}}>
+      <form onSubmit={handleSubmit}>
       <div style={{ display: "flex" , width : "100vw"  , alignItems : "center" ,justifyContent : "center" }}>
         <TextField
           multiline
           rows={2}
-          placeholder="Recipient's username"
+          placeholder="Ask Something..."
           value={text}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
@@ -44,6 +45,7 @@ const TextArea = ({ onMessageSubmit }) => {
         </Button>
       </div>
     </form>
+    </div>
   );
 };
 

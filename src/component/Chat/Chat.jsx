@@ -1,31 +1,35 @@
 import React, { useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { Container, Typography } from '@mui/material';
+import { CircularProgress, Container, Typography } from '@mui/material';
 import TextArea from '../TextArea/TextArea';
 import { adminPanelByAI } from '../../api/dbApi';
+import { Box } from '@mui/system';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
-
+  const [loader, setloader] = useState(false)
   const handleMessageSubmit = async (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
     try {
       const response = await adminPanelByAI(message);
-      const data = response.data;
+       const data = response.data;
       setMessages((prevMessages) => [...prevMessages, data.success]);
+      setloader(false)
     } catch (error) {
-      console.error(error);
+         setMessages((prevMessages) => [...prevMessages, error.response.data["try again some error "] ]);
+      setloader(false)
     }
   };
   
 
   return (
-    <Container
+   <div style={{backgroundColor : "#dadada" , position : "relative" , overflow : "hidden"}}>
+     <Container
       maxWidth="xl"
       
       sx={{
         position: 'relative',
-        height: '100%',
+        height: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignContent: 'center',
@@ -34,18 +38,22 @@ const Chat = () => {
     >
       {/* <Typography variant="h3">AdminPanelByAI</Typography> */}
       <Container
-        sx={{ height: '80vh', overflowY: 'auto' }}
+        sx={{ height: '80%', overflow: 'auto' }}
       >
-        <TransitionGroup>
+        {!loader?<TransitionGroup>
           {messages.map((message, index) => (
             <CSSTransition key={index} timeout={500} classNames="message">
               <Typography variant='h6' className="message">{message}</Typography>
             </CSSTransition>
           ))}
-        </TransitionGroup>
+        </TransitionGroup>:<Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+}
       </Container>
-      <TextArea onMessageSubmit={handleMessageSubmit} />
+      <TextArea onMessageSubmit ={(message)=>{setloader(true); handleMessageSubmit(message)}} />
     </Container>
+   </div>
   );
 };
 
