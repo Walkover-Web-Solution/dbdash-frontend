@@ -31,45 +31,45 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 const getHeaders = async (dbId, tableName, payloadfields) => {
     const fields = payloadfields || await getAllfields(dbId, tableName);
     let columns = [
-        {
-            id: 9999991,
-            width: 10,
-            label: "check",
-            disableResizing: true,
-            dataType: "check",
-            accessor: "check",
-        },
+        // {
+        //     id: 9999991,
+        //     width: 10,
+        //     label: "check",
+        //     disableResizing: true,
+        //     dataType: "check",
+        //     accessor: "check",
+        // },
     ];
 
     const arr = fields?.data?.data?.fields || fields;
 
     Object.entries(arr).forEach((field) => {
         var json = {
+            title: "",
             id: "",
-            label: "",
-            accessor: "",
-            minWidth: 100,
             dataType: "",
-            options: [],
-            metadata: {},
-            width: field[1].metaData?.width ? field[1].metaData?.width : 150
+            // minWidth: 100,
+            // options: [],
+            // metadata: {},
+            // width: field[1].metaData?.width ? field[1].metaData?.width : 150
         }
         json.id = field[0];
-        json.label = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
-        json.accessor = field[0]?.toLowerCase();
-        json.metadata = field[1].metaData;
+        json.title = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
+        // json.accessor = field[0]?.toLowerCase();
+        // json.metadata = field[1].metaData;
         json.dataType = field[1].fieldType?.toLowerCase();
         columns.push(json);
+        console.log(columns,"columns")
 
     }
     )
-    columns.push({
-        id: 999999,
-        width: 20,
-        label: "+",
-        disableResizing: true,
-        dataType: "null"
-    })
+    // columns.push({
+    //     id: 999999,
+    //     // width: 20,
+    //     title: "+",
+    //     // disableResizing: true,
+    //     dataType: "null"
+    // })
     return columns;
 }
 
@@ -104,7 +104,7 @@ export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
         var columns = null
-        if ((payload?.pageNo <= 1) || !(payload?.pageNo)) {
+        if (!(payload?.pageNo)) {
             columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
         }
         if (payload?.filter != null) {
@@ -120,15 +120,15 @@ export const bulkAddColumns = createAsyncThunk(
             querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
                 row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
             })
-            if (tableInfo.filterId == payload?.filterId && tableInfo.pageNo < payload?.pageNo) {
+            if (tableInfo.filterId == payload?.filterId) {
                 querydata.data.data.rows = [
                     ...(tableInfo?.data ?? []),
                     ...(querydata?.data?.data?.rows ?? []),
                 ];
             }
-            else {
-                querydata.data.data.pageNo = 1;
-            }
+            // else {
+            //     querydata.data.data.pageNo = 1;
+            // }
             const dataa = {
                 "columns": columns,
                 "row": querydata?.data?.data?.rows,

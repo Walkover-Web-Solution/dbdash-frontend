@@ -55,7 +55,6 @@ export function extraReducers(builder) {
         state.status = "failed";
       })
 
-      
       .addCase(removeTable1.pending, (state) => {
         state.status = "loading"
       })
