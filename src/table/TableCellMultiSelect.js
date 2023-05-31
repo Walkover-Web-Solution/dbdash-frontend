@@ -62,10 +62,11 @@ const InputWrapper = styled('div')(
 function Tag(props) {
   const dispatch = useDispatch();
   const handleDeleteChip = (value) => {
+    const rowtodel = (parseInt(props?.row?.id) || 0) + 1;
     dispatch(
       updateCells({
         columnId: props?.colid,
-        rowIndex: props?.rowid || props?.row.original?.["fld"+props?.tableId.substring(3)+"autonumber"],
+        rowIndex: rowtodel || props?.row.original?.["fld"+props?.tableId?.substring(3)+"autonumber"],
         value: { delete: value },
         dataTypes: "multipleselect"
       })

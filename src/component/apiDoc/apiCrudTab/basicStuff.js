@@ -15,7 +15,7 @@ function BasicStuff(props) {
     setFieldData(data?.data?.data?.fields);
   };
 
-  const CopyButton = (text, index) => {
+  const CopyButton = (text) => {
     const handleMouseDown = (e) => {
       e.target.style.backgroundColor = "gray";
     };
@@ -85,7 +85,7 @@ function BasicStuff(props) {
           key={index}
           style={{
             display: "flex",
-            alignItems: "center", 
+            alignItems: "center",
           }}
         >
           <Typography style={{ fontSize: "20px"}}>{fields[1].fieldName}</Typography>
@@ -100,7 +100,7 @@ function BasicStuff(props) {
           key={index}
           style={{
             display: "flex",
-            alignItems: "center", 
+            alignItems: "center",
             fontSize: "20px",
           }}
         >

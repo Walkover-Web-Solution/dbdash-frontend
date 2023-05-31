@@ -5,10 +5,9 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { removeDbThunk, renameDBThunk, moveDbThunk } from "../../store/database/databaseThunk";
+import { renameDBThunk, moveDbThunk, restoreDbThunk, deleteDbThunk } from "../../store/database/databaseThunk";
 import { allOrg } from "../../store/database/databaseSelector";
 export default function SingleDatabase(props) {
-
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState();
   const [openmove, setOpenmove] = useState(false);
@@ -17,10 +16,13 @@ export default function SingleDatabase(props) {
   const dispatch = useDispatch();
   const allorgss = useSelector((state) => allOrg(state))
   let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
-
   const handlingmove = () => {
     setOpenmove(false);
   }
+  const restoreDb = async (orgId, dbId) => {
+    dispatch(restoreDbThunk({ orgId, dbId }))
+  };
+
   const handlemove = async (orgid, dbid) => {
     const data = {
       newOrgId: selectedorg._id
@@ -41,13 +43,15 @@ export default function SingleDatabase(props) {
 
   const deletDatabases = async () => {
     if (props?.db?.org_id?._id) {
-      dispatch(removeDbThunk({ orgId: props?.db?.org_id?._id, dbId: props?.db?._id }));
+      dispatch(deleteDbThunk({ orgId: props?.db?.org_id?._id, dbId: props?.db?._id }));
     }
     else if (props?.db?.org_id) {
-      dispatch(removeDbThunk({ orgId: props?.db?.org_id, dbId: props?.db?._id }));
+      dispatch(deleteDbThunk({ orgId: props?.db?.org_id, dbId: props?.db?._id }));
     }
-
   };
+  const arr1 = !props?.db?.deleted ? Array(props?.dblength).fill(props.db) : [];
+  const orgIdForRestore = props.db?.org_id._id || props.db?.org_id;
+
   return (
     <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2, cursor: 'pointer' }} onClick={() => {
 
@@ -84,9 +88,10 @@ export default function SingleDatabase(props) {
                       e.preventDefault();
                       e.stopPropagation();
                       setOpenmove(false)
-                    }}
+                    }
                   }
-                  sx={{marginBottom: 1,marginLeft: 3,minWidth: 120}}
+                  }
+                  sx={{ marginBottom: 1, marginLeft: 3, minWidth: 120 }}
                   onChange={(event) => {
                     setSelectedorg(event.target.value);
                   }}
@@ -198,31 +203,44 @@ export default function SingleDatabase(props) {
               {props.db.name}{" "}
             </Typography>
             <Box sx={{ mt: -1 }}>
-              {props?.dblength > 1 ? <Dropdown
-                setTabIndex={props?.setTabIndex}
-                tabIndex={props?.index}
-                first={"Rename Database"}
-                second={"Delete Database"}
-                third={"Move"}
-                setOpenmove={setOpenmove}
-                orgid={props?.db?.org_id?._id}
-                dbid={props?.db?._id}
-                setName={setName}
-                idToDelete={props?.db?._id}
-                deleteFunction={deletDatabases}
-                title={"Database"}
-              /> : <Dropdown
-                setTabIndex={props?.setTabIndex}
-                tabIndex={props?.index}
-                first={"Rename Database"}
-                second={""}
-                third={""}
-                orgid={props?.db?.org_id?._id}
-                dbid={props?.db?._id}
-                setName={setName}
-                title={"Database"}
-              />}
-
+            {arr1.length > 1 && !props?.db?.deleted ? (
+  <Dropdown
+    setTabIndex={props?.setTabIndex}
+    tabIndex={props?.index}
+    first={"Rename Database"}
+    second={"Delete Database"}
+    third={"Move"}
+    setOpenmove={setOpenmove}
+    orgid={props?.db?.org_id?._id}
+    dbid={props?.db?._id}
+    setName={setName}
+    idToDelete={props?.db?._id}
+    deleteFunction={deletDatabases}
+    title={"Database"}
+  />
+) :  !props?.db?.deleted ? (
+  <Dropdown
+    setTabIndex={props?.setTabIndex}
+    tabIndex={props?.index}
+    first={"Rename Database"}
+    second={""}
+    third={""}
+    orgid={props?.db?.org_id?._id}
+    dbid={props?.db?._id}
+    setName={setName}
+    title={"Database"}
+  />
+) : (
+  <Button    onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    restoreDb(orgIdForRestore,props.db._id);
+  }}
+    variant="contained"
+    size="small"
+    sx={{ display: "flex" }}
+  >restore</Button>
+)}
             </Box>
           </>
         )}
@@ -235,10 +253,13 @@ SingleDatabase.propTypes = {
     name: PropTypes.string,
     _id: PropTypes.string,
     org_id: PropTypes.any,
+    deleted: PropTypes.any
   }),
   getOrgAndDbs: PropTypes.func,
   tabIndex: PropTypes.number,
   index: PropTypes.any,
   setTabIndex: PropTypes.func,
-  dblength: PropTypes.number
+  dblength: PropTypes.number,
+  orgId: PropTypes.any
+
 };

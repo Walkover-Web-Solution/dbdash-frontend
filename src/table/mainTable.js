@@ -1,75 +1,73 @@
-import React, { memo } from "react";
-import "./style.css";
-import Table from "./table";
-import {  useDispatch ,useSelector } from "react-redux";
-import { useParams} from 'react-router-dom';
-import { bulkAddColumns } from "../store/table/tableThunk";
-import PropTypes from "prop-types";
+import React,{useState,useCallback} from "react";
+// import "./style.css";
+// import Table from "./table";
+// import {useDispatch } from "react-redux";
+import {DataEditor,
+  GridCellKind
+} from "@glideapps/glide-data-grid";
+// import { bulkAddColumns } from "../store/table/tableThunk";
+// import PropTypes from "prop-types";
+// import { useParams } from "react-router-dom";
+import "@glideapps/glide-data-grid/dist/index.css";
+import "../../src/App.css"
 
-const  MainTable = memo ( ({page,setPage}) =>  {
+export default function MainTable() {
   
-  const columns=useSelector((state)=>state.table.columns);
-  const data=useSelector((state)=>state.table.data);
-  const dbId=useSelector((state)=>state.table.dbId);
-  const tableId=useSelector((state)=>state.table.tableId);
-  const AllTableInfo = useSelector((state) => state.tables.tables);
-  const dispatchs = useDispatch();
-  const params =  useParams();
-  const fetchMoreData = () => {
-    dispatchs(bulkAddColumns({
-      "dbId": dbId,
-      "tableName": tableId,
-      "pageNo": page+1,
-      "filter": AllTableInfo?.[params?.tableName]?.filters?.[params?.filterName]?.query,
-      "filterId" : params?.filterName
-    }));
-    setPage((page) => page + 1);
+  const columns = [
+    { title: "First Name" },
+    { title: "Last Name"}
+];
+const data = [
+    {
+      "firstName": " Fowler",
+      "lastName": "BUZZNESS",
+    },
+     {
+      "firstName": "Hines Fowler",
+      "lastName": "BUZZNESS",
+     
+    },
+     {
+      "firstName": "ddfr",
+      "lastName": "BUZZNESS",
+     
+    },
+]
+const [rowData, setRowData] = useState(data);
+const getData=useCallback((cell)=>{
+  console.log("cell",cell)
+  const [col, row] = cell;
+    const dataRow = rowData[row];
+    const indexes = ["firstName", "lastName"];
+    const d = dataRow[indexes[col]]
+    return {
+      kind: GridCellKind.Text,
+      allowOverlay: false,
+      displayData: d,
+      data: d,
   };
+},[rowData])
+
+const reorderRows = useCallback((from, to) => {
+  console.log(from,to,12432);
+          setRowData(cv => {
+            const d = [...cv];
+            const removed = d.splice(from, 1);
+            d.splice(to, 0, ...removed);
+            return d;
+        });
+     }, []);
+
 
 
   return (
-    <div
-      style={{
-        width: "fitcontent",
-        
-        
-        overflowX:"hidden",
-        overflowY:"hidden",
-        marginTop: 20
-      }}
-      // id="scrollableDiv"
-    >
-      <div style={{  display: "flex", width: "100vw", height:"100%"}}>
-        <div
-          style={{
-            padding: "6px 0px",
-            marginLeft: "4px"
-            
-          }}
-        >
-          {columns?.length > 0 && 
-          <Table
-           update={fetchMoreData}
-           hasMore={true}
-            columns={columns}
-            data={data|| []}
-            dispatch={dispatchs}
-            page = {page}
-            // skipReset={tableInfo.skipReset}
-          /> }
-        </div>
-        
-      </div>
-    
-
-    </div>
-  );
-}
+        <DataEditor
+        getCellContent={getData}
+        columns={columns}
+        rows={data?.length}
+        rowMarkers={"both"}
+        onRowMoved={reorderRows}
+      />
 )
-MainTable.displayName = 'MainTable';
-export default  MainTable;
-MainTable.propTypes = {
-  page: PropTypes.any,
-  setPage: PropTypes.any
-};
+  }
 

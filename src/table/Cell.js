@@ -1,16 +1,22 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useRef } from "react";
 import ContentEditable from "react-contenteditable";
 import { updateCells } from "../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-import { Tabs,ClickAwayListener,Popper,Button } from "@mui/material";
+import { Tabs, ClickAwayListener, Popper, Button, TextareaAutosize } from "@mui/material";
 import { OpenInFull } from "@mui/icons-material";
-import {  EditorState,convertToRaw,convertFromHTML,ContentState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import draftToHtml from 'draftjs-to-html';
+
+// import {
+//   EditorState,
+//   convertToRaw,
+//   convertFromHTML,
+//   ContentState,
+// } from "draft-js";
+// import { Editor } from "react-draft-wysiwyg";
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import draftToHtml from "draftjs-to-html";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -20,31 +26,38 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import PropTypes from "prop-types";
-import TableCellSingleSelect from './TableCellSingleSelect'
-import TableCellMultiSelect from './TableCellMultiSelect'
+import TableCellSingleSelect from "./TableCellSingleSelect";
+import TableCellMultiSelect from "./TableCellMultiSelect";
 import PreviewAttachment from "./previewAttachment";
+import "./Cell.css";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 const Cell = memo(
-  ({ value: initialValue, row, column: { id, dataType, metadata,width} }) => {
-   
-  
+  ({ value: initialValue, row, column: { id, dataType, metadata, width } }) => {
     const dispatch = useDispatch();
     const [value, setValue] = useState({ value: initialValue, update: false });
     const [inputBoxShow, setInputBoxShow] = useState(false);
-    const[cursor,setCursor]=useState(false);
+    const [cursor, setCursor] = useState(false);
     const [open, setOpen] = useState(false);
-    const [imageLink, setImageLink] = useState("")
+    const [imageLink, setImageLink] = useState("");
     const [isOpen, setIsOpen] = useState(false);
-    const [previewModal, setPreviewModal] = useState(false)
-    const [selectedInput, setSelectedInput] = useState(null);
-    const tableId = useSelector((state) => state.table.tableId)
+    const [previewModal, setPreviewModal] = useState(false);
+    const[textarea,setTextarea]=useState((value?.value && value?.value?.toString()) || "")
+    const [selectedInput,  setSelectedInput] = useState(null);
+    const tableId = useSelector((state) => state.table.tableId);
+
+    const divRef = useRef();
+
+    useEffect(() => {
+      if(!divRef.current) return;
+      divRef.current.innerHTML = value.value;
+    }, [])
+    
 
     const handleInputClick = (event) => {
-      
-      // remove the border from the previously selected input element (if any)
+
       if (selectedInput) {
         selectedInput.style.border = "none";
       }
@@ -55,41 +68,41 @@ const Cell = memo(
     };
 
     const [popperOpen, setPopperOpen] = useState(false);
-    const [textarea, setTextarea] = useState(value?.value && value?.value?.toString() || "");
-   
+    // const [textarea, setTextarea] = useState(
+    //   (value?.value && value?.value?.toString()) || ""
+    // );
 
-    const [editorState, setEditorState] = useState(() => {
-      if (value?.value) {
-        const contentState = convertFromHTML(value?.value?.toString().trim());
-        return EditorState.createWithContent(ContentState.createFromBlockArray(contentState));
-      } else {
-        return EditorState.createEmpty();
-      }
-    });
-    
-    
-    const handleInputChange = (event) => {
-      event.preventDefault();
-      const newValue = event.target.innerHTML;
-      setValue({ value: newValue, update: true });
-    };
+    // const [editorState, setEditorState] = useState(() => {
+    //   if (value?.value) {
+    //     const contentState = convertFromHTML(value?.value?.toString().trim());
+    //     return EditorState.createWithContent(
+    //       ContentState.createFromBlockArray(contentState)
+    //     );
+    //   } else {
+    //     return EditorState.createEmpty();
+    //   }
+    // });
 
-    const handleClickButton = () => {
-      setPopperOpen(true);
-    };
+    // const handleInputChange = (event) => {
+    //   console.log("hello idris", event.target.innerHTML);
+    //   const newValue = event.target.innerHTML;
+    //   setValue({ value: newValue, update: false });
+    // };
+
     const handleClickAway = () => {
       setPopperOpen(false);
       setSelectedInput(null);
       setCursor(false);
     };
 
-    const onEditorStateChange = (newEditorState) => {
-      setEditorState(newEditorState);
-      const contentState = newEditorState.getCurrentContent();
-      const rawContentState = convertToRaw(contentState);
-      const html = draftToHtml(rawContentState);
-      setTextarea(html);
-    };
+    // const onEditorStateChange = (newEditorState) => {
+    //   setEditorState(newEditorState);
+    //   const contentState = newEditorState.getCurrentContent();
+    //   const rawContentState = convertToRaw(contentState);
+    //   const html = draftToHtml(rawContentState);
+    //   setTextarea(html);
+    //   setValue({ value: textarea, update: false });
+    // };
     const handleInputBlur = (event) => {
       event.target.style.border = "none";
     };
@@ -109,7 +122,9 @@ const Cell = memo(
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
+            rowIndex:
+              row.original.id ||
+              row.original?.["fld" + tableId.substring(3) + "autonumber"],
             value: null,
             imageLink: imageLink,
             dataTypes: type,
@@ -119,14 +134,16 @@ const Cell = memo(
         });
       }
       e.target.value = null;
-    }
+    };
 
     const onChangeFile = (e, type) => {
       if (e.target.files[0] != null) {
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex: row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
+            rowIndex:
+              row.original.id ||
+              row.original?.["fld" + tableId.substring(3) + "autonumber"],
             value: e.target.files[0],
             imageLink: imageLink,
             dataTypes: type,
@@ -143,11 +160,17 @@ const Cell = memo(
     }, [initialValue]);
 
     useEffect(() => {
-      if (value?.update && value?.value != null && value?.value !== initialValue ) {
+      if (
+        value?.update &&
+        value?.value != null &&
+        value?.value !== initialValue
+      ) {
         dispatch(
           updateCells({
             columnId: id,
-            rowIndex:   row.original.id || row.original?.["fld"+tableId.substring(3)+"autonumber"],
+            rowIndex:
+              row.original.id ||
+              row.original?.["fld" + tableId.substring(3) + "autonumber"],
             value: value.value,
             dataTypes: "dataTypes",
           })
@@ -157,7 +180,6 @@ const Cell = memo(
 
     let element;
     switch (dataType) {
-    
       case "formula":
         element = (
           <input
@@ -170,66 +192,93 @@ const Cell = memo(
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
           />
-        
         );
         break;
 
       case "createdby":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+            }
+          }}
+          tabIndex={0}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
 
       case "createdat":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          tabIndex={0}
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+              
+            }
+          }}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
+            
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
 
       case "rowid":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+              
+            }
+          }}
+          tabIndex={0}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
       case "autonumber":
         element = (
-          <input
-            type="text"
-            readOnly="readonly"
-            value={(value?.value && value?.value?.toString()) || ""}
+          <div
+          onKeyDown={(event)=>{
+            if ((event.ctrlKey || event.metaKey) && event.code === 'KeyC') {
+    navigator.clipboard.writeText(value?.value && value?.value?.toString());
+              
+            }
+          }}
+          tabIndex={0}
+            // type="text"
+            // readOnly="readonly"
+            // value={(value?.value && value?.value?.toString()) || ""}
             className="data-input"
             style={{ background: "none" }}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputClick}
-          />
+          >{(value?.value && value?.value?.toString()) || ""}</div>
         );
         break;
 
@@ -291,125 +340,288 @@ const Cell = memo(
         );
         break;
 
-        case "longtext":
-  element = (
-    <>
-      <div
-        contentEditable="true"
-        onInput={handleInputChange}
-        onClick={() => {
-          setCursor(true);
-          // handleInputClick(event);
-        }}
-        style={{ height: "35px", borderColor: "transparent", border: 0 }}
-        className="data-input"
-        onBlur={(event) => {
-          setValue((old) => ({ value: old.value, update: true }));
-          if (selectedInput === event.target) {
-            if (!popperOpen) {
-              setSelectedInput(null);
-              setCursor(false);
-            }
-          }
-          event.target.style.border = "none";
-        }}
-        // onFocus={handleInputClick}
+      // case "longtext":
+      //   element = (
+      //     <>
+      //       <div
+      //         contentEditable="true"
+      //         ref={divRef}
+      //         onInput={handleInputChange}
+      //         onClick={handleInputClick}
+      //         onFocus={handleInputClick}
+      //         onDoubleClick={() => {
+      //           setCursor(true);
+      //         }}
+      //         onKeyDown={(e) => {
+      //           setCursor(true);
+      //           if (e.key === "Enter") {
+      //             // setValue((old) => ({ value: old.value, update: true }));
+      //             let value = divRef.current.innerHTML;
+      //             setValue({ value: value, update: true });
+      //           }
+      //         }}
+      //         // onFocus={handleInputClick}
+      //         style={
+      //           !cursor
+      //             ? {
+      //                 border: "none",
+      //                 caretColor: "transparent",
+      //                 paddingRight: "13px",
+      //                 height: "175px",
+      //                 overflowY: "hidden",
+      //               }
+      //             : {
+      //                 border: "none",
+      //                 backgroundColor: "white",
+      //                 paddingRight: "13px",
+      //                 position: "absolute",
+      //                 zIndex: "20",
+      //                 WebkitOverflowScrolling: "touch",
+      //                 maxHeight: "175px",
+      //                 overflowY: "auto",
+      //                 width: `${width}px`,
+      //                 bottom: "auto",
+      //                 top: "auto",
+      //               }
+      //         }
+      //         className="data-input"
+      //         onBlur={(event) => {
+      //           if (selectedInput === event.target) {
+      //             if (!popperOpen) {
+      //               // setValue((old) => ({ value: old.value, update: true }));
+      //               let value = divRef.current.innerHTML;
+      //               setValue({ value: value, update: true });
+      //               setSelectedInput(null);
+      //               setCursor(false);
+      //             }
+      //           }
+      //           event.target.style.border = "none";
+      //         }}
+      //         value={value?.value}
+      //       ></div>
 
-        dangerouslySetInnerHTML={{ __html: value?.value }}
-      ></div>
+      //       {/* {cursor && (
+      //         <div
+      //           onMouseDown={(e) => {
+      //             e.preventDefault();
+      //           }}
+      //           style={{
+      //             position: "absolute",
+      //             right: "1%",
+      //             top: "32%",
+      //             transform: "translateY(-50%)",
+      //             zIndex: "20",
+      //           }}
+      //         >
+      //           <OpenInFull
+      //             style={{ fontSize: "15px", color: "blue" }}
+      //             onClick={() => {
+      //               setValue((old) => ({ value: old.value, update: false }));
+      //               // setEditorState(() => {
+      //               //   if (value?.value) {
+      //               //     const contentState = convertFromHTML(
+      //               //       value?.value?.toString().trim()
+      //               //     );
+      //               //     return EditorState.createWithContent(
+      //               //       ContentState.createFromBlockArray(contentState)
+      //               //     );
+      //               //   } else {
+      //               //     return EditorState.createEmpty();
+      //               //   }
+      //               // });
+      //               setPopperOpen(true);
+      //             }}
+      //           />
+      //         </div>
+      //       )} */}
 
-      {cursor && (
-        <div
-          onMouseDown={(e) => {
-            e.preventDefault();
-          }}
-          style={{
-            position: "absolute",
-            right: "1%",
-            top: "32%",
-            transform: "translateY(-50%)",
-          }}
-        >
-          <OpenInFull
-            style={{ fontSize: "15px", color: "blue" }}
-            onClick={handleClickButton}
-          />
-        </div>
-      )}
+      //       {cursor && popperOpen && (
+      //         <ClickAwayListener onClickAway={handleClickAway}>
+      //           <Popper
+      //             open={popperOpen}
+      //             anchorEl={null}
+      //             placement="center"
+      //             style={{
+      //               zIndex: 20,
+      //               margin: "5px",
+      //               backgroundColor: "whitesmoke",
+      //               color: "white",
+      //               width: "500px",
+      //               height: "500px",
+      //               whiteSpace: "pre-wrap",
+      //               overflowX: "hidden",
+      //               overflowY: "scroll",
+      //               position: "fixed",
+      //               left: "50%",
+      //               top: "50%",
+      //               boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+      //               transform: "translate(-50%, -50%)",
+      //             }}
+      //           >
+      //             <div>
+      //               {/* <Editor
+      //                 editorState={editorState}
+      //                 onEditorStateChange={onEditorStateChange}
+      //                 editorStyle={{ color: "black" }}
+      //                 autoFocus
+      //                 wrapperClassName="editor-wrapper"
+      //               /> */}
 
-      {cursor && popperOpen && (
-        <ClickAwayListener onClick={(e) => e.stopPropagation()} onClickAway={handleClickAway}>
-          <Popper
-            open={popperOpen}
-            anchorEl={null}
-            placement="center"
-            style={{
-              zIndex: 20,
-              margin: "5px",
-              backgroundColor: "whitesmoke",
-              color: "white",
-              width: "500px",
-              height: "500px",
-              whiteSpace: "pre-wrap",
-              overflowX: "hidden",
-              overflowY: "scroll",
-              position: "fixed",
-              left: "50%",
-              top: "50%",
-              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
-              transform: "translate(-50%, -50%)",
-            }}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-          >
-            <div>
+      //               <Button
+      //                 variant="outlined"
+      //                 style={{
+      //                   margin: "2px",
+      //                   color: "maroon",
+      //                   backgroundColor: "white",
+      //                 }}
+      //                 onClick={() => {
+      //                   setValue((old)=>{({ value: old.value, update: true })});
+      //                 }}
+      //               >
+      //                 save
+      //               </Button>
+      //             </div>
+      //           </Popper>
+      //         </ClickAwayListener>
+      //       )}
+      //     </>
+      //   );
+      //   break;
+
+      case "longtext":
+        element = (
+          <>
+          <TextareaAutosize
+            value={(value?.value && value?.value?.toString()) || ""}
+            onChange={onChange}
+            onFocus={handleInputClick}
+            readOnly={!cursor?true:false}
             
-              <Editor
-                editorState={editorState}
-                onEditorStateChange={onEditorStateChange}
-                editorStyle={{ color: "black" }}
-                autoFocus
-                // toolbar={{
-                //   inline: { inDropdown: true },
-                //   list: { inDropdown: true },
-                //   textAlign: { inDropdown: true },
-                //   link: { inDropdown: true },
-                //   history: { inDropdown: true },
-                //   image: { uploadCallback: uploadImageCallBack},
-                // }}
-                
-              />
-    
-              <Button
-                variant="outlined"
-                style={{ margin: "2px", color: "maroon", backgroundColor: "white" }}
-                onClick={() => {
-                  setValue({ value: textarea, update: true });
-                }}
-              >
-                save
-              </Button>
-            </div>
-          </Popper>
-        </ClickAwayListener>
-      )}
-    </>
-  );
-  break;
+            // inputProps={{ style: { width: `${width}` } }} 
+            onDoubleClick={()=>{
+             
+              setCursor(true);
+            }}
 
+        
+            style={!cursor?{caretColor:"transparent",backgroundColor:"transparent",paddingRight:"13px",height:"35px",overflowY:"hidden"}:{paddingRight:"13px",position:"absolute",zIndex:'20', WebkitOverflowScrolling: "touch",height:"175px",overflowY:"scroll",width:`${width}px`}}
+            onBlur={(event) => {
+              setValue((old) => ({ value: old.value, update: true }));
+              if (selectedInput === event.target) {
+               
+               setSelectedInput(null);
+               
+                setCursor(false);
+              event.target.style.border = "none";
 
-        case "singlelinetext":
+              }
+            }}
+
+            onClick={handleInputClick}
+            onKeyDown={(e) => {
+              setCursor(true);
+              if (e.key === 'Enter') {
+                setValue((old) => ({ value: old.value, update: true }))
+              }
+            }}
+            className="data-input"
+
+          />
+        {selectedInput && 
+    <div
+     onMouseDown={(e)=>{
+      e.preventDefault();
+   
+     }}
+      style={{
+        position: "absolute",
+        right: "1%",
+        top: "32%",
+        zIndex:"25",
+
+        transform: "translateY(-50%)",
+      }}
+    >
+      
+        <OpenInFull style={{fontSize:"15px",color:"blue"}}   onClick={()=>{
+          setPopperOpen(true);
+        }} />
+  
+      </div>}
+    {popperOpen && <ClickAwayListener onClick={(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+  
+ }} onClickAway={handleClickAway}>
+<Popper
+
+  open={popperOpen}
+  anchorEl={null}
+   placement="center"
+  style={{
+    zIndex: 20,
+    margin: "5px",
+    backgroundColor: "whitesmoke",
+    color: "white",
+    width: "500px",
+    height: "500px",
+    whiteSpace: "pre-wrap",
+    overflowX: "hidden",
+    overflowY: "scroll",
+    position: "fixed",
+    left: "50%",
+    top: "50%",
+    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+    transform: "translate(-50%, -50%)",
+  }}
+  
+  
+>
+
+  <div>
+  <TextareaAutosize
+  
+style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1px",WebkitOverflowScrolling: "touch"}}
+            value={(value?.value && value?.value?.toString()) || ""}
+            onChange={(e)=>{
+              setValue({value:e.target.value,update:false});
+               setTextarea(e.target.value)}}
+           
+            onKeyDown={(e)=>{
+
+              if(e.key=="Enter")
+              {
+                setValue({value:e.target.value,update:true});
+              }
+            }}
+            maxRows={100}
+            minRows={1}
+            />
+            <Button 
+            variant="outlined" style={{margin:"2px",color:"maroon",backgroundColor:"white"}}  onClick={()=>{
+              setValue({value:textarea,update:true});
+
+            }}>save</Button>
+  </div>
+</Popper>
+</ClickAwayListener>}
+
+          </>
+        );
+        break;
+      case "singlelinetext":
         element = (
           <input
             value={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
-            onDoubleClick={()=>{
+            onDoubleClick={() => {
               setCursor(true);
             }}
-            
-            style={!cursor?{caretColor:"transparent",backgroundColor:"transparent"}:{backgroundColor:"transparent"}}
+            style={
+              !cursor
+                ? { caretColor: "transparent", backgroundColor: "transparent" }
+                : { backgroundColor: "transparent" }
+            }
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
@@ -421,8 +633,8 @@ const Cell = memo(
             onClick={handleInputClick}
             onKeyDown={(e) => {
               setCursor(true);
-              if (e.key === 'Enter') {
-                setValue((old) => ({ value: old.value, update: true }))
+              if (e.key === "Enter") {
+                setValue((old) => ({ value: old.value, update: true }));
                 event.preventDefault();
               }
             }}
@@ -436,11 +648,13 @@ const Cell = memo(
           <ContentEditable
             html={(value?.value && value?.value?.toString()) || ""}
             onChange={onChange}
-            onDoubleClick={()=>{
+            onDoubleClick={() => {
               setCursor(true);
             }}
-            onKeyDown={()=>{setCursor(true)}}
-            style={!cursor?{caretColor:"transparent"}:{}}
+            onKeyDown={() => {
+              setCursor(true);
+            }}
+            style={!cursor ? { caretColor: "transparent" } : {}}
             onBlur={() => {
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
@@ -458,13 +672,23 @@ const Cell = memo(
       case "phone":
         element = (
           <>
-            <input type="tel" id="phone" name="phone" maxLength="13"
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              maxLength="13"
               value={(value?.value && value?.value?.toString()) || ""}
-              onDoubleClick={()=>{
+              onDoubleClick={() => {
                 setCursor(true);
               }}
-              onKeyDown={()=>{setCursor(true)}}
-              style={!cursor?{caretColor:"transparent",background:"none"}:{background:"none"}}
+              onKeyDown={() => {
+                setCursor(true);
+              }}
+              style={
+                !cursor
+                  ? { caretColor: "transparent", background: "none" }
+                  : { background: "none" }
+              }
               onChange={(event) => {
                 let newValue = event.target.value.replace(/[^\d+]/g, "");
                 onChange({ target: { value: newValue } });
@@ -479,8 +703,6 @@ const Cell = memo(
               }}
               onClick={handleInputClick}
               className="data-input"
-             
-
             />
           </>
         );
@@ -492,11 +714,14 @@ const Cell = memo(
               type="number"
               value={(value?.value && value?.value?.toString()) || ""}
               onChange={onChange}
-              onDoubleClick={()=>{
+              onDoubleClick={() => {
                 setCursor(true);
               }}
-              
-              style={!cursor?{caretColor:"transparent",background:"none"}:{background:"none"}}
+              style={
+                !cursor
+                  ? { caretColor: "transparent", background: "none" }
+                  : { background: "none" }
+              }
               onBlur={() => {
                 setValue((old) => ({ value: old.value, update: true }));
                 if (selectedInput === event.target) {
@@ -508,34 +733,63 @@ const Cell = memo(
               onClick={handleInputClick}
               onKeyDown={(e) => {
                 setCursor(true);
-                if (e.key === 'Enter') {
-                  setValue((old) => ({ value: old.value, update: true }))
+                if (e.key === "Enter") {
+                  setValue((old) => ({ value: old.value, update: true }));
                 }
               }}
               className="data-input"
-         
             />
           </>
         );
         break;
 
       case "multipleselect":
-       
         element = (
-          <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellMultiSelect  tableId = {tableId} row={row} value={value?.value || []} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen}  width ={width} /></div>)
+          <div
+            onClick={handleCellClick}
+            style={{ display: "flex", overflowX: "auto" }}
+          >
+            <TableCellMultiSelect
+              tableId={tableId}
+              row={row}
+              value={value?.value || []}
+              rowid={row.original.id}
+              colid={id}
+              setIsOpen={setIsOpen}
+              isOpen={isOpen}
+              width={width}
+            />
+          </div>
+        );
         break;
 
       case "singleselect":
         element = (
-          <div onClick={handleCellClick} style={{ display: 'flex', overflowX: "auto" }}>
-            <TableCellSingleSelect   tableId = {tableId} row={row} metaData={metadata} value={value?.value} rowid={row.original.id} colid={id} setIsOpen={setIsOpen} isOpen={isOpen} />
+          <div
+            onClick={handleCellClick}
+            style={{ display: "flex", overflowX: "auto" }}
+          >
+            <TableCellSingleSelect
+              tableId={tableId}
+              row={row}
+              metaData={metadata}
+              value={value?.value}
+              rowid={row.original.id}
+              colid={id}
+              setIsOpen={setIsOpen}
+              isOpen={isOpen}
+            />
           </div>
         );
         break;
       case "check":
         element = (
-          <div key={row.getRowProps().key} style={{ display: 'flex', flex: '1 0 auto', position: 'sticky' }} role="row" className="tr">
+          <div
+            key={row.getRowProps().key}
+            style={{ display: "flex", flex: "1 0 auto", position: "sticky" }}
+            role="row"
+            className="tr"
+          >
             {!row.isSelected && (
               <div className="count" title="Check">
                 {row.index + 1}
@@ -551,15 +805,12 @@ const Cell = memo(
         element = (
           <ContentEditable
             html={(value?.value && value?.value?.toString()) || ""}
-            onDoubleClick={()=>{
+            onDoubleClick={() => {
               setCursor(true);
             }}
-            
-            style={!cursor?{caretColor:"transparent"}:{}}
-     
+            style={!cursor ? { caretColor: "transparent" } : {}}
             onChange={onChange}
             onBlur={() => {
-
               setValue((old) => ({ value: old.value, update: true }));
               if (selectedInput === event.target) {
                 setSelectedInput(null);
@@ -570,8 +821,8 @@ const Cell = memo(
             onClick={handleInputClick}
             onKeyDown={(e) => {
               setCursor(true);
-              if (e.key === 'Enter') {
-                setValue((old) => ({ value: old.value, update: true }))
+              if (e.key === "Enter") {
+                setValue((old) => ({ value: old.value, update: true }));
               }
             }}
             className="data-input"
@@ -609,19 +860,29 @@ const Cell = memo(
                 overflowY: "hidden",
                 overflowX: "hidden",
               }}
-
             >
               {value?.value?.length > 0 &&
                 value?.value?.map((imgLink, index) => (
                   <React.Fragment key={index}>
-                    <embed src={imgLink} width="50px" onClick={() => {
-                      setPreviewModal(true)
-                    }} />
+                    <embed
+                      src={imgLink}
+                      width="50px"
+                      onClick={() => {
+                        setPreviewModal(true);
+                      }}
+                    />
                     {previewModal && (
-                      <PreviewAttachment imageLink={imgLink} open={previewModal} tableId = {tableId}  setPreviewModal={setPreviewModal} rowId={row.original.id} columnId={id} row={row}/>
+                      <PreviewAttachment
+                        imageLink={imgLink}
+                        open={previewModal}
+                        tableId={tableId}
+                        setPreviewModal={setPreviewModal}
+                        rowId={row.original.id}
+                        columnId={id}
+                        row={row}
+                      />
                     )}
                   </React.Fragment>
-
                 ))}
             </Tabs>
 
@@ -655,5 +916,5 @@ Cell.propTypes = {
   column: PropTypes.any,
   dataDispatch: PropTypes.any,
   row: PropTypes.any,
-  headerGroups:PropTypes.any
+  headerGroups: PropTypes.any,
 };

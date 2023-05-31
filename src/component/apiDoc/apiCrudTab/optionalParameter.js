@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import {
-  MenuItem,
+  // MenuItem,
   Typography,
-  Select,
+  // Select,
   InputLabel,
   FormControl,
   Link,
@@ -30,17 +30,22 @@ function OptionalParameter(props) {
 
   const handleChange = (e) => {
     const selectedAge = e.target.value;
-
-    props?.setAge(selectedAge);
-
-    if (text.trim() !== '' && selectedAge !== '') {
-      props.setValue(text + `&pageSize=${selectedAge}`);
-    } else if (selectedAge !== '') {
-      props.setValue(`pageSize=${selectedAge}`);
+  if(e.target.value<=200)
+  {
+    if (selectedAge.trim() !== '') {
+      props?.setAge(selectedAge);
+      if (text.trim() !== '') {
+        props.setValue(text + `&pageSize=${selectedAge}`);
+      } else {
+        props.setValue(`pageSize=${selectedAge}`);
+      }
     } else {
-      props.setValue(text);
+      props?.setAge('');
+      props.setValue('');
     }
+  }
   };
+  
 
   return (
     <div>
@@ -60,7 +65,7 @@ function OptionalParameter(props) {
         <TextField
           id="outlined-basic"
           value={text}
-          label=" "
+          label=""
           onChange={handleTextChange}
           variant="outlined"
           style={{ height: '0px', width: 420 }}
@@ -74,26 +79,28 @@ function OptionalParameter(props) {
         <Typography style={{ fontWeight: 'bold', fontSize: '17px', paddingBottom: '8px', paddingTop: '13px' }}>
           Limit
         </Typography>
+
+        
         <Typography>Limit Column/Field in response</Typography>
         <div>
-          <FormControl sx={{ m: 1, minWidth: 60 }}>
-            <InputLabel id="demo-simple-select-helper-label" style={{ fontSize: '15px', paddingBottom: '40px' }}>
-              All
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={props?.age}
-              label="Age"
-              onChange={handleChange}
-              style={{ height: '50px' }}
-            >
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={30}>30</MenuItem>
-            </Select>
-          </FormControl>
+        <FormControl sx={{ m: 1, minWidth: 60 }}>
+  <InputLabel id="demo-simple-select-helper-label" style={{ fontSize: '15px', paddingBottom: '40px' }}>
+    
+  </InputLabel>
+  <TextField
+  id="demo-simple-select-helper"
+  value={props?.age}
+  label="Limit"
+  onChange={handleChange}
+  style={{ height: '50px' }}
+  type="number"
+  inputProps={{ pattern: "[0-9]*" }}
+  placeholder='none'
+/>
+
+</FormControl>
+
+
         </div>
       </Box>
     </div>

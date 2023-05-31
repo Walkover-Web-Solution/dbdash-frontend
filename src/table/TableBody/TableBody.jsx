@@ -18,6 +18,7 @@ import {updateCells } from "../../store/table/tableThunk";
 selectedColumnIndex
 })
  {
+  const height=(window.screen.height*51)/100;
    const dispatch =  useDispatch()
    const tableId = useSelector((state) => state.table.tableId)
   const limit = 200;
@@ -36,30 +37,37 @@ selectedColumnIndex
   );
 
   const handleCopy = (event, value) => {
+    
     event.clipboardData.setData("text/plain", value);
     event.preventDefault();
     document.execCommand("copy");
   };
 
-  
+  // document.addEventListener('keydown', function(event) {
+  //   if (event.key === 'Backspace' && selectedColumnIndex) {
+  //     console.log("backspace, we will add function here to clear column");
+  //   }
+  // });
   
   const handlePaste = ( event,row, cell) => {
     event.preventDefault();
-   
     const text = event.clipboardData.getData("text/plain");
-    const arr = text.split('.?.?.')
-
+    const arr = text.split(', ');
+    
     for (let i = 0; i < arr.length; i++) {
       const updatedRowIndex = cell.row.original?.["fld" + tableId.substring(3) + "autonumber"] + i;
-      if(cell?.column?.dataType != "attachment"){
+      if (cell?.column?.dataType !== "attachment") {
+        const value = arr[i].replace(/(^"|"$)/g, ''); // Remove inverted commas
         dispatch(
           updateCells({
             columnId: cell.column.id,
             rowIndex: updatedRowIndex,
-            value: arr[i],
+            value: value,
           })
         );
-    }
+      }
+    
+    
    
     }
   };
@@ -101,10 +109,11 @@ selectedColumnIndex
           id={`table-row-${index}`}
         >
           {row.cells.map((cell,key) => {
-           
+            
             return (
  
               <div 
+            
               {...cell.getCellProps({
                 onCopy: (event) => handleCopy(event, cell.value),
                 onPaste: (event) => handlePaste(event, key, cell),
@@ -165,7 +174,7 @@ selectedColumnIndex
         {({ onItemsRendered, ref }) => (
           <FixedSizeList
           // width={800}
-            height={440}
+            height={height}
             // height={35*rows.length}
             itemCount={rows.length}
             itemSize={35}

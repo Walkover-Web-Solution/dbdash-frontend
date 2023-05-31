@@ -13,6 +13,12 @@ const updateField = async (db_id,tableName,fieldId,data) =>
 {
     return await axios.patch(URL +`/dbs/${db_id}/${tableName}/${fieldId}/updatefield`,data)
 }
+
+const hideAllField = async (db_id,tableName,data) =>
+{
+    return await axios.patch(URL +`/dbs/${db_id}/${tableName}/hideallfield`,data)
+}
+
 const getQueryByAi = async (db_id,tableName,data) =>
 {
     return await axios.post(URL +`/dbs/${db_id}/${tableName}/querybyai`,data)
@@ -30,5 +36,6 @@ export{
     updateField,
     deleteField,
     getAllfields,
-    getQueryByAi
+    getQueryByAi,
+    hideAllField
 }

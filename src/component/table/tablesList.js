@@ -15,11 +15,10 @@ import { deleteFilter } from "../../api/filterApi";
 import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
-// import HideFieldDropdown from "./hidefieldDropdown";
 
 export default function TablesList({ dbData }) {
+  
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
-  // const columns=useSelector((state)=>state.table?.columns.map(columns=> (columns.label)));
   const dispatch = useDispatch();
   const params = useParams();
   const AllTableInfo = useSelector((state) => state.tables.tables);
@@ -41,14 +40,6 @@ export default function TablesList({ dbData }) {
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
-
-  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-
-  // const handleMenuOpen = (event) => {
-  //   setMenuAnchorEl(event.currentTarget);
-  // };
-
-  
 
   const handleClick = (event, id) => {
     setcurrentTable(id)
@@ -73,7 +64,6 @@ export default function TablesList({ dbData }) {
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
       return apiCreate?.data?.data?.tables[key].tableName === table;
     });
-
     if (matchedKey) {
       navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
     }
@@ -81,7 +71,6 @@ export default function TablesList({ dbData }) {
     const newTableIndex = Object.keys(AllTableInfo).length;
     setValue(newTableIndex);
   };
-
 
   const handleEdit = async () => {
     setEdit(true);
@@ -99,11 +88,13 @@ export default function TablesList({ dbData }) {
         filter: filter,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
-        filterId: id
+        filterId : id,
+        fields:dbData?.db?.tables[params?.tableName]?.fields 
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
+
   const deleteFilterInDb = async (filterId) => {
     const data = {
       filterId: filterId,
@@ -125,6 +116,8 @@ export default function TablesList({ dbData }) {
         tableName: params?.tableName,
         org_id: dbData?.db?.org_id,
         pageNo: 1,
+        fields:dbData?.db?.tables[params?.tableName]?.fields
+
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
@@ -141,8 +134,8 @@ export default function TablesList({ dbData }) {
           filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
           org_id: dbData?.db?.org_id,
           pageNo: 1,
-          filterId: params?.filterName
-         
+          filterId : params?.filterName,
+          fields:dbData?.db?.tables[params?.tableName]?.fields         
         })
         
       );
@@ -155,6 +148,7 @@ export default function TablesList({ dbData }) {
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
           pageNo: 1,
+          fields:dbData?.db?.tables[params?.tableName]?.fields
         })
       );
       setValue(
@@ -174,10 +168,9 @@ export default function TablesList({ dbData }) {
         sx={{
           width: "100%",
           display: "flex",
-          height: "7vh",
+          height: "5vh",
           overflow: "hidden",
           position: "sticky",
-          marginTop: "0.5vh"
         }}
       >
         <Box
@@ -185,19 +178,22 @@ export default function TablesList({ dbData }) {
             display: "flex",
             overflow: "hidden",
             width: "100%",
-            height: "auto",
+            height: "5vh",
           }}
         >
           <Tabs
             value={value}
             onChange={handleChange}
+            TabIndicatorProps={{
+              style: { display: "none" },
+            }}
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
             {AllTableInfo &&
               Object.entries(AllTableInfo).map((table, index) => (
-                <Box key={index} sx={{ height: "57px" }}>
+                <Box key={index} >
                   <SingleTable
                     table={table}
                     tableLength={tableLength}
@@ -205,10 +201,7 @@ export default function TablesList({ dbData }) {
                     setTabIndex={setTabIndex}
                     index={index}
                     dbData={dbData}
-                    highlightActiveTable={() => setValue(index)}
-                    value={value}
                     setPage={setPage}
-                    setValue={setValue}
                   />
                 </Box>
               ))}
@@ -216,7 +209,7 @@ export default function TablesList({ dbData }) {
           <Button
             variant="outlined"
             onClick={() => handleOpen()}
-            sx={{ margin: "0.5rem", width: "fit-content", height: "5vh" }}
+            sx={{ marginLeft: "0.5rem", marginTop:"4px" ,width: "fit-content", height: "4vh" }}
           >
             <AddIcon />
           </Button>
@@ -260,13 +253,11 @@ export default function TablesList({ dbData }) {
         <Button
           onClick={() => handleOpenn()}
           variant="contained"
-          sx={{ width: 100, mt: 1.5, ml: 1, fontSize: "11px" }}
+          sx={{ width: 100, mt: 1, ml: 1, fontSize: "11px" }}
         >
           Add Filter
         </Button>
       </Box>
-      {/* <Button onClick={handleMenuOpen}>Hide Fields</Button>
-      <HideFieldDropdown columns={columns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} /> */}
       {open && (
         <PopupModal
           title="Create Table"
