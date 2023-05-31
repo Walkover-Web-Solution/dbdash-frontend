@@ -9,11 +9,13 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [loader, setloader] = useState(false)
   const handleMessageSubmit = async (message) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
+    const actual_message = "Question   :-" + message
+    setMessages((prevMessages) => [...prevMessages, actual_message]);
     try {
       const response = await adminPanelByAI(message);
        const data = response.data;
-      setMessages((prevMessages) => [...prevMessages, data.success]);
+       const actual_response ="Answer   :-" + data.success
+      setMessages((prevMessages) => [...prevMessages, actual_response]);
       setloader(false)
     } catch (error) {
          setMessages((prevMessages) => [...prevMessages, error.response.data["try again some error "] ]);
