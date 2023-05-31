@@ -23,7 +23,7 @@ function DeleteRecord(props) {
           width: "36vw",
           padding: "10px",
           height: "65vh",
-          overflowY: "scroll",
+          overflowY: "auto",
           whiteSpace: "pre-wrap",
         }}
       >
@@ -43,7 +43,7 @@ function DeleteRecord(props) {
       </div>
 
 
-      <div style={{ width: '700px', height: "65vh", overflowY: "scroll", whiteSpace: "pre-wrap", padding: "2px" }}>
+      <div style={{ width: '700px', height: "65vh", overflowY: "auto", whiteSpace: "pre-wrap", padding: "2px" }}>
 
         <Box>
           <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>

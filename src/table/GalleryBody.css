@@ -1,0 +1,64 @@
+
+
+.checkbox{
+  font-weight: bold;
+  padding-bottom: 2%;
+}
+
+.dbdash-custom-card {
+  overflow-x:hidden;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 10px;
+    
+    margin-bottom: 10px;
+  }
+  .image-thumbnail {
+    max-width: 100%; 
+    max-height: 200px; /* Set the desired maximum height */
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .dbdash-custom-card-item {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  
+  .dbdash-custom-card-item-content {
+    /* font-weight: bold;
+    grid-template-columns: auto 1fr; */
+    margin-bottom: 10px;  
+    padding-bottom: 5px;
+    
+  }
+ 
+  
+ 
+  .dbdash-card-view{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 7%;
+  }
+  .cell-content {
+    /* grid-column: 2;
+    word-break: break-word; /* Wrap cell content if it exceeds the container width */
+   
+   font-size: 14px;
+  }
+  .chips-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .chip {
+    background-color: #e0e0e0;
+    color: #333;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }

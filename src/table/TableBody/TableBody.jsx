@@ -178,7 +178,7 @@ selectedColumnIndex
             // height={35*rows.length}
             itemCount={rows.length}
             itemSize={35}
-             style={{overflowY:"auto"}}
+             style={{overflowY:"auto",overflowX:"hidden"}}
             onItemsRendered={onItemsRendered}
             ref={ref}
             innerElementType={({ children, style, ...rest }) => (

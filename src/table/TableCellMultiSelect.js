@@ -286,7 +286,7 @@ export default function TableCellMultiSelect(props) {
           ))}
          
           </div>
-          <input {...getInputProps()} />
+          <input {...getInputProps()} style={{backgroundColor:"transparent"}} />
         </InputWrapper>
       </div>
       {groupedOptions.length > 0 ? (

@@ -25,7 +25,7 @@ function AddRecord(props) {
           padding: "10px",
          
           height: "65vh",
-          overflowY: "scroll",
+          overflowY: "auto",
           whiteSpace: "pre-wrap",
         }}
       >
@@ -48,7 +48,7 @@ function AddRecord(props) {
         style={{
           width: "700px",
           height: "65vh",
-          overflowY: "scroll",
+          overflowY: "auto",
       
           whiteSpace: "pre-wrap",
           padding: "2px",

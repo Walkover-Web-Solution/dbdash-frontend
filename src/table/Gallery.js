@@ -1,22 +1,22 @@
-import React, { useMemo, memo, useState } from "react";
+import React, { useMemo, memo } from "react";
 import {useTable,useFlexLayout,useResizeColumns,useRowSelect,useSortBy,useColumnOrder} from "react-table";
 import Header from "./Header";
 import PropTypes from "prop-types";
 import { useCellRangeSelection } from "react-table-plugins";
-import { addRows, deleteRows } from "../store/table/tableThunk";
+import {  deleteRows } from "../store/table/tableThunk";
 import { Button } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import withScrolling from "react-dnd-scrolling";
 import Preview from "./Preview";
+
 import Cell from "./Cell";
-import TableHeader from "./TableHeader/TableHeader";
-import { TableBody } from "./TableBody";
-import PlusIcon from './img/Plus'
+// import TableHeader from "./TableHeader/TableHeader";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { DeleteOutlined } from "@mui/icons-material";
 import HideFieldDropdown from "../component/table/hidefieldDropdown";
+import GalleryBody from "./GalleryBody";
 
 
 const ScrollingComponent = withScrolling("div");
@@ -29,7 +29,7 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast",
 };
 
-const Table = memo(
+const Gallery = memo(
   ({
     isNextPageLoading,
     columns,
@@ -99,14 +99,14 @@ const Table = memo(
       });
   }, [allColumns]);
 
-    const [selectedColumnIndex, setSelectedColumnIndex] = useState(null);
+    // const [selectedColumnIndex, setSelectedColumnIndex] = useState(null);
 
     const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
     const handleMenuOpen = (event) => {
       setMenuAnchorEl(event.currentTarget);
     };
-
+console.log("header",headerGroups);
     const tableData = useSelector((state) => state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
@@ -134,12 +134,11 @@ const Table = memo(
 
     return (
       <>
+         
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
-          
           <HideFieldDropdown getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         </div>
-       
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <Button
@@ -155,20 +154,20 @@ const Table = memo(
         )}
         <DndProvider backend={HTML5Backend}>
            <ScrollingComponent id="scroll"
-            style={{ display:"flex",overflowY:"hidden",overflowX:"auto",height:(window.screen.height*54)/100,width:"99.6vw"}}
+            style={{ display:"flex",overflowY:"auto",overflowX:"hidden",height:(window.screen.height*57)/100,width:"99.6vw",border:"1px solid cadetblue"}}
           >
             <table {...getTableProps()} >
 
-              <TableHeader
+              {/* <TableHeader
                 getTableProps={getTableProps}
                 headerGroups={headerGroups}
                 columns={columns}
                 selectedColumnIndex={selectedColumnIndex}
                 setSelectedColumnIndex={setSelectedColumnIndex}
 
-              />
+              /> */}
 
-              <TableBody
+              <GalleryBody
                 getTableBodyProps={getTableBodyProps}
                 rows={rows}
                 hasNextPage={hasNextPage}
@@ -177,21 +176,13 @@ const Table = memo(
                 prepareRow={prepareRow}
                 cellsSelected={{ ...currentSelectedCellIds, ...selectedCellIds }}
                 update={update}
-                selectedColumnIndex={selectedColumnIndex}
+                // selectedColumnIndex={selectedColumnIndex}
+                headerGroups={headerGroups}
               />
             </table>
 
           </ScrollingComponent>
-          <div className='tr add-row'
-            style={{ position: 'sticky', bottom: 0, left: 0 }}
-            onClick={() => dataDispatch(addRows({ type: "add_row" }))}
-          >
-
-            <span className='svg-icon svg-gray' style={{ marginRight: 4, mt: 0, p: 0 }}>
-              <PlusIcon />
-            </span>
-            New
-          </div>
+         
 
           <Preview />
         </DndProvider>
@@ -200,10 +191,10 @@ const Table = memo(
   }
 );
 
-Table.displayName = "Table";
-export default Table;
+Gallery.displayName = "Gallery";
+export default Gallery;
 
-Table.propTypes = {
+Gallery.propTypes = {
   columns: PropTypes.any,
   hasMore: PropTypes.any,
   update: PropTypes.any,

@@ -26,7 +26,7 @@ export default function LandingPage() {
          dispatch(bulkAdd({ email: emailId.email }))
    }, [])
    return (
-      <Container maxWidth='true'>
+      <Container maxWidth='true' style={{overflowX:"hidden"}}>
 
          <Box >
 
