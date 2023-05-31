@@ -14,6 +14,7 @@ import AuthKeyPage from './pages/authKeyPage';
 import CreateAuth from './pages/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Chat from './component/Chat/Chat';
 
 
 
@@ -36,7 +37,8 @@ function App() {
       <Route exact path ="/apiDoc/db/:dbId" element ={<Protected><ApiDocPage /></Protected>}/>
       <Route exact path="*" element={<Navigate to="/notFound" />} />
       <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
-
+      
+      <Route exact path = "/msg91bi" element = {<Chat />} />
     </Routes>
 
     </AuthContextProvider>
