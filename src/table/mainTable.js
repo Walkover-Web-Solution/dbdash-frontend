@@ -1,73 +1,86 @@
-import React,{useState,useCallback} from "react";
-// import "./style.css";
-// import Table from "./table";
-// import {useDispatch } from "react-redux";
-import {DataEditor,
-  GridCellKind
-} from "@glideapps/glide-data-grid";
-// import { bulkAddColumns } from "../store/table/tableThunk";
-// import PropTypes from "prop-types";
-// import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
+import { bulkAddColumns } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
-import "../../src/App.css"
+import "../../src/App.css";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import "./style.css";
+import { reorderRows } from "./reorderRows.js";
 
 export default function MainTable() {
-  
-  const columns = [
-    { title: "First Name" },
-    { title: "Last Name"}
-];
-const data = [
-    {
-      "firstName": " Fowler",
-      "lastName": "BUZZNESS",
-    },
-     {
-      "firstName": "Hines Fowler",
-      "lastName": "BUZZNESS",
-     
-    },
-     {
-      "firstName": "ddfr",
-      "lastName": "BUZZNESS",
-     
-    },
-]
-const [rowData, setRowData] = useState(data);
-const getData=useCallback((cell)=>{
-  console.log("cell",cell)
-  const [col, row] = cell;
-    const dataRow = rowData[row];
-    const indexes = ["firstName", "lastName"];
-    const d = dataRow[indexes[col]]
+  const params = useParams();
+  const fields = useSelector((state) => state.table.columns);
+  const dataa = useSelector((state) => state.table.data);
+  const [, setColumns] = useState(fields);
+  const [data, setData] = useState(dataa);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      bulkAddColumns({
+        dbId: params?.dbId,
+        tableName: params?.tableName,
+      })
+    );
+  }, []);
+
+  const onAddCol = useCallback(() => {
+    const newData = dataa.map((row) => {
+      return { ...row, new: "" };
+    });
+    setData(newData);
+    setColumns([
+      ...fields,
+      {
+        title: "New",
+        id: "new",
+        hasMenu: true,
+      },
+    ]);
+  }, [dataa, fields]);
+
+  const getData = useCallback((cell) => {
+    const [col, row] = cell;
+    const dataRow = dataa[row];
+    const d = dataRow[fields[col].id];
+    const { dataType } = fields[col];
+
+    if (dataType === "autonumber") {
+      return {
+        allowOverlay: true,
+        kind: GridCellKind.Number,
+        data: d,
+        displayData: d.toString(),
+      };
+    }
+
     return {
       kind: GridCellKind.Text,
-      allowOverlay: false,
-      displayData: d,
-      data: d,
-  };
-},[rowData])
+      allowOverlay: true,
+      readonly: false,
+      displayData: d || "",
+      data: d || "",
+    };
+  }, [dataa, fields]);
 
-const reorderRows = useCallback((from, to) => {
-  console.log(from,to,12432);
-          setRowData(cv => {
-            const d = [...cv];
-            const removed = d.splice(from, 1);
-            d.splice(to, 0, ...removed);
-            return d;
-        });
-     }, []);
-
-
-
+  const handleRowMoved = useCallback((from, to) => {
+    reorderRows(from, to, data, setData);
+  }, [data, setData]);
   return (
-        <DataEditor
+    <div className="table-container">
+      <DataEditor
         getCellContent={getData}
-        columns={columns}
-        rows={data?.length}
-        rowMarkers={"both"}
-        onRowMoved={reorderRows}
+        columns={fields}
+        rows={dataa.length}
+        rowMarkers="both"
+        onRowMoved={handleRowMoved}
+        rightElement={
+          <div className="addCol">
+            <button onClick={onAddCol}>+</button>
+          </div>
+        }
       />
-)
-  }
-
+    </div>
+  );
+}

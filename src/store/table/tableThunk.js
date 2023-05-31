@@ -59,7 +59,6 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
         // json.metadata = field[1].metaData;
         json.dataType = field[1].fieldType?.toLowerCase();
         columns.push(json);
-        console.log(columns,"columns")
 
     }
     )
@@ -104,9 +103,8 @@ export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
         var columns = null
-        if (!(payload?.pageNo)) {
-            columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
-        }
+       
+         columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
         if (payload?.filter != null) {
             const tableInfo = getTableInfo(getState())
             const querydata = await runQueryonTable(
