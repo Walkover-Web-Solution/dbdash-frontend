@@ -369,7 +369,7 @@ export default function FilterModal(props) {
                   <Select value={q?.fields || fieldData[0]?.id} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
                     {fieldData && Object.entries(fieldData)?.map((fields, index) => (
                       <MenuItem key={index} value={fields[1]?.id} >
-                        {fields[1].label}
+                        {fields[1].title}
                       </MenuItem>
                     ))}
                   </Select>
