@@ -11,7 +11,7 @@ import Protected from './component/protected';
 import WithAuth from './component/withAuth';
 import Notfoundpage from './component/notFoundPage';
 import AuthKeyPage from './pages/authKeyPage';
-import CreateAuth from './pages/createAuth';
+import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

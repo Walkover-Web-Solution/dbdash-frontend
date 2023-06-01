@@ -34,7 +34,8 @@ function BasicStuff(props) {
     };
 
     return (
-      <button
+      <span
+      
       className="copy-button"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -42,7 +43,7 @@ function BasicStuff(props) {
       >
         <ContentPasteIcon className="color-black"/>
         {copiedIndex === index && <span className="copied-text">Copied!</span>}
-      </button>
+      </span>
     );
   };
 
