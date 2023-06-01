@@ -62,7 +62,6 @@ export default function MainTable() {
     const d = dataRow[fields[col].id];
     const { dataType } = fields[col];
     
-    
     if (dataType === "autonumber") {
       return {
         allowOverlay: true,
@@ -85,19 +84,6 @@ export default function MainTable() {
         }
       };
     }
-    if (dataType === "checkbox") {
-      return {
-        kind: GridCellKind.Custom,
-        allowOverlay: true,
-        copyData: "4",
-        data: {
-          kind: "checkbox-cell",
-          value: d || false, // Use value from cellProps or default to false
-          onChange: (newValue) => handleCheckboxChange(newValue, cellProps),
-        },
-      };
-    }
-  
     else if (dataType === "createdby") {
       return {
         kind: GridCellKind.Text,
