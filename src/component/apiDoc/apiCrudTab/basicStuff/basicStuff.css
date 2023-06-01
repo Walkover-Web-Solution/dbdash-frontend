@@ -23,11 +23,13 @@
   }
   
   .copy-button {
-    transition: background-color 0.3s ease;
-    background-color: transparent;
-    margin: 2px;
-    border: none;
-    font-size: 16px;
+    transition: background-color 0.3s ease !important;
+  background-color: transparent !important;
+  color: black !important;
+  margin: 2px !important;
+  border: none !important;
+  font-size: 12px !important;
+  padding: 0;
   }
   
   .color-black {
@@ -35,7 +37,7 @@
   }
   
   .copied-text {
-    margin-left: 10px;
+    /* margin-left: 10px; */
     font-size: 16px;
     color: black;
   }

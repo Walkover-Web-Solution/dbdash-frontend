@@ -99,7 +99,7 @@ export default function Navbar() {
         </Box>
         {Object.keys(tables).length >= 1 && (
   <Box>
-    <FormControl className="tables-select" sx={{ m:1.85, minWidth: 130 }}>
+    <FormControl className="tables-select" sx={{ m:1, minWidth: 130 }}>
       <InputLabel htmlFor="grouped-select" className="label">Tables-Name</InputLabel>
       <Select
         value={selectTable}
