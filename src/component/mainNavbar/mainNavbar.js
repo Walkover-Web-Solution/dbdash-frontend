@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import { Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem, Divider, Button } from '@mui/material';
-import { UserAuth } from "../../../context/authContext.js"
+import { UserAuth } from "../../context/authContext.js"
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectActiveUser } from '../../../store/user/userSelector.js';
+import { selectActiveUser } from '../../store/user/userSelector.js';
 import PropTypes from 'prop-types';
-import dbDashLogo from '../../../table/img/dbDashLogo.png';
+import dbDashLogo from '../../../src/table/img/dbDashLogo.png';
 import './mainNavbar.css';
 
-function MainNavbar(props) {
+function mainNavbar(props) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -104,8 +104,8 @@ function MainNavbar(props) {
     </Container>
   );
 }
-export default MainNavbar;
+export default mainNavbar;
 
-MainNavbar.propTypes = {
+mainNavbar.propTypes = {
   dbData: PropTypes.any
 }

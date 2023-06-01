@@ -1,0 +1,60 @@
+.create-auth-key-container {
+    padding: 20px;
+    margin: 80px;
+    justify-content: center;
+    border-radius: 10px;
+    border: 2px solid #1a1919;
+    position: sticky;
+    margin-top: 15px;
+    height: 400px; /* Adjust the height value as needed */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow */
+  }
+  
+  .create-auth-key-main-container {
+    margin: 1rem;
+  }
+  
+  .create-auth-key-content-container {
+    margin-top: 3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border: 2px;
+    min-height: 50px;
+    text-align: center;
+  }
+  
+  .create-auth-key-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .create-auth-key-label {
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+
+     /* Add margin bottom between label and input */
+  }
+  
+  .create-auth-key-dropdown {
+    margin-top: 0.3rem;
+    margin-bottom: 0.5rem; /* Add margin bottom between input and other elements */
+    padding: 0.7rem;
+  }
+  
+  .create-auth-key-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+  }
+  
+  .create-auth-key-button {
+    margin-left: 1rem;
+  }
+  
+  .create-auth-key-link {
+    text-decoration: none;
+  }
+  

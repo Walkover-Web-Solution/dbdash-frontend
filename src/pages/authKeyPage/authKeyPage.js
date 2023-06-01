@@ -4,8 +4,8 @@ import { Box, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import AuthKeyHeader from "../../component/authKeyComponents/authKeyHeader";
 import { Link, useParams } from "react-router-dom";
-import MainNavbar from "../../component/apiDoc/mainNavbar/mainNavbar";
-import './authKeyPage.css';
+import MainNavbar from "../../component/mainNavbar/mainNavbar";
+import "./authKeyPage.css";
 
 
 export default function authKeyPage() {

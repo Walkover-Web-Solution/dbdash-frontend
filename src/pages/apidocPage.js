@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React from "react";
 // import PropTypes from "prop-types";
 import Navbar from "../component/apiDoc/navbarApi/navbarApi";
-import MainNavbar from "../component/apiDoc/mainNavbar/mainNavbar";
+import MainNavbar from "../component/mainNavbar/mainNavbar";
 
 function ApiDocPage() {
 
