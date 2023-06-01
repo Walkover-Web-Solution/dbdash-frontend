@@ -181,6 +181,7 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch, getState }) => {
+        console.log(payload,"inside")
         const data = {
             newFieldName: payload?.label,
             newFieldType: payload?.fieldType,

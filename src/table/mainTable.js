@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {  bulkAddColumns} from "../store/table/tableThunk";
+import {  bulkAddColumns, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,6 +9,7 @@ import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import { addColumn, addRow, editCell } from "./addRow";
+// import  debounce  from 'lodash.debounce';
 
 export default function MainTable() {
   const params = useParams();
@@ -25,6 +26,7 @@ export default function MainTable() {
   const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
+//  const [columns, setColumns] = useState(second)
 
   useEffect(() => {
     dispatch(
@@ -55,6 +57,22 @@ export default function MainTable() {
     },[data, fields]
      );
 
+     const handleColumnResize = (fields, newSize, colIndex, newSizeWithGrow) => {
+      console.log(fields, newSize, colIndex, newSizeWithGrow,786)
+      // console.log(fieldName,786)
+        // debounce(async()=>{
+        dispatch(updateColumnHeaders({
+            dbId:params?.dbId,
+            tableName:params?.tableName,
+            fieldName:fields?.id,
+            // columnId : fields?.id,
+            metaData:{width:newSize}
+        }));
+        
+    
+      // setColumns([...columns]); // Assuming you're using React and maintaining the columns state using useState
+      };
+
   const getData = useCallback((cell) => {
    
     const [col, row] = cell;
@@ -62,7 +80,7 @@ export default function MainTable() {
     const d = dataRow[fields[col].id];
     const { dataType } = fields[col];
     
-    if (dataType === "autonumber") {
+    if (dataType === "autonumber" || dataType === "rowid") {
       return {
         allowOverlay: true,
         kind: GridCellKind.Number,
@@ -70,38 +88,7 @@ export default function MainTable() {
         displayData: d.toString(),
       };
     }
-    else if (dataType === "createdat") {
-      console.log(d,"createdat")
-      return {
-        kind: GridCellKind.Custom,
-        allowOverlay: true,
-        copyData: "4",
-        data: {
-          kind: "date-picker-cell",
-          date: new Date(),
-          displayDate: new Date().toISOString(),
-          format: "date"
-        }
-      };
-    }
-    else if (dataType === "createdby") {
-      return {
-        kind: GridCellKind.Text,
-        allowOverlay: true,
-        readonly: false,
-        displayData: d || "",
-        data: d || "",
-      };
-    }
-    else if (dataType === "rowid") {
-      return {
-        allowOverlay: true,
-        kind: GridCellKind.Number,
-        data: d,
-        displayData: d.toString(),
-      };
-    }
-    else if (dataType === "longtext") {
+    else if (dataType === "createdat" || dataType === "createdby" || dataType === "longtext") {
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,
@@ -147,7 +134,11 @@ export default function MainTable() {
         rowMarkers="both"
         onCellEdited={onCellEdited}
         onRowMoved={handleRowMoved}
-        editable
+        getCellsForSelection={true}
+        onColumnResizeEnd={handleColumnResize}
+        scaleToRem={true}
+        // onColumnResize={fields}
+        onPaste={true}
         rightElement={
           <div className="addCol">
           <button onClick={() => setOpen(true)}>+</button>
