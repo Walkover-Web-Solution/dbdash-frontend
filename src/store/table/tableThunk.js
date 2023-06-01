@@ -48,27 +48,21 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
             title: "",
             id: "",
             dataType: "",
+            hasMenu: true,
             // minWidth: 100,
             // options: [],
-            // metadata: {},
-            // width: field[1].metaData?.width ? field[1].metaData?.width : 150
+            metadata: {},
+            width: field[1].metaData?.width ? field[1].metaData?.width : 150
         }
         json.id = field[0];
         json.title = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
         // json.accessor = field[0]?.toLowerCase();
-        // json.metadata = field[1].metaData;
+        json.metadata = field[1].metaData;
         json.dataType = field[1].fieldType?.toLowerCase();
         columns.push(json);
 
     }
     )
-    // columns.push({
-    //     id: 999999,
-    //     // width: 20,
-    //     title: "+",
-    //     // disableResizing: true,
-    //     dataType: "null"
-    // })
     return columns;
 }
 
@@ -187,6 +181,7 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch, getState }) => {
+        console.log(payload,"inside")
         const data = {
             newFieldName: payload?.label,
             newFieldType: payload?.fieldType,
