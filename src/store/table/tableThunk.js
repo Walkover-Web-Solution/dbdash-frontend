@@ -62,13 +62,13 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
 
     }
     )
-    columns.push({
-        id: 999999,
-        width: 40,
-        title: "+",
+    // columns.push({
+        // id: 999999,
+        // width: 40,
+        // title: "+",
         // disableResizing: true,
-        dataType: "null"
-    })
+        // dataType: "null"
+    // })
     return columns;
 }
 
