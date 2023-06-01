@@ -64,6 +64,7 @@ export default function PreviewAttachment(props) {
                 <AppBar sx={{ position: 'relative' }}>
                     <Toolbar>
                         <IconButton
+                        style={{borderRadius:0}}
                             edge="start"
                             color="inherit"
                             onClick={handleClose}
@@ -74,12 +75,12 @@ export default function PreviewAttachment(props) {
                         {/* <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Sound
             </Typography> */}
-                        <Button autoFocus color="inherit" onClick={() => {
+                        <Button style={{borderRadius:0}} autoFocus color="inherit" onClick={() => {
                             downloadImage(props?.imageLink);
                         }}>
                             Download
                         </Button>
-                        <Button autoFocus color="inherit" onClick={()=>{
+                        <Button style={{borderRadius:0}} autoFocus color="inherit" onClick={()=>{
                             deleteImage(props?.imageLink);
                             handleClose()
                         }}>

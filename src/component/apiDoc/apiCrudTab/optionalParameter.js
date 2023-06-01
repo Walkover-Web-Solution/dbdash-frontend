@@ -53,7 +53,7 @@ function OptionalParameter(props) {
         component="div"
         style={{
           border: '2px solid black',
-          borderRadius: '1px',
+          
           padding: '10px',
           width: '34.5vw',
           backgroundColor: 'lightgrey',

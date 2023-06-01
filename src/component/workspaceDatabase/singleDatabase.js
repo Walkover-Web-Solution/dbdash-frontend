@@ -117,6 +117,7 @@ export default function SingleDatabase(props) {
               }}
               variant="contained"
               sx={{
+                borderRadius:0,
                 width: "8rem",
                 backgroundColor: "#1C2833",
                 fontSize: "12px",
@@ -179,6 +180,7 @@ export default function SingleDatabase(props) {
                   }}
                   variant="contained"
                   sx={{
+                    borderRadius:0,
                     width: "8rem",
                     backgroundColor: "#1C2833",
                     fontSize: "12px",
@@ -238,7 +240,7 @@ export default function SingleDatabase(props) {
   }}
     variant="contained"
     size="small"
-    sx={{ display: "flex" }}
+    sx={{ display: "flex",borderRadius:0 }}
   >restore</Button>
 )}
             </Box>

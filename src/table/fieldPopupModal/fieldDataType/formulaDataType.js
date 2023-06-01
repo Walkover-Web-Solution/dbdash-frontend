@@ -85,7 +85,7 @@ useEffect(() => {
       width: '360px',
       height: '50px',
       border: '1px solid black',
-      borderRadius: '5px',
+      
       marginTop: 10,
     },
   };
@@ -120,7 +120,7 @@ useEffect(() => {
         inputProps={inputProps}
         renderSuggestionsContainer={renderSuggestionsContainer}
       />
-      <Button onClick={handleClick} color="primary">
+      <Button style={{borderRadius:0}} onClick={handleClick} color="primary">
         Ask AI
       </Button>
       {isLoading && <Box sx={{ display: 'flex',

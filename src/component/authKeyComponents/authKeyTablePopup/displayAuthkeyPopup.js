@@ -28,11 +28,11 @@ export default function DisplayAuthKeyPopup(props) {
         <DialogTitle id="alert-dialog-title">{ props.title}</DialogTitle>
 
         <DialogActions>
-          <Button onClick={(e) => { e.preventDefault(); e.stopPropagation(); copyToClipboard() }}>
+          <Button style={{borderRadius:0}} onClick={(e) => { e.preventDefault(); e.stopPropagation(); copyToClipboard() }}>
           {isCopied ? "Copied!" : "copy"}
           </Button>
           <Link to={`/authkeypage/${id}`} style={{ textDecoration: 'none' }}>
-          <Button onClick={handleClose} autoFocus>Cancel </Button>
+          <Button  style={{borderRadius:0}} onClick={handleClose} autoFocus>Cancel </Button>
           </Link>
         </DialogActions>
       </Dialog>

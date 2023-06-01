@@ -22,9 +22,9 @@ export default function DeleteAuthKeyPopup(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={(e) => { e.preventDefault(); e.stopPropagation(); props?.deleteFunction(props?.title)      ; handleClose(); }}>Delete</Button>
+          <Button style={{borderRadius:0}} onClick={(e) => { e.preventDefault(); e.stopPropagation(); props?.deleteFunction(props?.title)      ; handleClose(); }}>Delete</Button>
 
-          <Button onClick={handleClose} autoFocus>Cancel </Button>
+          <Button style={{borderRadius:0}} onClick={handleClose} autoFocus>Cancel </Button>
         </DialogActions>
       </Dialog>
     </>

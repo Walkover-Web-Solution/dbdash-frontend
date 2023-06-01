@@ -92,8 +92,8 @@ export default function ShareOrgModal(props) {
   </FormControl>
 </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button
+        <Button style={{borderRadius:0}} onClick={handleClose}>Cancel</Button>
+        <Button style={{borderRadius:0}}
           variant="contained"
           color="primary"
           onClick={handleSendInvite}
@@ -132,6 +132,7 @@ export default function ShareOrgModal(props) {
                 <Box sx={{ alignItems: "center" }}>
                   <IconButton
                     aria-label="delete"
+                    style={{borderRadius:0}}
                     onClick={() => handleRemoveUser(user?.user_id?.email)}
                   >
                     <DeleteIcon />

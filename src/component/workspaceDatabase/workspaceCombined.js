@@ -65,7 +65,7 @@ export default function WorkspaceCombined() {
     <>
       <Box>
         <Box sx={{ display: 'flex', m: 3 }}>
-          <Button onClick={handleOpen} variant="contained">Create Organisation</Button>
+          <Button onClick={handleOpen} style={{borderRadius:0}} variant="contained">Create Organisation</Button>
           <PopupModal
             title="create organisation"
             label="Organization Name"

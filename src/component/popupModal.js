@@ -106,6 +106,7 @@ export default function PopupModal(props) {
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
               <Button
+              style={{borderRadius:0}}
                 variant="contained"
                 disabled={
                   textFieldValue.length < 3 ||
@@ -121,7 +122,7 @@ export default function PopupModal(props) {
               </Button>
             </Box>
             <Box>
-              <Button variant="outlined" onClick={handleClose}>
+              <Button variant="outlined" style={{borderRadius:0}} onClick={handleClose}>
                 Cancel
               </Button>
             </Box>

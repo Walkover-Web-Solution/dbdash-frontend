@@ -19,8 +19,8 @@ export default function DuplicateFieldPopup(props) {
           />
         </FormGroup>
       </DialogContent>
-      <Button onClick={props?.handleClose}>Cancel</Button>
-      <Button onClick={props?.handleDuplicate}>Duplicate Field</Button>
+      <Button style={{borderRadius:0}} onClick={props?.handleClose}>Cancel</Button>
+      <Button style={{borderRadius:0}} onClick={props?.handleDuplicate}>Duplicate Field</Button>
     </Dialog>
   );
 }

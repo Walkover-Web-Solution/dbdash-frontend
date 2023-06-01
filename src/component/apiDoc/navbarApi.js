@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
+import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader, ButtonGroup } from "@mui/material";
 import ApiCrudTablist from './apiCrudTab/apiCrudTablist';
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
@@ -66,6 +66,8 @@ export default function Navbar() {
               <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
               <Select
                 id="grouped-select"
+              className="rigid-border"
+
                 label="Organization and dbs"
                 value={selectedDb}
                 onChange={handleChange}
@@ -101,6 +103,7 @@ export default function Navbar() {
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
               <Select
+              className="rigid-border"
                 value={selectTable}
                 label="Tables-Name"
                 onChange={handleChangeTable}
@@ -115,12 +118,39 @@ export default function Navbar() {
           </Box>
         )}
         {Object.keys(tables).length >= 1 && (
-          <Box sx={{ display: 'flex', alignItems: 'center', marginRight: "10px", position: "fixed", right: 0, top: "10vh" }}>
-            <Link to={`/authkeypage/${dbId}`} state={selectedOption} style={{ textDecoration: 'none' }}>
-              <Button variant="contained" color="primary">Auth Key</Button>
-            </Link>
-          </Box>
-        )}
+  <Box
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: '10px',
+      position: 'fixed',
+      right: 0,
+      top: '10vh'
+    }}
+  >
+    <ButtonGroup color="primary" style={{borderRadius:0}}>
+      
+      <Button variant="contained"  
+sx={{
+          pointerEvents: 'none',
+          
+        }}>{'API Documentation'}</Button>
+      <Link
+        to={`/authkeypage/${dbId}`}
+        state={selectedOption}
+        
+        style={{ textDecoration: 'none' }}
+      >
+        <Button variant="outlined" >{'Auth Key'}</Button>
+      </Link>
+    </ButtonGroup>
+  </Box>
+)}
+
+
+
+
+
       </Box>
       <Box>
         {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}

@@ -27,6 +27,7 @@ export default function AuthDropdown(props) {
     <>
       <Tooltip>
         <IconButton
+        style={{borderRadius:0}}
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();

@@ -396,14 +396,16 @@ export default function FilterModal(props) {
                     <div style={{ color: 'red', fontSize: '12px' }}>Value cannot be empty</div>
                   )}
                 </Box>
-                {index >= 1 && <Button onClick={() => {
+                {index >= 1 && <Button 
+                style={{borderRadius:0}}
+                onClick={() => {
                   handleRemove(index)
                 }}>Remove</Button>}
               </Box>))}
             </Box>
 
             <Box sx={{ mb: 2, ml: 1 }}>
-              <Button onClick={handleAddInput}> <AddIcon sx={addBtnStyle} /> </Button>
+              <Button style={{borderRadius:0}} onClick={handleAddInput}> <AddIcon sx={addBtnStyle} /> </Button>
             </Box>
 
           </Box>
@@ -411,7 +413,7 @@ export default function FilterModal(props) {
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {props?.edit == false && <Box>
-              <Button variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
+              <Button  style={{borderRadius:0}} variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
                 validate();
                 getQueryData();
                 handleClose();
@@ -421,14 +423,14 @@ export default function FilterModal(props) {
             </Box>}
 
             <Box>
-              {props?.edit == true && <Button onClick={() => {
+              {props?.edit == true && <Button style={{borderRadius:0}} onClick={() => {
                 editQueryData()
                 handleClose()
               }} variant="contained">Edit</Button>}
             </Box>
 
             <Box>
-              <Button variant="outlined" onClick={handleClose}>
+              <Button style={{borderRadius:0}} variant="outlined" onClick={handleClose}>
                 Cancel
               </Button>
             </Box>

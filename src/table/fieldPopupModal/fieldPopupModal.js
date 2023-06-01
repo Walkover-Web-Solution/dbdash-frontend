@@ -246,7 +246,7 @@ export default function FieldPopupModal(props) {
             </FormGroup>
           )}
         </DialogContent>
-        <Button sx={{textTransform: "none"}}
+        <Button sx={{textTransform: "none",borderRadius:0}}
           onClick={() => {
             handleClose();
             props?.submitData(false);

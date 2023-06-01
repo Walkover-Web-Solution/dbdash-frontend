@@ -29,7 +29,7 @@ import PropTypes from "prop-types";
 import TableCellSingleSelect from "./TableCellSingleSelect";
 import TableCellMultiSelect from "./TableCellMultiSelect";
 import PreviewAttachment from "./previewAttachment";
-import "./Cell.css";
+import "./Cell.scss";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);

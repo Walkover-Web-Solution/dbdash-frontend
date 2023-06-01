@@ -1,0 +1,61 @@
+.main-navbar {
+    background-color: transparent;
+    border-bottom: 2px solid black;
+    height: 8vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    a {
+      text-decoration: none;
+      margin-bottom: 8px;
+      font-family: 'Inter';
+      font-size: 1rem;
+      color: black;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  
+    
+    .api-button,
+    .tables-button {
+      font-family: 'Inter';
+      font-size: 1rem;
+      text-decoration: none;
+      color: black;
+      border-radius: 0;
+      margin-bottom: 2px;
+      border: none;
+  
+      &:hover {
+        border: none;
+        background-color: transparent;
+        color: black;
+      }
+    }
+  
+    .api-button {
+      background-color: transparent;
+  
+      &.active {
+        background-color: lightgrey;
+      }
+    }
+  
+    .tables-button {
+      background-color: transparent;
+  
+      &.active {
+        background-color: lightgrey;
+      }
+    }
+  
+    .settings-icon {
+      margin-bottom: 2px;
+      margin-left: 10;
+      border-radius: 0;
+    }
+  }
+  

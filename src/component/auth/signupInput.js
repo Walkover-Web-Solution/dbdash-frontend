@@ -137,7 +137,7 @@ export default function SignupInput(props) {
             </Box>
           </Box>
         </Box>
-        <Button type='submit' onClick={validate} sx={{bgcolor: 'text.primary', width:"50%", mt:3,mb:1}} variant="contained">Signup</Button>
+        <Button type='submit' onClick={validate} sx={{bgcolor: 'text.primary', width:"50%", mt:3,mb:1,borderRadius:0}} variant="contained">Signup</Button>
         </Box>
     </Box>
   )

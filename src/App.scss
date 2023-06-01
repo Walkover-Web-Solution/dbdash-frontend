@@ -1,0 +1,12 @@
+@import '../src/assets/styling.scss';
+body{
+  background-color:$bgColorValue;
+color:$fontColorValue;
+border-radius: 0 !important;
+}
+ Button, Select, MenuItem{
+  border-radius: 0 !important;
+}
+.rigid-border{
+  border-radius:0 !important;
+}

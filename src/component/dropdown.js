@@ -20,7 +20,9 @@ export default function Dropdown(props) {
   return (
     <>
         <Tooltip>
-            <IconButton onClick={(e)=>{
+            <IconButton 
+            style={{borderRadius:0}}
+            onClick={(e)=>{
               e.preventDefault();
               e.stopPropagation();
               handleOpenUserMenu(e)}}>

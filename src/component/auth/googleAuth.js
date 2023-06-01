@@ -15,7 +15,7 @@ export default function GoogleAuth() {
 
   return (
     <Button
-    type="outlined" variant="outlined" style={{marginTop:"10px",fontWeight:'bold'}}  sx={{border:2, borderColor:"black"}}
+    type="outlined" variant="outlined" style={{marginTop:"10px",fontWeight:'bold'}}  sx={{border:2, borderColor:"black",borderRadius:0}}
      onClick={(e)=>{handleGoogleSignIn(e)}}>
         <img style={{width : "30px", heigth :"auto"}}  src={googleIcon} alt=""/>
         <p>Google</p>

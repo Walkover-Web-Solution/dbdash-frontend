@@ -20,6 +20,7 @@ const CodeSnippet = ({ codeString }) => {
       <Button
         style={{
           marginRight: 'auto',
+          borderRadius:0,
           padding: "0.5rem",
           cursor: "pointer"
         }}

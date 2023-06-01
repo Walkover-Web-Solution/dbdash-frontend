@@ -225,7 +225,7 @@ export default function TablesList({ dbData }) {
                     alignItems: "center",
                     justifyContent: "center",
                     color: "#fff",
-                    borderRadius: 3,
+                   
                     p: 1,
                   }}
                   onClick={() => {

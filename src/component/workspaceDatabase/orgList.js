@@ -130,6 +130,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                     width: "8rem",
                     backgroundColor: "#1C2833",
                     fontSize: "12px",
+                    borderRadius:0,
                     mx: 3,
                     ":hover": {
                       bgcolor: "#273746",
@@ -167,7 +168,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                           variant="contained"
                           size="small"
                           color="success"
-                          sx={{ display: "flex" }}
+                          sx={{ display: "flex" ,borderRadius:0}}
                           onClick={handleOpenShareOrg}
                         >
                           Share
@@ -199,7 +200,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
               ))}
               <Card sx={{ m: 4, minWidth: 250, minHeight: 200, boxShadow: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
 
-                <IconButton sx={{ color: "black" }}
+                <IconButton sx={{ color: "black",borderRadius:0 }}
                   onClick={(e) => {
                     handleOpen(e);
                     setOrg(props?.orgId);

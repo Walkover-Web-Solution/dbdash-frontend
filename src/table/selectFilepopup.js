@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     backgroundColor: 'blue',
     color: 'white',
     padding: '10px',
-    borderRadius: '4px',
+  
     cursor: 'pointer',
   },
 });
@@ -100,7 +100,7 @@ export default function selectFilepopup(props) {
           
         <Box sx={{display:'flex',mt:3}}>
           {isUrlSelected  && <Box>
-            <Button onClick={(e)=>{handleClose(); props?.onChangeUrl(e,"file")}}>Submit</Button>
+            <Button style={{borderRadius:0}} onClick={(e)=>{handleClose(); props?.onChangeUrl(e,"file")}}>Submit</Button>
           </Box>}
 
           {uploadOption == "file" && 
@@ -118,7 +118,7 @@ export default function selectFilepopup(props) {
             }
 
             <Box>
-            <Button variant="outlined" onClick={handleClose}>cancel</Button>
+            <Button style={{borderRadius:0}} variant="outlined" onClick={handleClose}>cancel</Button>
             </Box>
         </Box>
 

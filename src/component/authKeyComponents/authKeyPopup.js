@@ -48,7 +48,7 @@ export default function AuthKeyPopup(props) {
           </Box>
           <Box sx={{ mt: 3 }}>
             <Link to={`/authkeypage/${props?.dbId}`} style={{ textDecoration: 'none' }}>
-              <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+              <Button style={{borderRadius:0}} variant="outlined" onClick={handleClose}>Cancel</Button>
             </Link>
           </Box>
         </Box>

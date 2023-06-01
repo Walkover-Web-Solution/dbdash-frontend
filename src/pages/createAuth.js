@@ -150,6 +150,7 @@ export default function CreateAuthKey() {
         >
           <Box sx={{ m: 1 }}>
             <Button
+            style={{borderRadius:0}}
               variant="contained"
               disabled={isDisabled}
               onClick={() => {
@@ -170,7 +171,7 @@ export default function CreateAuthKey() {
           </Box>
           <Box sx={{ m: 1 }}>
             <Link to={`/authkeypage/${id}`} style={{ textDecoration: "none" }}>
-              <Button variant="outlined">Cancel</Button>
+              <Button style={{borderRadius:0}} variant="outlined">Cancel</Button>
             </Link>
           </Box>
           {/* <Box sx={{ mt: "35px" }}>

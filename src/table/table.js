@@ -135,7 +135,7 @@ const Table = memo(
     return (
       <>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
+          <Button sx={{ fontSize: "11px" ,borderRadius:0}} onClick={handleMenuOpen}>Hide Fields</Button>
           <HideFieldDropdown getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         </div>
         {selectedFlatRows?.length > 0 && (

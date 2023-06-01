@@ -142,6 +142,7 @@ const tablePath = pathSegments.slice(-2).join('/'); // Extract the last two segm
                   onChange={(e) => { setTableNa(e.target.value) }} size="small" />
                 <Button
                   sx={{
+                    borderRadius:0,
                     width: 2,
                     fontSize: 8,
                     mt: 1
