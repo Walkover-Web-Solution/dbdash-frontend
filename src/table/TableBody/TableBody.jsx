@@ -43,11 +43,6 @@ selectedColumnIndex
     document.execCommand("copy");
   };
 
-  // document.addEventListener('keydown', function(event) {
-  //   if (event.key === 'Backspace' && selectedColumnIndex) {
-  //     console.log("backspace, we will add function here to clear column");
-  //   }
-  // });
   
   const handlePaste = ( event,row, cell) => {
     event.preventDefault();

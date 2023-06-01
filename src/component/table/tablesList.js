@@ -253,7 +253,7 @@ export default function TablesList({ dbData }) {
         <Button
           onClick={() => handleOpenn()}
           variant="contained"
-          sx={{ width: 100, mt: 1, ml: 1, fontSize: "11px" }}
+          sx={{ width: 100, mt: 1, ml: 1, mb:1, fontSize: "11px", textTransform:"none" }}
         >
           Add Filter
         </Button>
