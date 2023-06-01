@@ -6,7 +6,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import './records.css'; // Import the CSS file
+import './records.scss'; // Import the CSS file
 
 function Records(props) {
   const [rowfieldData, setRowFieldData] = useState(null)

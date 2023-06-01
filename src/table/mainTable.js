@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
 import {  bulkAddColumns, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
-import "../../src/App.css";
+import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";

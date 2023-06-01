@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import CodeBlock from '../Codeblock/Codeblock';
 import OptionalParameter from '../optionalParameter/optionalParameter';
 import ResponseBox from '../responseBox';
-import './listRecord.css'; // Import the CSS file
+import './listRecord.scss'; // Import the CSS file
 
 function ListRecord(props) {
   const [value, setValue] = useState('');

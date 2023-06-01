@@ -9,7 +9,7 @@ import ListRecord from '../listRecord/listRecord';
 import AddRecord from '../addRecord/addRecord';
 import UpdateRecord from '../updateRecord/updateRecord';
 import DeleteRecord from '../deletRecord/deleteRecord';
-import './apiCrudTablist.css'; // Import the CSS file
+import './apiCrudTablist.scss'; // Import the CSS file
 
 const StyledTab = styled(Tab)(() => ({
   // ...styles

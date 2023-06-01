@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import './signupInput.css'; // Import the CSS file
+import './signupInput.scss'; // Import the CSS file
 
 export default function SignupInput(props) {
   // Joi implementation

@@ -8,7 +8,7 @@ import {
   TextField,
   Box,
 } from '@mui/material';
-import './optionalParameter.css'; // Import the CSS file
+import './optionalParameter.scss'; // Import the CSS file
 
 function OptionalParameter(props) {
   const [text, setText] = useState('');

@@ -2,7 +2,7 @@ import React from 'react';
 import { InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
-import './authKeyDropdown.css';
+import './authKeyDropdown.scss';
 
 export default function AuthKeyDropdown({ scope, setScope }) {
   const handleChange = (event) => {

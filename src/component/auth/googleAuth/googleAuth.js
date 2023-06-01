@@ -1,7 +1,7 @@
 import React from 'react'
 import googleIcon from '../../../assets/googleIcon.png'
 import { Button } from '@mui/material'
-import './googleAuth.css'; // Import the CSS file
+import './googleAuth.scss'; // Import the CSS file
 import { UserAuth } from '../../../context/authContext';
 
 export default function GoogleAuth() {

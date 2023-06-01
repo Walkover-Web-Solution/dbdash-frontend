@@ -6,7 +6,7 @@ import ApiCrudTablist from '../apiCrudTab/apiCrudTablist/apiCrudTablist';
 import { getDbById } from '../../../api/dbApi';
 import PropTypes from "prop-types";
 import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
-import "./navbarApi.css"; // Import the CSS file
+import "./navbarApi.scss"; // Import the CSS file
 
 export default function Navbar() {
   const [tables, setTables] = useState({});

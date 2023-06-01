@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { Button } from "@mui/material";
 import PropTypes from 'prop-types';
+import "./CodeSnippet.scss";
 
 const CodeSnippet = ({ codeString }) => {
   const [isCopied, setIsCopied] = useState(false);

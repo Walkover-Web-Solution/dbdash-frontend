@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 import CodeBlock from "../Codeblock/Codeblock";
 import Records from "../records/records";
 import ResponseBox from "../responseBox";
-import "./addRecord.css"; // Import the CSS file
+import "./addRecord.scss"; // Import the CSS file
 
 function AddRecord(props) {
   const [arr, setArr] = useState([]);

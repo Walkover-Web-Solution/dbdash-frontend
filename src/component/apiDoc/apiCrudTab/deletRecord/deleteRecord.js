@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import Records from '../records/records';
 import OptionalParameter from '../optionalParameter/optionalParameter';
 import ResponseBox from '../responseBox';
-import './deleteRecord.css'; // Import the CSS file
+import './deleteRecord.scss'; // Import the CSS file
 
 function DeleteRecord(props) {
   const [age, setAge] = useState('');

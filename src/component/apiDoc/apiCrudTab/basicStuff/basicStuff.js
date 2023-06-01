@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import './basicStuff.css'; // Import the CSS file
+import './basicStuff.scss'; // Import the CSS file
 
 function BasicStuff(props) {
   const [fieldData, setFieldData] = useState(null);

@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 import { selectActiveUser } from '../../store/user/userSelector.js';
 import PropTypes from 'prop-types';
 import dbDashLogo from '../../../src/table/img/dbDashLogo.png';
-import './mainNavbar.css';
+import './mainNavbar.scss';
 
-function mainNavbar(props) {
+function MainNavbar(props) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -104,8 +104,8 @@ function mainNavbar(props) {
     </Container>
   );
 }
-export default mainNavbar;
+export default MainNavbar;
 
-mainNavbar.propTypes = {
+MainNavbar.propTypes = {
   dbData: PropTypes.any
 }

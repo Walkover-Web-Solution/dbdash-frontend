@@ -10,7 +10,7 @@ import AuthKeyDropdown from "../../component/authKeyComponents/authKeyDropdown/a
 import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup";
 import { createAuthkey, getAuthkey, updateAuthkey } from "../../api/authkeyApi";
 import { selectActiveUser } from "../../store/user/userSelector.js";
-import "./createAuth.css";
+import "./createAuth.scss";
 
 export default function CreateAuthKey() {
   const location = useLocation();
