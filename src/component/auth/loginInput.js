@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import PropTypes from 'prop-types';
-import './loginInput.css'; // Import the CSS file
+import '../authCss/loginInput.css'; // Import the CSS file
 
 export default function LoginInput(props) {
 

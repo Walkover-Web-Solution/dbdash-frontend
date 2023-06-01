@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { getAllfields } from '../../../../api/fieldApi';
+import { getAllfields } from '../../../api/fieldApi';
 import Grid from '@mui/material/Grid';
 import { PropTypes } from 'prop-types';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import './records.css'; // Import the CSS file
+import '../apiCrudTabCss/records.css'; // Import the CSS file
 
 function Records(props) {
   const [rowfieldData, setRowFieldData] = useState(null)

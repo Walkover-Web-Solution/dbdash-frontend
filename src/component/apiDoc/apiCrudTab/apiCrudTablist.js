@@ -4,12 +4,12 @@ import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import BasicStuff from '../basicStuff/basicStuff';
-import ListRecord from '../listRecord/listRecord';
-import AddRecord from '../addRecord/addRecord';
-import UpdateRecord from '../updateRecord/updateRecord';
-import DeleteRecord from '../deletRecord/deleteRecord';
-import './apiCrudTablist.css'; // Import the CSS file
+import BasicStuff from './basicStuff';
+import ListRecord from './listRecord';
+import AddRecord from './addRecord';
+import UpdateRecord from './updateRecord';
+import DeleteRecord from './deleteRecord';
+import '../apiCrudTabCss/apiCrudTablist.css'; // Import the CSS file
 
 const StyledTab = styled(Tab)(() => ({
   // ...styles

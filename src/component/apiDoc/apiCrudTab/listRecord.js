@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { Typography } from '@mui/material';
-import CodeBlock from '../Codeblock/Codeblock';
-import OptionalParameter from '../optionalParameter/optionalParameter';
-import ResponseBox from '../responseBox';
-import './listRecord.css'; // Import the CSS file
+import CodeBlock from './Codeblock';
+import OptionalParameter from './optionalParameter';
+import ResponseBox from './responseBox';
+import '../apiCrudTabCss/listRecord.css'; // Import the CSS file
 
 function ListRecord(props) {
   const [value, setValue] = useState('');

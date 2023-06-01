@@ -1,6 +1,6 @@
 import { PropTypes } from 'prop-types';
 import React, { useState } from 'react';
-import './Codeblock.css'
+import '../apiCrudTabCss/Codeblock.css'
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 function CodeBlock(props) {

@@ -1,12 +1,12 @@
 import { PropTypes } from 'prop-types';
 import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
-import CodeBlock from '../Codeblock/Codeblock';
+import CodeBlock from './Codeblock';
 import React, { useState } from 'react';
-import Records from '../records/records';
-import OptionalParameter from '../optionalParameter/optionalParameter';
-import ResponseBox from '../responseBox';
-import './deleteRecord.css'; // Import the CSS file
+import Records from './records';
+import OptionalParameter from './optionalParameter';
+import ResponseBox from './responseBox';
+import '../apiCrudTabCss/deleteRecord.css'; // Import the CSS file
 
 function DeleteRecord(props) {
   const [age, setAge] = useState('');

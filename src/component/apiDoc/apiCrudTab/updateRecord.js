@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { PropTypes } from 'prop-types';
-import OptionalParameter from '../optionalParameter/optionalParameter';
+import OptionalParameter from './optionalParameter';
 import { Typography } from "@mui/material";
-import CodeBlock from '../Codeblock/Codeblock';
-import Records from '../records/records';
-import ResponseBox from '../responseBox';
-import './updateRecord.css'; // Import the CSS file
+import CodeBlock from './Codeblock';
+import Records from './records';
+import ResponseBox from './responseBox';
+import '../apiCrudTabCss/updateRecord.css'; // Import the CSS file
 
 function UpdateRecord(props) {
   const [value, setValue] = useState('');
