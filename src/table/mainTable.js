@@ -1,20 +1,31 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import { bulkAddColumns } from "../store/table/tableThunk";
+import {  bulkAddColumns} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
+import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
+import { addColumn, addRow, editCell } from "./addRow";
 
 export default function MainTable() {
   const params = useParams();
+  const dispatch = useDispatch();
   const fields = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
-  const [, setColumns] = useState(fields);
+  
+  const [selectedFieldName, setSelectedFieldName] = useState(false);
+  const [selectedTable, setSelectedTable] = useState("");
+  const [selectValue, setSelectValue] = useState('longtext');
+  const [open, setOpen] = useState(false);
+  const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
+  const [linkedValueName, setLinkedValueName] = useState("")
+  const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
-  const dispatch = useDispatch();
+  const [metaData, setMetaData] = useState({});
+
   useEffect(() => {
     dispatch(
       bulkAddColumns({
@@ -24,27 +35,34 @@ export default function MainTable() {
     );
   }, []);
 
-  const onAddCol = useCallback(() => {
-    const newData = dataa.map((row) => {
-      return { ...row, new: "" };
-    });
-    setData(newData);
-    setColumns([
-      ...fields,
-      {
-        title: "New",
-        id: "new",
-        hasMenu: true,
-      },
-    ]);
-  }, [dataa, fields]);
+  const createLeftorRightColumn = () => {
+    setOpen(false);
+    addColumn(dispatch,params,selectValue,metaData,textValue);
+    setSelectValue('longtext')
+  }
+
+  const addRows = () => {
+      addRow(dispatch);
+  };
+
+  const handleRowMoved = useCallback((from, to) => {
+    reorderRows(from, to, data, setData);
+  }, [data, setData]);
+
+  const onCellEdited = useCallback(
+    (cell, newValue) => {
+    editCell(cell, newValue,dispatch,fields);
+    },[data, fields]
+     );
 
   const getData = useCallback((cell) => {
+   
     const [col, row] = cell;
     const dataRow = dataa[row];
     const d = dataRow[fields[col].id];
     const { dataType } = fields[col];
-
+    
+    
     if (dataType === "autonumber") {
       return {
         allowOverlay: true,
@@ -53,34 +71,127 @@ export default function MainTable() {
         displayData: d.toString(),
       };
     }
-
-    return {
-      kind: GridCellKind.Text,
-      allowOverlay: true,
-      readonly: false,
-      displayData: d || "",
-      data: d || "",
-    };
+    else if (dataType === "createdat") {
+      console.log(d,"createdat")
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: true,
+        copyData: "4",
+        data: {
+          kind: "date-picker-cell",
+          date: new Date(),
+          displayDate: new Date().toISOString(),
+          format: "date"
+        }
+      };
+    }
+    if (dataType === "checkbox") {
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: true,
+        copyData: "4",
+        data: {
+          kind: "checkbox-cell",
+          value: d || false, // Use value from cellProps or default to false
+          onChange: (newValue) => handleCheckboxChange(newValue, cellProps),
+        },
+      };
+    }
+  
+    else if (dataType === "createdby") {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        displayData: d || "",
+        data: d || "",
+      };
+    }
+    else if (dataType === "rowid") {
+      return {
+        allowOverlay: true,
+        kind: GridCellKind.Number,
+        data: d,
+        displayData: d.toString(),
+      };
+    }
+    else if (dataType === "longtext") {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        displayData: d || "",
+        data: d || "",
+      };
+    }
+    else if(dataType === "multipleselect" && d != null){
+      return {
+        kind: GridCellKind.Bubble,
+        data: d,
+        allowOverlay: true
+      };
+    }
+    else if (dataType === "attachment" && d != null) {
+      return {
+        kind: GridCellKind.Image,
+        data: d,
+        allowOverlay: true,
+        allowAdd: true
+      };
+    } 
+    else {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        displayData: d || "",
+        data: d || "",
+      };
+    }
   }, [dataa, fields]);
 
-  const handleRowMoved = useCallback((from, to) => {
-    setData( reorderRows(from, to, data));
-  }, [data]);
-
+  
   return (
     <div className="table-container">
       <DataEditor
         getCellContent={getData}
+        onRowAppended={addRows}
         columns={fields}
         rows={dataa.length}
         rowMarkers="both"
+        onCellEdited={onCellEdited}
         onRowMoved={handleRowMoved}
+        editable
         rightElement={
           <div className="addCol">
-            <button onClick={onAddCol}>+</button>
-          </div>
+          <button onClick={() => setOpen(true)}>+</button>
+          <FieldPopupModal
+            title="create column"
+            label="Column Name"
+            setSelectedFieldName={setSelectedFieldName}
+            tableId={params?.tableName}
+            selectedFieldName={selectedFieldName}
+            selectedTable={selectedTable}
+            setSelectedTable={setSelectedTable}
+            setSelectValue={setSelectValue}
+            showFieldsDropdown={showFieldsDropdown}
+            setShowFieldsDropdown={setShowFieldsDropdown}
+            open={open}
+            metaData={metaData}
+            setMetaData={setMetaData}
+            setOpen={setOpen}
+            submitData={createLeftorRightColumn}
+            linkedValueName={linkedValueName}
+            setLinkedValueName={setLinkedValueName}
+            setTextValue={setTextValue}
+          />
+        </div>
         }
-
+        trailingRowOptions={{
+                  sticky: true,
+                  tint: true,
+                  hint: "New row...",
+                }}
       />
     </div>
   );
