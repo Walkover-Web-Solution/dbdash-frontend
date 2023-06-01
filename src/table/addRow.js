@@ -1,4 +1,4 @@
-import { addRows, addColumnrightandleft  } from "../store/table/tableThunk";
+import { addRows, addColumnrightandleft, updateCells } from "../store/table/tableThunk";
 
 export const addRow = (dispatch) => { 
     dispatch(addRows({ type: "add_row" }))    
@@ -11,3 +11,18 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue) => {
     }));
     return;
 }
+
+export const editCell = (cell, newValue,dispatch,fields) => { 
+    const [col, row] = cell;
+          const key = fields[col].id;
+          dispatch(
+          updateCells({
+            columnId: key,
+            rowIndex:row+1,
+            value: newValue.data,
+            dataTypes: newValue.kind,
+          })
+         );
+          return;
+}
+

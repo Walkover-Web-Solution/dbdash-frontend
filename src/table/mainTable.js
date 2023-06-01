@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {  bulkAddColumns,  } from "../store/table/tableThunk";
+import {  bulkAddColumns} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addColumn, addRow } from "./addRow";
+import { addColumn, addRow, editCell } from "./addRow";
 
 export default function MainTable() {
   const params = useParams();
@@ -49,6 +49,12 @@ export default function MainTable() {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
 
+  const onCellEdited = useCallback(
+    (cell, newValue) => {
+    editCell(cell, newValue,dispatch,fields);
+    },[data, fields]
+     );
+
   const getData = useCallback((cell) => {
     const [col, row] = cell;
     const dataRow = dataa[row];
@@ -82,6 +88,7 @@ export default function MainTable() {
         columns={fields}
         rows={dataa.length}
         rowMarkers="both"
+        onCellEdited={onCellEdited}
         onRowMoved={handleRowMoved}
         rightElement={
           <div className="addCol">
