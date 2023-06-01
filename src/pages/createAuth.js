@@ -7,7 +7,7 @@ import AuthAccessDropDown from "../component/authKeyComponents/authAccessDropdow
 import AuthKeyDropdown from "../component/authKeyComponents/authKeyDropdown";
 import { PropTypes } from "prop-types";
 import { createAuthkey, getAuthkey, updateAuthkey } from "../api/authkeyApi";
-import MainNavbar from "../component/mainNavbar";
+import MainNavbar from "../component/apiDoc/mainNavbar/mainNavbar";
 // import DisplayAuthKeyPopup from "../component/authKeyComponents/authKeyTablePopup/displayAuthkeyPopup";
 import AuthKeyPopup from "../component/authKeyComponents/authKeyPopup";
 import { useSelector } from "react-redux";

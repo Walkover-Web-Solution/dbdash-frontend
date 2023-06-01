@@ -2,33 +2,17 @@ import React, { useState } from "react";
 import { PropTypes } from "prop-types";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
-import CodeBlock from "./Codeblock";
-
-
-import Records from "./records";
-import ResponseBox from "./responseBox";
+import CodeBlock from "../Codeblock/Codeblock";
+import Records from "../records/records";
+import ResponseBox from "../responseBox";
+import "./addRecord.css"; // Import the CSS file
 
 function AddRecord(props) {
   const [arr, setArr] = useState([]);
 
   return (
     <>
-      <div
-    
-        style={{
-          position: "absolute",
-          display: "flex",
-          flexDirection: "column",
-       
-          right: 0,
-          width: "36vw",
-          padding: "10px",
-         
-          height: "65vh",
-          overflowY: "scroll",
-          whiteSpace: "pre-wrap",
-        }}
-      >
+      <div className="add-record-container">
         <CodeBlock
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
           header={`-H auth-key: YOUR_SECRET_API_TOKEN ${(
@@ -36,31 +20,20 @@ function AddRecord(props) {
           )} -H Content-Type: application/json`}
           body={arr}
         />
-        <ResponseBox response={`{
+        <ResponseBox
+          response={`{
 "employee": {
 "name": "sonoo",
 "salary": 56000,
 "married": true.
 }
-}`} />
+}`}
+        />
       </div>
-      <div
-        style={{
-          width: "700px",
-          height: "65vh",
-          overflowY: "scroll",
-      
-          whiteSpace: "pre-wrap",
-          padding: "2px",
-        }}
-      >
-        <Typography style={{ fontWeight: "bold", fontSize: "24px" }}>
-          Add Table Records
-        </Typography>
+      <div className="records-container">
+        <Typography className="add-record-title">Add Table Records</Typography>
         <br />
         <br />
-
-
         <Typography>
           <Box>
             <Records
@@ -75,8 +48,10 @@ function AddRecord(props) {
     </>
   );
 }
+
 AddRecord.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
 };
+
 export default AddRecord;

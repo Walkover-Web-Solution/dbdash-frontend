@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { getAllfields } from "../../../../api/fieldApi";
-import { Box } from "@mui/system";
-import { Typography } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
-import "./basicStuff.css";
+import React, { useEffect, useState } from 'react';
+import { PropTypes } from 'prop-types';
+import { getAllfields } from '../../../../api/fieldApi';
+import { Box } from '@mui/system';
+import { Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import './basicStuff.css'; // Import the CSS file
 
 function BasicStuff(props) {
   const [fieldData, setFieldData] = useState(null);
@@ -18,11 +18,11 @@ function BasicStuff(props) {
 
   const CopyButton = (text, index) => {
     const handleMouseDown = (e) => {
-      e.target.style.backgroundColor = "grey";
+      e.target.style.backgroundColor = 'gray';
     };
 
     const handleMouseUp = (e) => {
-      e.target.style.backgroundColor = "transparent";
+      e.target.style.backgroundColor = 'transparent';
     };
 
     const handleClick = () => {
@@ -33,20 +33,15 @@ function BasicStuff(props) {
       }, 2000);
     };
 
-    const textSize = text.length < 10 ? "16px" : "14px";
     return (
       <button
-        className="button"
+      className="copy-button"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onClick={handleClick}
       >
-        <ContentPasteIcon />
-        {copiedIndex === index && (
-          <span className="copied" style={{ marginLeft: "10px", fontSize: textSize - 4 }}>
-            Copied!
-          </span>
-        )}
+        <ContentPasteIcon className="color-black"/>
+        {copiedIndex === index && <span className="copied-text">Copied!</span>}
       </button>
     );
   };
@@ -56,30 +51,32 @@ function BasicStuff(props) {
   }, [props.db, props.table]);
 
   return (
-    <Box className="container">
-      <Typography className="bold">
+    <Box className="basic-stuff-container">
+      <Typography className="bold-text">
         Database Id - {props.db} {CopyButton(props.db, -1)}
       </Typography>
-      <Typography className="bold">
+      <Typography className="bold-text">
         Table Id - {props.table} {CopyButton(props.table, -2)}
       </Typography>
       <br />
       <Grid container spacing={2}>
         <Grid item xs={4}>
-          <Typography className="bold">fieldName</Typography>
+          <Typography className="bold-text">fieldName</Typography>
           {fieldData &&
             Object.entries(fieldData).map((fields, index) => (
-              <div className="field-container" key={index}>
+              <div className="field-name-container" key={index}>
                 <Typography className="field-name">{fields[1].fieldName}</Typography>
               </div>
             ))}
         </Grid>
         <Grid item xs={4}>
-          <Typography className="bold">fieldId</Typography>
+
+         
+          <Typography className="bold-text">fieldId</Typography>
           {fieldData &&
             Object.entries(fieldData).map((fields, index) => (
-              <div className="field-container" key={index}>
-                <Typography style={{ fontSize: "20px", textAlign: "left" }}>{fields[0]}</Typography>
+              <div className="field-id-container" key={index}>
+                <Typography>{fields[0]}</Typography>
                 {CopyButton(fields[0], index)}
               </div>
             ))}

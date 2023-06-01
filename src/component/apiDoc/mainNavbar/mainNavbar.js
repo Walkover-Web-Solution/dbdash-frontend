@@ -1,22 +1,22 @@
 import React, { useMemo } from 'react';
-import {Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem,  Divider, Button} from '@mui/material';
-import { UserAuth } from "../context/authContext.js"
-import { Link, useNavigate, useParams,useLocation} from 'react-router-dom';
-import { useSelector} from 'react-redux';
-import { selectActiveUser } from '../store/user/userSelector.js';
+import { Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem, Divider, Button } from '@mui/material';
+import { UserAuth } from "../../../context/authContext.js"
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectActiveUser } from '../../../store/user/userSelector.js';
 import PropTypes from 'prop-types';
-import dbDashLogo from '../table/img/dbDashLogo.png';
+import dbDashLogo from '../../../table/img/dbDashLogo.png';
+import './mainNavbar.css';
 
 function MainNavbar(props) {
-
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const user = UserAuth();
-  var {dbId} = useParams();
+  var { dbId } = useParams();
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
-  
+
   const shouldShowTypography = useMemo(() => {
     const currentPath = location.pathname;
     return currentPath.startsWith(`/db/${dbId}`) || currentPath.startsWith(`/db/${dbId}/table`);
@@ -42,43 +42,38 @@ function MainNavbar(props) {
   };
 
   return (
-    <Container sx={{bgcolor: "#212529", height: '8vh'}} maxWidth="false" >
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '8vh' }} disableGutters>
-        <Box sx={{ display: 'flex', justifyContent: "space-between", alignItems: 'center', width: '20%', height: '50px' }}>
-          <Box sx={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
+    <Container className="main-navbar-container" maxWidth="false">
+      <Toolbar className="main-navbar-toolbar" disableGutters>
+        <Box className="main-navbar-logo">
+          <Box>
             <Link to="/dashboard">
-              <img style={{ width: "100px", height: '3vh' }}
-                src={dbDashLogo}
-                alt="Db Dash" /> 
+              <img className="main-navbar-logo-image" src={dbDashLogo} alt="Db Dash" />
             </Link>
           </Box>
         </Box>
-
-
-        
         {props?.dbData &&
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '60%', height: '50px',mb: "2.5px" }}>
+          <Box className="main-navbar-dbname">
             <Typography variant="body1" align="center" fontWeight={600} color="white">
               {props?.dbData?.db.name}
             </Typography>
           </Box>
-        
         }
 
-                <Box ml="auto">
-         {shouldShowTypography && <Tooltip title="APIs">
-            <Button variant="outlined" component={Link} to={{ pathname: `/apiDoc/db/${dbId}` }} sx={{ textDecoration: 'none', color: '#fff', mb: '8px',fontWeight: 'bold',borderColor: 'green',  '&:hover': {
-          borderColor: '#7fc98d'} }}>APIs</Button>
+        <Box ml="auto">
+          {shouldShowTypography && <Tooltip title="APIs">
+            <Button className="main-navbar-apis-button" component={Link} to={{ pathname: `/apiDoc/db/${dbId}` }}>
+              APIs
+            </Button>
           </Tooltip>}
 
           <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ mb: "9px",ml:10 }}>
-              <Avatar alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL}/>
+            <IconButton className="main-navbar-settings-button" onClick={handleOpenUserMenu}>
+              <Avatar className="main-navbar-avatar" alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
             </IconButton>
           </Tooltip>
 
           <Menu
-            sx={{ mt: '45px' }}
+            className="main-navbar-user-menu"
             id="menu-appbar"
             anchorEl={anchorElUser}
             anchorOrigin={{
@@ -94,10 +89,10 @@ function MainNavbar(props) {
             onClose={handleCloseUserMenu}
           >
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">{userDetails?.fullName}</Typography>
+              <Typography className="main-navbar-user-menu-item-name" textAlign="center">{userDetails?.fullName}</Typography>
             </MenuItem>
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">{userDetails?.email}</Typography>
+              <Typography className="main-navbar-user-menu-item-email" textAlign="center">{userDetails?.email}</Typography>
             </MenuItem>
             <Divider />
             <MenuItem onClick={() => { handleLogOut() }}>
@@ -111,6 +106,6 @@ function MainNavbar(props) {
 }
 export default MainNavbar;
 
-MainNavbar.propTypes= {
-  dbData:PropTypes.any
+MainNavbar.propTypes = {
+  dbData: PropTypes.any
 }

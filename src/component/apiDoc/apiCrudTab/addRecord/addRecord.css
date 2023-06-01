@@ -1,0 +1,24 @@
+.add-record-container {
+    position: absolute !important;
+    display: flex !important;
+    flex-direction: column !important;
+    right: 0 !important;
+    width: 36vw !important;
+    padding: 10px !important;
+    height: 65vh !important;
+    overflow-y: scroll !important;
+    white-space: pre-wrap !important;
+  }
+  
+  .records-container {
+    width: 700px !important;
+    height: 65vh !important;
+    overflow-y: scroll !important;
+    white-space: pre-wrap !important;
+    padding: 2px !important;
+  }
+  
+  .add-record-title {
+    font-weight: bold !important;
+    font-size: 24px !important;
+  }  

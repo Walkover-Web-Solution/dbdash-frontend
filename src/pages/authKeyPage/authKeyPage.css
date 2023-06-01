@@ -1,0 +1,19 @@
+.auth-key-page-container {
+    display: flex;
+    justify-content: end;
+    margin: 1rem;
+  }
+  
+  .auth-key-page-button {
+    text-decoration: none;
+    margin-right: 5px;
+  }
+  
+  .auth-key-page-navbar {
+    margin-bottom: 1rem;
+  }
+  
+  .auth-key-page-content {
+    margin-top: 2rem;
+  }
+  

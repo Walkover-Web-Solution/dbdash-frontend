@@ -1,5 +1,5 @@
 import React from 'react'
-import './Codeblock.css';
+import '../apiCrudTab/Codeblock/Codeblock';
 import { PropTypes } from 'prop-types';
 
 function ResponseBox(props) {

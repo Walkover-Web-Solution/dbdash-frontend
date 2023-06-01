@@ -1,10 +1,11 @@
 import React,{useState} from 'react'
 import Box from '@mui/material/Box';
 import { UserAuth } from '../context/authContext.js'
-import GoogleAuth from '../component/auth/googleAuth';
+// import GoogleAuth from '../component/auth/googleAuth';
 import SignupInput from '../component/auth/signupInput';
-import LoginInput from '../component/auth/loginInput';
+import LoginInput from '../component/auth/loginInput/loginInput.js';
 import {Container} from '@mui/material';
+import GoogleAuth from '../component/auth/googleAuth/googleAuth.js';
 
 export default function Authpage() {
 

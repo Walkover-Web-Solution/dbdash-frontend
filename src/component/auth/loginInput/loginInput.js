@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import PropTypes from 'prop-types';
+import './loginInput.css'; // Import the CSS file
 
 export default function LoginInput(props) {
 
@@ -59,31 +60,26 @@ export default function LoginInput(props) {
 
 
     return (
-        <Box onSubmit={onSubmitLogin} component="form" sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Box sx={{ m: 1, width: '100%', height: '70px' }}>
-            <TextField style={{width:"350px"}} error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' label="Email" type="email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
+        <Box onSubmit={onSubmitLogin} component="form" className="login-input-form">
+          <Box className="login-input-field">
+            <TextField className="login-input-textfield" error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' label="Email" type="email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
             {/* error display */}
-            <Box style={{ color: 'red', fontSize: '12px', margin: '2px' }}>
+            <Box className="login-input-error">
               {state.$errors.email.map((data) => data.$message).join(",")}
             </Box>
           </Box>
-          <Box sx={{ m: 1, width: '100%', height: '70px'}}>
-            <TextField style={{width:"350px"}} error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' label="Password" type="password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
+          <Box className="login-input-field">
+            <TextField className="login-input-textfield" error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' label="Password" type="password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
             {/* error display */}
-            <Box style={{ color: 'red', fontSize: '12px',whiteSpace:"pre-wrap" }}>
+            <Box className="login-input-error">
               {state.$errors.password.map((data) => data.$message).join(",")}
             </Box>
           </Box>
-          <Button onClick={validate} type='submit' sx={{ bgcolor: 'text.primary', width: "50%", my: 2 }} variant="contained">Login</Button>
+          <Button onClick={validate} type='submit' className="login-input-button" variant="contained">Login</Button>
         </Box>
       )
 }
+
 LoginInput.propTypes = {
     loginHandleSubmit: PropTypes.func
 }
-
-
-
-
-
-

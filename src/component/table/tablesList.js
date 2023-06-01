@@ -179,7 +179,7 @@ export default function TablesList({ dbData }) {
             overflow: "hidden",
             width: "100%",
             height: "5vh",
-          }}
+          }}  
         >
           <Tabs
             value={value}

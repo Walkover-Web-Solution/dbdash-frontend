@@ -1,0 +1,25 @@
+#country-select-demo {
+    width: 300px;
+  }
+  
+  #country-select-demo .MuiOutlinedInput-root > fieldset {
+    border: none;
+  }
+  
+  #country-select-demo .MuiAutocomplete-inputRoot {
+    height: 1px;
+  }
+  
+  #country-select-demo .MuiAutocomplete-option {
+    padding: 5px 0;
+  }
+  
+  #country-select-demo .MuiAutocomplete-listbox {
+    padding: 0;
+    list-style: none;
+  }
+  
+  #country-select-demo .MuiAutocomplete-option.Mui-selected {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
