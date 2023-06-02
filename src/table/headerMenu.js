@@ -43,7 +43,6 @@ export default function Headermenu(props) {
 
   // Usage
   
-// console.log(props);
 const isOpen = props?.menu !== undefined;
 
 const { layerProps, renderLayer } = useLayer({

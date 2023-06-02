@@ -96,16 +96,17 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
-        console.log(payload,"payload")
         var columns = null
-         columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
-            if (payload?.filter != null) {
+        columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
+        if (payload?.filter != null) {
             // const tableInfo = getTableInfo(getState())
             const querydata = await runQueryonTable(
                 payload.dbId,
                 payload?.filter,
                 payload?.pageNo
             )
+            // console.log(querydata?.data?.data,"filter")
+
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
             const createdby = "fld" + payload.tableName.substring(3) + "createdby"
@@ -134,7 +135,7 @@ export const bulkAddColumns = createAsyncThunk(
             return dataa;
         }
         else {
-
+            console.log("else")
             const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
             const dataa = {
                 "columns": columns,
@@ -186,27 +187,27 @@ export const updateColumnHeaders = createAsyncThunk(
             newFieldType: payload?.fieldType,
             metaData: payload?.metaData
         }
-        
-        if(payload?.metaData?.isAllHide){
-            await hideAllField(payload?.dbId, payload?.tableName,payload?.metaData)
-            return;   
-        }  
-        else{
+
+        if (payload?.metaData?.isAllHide) {
+            await hideAllField(payload?.dbId, payload?.tableName, payload?.metaData)
+            return;
+        }
+        else {
 
             await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
         }
-        
-        if(payload?.metaData?.width) return;
-       
+
+        if (payload?.metaData?.width) return;
+
         const { tableId, dbId } = getState().table
-        if(payload?.metaData?.hide){
+        if (payload?.metaData?.hide) {
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
             return;
-        }else{
+        } else {
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
         }
         dispatch(getTable1({ dbId: payload?.dbId }))
-        if(payload?.metaData?.hide){
+        if (payload?.metaData?.hide) {
             return;
         }
         dispatch(updateColumnHeader(payload));
@@ -237,9 +238,9 @@ export const addColumnrightandleft = createAsyncThunk(
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
         else
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
-            dispatch(getTable1({ dbId: payload?.dbId }))
+        dispatch(getTable1({ dbId: payload?.dbId }))
         // dispatch(addColumnToLeft(payload));
-            const { tableId, dbId } = getState().table
+        const { tableId, dbId } = getState().table
         dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data }));
         return payload;
     }
@@ -262,11 +263,11 @@ export const addColumsToLeft = createAsyncThunk(
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
         else
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
-            dispatch(getTable1({ dbId: payload?.dbId }))
+        dispatch(getTable1({ dbId: payload?.dbId }))
         // dispatch(addColumnToLeft(payload));
-            const { tableId, dbId } = getState().table
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data }));
-            return payload;
+        const { tableId, dbId } = getState().table
+        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data }));
+        return payload;
     }
 )
 export const updateCells = createAsyncThunk(
@@ -282,7 +283,6 @@ export const updateCells = createAsyncThunk(
             return payload;
         }
         const data = await updateRow(dbId, tableId, payload.rowIndex, { [columnId]: value })
-        console.log("data",data)
         const createdby = "fld" + tableId.substring(3) + "createdby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {

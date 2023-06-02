@@ -5,7 +5,6 @@ export const addRow = (dispatch) => {
     return;
 }
 export const addColumn = (dispatch,params,selectValue,metaData,textValue) => { 
-  console.log(params,selectValue,metaData,textValue,"col")
     dispatch(addColumnrightandleft({
       fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
         selectValue, metaData: metaData

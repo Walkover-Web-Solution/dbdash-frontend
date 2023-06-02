@@ -123,8 +123,6 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
-    console.log(dbData);
- 
     if (params?.filterName) {
       setUnderLine(params?.filterName)
       dispatch(
@@ -136,8 +134,7 @@ export default function TablesList({ dbData }) {
           pageNo: 1,
           filterId : params?.filterName,
           fields:dbData?.db?.tables[params?.tableName]?.fields         
-        })
-        
+        })       
       );
     }
     else if (dbData?.db?.tables) {

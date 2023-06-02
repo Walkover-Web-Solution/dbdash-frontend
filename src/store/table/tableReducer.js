@@ -151,9 +151,7 @@ export const reducers = {
   },
 
   updateCell(state, payload) {
-    console.log("dsfdg")
     const action = payload.payload
-    console.log("action",action)
     state.skipReset=true;
     let arr= [];
   
@@ -498,11 +496,9 @@ export function extraReducers(builder) {
     .addCase(updateCells.fulfilled, (state , {payload}) => {
       
       const action = payload
-      console.log("actiond",action)
       state.skipReset=true;
       // let arr= [];
       const table = current(state.data);
-      console.log("state",current(state.data))      
       const updatedSeriesData = table?.map((series) => {
         const id  = series.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
         if(series[id]===action.rowIndex )  {
@@ -510,7 +506,6 @@ export function extraReducers(builder) {
         }
         return series;
       });
-console.log("updfated",updatedSeriesData)
       // state.data.forEach((ele)=>{
       //   const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
       //   if(ele[id] !==action.rowIndex ) {

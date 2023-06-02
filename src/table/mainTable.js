@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {  bulkAddColumns, updateColumnHeaders} from "../store/table/tableThunk";
+import {updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -63,19 +63,17 @@ export default function MainTable() {
   const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
-console.log("fields",fields);
-  useEffect(() => {
-    dispatch(
-      bulkAddColumns({
-        dbId: params?.dbId,
-        tableName: params?.tableName,
-      })
-    );
-  }, []);
+  // useEffect(() => {
+  //   dispatch(
+  //     bulkAddColumns({
+  //       dbId: params?.dbId,
+  //       tableName: params?.tableName,
+  //     })
+  //   );
+  // }, []);
 
-  const updatedField= useMemo(()=>fields,[fields])
-  console.log("first,",updatedField)
-
+  // const updatedField= useMemo(()=>fields,[fields])
+  // console.log(updatedField)
   const createLeftorRightColumn = () => {
     setOpen(false);
     addColumn(dispatch,params,selectValue,metaData,textValue);

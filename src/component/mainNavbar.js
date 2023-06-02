@@ -14,7 +14,6 @@ function MainNavbar(props) {
   const location = useLocation();
   const user = UserAuth();
   var {dbId} = useParams();
-  console.log(dbId);
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
   
