@@ -99,13 +99,12 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   }
 
   const location = useLocation();
-  const pathSegments = location.pathname.split('/');
-  const tablePath = pathSegments.slice(-2).join('/');
+  
 
   return (
     <>
       <Box
-        className={`single-table ${tablePath === `table/${table[0]}` ? 'active' : ''}`}
+        className={`single-table ${location.pathname.includes(`table/${table[0]}`) ? 'active' : ''}`}
         onClick={() => {
           onTableClicked(table[0]);
         }}

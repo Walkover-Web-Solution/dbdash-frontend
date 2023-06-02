@@ -6,7 +6,6 @@ import ApiCrudTablist from './apiCrudTab/apiCrudTablist';
 import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
 import { selectOrgandDb } from '../../store/database/databaseSelector.js';
-import "../apiDocCss/navbarApi.css"; // Import the CSS file
 
 export default function Navbar() {
   const [tables, setTables] = useState({});
@@ -58,8 +57,7 @@ export default function Navbar() {
   };
 
   return (
-    <>
-      {/*  <Box className="container" align="center"></Box> */}
+    <div style={{position:"fixed",top:0}}>
       <Box className="row-container" sx={{ display: "flex", flexDirection: "row" }}>
         <Box className="select-container" sx={{ display: "flex", flexDirection: "row" }}>
           {alldb && selectedDb && (
@@ -130,7 +128,7 @@ export default function Navbar() {
       <Box>
         {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
       </Box>
-    </>
+    </div>
   );
 }
 

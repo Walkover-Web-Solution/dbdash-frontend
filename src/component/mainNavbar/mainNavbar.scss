@@ -1,7 +1,7 @@
 @import '../../assets/styling.scss';
 .main-navbar-container {
   background-color: $bgColorValue !important;
-  border-bottom: 1px solid black !important;
+  border-bottom: 0.1px solid $linecolor !important;
   height: 8vh !important;
   position: fixed !important;
   top: 0 !important;
@@ -16,7 +16,7 @@
   margin-bottom: 8px !important;
   font-family: 'Inter' !important;
   font-size: 1rem !important;
-  color: black !important;
+  color: $fontColorVAlue !important;
 
   &:hover {
     text-decoration: underline !important;
@@ -33,7 +33,7 @@
   font-family: 'Inter' !important;
   font-size: 1rem !important;
   text-decoration: none !important;
-  color: black !important;
+  color: $fontColorVAlue !important;
   border-radius: 0 !important;
   border: none !important;
   margin-bottom: 2px !important;
@@ -41,7 +41,7 @@
   &:hover {
     border: none !important;
     background-color: transparent !important;
-    color: black !important;
+    color: $fontColorVAlue !important;
     text-decoration: underline !important;
   }
 }

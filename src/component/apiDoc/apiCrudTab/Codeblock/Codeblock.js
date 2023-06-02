@@ -39,9 +39,11 @@ const dummy=(type)=>{
 
 
     <div className="code-block" >
-      <button style={{ marginLeft: "450px" }} className="copy-button" onClick={(handleCopyClick)}>
-        {isCopied ? 'Copied!' : <ContentPasteIcon />}
+      <div className="codeblock-header">     <button className="copy-button" onClick={(handleCopyClick)}>
+        {isCopied ? <span style={{fontSize:"20px"}}>Copied!</span> : <ContentPasteIcon />}
       </button>
+      </div>
+ 
       <div style={{ position: "relative", bottom: 65 }} >
         <button onClick={() => { setShowAPI(true) }} style={showAPI ? { backgroundColor: "black", color: "white",  fontSize: "15px" } : {  backgroundColor: "white", color: "black", fontSize: "15px" }}>API</button>
         <button onClick={() => { setShowAPI(false) }} style={showAPI ? { backgroundColor: "white", color: "black", fontSize: "15px" } : {  backgroundColor: "black", color: "white", fontSize: "15px" }}>CURL</button>

@@ -4,7 +4,7 @@ import { UserAuth } from "../context/authContext.js"
 import { Link, useNavigate, useParams,useLocation} from 'react-router-dom';
 import { useSelector} from 'react-redux';
 import { selectActiveUser } from '../store/user/userSelector.js';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; s
 import dbDashLogo from '../table/img/dbDashLogo.png';
 
 function MainNavbar(props) {
@@ -14,7 +14,6 @@ function MainNavbar(props) {
   const location = useLocation();
   const user = UserAuth();
   var {dbId} = useParams();
-  console.log(dbId);
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
   

@@ -1,3 +1,20 @@
 $bgColorValue:#fff;
 $fontColorVAlue:#000000;
 $filterColorValue:black;
+$responseboxfontColor:#fff;
+$responseboxbgcolor:#4A4A4A;
+$copybuttoncolorlight:#fff;
+$copybuttoncolordark:#0000;
+$googleauthbordercolor:#0000;
+$errorcolor:#a51226;
+$selectedtabfontcolor:white;
+$selectedtabbgcolor:black;
+$megatitlesize:30;
+
+$headingtitle:'h2';
+$normaltext:'h3';
+$linecolor:#ccc;
+$bold:bold;
+:export {
+    megatitlesize: $megatitlesize;
+  }

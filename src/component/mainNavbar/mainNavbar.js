@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectActiveUser } from '../../store/user/userSelector.js';
 import { UserAuth } from '../../context/authContext.js';
+
 import {
   Box,
   IconButton,
@@ -17,13 +18,30 @@ import {
   Button,
 } from '@mui/material';
 import './mainNavbar.scss';
-
+import { selectOrgandDb } from '../../store/database/databaseSelector.js';
+function getDbNameByDbId(orgArray, dbId) {
+  for (let i = 0; i < orgArray.length; i++) {
+    const orgDbs = Object.entries(orgArray[i][1]);
+    
+    for (let j = 0; j < orgDbs.length; j++) {
+      if (orgDbs[j][0] === dbId && orgDbs[j][1] && orgDbs[j][1].name) {
+        return orgDbs[j][1].name;
+      }
+    }
+  }
+  return null; // Return null if the database ID is not found or the name is not available
+}
 function MainNavbar(props) {
+  const alldb = useSelector((state) => selectOrgandDb(state));
+console.log(Object.entries(alldb));
+  
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const user = UserAuth();
-  const { dbId } = useParams();
+  
+  const { dbId ,tableName} = useParams();
+console.log(tableName)
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
   const shouldShowTypography = useMemo(() => {
@@ -66,7 +84,7 @@ function MainNavbar(props) {
         </Link>
       </Box>
 
-      {props?.dbData && (
+      {(props?.dbData || props.dbtoredirect)  && (
         <Typography
           variant="body1"
           align="center"
@@ -75,7 +93,7 @@ function MainNavbar(props) {
           fontSize={24}
           color="black"
         >
-          {props?.dbData?.db.name}
+          {props?.dbData?.db.name || getDbNameByDbId(alldb,props.dbtoredirect)}
         </Typography>
       )}
 
@@ -87,7 +105,7 @@ function MainNavbar(props) {
               className="main-navbar-button"
               component={Link}
               style={shouldShowTableButton ? { backgroundColor: 'lightgrey', pointerEvents: 'none' } : {}}
-              to={{ pathname: `/apiDoc/db/${dbId}` }}
+              to={{ pathname: `/apiDoc/db/${dbId}`,state:{tableName:tableName} }}
             >
               APIs
             </Button>
@@ -96,13 +114,18 @@ function MainNavbar(props) {
 
         {(shouldShowTypography || shouldShowTableButton) && (
           <Tooltip title="Tables">
-            <Button
-              variant="outlined"
-              component={Link}
-              className="main-navbar-button"
-              style={shouldShowTypography ? { backgroundColor: 'lightgrey', pointerEvents: 'none' } : {}}
-              to={{ pathname: `/db/${dbId}` }}
-            >
+           <Button
+  variant="outlined"
+  component={Link}
+  className="main-navbar-button"
+  style={shouldShowTypography ? { backgroundColor: 'lightgrey', pointerEvents: 'none' } : {}}
+  to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
+    : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
+    : { pathname: `/db/${dbId}` }
+  }
+>
+
+
               Tables
             </Button>
           </Tooltip>
@@ -148,6 +171,8 @@ function MainNavbar(props) {
 
 MainNavbar.propTypes = {
   dbData: PropTypes.any,
+  dbtoredirect:PropTypes.any,
+  tabletoredirect:PropTypes.any
 };
 
 export default MainNavbar;

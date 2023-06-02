@@ -31,7 +31,7 @@ function DeleteRecord(props) {
       </div>
 
       <div className="records-container">
-        <Box>
+        <Box className="records-container">
           <Typography className="bold-heading">Delete Table Records</Typography>
           <Typography>
             <Box>

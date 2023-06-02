@@ -61,6 +61,7 @@
   }
   
   
+  
   .filter-button {
     width: 100px !important;
     margin-top: 1px !important;
@@ -70,26 +71,13 @@
     font-size: 11px !important;
     text-transform: none !important;
    
-
+&.hover{
+  background-color: $responseboxbgcolor;
+}
   }
 
   
-  .filter-box {
-    background-color: #4B4E5A !important;
-    height: 30px !important;
-    width: 120px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: #fff !important;
-    border-radius: 3px !important;
-    padding: 1px !important;
-   
-  
-    &:hover {
-      text-decoration: underline !important;
-    }
-  }
+ 
   .moreverticon{
     color:$filterColorValue !important;
   }
@@ -100,18 +88,5 @@
     align-items: center !important;
   }
   
-  .filter-button {
-    text-transform: uppercase !important;
-    cursor: pointer !important;
-    border: none !important;
-    outline: none !important;
-  
-    &:hover {
-      background-color:#4B4E5A !important;
-    }
-  
-    &:active {
-      background-color: #4B4E5A!important;
-    }
-  }
+ 
  
