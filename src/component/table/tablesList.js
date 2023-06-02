@@ -80,7 +80,7 @@ export default function TablesList({ dbData }) {
   function onFilterClicked(filter, id) {
     setUnderLine(id)
     setFilterId(id);
-    setPage(1);
+    // setPage(1);
     dispatch(
       bulkAddColumns({
         dbId: dbData?.db?._id,
@@ -207,20 +207,22 @@ export default function TablesList({ dbData }) {
           Object.entries(AllTableInfo[params?.tableName]?.filters).map(
             (filter, index) => (
               <Box key={index} className="custom-box">
-  <Box
-    className="filter-box"
-    onClick={() => {
-      onFilterClicked(filter[1].query, filter[0], filter[1]);
-    }}
-    style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
-    variant="outlined"
-  >
-    {filter[1]?.filterName}
-    <IconButton onClick={(e) => handleClick(e, filter[0])}>
-      <MoreVertIcon className="moreverticon" />
-    </IconButton>
-  </Box>
-</Box>
+            <Box
+              className="filter-box"
+             
+              style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
+              variant="outlined"
+            >
+              <Box  onClick={() => {
+                onFilterClicked(filter[1].query, filter[0], filter[1]);
+              }}>
+              {filter[1]?.filterName}
+              </Box>
+              <IconButton onClick={(e) => handleClick(e, filter[0])}>
+                <MoreVertIcon className="moreverticon" />
+              </IconButton>
+            </Box>
+          </Box>
 
             )
           )}

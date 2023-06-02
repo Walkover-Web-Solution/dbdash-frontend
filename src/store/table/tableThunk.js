@@ -96,11 +96,11 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
+        console.log(payload,"payload")
         var columns = null
-       
          columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
-        if (payload?.filter != null) {
-            const tableInfo = getTableInfo(getState())
+            if (payload?.filter != null) {
+            // const tableInfo = getTableInfo(getState())
             const querydata = await runQueryonTable(
                 payload.dbId,
                 payload?.filter,
@@ -112,12 +112,12 @@ export const bulkAddColumns = createAsyncThunk(
             querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
                 row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
             })
-            if (tableInfo.filterId == payload?.filterId) {
-                querydata.data.data.rows = [
-                    ...(tableInfo?.data ?? []),
-                    ...(querydata?.data?.data?.rows ?? []),
-                ];
-            }
+            // if (tableInfo.filterId == payload?.filterId) {
+            //     querydata.data.data.rows = [
+            //         ...(tableInfo?.data ?? []),
+            //         ...(querydata?.data?.data?.rows ?? []),
+            //     ];
+            // }
             // else {
             //     querydata.data.data.pageNo = 1;
             // }
