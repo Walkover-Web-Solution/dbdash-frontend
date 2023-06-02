@@ -133,11 +133,12 @@ export default function CreateAuthKey() {
               <Button
                 variant="contained"
                 disabled={isDisabled}
+
                 onClick={() => {
                   createAuth();
                   handleOpen();
                 }}
-                className="create-auth-key-button"
+                className="create-auth-key-button mui-button"
               >
                 {dbId ? "Update" : "Create"}
               </Button>
@@ -145,7 +146,7 @@ export default function CreateAuthKey() {
             </Box>
             <Box>
               <Link to={`/authkeypage/${id}`} className="create-auth-key-link">
-                <Button variant="outlined" className="create-auth-key-button">
+                <Button variant="outlined" className=" mui-button-outlined create-auth-key-button">
                   Cancel
                 </Button>
               </Link>

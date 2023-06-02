@@ -15,7 +15,7 @@ import { deleteFilter } from "../../api/filterApi";
 import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
-
+import './tablesList.scss'
 export default function TablesList({ dbData }) {
   
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -164,31 +164,18 @@ export default function TablesList({ dbData }) {
   }, [params?.tableName]);
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          height: "5vh",
-          overflow: "hidden",
-          position: "sticky",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            overflow: "hidden",
-            width: "100%",
-            height: "5vh",
-          }}  
-        >
+    <div className="tableslist">
+      <Box className="tables-list-container">
+      <Box className="tabs-container">
           <Tabs
             value={value}
             onChange={handleChange}
             TabIndicatorProps={{
               style: { display: "none" },
             }}
+            className="tabs"
             variant="scrollable"
-            scrollButtons="auto"
+            scrollButtons="fixed"
             aria-label="scrollable auto tabs example"
           >
             {AllTableInfo &&
@@ -207,54 +194,41 @@ export default function TablesList({ dbData }) {
               ))}
           </Tabs>
           <Button
-            variant="outlined"
-            onClick={() => handleOpen()}
-            sx={{ marginLeft: "0.5rem", marginTop:"4px" ,width: "fit-content", height: "4vh" }}
-          >
+      variant="outlined"
+      className="mui-button-outlined add-button"
+      onClick={() => handleOpen()}
+    >
             <AddIcon />
           </Button>
         </Box>
       </Box>
-      <Box display="flex" flexWrap="nowrap">
+      <Box display="flex"  flexWrap="nowrap">
         {AllTableInfo[params?.tableName]?.filters &&
           Object.entries(AllTableInfo[params?.tableName]?.filters).map(
             (filter, index) => (
-              <Box key={index} sx={{ mt: "1%", ml: 1 }}>
-                <Box
-                  sx={{
-                    backgroundColor: "#4B4E5A",
-                    height: 30,
-                    width: 120,
-                    display: "flex",
-                    gap: "10px",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#fff",
-                    borderRadius: 3,
-                    p: 1,
-                  }}
-                  onClick={() => {
-                    onFilterClicked(filter[1].query, filter[0], filter[1]);
-                  }}
-                  style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
-                  variant="contained"
-                  color="primary"
-                >
-                  {filter[1]?.filterName}
-                  <IconButton onClick={(e) => handleClick(e, filter[0])}>
-                    <MoreVertIcon sx={{ color: "#fff" }} />
-                  </IconButton>
+              <Box key={index} className="custom-box">
+  <Box
+    className="filter-box"
+    onClick={() => {
+      onFilterClicked(filter[1].query, filter[0], filter[1]);
+    }}
+    style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
+    variant="outlined"
+  >
+    {filter[1]?.filterName}
+    <IconButton onClick={(e) => handleClick(e, filter[0])}>
+      <MoreVertIcon className="moreverticon" />
+    </IconButton>
+  </Box>
+</Box>
 
-                </Box>
-              </Box>
             )
           )}
-
-        <Button
-          onClick={() => handleOpenn()}
-          variant="contained"
-          sx={{ width: 100, mt: 1, ml: 1, mb:1, fontSize: "11px", textTransform:"none" }}
-        >
+ <Button
+    onClick={() => handleOpenn()}
+    variant="contained"
+    className="mui-button filter-button"
+  >
           Add Filter
         </Button>
       </Box>
@@ -303,13 +277,17 @@ export default function TablesList({ dbData }) {
           Delete
         </MenuItem>
       </Menu>
+    </div>
+
+<div style={{marginTop:"25vh"}}>
       {isTableLoading ? (
-        <CircularProgress />
+      <CircularProgress className="table-loading" />
       ) : (
         <>
           <MainTable setPage={setPage} page={page} />
         </>
       )}
+      </div>
     </>
   );
 }

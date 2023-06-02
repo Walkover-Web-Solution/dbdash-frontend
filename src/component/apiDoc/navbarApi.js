@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader, ButtonGroup } from "@mui/material";
-import ApiCrudTablist from '../apiCrudTab/apiCrudTablist/apiCrudTablist';
-import { getDbById } from '../../../api/dbApi';
+import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader } from "@mui/material";
+import ApiCrudTablist from './apiCrudTab/apiCrudTablist';
+import { getDbById } from '../../api/dbApi';
 import PropTypes from "prop-types";
-import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
+import { selectOrgandDb } from '../../store/database/databaseSelector.js';
+import "../apiDocCss/navbarApi.css"; // Import the CSS file
 
 export default function Navbar() {
   const [tables, setTables] = useState({});
@@ -58,21 +59,19 @@ export default function Navbar() {
 
   return (
     <>
-      <Box align="center"></Box>
-      <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
+      {/*  <Box className="container" align="center"></Box> */}
+      <Box className="row-container" sx={{ display: "flex", flexDirection: "row" }}>
+        <Box className="select-container" sx={{ display: "flex", flexDirection: "row" }}>
           {alldb && selectedDb && (
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
+            <FormControl className="form-control" sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel htmlFor="grouped-select" className="label">Organization-db</InputLabel>
               <Select
                 id="grouped-select"
-              className="rigid-border"
-
                 label="Organization and dbs"
                 value={selectedDb}
                 onChange={handleChange}
               >
-                {Object.entries(alldb)
+                {Object.entries(alldb) 
                   .sort(([, dbs1], [, dbs2]) =>
                     dbs1[0]?.org_id?.name && dbs2[0]?.org_id?.name
                       ? dbs1[0].org_id.name.localeCompare(dbs2[0].org_id.name)
@@ -99,57 +98,35 @@ export default function Navbar() {
           )}
         </Box>
         {Object.keys(tables).length >= 1 && (
-          <Box>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
-              <Select
-              className="rigid-border"
-                value={selectTable}
-                label="Tables-Name"
-                onChange={handleChangeTable}
-              >
-                {Object.entries(tables)?.map((table) => (
-                  <MenuItem key={table[0]} value={table[0]}>
-                    {table[1].tableName || table[0]}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-        )}
-        {Object.keys(tables).length >= 1 && (
-  <Box
-    sx={{
-      display: 'flex',
-      alignItems: 'center',
-      marginRight: '10px',
-      position: 'fixed',
-      right: 0,
-      top: '10vh'
-    }}
-  >
-    <ButtonGroup color="primary" style={{borderRadius:0}}>
-      
-      <Button   className="mui-button" variant="contained"  
-sx={{
-          pointerEvents: 'none',
-          
-        }}>{'API Documentation'}</Button>
-      <Link
-        to={`/authkeypage/${dbId}`}
-        state={selectedOption}
-        
-        style={{ textDecoration: 'none' }}
+  <Box>
+    <FormControl className="tables-select" sx={{ m:1, minWidth: 130 }}>
+      <InputLabel htmlFor="grouped-select" className="label">Tables-Name</InputLabel>
+      <Select
+        value={selectTable}
+        label="Tables-Name"
+        onChange={handleChangeTable}
       >
-        <Button className="mui-button-outlined" variant="outlined" >{'Auth Key'}</Button>
-      </Link>
-    </ButtonGroup>
+        {Object.entries(tables)?.map((table) => (
+          <MenuItem key={table[0]} value={table[0]}>
+            {table[1].tableName || table[0]}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+
+    {Object.keys(tables).length >= 1 && (
+      <Box className="fixed-button">
+        <Link to={`/authkeypage/${dbId}`} state={selectedOption}>
+          <Button  className="mui-button" variant="contained" >Auth Key</Button>
+        </Link>
+      </Box>
+    )}
   </Box>
 )}
 
-
-
       </Box>
+
+      
       <Box>
         {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
       </Box>

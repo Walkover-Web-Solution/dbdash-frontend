@@ -11,7 +11,9 @@ function ApiDocPage() {
         <Box>
       <MainNavbar/>
     </Box>
+    <Box sx={{mt:"8vh"}}>
         <Navbar/>
+        </Box>
    </>
     );
 }

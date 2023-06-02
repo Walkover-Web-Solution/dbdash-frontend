@@ -598,6 +598,7 @@ style={{overflowY:"scroll",margin:"30px",height:"400px",width:"300px",padding:"1
             minRows={1}
             />
             <Button 
+            className="mui-button-outlined" 
             variant="outlined" style={{margin:"2px",color:"maroon",backgroundColor:"white"}}  onClick={()=>{
               setValue({value:textarea,update:true});
 

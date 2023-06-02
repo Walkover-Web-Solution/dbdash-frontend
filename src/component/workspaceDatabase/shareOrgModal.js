@@ -95,6 +95,7 @@ export default function ShareOrgModal(props) {
         <Button onClick={handleClose}>Cancel</Button>
         <Button
           variant="contained"
+          className="mui-button"
           color="primary"
           onClick={handleSendInvite}
         >

@@ -58,7 +58,7 @@ function OptionalParameter(props) {
           label=""
           onChange={handleTextChange}
           variant="outlined"
-          className="text-field"
+          className="text-field mui-button-outlined"
         />
         <br />
         <br />

@@ -142,9 +142,9 @@ const Table = memo(
               onClick={() => {
                 dataDispatch(deleteRows(selectedFlatRows));
               }}
-              variant="contained"
+              variant="contained"  className="mui-button"
             >
-              <DeleteOutlined style={{ fontSize: "19px" }} />
+              <DeleteOutlined  className="mui-button-outlined" style={{ fontSize: "19px" }} />
             </Button>
           </div>
         )}

@@ -9,6 +9,9 @@
 .custom-tab-indicator {
   display: none !important
 }
+::-webkit-scrollbar{
+  display: none !important;
+}
 
 .custom-tab-label {
   background-color: #9e9e9e !important ;

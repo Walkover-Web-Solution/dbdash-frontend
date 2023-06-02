@@ -1,11 +1,21 @@
 import React, { useMemo } from 'react';
-import { Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem, Divider, Button } from '@mui/material';
-import { UserAuth } from "../../context/authContext.js"
+import PropTypes from 'prop-types';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectActiveUser } from '../../store/user/userSelector.js';
-import PropTypes from 'prop-types';
-import dbDashLogo from '../../../src/table/img/dbDashLogo.png';
+import { UserAuth } from '../../context/authContext.js';
+import {
+  Box,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Tooltip,
+  MenuItem,
+  Divider,
+  Button,
+} from '@mui/material';
 import './mainNavbar.scss';
 
 function MainNavbar(props) {
@@ -13,14 +23,20 @@ function MainNavbar(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const user = UserAuth();
-  var { dbId } = useParams();
+  const { dbId } = useParams();
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
-
   const shouldShowTypography = useMemo(() => {
     const currentPath = location.pathname;
-    return currentPath.startsWith(`/db/${dbId}`) || currentPath.startsWith(`/db/${dbId}/table`);
+    return (
+      currentPath.startsWith(`/db/${dbId}`) || currentPath.startsWith(`/db/${dbId}/table`)
+    );
   }, [dbId, location.pathname]);
+
+  const shouldShowTableButton = useMemo(() => {
+    const currentPath = location.pathname;
+    return currentPath.startsWith('/apiDoc/db') || currentPath.startsWith('/authkeypage');
+  });
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -30,12 +46,11 @@ function MainNavbar(props) {
     try {
       await logOut();
       localStorage.clear();
-      navigate("/")
+      navigate('/');
+    } catch (e) {
+      console.log(e);
     }
-    catch (e) {
-      console.log(e)
-    }
-  }
+  };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -43,69 +58,96 @@ function MainNavbar(props) {
 
   return (
     <Container className="main-navbar-container" maxWidth="false">
-      <Toolbar className="main-navbar-toolbar" disableGutters>
-        <Box className="main-navbar-logo">
-          <Box>
-            <Link to="/dashboard">
-              <img className="main-navbar-logo-image" src={dbDashLogo} alt="Db Dash" />
-            </Link>
-          </Box>
-        </Box>
-        {props?.dbData &&
-          <Box className="main-navbar-dbname">
-            <Typography variant="body1" align="center" fontWeight={600} color="white">
-              {props?.dbData?.db.name}
-            </Typography>
-          </Box>
-        }
+      <Box>
+        <Link to="/dashboard" className="main-navbar-link">
+          <Typography variant="h6" component="span" className="main-navbar-title">
+            dbDash
+          </Typography>
+        </Link>
+      </Box>
 
-        <Box ml="auto">
-          {shouldShowTypography && <Tooltip title="APIs">
-            <Button className="main-navbar-apis-button" component={Link} to={{ pathname: `/apiDoc/db/${dbId}` }}>
+      {props?.dbData && (
+        <Typography
+          variant="body1"
+          align="center"
+          fontWeight={200}
+          fontFamily="Inter"
+          fontSize={24}
+          color="black"
+        >
+          {props?.dbData?.db.name}
+        </Typography>
+      )}
+
+      <Box>
+        {(shouldShowTypography || shouldShowTableButton) && (
+          <Tooltip title="APIs">
+            <Button
+              variant="outlined"
+              className="main-navbar-button"
+              component={Link}
+              style={shouldShowTableButton ? { backgroundColor: 'lightgrey', pointerEvents: 'none' } : {}}
+              to={{ pathname: `/apiDoc/db/${dbId}` }}
+            >
               APIs
             </Button>
-          </Tooltip>}
-
-          <Tooltip title="Open settings">
-            <IconButton className="main-navbar-settings-button" onClick={handleOpenUserMenu}>
-              <Avatar className="main-navbar-avatar" alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
-            </IconButton>
           </Tooltip>
+        )}
 
-          <Menu
-            className="main-navbar-user-menu"
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography className="main-navbar-user-menu-item-name" textAlign="center">{userDetails?.fullName}</Typography>
-            </MenuItem>
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography className="main-navbar-user-menu-item-email" textAlign="center">{userDetails?.email}</Typography>
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={() => { handleLogOut() }}>
-              <Typography textAlign="center">Logout</Typography>
-            </MenuItem>
-          </Menu>
-        </Box>
-      </Toolbar>
+        {(shouldShowTypography || shouldShowTableButton) && (
+          <Tooltip title="Tables">
+            <Button
+              variant="outlined"
+              component={Link}
+              className="main-navbar-button"
+              style={shouldShowTypography ? { backgroundColor: 'lightgrey', pointerEvents: 'none' } : {}}
+              to={{ pathname: `/db/${dbId}` }}
+            >
+              Tables
+            </Button>
+          </Tooltip>
+        )}
+
+        <Tooltip title="Open settings">
+          <IconButton onClick={handleOpenUserMenu} className="main-navbar-avatar-button">
+            <Avatar alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
+          </IconButton>
+        </Tooltip>
+
+        <Menu
+          className="main-navbar-menu"
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          <MenuItem onClick={handleCloseUserMenu}>
+            <Typography textAlign="center">{userDetails?.fullName}</Typography>
+          </MenuItem>
+          <MenuItem onClick={handleCloseUserMenu}>
+            <Typography textAlign="center">{userDetails?.email}</Typography>
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={handleLogOut}>
+            <Typography textAlign="center">Logout</Typography>
+          </MenuItem>
+        </Menu>
+      </Box>
     </Container>
   );
 }
-export default MainNavbar;
 
 MainNavbar.propTypes = {
-  dbData: PropTypes.any
-}
+  dbData: PropTypes.any,
+};
+
+export default MainNavbar;

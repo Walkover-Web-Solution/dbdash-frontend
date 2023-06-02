@@ -1,0 +1,24 @@
+.single-table {
+    padding: 2.5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: white!important;
+    text-align: center;
+    color:black !important;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: transform 0.2s ease-in-out;
+  
+    &.active {
+      background-color: black !important;
+      color:white !important;
+    }
+  
+    .MuiTab-root {
+      min-width: auto;
+      overflow-x: auto;
+      flex-direction: row;
+      text-transform: none;
+      height: 10px;
+    }
+  }
+ 

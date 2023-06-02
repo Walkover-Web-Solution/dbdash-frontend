@@ -1,76 +1,56 @@
+@import '../../assets/styling.scss';
 .main-navbar-container {
-    background-color: #212529 !important;
-    height: 8vh !important;
+  background-color: $bgColorValue !important;
+  border-bottom: 1px solid black !important;
+  height: 8vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  z-index:100;
+}
+
+.main-navbar-link {
+  text-decoration: none !important;
+  margin-bottom: 8px !important;
+  font-family: 'Inter' !important;
+  font-size: 1rem !important;
+  color: black !important;
+
+  &:hover {
+    text-decoration: underline !important;
   }
-  
-  .main-navbar-toolbar {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    height: 8vh !important;
+}
+
+.main-navbar-title {
+  &:hover {
+    text-decoration: underline !important;
   }
-  
-  .main-navbar-logo {
-    display: flex !important;
-    /* justify-content: center; */
-    align-items: center !important;
-    width: 20% !important;
-    height: 50px !important;
+}
+
+.main-navbar-button {
+  font-family: 'Inter' !important;
+  font-size: 1rem !important;
+  text-decoration: none !important;
+  color: black !important;
+  border-radius: 0 !important;
+  border: none !important;
+  margin-bottom: 2px !important;
+
+  &:hover {
+    border: none !important;
+    background-color: transparent !important;
+    color: black !important;
+    text-decoration: underline !important;
   }
-  
-  .main-navbar-logo img {
-    width: 100px !important;
-    height: 3vh !important;
-  }
-  
-  .main-navbar-dbname {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 60% !important;
-    height: 50px !important;
-    margin-bottom: 2.5px !important;
-  }
-  
-  .main-navbar-apis-button {
-    text-decoration: none !important;
-    color: #fff !important;
-    margin-bottom: 8px !important;
-    font-weight: bold !important;
-    border-color: #028702 !important;
-  }
-  
-  .main-navbar-apis-button:hover {
-    border-color: #7fc98d !important;
-  }
-  
-  .main-navbar-settings-button {
-   
-    margin-bottom: 9px !important;
-    margin-left: 10px !important;
-  }
-  
-  .main-navbar-avatar {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 32px !important;
-    height: 32px !important;
-  }
-  
-  .main-navbar-user-menu {
-    margin-top: 45px !important;
-  }
-  
-  .main-navbar-user-menu-item {
-    text-align: center !important;
-  }
-  
-  .main-navbar-user-menu-item-name {
-    text-align: center !important;
-  }
-  
-  .main-navbar-user-menu-item-email {
-    text-align: center !important;
-  }
-  
+}
+
+.main-navbar-avatar-button {
+  margin-left: 10px !important;
+  border-radius: 0 !important;
+}
+
+.main-navbar-menu {
+  margin-top: 45px !important;
+}
