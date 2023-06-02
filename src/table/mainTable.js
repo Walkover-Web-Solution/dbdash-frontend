@@ -16,7 +16,6 @@ export default function MainTable() {
   const dispatch = useDispatch();
   const fields = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
-  
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -79,8 +78,27 @@ export default function MainTable() {
     const dataRow = dataa[row];
     const d = dataRow[fields[col].id];
     const { dataType } = fields[col];
+
+    // const handlePhoneChange = (event) => {
+    //   const newValue = event.target.value;
+    //   console.log(newValue)
+    //   // Handle the phone number change here
+    // };
+
+    // if (dataType === "phone") {
+    //   return {
+    //     kind: GridCellKind.Custom,
+    //     allowOverlay: true,
+    //     copyData: "4",
+    //     data: {
+    //       kind: "phone-cell",
+    //       value: d || "",
+    //       onChange: (newValue) => handlePhoneChange(newValue, cellProps),
+    //     },
+    //   };
+    // }
     
-    if (dataType === "autonumber" || dataType === "rowid") {
+    if (dataType === "autonumber" ) {
       return {
         allowOverlay: true,
         kind: GridCellKind.Number,
@@ -88,7 +106,7 @@ export default function MainTable() {
         displayData: d.toString(),
       };
     }
-    else if (dataType === "createdat" || dataType === "createdby" || dataType === "longtext") {
+    else if (dataType === "createdat" || dataType === "createdby" || dataType === "longtext"|| dataType === "rowid") {
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,
@@ -97,6 +115,15 @@ export default function MainTable() {
         data: d || "",
       };
     }
+    // else if (dataType === "checkbox") {
+    //   return {
+    //     kind: GridCellKind.Boolean,
+    //     allowOverlay: true,
+    //     readonly: false,
+    //     displayData: 0 || "",
+    //     data: 0 || "",
+    //   };
+    // }
     else if(dataType === "multipleselect" && d != null){
       return {
         kind: GridCellKind.Bubble,
@@ -123,11 +150,31 @@ export default function MainTable() {
     }
   }, [dataa, fields]);
 
+
+  // function CustomCellRenderer(cell) {
+  //   console.log(cell,"cell")
+  //   const { dataType, value } = cell;
+  //   if (dataType === "phone") {
+      // const handlePhoneChange = (event) => {
+      //   const newValue = event.target.value;
+      //   console.log(newValue)
+      //   // Handle the phone number change here
+      // };
   
+  //     return (
+  //       <input type="tel" value={value} onChange={handlePhoneChange} />
+  //     );
+  //   }
+  
+  //   // Render the default cell content if it's not a phone type
+  //   return value;
+  // }
+
   return (
     <div className="table-container">
       <DataEditor
         getCellContent={getData}
+        // customCellRenderer={CustomCellRenderer}
         onRowAppended={addRows}
         columns={fields}
         rows={dataa.length}
