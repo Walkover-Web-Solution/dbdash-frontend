@@ -17,7 +17,7 @@ function DeleteRecord(props) {
     <>
       <div className="delete-record-container">
         <CodeBlock
-          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}${value != "" ? `?${value}` : ``}`}
+          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}/{:rowId}${value != "" ? `?${value}` : ``}`}
           header="-H auth-key: AUTH_TOKEN"
           body={arr}
         />
@@ -36,9 +36,9 @@ function DeleteRecord(props) {
           <Typography>
             <Box>
               <br />
-              <Records db={props.db} table={props.table} setArr={setArr} arr={arr} />
+              <Records db={props?.db} table={props?.table} setArr={setArr} arr={arr} />
               <br />
-              <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge} />
+              <OptionalParameter  db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
             </Box>
           </Typography>
         </Box>

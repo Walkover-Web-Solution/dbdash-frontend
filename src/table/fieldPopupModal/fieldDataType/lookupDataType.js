@@ -49,7 +49,6 @@ export default function LoookupDataType(props) {
 
             setOpenViewDropdown(true);
           }}
-
         >
 
           {
