@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import Authpage from './pages/authPage';
 import LandingPage from './pages/landingPage';
@@ -10,8 +10,8 @@ import ApiDocPage from './pages/apidocPage';
 import Protected from './component/protected';
 import WithAuth from './component/withAuth';
 import Notfoundpage from './component/notFoundPage';
-import AuthKeyPage from './pages/authKeyPage';
-import CreateAuth from './pages/createAuth';
+import AuthKeyPage from '../src/pages/authKeyPage/authKeyPage';
+import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

@@ -411,7 +411,7 @@ export default function FilterModal(props) {
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {props?.edit == false && <Box>
-              <Button variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
+              <Button className="mui-button" variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
                 validate();
                 getQueryData();
                 handleClose();
@@ -421,14 +421,14 @@ export default function FilterModal(props) {
             </Box>}
 
             <Box>
-              {props?.edit == true && <Button onClick={() => {
+              {props?.edit == true && <Button className="mui-button" onClick={() => {
                 editQueryData()
                 handleClose()
               }} variant="contained">Edit</Button>}
             </Box>
 
             <Box>
-              <Button variant="outlined" onClick={handleClose}>
+              <Button variant="outlined" className="mui-button-outlined" onClick={handleClose}>
                 Cancel
               </Button>
             </Box>

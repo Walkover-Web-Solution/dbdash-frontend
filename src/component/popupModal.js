@@ -106,6 +106,7 @@ export default function PopupModal(props) {
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
               <Button
+              className="mui-button"
                 variant="contained"
                 disabled={
                   textFieldValue.length < 3 ||
@@ -121,7 +122,7 @@ export default function PopupModal(props) {
               </Button>
             </Box>
             <Box>
-              <Button variant="outlined" onClick={handleClose}>
+              <Button variant="outlined" className="mui-button-outlined"  onClick={handleClose}>
                 Cancel
               </Button>
             </Box>

@@ -5,7 +5,6 @@ export const addRow = (dispatch) => {
     return;
 }
 export const addColumn = (dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName) => { 
-  console.log(params,selectValue,metaData,textValue,linkedValueName,selectedTable,selectedFieldName,"col")
       dispatch(addColumsToLeft({
       fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
         selectValue, metaData: metaData,selectedTable,selectedFieldName,linkedValueName
@@ -14,7 +13,7 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue,selecte
 }
 
 export const editCell = (cell, newValue,dispatch,fields) => { 
-    const [col, row] = cell;
+    const [col,row] = cell;
           const key = fields[col].id;
           dispatch(
           updateCells({

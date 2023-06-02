@@ -1,6 +1,6 @@
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
-// import { current } from '@reduxjs/toolkit';
+import { current } from '@reduxjs/toolkit';
 
 export const initialState = {
   columns: [],
@@ -150,11 +150,7 @@ export const reducers = {
     }
   },
 
-  
-  
-
   updateCell(state, payload) {
-    
     const action = payload.payload
     state.skipReset=true;
     let arr= [];
@@ -498,28 +494,37 @@ export function extraReducers(builder) {
       state.status = "loading"
     })
     .addCase(updateCells.fulfilled, (state , {payload}) => {
+      
       const action = payload
       state.skipReset=true;
-      let arr= [];
-      state.data.forEach((ele)=>{
-        const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
-        if(ele[id] !==action.rowIndex ) {
-          arr=[...arr,{...ele}];     }
-        else {
-         
-          if(action?.dataTypes == "file"  )
-          {  
-            var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
-            arrr.push(action.value)
-            arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
-          }
-          else
-          {
-            arr=[...arr,action.newData];
-          }
+      // let arr= [];
+      const table = current(state.data);
+      const updatedSeriesData = table?.map((series) => {
+        const id  = series.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
+        if(series[id]===action.rowIndex )  {
+          return action.newData;
         }
+        return series;
       });
-      state.data=arr;
+      // state.data.forEach((ele)=>{
+      //   const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
+      //   if(ele[id] !==action.rowIndex ) {
+      //     arr=[...arr,{...ele}];     }
+      //   else {
+         
+      //     if(action?.dataTypes == "file"  )
+      //     {  
+      //       var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
+      //       arrr.push(action.value)
+      //       arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
+      //     }
+      //     else
+      //     {
+      //       arr=[...arr,action.newData];
+      //     }
+      //   }
+      // });
+      state.data=updatedSeriesData;
       state.status = "succeeded"
     })
     .addCase(updateCells.rejected, (state) => {

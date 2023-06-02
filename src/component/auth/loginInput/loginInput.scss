@@ -1,0 +1,30 @@
+.login-input-form {
+    width: 100% !important ;
+    display: flex !important ;
+    flex-direction: column !important ;
+    align-items: center !important ;
+  }
+  
+  .login-input-field {
+    margin: 1px !important ;
+    width: 100% !important ;
+    height: 70px !important ;
+  }
+  
+  .login-input-textfield {
+    width: 350px !important ;
+  }
+  
+  .login-input-error {
+    color: red !important ;
+    font-size: 12px !important ;
+    margin: 2px !important ;
+    white-space: pre-wrap !important ;
+  }
+  
+  .login-input-button {
+    background-color: #000 !important ;
+    width: 50% !important ;
+    margin-top: 2px !important ;
+  }
+  

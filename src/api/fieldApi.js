@@ -2,7 +2,6 @@ import axios from "../interceptor/interceptor.js";
 const URL = process.env.REACT_APP_API_BASE_URL;
 const createField = async (db_id,tableName,data) =>
 {
-    console.log("metaData",data)
     return await axios.post(URL +`/dbs/${db_id}/${tableName}/field`,data)
 }
 const getAllfields = async (db_id, tableName) =>{

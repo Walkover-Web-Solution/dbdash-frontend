@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Box} from "@mui/material";
 import { useParams} from "react-router-dom";
 import TablesList from "../component/table/tablesList";
-import MainNavbar from "../component/mainNavbar";
+import MainNavbar from "../component/mainNavbar/mainNavbar";
 import { getDbById } from "../api/dbApi";
 import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../store/allTable/allTableSlice";

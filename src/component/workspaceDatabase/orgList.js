@@ -126,6 +126,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                 <Button
                   onClick={() => { renameWorkspace(props?.orgId, orgName); setName(false); }}
                   variant="contained"
+                  className="mui-button"
                   sx={{
                     width: "8rem",
                     backgroundColor: "#1C2833",
@@ -165,6 +166,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                       <Box sx={{ right: "10px", display: "flex" }}>
                         <Button
                           variant="contained"
+                          className="mui-button"
                           size="small"
                           color="success"
                           sx={{ display: "flex" }}
