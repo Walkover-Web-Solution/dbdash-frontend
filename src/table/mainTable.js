@@ -252,6 +252,7 @@ console.log("fields",fields);
     <>
     <div className="table-container">
       <DataEditor
+        width={1300}
         getCellContent={getData}
         // customCellRenderer={CustomCellRenderer}
         onRowAppended={addRows}
@@ -268,7 +269,6 @@ console.log("fields",fields);
         onPaste={true}
         rightElement={
           <div className="addCol">
-            addIcon: 
           <button onClick={() => setOpen(true)}>+</button>
           <FieldPopupModal
             title="create column"
