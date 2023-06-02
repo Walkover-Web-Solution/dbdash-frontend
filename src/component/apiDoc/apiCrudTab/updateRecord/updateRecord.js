@@ -29,7 +29,7 @@ function UpdateRecord(props) {
         <br />
         <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} />
         <br />
-        <OptionalParameter setValue={setValue} age={age} value={value} setAge={setAge} />
+        <OptionalParameter  db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
       </div>
     </>
   )
