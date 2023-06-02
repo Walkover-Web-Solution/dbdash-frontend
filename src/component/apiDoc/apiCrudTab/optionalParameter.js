@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import {
   Typography,
@@ -8,10 +8,8 @@ import {
   TextField,
   Box,
 } from '@mui/material';
-import './optionalParameter.scss'; // Import the CSS file
-import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
-import { getAllfields } from "../../../../api/fieldApi";
-
+import CustomAutoSuggest from '../../customAutoSuggest/customAutoSuggest'
+import { getAllfields } from "../../../api/fieldApi";
 function OptionalParameter(props) {
   const [fields, setFields] = useState([]);
   const [html, setHtml] = useState('')
@@ -109,7 +107,6 @@ function OptionalParameter(props) {
     </div>
   );
 }
-
 OptionalParameter.propTypes = {
   age: PropTypes.number,
   setAge: PropTypes.func,

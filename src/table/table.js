@@ -127,7 +127,6 @@ const Table = memo(
         }, 1000)
       }
     }, [lastRowIndex])
-    console.log(selectedFlatRows,786)
 
     return (
       <>

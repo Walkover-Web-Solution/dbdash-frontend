@@ -181,7 +181,6 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch, getState }) => {
-        console.log(payload,"inside")
         const data = {
             newFieldName: payload?.label,
             newFieldType: payload?.fieldType,
@@ -283,6 +282,7 @@ export const updateCells = createAsyncThunk(
             return payload;
         }
         const data = await updateRow(dbId, tableId, payload.rowIndex, { [columnId]: value })
+        console.log("data",data)
         const createdby = "fld" + tableId.substring(3) + "createdby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {

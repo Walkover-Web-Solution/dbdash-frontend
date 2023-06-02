@@ -14,7 +14,7 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue) => {
 }
 
 export const editCell = (cell, newValue,dispatch,fields) => { 
-    const [col, row] = cell;
+    const [col,row] = cell;
           const key = fields[col].id;
           dispatch(
           updateCells({
