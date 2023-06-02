@@ -150,11 +150,8 @@ export const reducers = {
     }
   },
 
-  
-  
-
   updateCell(state, payload) {
-    
+    console.log("dsfdg")
     const action = payload.payload
     state.skipReset=true;
     let arr= [];
