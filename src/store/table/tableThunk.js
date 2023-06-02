@@ -337,6 +337,7 @@ export const updateColumnsType = createAsyncThunk(
 export const updateColumnOrder = createAsyncThunk(
     "table/updateColumnOrder",
     async (payload, { getState }) => {
+        console.log("payload",payload)
         const data = {
             oldIndex: payload?.oldIndex,
             newIndex: payload?.newIndex

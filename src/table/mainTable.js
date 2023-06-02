@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {  bulkAddColumns, updateColumnHeaders} from "../store/table/tableThunk";
+import {  bulkAddColumns, deleteRows, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,15 +8,18 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addColumn, addRow, editCell } from "./addRow";
+import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
+import { DeleteOutlined } from "@mui/icons-material";
+// import { Button } from "react-scroll";
+// import { DeleteOutlined } from "@mui/icons-material";
 // import  debounce  from 'lodash.debounce';
 
 export default function MainTable() {
   const params = useParams();
   const dispatch = useDispatch();
   const fields = useSelector((state) => state.table.columns);
+  console.log("fields above call",fields)
   const dataa = useSelector((state) => state.table.data);
-  
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -37,15 +40,23 @@ export default function MainTable() {
     );
   }, []);
 
-  const createLeftorRightColumn = () => {
+  const createColumn = () => {
     setOpen(false);
-    addColumn(dispatch,params,selectValue,metaData,textValue);
+    console.log("linkedValueName",linkedValueName)
+    addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
     setSelectValue('longtext')
   }
 
   const addRows = () => {
       addRow(dispatch);
-  };
+  }; 
+
+  const reorder = useCallback(
+    (item, newIndex) => {
+      reorderFuncton(dispatch,item,newIndex,fields)
+    },
+    [fields]
+  );
 
   const handleRowMoved = useCallback((from, to) => {
     reorderRows(from, to, data, setData);
@@ -68,8 +79,6 @@ export default function MainTable() {
             // columnId : fields?.id,
             metaData:{width:newSize}
         }));
-        
-    
       // setColumns([...columns]); // Assuming you're using React and maintaining the columns state using useState
       };
 
@@ -123,9 +132,29 @@ export default function MainTable() {
     }
   }, [dataa, fields]);
 
-  
+  const deletedFunc = useCallback((celled) => {
+    console.log("cell",celled)
+  });
+
+  const handledata = (selectedCells)=>{
+     console.log("selectedCells",selectedCells)
+  }
+
   return (
     <div className="table-container">
+       {/* {getCellsForSelection?.length > 0 && ( */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+            // sx={{ position: "absolute", right: "1%", top: "16.5%" }}
+              onClick={() => {
+                dispatch(deleteRows(""));
+              }}
+              // variant="contained"
+            >
+              <DeleteOutlined style={{ fontSize: "19px" }} />
+            </button>
+          </div>
+        {/* )} */}
       <DataEditor
         getCellContent={getData}
         onRowAppended={addRows}
@@ -135,8 +164,11 @@ export default function MainTable() {
         onCellEdited={onCellEdited}
         onRowMoved={handleRowMoved}
         getCellsForSelection={true}
+        onCellSelection={handledata}
         onColumnResizeEnd={handleColumnResize}
+        onColumnMoved={reorder}
         scaleToRem={true}
+        onDelete={deletedFunc}
         // onColumnResize={fields}
         onPaste={true}
         rightElement={
@@ -157,7 +189,7 @@ export default function MainTable() {
             metaData={metaData}
             setMetaData={setMetaData}
             setOpen={setOpen}
-            submitData={createLeftorRightColumn}
+            submitData={createColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
             setTextValue={setTextValue}
