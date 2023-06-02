@@ -25,7 +25,7 @@ function ListRecord(props) {
           whiteSpace: "pre-wrap",
         }}
       >
-     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
+     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
      <ResponseBox response={`{
 "employee": {
 "name": "sonoo",
@@ -41,7 +41,7 @@ function ListRecord(props) {
         You can filter, sort, and format the results with the following query parameters.
         <br/>
         <br/>
-        <OptionalParameter  db={props.db} table={props.table}  setValue={setValue} age={age} value={value} setAge={setAge}/>
+        <OptionalParameter  db={props?.db} table={props?.table}  setValue={setValue} age={age} value={value} setAge={setAge}/>
         </Typography>
         <br/>
    
