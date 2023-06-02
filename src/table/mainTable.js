@@ -30,7 +30,7 @@ export default function MainTable() {
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
 //  const [columns, setColumns] = useState(second)
-
+console.log("selectedFieldName",selectedFieldName,"selectedTable",selectedTable)
   useEffect(() => {
     dispatch(
       bulkAddColumns({
@@ -41,6 +41,13 @@ export default function MainTable() {
   }, []);
 
   const createColumn = () => {
+    var dataa = metaData;
+    if (selectValue == "link") {
+      dataa.foreignKey = {
+        fieldId: selectedFieldName,
+        tableId: selectedTable
+      }
+    }
     setOpen(false);
     console.log("linkedValueName",linkedValueName)
     addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);

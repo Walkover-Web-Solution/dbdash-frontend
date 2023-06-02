@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 
 
 export default function LinkDataType(props) {
-
+console.log("props in LinkDataType",props)
   const allTables = useSelector((state) => getAllTableInfo(state));
   const tableId = useSelector((state) => state.table.tableId);
   const AllTableInfo = cloneDeep(allTables)
