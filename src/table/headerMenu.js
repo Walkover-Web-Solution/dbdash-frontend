@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLayer } from "react-laag";
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
@@ -9,6 +9,8 @@ import WestIcon from '@mui/icons-material/West';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DuplicateFieldPopup from './duplicateFieldPopup';
+import { addColumnrightandleft } from '../store/table/tableThunk';
 import { updateColumnHeaders } from '../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -47,33 +49,24 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
   },
 }));
-
-
 export default function Headermenu(props) {
   const classes = useStyles();
   const isOpen = props?.menu !== undefined;
- const dispatch =  useDispatch();
-const params = useParams();
-  const hideColumn = async () => {
-    const metaData = { hide:"true" };
-      dispatch(updateColumnHeaders({
-        dbId: params?.dbId,
-        tableName: params?.tableName,
-        fieldName: props?.fields[props?.menu.col].id,
-        columnId: props?.fields[props?.menu.col].id,
-        metaData: metaData
-      }));
-    }
-    const handleDelete=()=>{dispatch(
-      deleteColumns({
-        label: props?.fields[props?.menu?.col]?.title,
-        columnId: props?.fields[props?.menu?.col]?.id,
-        fieldName: props?.fields[props?.menu?.col]?.id,
-        fieldDataType: props?.fields[props?.menu?.col].dataType || "",
-        tableId: params?.tableName,
-        dbId: params?.dbId,
-      })
-    );}
+  const [showduplicate, setShowDuplicate] = useState(false);
+  const [duplicateField, setDuplicateField] = useState(true);
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const handleDelete=()=>{dispatch(
+    deleteColumns({
+      label: props?.fields[props?.menu?.col]?.title,
+      columnId: props?.fields[props?.menu?.col]?.id,
+      fieldName: props?.fields[props?.menu?.col]?.id,
+      fieldDataType: props?.fields[props?.menu?.col].dataType || "",
+      tableId: params?.tableName,
+      dbId: params?.dbId,
+    })
+  );}
   const { layerProps, renderLayer } = useLayer({
     isOpen,
     auto: true,
@@ -92,30 +85,77 @@ const params = useParams();
     },
   });
 
+  const handleClose = () => {
+    setShowDuplicate(false);
+    props.setMenu(null);
+  };
+
+  const handleOpenDuplicate = () => {
+    setShowDuplicate(true)
+    // setExpanded(false);
+  }
+
+  const handleDuplicate = () => {
+    setShowDuplicate(false);
+    dispatch(addColumnrightandleft({
+      dbId: params?.dbId,
+      direction: "right",
+      position: props?.fields[props?.menu?.col]?.id,
+      duplicateField: `${duplicateField}`,
+      tableId: params?.tableName,
+    }));
+    setDuplicateField(true);
+
+  };
+
+  const handleUniqueChange = () => {
+    setDuplicateField((isDuplicate) =>
+      !isDuplicate
+    )
+  };
+
+  const hideColumn = async () => {
+    const metaData = { hide: "true" };
+    dispatch(updateColumnHeaders({
+      dbId: params?.dbId,
+      tableName: params?.tableName,
+      fieldName: props?.fields[props?.menu.col].id,
+      columnId: props?.fields[props?.menu.col].id,
+      metaData: metaData
+    }));
+  }
   return (
     <>
       { props?.menu &&
         renderLayer(
           <div className={classes.simpleMenu} {...layerProps}>
-            {/* <div>Property type</div> */}
+            {showduplicate && <DuplicateFieldPopup
+              open={showduplicate}
+              handleClose={handleClose}
+              handleDuplicate={handleDuplicate}
+              handleUniqueChange={handleUniqueChange}
+              duplicateField={duplicateField}
+            />}
             <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
-            <div onClick={()=> {hideColumn();}} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
+            <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
             <div onClick={() => {
               props?.setOpen(true),
-              props?.setDirectionAndId({
-              direction: "left",
-              position: props?.fields[props?.menu.col].id
-              })
+                props?.setDirectionAndId({
+                  direction: "left",
+                  position: props?.fields[props?.menu.col].id
+                })
             }} className={classes.menuItem}><WestIcon fontSize='2px' />Insert Left</div>
             <div onClick={() => {
               props?.setOpen(true), props?.setDirectionAndId({
-              direction: "right",
-              position: props?.fields[props?.menu.col].id
+                direction: "right",
+                position: props?.fields[props?.menu.col].id
               })
             }} className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
             <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
             <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
-            <div className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
+            <div onClick={()=>{
+              handleOpenDuplicate()
+            }} className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
             <div onClick={()=>{
         handleDelete();
         
@@ -131,6 +171,6 @@ Headermenu.propTypes = {
   menu: PropTypes.any,
   setMenu: PropTypes.any,
   setOpen: PropTypes.any,
-  setDirectionAndId: PropTypes.any,
   fields: PropTypes.any,
+  setDirectionAndId: PropTypes.any,
 };
