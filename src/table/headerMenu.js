@@ -11,6 +11,7 @@ import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DuplicateFieldPopup from './duplicateFieldPopup';
 import { addColumnrightandleft } from '../store/table/tableThunk';
+import { updateColumnHeaders } from '../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -99,6 +100,17 @@ const handleUniqueChange = () => {
     !isDuplicate
   )
 };
+
+const hideColumn = async () => {
+  const metaData = { hide:"true" };
+    dispatch(updateColumnHeaders({
+      dbId: params?.dbId,
+      tableName: params?.tableName,
+      fieldName: props?.fields[props?.menu.col].id,
+      columnId: props?.fields[props?.menu.col].id,
+      metaData: metaData
+    }));
+  }
   return (
 <>
 {isOpen && props.menu &&
@@ -112,9 +124,20 @@ const handleUniqueChange = () => {
       duplicateField={duplicateField}
     />}
       <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
-      <div className={classes.menuItem}><VisibilityOffIcon fontSize='2px'/>Hide Field</div>
-      <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><WestIcon fontSize='2px'/>Insert Left</div>
-      <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><EastIcon fontSize='2px'/>Insert Right</div>
+      <div onClick={()=> {hideColumn();}} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
+            <div onClick={() => {
+              props?.setOpen(true),
+              props?.setDirectionAndId({
+              direction: "left",
+              position: props?.fields[props?.menu.col].id
+              })
+            }} className={classes.menuItem}><WestIcon fontSize='2px' />Insert Left</div>
+            <div onClick={() => {
+              props?.setOpen(true), props?.setDirectionAndId({
+              direction: "right",
+              position: props?.fields[props?.menu.col].id
+              })
+            }} className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
       <div className={classes.menuItem}><NorthIcon fontSize='2px'/>Sort ascending</div>
       <div className={classes.menuItem}><SouthIcon fontSize='2px'/>Sort descending</div>
       <div  onClick={() => { handleOpenDuplicate(); }} className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px'/>Duplicate cell</div>
@@ -129,5 +152,6 @@ Headermenu.propTypes = {
  menu: PropTypes.any,
  setMenu: PropTypes.any,
  setOpen: PropTypes.any,
- fields:PropTypes.any
+ fields:PropTypes.any,
+ setDirectionAndId: PropTypes.any,
 };

@@ -33,7 +33,6 @@ function BasicStuff(props) {
         setCopiedIndex(null);
       }, 2000);
     };
-    console.log(variables);
 
     return (
       <span
