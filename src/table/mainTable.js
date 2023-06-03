@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {updateColumnHeaders} from "../store/table/tableThunk";
+import {  bulkAddColumns, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,13 +8,8 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addColumn, addRow, editCell } from "./addRow";
-import { useMemo } from "react";
-// import { styled } from "@linaria/react";
-// import { useLayer } from "react-laag";
+import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 
-// import  debounce  from 'lodash.debounce';
-// import Headermenu from "./headerMenu";
 
 // const SimpleMenu = styled.div(`
 // width: 175px;
@@ -63,15 +58,38 @@ export default function MainTable() {
   const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
- 
-  const createLeftorRightColumn = () => {
+  useEffect(() => {
+    dispatch(
+      bulkAddColumns({
+        dbId: params?.dbId,
+        tableName: params?.tableName,
+      })
+    );
+  }, []);
+
+  const createColumn = () => {
+    var data1 = metaData;
+    if (selectValue == "link") {
+      data1.foreignKey = {
+        fieldId: selectedFieldName,
+        tableId: selectedTable
+      }
+    }
     setOpen(false);
-    addColumn(dispatch,params,selectValue,metaData,textValue);
+    addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
     setSelectValue('longtext')
   }
 
   const addRows = () => {
-      addRow(dispatch);};
+      addRow(dispatch);
+  }; 
+
+  const reorder = useCallback(
+    (item, newIndex) => {
+      reorderFuncton(dispatch,item,newIndex,fields)
+    },
+    [fields]
+  );
 
   const handleRowMoved = useCallback((from, to) => {
     reorderRows(from, to, data, setData);
@@ -83,7 +101,6 @@ export default function MainTable() {
 
      const handleColumnResize = (fields, newSize, colIndex, newSizeWithGrow) => {
       console.log(fields, newSize, colIndex, newSizeWithGrow,786)
-        // debounce(async()=>{
         dispatch(updateColumnHeaders({
             dbId:params?.dbId,
             tableName:params?.tableName,
@@ -180,70 +197,29 @@ export default function MainTable() {
   }
   }, [dataa, fields]);
 
+  // const deletedFunc = useCallback((celled) => {
+  //   console.log("cell",celled)
+  // });
 
-  // function CustomCellRenderer(cell) {
-  //   console.log(cell,"cell")
-  //   const { dataType, value } = cell;
-  //   if (dataType === "phone") {
-      // const handlePhoneChange = (event) => {
-      //   const newValue = event.target.value;
-      //   console.log(newValue)
-      //   // Handle the phone number change here
-      // };
-  
-  //     return (
-  //       <input type="tel" value={value} onChange={handlePhoneChange} />
-  //     );
-  //   }
-  
-  //   // Render the default cell content if it's not a phone type
-  //   return value;
-  // }
+ 
 
-  const realCols = useMemo(() => {
-    return fields.map((c) => ({
-      ...c,
-      hasMenu: true,
-    }));
-  }, [fields]);
-// console.log("aaa");
-// const isOpen = menu !== undefined;
-
-// const { layerProps, renderLayer } = useLayer({
-//   isOpen,
-//   auto: true,
-//   placement: "bottom-end",
-//   triggerOffset: 2,
-//   onOutsideClick: () => setMenu(undefined),
-//   trigger: {
-//     getBounds: () => ({
-//       left: menu ? menu.bounds?.x : 0,
-//       top: menu ? menu.bounds?.y : 0,
-//       width: menu ? menu.bounds?.width : 0,
-//       height: menu ? menu.bounds?.height : 0,
-//       right: (menu ? menu.bounds?.x : 0) + (menu ? menu.bounds?.width : 0),
-//       bottom: (menu ? menu.bounds?.y : 0) + (menu ? menu.bounds?.height : 0),
-//     }),
-//   },
-// });
   return (
     <>
     <div className="table-container">
       <DataEditor
         width={1300}
         getCellContent={getData}
-        // customCellRenderer={CustomCellRenderer}
         onRowAppended={addRows}
-        columns={realCols}
+        columns={fields}
         rows={dataa.length}
         rowMarkers="both"
         onCellEdited={onCellEdited}
         onRowMoved={handleRowMoved}
         getCellsForSelection={true}
         onColumnResizeEnd={handleColumnResize}
-        // onHeaderMenuClick={onHeaderMenuClick }
-        // scaleToRem={true}
-        // onColumnResize={fields}
+        onColumnMoved={reorder}
+        scaleToRem={true}
+        // onDelete={deletedFunc}
         onPaste={true}
         rightElement={
           <div className="addCol">
@@ -263,7 +239,7 @@ export default function MainTable() {
             metaData={metaData}
             setMetaData={setMetaData}
             setOpen={setOpen}
-            submitData={createLeftorRightColumn}
+            submitData={createColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
             setTextValue={setTextValue}
