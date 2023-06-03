@@ -9,9 +9,10 @@ import WestIcon from '@mui/icons-material/West';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
-import { useParams } from 'react-router-dom';
+import { updateColumnHeaders } from '../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 import { deleteColumns } from '../store/table/tableThunk';
 const useStyles = makeStyles(() => ({
 
@@ -46,66 +47,90 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
   },
 }));
-export default function Headermenu(props) {
-  const dispatch=useDispatch();
-  const params=useParams();
-  const handleDelete=()=>{dispatch(
-    deleteColumns({
-      label: props?.fields[props?.menu?.col]?.title,
-      columnId: props?.fields[props?.menu?.col]?.id,
-      fieldName: props?.fields[props?.menu?.col]?.id,
-      fieldDataType: props?.fields[props?.menu?.col].dataType || "",
-      tableId: params?.tableName,
-      dbId: params?.dbId,
-    })
-  );}
-const classes = useStyles();
-const isOpen = props?.menu !== undefined;
 
-const { layerProps, renderLayer } = useLayer({
-  isOpen,
-  auto: true,
-  placement: "bottom-end",
-  triggerOffset: 2,
-  onOutsideClick: () => props?.setMenu(undefined),
-  trigger: {
-    getBounds: () => ({
-      left: props?.menu ? props?.menu.bounds?.x : 0,
-      top: props?.menu ? props?.menu.bounds?.y : 0,
-      width: props?.menu ? props?.menu.bounds?.width : 0,
-      height: props?.menu ? props?.menu.bounds?.height : 0,
-      right: (props?.menu ? props?.menu.bounds?.x : 0) + (props?.menu ? props?.menu.bounds?.width : 0),
-      bottom: (props?.menu ? props?.menu.bounds?.y : 0) + (props?.menu ? props?.menu.bounds?.height : 0),
-    }),
-  },
-});
+
+export default function Headermenu(props) {
+  const classes = useStyles();
+  const isOpen = props?.menu !== undefined;
+ const dispatch =  useDispatch();
+const params = useParams();
+  const hideColumn = async () => {
+    const metaData = { hide:"true" };
+      dispatch(updateColumnHeaders({
+        dbId: params?.dbId,
+        tableName: params?.tableName,
+        fieldName: props?.fields[props?.menu.col].id,
+        columnId: props?.fields[props?.menu.col].id,
+        metaData: metaData
+      }));
+    }
+    const handleDelete=()=>{dispatch(
+      deleteColumns({
+        label: props?.fields[props?.menu?.col]?.title,
+        columnId: props?.fields[props?.menu?.col]?.id,
+        fieldName: props?.fields[props?.menu?.col]?.id,
+        fieldDataType: props?.fields[props?.menu?.col].dataType || "",
+        tableId: params?.tableName,
+        dbId: params?.dbId,
+      })
+    );}
+  const { layerProps, renderLayer } = useLayer({
+    isOpen,
+    auto: true,
+    placement: "bottom-end",
+    triggerOffset: 2,
+    onOutsideClick: () => props?.setMenu(undefined),
+    trigger: {
+      getBounds: () => ({
+        left: props?.menu ? props?.menu.bounds?.x : 0,
+        top: props?.menu ? props?.menu.bounds?.y : 0,
+        width: props?.menu ? props?.menu.bounds?.width : 0,
+        height: props?.menu ? props?.menu.bounds?.height : 0,
+        right: (props?.menu ? props?.menu.bounds?.x : 0) + (props?.menu ? props?.menu.bounds?.width : 0),
+        bottom: (props?.menu ? props?.menu.bounds?.y : 0) + (props?.menu ? props?.menu.bounds?.height : 0),
+      }),
+    },
+  });
+
   return (
-<>
-{isOpen && props.menu &&
-   renderLayer(
-    <div className={classes.simpleMenu} {...layerProps}>
-      {/* <div>Property type</div> */}
-      <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
-      <div className={classes.menuItem}><VisibilityOffIcon fontSize='2px'/>Hide Field</div>
-      <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><WestIcon fontSize='2px'/>Insert Left</div>
-      <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><EastIcon fontSize='2px'/>Insert Right</div>
-      <div className={classes.menuItem}><NorthIcon fontSize='2px'/>Sort ascending</div>
-      <div className={classes.menuItem}><SouthIcon fontSize='2px'/>Sort descending</div>
-      <div  className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px'/>Duplicate cell</div>
-      <div onClick={()=>{
+    <>
+      { props?.menu &&
+        renderLayer(
+          <div className={classes.simpleMenu} {...layerProps}>
+            {/* <div>Property type</div> */}
+            <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
+            <div onClick={()=> {hideColumn();}} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
+            <div onClick={() => {
+              props?.setOpen(true),
+              props?.setDirectionAndId({
+              direction: "left",
+              position: props?.fields[props?.menu.col].id
+              })
+            }} className={classes.menuItem}><WestIcon fontSize='2px' />Insert Left</div>
+            <div onClick={() => {
+              props?.setOpen(true), props?.setDirectionAndId({
+              direction: "right",
+              position: props?.fields[props?.menu.col].id
+              })
+            }} className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
+            <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
+            <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
+            <div className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
+            <div onClick={()=>{
         handleDelete();
         
         props.setMenu(false);
       }} className={classes.menuItem}><DeleteOutlineIcon fontSize='2.5px'/>Delete</div>
-    </div>
-    )}
-   </>
- );
+          </div>
+        )}
+    </>
+  );
 }
 
 Headermenu.propTypes = {
- menu: PropTypes.any,
- setMenu: PropTypes.any,
- fields:PropTypes.any,
- setOpen: PropTypes.any,
+  menu: PropTypes.any,
+  setMenu: PropTypes.any,
+  setOpen: PropTypes.any,
+  setDirectionAndId: PropTypes.any,
+  fields: PropTypes.any,
 };

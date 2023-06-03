@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from "react";
-import { 
-  // CompactSelection
-  DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {  updateColumnHeaders} from "../store/table/tableThunk";
+import { // CompactSelection
+DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
+import { addColumnrightandleft, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +9,7 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import {addColumn,  addRow, editCell,reorderFuncton } from "./addRow";
+import { addColumn, addRow, editCell,reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 
@@ -30,26 +29,29 @@ export default function MainTable() {
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
-  
-  const createColumn = () => {
-    var data1 = metaData;
-    if (selectValue == "link") {
-      data1.foreignKey = {
-        fieldId: selectedFieldName,
-        tableId: selectedTable
-      }
+  const [directionAndId, setDirectionAndId] = useState({})
+  const createLeftorRightColumn = () => {
+    if(directionAndId.direction == "left" || directionAndId.direction== "right"){
+      setOpen(false);
+      dispatch(addColumnrightandleft({
+        fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
+          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
+      }));
+      setSelectValue('longtext')
+      setDirectionAndId({})
     }
-    setOpen(false);
-    // dispatch(addColumnrightandleft({
-    //   fieldName: textValue,
-    //   dbId: params?.dbId,
-    //   tableId: params?.tableName,
-    //   fieldType: selectValue,
-    //   metaData: metaData
-    // }));
-    addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
-    setSelectValue('longtext')
-  }
+    else{
+      var data1 = metaData;
+      if (selectValue == "link") {
+        data1.foreignKey = {
+          fieldId: selectedFieldName,
+          tableId: selectedTable
+        }}
+      setOpen(false);
+      addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
+      setSelectValue('longtext')
+    }
+  };
 
   const addRows = () => {
       addRow(dispatch);
@@ -95,7 +97,6 @@ export default function MainTable() {
 
     // const handlePhoneChange = (event) => {
     //   const newValue = event.target.value;
-    //   console.log(newValue)
     //   // Handle the phone number change here
     // };
 
@@ -175,6 +176,11 @@ export default function MainTable() {
     }));
   }, [fields]);
 
+  const handleRowClick = (rowId) => {
+    console.log('Clicked row ID:', rowId);
+    // Perform any further actions with the row ID
+  };
+
   return (
     <>
     <div className="table-container">
@@ -182,6 +188,7 @@ export default function MainTable() {
         width={1300}
         getCellContent={getData}
         onRowAppended={addRows}
+        onRowClick={handleRowClick}
         columns={realCols}
         rows={dataa.length}
         rowMarkers="both"
@@ -199,7 +206,17 @@ export default function MainTable() {
         rightElement={
           <div className="addCol">
           <button onClick={() => setOpen(true)}>+</button>
-         {open && <FieldPopupModal
+        </div>
+        }
+        trailingRowOptions={{
+                  sticky: true,
+                  tint: true,
+                  hint: "New row...",
+                  targetColumn: 4
+                }}
+      />
+    </div>
+    {open &&<FieldPopupModal
             title="create column"
             label="Column Name"
             setSelectedFieldName={setSelectedFieldName}
@@ -214,23 +231,12 @@ export default function MainTable() {
             metaData={metaData}
             setMetaData={setMetaData}
             setOpen={setOpen}
-            // submitData={createLeftorRightColumn}
-            submitData={createColumn}
+            submitData={createLeftorRightColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
-            setTextValue={setTextValue}   
+            setTextValue={setTextValue}
           />}
-        </div>
-        }
-        trailingRowOptions={{
-                  sticky: true,
-                  tint: true,
-                  hint: "New row...",
-                  targetColumn: 4
-                }}
-      />
-    </div>
-    <Headermenu fields={fields} menu={menu} setMenu={setMenu}  setOpen={setOpen}   />
+    <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
     </>
     
   );

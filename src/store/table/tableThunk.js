@@ -105,7 +105,6 @@ export const bulkAddColumns = createAsyncThunk(
                 payload?.filter,
                 payload?.pageNo
             )
-            // console.log(querydata?.data?.data,"filter")
 
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
