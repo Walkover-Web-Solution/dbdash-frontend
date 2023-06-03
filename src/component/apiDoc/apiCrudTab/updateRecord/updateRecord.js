@@ -6,6 +6,7 @@ import CodeBlock from '../Codeblock/Codeblock';
 import Records from '../records/records';
 import ResponseBox from '../responseBox';
 import './updateRecord.scss'; // Import the CSS file
+import variables from '../../../../assets/styling.scss';
 
 function UpdateRecord(props) {
   const [value, setValue] = useState('');
@@ -25,7 +26,7 @@ function UpdateRecord(props) {
 }`} />
       </div>
       <div className="response-container">
-        <Typography className="bold-heading">To Update records in the</Typography>
+        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >To Update records in the</Typography>
         <br />
         <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} />
         <br />

@@ -2,7 +2,7 @@ import { PropTypes } from 'prop-types';
 import React, { useState } from 'react';
 import './Codeblock.scss'
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-
+import variables from '../../../../assets/styling.scss';
 function CodeBlock(props) {
   
   const [isCopied, setIsCopied] = useState(false);
@@ -18,7 +18,7 @@ function CodeBlock(props) {
 const dummy=(type)=>{
   switch(type){
     case "number":
-      return 123;
+      return 124553;
       case "rowid":
         return "row34";
         case "createdat":
@@ -26,7 +26,7 @@ const dummy=(type)=>{
           case "longtext":
             return "it is a long long text";
             case "autonumber":
-              return 4563;
+              return 4564443;
               case "createdby":
                  return "chirag devlani";
                  case "checkbox":
@@ -39,13 +39,15 @@ const dummy=(type)=>{
 
 
     <div className="code-block" >
-      <button style={{ marginLeft: "450px" }} className="copy-button" onClick={(handleCopyClick)}>
-        {isCopied ? 'Copied!' : <ContentPasteIcon />}
+      <div className="codeblock-header">     <button className="copy-button" onClick={(handleCopyClick)}>
+        {isCopied ? <span style={{fontSize:variables.codeblockcopybuttonsize}}>Copied!</span> : <ContentPasteIcon />}
       </button>
-      <div style={{ position: "relative", bottom: 65 }} >
-        <button onClick={() => { setShowAPI(true) }} style={showAPI ? { backgroundColor: "black", color: "white",  fontSize: "15px" } : {  backgroundColor: "white", color: "black", fontSize: "15px" }}>API</button>
-        <button onClick={() => { setShowAPI(false) }} style={showAPI ? { backgroundColor: "white", color: "black", fontSize: "15px" } : {  backgroundColor: "black", color: "white", fontSize: "15px" }}>CURL</button>
       </div>
+ 
+      <div className="button">
+  <button onClick={() => { setShowAPI(true) }} className={showAPI ? "button-api" : "button-curl"}>API</button>
+  <button onClick={() => { setShowAPI(false) }} className={showAPI ? "button-curl" : "button-api"}>CURL</button>
+</div>
       <pre style={{ position: "relative", width: "400px", whiteSpace: "pre-wrap" }}>
         <br />
         <code style={{ whiteSpace: "pre-wrap", maxWidth: "400px", wordWrap: "break-word" }}>

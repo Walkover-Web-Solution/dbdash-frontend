@@ -43,7 +43,7 @@ function DbDetails() {
     </Box>
            
             <Box align="center" style={{height: "95%"}} >
-            { dbData && <TablesList dbData={dbData} tables={tables} setTables={setTables} />}
+            { dbData && <TablesList  dbData={dbData} tables={tables} setTables={setTables} />}
             </Box> 
         </>
     );  

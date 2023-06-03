@@ -1,9 +1,15 @@
+@import '../../../../assets/styling.scss';
+*{
+font-family: 'Inter' !important;
+}
+
 .optional-parameter-container {
-    border: 2px solid black !important;
-    border-radius: 1px !important;
+    border: 2px solid $fontColorVAlue !important;
+    border-radius: 0px !important;
     padding: 10px !important;
+
     width: 34.5vw !important;
-    background-color: lightgrey !important;
+    background-color: $bgColorValue !important;
     padding-bottom: 20px !important;
   }
   

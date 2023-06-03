@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectActiveUser } from '../../store/user/userSelector.js';
 import { UserAuth } from '../../context/authContext.js';
+import variables from '../../assets/styling.scss';
 import {
   Box,
   IconButton,
@@ -17,13 +18,26 @@ import {
   Button,
 } from '@mui/material';
 import './mainNavbar.scss';
+import { selectOrgandDb } from '../../store/database/databaseSelector.js';
+
 
 function MainNavbar(props) {
+  const alldb = useSelector((state) => selectOrgandDb(state));
+let dbname = '';
+  Object.entries(alldb).forEach(([, dbs]) => {
+    const matchingDb = dbs.find(db => db?._id === props.dbtoredirect);
+    if (matchingDb) {
+      dbname = matchingDb.name;
+    }
+  });
+  
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const user = UserAuth();
-  const { dbId } = useParams();
+  
+  const { dbId ,tableName} = useParams();
+console.log(tableName)
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
   const shouldShowTypography = useMemo(() => {
@@ -60,22 +74,21 @@ function MainNavbar(props) {
     <Container className="main-navbar-container" maxWidth="false">
       <Box>
         <Link to="/dashboard" className="main-navbar-link">
-          <Typography variant="h6" component="span" className="main-navbar-title">
+          <Typography variant={variables.homebuttonvariant} component="span" className="main-navbar-title">
             dbDash
           </Typography>
         </Link>
       </Box>
 
-      {props?.dbData && (
+      {(props?.dbData || props.dbtoredirect)  && (
         <Typography
-          variant="body1"
-          align="center"
-          fontWeight={200}
-          fontFamily="Inter"
-          fontSize={24}
-          color="black"
+          fontWeight={Number(variables.mainnavbarfontweight)}
+          fontFamily={variables.fontFamily}
+          sx={{paddingBottom:0.85}}
+          fontSize={Number(variables.titlesize)}
+          color={variables.mainnavbartextcolor}
         >
-          {props?.dbData?.db.name}
+          {props?.dbData?.db.name || dbname}
         </Typography>
       )}
 
@@ -86,8 +99,9 @@ function MainNavbar(props) {
               variant="outlined"
               className="main-navbar-button"
               component={Link}
-              style={shouldShowTableButton ? { backgroundColor: 'lightgrey', pointerEvents: 'none' } : {}}
+              style={shouldShowTableButton ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none' } : {}}
               to={{ pathname: `/apiDoc/db/${dbId}` }}
+              state={tableName}
             >
               APIs
             </Button>
@@ -96,21 +110,26 @@ function MainNavbar(props) {
 
         {(shouldShowTypography || shouldShowTableButton) && (
           <Tooltip title="Tables">
-            <Button
-              variant="outlined"
-              component={Link}
-              className="main-navbar-button"
-              style={shouldShowTypography ? { backgroundColor: 'lightgrey', pointerEvents: 'none' } : {}}
-              to={{ pathname: `/db/${dbId}` }}
-            >
+           <Button
+  variant="outlined"
+  component={Link}
+  className="main-navbar-button"
+  style={shouldShowTypography ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none' } : {}}
+  to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
+    : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
+    : { pathname: `/db/${dbId}` }
+  }
+>
+
+
               Tables
             </Button>
           </Tooltip>
         )}
 
         <Tooltip title="Open settings">
-          <IconButton onClick={handleOpenUserMenu} className="main-navbar-avatar-button">
-            <Avatar alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
+          <IconButton  size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button">
+            <Avatar sx={{height:variables.profileiconheight,width:variables.profileiconwidth}} alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
           </IconButton>
         </Tooltip>
 
@@ -148,6 +167,8 @@ function MainNavbar(props) {
 
 MainNavbar.propTypes = {
   dbData: PropTypes.any,
+  dbtoredirect:PropTypes.any,
+  tabletoredirect:PropTypes.any,
 };
 
 export default MainNavbar;

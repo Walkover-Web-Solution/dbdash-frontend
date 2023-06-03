@@ -16,7 +16,7 @@ export default function AuthKeyHeader(props) {
   
         <Button     className="mui-button-outlined"  variant="outlined" >{'API Documentation'}</Button>
         </Link>
-        <Button variant="contained"  className="mui-button" sx={{
+        <Button variant="outlined"  className="mui-button" sx={{
         pointerEvents: 'none',
         // opacity: 0.5,
         // Additional custom styles

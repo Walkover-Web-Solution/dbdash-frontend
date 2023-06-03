@@ -16,6 +16,7 @@ import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
 import './tablesList.scss'
+
 export default function TablesList({ dbData }) {
   
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -297,6 +298,7 @@ TablesList.propTypes = {
   orgId: PropTypes.string,
   tables: PropTypes.any,
   dropdown: PropTypes.any,
+  setSelectedTable:PropTypes.any,
   label: PropTypes.any,
   setTables: PropTypes.any,
 };

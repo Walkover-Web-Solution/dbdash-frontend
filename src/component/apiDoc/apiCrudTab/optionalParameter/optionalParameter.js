@@ -11,7 +11,7 @@ import {
 import './optionalParameter.scss'; // Import the CSS file
 import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
 import { getAllfields } from "../../../../api/fieldApi";
-
+import variables from '../../../../assets/styling.scss';
 function OptionalParameter(props) {
   const [fields, setFields] = useState([]);
   const [html, setHtml] = useState('')
@@ -65,32 +65,26 @@ function OptionalParameter(props) {
     <div>
       <Box
         component="div"
-        style={{
-          border: '2px solid black',
-          borderRadius: '1px',
-          padding: '10px',
-          width: '34.5vw',
-          backgroundColor: 'lightgrey',
-        }}
+       className='optional-parameter-container'
       >
-        <Typography style={{ fontWeight: 'bold', fontSize: '17px' }}>Optional parameter</Typography>
-        <Typography style={{ fontWeight: 'bold', fontSize: '17px', paddingTop: '10px' }}>Where</Typography>
+        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.titlesize)} variant={variables.titlevariant}>Optional parameter</Typography>
+        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant}style={{ paddingTop: '10px' }}>Where</Typography>
         <Typography style={{ paddingBottom: '15px' }}>To filter record based on certain</Typography>
         <CustomAutoSuggest getInputValueWithContext={handleTextChange} suggestion={fields} setHtml={setHtml} setText={setText} defaultValue={html} />
         <br />
         <br />
         <br />
-        <Link href="#" style={{ fontSize: '15px' }}>
+        <Link href="#" style={{ fontSize: `${variables.textsize}px` }}>
           Learn more about the where clause
         </Link>
-        <Typography style={{ fontWeight: 'bold', fontSize: '17px', paddingBottom: '8px', paddingTop: '13px' }}>
+        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} style={{ paddingBottom: '8px', paddingTop: '1px' }}>
           Limit
         </Typography>
 
         <Typography>Limit Column/Field in response</Typography>
         <div>
           <FormControl sx={{ m: 1, minWidth: 60 }}>
-            <InputLabel id="demo-simple-select-helper-label" style={{ fontSize: '15px', paddingBottom: '40px' }}>
+            <InputLabel id="demo-simple-select-helper-label"  style={{ fontSize: `${variables.textsize}px`, paddingBottom: '40px' }}>
             </InputLabel>
             <TextField
               id="demo-simple-select-helper"

@@ -19,6 +19,7 @@ export default function MainTable() {
   const params = useParams();
   const dispatch = useDispatch();
   const fields = useSelector((state) => state.table.columns);
+  console.log("fields",fields)
   const dataa = useSelector((state) => state.table.data);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
@@ -229,7 +230,7 @@ export default function MainTable() {
                 }}
       />
     </div>
-   <Headermenu menu={menu} setMenu={setMenu}  setOpen={setOpen}   />
+   <Headermenu menu={menu} setMenu={setMenu}  setOpen={setOpen}  fields={fields} />
     </>
     
   );

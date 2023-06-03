@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLayer } from "react-laag";
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
@@ -9,6 +9,10 @@ import WestIcon from '@mui/icons-material/West';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DuplicateFieldPopup from './duplicateFieldPopup';
+import { addColumnrightandleft } from '../store/table/tableThunk';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   simpleMenu: {
@@ -45,7 +49,10 @@ const useStyles = makeStyles(() => ({
 export default function Headermenu(props) {
 const classes = useStyles();
 const isOpen = props?.menu !== undefined;
-
+const [showduplicate, setShowDuplicate] = useState(false);
+const [duplicateField, setDuplicateField] = useState(true);
+const dispatch = useDispatch();
+const params = useParams();
 const { layerProps, renderLayer } = useLayer({
   isOpen,
   auto: true,
@@ -63,19 +70,54 @@ const { layerProps, renderLayer } = useLayer({
     }),
   },
 });
+
+const handleClose = () => {
+  setShowDuplicate(false);
+  props.setMenu(null);
+};
+
+const handleOpenDuplicate = () => {
+  setShowDuplicate(true)
+  // setExpanded(false);
+}
+
+const handleDuplicate = () => {
+  setShowDuplicate(false);
+  dispatch(addColumnrightandleft({
+    dbId:params?.dbId,
+    direction:"right",
+    position:props?.fields[props?.menu?.col]?.id,
+    duplicateField: `${duplicateField}`,
+    tableId:params?.tableName,
+  }));
+  setDuplicateField(true);
+
+};
+
+const handleUniqueChange = () => {
+  setDuplicateField((isDuplicate) =>
+    !isDuplicate
+  )
+};
   return (
 <>
-{isOpen &&
+{isOpen && props.menu &&
    renderLayer(
     <div className={classes.simpleMenu} {...layerProps}>
-      {/* <div>Property type</div> */}
+  {showduplicate && <DuplicateFieldPopup
+      open={showduplicate}
+      handleClose={handleClose}
+      handleDuplicate={handleDuplicate}
+      handleUniqueChange={handleUniqueChange}
+      duplicateField={duplicateField}
+    />}
       <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
       <div className={classes.menuItem}><VisibilityOffIcon fontSize='2px'/>Hide Field</div>
       <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><WestIcon fontSize='2px'/>Insert Left</div>
       <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><EastIcon fontSize='2px'/>Insert Right</div>
       <div className={classes.menuItem}><NorthIcon fontSize='2px'/>Sort ascending</div>
       <div className={classes.menuItem}><SouthIcon fontSize='2px'/>Sort descending</div>
-      <div  className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px'/>Duplicate cell</div>
+      <div  onClick={() => { handleOpenDuplicate(); }} className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px'/>Duplicate cell</div>
       <div className={classes.menuItem}><DeleteOutlineIcon fontSize='2.5px'/>Delete</div>
     </div>
     )}
@@ -87,4 +129,5 @@ Headermenu.propTypes = {
  menu: PropTypes.any,
  setMenu: PropTypes.any,
  setOpen: PropTypes.any,
+ fields:PropTypes.any
 };
