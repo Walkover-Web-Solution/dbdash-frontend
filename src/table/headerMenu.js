@@ -9,6 +9,9 @@ import WestIcon from '@mui/icons-material/West';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { updateColumnHeaders } from '../store/table/tableThunk';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   simpleMenu: {
@@ -46,7 +49,18 @@ const useStyles = makeStyles(() => ({
 export default function Headermenu(props) {
   const classes = useStyles();
   const isOpen = props?.menu !== undefined;
-
+ const dispatch =  useDispatch();
+const params = useParams();
+  const hideColumn = async () => {
+    const metaData = { hide:"true" };
+      dispatch(updateColumnHeaders({
+        dbId: params?.dbId,
+        tableName: params?.tableName,
+        fieldName: props?.fields[props?.menu.col].id,
+        columnId: props?.fields[props?.menu.col].id,
+        metaData: metaData
+      }));
+    }
   const { layerProps, renderLayer } = useLayer({
     isOpen,
     auto: true,
@@ -72,7 +86,7 @@ export default function Headermenu(props) {
           <div className={classes.simpleMenu} {...layerProps}>
             {/* <div>Property type</div> */}
             <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
-            <div className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
+            <div onClick={()=> {hideColumn();}} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
             <div onClick={() => {
               props?.setOpen(true),
               props?.setDirectionAndId({

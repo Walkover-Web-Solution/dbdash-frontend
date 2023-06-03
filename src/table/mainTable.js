@@ -30,7 +30,7 @@ export default function MainTable() {
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
-  
+  const [,setItem] = useState("")
   const createLeftorRightColumn = () => {
     if(directionAndId.direction == "left" || directionAndId.direction== "right"){
       setOpen(false);
@@ -177,6 +177,11 @@ export default function MainTable() {
     }));
   }, [fields]);
 
+  const handleRowClick = (rowId) => {
+    console.log('Clicked row ID:', rowId);
+    // Perform any further actions with the row ID
+  };
+
   return (
     <>
     <div className="table-container">
@@ -184,6 +189,7 @@ export default function MainTable() {
         width={1300}
         getCellContent={getData}
         onRowAppended={addRows}
+        onRowClick={handleRowClick}
         columns={realCols}
         rows={dataa.length}
         rowMarkers="both"
