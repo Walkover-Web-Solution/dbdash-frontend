@@ -14,8 +14,8 @@
 .main-navbar-link {
   text-decoration: none !important;
   margin-bottom: 8px !important;
-  font-family: 'Inter' !important;
-  font-size: 1rem !important;
+  font-family: $fontFamily !important;
+  font-size: $mainnavbartabsfont !important;
   color: $fontColorVAlue !important;
 
   &:hover {
@@ -30,8 +30,8 @@
 }
 
 .main-navbar-button {
-  font-family: 'Inter' !important;
-  font-size: 1rem !important;
+  font-family: $fontFamily !important;
+  font-size: $mainnavbartabsfont !important;
   text-decoration: none !important;
   color: $fontColorVAlue !important;
   border-radius: 0 !important;

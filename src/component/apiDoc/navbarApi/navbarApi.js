@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader, ButtonGroup } from "@mui/material";
 import ApiCrudTablist from '../apiCrudTab/apiCrudTablist/apiCrudTablist';
@@ -8,13 +8,14 @@ import PropTypes from "prop-types";
 import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
 
 export default function Navbar(props) {
+  
   const [tables, setTables] = useState({});
   const [dbId, setDbId] = useState("");
   const navigate = useNavigate();
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
-  const [selectedDb, setSelectedDb] = useState(false);
-  const [selectTable, setSelectTable] = useState(false);
+  const [selectedDb, setSelectedDb] = useState(useParams().dbId);
+  const [selectTable, setSelectTable] = useState(useLocation().state);
   const alldb = useSelector((state) => selectOrgandDb(state));
   const [loading, setLoading] = useState(false);
 if(selectedDb){props?.setDbtoredirect(selectedDb);}
@@ -55,7 +56,7 @@ props.setDbtoredirect(dbObj._id);
     const data = await getDbById(dbId);
     setTables(data.data.data.tables || {});
     if (data.data.data.tables) {
-      setSelectTable(Object.keys(data.data.data.tables)[0]);
+      setSelectTable(selectTable || Object.keys(data.data.data.tables)[0]);
       props.setTabletoredirect(Object.keys(data.data.data.tables)[0]);
       setLoading(true);
     }

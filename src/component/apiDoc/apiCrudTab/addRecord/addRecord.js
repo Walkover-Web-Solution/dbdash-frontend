@@ -6,6 +6,7 @@ import CodeBlock from "../Codeblock/Codeblock";
 import Records from "../records/records";
 import ResponseBox from "../responseBox";
 import "./addRecord.scss"; // Import the CSS file
+import variables from '../../../../assets/styling.scss';
 
 function AddRecord(props) {
   const [arr, setArr] = useState([]);
@@ -31,7 +32,7 @@ function AddRecord(props) {
         />
       </div>
       <div className="records-container">
-        <Typography className="add-record-title">Add Table Records</Typography>
+        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
         <br />
         <br />
         <Typography>

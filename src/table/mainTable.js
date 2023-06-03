@@ -63,17 +63,7 @@ export default function MainTable() {
   const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
-  // useEffect(() => {
-  //   dispatch(
-  //     bulkAddColumns({
-  //       dbId: params?.dbId,
-  //       tableName: params?.tableName,
-  //     })
-  //   );
-  // }, []);
-
-  // const updatedField= useMemo(()=>fields,[fields])
-  // console.log(updatedField)
+ 
   const createLeftorRightColumn = () => {
     setOpen(false);
     addColumn(dispatch,params,selectValue,metaData,textValue);
@@ -102,17 +92,7 @@ export default function MainTable() {
         }));
       };
 
-      // const [menu, setMenu] = useState({
-      //   col: null,
-      //   bounds: null,
-      // });
       
-      // const onHeaderMenuClick = useCallback((col, bounds) => {
-        
-      //   setMenu({ col, bounds });
-
-        
-      // }, []);
       
 
   const getData = useCallback((cell) => {

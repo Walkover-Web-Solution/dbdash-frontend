@@ -11,10 +11,26 @@ $selectedtabfontcolor:white;
 $selectedtabbgcolor:black;
 $megatitlesize:30;
 
-$headingtitle:'h2';
-$normaltext:'h3';
+$mainnavbartextcolor:$fontColorVAlue;
+$fontFamily:'Inter';
+$mainnavbarfontweight:200;
 $linecolor:#ccc;
+$mainnavbartabsfont:1rem;
 $bold:bold;
+$highlightedtabbgcolor:lightgrey;
 :export {
+  titlevariant:h2;
+titleweight:bold;
+  megatitlevariant:h3;
     megatitlesize: $megatitlesize;
+    titlesize:24;
+    textsize:18;
+mainnavbartextcolor:$mainnavbartextcolor;
+fontFamily:Inter;
+mainnavbarfontweight:$mainnavbarfontweight;
+homebuttonvariant:h6;
+highlightedtabbgcolor:$highlightedtabbgcolor;
+profileiconheight:34px;
+profileiconwidth:36px;
+codeblockcopybuttonsize:20px;
   }

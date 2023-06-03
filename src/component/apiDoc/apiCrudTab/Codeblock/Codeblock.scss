@@ -53,3 +53,19 @@
     white-space: pre-wrap !important;
   }
   
+  .button {
+    position: relative !important;
+    bottom: 65px  !important;
+    font-size: 15px  !important;
+  }
+  
+  .button-api {
+    background-color: $bgColorValue  !important;
+    color: $fontColorVAlue  !important;
+  }
+  
+  .button-curl {
+    background-color: $fontColorVAlue;
+    color: $bgColorValue
+  }
+  

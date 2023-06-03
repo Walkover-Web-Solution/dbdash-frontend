@@ -55,6 +55,8 @@ export default function Navbar() {
       setLoading(true);
     }
   };
+  
+
 
   return (
     <div style={{position:"fixed",top:0}}>

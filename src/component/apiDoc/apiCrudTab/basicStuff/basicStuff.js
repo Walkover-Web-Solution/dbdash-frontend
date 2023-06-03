@@ -55,32 +55,32 @@ function BasicStuff(props) {
 
   return (
     <Box className="basic-stuff-container">
-      <Typography variant={'h3'} fontSize={Number(variables.megatitlesize)} className="bold-text">
-        Database Id - {props.db} {CopyButton(props.db, -1)}
+      <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)}   >
+        Database Id - {props.db} <span>{CopyButton(props.db, -1)}</span>
       </Typography>
-      <Typography variant={'h3'} fontSize={Number(variables.megatitlesize)} className="bold-text">
-        Table Id - {props.table} {CopyButton(props.table, -2)}
+      <Typography variant={'h3'} fontSize={Number(variables.megatitlesize)} >
+        Table Id - {props.table} <span>{CopyButton(props.table, -2)}</span>
       </Typography>
       <br />
       <Grid container spacing={2}>
         <Grid item xs={2}>
-          <Typography  className="bold-text">fieldName</Typography>
+          <Typography fontSize={Number(variables.titlesize)} className="bold-text">fieldName</Typography>
           {fieldData &&
             Object.entries(fieldData).map((fields, index) => (
               <div className="field-name-container" key={index}>
-                <Typography className="field-name">{fields[1].fieldName}</Typography>
+                <Typography fontSize={Number(variables.textsize)} className="field-name">{fields[1].fieldName}</Typography>
               </div>
             ))}
         </Grid>
         <Grid item xs={2}>
 
          
-          <Typography  className="bold-text">fieldId</Typography>
+          <Typography fontSize={Number(variables.titlesize)}  className="bold-text">fieldId</Typography>
           {fieldData &&
             Object.entries(fieldData).map((fields, index) => (
               <div className="field-id-container" key={index}>
-                <Typography>{fields[0]}</Typography>
-                {CopyButton(fields[0], index)}
+                <Typography fontSize={Number(variables.textsize)} >{fields[0]}</Typography>
+                <div>{CopyButton(fields[0], index)}</div>
               </div>
             ))}
         </Grid>

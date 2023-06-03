@@ -29,21 +29,20 @@ margin:0 !important;
   
   .copy-button1 {
     transition: background-color 0.3s ease !important;
-  background-color: transparent !important;
-  color: $fontColorVAlue!important;
-  margin: 0px !important;
-  border: none !important;
-  font-size: 12px !important;
-  padding: 0 !important;
+    background-color: transparent !important;
+    color: $fontColorVAlue !important;
+    margin: 0 !important;
+    border: none !important;
+    font-size: 12px !important;
+    padding: 0 !important;
   }
+  
   
   .color-black {
     color: $fontColorVAlue;
   }
-  
   .copied-text {
-    /* margin-left: 10px; */
-    font-size: 16px;
+    font-size: 12px;
     color: $fontColorVAlue;
   }
   
