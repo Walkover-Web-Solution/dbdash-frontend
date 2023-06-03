@@ -42,7 +42,6 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
     ];
 
     const arr = fields?.data?.data?.fields || fields;
-    console.log("arr",arr)
 
     Object.entries(arr).forEach((field) => {
         var json = {

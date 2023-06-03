@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import { // CompactSelection
 DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
 import { addColumnrightandleft, updateColumnHeaders} from "../store/table/tableThunk";
@@ -17,8 +17,7 @@ import Headermenu from "./headerMenu";
 export default function MainTable() {
   const params = useParams();
   const dispatch = useDispatch();
-  const fields = useSelector((state) => state.table.columns);
-  console.log("fields",fields)
+  const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
@@ -31,6 +30,7 @@ export default function MainTable() {
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
+  const [fields,setFields] = useState(fields1 || [])
   const createLeftorRightColumn = () => {
     if(directionAndId.direction == "left" || directionAndId.direction== "right"){
       setOpen(false);
@@ -53,6 +53,17 @@ export default function MainTable() {
       setSelectValue('longtext')
     }
   };
+
+  
+useEffect(() => {
+  var newcolumn = []
+  fields1.forEach(column => {
+    if (column?.metadata?.hide != "true") {
+      newcolumn.push(column)
+   }
+  });
+  setFields(newcolumn);
+}, [fields1]);
 
   const addRows = () => {
       addRow(dispatch);
@@ -95,34 +106,26 @@ export default function MainTable() {
     
     const d = dataRow[fields[col]?.id];
     const { dataType } = fields[col];
-
-    // const handlePhoneChange = (event) => {
-    //   const newValue = event.target.value;
-    //   // Handle the phone number change here
-    // };
-
-    // if (dataType === "phone") {
-    //   return {
-    //     kind: GridCellKind.Custom,
-    //     allowOverlay: true,
-    //     copyData: "4",
-    //     data: {
-    //       kind: "phone-cell",
-    //       value: d || "",
-    //       onChange: (newValue) => handlePhoneChange(newValue, cellProps),
-    //     },
-    //   };
-    // }
     
     if (dataType === "autonumber" ) {
       return {
         allowOverlay: true,
         kind: GridCellKind.Number,
+        readonly: true,
         data: d,
         displayData: d.toString(),
       };
     }
-    else if (dataType === "createdat" || dataType === "createdby" || dataType === "longtext"|| dataType === "rowid") {
+    else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid") {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: true,
+        displayData: d || "",
+        data: d || "",
+      };
+    }
+    else if (dataType === "longtext") {
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,
@@ -131,19 +134,21 @@ export default function MainTable() {
         data: d || "",
       };
     }
-    // else if (dataType === "checkbox") {
-    //   return {
-    //     kind: GridCellKind.Boolean,
-    //     allowOverlay: true,
-    //     readonly: false,
-    //     displayData: 0 || "",
-    //     data: 0 || "",
-    //   };
-    // }
+    else if (dataType === "phone") {
+  const data = d || "";
+  const displayData = d !== null && d !== undefined ? d.toString() : "";
+  return {
+    allowOverlay: true,
+    kind: GridCellKind.Number,
+    data: data,
+    displayData: displayData,
+  };
+}
     else if(dataType === "multipleselect" && d != null){
+      const bubbles = Array.isArray(d) ? d : [d];
       return {
         kind: GridCellKind.Bubble,
-        data: d,
+        data: bubbles,
         allowOverlay: true
       };
     }
@@ -177,11 +182,6 @@ export default function MainTable() {
     }));
   }, [fields]);
 
-  const handleRowClick = (rowId) => {
-    console.log('Clicked row ID:', rowId);
-    // Perform any further actions with the row ID
-  };
-
   return (
     <>
     <div className="table-container">
@@ -189,7 +189,6 @@ export default function MainTable() {
         width={1300}
         getCellContent={getData}
         onRowAppended={addRows}
-        onRowClick={handleRowClick}
         columns={realCols}
         rows={dataa.length}
         rowMarkers="both"
