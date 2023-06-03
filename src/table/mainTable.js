@@ -58,6 +58,8 @@ export default function MainTable() {
   const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
+  // const [selectedRows, setSelectedRows] = useState([]);
+  console.log("fields",fields)
   useEffect(() => {
     dispatch(
       bulkAddColumns({
@@ -210,8 +212,12 @@ export default function MainTable() {
   // const deletedFunc = useCallback((celled) => {
   //   console.log("cell",celled)
   // });
-
- 
+  // const handleSelectionChanged = (selectedCells) => {
+  //   const selectedRowIds = selectedCells.map((cell) => cell.row);
+  //   console.log("selectedRowIds",selectedRowIds)
+  //   setSelectedRows(selectedRowIds);      
+  // };
+  // console.log("Selected Rows IDs:", selectedRows);
 
   return (
     <>
@@ -229,6 +235,7 @@ export default function MainTable() {
         onColumnResizeEnd={handleColumnResize}
         onColumnMoved={reorder}
         scaleToRem={true}
+        // onSelectionChanged={handleSelectionChanged}
         // onDelete={deletedFunc}
         onPaste={true}
         rightElement={

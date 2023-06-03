@@ -562,6 +562,7 @@ export function extraReducers(builder) {
 
     })
     .addCase(updateColumnOrder.fulfilled, (state,{payload}) => {
+      console.log("payload.columns",payload.columns)
       state.columns = payload.columns
       state.status = "succeeded";
 

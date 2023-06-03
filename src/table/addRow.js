@@ -31,6 +31,7 @@ const newOrder = Array.from(fields);
 const key = fields[currentIndex].id;
 const [removedColumn] = newOrder.splice(currentIndex, 1);
 newOrder.splice(newIndex, 0, removedColumn);
+console.log("newOrder",newOrder)
 dispatch(
   updateColumnOrder({
     columns: newOrder,
