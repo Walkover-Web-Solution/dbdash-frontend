@@ -37,7 +37,6 @@ let dbname = '';
   const user = UserAuth();
   
   const { dbId ,tableName} = useParams();
-console.log(tableName)
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
   const shouldShowTypography = useMemo(() => {

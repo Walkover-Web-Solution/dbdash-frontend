@@ -192,14 +192,14 @@ export default function MainTable() {
         onColumnResizeEnd={handleColumnResize}
         onHeaderMenuClick={onHeaderMenuClick } //iske niche ki 2 line mat hatana
         // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
-        // onGridSelectionChange={(ele)=>{console.log("ele",ele);setItem(ele.rows.items)}}
+        // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
         onColumnMoved={reorder}
 
         onPaste={true}
         rightElement={
           <div className="addCol">
           <button onClick={() => setOpen(true)}>+</button>
-          <FieldPopupModal
+         {open && <FieldPopupModal
             title="create column"
             label="Column Name"
             setSelectedFieldName={setSelectedFieldName}
@@ -218,8 +218,8 @@ export default function MainTable() {
             submitData={createColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
-            setTextValue={setTextValue}
-          />
+            setTextValue={setTextValue}   
+          />}
         </div>
         }
         trailingRowOptions={{
@@ -230,7 +230,7 @@ export default function MainTable() {
                 }}
       />
     </div>
-   <Headermenu menu={menu} setMenu={setMenu}  setOpen={setOpen}   />
+    <Headermenu fields={fields} menu={menu} setMenu={setMenu}  setOpen={setOpen}   />
     </>
     
   );

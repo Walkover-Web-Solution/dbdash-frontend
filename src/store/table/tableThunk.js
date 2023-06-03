@@ -135,7 +135,6 @@ export const bulkAddColumns = createAsyncThunk(
             return dataa;
         }
         else {
-            console.log("else")
             const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
             const dataa = {
                 "columns": columns,

@@ -171,6 +171,10 @@ export default function FieldPopupModal(props) {
           onKeyDown={(e) => {
             if (e.target.value.length >= 1 && e.target.value.length <= 30) {
               if (e.key === "Enter") {
+                
+                handleClose();
+                e.stopPropagation();
+                e.preventDefault();
                 props?.submitData(false);
               }
             }
