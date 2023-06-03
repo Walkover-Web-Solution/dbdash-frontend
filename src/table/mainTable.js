@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { 
-  // CompactSelection
-  DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
+import { // CompactSelection
+DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
 import { addColumnrightandleft, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
@@ -10,7 +9,7 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import {  addRow, editCell,reorderFuncton } from "./addRow";
+import { addColumn, addRow, editCell,reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 
@@ -32,27 +31,27 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   
-  // const createColumn = () => {
-  //   var data1 = metaData;
-  //   if (selectValue == "link") {
-  //     data1.foreignKey = {
-  //       fieldId: selectedFieldName,
-  //       tableId: selectedTable
-  //     }}
-  //   setOpen(false);
-  //   addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
-  //   setSelectValue('longtext')
-  // }
-
-  const createLeftorRightColumn = useCallback(() => {
-    setOpen(false);
-    dispatch(addColumnrightandleft({
-      fieldName: textValue, dbId: params?.dbId, tableId: params?.tableId, fieldType:
-        selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
-    }));
-    setSelectValue('longtext')
-  }
-  );
+  const createLeftorRightColumn = () => {
+    if(directionAndId.direction == "left" || directionAndId.direction== "right"){
+      setOpen(false);
+      dispatch(addColumnrightandleft({
+        fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
+          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
+      }));
+      setSelectValue('longtext')
+    }
+    else{
+      var data1 = metaData;
+      if (selectValue == "link") {
+        data1.foreignKey = {
+          fieldId: selectedFieldName,
+          tableId: selectedTable
+        }}
+      setOpen(false);
+      addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
+      setSelectValue('longtext')
+    }
+  };
 
   const addRows = () => {
       addRow(dispatch);
@@ -201,7 +200,17 @@ export default function MainTable() {
         rightElement={
           <div className="addCol">
           <button onClick={() => setOpen(true)}>+</button>
-          <FieldPopupModal
+        </div>
+        }
+        trailingRowOptions={{
+                  sticky: true,
+                  tint: true,
+                  hint: "New row...",
+                  targetColumn: 4
+                }}
+      />
+    </div>
+    <FieldPopupModal
             title="create column"
             label="Column Name"
             setSelectedFieldName={setSelectedFieldName}
@@ -216,23 +225,12 @@ export default function MainTable() {
             metaData={metaData}
             setMetaData={setMetaData}
             setOpen={setOpen}
-            // submitData={createLeftorRightColumn}
             submitData={createLeftorRightColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
             setTextValue={setTextValue}
           />
-        </div>
-        }
-        trailingRowOptions={{
-                  sticky: true,
-                  tint: true,
-                  hint: "New row...",
-                  targetColumn: 4
-                }}
-      />
-    </div>
-   <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} />
+    <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
     </>
     
   );
