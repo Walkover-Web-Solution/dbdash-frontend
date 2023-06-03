@@ -39,6 +39,7 @@ export default function MainTable() {
           selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
       }));
       setSelectValue('longtext')
+      setDirectionAndId({})
     }
     else{
       var data1 = metaData;
