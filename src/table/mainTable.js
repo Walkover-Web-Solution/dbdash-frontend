@@ -18,6 +18,7 @@ export default function MainTable() {
   const params = useParams();
   const dispatch = useDispatch();
   const fields = useSelector((state) => state.table.columns);
+  console.log("fields",fields)
   const dataa = useSelector((state) => state.table.data);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
@@ -201,7 +202,6 @@ export default function MainTable() {
         // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
         // onGridSelectionChange={(ele)=>{console.log("ele",ele);setItem(ele.rows.items)}}
         onColumnMoved={reorder}
-
         onPaste={true}
         rightElement={
           <div className="addCol">
