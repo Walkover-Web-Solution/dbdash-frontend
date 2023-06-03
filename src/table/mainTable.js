@@ -30,7 +30,6 @@ export default function MainTable() {
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
-  const [,setItem] = useState("")
   const createLeftorRightColumn = () => {
     if(directionAndId.direction == "left" || directionAndId.direction== "right"){
       setOpen(false);

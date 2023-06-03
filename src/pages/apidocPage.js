@@ -3,13 +3,14 @@ import React,{useState} from "react";
 // import PropTypes from "prop-types";
 import Navbar from "../component/apiDoc/navbarApi/navbarApi";
 import MainNavbar from "../component/mainNavbar/mainNavbar";
-import {  useLocation, useParams } from "react-router";
+import {  useLocation, useParams } from "react-router-dom";
 
 function ApiDocPage() {
   const params=useParams();
+  const location = useLocation();
   const[dbtoredirect,setDbtoredirect]=useState(params.dbId);
   
-  const[tabletoredirect,setTabletoredirect]=useState(useLocation().state);
+  const[tabletoredirect,setTabletoredirect]=useState(location.state);
     return (
         <>
         <Box>
