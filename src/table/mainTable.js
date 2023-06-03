@@ -1,6 +1,8 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {  bulkAddColumns, updateColumnHeaders} from "../store/table/tableThunk";
+import React, { useState, useCallback } from "react";
+import { 
+  // CompactSelection
+  DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
+import {  updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,41 +10,10 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
+import {addColumn,  addRow, editCell,reorderFuncton } from "./addRow";
+import { useMemo } from "react";
+import Headermenu from "./headerMenu";
 
-
-// const SimpleMenu = styled.div(`
-// width: 175px;
-// padding: 8px 0;
-// border-radius: 6px;
-// box-shadow: 0px 0px 1px rgba(62, 65, 86, 0.7), 0px 6px 12px rgba(62, 65, 86, 0.35);
-
-// display: flex;
-// flex-direction: column;
-
-// background-color: white;
-// font-size: 13px;
-// font-weight: 600;
-// font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-
-// .danger {
-//   color: rgba(255, 40, 40, 0.8);
-//   &:hover {
-//     color: rgba(255, 40, 40, 1);
-//   }
-// }
-
-// > div {
-//   padding: 6px 8px;
-//   color: rgba(0, 0, 0, 0.7);
-//   &:hover {
-//     background-color: rgba(0, 0, 0, 0.05);
-//     color: rgba(0, 0, 0, 0.9);
-//   }
-//   transition: background-color 100ms;
-//   cursor: pointer;
-// }
-// `);
 
 export default function MainTable() {
   const params = useParams();
@@ -58,17 +29,8 @@ export default function MainTable() {
   const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
-  // const [selectedRows, setSelectedRows] = useState([]);
-  console.log("fields",fields)
-  useEffect(() => {
-    dispatch(
-      bulkAddColumns({
-        dbId: params?.dbId,
-        tableName: params?.tableName,
-      })
-    );
-  }, []);
-
+  const [menu, setMenu] = useState();
+  
   const createColumn = () => {
     var data1 = metaData;
     if (selectValue == "link") {
@@ -78,6 +40,13 @@ export default function MainTable() {
       }
     }
     setOpen(false);
+    // dispatch(addColumnrightandleft({
+    //   fieldName: textValue,
+    //   dbId: params?.dbId,
+    //   tableId: params?.tableName,
+    //   fieldType: selectValue,
+    //   metaData: metaData
+    // }));
     addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
     setSelectValue('longtext')
   }
@@ -111,25 +80,15 @@ export default function MainTable() {
         }));
       };
 
-      // const [menu, setMenu] = useState({
-      //   col: null,
-      //   bounds: null,
-      // });
-      
-      // const onHeaderMenuClick = useCallback((col, bounds) => {
-        
-      //   setMenu({ col, bounds });
-
-        
-      // }, []);
+    const onHeaderMenuClick = useCallback((col, bounds) => {
+      setMenu({ col, bounds });
+      }, []);
       
 
   const getData = useCallback((cell) => {
-   
     const [col, row] = cell;
     const dataRow = dataa[row];
     if(dataRow){
-
     
     const d = dataRow[fields[col]?.id];
     const { dataType } = fields[col];
@@ -209,15 +168,12 @@ export default function MainTable() {
   }
   }, [dataa, fields]);
 
-  // const deletedFunc = useCallback((celled) => {
-  //   console.log("cell",celled)
-  // });
-  // const handleSelectionChanged = (selectedCells) => {
-  //   const selectedRowIds = selectedCells.map((cell) => cell.row);
-  //   console.log("selectedRowIds",selectedRowIds)
-  //   setSelectedRows(selectedRowIds);      
-  // };
-  // console.log("Selected Rows IDs:", selectedRows);
+  const realCols = useMemo(() => {
+    return fields.map((c) => ({
+      ...c,
+      hasMenu: true,
+    }));
+  }, [fields]);
 
   return (
     <>
@@ -226,17 +182,18 @@ export default function MainTable() {
         width={1300}
         getCellContent={getData}
         onRowAppended={addRows}
-        columns={fields}
+        columns={realCols}
         rows={dataa.length}
         rowMarkers="both"
+        rowSelectionMode="multi"
         onCellEdited={onCellEdited}
         onRowMoved={handleRowMoved}
         getCellsForSelection={true}
         onColumnResizeEnd={handleColumnResize}
+        onHeaderMenuClick={onHeaderMenuClick } //iske niche ki 2 line mat hatana
+        // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
+        // onGridSelectionChange={(ele)=>{console.log("ele",ele);setItem(ele.rows.items)}}
         onColumnMoved={reorder}
-        scaleToRem={true}
-        // onSelectionChanged={handleSelectionChanged}
-        // onDelete={deletedFunc}
         onPaste={true}
         rightElement={
           <div className="addCol">
@@ -256,6 +213,7 @@ export default function MainTable() {
             metaData={metaData}
             setMetaData={setMetaData}
             setOpen={setOpen}
+            // submitData={createLeftorRightColumn}
             submitData={createColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
@@ -271,19 +229,7 @@ export default function MainTable() {
                 }}
       />
     </div>
-   {/* <Headermenu menu={menu} setMenu={setMenu}/> */}
-   {/* {isOpen &&
-    renderLayer(
-      <SimpleMenu {...layerProps}>
-        <div onClick={() => setMenu(undefined)}>These do nothing</div>
-        <div onClick={() => setMenu(undefined)}>Add column right</div>
-        <div onClick={() => setMenu(undefined)}>Add column left</div>
-        <div className="danger" onClick={() => setMenu(undefined)}>
-          Delete
-        </div>
-      </SimpleMenu>
-   )}
-    */}
+   <Headermenu menu={menu} setMenu={setMenu}  setOpen={setOpen}   />
     </>
     
   );
