@@ -112,7 +112,6 @@ export default function Header({allColumns,
         selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
     }));
     setSelectValue('longtext')
-
   }
   const duplicateFields = (props) => {
     setShowDuplicate(false);
