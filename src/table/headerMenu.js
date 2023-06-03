@@ -42,6 +42,7 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
   },
 }));
+
 export default function Headermenu(props) {
 const classes = useStyles();
 const isOpen = props?.menu !== undefined;
@@ -63,6 +64,7 @@ const { layerProps, renderLayer } = useLayer({
     }),
   },
 });
+
   return (
 <>
 {isOpen &&
@@ -71,7 +73,10 @@ const { layerProps, renderLayer } = useLayer({
       {/* <div>Property type</div> */}
       <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
       <div className={classes.menuItem}><VisibilityOffIcon fontSize='2px'/>Hide Field</div>
-      <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><WestIcon fontSize='2px'/>Insert Left</div>
+      <div onClick={() => {props?.setOpen(true), props?.setDirectionAndId({
+        direction: "left",
+        // position: props?.colIndex
+      })}} className={classes.menuItem}><WestIcon fontSize='2px'/>Insert Left</div>
       <div onClick={() => {props?.setOpen(true)}} className={classes.menuItem}><EastIcon fontSize='2px'/>Insert Right</div>
       <div className={classes.menuItem}><NorthIcon fontSize='2px'/>Sort ascending</div>
       <div className={classes.menuItem}><SouthIcon fontSize='2px'/>Sort descending</div>
@@ -87,4 +92,6 @@ Headermenu.propTypes = {
  menu: PropTypes.any,
  setMenu: PropTypes.any,
  setOpen: PropTypes.any,
+ setDirectionAndId: PropTypes.any,
+ colIndex: PropTypes.any
 };

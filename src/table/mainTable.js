@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { 
   // CompactSelection
   DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import {  updateColumnHeaders} from "../store/table/tableThunk";
+import { addColumnrightandleft, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import {addColumn,  addRow, editCell,reorderFuncton } from "./addRow";
+import {  addRow, editCell,reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 
@@ -30,26 +30,29 @@ export default function MainTable() {
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
+  const [directionAndId, setDirectionAndId] = useState({})
   
-  const createColumn = () => {
-    var data1 = metaData;
-    if (selectValue == "link") {
-      data1.foreignKey = {
-        fieldId: selectedFieldName,
-        tableId: selectedTable
-      }
-    }
+  // const createColumn = () => {
+  //   var data1 = metaData;
+  //   if (selectValue == "link") {
+  //     data1.foreignKey = {
+  //       fieldId: selectedFieldName,
+  //       tableId: selectedTable
+  //     }}
+  //   setOpen(false);
+  //   addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
+  //   setSelectValue('longtext')
+  // }
+
+  const createLeftorRightColumn = useCallback(() => {
     setOpen(false);
-    // dispatch(addColumnrightandleft({
-    //   fieldName: textValue,
-    //   dbId: params?.dbId,
-    //   tableId: params?.tableName,
-    //   fieldType: selectValue,
-    //   metaData: metaData
-    // }));
-    addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
+    dispatch(addColumnrightandleft({
+      fieldName: textValue, dbId: params?.dbId, tableId: params?.tableId, fieldType:
+        selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
+    }));
     setSelectValue('longtext')
   }
+  );
 
   const addRows = () => {
       addRow(dispatch);
@@ -95,7 +98,6 @@ export default function MainTable() {
 
     // const handlePhoneChange = (event) => {
     //   const newValue = event.target.value;
-    //   console.log(newValue)
     //   // Handle the phone number change here
     // };
 
@@ -215,7 +217,7 @@ export default function MainTable() {
             setMetaData={setMetaData}
             setOpen={setOpen}
             // submitData={createLeftorRightColumn}
-            submitData={createColumn}
+            submitData={createLeftorRightColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
             setTextValue={setTextValue}
@@ -230,7 +232,7 @@ export default function MainTable() {
                 }}
       />
     </div>
-   <Headermenu menu={menu} setMenu={setMenu}  setOpen={setOpen}   />
+   <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} />
     </>
     
   );
