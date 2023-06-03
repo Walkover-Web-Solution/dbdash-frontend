@@ -20,6 +20,7 @@ export default function MainTable() {
   const dispatch = useDispatch();
   const fields = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
+  console.log(dataa,"datttttt");
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -30,7 +31,7 @@ export default function MainTable() {
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
-  
+  console.log("fields",fields,"data",data);
   const createColumn = () => {
     var data1 = metaData;
     if (selectValue == "link") {
