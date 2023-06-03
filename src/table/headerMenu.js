@@ -9,6 +9,7 @@ import WestIcon from '@mui/icons-material/West';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+
 const useStyles = makeStyles(() => ({
   simpleMenu: {
     width: '175px',

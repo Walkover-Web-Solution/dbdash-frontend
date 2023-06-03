@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { 
   // CompactSelection
   DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import { addColumnrightandleft, updateColumnHeaders} from "../store/table/tableThunk";
+import {  updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import {  addRow, editCell } from "./addRow";
+import {addColumn,  addRow, editCell,reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 
@@ -29,33 +29,38 @@ export default function MainTable() {
   const [textValue, setTextValue] = useState('');
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
-const [menu, setMenu] = useState();
+  const [menu, setMenu] = useState();
   
-// useEffect(() => {
-  //   dispatch(
-  //     bulkAddColumns({
-  //       dbId: params?.dbId,
-  //       tableName: params?.tableName,
-  //     })
-  //   );
-  // }, []);
-
-  // const updatedField= useMemo(()=>fields,[fields])
-  // console.log(updatedField)
-  const createLeftorRightColumn = () => {
+  const createColumn = () => {
+    var data1 = metaData;
+    if (selectValue == "link") {
+      data1.foreignKey = {
+        fieldId: selectedFieldName,
+        tableId: selectedTable
+      }
+    }
     setOpen(false);
-    dispatch(addColumnrightandleft({
-      fieldName: textValue,
-      dbId: params?.dbId,
-      tableId: params?.tableName,
-      fieldType: selectValue,
-      metaData: metaData
-    }));
+    // dispatch(addColumnrightandleft({
+    //   fieldName: textValue,
+    //   dbId: params?.dbId,
+    //   tableId: params?.tableName,
+    //   fieldType: selectValue,
+    //   metaData: metaData
+    // }));
+    addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
     setSelectValue('longtext')
   }
 
   const addRows = () => {
-      addRow(dispatch);};
+      addRow(dispatch);
+  }; 
+
+  const reorder = useCallback(
+    (item, newIndex) => {
+      reorderFuncton(dispatch,item,newIndex,fields)
+    },
+    [fields]
+  );
 
   const handleRowMoved = useCallback((from, to) => {
     reorderRows(from, to, data, setData);
@@ -163,26 +168,6 @@ const [menu, setMenu] = useState();
   }
   }, [dataa, fields]);
 
-
-  // function CustomCellRenderer(cell) {
-  //   console.log(cell,"cell")
-  //   const { dataType, value } = cell;
-  //   if (dataType === "phone") {
-      // const handlePhoneChange = (event) => {
-      //   const newValue = event.target.value;
-      //   console.log(newValue)
-      //   // Handle the phone number change here
-      // };
-  
-  //     return (
-  //       <input type="tel" value={value} onChange={handlePhoneChange} />
-  //     );
-  //   }
-  
-  //   // Render the default cell content if it's not a phone type
-  //   return value;
-  // }
-
   const realCols = useMemo(() => {
     return fields.map((c) => ({
       ...c,
@@ -190,31 +175,12 @@ const [menu, setMenu] = useState();
     }));
   }, [fields]);
 
-//   isOpen,
-//   auto: true,
-//   placement: "bottom-end",
-//   triggerOffset: 2,
-//   onOutsideClick: () => setMenu(undefined),
-//   trigger: {
-//     getBounds: () => ({
-//       left: menu ? menu.bounds?.x : 0,
-//       top: menu ? menu.bounds?.y : 0,
-//       width: menu ? menu.bounds?.width : 0,
-//       height: menu ? menu.bounds?.height : 0,
-//       right: (menu ? menu.bounds?.x : 0) + (menu ? menu.bounds?.width : 0),
-//       bottom: (menu ? menu.bounds?.y : 0) + (menu ? menu.bounds?.height : 0),
-//     }),
-//   },
-// });
-
-// const [item,setItem] = useState([])
   return (
     <>
     <div className="table-container">
       <DataEditor
         width={1300}
         getCellContent={getData}
-        // customCellRenderer={CustomCellRenderer}
         onRowAppended={addRows}
         columns={realCols}
         rows={dataa.length}
@@ -227,6 +193,8 @@ const [menu, setMenu] = useState();
         onHeaderMenuClick={onHeaderMenuClick } //iske niche ki 2 line mat hatana
         // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
         // onGridSelectionChange={(ele)=>{console.log("ele",ele);setItem(ele.rows.items)}}
+        onColumnMoved={reorder}
+
         onPaste={true}
         rightElement={
           <div className="addCol">
@@ -246,8 +214,8 @@ const [menu, setMenu] = useState();
             metaData={metaData}
             setMetaData={setMetaData}
             setOpen={setOpen}
-            submitData={createLeftorRightColumn}
-            
+            // submitData={createLeftorRightColumn}
+            submitData={createColumn}
             linkedValueName={linkedValueName}
             setLinkedValueName={setLinkedValueName}
             setTextValue={setTextValue}
@@ -262,7 +230,7 @@ const [menu, setMenu] = useState();
                 }}
       />
     </div>
-   <Headermenu menu={menu} setMenu={setMenu} setSelectValue={setSelectValue} setOpen={setOpen}  metaData={metaData} textValue={textValue}  />
+   <Headermenu menu={menu} setMenu={setMenu}  setOpen={setOpen}   />
     </>
     
   );
