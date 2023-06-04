@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ShareLinkPopUp from "./ShareLinkPopUp";
 import {Box,Button,Tabs,IconButton,Menu,MenuItem,CircularProgress,} from "@mui/material";
 import PopupModal from "../popupModal";
 import FilterModal from "../filterPopUp";
@@ -16,6 +17,7 @@ import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
 import './tablesList.scss'
+import { createViewTable } from "../../api/viewTableApi";
 export default function TablesList({ dbData }) {
   
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -27,6 +29,7 @@ export default function TablesList({ dbData }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
   const [tabIndex, setTabIndex] = useState(0);
@@ -40,11 +43,17 @@ export default function TablesList({ dbData }) {
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
+  const [link,setLink]=useState("Link");
 
   const handleClick = (event, id) => {
-    setcurrentTable(id)
-    setAnchorEl(event.currentTarget);
+    if (id === "share") {
+      setShareLinkOpen(true);
+    } else {
+      setcurrentTable(id);
+      setAnchorEl(event.currentTarget);
+    }
   };
+  
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -80,7 +89,7 @@ export default function TablesList({ dbData }) {
   function onFilterClicked(filter, id) {
     setUnderLine(id)
     setFilterId(id);
-    // setPage(1);
+    setPage(1);
     dispatch(
       bulkAddColumns({
         dbId: dbData?.db?._id,
@@ -123,6 +132,8 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
+    console.log(dbData);
+ 
     if (params?.filterName) {
       setUnderLine(params?.filterName)
       dispatch(
@@ -134,7 +145,8 @@ export default function TablesList({ dbData }) {
           pageNo: 1,
           filterId : params?.filterName,
           fields:dbData?.db?.tables[params?.tableName]?.fields         
-        })       
+        })
+        
       );
     }
     else if (dbData?.db?.tables) {
@@ -159,6 +171,32 @@ export default function TablesList({ dbData }) {
 
     }
   }, [params?.tableName]);
+  let dataa1="";
+
+  const shareLink= async () => {
+    const db_Id = dbData?.db?._id
+    const data={
+      // dbId:dbData?.db?._id,
+      tableId:params?.tableName,
+      filterId:params?.filterName
+    }
+    
+    dataa1 =await createViewTable(db_Id,data);
+    
+    setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+
+//     console.log("indata",dataa1);
+
+// const s=Object.keys(Object.values(dataa1.data.data)[0])
+//     console.log(Object.values(dataa1.data.data)[0],"aaqqqhhha");
+//     // console.log(s[0],"aasssha");
+  }
+  
+
+  // useEffect=()=>{
+  //   ,[createViewTable]
+  // }
+
   return (
     <>
     <div className="tableslist">
@@ -204,22 +242,20 @@ export default function TablesList({ dbData }) {
           Object.entries(AllTableInfo[params?.tableName]?.filters).map(
             (filter, index) => (
               <Box key={index} className="custom-box">
-            <Box
-              className="filter-box"
-             
-              style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
-              variant="outlined"
-            >
-              <Box  onClick={() => {
-                onFilterClicked(filter[1].query, filter[0], filter[1]);
-              }}>
-              {filter[1]?.filterName}
-              </Box>
-              <IconButton onClick={(e) => handleClick(e, filter[0])}>
-                <MoreVertIcon className="moreverticon" />
-              </IconButton>
-            </Box>
-          </Box>
+  <Box
+    className="filter-box"
+    onClick={() => {
+      onFilterClicked(filter[1].query, filter[0], filter[1]);
+    }}
+    style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
+    variant="outlined"
+  >
+    {filter[1]?.filterName}
+    <IconButton onClick={(e) => handleClick(e, filter[0])}>
+      <MoreVertIcon className="moreverticon" />
+    </IconButton>
+  </Box>
+</Box>
 
             )
           )}
@@ -263,6 +299,8 @@ export default function TablesList({ dbData }) {
         <MenuItem
           onClick={() => {
             handleEdit();
+            handleClose();
+
           }}
         >
           Edit
@@ -272,9 +310,32 @@ export default function TablesList({ dbData }) {
             deleteFilterInDb(currentTable);
             handleClose();
           }}
+          
         >
           Delete
         </MenuItem>
+        <MenuItem 
+        onClick={(e) => 
+        {
+          handleClick(e, "share");
+        shareLink();
+        }
+        }
+        
+        >
+    Share this view
+  </MenuItem>
+        {shareLinkOpen && (
+  <ShareLinkPopUp
+    title="Share Link"
+    open={shareLinkOpen}
+    setOpen={setShareLinkOpen}
+    label="Link"
+    textvalue={link}
+    
+  />
+)}
+
       </Menu>
     </div>
 
@@ -297,6 +358,7 @@ TablesList.propTypes = {
   orgId: PropTypes.string,
   tables: PropTypes.any,
   dropdown: PropTypes.any,
+  setSelectedTable:PropTypes.any,
   label: PropTypes.any,
   setTables: PropTypes.any,
 };

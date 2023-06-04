@@ -26,7 +26,6 @@ import Joi from "joi";
 import PropTypes from "prop-types";
 
 export default function FieldPopupModal(props) {
-
   // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);

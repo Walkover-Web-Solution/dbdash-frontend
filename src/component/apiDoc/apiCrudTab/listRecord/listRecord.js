@@ -5,6 +5,8 @@ import CodeBlock from '../Codeblock/Codeblock';
 import OptionalParameter from '../optionalParameter/optionalParameter';
 import ResponseBox from '../responseBox';
 import './listRecord.scss'; // Import the CSS file
+import variables from '../../../../assets/styling.scss';
+
 
 function ListRecord(props) {
   const[value,setValue]=useState('');
@@ -13,17 +15,7 @@ function ListRecord(props) {
   return (
     <>
     <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          position: "fixed",
-          right: 0,
-          width: "36vw",
-          padding: "10px",
-          height: "65vh",
-          overflowY: "scroll",
-          whiteSpace: "pre-wrap",
-        }}
+      className="list-record-container"
       >
      <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
      <ResponseBox response={`{
@@ -34,9 +26,9 @@ function ListRecord(props) {
 }
 }`} />
      </div>
-     <div style={{width:'700px',height:"65vh",overflowY:"scroll",whiteSpace:"pre-wrap",padding:"2px"}}>
-        <Typography style={{fontWeight: 'bold',fontSize: '24px'}}>List records</Typography>
-        <Typography>
+     <div className='records-container'>
+        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >List records</Typography>
+        <Typography  fontSize={variables.textsize} >
         To list records in {props.table} ,issue a GET request to the {props.table} endpoint using {props.table} ids<br/>
         You can filter, sort, and format the results with the following query parameters.
         <br/>

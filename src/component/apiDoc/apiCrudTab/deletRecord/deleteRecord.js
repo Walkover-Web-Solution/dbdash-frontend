@@ -7,7 +7,7 @@ import Records from '../records/records';
 import OptionalParameter from '../optionalParameter/optionalParameter';
 import ResponseBox from '../responseBox';
 import './deleteRecord.scss'; // Import the CSS file
-
+import variables from '../../../../assets/styling.scss';
 function DeleteRecord(props) {
   const [age, setAge] = useState('');
   const [value, setValue] = useState('');
@@ -31,8 +31,8 @@ function DeleteRecord(props) {
       </div>
 
       <div className="records-container">
-        <Box>
-          <Typography className="bold-heading">Delete Table Records</Typography>
+        <Box className="records-container">
+          <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Table Records</Typography>
           <Typography>
             <Box>
               <br />

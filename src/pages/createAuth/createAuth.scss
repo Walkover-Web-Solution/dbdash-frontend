@@ -2,12 +2,11 @@
     padding: 20px;
     margin: 80px;
     justify-content: center;
-    border-radius: 10px;
+    border-radius: 0 !important;
     border: 2px solid #1a1919;
     position: sticky;
     margin-top: 15px;
     height: 400px; /* Adjust the height value as needed */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow */
   }
   
   .create-auth-key-main-container {

@@ -7,7 +7,7 @@ import { Typography } from '@mui/material';
 import { useState } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import './records.scss'; // Import the CSS file
-
+import variables from '../../../../assets/styling.scss';
 function Records(props) {
   const [rowfieldData, setRowFieldData] = useState(null)
 
@@ -23,26 +23,26 @@ function Records(props) {
   return (
     <div>
       <Grid container spacing={2}>
-        <Grid item xs={3.2}>
-          <Typography className="bold-heading">fieldName</Typography>
+        <Grid item xs={3}>
+          <Typography fontSize={Number(variables.titlesize)}  fontWeight={variables.titleweight} variant={variables.titlevariant}>fieldName</Typography>
           {rowfieldData && Object?.entries(rowfieldData) && Object?.entries(rowfieldData).map((fields, index) => (
             <Typography className="field-name" key={index}>{fields[1].fieldName}</Typography>
           ))}
         </Grid>
-        <Grid item xs={3.2}>
-          <Typography className="bold-heading">fieldId</Typography>
+        <Grid item xs={3}>
+          <Typography fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>fieldId</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
             <Typography className="field-id" key={index}>{fields[0]}</Typography>
           ))}
         </Grid>
-        <Grid item xs={3.2}>
-          <Typography className="bold-heading">fieldType</Typography>
+        <Grid item xs={3}>
+          <Typography fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>fieldType</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
             <Typography className="field-type" key={index}>{fields[1].fieldType === "checkbox" ? "boolean" : fields[1].fieldType}</Typography>
           ))}
         </Grid>
-        <Grid item xs={2}>
-          <Typography className="add-remove">Add/Remove</Typography>
+        <Grid item xs={3} >
+          <Typography fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant} className="add-remove">Add/Remove</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
             <Typography key={index}>
               {props.arr && !props.arr.find(x => x[0] === fields[0]) ? (

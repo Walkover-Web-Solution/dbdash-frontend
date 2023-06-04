@@ -74,6 +74,7 @@ function ApiCrudTablist(props) {
           <StyledTab className="custom-tab-label" label="Delete" {...a11yProps(4)} />
         </Tabs>
       </Box>
+      <div style={{marginTop:"23vh"}}>
       <TabPanel value={value} index={0}>
         <BasicStuff db={props.db} table={props.table} />
       </TabPanel>
@@ -89,6 +90,7 @@ function ApiCrudTablist(props) {
       <TabPanel value={value} index={4}>
         <DeleteRecord db={props.db} table={props.table} />
       </TabPanel>
+      </div>
     </Box>
   );
 }
