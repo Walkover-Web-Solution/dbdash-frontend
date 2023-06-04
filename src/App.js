@@ -14,7 +14,7 @@ import AuthKeyPage from '../src/pages/authKeyPage/authKeyPage';
 import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ViewTable from './pages/ViewTable/ViewTable';
+import ViewTable from './pages/viewTable/viewTable';
 
 
   
