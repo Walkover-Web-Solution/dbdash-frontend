@@ -132,7 +132,6 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
-    console.log(dbData);
  
     if (params?.filterName) {
       setUnderLine(params?.filterName)

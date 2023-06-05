@@ -112,7 +112,7 @@ setFields(newarrr);
     if(dataRow){
     
     const d = dataRow[fields[col]?.id];
-    const { dataType } = fields[col];
+    const { dataType } = fields[col] || " ";
     if (dataType === "autonumber" ) {
       return {
         allowOverlay: true,
