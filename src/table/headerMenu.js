@@ -10,12 +10,11 @@ import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DuplicateFieldPopup from './duplicateFieldPopup';
-import { addColumnrightandleft } from '../store/table/tableThunk';
-import { updateColumnHeaders } from '../store/table/tableThunk';
+import { addColumnrightandleft, updateColumnHeaders } from '../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
 import { deleteColumns } from '../store/table/tableThunk';
+
 const useStyles = makeStyles(() => ({
 
   simpleMenu: {
@@ -56,17 +55,20 @@ export default function Headermenu(props) {
   const [duplicateField, setDuplicateField] = useState(true);
   const dispatch = useDispatch();
   const params = useParams();
-
-  const handleDelete=()=>{dispatch(
-    deleteColumns({
-      label: props?.fields[props?.menu?.col]?.title,
-      columnId: props?.fields[props?.menu?.col]?.id,
-      fieldName: props?.fields[props?.menu?.col]?.id,
-      fieldDataType: props?.fields[props?.menu?.col].dataType || "",
-      tableId: params?.tableName,
-      dbId: params?.dbId,
-    })
-  );}
+  const dataType = props?.fields[props?.menu?.col]?.dataType;
+  
+  const handleDelete = () => {
+    dispatch(
+      deleteColumns({
+        label: props?.fields[props?.menu?.col]?.title,
+        columnId: props?.fields[props?.menu?.col]?.id,
+        fieldName: props?.fields[props?.menu?.col]?.id,
+        fieldDataType: props?.fields[props?.menu?.col].dataType || "",
+        tableId: params?.tableName,
+        dbId: params?.dbId,
+      })
+    );
+  }
   const { layerProps, renderLayer } = useLayer({
     isOpen,
     auto: true,
@@ -92,7 +94,6 @@ export default function Headermenu(props) {
 
   const handleOpenDuplicate = () => {
     setShowDuplicate(true)
-    // setExpanded(false);
   }
 
   const handleDuplicate = () => {
@@ -126,7 +127,7 @@ export default function Headermenu(props) {
   }
   return (
     <>
-      { props?.menu &&
+      {props?.menu &&
         renderLayer(
           <div className={classes.simpleMenu} {...layerProps}>
             {showduplicate && <DuplicateFieldPopup
@@ -140,27 +141,26 @@ export default function Headermenu(props) {
             <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
             <div onClick={() => {
               props?.setOpen(true),
-                props?.setDirectionAndId({
-                  direction: "left",
-                  position: props?.fields[props?.menu.col].id
-                })
-            }} className={classes.menuItem}><WestIcon fontSize='2px' />Insert Left</div>
+              props?.setDirectionAndId({
+              direction: "left",
+              position: props?.fields[props?.menu?.col].id})}} 
+              className={classes.menuItem}><WestIcon fontSize='2px' />Insert Left</div>
             <div onClick={() => {
-              props?.setOpen(true), props?.setDirectionAndId({
-                direction: "right",
-                position: props?.fields[props?.menu.col].id
-              })
-            }} className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
+              props?.setOpen(true),
+              props?.setDirectionAndId({
+              direction: "right",
+              position: props?.fields[props?.menu?.col].id})}} 
+              className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
             <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
             <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
-            <div onClick={()=>{
-              handleOpenDuplicate()
-            }} className={classes.menuItem}> <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
-            <div onClick={()=>{
-        handleDelete();
-        
-        props.setMenu(false);
-      }} className={classes.menuItem}><DeleteOutlineIcon fontSize='2.5px'/>Delete</div>
+            {(dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") && (
+            <>
+                <div onClick={() => { handleOpenDuplicate(); } } className={classes.menuItem}>
+                <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
+                <div onClick={() => {handleDelete();props.setMenu(false);}} className={classes.menuItem}>
+                <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
+            </>
+            )}
           </div>
         )}
     </>

@@ -152,6 +152,18 @@ export default function MainTable() {
           readonly: false,
           displayData: d || "",
           data: d || "",
+          provideEditor: true
+        };
+      }
+      else if (dataType === "singlelinetext") {
+        return {
+          kind: GridCellKind.Text,
+          allowOverlay: true,
+          readonly: false,
+          displayData: d || "",
+          data: d || "",
+          wrapText: false,
+          multiline: false
         };
       }
       else if (dataType === "phone") {
@@ -239,9 +251,9 @@ export default function MainTable() {
 
   return (
     <>
-<div style={{height:`${((window.screen.height*61)/100)}px`}} className="table-container">
-      <DataEditor
-        width={window.screen.width}
+      <div className="table-container" style={{height:`${((window.screen.height*65)/100)}px`}}>
+        <DataEditor
+          width={window.screen.width}
           getCellContent={getData}
           onRowAppended={addRows}
           columns={realCols}
