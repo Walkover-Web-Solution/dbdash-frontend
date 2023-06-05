@@ -16,7 +16,9 @@ import Headermenu from "./headerMenu";
 
 
 export default function MainTable() {
+
   const params = useParams();
+
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
@@ -204,6 +206,41 @@ export default function MainTable() {
       return {};
     }
   }, [dataa, fields]);
+  // const onCellClicked=useCallback((item,event)=>{
+  //   const[col,row]=item;
+  //   if(col==-1 && event.isEdge==false)
+  //   {
+  //     const index=arr.indexOf(row);
+  //     if(index>-1){
+  //       arr.splice(index,1);
+  //     }
+  //     else{
+  //       arr.push(row);
+  //     }
+  //   }
+  //   else{
+  //     arr=[];
+  //   }
+  //   console.log(arr);
+
+  // })
+
+//   const handleDeleteRow = useCallback(
+//     (selection) => {
+//       console.log("heello delte",selection);
+// let resultArray=[];
+// for (const element of selection.rows.items) {
+//   const [start, end] = element;
+//   for (let i = start; i < end; i++) {
+//     console.log(dataa,"iiiii");
+//     resultArray.push(i);
+//   }
+// }
+//       console.log(resultArray,"hiii");
+//     },
+//     [data]
+//   );
+
 
   const realCols = useMemo(() => {
     return fields.map((c) => ({

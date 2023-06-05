@@ -22,6 +22,8 @@ import { selectOrgandDb } from '../../store/database/databaseSelector.js';
 
 
 function MainNavbar(props) {
+  let { dbId  ,id,tableName} = useParams();
+
   const alldb = useSelector((state) => selectOrgandDb(state));
 let dbname = '';
   Object.entries(alldb).forEach(([, dbs]) => {
@@ -31,12 +33,13 @@ let dbname = '';
     }
   });
   
+  console.log("props",props);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const user = UserAuth();
   
-  const { dbId ,tableName} = useParams();
+
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
   const shouldShowTypography = useMemo(() => {
@@ -83,7 +86,7 @@ let dbname = '';
         <Typography
           fontWeight={Number(variables.mainnavbarfontweight)}
           fontFamily={variables.fontFamily}
-          sx={{paddingBottom:0.85}}
+          sx={{paddingBottom:0.85}} 
           fontSize={Number(variables.titlesize)}
           color={variables.mainnavbartextcolor}
         >
@@ -116,7 +119,7 @@ let dbname = '';
   style={shouldShowTypography ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none' } : {}}
   to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
     : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
-    : { pathname: `/db/${dbId}` }
+    : { pathname: `/db/${dbId || id}` }
   }
 >
 

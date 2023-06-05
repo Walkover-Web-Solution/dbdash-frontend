@@ -12,6 +12,8 @@ export default function AuthKeyHeader(props) {
       <Link
        to={`/apiDoc/db/${props?.id}`}
         style={{ textDecoration: 'none' }}
+        state={props.tabletoredirect}
+
       >
   
         <Button     className="mui-button-outlined"  variant="outlined" >{'API Documentation'}</Button>
@@ -29,5 +31,6 @@ export default function AuthKeyHeader(props) {
   )
 }
 AuthKeyHeader.propTypes = {
-  id: PropTypes.string
+  id: PropTypes.string,
+  tabletoredirect:PropTypes.any
 }
