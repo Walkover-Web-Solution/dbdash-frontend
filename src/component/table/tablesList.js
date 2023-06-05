@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import SingleTable from "./singleTable";
 import { useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
-import { bulkAddColumns } from "../../store/table/tableThunk";
+import { bulkAddColumns, filterData } from "../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../table/mainTable";
 import { createTable1 } from "../../store/allTable/allTableThunk";
@@ -82,17 +82,23 @@ export default function TablesList({ dbData }) {
     setUnderLine(id)
     setFilterId(id);
     // setPage(1);
-    dispatch(
-      bulkAddColumns({
-        dbId: dbData?.db?._id,
-        tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-        filter: filter,
-        org_id: dbData?.db?.org_id,
-        pageNo: 1,
-        filterId : id,
-        fields:dbData?.db?.tables[params?.tableName]?.fields 
-      })
-    );
+    dispatch(filterData({
+      filterId : id,
+      tableId: params?.tableName ,
+      filter: filter,
+          dbId: dbData?.db?._id,
+    }))
+    // dispatch(
+    //   bulkAddColumns({
+    //     dbId: dbData?.db?._id,
+    //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
+    //     filter: filter,
+    //     org_id: dbData?.db?.org_id,
+    //     pageNo: 1,
+    //     filterId : id,
+    //     fields:dbData?.db?.tables[params?.tableName]?.fields 
+    //   })
+    // );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
 
@@ -126,17 +132,24 @@ export default function TablesList({ dbData }) {
   useEffect(() => {
     if (params?.filterName) {
       setUnderLine(params?.filterName)
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?.db?._id,
-          tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-          filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-          org_id: dbData?.db?.org_id,
-          pageNo: 1,
-          filterId : params?.filterName,
-          fields:dbData?.db?.tables[params?.tableName]?.fields         
-        })       
-      );
+
+      dispatch(filterData({
+        filterId : params?.filterName,
+        tableId: params?.tableName ,
+        filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+        dbId: dbData?.db?._id,
+      }))
+      // dispatch(
+      //   bulkAddColumns({
+      //     dbId: dbData?.db?._id,
+      //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
+      //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+      //     org_id: dbData?.db?.org_id,
+      //     pageNo: 1,
+      //     filterId : params?.filterName,
+      //     fields:dbData?.db?.tables[params?.tableName]?.fields         
+      //   })       
+      // );
     }
     else if (dbData?.db?.tables) {
       const tableNames = Object.keys(dbData.db.tables);
@@ -149,11 +162,7 @@ export default function TablesList({ dbData }) {
           fields:dbData?.db?.tables[params?.tableName]?.fields
         })
       );
-      setValue(
-        tableNames?.indexOf(params?.tableName) !== -1
-          ? tableNames?.indexOf(params?.tableName)
-          : 0
-      );
+      setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
       if (!params?.tableName) {
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
       }
