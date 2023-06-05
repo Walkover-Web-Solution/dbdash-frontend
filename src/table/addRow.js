@@ -6,7 +6,7 @@ export const addRow = (dispatch) => {
 }
 export const addColumn = (dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName) => { 
       dispatch(addColumsToLeft({
-      fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
+      filterId:params?.filterName,fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
         selectValue, metaData: metaData,selectedTable,selectedFieldName,linkedValueName
     }));
     return;
@@ -26,13 +26,14 @@ export const editCell = (cell, newValue,dispatch,fields) => {
           return;
 }
 
-export const reorderFuncton = (dispatch,currentIndex,newIndex,fields) => { 
+export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,filterId) => { 
 const newOrder = Array.from(fields);
 const key = fields[currentIndex].id;
 const [removedColumn] = newOrder.splice(currentIndex, 1);
 newOrder.splice(newIndex, 0, removedColumn);
 dispatch(
   updateColumnOrder({
+    filterId:filterId,
     columns: newOrder,
     id: key,
     oldIndex: currentIndex, 
