@@ -37,7 +37,7 @@ export default function MainTable() {
     if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
       dispatch(addColumnrightandleft({
-        fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
+        filterId:params?.filterName,fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
           selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
       }));
       setSelectValue('longtext')
@@ -74,7 +74,7 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields)
+      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName)
     },
     [fields]
   );
@@ -94,6 +94,7 @@ export default function MainTable() {
     newarrr[colIndex] = obj;
     setFields(newarrr);
     dispatch(updateColumnHeaders({
+      filterId:params?.filterName,
       dbId: params?.dbId,
       tableName: params?.tableName,
       fieldName: fields?.id,
