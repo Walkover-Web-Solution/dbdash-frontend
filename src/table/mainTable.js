@@ -1,7 +1,8 @@
-import React, { useState, useCallback,useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { // CompactSelection
-DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import { addColumnrightandleft,  updateColumnHeaders} from "../store/table/tableThunk";
+  DataEditor, GridCellKind
+} from "@glideapps/glide-data-grid";
+import { addColumnrightandleft, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +10,7 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addColumn, addRow, editCell,reorderFuncton } from "./addRow";
+import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 
@@ -32,49 +33,48 @@ export default function MainTable() {
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
-  const [fields,setFields] = useState(fields1 || [])
-  // let arr=[];
+  const [fields, setFields] = useState(fields1 || [])
   const createLeftorRightColumn = () => {
-    if(directionAndId.direction == "left" || directionAndId.direction== "right"){
+    if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
       dispatch(addColumnrightandleft({
-        fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
+        filterId:params?.filterName,fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
           selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
       }));
       setSelectValue('longtext')
       setDirectionAndId({})
     }
-    else{
+    else {
       var data1 = metaData;
       if (selectValue == "link") {
         data1.foreignKey = {
           fieldId: selectedFieldName,
           tableId: selectedTable
-        }}
+        }
+      }
       setOpen(false);
-      addColumn(dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName);
+      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName);
       setSelectValue('longtext')
     }
   };
 
-  
-useEffect(() => {
-  var newcolumn = []
-  fields1.forEach(column => {
-    if (column?.metadata?.hide != "true") {
-      newcolumn.push(column)
-   }
-  });
-  setFields(newcolumn);
-}, [fields1]);
+  useEffect(() => {
+    var newcolumn = []
+    fields1.forEach(column => {
+      if (column?.metadata?.hide != "true") {
+        newcolumn.push(column)
+      }
+    });
+    setFields(newcolumn);
+  }, [fields1]);
 
   const addRows = () => {
-      addRow(dispatch);
-  }; 
+    addRow(dispatch);
+  };
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch,item,newIndex,fields)
+      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName)
     },
     [fields]
   );
@@ -83,105 +83,116 @@ useEffect(() => {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
 
-  const onCellEdited = useCallback((cell, newValue,event) => {
-// console.log(event);
-    editCell(cell, newValue,dispatch,fields);
-    },[data, fields]);
+  const onCellEdited = useCallback((cell, newValue) => {
+    editCell(cell, newValue, dispatch, fields);
+  }, [data, fields]);
 
-     const handleColumnResize = (fields, newSize, colIndex) => {
-let newarrr = [...fields1];
-let obj = Object.assign({}, newarrr[colIndex]); 
-obj.width = newSize;
-newarrr[colIndex] = obj;
-setFields(newarrr);
-        dispatch(updateColumnHeaders({
-            dbId:params?.dbId,
-            tableName:params?.tableName,
-            fieldName:fields?.id, 
-            metaData:{width:newSize}
-        }));
-     
+  const handleColumnResize = (fields, newSize, colIndex) => {
+    let newarrr = [...fields1];
+    let obj = Object.assign({}, newarrr[colIndex]);
+    obj.width = newSize;
+    newarrr[colIndex] = obj;
+    setFields(newarrr);
+    dispatch(updateColumnHeaders({
+      filterId:params?.filterName,
+      dbId: params?.dbId,
+      tableName: params?.tableName,
+      fieldName: fields?.id,
+      metaData: { width: newSize }
+    }));
+  };
 
-      };
+  const onHeaderMenuClick = useCallback((col, bounds) => {
+    setMenu({ col, bounds });
+  }, []);
 
-    const onHeaderMenuClick = useCallback((col, bounds) => {
-      setMenu({ col, bounds });
-      }, []);
-      
 
   const getData = useCallback((cell) => {
     const [col, row] = cell;
     const dataRow = dataa[row];
-    if(dataRow){
-    
-    const d = dataRow[fields[col]?.id];
-    const { dataType } = fields[col];
-    if (dataType === "autonumber" ) {
-      return {
-        allowOverlay: true,
-        kind: GridCellKind.Number,
-        readonly: true,
-        data: d,
-        displayData: d.toString(),
-      };
+    if (dataRow) {
+
+      const d = dataRow[fields[col]?.id];
+      const { dataType } = fields[col] || "";
+      if (dataType === "autonumber") {
+        return {
+          allowOverlay: true,
+          kind: GridCellKind.Number,
+          readonly: true,
+          data: d,
+          displayData: d.toString(),
+        };
+      }
+      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid") {
+        return {
+          kind: GridCellKind.Text,
+          allowOverlay: true,
+          readonly: true,
+          displayData: d || "",
+          data: d || "",
+        };
+      }
+      else if (dataType === "datetime") {
+        return {
+          kind: GridCellKind.Custom,
+          allowOverlay: true,
+          copyData: "4",
+          data: {
+            kind: "date-picker-cell",
+            date: new Date(),
+            displayDate: new Date().toISOString(),
+            format: "date"
+          }
+      }
     }
-    else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid") {
-      return {
-        kind: GridCellKind.Text,
-        allowOverlay: true,
-        readonly: true,
-        displayData: d || "",
-        data: d || "",
-      };
+      else if (dataType === "longtext") {
+        return {
+          kind: GridCellKind.Text,
+          allowOverlay: true,
+          readonly: false,
+          displayData: d || "",
+          data: d || "",
+        };
+      }
+      else if (dataType === "phone") {
+        const data = d || "";
+        const displayData = d !== null && d !== undefined ? d.toString() : "";
+        return {
+          allowOverlay: true,
+          kind: GridCellKind.Number,
+          data: data,
+          displayData: displayData,
+        };
+      }
+      else if (dataType === "multipleselect" && d != null) {
+        const bubbles = Array.isArray(d) ? d : [d];
+        return {
+          kind: GridCellKind.Bubble,
+          data: bubbles,
+          allowOverlay: true
+        };
+      }
+      else if (dataType === "attachment" && d != null) {
+        return {
+          kind: GridCellKind.Image,
+          data: d,
+          allowOverlay: true,
+          allowAdd: true
+        };
+      }
+      else {
+        return {
+          kind: GridCellKind.Text,
+          allowOverlay: true,
+          readonly: false,
+          displayData: d || "",
+          data: d || "",
+        };
+      }
     }
-    else if (dataType === "longtext") {
-      return {
-        kind: GridCellKind.Text,
-        allowOverlay: true,
-        readonly: false,
-        displayData: d || "",
-        data: d || "",
-      };
-    }
-    else if (dataType === "phone") {
-  const data = d || "";
-  const displayData = d  ? d.toString() : "";
-  return {
-    allowOverlay: true,
-    kind: GridCellKind.Number,
-    data: data,
-    displayData: displayData,
-  };
-}
-    else if(dataType === "multipleselect" && d != null){
-      const bubbles = Array.isArray(d) ? d : [d];
-      return {
-        kind: GridCellKind.Bubble,
-        data: bubbles,
-        allowOverlay: true
-      };
-    }
-    else if (dataType === "attachment" && d != null) {
-      return {
-        kind: GridCellKind.Image,
-        data: d,
-        allowOverlay: true,
-        allowAdd: true
-      };
-    } 
     else {
-      return {
-        kind: GridCellKind.Text,
-        allowOverlay: true,
-        readonly: false,
-        displayData: d || "",
-        data: d || "",
-      };
+      return {};
     }
-  }
-  else{
-    return {};
-  }
   }, [dataa, fields]);
   // const onCellClicked=useCallback((item,event)=>{
   //   const[col,row]=item;
@@ -220,7 +231,6 @@ setFields(newarrr);
 
 
   const realCols = useMemo(() => {
-    console.log("fields",fields)
     return fields.map((c) => ({
       ...c,
       hasMenu: true,
@@ -229,62 +239,60 @@ setFields(newarrr);
 
   return (
     <>
-    <div style={{height:`${((window.screen.height*61)/100)}px`}} className="table-container">
+<div style={{height:`${((window.screen.height*61)/100)}px`}} className="table-container">
       <DataEditor
         width={window.screen.width}
-        // onDelete={handleDeleteRow}
-        getCellContent={getData}
-        onRowAppended={addRows}
-        columns={realCols}
-        rows={dataa.length}
-        rowMarkers="both"
-        rowSelectionMode="multi"
-        onCellEdited={onCellEdited}
-        onRowMoved={handleRowMoved}
-        getCellsForSelection={true}
-        // onCellClicked={onCellClicked}
-        onColumnResizeEnd={handleColumnResize}
-        onHeaderMenuClick={onHeaderMenuClick } //iske niche ki 2 line mat hatana
-        // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
-        // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
-        onColumnMoved={reorder}
-        onPaste={true}
-        rightElement={
-          <div className="addCol">
-          <button onClick={() => setOpen(true)}>+</button>
-        </div>
-        }
-        trailingRowOptions={{
-                  sticky: true,
-                  tint: true,
-                  hint: "New row...",
-                  targetColumn: 4
-                }}
-      />
-    </div>
-    {open &&<FieldPopupModal
-            title="create column"
-            label="Column Name"
-            setSelectedFieldName={setSelectedFieldName}
-            tableId={params?.tableName}
-            
-            selectedFieldName={selectedFieldName}
-            selectedTable={selectedTable}
-            setSelectedTable={setSelectedTable}
-            setSelectValue={setSelectValue}
-            showFieldsDropdown={showFieldsDropdown}
-            setShowFieldsDropdown={setShowFieldsDropdown}
-            open={open}
-            metaData={metaData}
-            setMetaData={setMetaData}
-            setOpen={setOpen}
-            submitData={createLeftorRightColumn}
-            linkedValueName={linkedValueName}
-            setLinkedValueName={setLinkedValueName}
-            setTextValue={setTextValue}
-          />}
-    <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
+          getCellContent={getData}
+          onRowAppended={addRows}
+          columns={realCols}
+          rows={dataa.length}
+          rowMarkers="both"
+          rowSelectionMode="multi"
+          onCellEdited={onCellEdited}
+          onRowMoved={handleRowMoved}
+          getCellsForSelection={true}
+          onColumnResizeEnd={handleColumnResize}
+          onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
+          // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
+          // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
+          onColumnMoved={reorder}
+          onPaste={true}
+          rightElement={
+            <div className="addCol">
+              <button onClick={() => setOpen(true)}>+</button>
+            </div>
+          }
+          trailingRowOptions={{
+            sticky: true,
+            tint: true,
+            hint: "New row...",
+            targetColumn: 4
+          }}
+        />
+      </div>
+      {open && <FieldPopupModal
+        title="create column"
+        label="Column Name"
+        setSelectedFieldName={setSelectedFieldName}
+        tableId={params?.tableName}
+        selectedFieldName={selectedFieldName}
+        selectedTable={selectedTable}
+        setSelectedTable={setSelectedTable}
+        setSelectValue={setSelectValue}
+        showFieldsDropdown={showFieldsDropdown}
+        setShowFieldsDropdown={setShowFieldsDropdown}
+        open={open}
+        metaData={metaData}
+        setMetaData={setMetaData}
+        setOpen={setOpen}
+        submitData={createLeftorRightColumn}
+        linkedValueName={linkedValueName}
+        
+        setLinkedValueName={setLinkedValueName}
+        setTextValue={setTextValue}
+      />}
+      <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
     </>
-    
+
   );
 }
