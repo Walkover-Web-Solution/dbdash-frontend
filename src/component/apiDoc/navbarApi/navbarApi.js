@@ -144,7 +144,7 @@ sx={{
         }}>{'API Documentation'}</Button>
       <Link
         to={`/authkeypage/${dbId}`}
-        state={selectedOption}
+        state={[selectedOption,props.dbtoredirect,props.tabletoredirect]}
         
         style={{ textDecoration: 'none' }}
       >
@@ -171,4 +171,7 @@ Navbar.propTypes = {
   orgId: PropTypes.string,
   setDbtoredirect:PropTypes.any,
   setTabletoredirect:PropTypes.any
+  ,
+  dbtoredirect:PropTypes.any,
+  tabletoredirect:PropTypes.any
 };

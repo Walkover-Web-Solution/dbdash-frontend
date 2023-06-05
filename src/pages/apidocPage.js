@@ -17,7 +17,7 @@ function ApiDocPage() {
       <MainNavbar dbtoredirect={dbtoredirect} tabletoredirect={tabletoredirect}/>
     </Box>
     <Box sx={{mt:"8vh"}}>
-        <Navbar setDbtoredirect={setDbtoredirect} setTabletoredirect={setTabletoredirect} />
+        <Navbar dbtoredirect={dbtoredirect} tabletoredirect={tabletoredirect} setDbtoredirect={setDbtoredirect} setTabletoredirect={setTabletoredirect} />
         </Box>
    </>
     );

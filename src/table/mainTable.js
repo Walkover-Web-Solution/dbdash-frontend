@@ -1,7 +1,7 @@
 import React, { useState, useCallback,useEffect } from "react";
 import { // CompactSelection
 DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import { addColumnrightandleft, updateColumnHeaders} from "../store/table/tableThunk";
+import { addColumnrightandleft, deleteRows, updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -179,6 +179,23 @@ setFields(newarrr);
     return {};
   }
   }, [dataa, fields]);
+  const handleDeleteRow = useCallback(
+    (selection) => {
+      console.log("heello delte",selection);
+      let resultArray = [];
+
+for (const element of selection.rows.items) {
+  const [start, end] = element;
+  for (let i = start; i < end; i++) {
+    resultArray.push(i);
+  }
+}
+      console.log(resultArray,"hiii");
+      dispatch(deleteRows(resultArray));
+    },
+    [data]
+  );
+
 
   const realCols = useMemo(() => {
     console.log("fields",fields)
@@ -190,9 +207,10 @@ setFields(newarrr);
 
   return (
     <>
-    <div className="table-container">
+    <div style={{height:`${((window.screen.height*60)/100)}px`}} className="table-container">
       <DataEditor
-        width={1300}
+        width={(window.screen.width*96)/100}
+        onDelete={handleDeleteRow}
         getCellContent={getData}
         onRowAppended={addRows}
         columns={realCols}
@@ -226,6 +244,7 @@ setFields(newarrr);
             label="Column Name"
             setSelectedFieldName={setSelectedFieldName}
             tableId={params?.tableName}
+            
             selectedFieldName={selectedFieldName}
             selectedTable={selectedTable}
             setSelectedTable={setSelectedTable}
