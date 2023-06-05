@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useLayer } from "react-laag";
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
@@ -10,14 +10,13 @@ import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DuplicateFieldPopup from './duplicateFieldPopup';
-import { addColumnrightandleft } from '../store/table/tableThunk';
-import { updateColumnHeaders } from '../store/table/tableThunk';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
 import { deleteColumns } from '../store/table/tableThunk';
-const useStyles = makeStyles(() => ({
+import { createDuplicateColumn, getPropertyIcon,handleRenameColumn, hideColumns } from './headerFunctionality';
 
+
+const useStyles = makeStyles(() => ({
   simpleMenu: {
     width: '175px',
     padding: '8px 0',
@@ -48,14 +47,26 @@ const useStyles = makeStyles(() => ({
     transition: 'background-color 100ms',
     cursor: 'pointer',
   },
+  centeredText: {
+    display: 'block',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center'
+  },
 }));
 export default function Headermenu(props) {
   const classes = useStyles();
+  const[header,setHeader]=useState(props?.fields[props?.menu?.col]?.title);
   const isOpen = props?.menu !== undefined;
   const [showduplicate, setShowDuplicate] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
   const dispatch = useDispatch();
   const params = useParams();
+
+  //current column value in input box 
+  useEffect(() => {
+  setHeader(props?.fields[props?.menu?.col]?.title);
+  }, [props?.menu?.col])
 
   const handleDelete=()=>{dispatch(
     deleteColumns({
@@ -97,16 +108,13 @@ export default function Headermenu(props) {
 
   const handleDuplicate = () => {
     setShowDuplicate(false);
-    dispatch(addColumnrightandleft({
-      dbId: params?.dbId,
-      direction: "right",
-      position: props?.fields[props?.menu?.col]?.id,
-      duplicateField: `${duplicateField}`,
-      tableId: params?.tableName,
-    }));
+    createDuplicateColumn(params, props, dispatch,duplicateField);
     setDuplicateField(true);
-
   };
+
+  let data_type = props?.fields[props?.menu?.col]?.dataType;
+  // get column icons
+  const propertyIcon = getPropertyIcon(data_type);
 
   const handleUniqueChange = () => {
     setDuplicateField((isDuplicate) =>
@@ -116,13 +124,27 @@ export default function Headermenu(props) {
 
   const hideColumn = async () => {
     const metaData = { hide: "true" };
-    dispatch(updateColumnHeaders({
-      dbId: params?.dbId,
-      tableName: params?.tableName,
-      fieldName: props?.fields[props?.menu.col].id,
-      columnId: props?.fields[props?.menu.col].id,
-      metaData: metaData
-    }));
+    hideColumns(dispatch, params, props,metaData);
+  }
+
+  function handleChange(e) {
+    setHeader(e.target.value);
+  }
+
+  //rename column name for outside click
+  function handleBlur(e) {
+     e.preventDefault();
+      if (props?.fields[props?.menu?.col]?.title !== header) {
+        handleRenameColumn(props, header, params, dispatch);
+      }
+  }
+
+  //rename column name for enter
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+    handleRenameColumn(props, header, params, dispatch);
+      props.setMenu(false);
+    }
   }
   return (
     <>
@@ -136,7 +158,22 @@ export default function Headermenu(props) {
               handleUniqueChange={handleUniqueChange}
               duplicateField={duplicateField}
             />}
+             <div className='is-fullwidth' style={{ marginBottom: 5,display:"flex",justifyContent:"center" }} >
+                  <input
+                    className='form-input'
+                    type='text'
+                    value={header}
+                    style={{ width: "90%"}}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
             <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
+            <div className={`${classes.centeredText}`}>
+            <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
+                  <span style={{ textTransform: "capitalize" }}>{data_type}</span>
+            </div>
             <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
             <div onClick={() => {
               props?.setOpen(true),
