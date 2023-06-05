@@ -171,32 +171,27 @@ export default function TablesList({ dbData }) {
 
     }
   }, [params?.tableName]);
-  let dataa1="";
 
+  let dataa1="";
   const shareLink= async () => {
-    const db_Id = dbData?.db?._id
-    const data={
-      // dbId:dbData?.db?._id,
-      tableId:params?.tableName,
-      filterId:params?.filterName
+    const viewId= dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
+    if(viewId){
+      setLink(`localhost:3000/${viewId}`)
+    }
+    else{
+      const db_Id = dbData?.db?._id
+      const data={
+        tableId:params?.tableName,
+        filterId:params?.filterName
+      }
+      
+      dataa1 =await createViewTable(db_Id,data);
+      
+      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
     }
     
-    dataa1 =await createViewTable(db_Id,data);
-    
-    setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
-
-//     console.log("indata",dataa1);
-
-// const s=Object.keys(Object.values(dataa1.data.data)[0])
-//     console.log(Object.values(dataa1.data.data)[0],"aaqqqhhha");
-//     // console.log(s[0],"aasssha");
   }
   
-
-  // useEffect=()=>{
-  //   ,[createViewTable]
-  // }
-
   return (
     <>
     <div className="tableslist">
