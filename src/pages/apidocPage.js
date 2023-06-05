@@ -8,7 +8,7 @@ import {  useLocation, useParams } from "react-router-dom";
 function ApiDocPage() {
   const params=useParams();
   const location = useLocation();
-  const[dbtoredirect,setDbtoredirect]=useState(params.dbId);
+  const[dbtoredirect,setDbtoredirect]=useState(params.dbId || params.id);
   
   const[tabletoredirect,setTabletoredirect]=useState(location.state);
     return (

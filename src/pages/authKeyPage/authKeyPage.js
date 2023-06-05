@@ -26,7 +26,7 @@ export default function authKeyPage() {
           </Button>
         </Link>
         
-        <AuthKeyHeader id={id} />
+        <AuthKeyHeader  tabletoredirect={useLocation().state[2]} id={id} />
       </Box>
 
       <Box className="auth-key-page-content">

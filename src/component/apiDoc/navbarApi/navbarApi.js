@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
 
 export default function Navbar(props) {
-  
+  let dbchanged=0;
   const [tables, setTables] = useState({});
   const [dbId, setDbId] = useState("");
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ export default function Navbar(props) {
 if(selectedDb){props?.setDbtoredirect(selectedDb);}
 if(selectTable){props?.setTabletoredirect(selectTable)}
   const handleChange = async (event) => {
+    dbchanged=1;
     setSelectedDb(event.target.value);
     props?.setDbtoredirect(event.target.value);
     setSelectedOption(event.target.value);
@@ -56,7 +57,15 @@ props.setDbtoredirect(dbObj._id);
     const data = await getDbById(dbId);
     setTables(data.data.data.tables || {});
     if (data.data.data.tables) {
-      setSelectTable(selectTable || Object.keys(data.data.data.tables)[0]);
+      if(dbchanged==0)
+      {
+        setSelectTable(selectTable || Object.keys(data.data.data.tables)[0]);
+
+      }
+      else {
+      setSelectTable( Object.keys(data.data.data.tables)[0] || selectTable );
+      dbchanged=0;
+      }
       props.setTabletoredirect(Object.keys(data.data.data.tables)[0]);
       setLoading(true);
     }
@@ -105,13 +114,13 @@ props.setDbtoredirect(dbObj._id);
             </FormControl>
           )}
         </Box>
-        {Object.keys(tables).length >= 1 && (
+        {Object.keys(tables).length >= 1  &&  (
           <Box>
             <FormControl sx={{ m: 1, minWidth: 120,mt:2 }}>
               <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
               <Select
               sx={{borderRadius:0,height:'30px'}}
-                value={selectTable}
+                value={selectTable }
                 label="Tables-Name"
                 onChange={handleChangeTable}
               >

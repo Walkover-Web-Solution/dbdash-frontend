@@ -1,7 +1,7 @@
 import React, { useState, useCallback,useEffect } from "react";
 import { // CompactSelection
 DataEditor, GridCellKind } from "@glideapps/glide-data-grid";
-import { addColumnrightandleft, deleteRows, updateColumnHeaders} from "../store/table/tableThunk";
+import { addColumnrightandleft,  updateColumnHeaders} from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,7 +15,9 @@ import Headermenu from "./headerMenu";
 
 
 export default function MainTable() {
+
   const params = useParams();
+
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
@@ -31,6 +33,7 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [fields,setFields] = useState(fields1 || [])
+  // let arr=[];
   const createLeftorRightColumn = () => {
     if(directionAndId.direction == "left" || directionAndId.direction== "right"){
       setOpen(false);
@@ -80,7 +83,8 @@ useEffect(() => {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
 
-  const onCellEdited = useCallback((cell, newValue) => {
+  const onCellEdited = useCallback((cell, newValue,event) => {
+// console.log(event);
     editCell(cell, newValue,dispatch,fields);
     },[data, fields]);
 
@@ -141,7 +145,7 @@ setFields(newarrr);
     }
     else if (dataType === "phone") {
   const data = d || "";
-  const displayData = d !== null && d !== undefined ? d.toString() : "";
+  const displayData = d  ? d.toString() : "";
   return {
     allowOverlay: true,
     kind: GridCellKind.Number,
@@ -179,22 +183,40 @@ setFields(newarrr);
     return {};
   }
   }, [dataa, fields]);
-  const handleDeleteRow = useCallback(
-    (selection) => {
-      console.log("heello delte",selection);
-      let resultArray = [];
+  // const onCellClicked=useCallback((item,event)=>{
+  //   const[col,row]=item;
+  //   if(col==-1 && event.isEdge==false)
+  //   {
+  //     const index=arr.indexOf(row);
+  //     if(index>-1){
+  //       arr.splice(index,1);
+  //     }
+  //     else{
+  //       arr.push(row);
+  //     }
+  //   }
+  //   else{
+  //     arr=[];
+  //   }
+  //   console.log(arr);
 
-for (const element of selection.rows.items) {
-  const [start, end] = element;
-  for (let i = start; i < end; i++) {
-    resultArray.push(i);
-  }
-}
-      console.log(resultArray,"hiii");
-      dispatch(deleteRows(resultArray));
-    },
-    [data]
-  );
+  // })
+
+//   const handleDeleteRow = useCallback(
+//     (selection) => {
+//       console.log("heello delte",selection);
+// let resultArray=[];
+// for (const element of selection.rows.items) {
+//   const [start, end] = element;
+//   for (let i = start; i < end; i++) {
+//     console.log(dataa,"iiiii");
+//     resultArray.push(i);
+//   }
+// }
+//       console.log(resultArray,"hiii");
+//     },
+//     [data]
+//   );
 
 
   const realCols = useMemo(() => {
@@ -207,10 +229,10 @@ for (const element of selection.rows.items) {
 
   return (
     <>
-    <div style={{height:`${((window.screen.height*60)/100)}px`}} className="table-container">
+    <div style={{height:`${((window.screen.height*61)/100)}px`}} className="table-container">
       <DataEditor
-        width={(window.screen.width*96)/100}
-        onDelete={handleDeleteRow}
+        width={window.screen.width}
+        // onDelete={handleDeleteRow}
         getCellContent={getData}
         onRowAppended={addRows}
         columns={realCols}
@@ -220,6 +242,7 @@ for (const element of selection.rows.items) {
         onCellEdited={onCellEdited}
         onRowMoved={handleRowMoved}
         getCellsForSelection={true}
+        // onCellClicked={onCellClicked}
         onColumnResizeEnd={handleColumnResize}
         onHeaderMenuClick={onHeaderMenuClick } //iske niche ki 2 line mat hatana
         // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
