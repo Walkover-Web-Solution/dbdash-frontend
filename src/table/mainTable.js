@@ -13,7 +13,6 @@ import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
-import { useRef } from "react";
 
 
 export default function MainTable() {
@@ -33,14 +32,11 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [fields, setFields] = useState(fields1 || [])
-  const [visibleRegion, setVisibleRegion] = useState();
-  const containerRef = useRef(null);
-
   const createLeftorRightColumn = () => {
     if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
       dispatch(addColumnrightandleft({
-        fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
+        filterId:params?.filterName,fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
           selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
       }));
       setSelectValue('longtext')
@@ -60,17 +56,6 @@ export default function MainTable() {
     }
   };
 
-  const handleScroll = () => {
-    console.log("handle scroll", visibleRegion)
-    const container = containerRef.current;
-    if (container) {
-      const isFullyScrolled = container.scrollHeight - container.scrollTop === container.clientHeight;
-      if (isFullyScrolled) {
-        console.log('Container is fully scrolled.');
-        // Perform any desired actions when the container is fully scrolled
-      }
-    }
-  };
   useEffect(() => {
     var newcolumn = []
     fields1.forEach(column => {
@@ -87,7 +72,7 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields)
+      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName)
     },
     [fields]
   );
@@ -107,17 +92,15 @@ export default function MainTable() {
     newarrr[colIndex] = obj;
     setFields(newarrr);
     dispatch(updateColumnHeaders({
+      filterId:params?.filterName,
       dbId: params?.dbId,
       tableName: params?.tableName,
       fieldName: fields?.id,
       metaData: { width: newSize }
     }));
-    
-    
   };
-  
+
   const onHeaderMenuClick = useCallback((col, bounds) => {
-    console.log("visibleRegion",visibleRegion)
     setMenu({ col, bounds });
   }, []);
 
@@ -128,7 +111,7 @@ export default function MainTable() {
     if (dataRow) {
 
       const d = dataRow[fields[col]?.id];
-      const { dataType } = fields[col];
+      const { dataType } = fields[col] || "";
       if (dataType === "autonumber") {
         return {
           allowOverlay: true,
@@ -147,6 +130,19 @@ export default function MainTable() {
           data: d || "",
         };
       }
+      else if (dataType === "datetime") {
+        return {
+          kind: GridCellKind.Custom,
+          allowOverlay: true,
+          copyData: "4",
+          data: {
+            kind: "date-picker-cell",
+            date: new Date(),
+            displayDate: new Date().toISOString(),
+            format: "date"
+          }
+      }
+    }
       else if (dataType === "longtext") {
         return {
           kind: GridCellKind.Text,
@@ -206,45 +202,36 @@ export default function MainTable() {
 
   return (
     <>
-    
-
-      <div
-         ref={containerRef}
-         style={{ height: '500px' }}
-         onScroll={handleScroll} className="table-container" >
-         <DataEditor
-            width={1300}
-            onVisibleRegionChanged={setVisibleRegion}
-            getCellContent={getData}
-            onRowAppended={addRows}
-            columns={realCols}
-            rows={dataa?.length}
-            rowMarkers="both"
-            rowSelectionMode="multi"
-            onCellEdited={onCellEdited}
-            onRowMoved={handleRowMoved}
-            getCellsForSelection={true}
-            onColumnResizeEnd={handleColumnResize}
-            smoothScrollX={true}
-            smoothScrollY={true}
-            onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
-            // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
-            // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
-            onColumnMoved={reorder}
-            onPaste={true}
-            rightElement={
-              <div className="addCol">
-                <button onClick={() => setOpen(true)}>+</button>
-              </div>
-            }
-            trailingRowOptions={{
-              sticky: true,
-              tint: true,
-              hint: "New row...",
-              targetColumn: 4
-            }}
-          />
-
+      <div className="table-container" style={{height:`${((window.screen.height*60)/100)}px`}}>
+        <DataEditor
+          width={1300}
+          getCellContent={getData}
+          onRowAppended={addRows}
+          columns={realCols}
+          rows={dataa.length}
+          rowMarkers="both"
+          rowSelectionMode="multi"
+          onCellEdited={onCellEdited}
+          onRowMoved={handleRowMoved}
+          getCellsForSelection={true}
+          onColumnResizeEnd={handleColumnResize}
+          onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
+          // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
+          // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
+          onColumnMoved={reorder}
+          onPaste={true}
+          rightElement={
+            <div className="addCol">
+              <button onClick={() => setOpen(true)}>+</button>
+            </div>
+          }
+          trailingRowOptions={{
+            sticky: true,
+            tint: true,
+            hint: "New row...",
+            targetColumn: 4
+          }}
+        />
       </div>
       {open && <FieldPopupModal
         title="create column"
@@ -263,6 +250,7 @@ export default function MainTable() {
         setOpen={setOpen}
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
+        
         setLinkedValueName={setLinkedValueName}
         setTextValue={setTextValue}
       />}

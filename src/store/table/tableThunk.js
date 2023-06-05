@@ -185,21 +185,22 @@ export const deleteColumns = createAsyncThunk(
         }
     }
 )
+
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch, getState }) => {
         const data = {
+            filterId:payload?.filterId,
             newFieldName: payload?.label,
             newFieldType: payload?.fieldType,
             metaData: payload?.metaData
         }
 
         if (payload?.metaData?.isAllHide) {
-            await hideAllField(payload?.dbId, payload?.tableName, payload?.metaData)
+            await hideAllField(payload?.dbId, payload?.tableName, {metaData:payload?.metaData,filterId:payload?.filterId})
             return;
         }
         else {
-
             await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
         }
 
@@ -227,6 +228,7 @@ export const addColumnrightandleft = createAsyncThunk(
         { dispatch, getState }
     ) => {
         const data = {
+            filterId:payload?.filterId,
             fieldName: payload?.fieldName,
             fieldType: payload?.fieldType,
             direction: payload?.direction,
@@ -255,6 +257,7 @@ export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async (payload, { dispatch, getState }) => {
         const data = {
+            filterId:payload?.filterId,
             fieldName: payload?.fieldName,
             fieldType: payload?.fieldType,
             metaData: payload?.metaData,
@@ -344,6 +347,7 @@ export const updateColumnOrder = createAsyncThunk(
     "table/updateColumnOrder",
     async (payload, { getState }) => {
         const data = {
+            filterId:payload?.filterId,
             oldIndex: payload?.oldIndex,
             newIndex: payload?.newIndex
         }

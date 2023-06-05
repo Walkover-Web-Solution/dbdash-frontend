@@ -14,7 +14,7 @@ import AuthKeyPage from '../src/pages/authKeyPage/authKeyPage';
 import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import ViewTable from './pages/viewTable/viewTable';
 
 
   
@@ -36,7 +36,7 @@ function App() {
       <Route exact path ="/apiDoc/db/:dbId" element ={<Protected><ApiDocPage /></Protected>}/>
       <Route exact path="*" element={<Navigate to="/notFound" />} />
       <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
-
+      <Route exact path ="/:viewid" element ={<ViewTable/>}/>
     </Routes>
 
     </AuthContextProvider>
