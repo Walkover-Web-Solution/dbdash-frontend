@@ -74,7 +74,7 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName)
+      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName,setFields)
     },
     [fields]
   );
