@@ -25,18 +25,12 @@ export default function ShareLinkPopUp(props) {
     
     navigator.clipboard.writeText(textFieldValue)
       .then(() => {
-        console.log("Text copied to clipboard:", textFieldValue);
       })
       .catch((error) => {
         console.error("Failed to copy text to clipboard:", error);
       });
   };
   
-  
-
-  // const handleChange = () => {
-  //   setTextFieldValue(props.textvalue);
-  // };
 
   return (
     <Box>

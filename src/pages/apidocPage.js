@@ -8,7 +8,7 @@ import {  useLocation, useParams } from "react-router-dom";
 function ApiDocPage() {
   const params=useParams();
   const location = useLocation();
-  const[dbtoredirect,setDbtoredirect]=useState(params.dbId);
+  const[dbtoredirect,setDbtoredirect]=useState(params.dbId || params.id);
   
   const[tabletoredirect,setTabletoredirect]=useState(location.state);
     return (
@@ -17,7 +17,7 @@ function ApiDocPage() {
       <MainNavbar dbtoredirect={dbtoredirect} tabletoredirect={tabletoredirect}/>
     </Box>
     <Box sx={{mt:"8vh"}}>
-        <Navbar setDbtoredirect={setDbtoredirect} setTabletoredirect={setTabletoredirect} />
+        <Navbar dbtoredirect={dbtoredirect} tabletoredirect={tabletoredirect} setDbtoredirect={setDbtoredirect} setTabletoredirect={setTabletoredirect} />
         </Box>
    </>
     );
