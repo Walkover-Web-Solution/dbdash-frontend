@@ -116,15 +116,10 @@ export const bulkAddColumns = createAsyncThunk(
 export const filterData = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState ,dispatch}) => {
-        console.log("filterFields",payload)    
         const table = getAllTableInfo(getState())?.tables?.[payload?.tableId]
         const filter =table?.filters?.[payload?.filterId];
         const filterFields = filter?.fields
         const fieldArrayInFilter = filter?.fieldIds ;
-        console.log("filterFields",filter,"filterFields",filterFields)    
-        console.log("filterFields",fieldArrayInFilter)    
-        console.log("table",table?.fieldIds) 
-        console.log("table fields ",table?.fields) 
         const querydata = await runQueryonTable(payload.dbId,payload?.filter,payload?.pageNo )
         const userInfo = allOrg(getState());
         const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
@@ -132,17 +127,25 @@ export const filterData = createAsyncThunk(
         querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
             row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
         })
-        var columns ;
+        let columns ;
         // const viewFields =table.view?.fields;//views fields
         // Create a new object with fields sorted based on the sorted fieldIds array;
         fieldArrayInFilter?.forEach((id) => {
             columns[id] = table?.fields[id];
         });
-        if(filterFields)
-            columns = { ...columns, ...filterFields}
-        console.log("columns = ",columns)
-        columns = await getHeaders(payload?.dbId, payload?.tableId, columns || table?.fields )
-        console.log("columns",columns)
+        columns =  columns || table?.fields
+        console.log("columns1",columns)
+        console.log("columns2",filterFields)
+        filterFields && Object.entries(filterFields).map((entry) => {
+            const id = entry[0];
+            const metadata = entry[1]?.metaData;
+            if (metadata && (metadata.width || metadata.hide)) {
+                columns = {...columns,[id]: {...columns[id],
+                    metaData: {...columns[id].metaData,...(metadata.width ? { width: metadata.width } : {}),...(metadata.hide ? { hide: metadata.hide } : {})  }
+                }};
+            }
+        });
+        columns = await getHeaders(payload?.dbId, payload?.tableId,columns )
         const dataa = {
             "columns": columns,
             "row": querydata?.data?.data?.rows,
