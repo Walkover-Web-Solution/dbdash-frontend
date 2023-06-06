@@ -26,7 +26,7 @@ export const editCell = (cell, newValue,dispatch,fields) => {
           return;
 }
 
-export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,filterId) => { 
+export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,filterId,setFields) => { 
 const newOrder = Array.from(fields);
 const key = fields[currentIndex].id;
 const [removedColumn] = newOrder.splice(currentIndex, 1);
@@ -40,6 +40,7 @@ dispatch(
     newIndex: newIndex,
   })
 );
+setFields(newOrder)
 return;
 
 }
