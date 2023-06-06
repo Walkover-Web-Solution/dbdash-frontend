@@ -132,7 +132,7 @@ export default function Headermenu(props) {
     setHeader(e.target.value);
   }
 
-  //rename column name for outside click
+  //rename column name --> outside click
   function handleBlur(e) {
      e.preventDefault();
       if (props?.fields[props?.menu?.col]?.title !== header) {
@@ -140,7 +140,7 @@ export default function Headermenu(props) {
       }
   }
 
-  //rename column name for enter
+  //rename column name --> enter
   function handleKeyDown(e) {
     if (e.key === "Enter") {
     handleRenameColumn(props, header, params, dispatch);
