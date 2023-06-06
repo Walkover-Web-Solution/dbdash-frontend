@@ -38,7 +38,7 @@ function DbDetails() {
     return (
         <>
 
-        <Box sx ={{ overflow: 'hidden'}}>
+        <Box sx ={{ overflowX: 'hidden'}}>
       <MainNavbar dbData={dbData}/>
     </Box>
            
