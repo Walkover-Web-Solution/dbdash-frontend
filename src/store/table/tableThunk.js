@@ -128,30 +128,24 @@ export const filterData = createAsyncThunk(
                 row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
             })
             let columns={} ;
-            // const viewFields =table.view?.fields;//views fields
+            const viewFields =table.view?.fields;//views fields
             // Create a new object with fields sorted based on the sorted fieldIds array;
             fieldArrayInFilter?.forEach((id) => {
                 columns[id] = table?.fields?.[id];
             });
-            // console.log("columns after field array ",columns)
             if(!fieldArrayInFilter)
             {
-
-                columns =  table?.fields
+                columns = { ...table?.fields,...viewFields}
             }
-            // console.log("columns1",columns)
-            // console.log("columns2",filterFields)
+          
             filterFields && Object.entries(filterFields).map((entry) => {
                 const id = entry[0];
-                const metadata = entry[1]?.metaData;
-                if (metadata &&  columns[id] && (metadata?.width || metadata?.hide)) {
-                    columns = {...columns,[id]: {...columns[id],
-                        metaData: {...columns[id]?.metaData,...(metadata?.width ? { width: metadata?.width } : {}),...(metadata?.hide ? { hide: metadata?.hide } : {})  }
-                    }};
-                }
+                const hide =  entry[1].hide;
+                const width =  entry[1].width;
+                columns[id] = {...columns[id],metaData: {...columns[id]?.metaData,hide: hide,width: width}};
             });
-            // console.log("columns",columns)
             columns = await getHeaders(payload?.dbId, payload?.tableId,columns )
+
             const dataa = {
                 "columns": columns,
                 "row": querydata?.data?.data?.rows,
@@ -165,6 +159,7 @@ export const filterData = createAsyncThunk(
                 return dataa;
             }
          catch (error) {
+            console.log(error)
             console.log("error")
         }
     }       

@@ -61,7 +61,7 @@ export default function MainTable() {
   useEffect(() => {
     var newcolumn = []
     fields1.forEach(column => {
-      if (column?.metadata?.hide != "true") {
+      if (column?.metadata?.hide != true) {
         newcolumn.push(column)
       }
     });
@@ -299,7 +299,6 @@ export default function MainTable() {
         setOpen={setOpen}
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
-        
         setLinkedValueName={setLinkedValueName}
         setTextValue={setTextValue}
       />}
