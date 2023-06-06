@@ -193,7 +193,7 @@ export default function TablesList({ dbData }) {
 
       dataa1 = await createViewTable(db_Id, data);
 
-      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+      setLink(`localhost:3000/${dataa1.data.data.viewId}`)
     }
 
   }
