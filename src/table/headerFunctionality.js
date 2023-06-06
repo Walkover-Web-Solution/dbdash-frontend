@@ -98,7 +98,6 @@ export function handleRenameColumn(props, header, params, dispatch) {
 }
 
 export const createDuplicateColumn = (params, props, dispatch,duplicateField) => {
-  console.log("inside createDuplicateColumn")
   dispatch(addColumnrightandleft({
     dbId: params?.dbId,
     direction: "right",
