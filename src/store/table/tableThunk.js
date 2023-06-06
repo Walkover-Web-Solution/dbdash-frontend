@@ -165,6 +165,7 @@ export const filterData = createAsyncThunk(
                 return dataa;
             }
          catch (error) {
+            console.log("error")
         }
     }       
 );

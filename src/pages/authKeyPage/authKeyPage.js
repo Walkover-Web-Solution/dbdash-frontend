@@ -10,7 +10,6 @@ import "./authKeyPage.scss";
 
 export default function authKeyPage() {
   const { id } = useParams();
-  const location=useLocation();
   return (
     <>
       <Box>

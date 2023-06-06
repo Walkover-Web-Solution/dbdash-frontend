@@ -147,6 +147,7 @@ export default function TablesList({ dbData }) {
         filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
         dbId: dbData?.db?._id,
       }))
+
       // dispatch(
       //   bulkAddColumns({
       //     dbId: dbData?.db?._id,
