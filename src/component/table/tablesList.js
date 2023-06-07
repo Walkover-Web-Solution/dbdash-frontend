@@ -176,7 +176,7 @@ export default function TablesList({ dbData }) {
       }
 
     }
-  }, [params?.tableName]);
+  }, []);
 
   let dataa1 = "";
   const shareLink = async () => {
