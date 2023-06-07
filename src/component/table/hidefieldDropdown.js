@@ -13,7 +13,7 @@ export default function HideFieldDropdown(props) {
   const [checkedColumns, setCheckedColumns] = useState([]);
   
   let defaultArr= fields1.map((column) => {
-    return column.metadata && column.metadata.hide ? (column.metadata.hide==true?true:false)  : false;
+    return column?.metadata && column?.metadata?.hide ? (column?.metadata?.hide=="true"?true:false)  : false;
   });
 
   const handleMenuClose = () => {
@@ -32,7 +32,7 @@ export default function HideFieldDropdown(props) {
   };
 
   const hideColumn = async (columnId, isChecked) => {
-    const metaData = { hide: isChecked ? false : true };
+    const metaData = { hide: isChecked ? "false" : "true" };
     dispatch(
       updateColumnHeaders({
         dbId: params?.dbId,
@@ -75,12 +75,12 @@ export default function HideFieldDropdown(props) {
               padding: '2px 8px',
             }}
           >
-            <input
+            <input style={{width: "15px", height: "15px"}}
               type="checkbox"
               checked={defaultArr[index]}
-              onChange={() => toggleColumn(column.id)}
+              onChange={() => toggleColumn(column?.id)}
             />
-            {column.title}
+            {column?.title}
           </MenuItem>
         ))}
       </Menu>

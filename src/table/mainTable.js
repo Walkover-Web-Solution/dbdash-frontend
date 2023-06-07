@@ -1,7 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { // CompactSelection
-  DataEditor, GridCellKind
-} from "@glideapps/glide-data-grid";
 import { addColumnrightandleft, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
@@ -13,12 +10,15 @@ import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
-
+import DataEditor, {GridCellKind} from "@glideapps/glide-data-grid";
+import { useExtraCells } from "@glideapps/glide-data-grid-cells";
+import "@glideapps/glide-data-grid/dist/index.css";
+// import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export default function MainTable() {
 
   const params = useParams();
-
+  const cellProps = useExtraCells();
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
@@ -61,7 +61,7 @@ export default function MainTable() {
   useEffect(() => {
     var newcolumn = []
     fields1.forEach(column => {
-      if (column?.metadata?.hide != true) {
+      if (column?.metadata?.hide != "true") {
         newcolumn.push(column)
       }
     });
@@ -87,8 +87,8 @@ export default function MainTable() {
     editCell(cell, newValue, dispatch, fields);
   }, [data, fields]);
 
-  const handleColumnResize = (fields, newSize, colIndex) => {
-    let newarrr = [...fields1];
+  const handleColumnResize = (field, newSize, colIndex) => {
+    let newarrr = [...fields || fields1];
     let obj = Object.assign({}, newarrr[colIndex]);
     obj.width = newSize;
     newarrr[colIndex] = obj;
@@ -97,7 +97,7 @@ export default function MainTable() {
       filterId:params?.filterName,
       dbId: params?.dbId,
       tableName: params?.tableName,
-      fieldName: fields?.id,
+      fieldName: field?.id,
       metaData: { width: newSize }
     }));
   };
@@ -253,6 +253,7 @@ export default function MainTable() {
     <>
       <div className="table-container" style={{height:`${((window.screen.height*65)/100)}px`}}>
         <DataEditor
+           {...cellProps}
           width={window.screen.width}
           getCellContent={getData}
           onRowAppended={addRows}
