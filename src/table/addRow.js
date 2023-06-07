@@ -12,19 +12,23 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue,selecte
     return;
 }
 
-export const editCell = (cell, newValue,dispatch,fields) => { 
-    const [col,row] = cell;
-          const key = fields[col].id;
-          dispatch(
-          updateCells({
-            columnId: key,
-            rowIndex:row+1,
-            value: newValue.data,
-            dataTypes: newValue.kind,
-          })
-         );
-          return;
-}
+export const editCell = (cell, newValue, dispatch, fields, currentrow) => {
+  const col = cell[0];
+  const key = fields[col]?.id;
+  if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1] && newValue && newValue.data && newValue.kind && key) {
+    dispatch(
+      updateCells({
+        columnId: key,
+        rowIndex: Object.entries(currentrow)[1][1],
+        value: newValue?.data,
+        dataTypes: newValue?.kind,
+      })
+    );
+  }
+  
+  return;
+};
+
 
 export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,filterId) => { 
 const newOrder = Array.from(fields);

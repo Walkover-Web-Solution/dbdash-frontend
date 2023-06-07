@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { // CompactSelection
   DataEditor, GridCellKind
 } from "@glideapps/glide-data-grid";
-import { addColumnrightandleft, updateColumnHeaders } from "../store/table/tableThunk";
+import { addColumnrightandleft, deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,14 +14,16 @@ import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 
-
 export default function MainTable() {
 
   const params = useParams();
+let todeleterows=false;
+// const dataEditorRef = useRef(null);
 
   const dispatch = useDispatch();
+  // const[clickedcolumn,setClickedcolumn]=useState(-1);
   const fields1 = useSelector((state) => state.table.columns);
-  const dataa = useSelector((state) => state.table.data);
+  let dataa = useSelector((state) => state.table.data);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -34,6 +36,8 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [fields, setFields] = useState(fields1 || [])
+  
+  
   const createLeftorRightColumn = () => {
     if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
@@ -84,7 +88,13 @@ export default function MainTable() {
   }, [data, setData]);
 
   const onCellEdited = useCallback((cell, newValue) => {
-    editCell(cell, newValue, dispatch, fields);
+    if(todeleterows==false)
+    {
+      console.log("cell",cell,dataa)
+editCell(cell, newValue, dispatch, fields, dataa[cell?.[1] ?? []]);
+
+    }
+    todeleterows=false;
   }, [data, fields]);
 
   const handleColumnResize = (fields, newSize, colIndex) => {
@@ -106,10 +116,13 @@ export default function MainTable() {
     setMenu({ col, bounds });
   }, []);
 
+// Iterate through the selected row IDs and deselect each row
+
+
 
   const getData = useCallback((cell) => {
     const [col, row] = cell;
-    const dataRow = dataa[row];
+    const dataRow = dataa[row] ?? [];
     if (dataRow) {
 
       const d = dataRow[fields[col]?.id];
@@ -123,7 +136,7 @@ export default function MainTable() {
           displayData: d.toString(),
         };
       }
-      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid") {
+      else if ( dataType === "createdby" || dataType === "rowid") {
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
@@ -132,15 +145,15 @@ export default function MainTable() {
           data: d || "",
         };
       }
-      else if (dataType === "datetime") {
+      else if (dataType === "createdat" || dataType === "datetime") {
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
           copyData: "4",
           data: {
             kind: "date-picker-cell",
-            date: new Date(),
-            displayDate: new Date().toISOString(),
+            date: d,
+            displayDate: d,
             format: "date"
           }
       }
@@ -224,22 +237,36 @@ export default function MainTable() {
   //   console.log(arr);
 
   // })
+  // useEffect(() => {
+  //   if (dataEditorRef.current) {
+  //     // Access the DataEditor component and do something with it
+  //     console.log("okkkkk",dataEditorRef.current);
+  //   }
+  // }, [dataEditorRef.current]);
+  
+  const handleDeleteRow = useCallback((selection) => {
+    if(selection.current) return;
+    const deletedRowIndices = [];
+    // const newData = [...dataa];
+  
+    for (const element of selection.rows.items) {
+      const [start, end] = element;
+  
+      for (let i = start; i < end; i++) {
+        deletedRowIndices.push(Object.entries(dataa[i])[1][1]);
+      }
+    }
+    console.log("dataaa",dataa);
+  
+    if (deletedRowIndices.length > 0) {
+      todeleterows = true;
+      dispatch(deleteRows({deletedRowIndices,dataa}));
+    }
+    // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
+    // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
+  });
+  
 
-//   const handleDeleteRow = useCallback(
-//     (selection) => {
-//       console.log("heello delte",selection);
-// let resultArray=[];
-// for (const element of selection.rows.items) {
-//   const [start, end] = element;
-//   for (let i = start; i < end; i++) {
-//     console.log(dataa,"iiiii");
-//     resultArray.push(i);
-//   }
-// }
-//       console.log(resultArray,"hiii");
-//     },
-//     [data]
-//   );
 
 
   const realCols = useMemo(() => {
@@ -248,6 +275,7 @@ export default function MainTable() {
       hasMenu: true,
     }));
   }, [fields]);
+ 
 
   return (
     <>
@@ -257,12 +285,13 @@ export default function MainTable() {
           getCellContent={getData}
           onRowAppended={addRows}
           columns={realCols}
+          // ref={dataEditorRef}
           rows={dataa.length}
           rowMarkers="both"
           rowSelectionMode="multi"
           onCellEdited={onCellEdited}
+          onDelete={handleDeleteRow}
           onRowMoved={handleRowMoved}
-          getCellsForSelection={true}
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}

@@ -101,6 +101,7 @@ export const bulkAddColumns = createAsyncThunk(
         var columns = null
         columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
         const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
+        console.log("now recieve data",data);
         const dataa = {
             "columns": columns,
             "row": data?.rows,
@@ -323,17 +324,29 @@ export const addRows = createAsyncThunk(
         return newRow?.data?.data;
     }
 )
+
+
+// export const deleteRows = createAsyncThunk(
+//     "table/deleteRows",
+//     async (payload, { dispatch, getState }) => {
+//         var arr = [];
+//         const { tableId, dbId } = getState().table
+//         for (var index in payload) {
+//             arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
+//         }
+//         await deleteRow(dbId, tableId, { row_id: arr });
+//         dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+//         return payload;
+//     }
+// )
 export const deleteRows = createAsyncThunk(
     "table/deleteRows",
-    async (payload, { dispatch, getState }) => {
-        var arr = [];
-        const { tableId, dbId } = getState().table
-        for (var index in payload) {
-            arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
-        }
-        await deleteRow(dbId, tableId, { row_id: arr });
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-        return payload;
+    async (payload, {  getState }) => {
+         const { tableId, dbId } = getState().table
+    await deleteRow(dbId, tableId, { row_id: payload.deletedRowIndices });
+       let rows=payload.dataa;
+      let newrows=rows.filter(row=>{ return(!payload.deletedRowIndices.includes(Object.entries(row)[1][1]));})
+        return newrows;
     }
 )
 export const updateColumnsType = createAsyncThunk(
