@@ -15,18 +15,23 @@ export default function DuplicateFieldPopup(props) {
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
+        display: props.open ? "flex" : "none",
         justifyContent: "center",
         alignItems: "center",
+        backdropFilter: props.open ? "blur(8px)" : "none", // Apply blur effect when open
+        zIndex: 9999, // Ensure the popup is on top of other elements
       }}
     >
       <div
         style={{
           backgroundColor: "#fff",
           padding: "20px",
-          borderRadius: "0px",
+          // borderRadius: "8px ", // Add border-radius for rounded corners
           width: "400px",
+          position: "sticky", // Make the popup sticky
+          top: "50%",
+          transform: "translateY(-50%)",
+          border: "2px solid black", // Add border
         }}
       >
         <h3>Duplicate Field</h3>
@@ -41,8 +46,7 @@ export default function DuplicateFieldPopup(props) {
         </div>
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
           <button onClick={props?.handleClose}>Cancel</button>
-          <button onClick={handleDuplicateField
-         }>Duplicate Field</button>
+          <button onClick={handleDuplicateField}>Duplicate Field</button>
         </div>
       </div>
     </div>

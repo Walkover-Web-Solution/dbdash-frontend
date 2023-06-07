@@ -18,6 +18,7 @@ import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
 import './tablesList.scss'
 import { createViewTable } from "../../api/viewTableApi";
+import HideFieldDropdown from "./hidefieldDropdown";
 export default function TablesList({ dbData }) {
 
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -137,7 +138,6 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
-
     if (params?.filterName) {
       setUnderLine(params?.filterName)
 
@@ -147,7 +147,6 @@ export default function TablesList({ dbData }) {
         filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
         dbId: dbData?.db?._id,
       }))
-
       // dispatch(
       //   bulkAddColumns({
       //     dbId: dbData?.db?._id,
@@ -198,7 +197,12 @@ export default function TablesList({ dbData }) {
     }
 
   }
-
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+  
+  const handleMenuOpen = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+  
   return (
     <>
       <div className="tableslist">
@@ -269,6 +273,10 @@ export default function TablesList({ dbData }) {
             Add Filter
           </Button>
         </Box>
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
+          <HideFieldDropdown   menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+        </div>
         {open && (
           <PopupModal
             title="Create Table"

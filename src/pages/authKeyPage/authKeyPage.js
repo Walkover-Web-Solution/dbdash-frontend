@@ -10,6 +10,7 @@ import "./authKeyPage.scss";
 
 export default function authKeyPage() {
   const { id } = useParams();
+
   return (
     <>
       <Box>

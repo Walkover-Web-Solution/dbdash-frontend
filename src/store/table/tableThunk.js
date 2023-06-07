@@ -30,6 +30,7 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 
 
 const getHeaders = async (dbId, tableName, payloadfields) => {
+    console.log("payloadfields",payloadfields)
     const fields = payloadfields || await getAllfields(dbId, tableName);
     let columns = [
         // {
@@ -162,7 +163,7 @@ export const filterData = createAsyncThunk(
             console.log(error)
             console.log("error")
         }
-    }       
+    }
 );
 
 export const deleteColumns = createAsyncThunk(

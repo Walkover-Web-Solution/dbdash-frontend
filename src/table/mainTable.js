@@ -74,7 +74,7 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName,setFields)
+      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName)
     },
     [fields]
   );
@@ -132,7 +132,7 @@ export default function MainTable() {
           data: d || "",
         };
       }
-      else if (dataType === "DatePicker") {
+      else if (dataType === "datetime") {
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
@@ -171,7 +171,7 @@ export default function MainTable() {
         const displayData = d !== null && d !== undefined ? d.toString() : "";
         return {
           allowOverlay: true,
-          kind: GridCellKind.Custom,
+          kind: GridCellKind.Number,
           data: data,
           displayData: displayData,
         };
@@ -206,6 +206,41 @@ export default function MainTable() {
       return {};
     }
   }, [dataa, fields]);
+  // const onCellClicked=useCallback((item,event)=>{
+  //   const[col,row]=item;
+  //   if(col==-1 && event.isEdge==false)
+  //   {
+  //     const index=arr.indexOf(row);
+  //     if(index>-1){
+  //       arr.splice(index,1);
+  //     }
+  //     else{
+  //       arr.push(row);
+  //     }
+  //   }
+  //   else{
+  //     arr=[];
+  //   }
+  //   console.log(arr);
+
+  // })
+
+//   const handleDeleteRow = useCallback(
+//     (selection) => {
+//       console.log("heello delte",selection);
+// let resultArray=[];
+// for (const element of selection.rows.items) {
+//   const [start, end] = element;
+//   for (let i = start; i < end; i++) {
+//     console.log(dataa,"iiiii");
+//     resultArray.push(i);
+//   }
+// }
+//       console.log(resultArray,"hiii");
+//     },
+//     [data]
+//   );
+
 
   const realCols = useMemo(() => {
     return fields.map((c) => ({
@@ -216,7 +251,7 @@ export default function MainTable() {
 
   return (
     <>
-      <div className="table-container" style={{height:`${((window.screen.height*67.5)/100)}px`}}>
+      <div className="table-container" style={{height:`${((window.screen.height*65)/100)}px`}}>
         <DataEditor
           width={window.screen.width}
           getCellContent={getData}
@@ -264,6 +299,7 @@ export default function MainTable() {
         setOpen={setOpen}
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
+        
         setLinkedValueName={setLinkedValueName}
         setTextValue={setTextValue}
       />}
