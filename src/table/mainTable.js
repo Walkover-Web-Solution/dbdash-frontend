@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { // CompactSelection
   DataEditor, GridCellKind
 } from "@glideapps/glide-data-grid";
-import { addColumnrightandleft, updateColumnHeaders } from "../store/table/tableThunk";
+import { addColumnrightandleft, deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -22,6 +22,7 @@ export default function MainTable() {
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
+  let todeleterows=false;
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -84,8 +85,13 @@ export default function MainTable() {
   }, [data, setData]);
 
   const onCellEdited = useCallback((cell, newValue) => {
-    editCell(cell, newValue, dispatch, fields);
-  }, [data, fields]);
+    if(todeleterows==false)
+    {
+editCell(cell, newValue, dispatch, fields, dataa[cell?.[1] ?? []],fields[cell[0]]?.dataType);
+
+    } 
+    todeleterows=false;
+  }, [dataa, fields]);
 
   const handleColumnResize = (fields, newSize, colIndex) => {
     let newarrr = [...fields1];
@@ -101,6 +107,43 @@ export default function MainTable() {
       metaData: { width: newSize }
     }));
   };
+  const validateCell=useCallback((cell,newValue,oldValue)=>
+{
+  console.log(cell,oldValue)
+  if(newValue.kind==='number' )
+  {
+    if( newValue.data.toString().length<13)
+return newValue;
+else return false;
+
+  }
+},[dataa]);
+  const handleDeleteRow = useCallback((selection) => {
+    if(selection.current)
+    {return;
+    } 
+    const deletedRowIndices = [];
+    // const newData = [...dataa];
+  
+    for (const element of selection.rows.items) {
+      const [start, end] = element;
+  
+      for (let i = start; i < end; i++) {
+        deletedRowIndices.push(Object.entries(dataa[i])[1][1]);
+      }
+    }
+  
+    if (deletedRowIndices.length > 0) {
+      todeleterows = true;
+      dispatch(deleteRows({deletedRowIndices,dataa}))
+    }
+    // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
+    // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
+  });
+  
+
+
+
 
   const onHeaderMenuClick = useCallback((col, bounds) => {
     setMenu({ col, bounds });
@@ -167,13 +210,13 @@ export default function MainTable() {
         };
       }
       else if (dataType === "phone") {
-        const data = d || "";
-        const displayData = d !== null && d !== undefined ? d.toString() : "";
+
+        
         return {
           allowOverlay: true,
           kind: GridCellKind.Number,
-          data: data,
-          displayData: displayData,
+          data: d || "",
+          displayData:d || ""
         };
       }
       else if (dataType === "multipleselect" && d != null) {
@@ -262,6 +305,8 @@ export default function MainTable() {
           rowSelectionMode="multi"
           onCellEdited={onCellEdited}
           onRowMoved={handleRowMoved}
+          onDelete={handleDeleteRow}
+          validateCell={validateCell}
           getCellsForSelection={true}
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana

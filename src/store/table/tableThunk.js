@@ -1,4 +1,5 @@
 
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
@@ -324,24 +325,35 @@ export const addRows = createAsyncThunk(
         return newRow?.data?.data;
     }
 )
-export const deleteRows = createAsyncThunk(
-    "table/deleteRows",
-    async (payload, { dispatch, getState }) => {
-        var arr = [];
-        const { tableId, dbId } = getState().table
-        for (var index in payload) {
-            arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
-        }
-        await deleteRow(dbId, tableId, { row_id: arr });
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-        return payload;
-    }
-)
+// export const deleteRows = createAsyncThunk(
+//     "table/deleteRows",
+//     async (payload, { dispatch, getState }) => {
+//         var arr = [];
+//         const { tableId, dbId } = getState().table
+//         for (var index in payload) {
+//             arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
+//         }
+//         await deleteRow(dbId, tableId, { row_id: arr });
+//         dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+//         return payload;
+//     }
+// )
 export const updateColumnsType = createAsyncThunk(
     "table/updateColumnsType",
     async (payload, { dispatch }) => {
         dispatch(updateColumnType(payload));
         return payload;
+    }
+)
+
+export const deleteRows = createAsyncThunk(
+    "table/deleteRows",
+    async (payload, {  getState }) => {
+         const { tableId, dbId } = getState().table
+    await deleteRow(dbId, tableId, { row_id: payload.deletedRowIndices });
+       let rows=payload.dataa;
+      let newrows=rows.filter(row=>{ return(!payload.deletedRowIndices.includes(Object.entries(row)[1][1]));})
+        return newrows;
     }
 )
 export const updateColumnOrder = createAsyncThunk(  

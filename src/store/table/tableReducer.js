@@ -1,4 +1,5 @@
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions } from './tableThunk.js';
+
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions,deleteRows } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 import { current } from '@reduxjs/toolkit';
 
@@ -398,6 +399,16 @@ export function extraReducers(builder) {
       state.isTableLoading = false
     })
 
+    .addCase(deleteRows.pending,(state)=>{
+      state.status='loading'
+    })
+    .addCase(deleteRows.fulfilled, (state,action) => {
+      state.status = "succeeded";
+      state.data=action.payload;
+    })
+    .addCase(deleteRows.rejected, (state) => {
+      state.status = "failed";
+    })
 
 
     .addCase(deleteColumns.pending, (state) => {
@@ -562,3 +573,4 @@ export function extraReducers(builder) {
       state.status = "failed";
     })
 }
+

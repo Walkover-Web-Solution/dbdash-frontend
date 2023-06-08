@@ -10,15 +10,14 @@ import "./authKeyPage.scss";
 
 export default function authKeyPage() {
   const { id } = useParams();
-
   return (
     <>
       <Box>
-        <MainNavbar dbtoreedirect={useLocation().state[1]} tabletoredirect={useLocation().state[2]} className="auth-key-page-navbar" />
+        <MainNavbar dbtoredirect={useLocation().state[1]} tabletoredirect={useLocation().state[2]} className="auth-key-page-navbar" />
       </Box>
     
       <Box className="auth-key-page-container">
-        <Link to={`/authKeyCreate/${id}`} className="auth-key-page-button">
+        <Link to={`/authKeyCreate/${id}`} state={useLocation().state} className="auth-key-page-button">
           <Button className="mui-button" variant="contained" endIcon={<AddIcon />}>
             Create Authkey
           </Button>
