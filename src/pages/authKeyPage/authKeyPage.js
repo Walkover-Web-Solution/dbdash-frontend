@@ -2,7 +2,6 @@ import React from "react";
 import AuthKey from "../../component/authKeyComponents/authKeyTable";
 import { Box, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import AuthKeyHeader from "../../component/authKeyComponents/authKeyHeader";
 import { Link, } from "react-router-dom";
 import MainNavbar from "../../component/mainNavbar/mainNavbar";
 import "./authKeyPage.scss";
@@ -23,7 +22,6 @@ export default function AuthKeyPage(props) {
           </Button>
         </Link> 
         
-        <AuthKeyHeader  tabletoredirect={props.tabletoredirect} id={props.dbId} />
       </Box>
 
       <Box className="auth-key-page-content">

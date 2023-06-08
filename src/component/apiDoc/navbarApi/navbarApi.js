@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader, ButtonGroup } from "@mui/material";
 import ApiCrudTablist from '../apiCrudTab/apiCrudTablist/apiCrudTablist';
@@ -21,11 +21,9 @@ export default function Navbar(props) {
   const [selectTable, setSelectTable] = useState(useLocation().state || props.tabletoredirect);
   const alldb = useSelector((state) => selectOrgandDb(state));
   const [loading, setLoading] = useState(false);
-  const [showWebhookPage, setShowWebhookPage] = useState(false);
+  const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
  const [dataforwebhook,setdataforwebhook]=useState(null);
-  const handleWebhookClick = () => {
-    setShowWebhookPage(true);
-  };
+
 
   if (selectedDb) {
     props?.setDbtoredirect(selectedDb);
@@ -158,32 +156,37 @@ export default function Navbar(props) {
             >
               <ButtonGroup color="primary" style={{ borderRadius: 0 }}>
                 <Button
-                  className={!showWebhookPage?"mui-button":"mui-button-outlined"}
+                  className={showWebhookPage=="apidoc"?"mui-button":"mui-button-outlined"}
                   variant="outlined"
                   onClick={()=>{
-                    setShowWebhookPage(false)
+                    setShowWebhookPage("apidoc")
                   }}
                   sx={{
-                     pointerEvents: !showWebhookPage?'none':'',
+                     pointerEvents: showWebhookPage=="apidoc"?'none':'',
                   }}
                 >
                   {'API Documentation'}
                 </Button>
-                <Link
-                  to={`/authkeypage/${dbId}`}
-                  state={[selectedOption, props.dbtoredirect, props.tabletoredirect]}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <Button className="mui-button-outlined" variant="outlined">
+               
+                  <Button 
+                  className={showWebhookPage=="authkey"?"mui-button":"mui-button-outlined"}
+                  sx={{
+                    pointerEvents: showWebhookPage=="authkey"?'none':'',
+                 }}
+                 onClick={()=>{
+                  setShowWebhookPage("authkey")
+                }}
+                  variant="outlined">
                     {'Auth Key'}
                   </Button>
-                </Link>
                 <Button
-                  className={showWebhookPage?"mui-button":"mui-button-outlined"}
+                  className={showWebhookPage=="webhook"?"mui-button":"mui-button-outlined"}
                   variant="outlined"
-                  onClick={handleWebhookClick}
+                  onClick={()=>{
+                    setShowWebhookPage("webhook")
+                  }}
                   sx={{
-                    pointerEvents: showWebhookPage?'none':'',
+                    pointerEvents: showWebhookPage=="webhook"?'none':'',
                  }}
                 >
                   {'Webhook'}
@@ -193,14 +196,17 @@ export default function Navbar(props) {
           )}
         </Box>
 
-        {showWebhookPage ? (
-          <Webhookpage dataforwebhook={dataforwebhook}  table={props?.tabletoredirect}/>
-        ) : (
+        {showWebhookPage=="webhook"  &&  (
+          <Webhookpage dataforwebhook={dataforwebhook} dbId={props?.dbtoredirect}  table={props?.tabletoredirect}/>
+        ) }
+        {showWebhookPage=="apidoc" &&(
           <Box>
             {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
           </Box>
         )}
+        { showWebhookPage=="authkey" && 
         <AuthKeyPage  id={dbId} selectedOption={selectedOption} dbtoredirect={props.dbtoredirect} tabletoredirect={props.tabletoredirect}/>
+}
       </div>
     </div>
   );

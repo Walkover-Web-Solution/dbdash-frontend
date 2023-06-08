@@ -10,23 +10,29 @@ import {
   Modal,
 } from '@mui/material';
 import { PropTypes } from 'prop-types';
+import { createWebhook } from '../../api/webhookApi';
 
 function Createwebhook(props) {
   const [name, setName] = useState(null);
-  const [action, setAction] = useState('all');
+  const [action, setAction] = useState('');
+  const[filters,setFilters]=useState('all');
   const [url, setUrl] = useState(null);
-  const [webHooks, setWebHooks] = useState([]);
 
 
 
   const createWebHook = () => {
-    console.log(name,action,url,"hello")
-    const newWebHook = {
-      name: name,
-      action: action,
-      url: url,
-    };
-    setWebHooks([...webHooks, newWebHook]);
+
+    const data={
+        name:name,
+        url:url,
+filterId:filters,
+isActive: true,
+condition:action,
+
+    }
+    createWebhook(props.dbId,props.tableId,data);
+    handleClose();
+   
     setName(null);
     setAction(null);
     setUrl(null);
@@ -72,7 +78,7 @@ function Createwebhook(props) {
               </FormControl>
             </Box>
 
-            {action !== 'delete_row' ? (
+            {action !== 'deleteRow' ? (
               <Box className="create-auth-key-row">
                 <Typography className="create-webhook-label">Filters</Typography>
                 <FormControl variant="standard" className="create-auth-key-dropdown">
@@ -80,9 +86,9 @@ function Createwebhook(props) {
                     id="filterColumn"
                     select
                     label="Filters"
-                    value={action}
+                    value={filters}
                     style={{ minWidth: '210px' }}
-                    onChange={(e) => setAction(e.target.value)}
+                    onChange={(e) => setFilters(e.target.value)}
                   >
                     <MenuItem key={0} value={'all'}>
                       Anywhere in the table
@@ -118,7 +124,6 @@ function Createwebhook(props) {
            
               <Button
                 variant="contained"
-                disabled={()=>{return (!name || !action || !url);}}
                 className="create-auth-key-button mui-button"
                 onClick={createWebHook}
               >
@@ -139,6 +144,8 @@ Createwebhook.propTypes = {
   setOpen: PropTypes.any,
   filters: PropTypes.any,
   handleClose: PropTypes.any,
+  dbId:PropTypes.any,
+  tableId:PropTypes.any
 };
 
 export default Createwebhook;

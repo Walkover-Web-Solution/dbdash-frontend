@@ -24,6 +24,8 @@ export default function Webhookpage(props) {
             Add Webhook
           </Button>
           <Createwebhook
+          dbId={props.dbId}
+          tableId={props.table}
   filters={props?.dataforwebhook[props?.table].filters}
   open={addWebhook}
   setOpen={setAddWebhook}
@@ -40,5 +42,6 @@ export default function Webhookpage(props) {
 }
 Webhookpage.propTypes={
     dataforwebhook:PropTypes.any,
-    table:PropTypes.any
+    table:PropTypes.any,
+    dbId:PropTypes.any,
 }
