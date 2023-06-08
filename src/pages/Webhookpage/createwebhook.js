@@ -1,33 +1,45 @@
-import React,{useState} from 'react'
-import './Webhookpage.scss'
-import { Box, TextField, Typography, Button, FormControl, MenuItem, Modal } from "@mui/material";
-import { Link } from 'react-router-dom';
-import { PropTypes } from "prop-types";
-
+import React, { useState } from 'react';
+import './Webhookpage.scss';
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  FormControl,
+  MenuItem,
+  Modal,
+} from '@mui/material';
+import { PropTypes } from 'prop-types';
 
 function Createwebhook(props) {
-    const [name, setName] = useState("");
-    const [action, setAction] = useState("");
-    const [url, setUrl] = useState("");
-    const [webHooks, setWebHooks] = useState([]);
-  
-    const isDisabled = !name || !action || !url;
-  
-    const createWebHook = () => {
-      const newWebHook = {
-        name: name,
-        action: action,
-        url: url
-      };
-      setWebHooks([...webHooks, newWebHook]);
-      setName("");
-      setAction("");
-      setUrl("");
+  const [name, setName] = useState(null);
+  const [action, setAction] = useState('all');
+  const [url, setUrl] = useState(null);
+  const [webHooks, setWebHooks] = useState([]);
+
+
+
+  const createWebHook = () => {
+    console.log(name,action,url,"hello")
+    const newWebHook = {
+      name: name,
+      action: action,
+      url: url,
     };
-  
-    return (
-      <>
-       <Modal open={props.open} >
+    setWebHooks([...webHooks, newWebHook]);
+    setName(null);
+    setAction(null);
+    setUrl(null);
+  };
+  const handleClose = () => {
+    setName('');
+    setAction('');
+    setUrl('');
+    props.handleClose(); // Call the handleClose function from props to close the modal
+  };
+  return (
+    <>
+      <Modal open={props.open} onClose={handleClose}>
         <Box className="create-auth-key-main-container">
           <Box className="create-auth-key-content-container">
             <Box className="create-auth-key-row">
@@ -42,7 +54,7 @@ function Createwebhook(props) {
                 }}
               />
             </Box>
-            <Box className="create-auth-key-row" >
+            <Box className="create-auth-key-row">
               <Typography className="create-webhook-label">Action</Typography>
               <FormControl variant="standard" className="create-auth-key-dropdown">
                 <TextField
@@ -50,37 +62,45 @@ function Createwebhook(props) {
                   select
                   label="Action"
                   value={action}
-                  style={{minWidth:'210px'}}
+                  style={{ minWidth: '210px' }}
                   onChange={(e) => setAction(e.target.value)}
                 >
-                  <MenuItem value="create_row">Create Row</MenuItem>
-                  <MenuItem value="delete_row">Delete Row</MenuItem>
-                  <MenuItem value="update_row">Update Row</MenuItem>
-                 
+                  <MenuItem value="createRow">Create Row</MenuItem>
+                  <MenuItem value="deleteRow">Delete Row</MenuItem>
+                  <MenuItem value="updateRow">Update Row</MenuItem>
                 </TextField>
               </FormControl>
             </Box>
-  
-          { action!=='Delete Row' ? <Box className="create-auth-key-row">
-              <Typography className="create-webhook-label">Anywhere in Table Name</Typography>
-              <FormControl variant="standard" className="create-auth-key-dropdown">
-                <TextField
-                  id="filterColumn"
-                  select
-                  label="Anywhere in Table Name"
-                  value={action}
-                  style={{minWidth:'210px'}}
-                  onChange={(e) => setAction(e.target.value)}
-                >
-                  <MenuItem value="view1">view 1</MenuItem>
-                  <MenuItem value="view2">view 2</MenuItem>
-                  {/* <MenuItem value="update_row">Update Row</MenuItem> */}
-                 
-                </TextField>
-              </FormControl>
-            </Box>:<></>}
-  
-  
+
+            {action !== 'delete_row' ? (
+              <Box className="create-auth-key-row">
+                <Typography className="create-webhook-label">Filters</Typography>
+                <FormControl variant="standard" className="create-auth-key-dropdown">
+                  <TextField
+                    id="filterColumn"
+                    select
+                    label="Filters"
+                    value={action}
+                    style={{ minWidth: '210px' }}
+                    onChange={(e) => setAction(e.target.value)}
+                  >
+                    <MenuItem key={0} value={'all'}>
+                      Anywhere in the table
+                    </MenuItem>
+
+                    {props.filters &&
+                      Object.entries(props.filters).map(([key, value]) => (
+                        <MenuItem key={key} value={key}>
+                          {value.filterName}
+                        </MenuItem>
+                      ))}
+                  </TextField>
+                </FormControl>
+              </Box>
+            ) : (
+              <></>
+            )}
+
             <Box className="create-auth-key-row">
               <Typography className="create-auth-key-label">URL</Typography>
               <TextField
@@ -95,33 +115,30 @@ function Createwebhook(props) {
             </Box>
           </Box>
           <Box className="create-auth-key-actions">
-            <Link
-              to={{
-                pathname: "/webHookTable",
-                state: {
-                  webHooks: webHooks
-                }
-              }}
-              className="create-auth-key-link"
-            >
-              <Button variant="contained" disabled={isDisabled} className="create-auth-key-button mui-button" onClick={createWebHook}>
+           
+              <Button
+                variant="contained"
+                disabled={()=>{return (!name || !action || !url);}}
+                className="create-auth-key-button mui-button"
+                onClick={createWebHook}
+              >
                 Create
               </Button>
-            </Link>
-            <Link className="create-auth-key-link">
-              <Button variant="outlined" className="create-auth-key-button mui-button-outlined">
+              <Button onClick={handleClose} variant="outlined" className="create-auth-key-button mui-button-outlined">
                 Cancel
               </Button>
-            </Link>
           </Box>
         </Box>
-        </Modal>
-      </>
-    );
+      </Modal>
+    </>
+  );
 }
 
-Createwebhook.propTypes={
-    open:PropTypes.any,
-    setOpen:PropTypes.any
-}
-export default Createwebhook
+Createwebhook.propTypes = {
+  open: PropTypes.any,
+  setOpen: PropTypes.any,
+  filters: PropTypes.any,
+  handleClose: PropTypes.any,
+};
+
+export default Createwebhook;

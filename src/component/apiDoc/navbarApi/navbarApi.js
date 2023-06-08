@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 
 import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
 import Webhookpage from '../../../pages/Webhookpage/Webhookpage';
+import AuthKeyPage from '../../../pages/authKeyPage/authKeyPage';
 
 export default function Navbar(props) {
   let dbchanged = 0;
@@ -17,11 +18,11 @@ export default function Navbar(props) {
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb, setSelectedDb] = useState(useParams().dbId);
-  const [selectTable, setSelectTable] = useState(useLocation().state);
+  const [selectTable, setSelectTable] = useState(useLocation().state || props.tabletoredirect);
   const alldb = useSelector((state) => selectOrgandDb(state));
   const [loading, setLoading] = useState(false);
   const [showWebhookPage, setShowWebhookPage] = useState(false);
-
+ const [dataforwebhook,setdataforwebhook]=useState(null);
   const handleWebhookClick = () => {
     setShowWebhookPage(true);
   };
@@ -69,6 +70,8 @@ export default function Navbar(props) {
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId);
     setTables(data.data.data.tables || {});
+
+    setdataforwebhook(data.data.data.tables);
     if (data.data.data.tables) {
       if (dbchanged === 0) {
         setSelectTable(selectTable || Object.keys(data.data.data.tables)[0]);
@@ -123,7 +126,7 @@ export default function Navbar(props) {
               </FormControl>
             )}
           </Box>
-          {Object.keys(tables).length >= 1 && (
+          { selectTable && Object.keys(tables).length >= 1 && (
             <Box>
               <FormControl sx={{ m: 1, minWidth: 120, mt: 2 }}>
                 <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
@@ -189,13 +192,15 @@ export default function Navbar(props) {
             </Box>
           )}
         </Box>
+
         {showWebhookPage ? (
-          <Webhookpage />
+          <Webhookpage dataforwebhook={dataforwebhook}  table={props?.tabletoredirect}/>
         ) : (
           <Box>
             {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
           </Box>
         )}
+        <AuthKeyPage  id={dbId} selectedOption={selectedOption} dbtoredirect={props.dbtoredirect} tabletoredirect={props.tabletoredirect}/>
       </div>
     </div>
   );
