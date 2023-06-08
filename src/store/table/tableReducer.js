@@ -67,26 +67,7 @@ export const reducers = {
         ...state.columns.slice(deleteIndex + 1, state.columns.length)
       ]
     };
-  },
-  updateColumnHeader(state, payload) {
-    const action = payload.payload;
-    if (action) {
-      var index = state.columns.findIndex(
-        (column) => column.id === action.columnId
-      );
-    }
-
-    return {
-      ...state,
-    
-      columns: [
-        ...state.columns.slice(0, index),
-        { ...state.columns[index], label: action?.label },
-        ...state.columns.slice(index + 1, state.columns.length)
-      ]
-     
-    };
-  },
+  }, 
   addColumnrightandleft(state, payload) {
     const action = payload.payload;
     if (action) {
@@ -435,7 +416,18 @@ export function extraReducers(builder) {
     .addCase(updateColumnHeaders.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(updateColumnHeaders.fulfilled, (state) => {
+    .addCase(updateColumnHeaders.fulfilled, (state,{payload}) => {
+      let allColumns= [];
+      state.columns.forEach(column => {
+        if(column.id == payload?.id )
+        {
+          allColumns = [...allColumns,{...payload}]; 
+        }
+        else {
+          allColumns=[...allColumns,{...column}];
+        }
+      });
+      state.columns = allColumns
       state.status = "succeeded";
 
     })

@@ -67,8 +67,6 @@ export default function TablesList({ dbData }) {
 
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
-
-
     dispatch(createTable1({ tables: apiCreate.data.data.tables }));
 
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
@@ -77,7 +75,17 @@ export default function TablesList({ dbData }) {
     if (matchedKey) {
       navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
     }
-
+    // dispatch(
+    //   bulkAddColumns({
+    //     dbId: dbData?.db?._id,
+    //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
+    //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+    //     org_id: dbData?.db?.org_id,
+    //     pageNo: 1,
+    //     filterId : params?.filterName,
+    //     // fields:dbData?.db?.tables[params?.tableName]?.fields         
+    //   })       
+    // );
     const newTableIndex = Object.keys(AllTableInfo).length;
     setValue(newTableIndex);
   };
@@ -95,7 +103,7 @@ export default function TablesList({ dbData }) {
       filterId : id,
       tableId: params?.tableName ,
       filter: filter,
-          dbId: dbData?.db?._id,
+      dbId: dbData?.db?._id,
     }))
     // dispatch(
     //   bulkAddColumns({
@@ -138,9 +146,28 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
+    
+     if (dbData?.db?.tables && !(params?.filterName)) {
+      const tableNames = Object.keys(dbData.db.tables);
+      dispatch(setTableLoading(true));
+      dispatch(
+        bulkAddColumns({
+          dbId: dbData?.db?._id,
+          tableName: params?.tableName || tableNames[0],
+          pageNo: 1,
+          // fields: dbData?.db?.tables[params?.tableName]?.fields
+        })
+      );
+      setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
+      if (!params?.tableName) {
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+      }
+
+    }
+  }, [params?.tableName]);
+  useEffect(()=>{
     if (params?.filterName) {
       setUnderLine(params?.filterName)
-
       dispatch(filterData({
         filterId : params?.filterName,
         tableId: params?.tableName ,
@@ -159,24 +186,7 @@ export default function TablesList({ dbData }) {
       //   })       
       // );
     }
-    else if (dbData?.db?.tables) {
-      const tableNames = Object.keys(dbData.db.tables);
-      dispatch(setTableLoading(true));
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?.db?._id,
-          tableName: params?.tableName || tableNames[0],
-          pageNo: 1,
-          // fields: dbData?.db?.tables[params?.tableName]?.fields
-        })
-      );
-      setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
-      if (!params?.tableName) {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
-      }
-
-    }
-  }, []);
+  },[params?.filterName])
 
   let dataa1 = "";
   const shareLink = async () => {

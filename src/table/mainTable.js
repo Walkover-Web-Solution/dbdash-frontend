@@ -97,7 +97,7 @@ export default function MainTable() {
       filterId:params?.filterName,
       dbId: params?.dbId,
       tableName: params?.tableName,
-      fieldName: field?.id,
+      columnId: field?.id,
       metaData: { width: newSize }
     }));
   };

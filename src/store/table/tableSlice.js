@@ -10,6 +10,6 @@ const tableSlice = createSlice({
   extraReducers
 });
 
-export const { addOptionToColumn, bulkAdd,deleteColumn,updateColumnHeader,resetData,updateColumnType,addColumnToRight,addColumnToLeft,updateCell,addRow,updateTableData,setTableLoading} = tableSlice.actions;
+export const { addOptionToColumn, bulkAdd,deleteColumn,resetData,updateColumnType,addColumnToRight,addColumnToLeft,updateCell,addRow,updateTableData,setTableLoading} = tableSlice.actions;
 
 export default tableSlice.reducer;

@@ -15,7 +15,6 @@ export default function DraggableHeader({ columns,index, reoder, key}){
     dispatch(updateColumnHeaders({
         dbId:params?.dbId,
         tableName:params?.tableName,
-        fieldName:columns?.id,
         columnId : columns?.id,
         metaData:{width:columns?.width}
     }));

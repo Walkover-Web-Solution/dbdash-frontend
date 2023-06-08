@@ -5,13 +5,20 @@ import MenuItem from '@mui/material/MenuItem';
 import { updateColumnHeaders } from '../../store/table/tableThunk';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 
 export default function HideFieldDropdown(props) {
   const params = useParams();
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
-  const [checkedColumns, setCheckedColumns] = useState([]);
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   
+  const [checkedColumns, setCheckedColumns] = useState([]);
+  const tableFieldArray = AllTableInfo?.tables[params?.tableName]?.fields
+  
+  for (const key in tableFieldArray) {
+      tableFieldArray[key].metaData;
+  }
   let defaultArr= fields1.map((column) => {
     return column?.metadata && column?.metadata?.hide ? (column?.metadata?.hide=="true"?true:false)  : false;
   });
@@ -37,7 +44,6 @@ export default function HideFieldDropdown(props) {
       updateColumnHeaders({
         dbId: params?.dbId,
         tableName: params?.tableName,
-        fieldName: columnId,
         columnId: columnId,
         metaData: metaData,
       })

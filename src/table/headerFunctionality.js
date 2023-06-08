@@ -90,7 +90,6 @@ export function getPropertyIcon(data_type) {
 export function handleRenameColumn(props, header, params, dispatch) {
     dispatch(updateColumnHeaders({
       columnId: props?.fields[props?.menu?.col]?.id,
-      fieldName: props?.fields[props?.menu?.col]?.id,
       tableName: params?.tableName,
       dbId: params?.dbId,
       label: header
@@ -113,7 +112,6 @@ export const hideColumns = async (dispatch, params, props,metaData) => {
     updateColumnHeaders({
       dbId: params?.dbId,
       tableName: params?.tableName,
-      fieldName: props?.fields[props?.menu.col].id,
       columnId: props?.fields[props?.menu.col].id,
       metaData: metaData,
     })

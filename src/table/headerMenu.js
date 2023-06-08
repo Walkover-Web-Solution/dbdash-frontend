@@ -78,6 +78,7 @@ export default function Headermenu(props) {
       fieldDataType: props?.fields[props?.menu?.col].dataType || "",
       tableId: params?.tableName,
       dbId: params?.dbId,
+      filterId:params?.filterName
     })
   );}
   const { layerProps, renderLayer } = useLayer({
