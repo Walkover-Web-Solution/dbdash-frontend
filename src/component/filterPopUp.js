@@ -206,7 +206,7 @@ export default function FilterModal(props) {
 
   const tableData = async () => {
     var columns = cloneDeep(tableInfo.columns)
-    columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
+    // columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
     setFieldData(columns)
   }
 
