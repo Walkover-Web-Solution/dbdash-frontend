@@ -5,31 +5,23 @@ import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./../../component/authKeyComponents/tableMenuDropdown";
 import { useSelector } from "react-redux";
 import { allOrg } from "../../store/database/databaseSelector";
+import { getWebhook } from "../../api/webhookApi";
 
 export default function Webhooktable(props) {
   const adminId = localStorage.getItem("userid");
   const [authKeys, setAuthKeys] = useState(null);
-  const [createdBy, setCreatedBy] = useState(null);
   const user = useSelector((state) => allOrg(state));
-
+const [tabledata,setTabledata]=useState({})
   useEffect(async () => {
-     const arrayofUser = await getAuthkeyFun();
-    setCreatedBy(arrayofUser);
+
+    const data= await getWebhook(props.dbId);
+    setTabledata(data.data.data);
   }, []);
 
-  async function getAuthkeyFun() {
-    const data = await getAuthkey(props.dbId, adminId);
-    setAuthKeys(data?.data?.data);
-    var array = [];
-    Object.entries(Object.values(data?.data?.data)).map((key) => {
-      user[0]?.users?.map((id) => {
-        if (id?.user_id?._id == key[1].user) {
-          array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
-        }
-      });
-    });
-    return array;
-  }
+  useEffect(()=>{
+    console.log("dataaa",tabledata);
+  },[tabledata])
+  
 
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props.dbId, adminId, authKey);
@@ -108,55 +100,25 @@ export default function Webhooktable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {authKeys &&
-                Object.keys(authKeys).map((keys, index) => (
-                  <TableRow key={keys} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      {authKeys[keys].name}
-                    </TableCell>
-                    {createdBy && <TableCell>{createdBy[index]}</TableCell>}
+            {Object.entries(tabledata).map(([condition, webhooks]) => (
+  Object.entries(webhooks).map(([webhookid, webhook]) => (
+    <TableRow key={webhookid} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+      <TableCell component="th" scope="row">
+        {webhook.name}
+        
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {webhook.url}
+      </TableCell>
+      <TableCell>{condition}</TableCell>
+      <TableCell>
+        <span>{formatDateTime(webhook.createdAt)}</span>
+      </TableCell>
+      <TableCell>{webhook.isActive}</TableCell>
+    </TableRow>
+  ))
+))}
 
-                    <TableCell>
-                      <Tooltip title={authKeys[keys].createDate} placement="top">
-                        <span>{formatDateTime(authKeys[keys].createDate)}</span>
-                      </Tooltip>
-                    </TableCell>
-
-                    <TableCell component="th" scope="row">
-                      {keys.substring(0, 3) + "*".repeat(keys.length - 6) + keys.substring(keys.length - 3)}
-                    </TableCell>
-
-                    <TableCell>
-                      {authKeys[keys].access === '1' ? (
-                        <div>all</div>
-                      ) : (
-                        Object.keys(authKeys[keys].access).map((key) => (
-                          <div key={key}>{key}</div>
-                        ))
-                      )}
-                    </TableCell>
-
-                   
-                    <TableCell>
-                      {authKeys[keys].access === '1' ? (
-                        <div>all</div>
-                      ) : (
-                        <div>{Object.values(authKeys[keys].access)[0]?.scope}</div>
-                      )}
-
-                    </TableCell>
-                    <TableCell>
-                      <TableMenuDropdown
-                        authData={authKeys[keys]}
-                        first={"Edit"}
-                        second={"Delete"}
-                        third={"Show AuthKey"}
-                        title={keys}
-                        deleteFunction={deleteAuthkeyFun}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
             </TableBody>
           </Table>
         </TableContainer>

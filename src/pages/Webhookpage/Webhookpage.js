@@ -35,7 +35,7 @@ export default function Webhookpage(props) {
       </Box>
 
       <Box className="auth-key-page-content">
-        <Webhooktable dbId={'64802bf50b74cfa18e9f4132'}/>
+        <Webhooktable dbId={props.dbId}/>
       </Box>
     </>
   );
