@@ -126,9 +126,9 @@ const onCellEdited = useCallback((cell, newValue) => {
     {
       console.log("type object",newValue)
       newValue = newValue.value || newValue.data.value || newValue.data;
-
+      if(!arrr.includes(newValue))
+        editCell(cell, newValue, dispatch, fields,arrr,params,);
     }
-    editCell(cell, newValue, dispatch, fields,arrr,params,);
   }
   else {
     editCell(cell, newValue, dispatch, fields,false,params);
