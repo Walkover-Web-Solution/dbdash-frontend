@@ -45,7 +45,6 @@ export default function TableCellSingleSelect(props) {
         updateColumnHeaders({
           dbId: tableInfo?.dbId,
           tableName: tableInfo?.tableId,
-          fieldName: props?.colid,
           columnId: props?.colid,
           dataTypes: "singleselect",
           metaData: { option: updatedMetadata },

@@ -37,7 +37,6 @@ export default function HideFieldDropdown(props) {
       updateColumnHeaders({
         dbId: params?.dbId,
         tableName: params?.tableName,
-        fieldName: columnId,
         columnId: columnId,
         metaData: metaData,
       })

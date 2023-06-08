@@ -1,14 +1,16 @@
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
 import { insertRow, uploadImage, updateRow, deleteRow } from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
-import { addOptionToColumn, deleteColumn, setTableLoading, updateColumnHeader, updateColumnType } from "./tableSlice";
+import { addOptionToColumn, deleteColumn, setTableLoading, updateColumnType } from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
 import { runQueryonTable } from "../../api/filterApi";
 import { createView, deleteFieldInView } from "../../api/viewApi";
 import { getTableInfo } from "./tableSelector";
 import { getAllTableInfo } from "../allTable/allTableSelector";
+import { setAllTablesData } from "../allTable/allTableSlice";
 
 
 const replaceCreatedByIdWithName = async (userInfo, org_id) => {
@@ -30,7 +32,6 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 
 
 const getHeaders = async (dbId, tableName, payloadfields) => {
-    console.log("payloadfields",payloadfields)
     const fields = payloadfields || await getAllfields(dbId, tableName);
     let columns = [
         // {
@@ -197,37 +198,28 @@ export const deleteColumns = createAsyncThunk(
 
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
-    async (payload, { dispatch, getState }) => {
+    async (payload, { dispatch }) => {
         const data = {
             filterId:payload?.filterId,
             newFieldName: payload?.label,
             newFieldType: payload?.fieldType,
             metaData: payload?.metaData
         }
-
         if (payload?.metaData?.isAllHide) {
             await hideAllField(payload?.dbId, payload?.tableName, {metaData:payload?.metaData,filterId:payload?.filterId})
-            return;
-        }
-        else {
-            await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
-        }
-
-        if (payload?.metaData?.width) return;
-
-        const { tableId, dbId } = getState().table
-        if (payload?.metaData?.hide) {
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-            return;
-        } else {
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-        }
-        dispatch(getTable1({ dbId: payload?.dbId }))
-        if (payload?.metaData?.hide) {
-            return;
-        }
-        dispatch(updateColumnHeader(payload));
-        return 2;
+            return ; }
+        //call api to update backend 
+        const  updatedDbdata = await updateField(payload?.dbId, payload?.tableName, payload?.columnId, data) ; 
+        // update the all table reducer so all tables in the db will be updated 
+        dispatch(setAllTablesData({
+            dbId:updatedDbdata?.data?.data?._id,
+            tables: updatedDbdata?.data?.data?.tables
+        }))
+        let  updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
+        updatedColumn = {[payload?.columnId]:updatedColumn}
+        updatedColumn = await getHeaders(null , null , updatedColumn)
+        // now will update the table reducer so current table fields  will be updated as well 
+        return updatedColumn[0] ;
     }
 )
 
