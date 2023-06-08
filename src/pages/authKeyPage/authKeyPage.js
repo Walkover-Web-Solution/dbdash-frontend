@@ -21,7 +21,7 @@ export default function authKeyPage() {
           <Button className="mui-button" variant="contained" endIcon={<AddIcon />}>
             Create Authkey
           </Button>
-        </Link>
+        </Link> 
         
         <AuthKeyHeader  tabletoredirect={useLocation().state[2]} id={id} />
       </Box>
