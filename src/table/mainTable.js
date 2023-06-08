@@ -13,6 +13,9 @@ import Headermenu from "./headerMenu";
 import DataEditor, {GridCellKind} from "@glideapps/glide-data-grid";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 import "@glideapps/glide-data-grid/dist/index.css";
+import { cloneDeep } from 'lodash';
+import { getTableInfo } from "../store/table/tableSelector";
+
 // import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export default function MainTable() {
@@ -22,6 +25,8 @@ export default function MainTable() {
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
+ 
+
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -34,6 +39,34 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [fields, setFields] = useState(fields1 || [])
+  const tableInfo = useSelector((state) => getTableInfo(state));
+ 
+  // const possibleTags = [
+  //       {
+  //           tag: "Bug",
+  //           color: "#ff4d4d35",
+  //       },
+  //       {
+  //           tag: "Feature",
+  //           color: "#35f8ff35",
+  //       },
+  //       {
+  //           tag: "Enhancement",
+  //           color: "#48ff5735",
+  //       },
+  //       {
+  //           tag: "First Issue",
+  //           color: "#436fff35",
+  //       },
+  //       {
+  //           tag: "PR",
+  //           color: "#e0ff3235",
+  //       },
+  //       {
+  //           tag: "Assigned",
+  //           color: "#ff1eec35",
+  //       },
+  //   ];
   const createLeftorRightColumn = () => {
     if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
@@ -83,9 +116,24 @@ export default function MainTable() {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
 
-  const onCellEdited = useCallback((cell, newValue) => {
-    editCell(cell, newValue, dispatch, fields);
-  }, [data, fields]);
+
+let arrr=[];
+const onCellEdited = useCallback((cell, newValue) => {
+  const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
+    arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
+  if(fields[cell[0]].dataType == "singleselect"){
+    if(typeof(newValue) == "object")
+    {
+      console.log("type object",newValue)
+      newValue = newValue.value || newValue.data.value || newValue.data;
+
+    }
+    editCell(cell, newValue, dispatch, fields,arrr,params,);
+  }
+  else {
+    editCell(cell, newValue, dispatch, fields,false,params);
+  }
+}, [data, fields]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -105,7 +153,6 @@ export default function MainTable() {
   const onHeaderMenuClick = useCallback((col, bounds) => {
     setMenu({ col, bounds });
   }, []);
-
 
   const getData = useCallback((cell) => {
     const [col, row] = cell;
@@ -145,16 +192,16 @@ export default function MainTable() {
           }
       }
     }
-      else if (dataType === "longtext") {
-        return {
-          kind: GridCellKind.Text,
-          allowOverlay: true,
-          readonly: false,
-          displayData: d || "",
-          data: d || "",
-          provideEditor: true
-        };
-      }
+    else if (dataType === "longtext") {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        displayData: d || "",
+        data: d || "",
+        provideEditor: true
+      };
+    }
       else if (dataType === "singlelinetext") {
         return {
           kind: GridCellKind.Text,
@@ -176,14 +223,30 @@ export default function MainTable() {
           displayData: displayData,
         };
       }
-      else if (dataType === "multipleselect" && d != null) {
-        const bubbles = Array.isArray(d) ? d : [d];
-        return {
-          kind: GridCellKind.Bubble,
-          data: bubbles,
-          allowOverlay: true
-        };
-      }
+      // else if (dataType === "multipleselect" && d != null) {
+      //   // const possibleTags = []; // Define your array of possible tags here
+      //   // const row = 0; // Replace 0 with the appropriate row index
+      //   const rand = () => Math.random();
+      //   const uniq = (arr) => Array.from(new Set(arr));
+        
+      //   return {
+      //     kind: GridCellKind.Custom,
+      //     allowOverlay: true,
+      //     copyData: "4",
+      //     data: {
+      //       kind: "tags-cell",
+      //       possibleTags: possibleTags,
+      //       readonly: false,
+      //       tags: uniq([
+      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
+      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
+      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
+      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
+      //       ]),
+      //     },
+      //   };
+      // }
+      
       else if (dataType === "attachment" && d != null) {
         return {
           kind: GridCellKind.Image,
@@ -192,6 +255,26 @@ export default function MainTable() {
           allowAdd: true
         };
       }
+      else if (dataType === "singleselect"  && d != null) {
+        return {
+          kind: GridCellKind.Custom,
+          allowOverlay: true,
+          copyData: 4,
+          data: {
+            kind: "dropdown-cell",
+            allowedValues: fields[col].metadata.option || [],
+            value: d
+          }
+          };
+        }
+        else if (dataType === "checkbox" ) {
+          return {
+            kind: GridCellKind.Boolean,
+            data: d,
+            allowOverlay: false,
+          };
+        }
+      
       else {
         return {
           kind: GridCellKind.Text,
@@ -206,40 +289,6 @@ export default function MainTable() {
       return {};
     }
   }, [dataa, fields]);
-  // const onCellClicked=useCallback((item,event)=>{
-  //   const[col,row]=item;
-  //   if(col==-1 && event.isEdge==false)
-  //   {
-  //     const index=arr.indexOf(row);
-  //     if(index>-1){
-  //       arr.splice(index,1);
-  //     }
-  //     else{
-  //       arr.push(row);
-  //     }
-  //   }
-  //   else{
-  //     arr=[];
-  //   }
-  //   console.log(arr);
-
-  // })
-
-//   const handleDeleteRow = useCallback(
-//     (selection) => {
-//       console.log("heello delte",selection);
-// let resultArray=[];
-// for (const element of selection.rows.items) {
-//   const [start, end] = element;
-//   for (let i = start; i < end; i++) {
-//     console.log(dataa,"iiiii");
-//     resultArray.push(i);
-//   }
-// }
-//       console.log(resultArray,"hiii");
-//     },
-//     [data]
-//   );
 
 
   const realCols = useMemo(() => {
@@ -268,6 +317,7 @@ export default function MainTable() {
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
           // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
+          
           onColumnMoved={reorder}
           onPaste={true}
           rightElement={

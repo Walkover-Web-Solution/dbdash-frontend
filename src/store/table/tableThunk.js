@@ -340,6 +340,7 @@ export const addColumsToLeft = createAsyncThunk(
 export const updateCells = createAsyncThunk(
     "table/updateCells",
     async (payload, { getState }) => {
+        console.log(payload,"payload")
         const { tableId, dbId } = getState().table
         const value = payload?.value
         const columnId = payload.columnId;
