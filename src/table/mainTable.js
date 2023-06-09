@@ -1,6 +1,9 @@
 /*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
-import { addColumnrightandleft, updateColumnHeaders } from "../store/table/tableThunk";
+import { // CompactSelection
+  DataEditor, GridCellKind
+} from "@glideapps/glide-data-grid";
+import { addColumnrightandleft, updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,13 +14,14 @@ import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
-import DataEditor, {GridCellKind} from "@glideapps/glide-data-grid";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 import "@glideapps/glide-data-grid/dist/index.css";
 import { cloneDeep } from 'lodash';
 import { getTableInfo } from "../store/table/tableSelector";
 
 // import "react-responsive-carousel/lib/styles/carousel.min.css";
+import SelectFilepopup from "./selectFilepopup";
+import { toast } from "react-toastify";
 
 export default function MainTable() {
 
@@ -32,6 +36,7 @@ export default function MainTable() {
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
   const [open, setOpen] = useState(false);
+  const [openAttachment, setOpenAttachment] = useState(null);
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [linkedValueName, setLinkedValueName] = useState("")
   const [textValue, setTextValue] = useState('');
@@ -39,6 +44,7 @@ export default function MainTable() {
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
+  const [imageLink, setImageLink] = useState("");
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state));
  
@@ -68,6 +74,63 @@ export default function MainTable() {
   //           color: "#ff1eec35",
   //       },
   //   ];
+
+  const handleUploadFileClick = useCallback((cell) => {
+    if(!dataa)return ;
+    const [col, row] = cell;
+    console.log(row,"row")
+    console.log(dataa,"data")
+    const dataRow = dataa[row] || dataa[row-1];
+    console.log(dataRow,"dataRow");
+    console.log(fields[col]?.id)
+    const d = dataRow[fields[col]?.id];
+    const index = cell[0]
+    if(fields[index]?.dataType === "attachment" && (d==undefined || d?.length===0)){
+      setOpenAttachment(cell);
+    }
+  });
+
+  const onChangeUrl = (e, type) => {
+
+    const row=openAttachment[1];
+    const col=openAttachment[0];
+    if (imageLink !== null) {
+      dispatch(
+        updateCells({
+          columnId: fields[col]?.id,
+          rowIndex: Object.entries(dataa[row])[1][1],
+          value: null,
+          imageLink: imageLink,
+          dataTypes: type,
+        })
+      ).then(() => {
+        toast.success("Image uploaded successfully!");
+      });
+    }
+    e.target.value = null;
+  };
+
+
+  const onChangeFile = (e, type) => {
+    const row=openAttachment[1];
+    const col=openAttachment[0];
+    if (e.target.files[0] != null) {
+      dispatch(
+        updateCells({
+          columnId: fields[col]?.id,
+          rowIndex:Object.entries(dataa[row])[1][1],
+          value: e.target?.files[0],
+          imageLink: imageLink,
+          dataTypes: type,
+        })
+      ).then(() => {
+        toast.success("Image uploaded successfully!");
+      });
+    }
+    e.target.value = null;
+  };
+
+
   const createLeftorRightColumn = () => {
     if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
@@ -117,7 +180,6 @@ export default function MainTable() {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
 
-
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
@@ -165,6 +227,8 @@ const onCellEdited = useCallback((cell, newValue) => {
 
       const d = dataRow[fields[col]?.id];
       const { dataType } = fields[col] || "";
+
+      
       if (dataType === "autonumber") {
         return {
           allowOverlay: true,
@@ -251,13 +315,21 @@ const onCellEdited = useCallback((cell, newValue) => {
       //   };
       // }
       
-      else if (dataType === "attachment" && d != null) {
+      else if (dataType === "multipleselect" && d != null) {
+        const bubbles = Array.isArray(d) ? d : [d];
+        return {
+          kind: GridCellKind.Bubble,
+          data: bubbles,
+          allowOverlay: true
+        };
+      }
+      else if (dataType == "attachment" && d != null) {
         return {
           kind: GridCellKind.Image,
-          data: d,
+          data: d ,
           allowOverlay: true,
-          allowAdd: true
-        };
+          allowAdd: true,
+        };      
       }
       else if (dataType === "singleselect" && d!= null) {
         return {
@@ -296,7 +368,7 @@ const onCellEdited = useCallback((cell, newValue) => {
 
 
   const realCols = useMemo(() => {
-    return fields.map((c) => ({
+    return fields?.map((c) => ({
       ...c,
       hasMenu: true,
     }));
@@ -304,7 +376,7 @@ const onCellEdited = useCallback((cell, newValue) => {
 
   return (
     <>
-      <div className="table-container" style={{height:`${((window.screen.height*65)/100)}px`}}>
+      <div className="table-container" style={{height:`${((window?.screen?.height*65)/100)}px`}}>
         <DataEditor
            {...cellProps}
           width={window.screen.width}
@@ -317,6 +389,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           onCellEdited={onCellEdited}
           onRowMoved={handleRowMoved}
           getCellsForSelection={true}
+          onCellClicked={handleUploadFileClick}
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
@@ -354,12 +427,23 @@ const onCellEdited = useCallback((cell, newValue) => {
         setOpen={setOpen}
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
-        
         setLinkedValueName={setLinkedValueName}
         setTextValue={setTextValue}
       />}
       <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
-    </>
 
+      {openAttachment && (
+              <SelectFilepopup
+                title="uplaodfile"
+                label="UploadFileIcon"
+                open={openAttachment?true:false}
+                setImageLink={setImageLink}
+                onChangeUrl={onChangeUrl}
+                setOpen={setOpenAttachment}
+                imageLink={imageLink}
+                onChangeFile={onChangeFile}
+              />
+            )}
+    </>
   );
 }
