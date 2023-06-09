@@ -5,15 +5,22 @@ import MenuItem from '@mui/material/MenuItem';
 import { updateColumnHeaders } from '../../store/table/tableThunk';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 
 export default function HideFieldDropdown(props) {
   const params = useParams();
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
-  const [checkedColumns, setCheckedColumns] = useState([]);
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   
+  const [checkedColumns, setCheckedColumns] = useState([]);
+  const tableFieldArray = AllTableInfo?.tables[params?.tableName]?.fields
+  
+  for (const key in tableFieldArray) {
+      tableFieldArray[key].metaData;
+  }
   let defaultArr= fields1.map((column) => {
-    return column.metadata && column.metadata.hide ? (column.metadata.hide==true?true:false)  : false;
+    return column?.metadata && column?.metadata?.hide ? (column?.metadata?.hide=="true"?true:false)  : false;
   });
 
   const handleMenuClose = () => {
@@ -32,7 +39,7 @@ export default function HideFieldDropdown(props) {
   };
 
   const hideColumn = async (columnId, isChecked) => {
-    const metaData = { hide: isChecked ? false : true };
+    const metaData = { hide: isChecked ? "false" : "true" };
     dispatch(
       updateColumnHeaders({
         dbId: params?.dbId,
@@ -43,8 +50,8 @@ export default function HideFieldDropdown(props) {
     );
   };
 
-  return (
-    <div>
+  return (<>
+    {fields1 && <div>
       <Menu
         anchorEl={props?.menuAnchorEl}
         open={Boolean(props?.menuAnchorEl)}
@@ -74,16 +81,17 @@ export default function HideFieldDropdown(props) {
               padding: '2px 8px',
             }}
           >
-            <input
+            <input style={{width: "15px", height: "15px"}}
               type="checkbox"
               checked={defaultArr[index]}
-              onChange={() => toggleColumn(column.id)}
+              onChange={() => toggleColumn(column?.id)}
             />
-            {column.title}
+            {column?.title}
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </div>}
+    </>
   );
 }
 

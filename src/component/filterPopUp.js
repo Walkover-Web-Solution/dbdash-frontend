@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
 import { setAllTablesData } from "../store/allTable/allTableSlice";
-import { bulkAddColumns } from "../store/table/tableThunk";
+// import { bulkAddColumns } from "../store/table/tableThunk";
 import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
@@ -206,7 +206,7 @@ export default function FilterModal(props) {
 
   const tableData = async () => {
     var columns = cloneDeep(tableInfo.columns)
-    columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
+    // columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
     setFieldData(columns)
   }
 
@@ -286,18 +286,16 @@ export default function FilterModal(props) {
         "tables": filter.data.data.data.tables
       }
     ))
-    dispatch(bulkAddColumns(
-      {
-        "dbId": props?.dbId,
-        "filter":data,
-        "pageNo":1,
-        "tableName": props?.tableName,
-        "tables": props?.dbData?.db?.tables
+    // dispatch(bulkAddColumns(
+    //   {
+    //     "dbId": props?.dbId,
+    //     "filter":data,
+    //     "pageNo":1,
+    //     "tableName": props?.tableName,
+    //     "tables": props?.dbData?.db?.tables
         
-      }
-    ))
-
-
+    //   }
+    // ))
     props?.setUnderLine(filterKey)
     navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
     return dataa;
