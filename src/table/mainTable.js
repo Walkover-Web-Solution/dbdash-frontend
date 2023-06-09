@@ -174,7 +174,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           displayData: d.toString(),
         };
       }
-      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid") {
+      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat"   ) {
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
