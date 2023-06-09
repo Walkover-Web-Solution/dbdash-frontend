@@ -20,7 +20,7 @@ function Createwebhook(props) {
 
 
 
-  const createWebHook = () => {
+  const createWebHook =  () => {
 
     const data={
         name:name,
@@ -31,6 +31,7 @@ condition:action,
 
     }
     createWebhook(props.dbId,props.tableId,data);
+    props.setNewcreated(props.newcreated+1);
     handleClose();
    
     setName(null);
@@ -145,7 +146,9 @@ Createwebhook.propTypes = {
   filters: PropTypes.any,
   handleClose: PropTypes.any,
   dbId:PropTypes.any,
-  tableId:PropTypes.any
+  tableId:PropTypes.any,
+  setNewcreated:PropTypes.any,
+  newcreated:PropTypes.any
 };
 
 export default Createwebhook;

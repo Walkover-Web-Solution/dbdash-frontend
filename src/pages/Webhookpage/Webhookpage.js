@@ -8,9 +8,10 @@ import PropTypes from "prop-types";
 
 
 export default function Webhookpage(props) {
+    const [tabledata,setTabledata]=useState(null);
     const[addWebhook,setAddWebhook]=useState(false);
  
-
+const[newcreated,setNewcreated]=useState(0);
     const handleAddWebhook = () => {
         setAddWebhook(!addWebhook);
       };
@@ -24,6 +25,8 @@ export default function Webhookpage(props) {
             Add Webhook
           </Button>
           <Createwebhook
+          newcreated={newcreated}
+          setNewcreated={setNewcreated}
           dbId={props.dbId}
           tableId={props.table}
   filters={props?.dataforwebhook[props?.table]?.filters}
@@ -35,7 +38,7 @@ export default function Webhookpage(props) {
       </Box>
 
       <Box className="auth-key-page-content">
-        <Webhooktable dbId={props.dbId} tableId={props.table}/>
+        <Webhooktable setNewcreated={setNewcreated} newcreated={newcreated} tabledata={tabledata} setTabledata={setTabledata} dbId={props.dbId} tableId={props.table}/>
       </Box>
     </>
   );

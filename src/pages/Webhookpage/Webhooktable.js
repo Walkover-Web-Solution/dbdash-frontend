@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell } from "@mui/material";
+import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell, Button, Popover } from "@mui/material";
 import { PropTypes } from 'prop-types';
 import Switch from '@mui/material/Switch';
-import { getWebhook, updateWebhook } from "../../api/webhookApi";
-
+import { deleteWebhook, getWebhook, updateWebhook } from "../../api/webhookApi";
+import MenuIcon from '@mui/icons-material/Menu';
 export default function Webhooktable(props) {
-   
-const [tabledata,setTabledata]=useState({})
+    console.log("propssss",props);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isOpen = Boolean(anchorEl);
+
   useEffect(async () => {
 
-    console.log("dbId");
     const data= await getWebhook(props.dbId);
-    setTabledata(data.data.data);
-  }, [props.dbId]);
+    props.setTabledata(data?.data?.data);
+    
+  }, [props.dbId,props.newcreated]);
 
   useEffect(()=>{
-    console.log("dataaa",tabledata);
-  },[tabledata])
-  
+    console.log("dataaa",props.tabledata);
+  },[props.tabledata])
+
+  const toggleDropdown = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeDropdown = () => {
+    setAnchorEl(null);
+  };
+
 
   const formatDateTime = (dateTime) => {
     const currentDate = new Date();
@@ -72,15 +82,27 @@ const [tabledata,setTabledata]=useState({})
     return `${monthName} ${year}`;
  
   };
-  const handleUpdateActive = (webhookId, active,condition) => {
+  const handleUpdateActive =async (webhookId, active,condition) => {
     const data = {
 condition:condition,
-      isActive:!active,
+      isActive:active==true ?false:true,
     };
-    updateWebhook(props.dbId, props.tableId, webhookId, data);
+    const data1=await updateWebhook(props.dbId, props.tableId, webhookId, data);
+    console.log("update",data1);
+    props.setTabledata(data1.data.data.webhook);
+
   };
   
+const handleDeleteWebhook=async (webhookId,condition)=>{
+    console.log("condition",condition)
+const data={condition:condition};
+   const data1=await deleteWebhook(props.dbId,props.tableId,webhookId,data);
+   console.log("delete",data1);
+   setAnchorEl(null);
 
+   props.setTabledata(data1.data.data.webhook);
+
+}
   return (
     <>
       <Box sx={{ border: 1, m: 1 }}>
@@ -96,7 +118,7 @@ condition:condition,
               </TableRow>
             </TableHead>
             <TableBody>
-            {tabledata && Object.entries(tabledata).map(([condition, webhooks]) => (
+            {props.tabledata && Object.entries(props.tabledata).map(([condition, webhooks]) => (
   Object.entries(webhooks).map(([webhookid, webhook]) => (
     <TableRow key={webhookid} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell component="th" scope="row">
@@ -110,7 +132,36 @@ condition:condition,
       <TableCell>
         <span>{formatDateTime(webhook.createdAt)}</span>
       </TableCell>
-      <TableCell><Switch checked={webhook.isActive} onChange={()=>handleUpdateActive(webhookid,webhook.isActive,condition)}/></TableCell>
+      <TableCell>
+      <div>
+        <MenuIcon onClick={toggleDropdown} />
+        {isOpen && anchorEl && <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={closeDropdown}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          <div style={{ padding: '8px' }}>
+            <Switch
+              checked={webhook.isActive}
+              onChange={() => handleUpdateActive(webhookid, webhook.isActive, condition)}
+            />
+          </div>
+          <div style={{ padding: '8px' }}>
+            <Button variant="outlined" onClick={() => handleDeleteWebhook(webhookid, condition)}>
+              Delete
+            </Button>
+          </div>
+        </Popover>
+      }</div>
+    </TableCell>
     </TableRow>
   ))
 ))}
@@ -125,6 +176,9 @@ condition:condition,
 
 Webhooktable.propTypes = {
   dbId: PropTypes.string,
+  tabledata:PropTypes.any,
+  setTabledata:PropTypes.any,
   tableId:PropTypes.any,
+  newcreated:PropTypes.any
  
 };
