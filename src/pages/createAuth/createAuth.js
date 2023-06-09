@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Box, TextField, Typography, Button, Modal } from "@mui/material";
+import React, {  useState,useEffect } from "react";
+import { Box, TextField, Typography, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { PropTypes } from "prop-types";
+// import MainNavbar from "../../component/mainNavbar/mainNavbar";
+// import AuthKeyHeader from "../../component/authKeyComponents/authKeyHeader";
 import AuthAccessDropDown from "../../component/authKeyComponents/authAccessDropdown";
 import AuthKeyDropdown from "../../component/authKeyComponents/authKeyDropdown/authKeyDropdown";
 import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup";
 import { createAuthkey, getAuthkey, updateAuthkey } from "../../api/authkeyApi";
 import { selectActiveUser } from "../../store/user/userSelector.js";
 import "./createAuth.scss";
+import { useParams } from "react-router-dom";
 
 export default function CreateAuthKey(props) {
-  const dbId = null;
+  console.log("props",props)// const{id,dbId}=props;
+const parmas  = useParams();
+const id=parmas?.dbId
+const dbId= id ;
+console.log("location",dbId)
 
   const [selected, setSelected] = useState([]);
   const [scope, setScope] = useState("");
@@ -18,8 +25,8 @@ export default function CreateAuthKey(props) {
   const userDetails = useSelector((state) => selectActiveUser(state));
   const [authKey, setAuthKey] = useState("");
   const [open, setOpen] = useState(false);
-  const [options, setOptions ] = useState([])
-  const handleOpen = () => setOpen(true)
+  const [options, setOptions] = useState([]);
+
   const isDisabled = !name || !scope || selected.length === 0;
 
   const createAuth = async () => {
@@ -37,33 +44,43 @@ export default function CreateAuthKey(props) {
     }
 
     if (!dbId) {
-      const create = await createAuthkey(props.id, adminId, data);
+      const create = await createAuthkey(id, adminId, data);
       setOpen(true);
       setAuthKey(create?.data?.data?.authKey);
-      await getAuthkey(props.id, adminId);
+      await getAuthkey(id, adminId);
       return;
     }
+    
 
     const authKey = dbId.title;
-    await updateAuthkey(props.id, adminId1, authKey, data);
+    await updateAuthkey(id, adminId1, authKey, data);
     setAuthKey(dbId.title);
-    await getAuthkey(props.id, adminId);
+    await getAuthkey(id, adminId);
+  };
+  const handleOpen=()=>{
+    setOpen(true);
+  }
+
+  const handleClosePopup = () => {
+    props.handleClose();
+    setOpen(false);
   };
 
   const updateValueOnEdit = () => {
-    if (dbId) {
-      setName(dbId?.authData?.name);
-      if (Object.values(dbId?.authData?.access)[0] === "1") {
-        setScope(Object.values(dbId?.authData)[3]);
+    console.log(props.dbId,"ddddddddddddddddddd")
+    if (props.dbId) {
+      setName(props?.dbId?.authData?.name);
+      if (Object.values(props?.dbId?.authData?.access)[0] === "1") {
+        setScope(Object.values(props?.dbId?.authData)[3]);
         let all = [];
         Object.entries(options).map((option) => {
-          all = [...all, option[1]?.tableName];
+          all = [...all, option[1].tableName];
         });
         setSelected(all);
       } else {
-        setScope(Object.values(dbId?.authData?.access)[0]?.scope);
-        const tableIds = Object.keys(dbId?.authData?.access);
-        const optionList = Object.entries(options).map(([id, { tableName }]) => ({
+        setScope(Object.values(props?.dbId?.authData?.access)[0]?.scope);
+        const tableIds = Object?.keys(props?.dbId?.authData?.access);
+        const optionList = Object?.entries(options).map(([id, { tableName }]) => ({
           id,
           tableName,
         }));
@@ -76,59 +93,57 @@ export default function CreateAuthKey(props) {
     }
   };
 
-  const handleClose = () => {
-    
-    props.handleClose(); // Call the handleClose function from props to close the modal
-  };
   useEffect(() => {
     updateValueOnEdit();
   }, [dbId, options]);
-
+  
   return (
     <>
-     {console.log("inter",props   )}
-     <Modal open={props.open} onClose={handleClose}>
       
-        <Box className="create-auth-key-content-container">
-          <Box className="create-auth-key-row">
-            <Typography className="create-auth-key-label">Name</Typography>
-            <TextField
-              id="standard-basic"
-              label="Standard"
-              variant="standard"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-          </Box>
-          <Box className="create-auth-key-row">
+      <Box className="create-auth-key-main-container">
+     
+        {/* <Box className="create-auth-key-container"> */}
+          <Box className="create-auth-key-content-container">
+            <Box className="create-auth-key-row">
+              <Typography className="create-auth-key-label">Name</Typography>
+              <TextField
+                id="standard-basic"
+                label="Standard"
+                variant="standard"
+                style={{width:'300px'}}
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+            </Box>
+            <Box className="create-auth-key-row">
             <Typography className="create-auth-key-label">Table Access</Typography>
             <Box className="create-auth-key-dropdown">
               <AuthAccessDropDown
                 dbIds={dbId}
                 selected={selected}
                 setSelected={setSelected}
-                dbId={props.id}
+                dbId={id}
                 options={options}
                 setOptions={setOptions}
               />
             </Box>
           </Box>
-          <Box className="create-auth-key-row">
-            <Typography className="create-auth-key-label">Scope</Typography>
-            <Box className="create-auth-key-dropdown">
-              <AuthKeyDropdown scope={scope} setScope={setScope} />
+            <Box className="create-auth-key-row">
+              <Typography className="create-auth-key-label">Scope</Typography>
+              <Box className="create-auth-key-dropdown">
+                <AuthKeyDropdown scope={scope} setScope={setScope} />
+              </Box>
             </Box>
           </Box>
-          </Box>  
           <Box className="create-auth-key-actions">
             <Box>
               <Button
                 variant="contained"
                 disabled={isDisabled}
 
-                onClick={() => {
+                onClick={() => { 
                   createAuth();
                   handleOpen();
                 }}
@@ -136,23 +151,28 @@ export default function CreateAuthKey(props) {
               >
                 {dbId ? "Update" : "Create"}
               </Button>
-              <AuthKeyPopup  handleClose={props.handleClose} open={open} state={props.location} setOpen={setOpen} title={authKey} dbId={props.id} />
+              <AuthKeyPopup handleClose={props.handleClose} open={open} setOpen={setOpen} title={authKey} dbId={id} />
             </Box>
             <Box>
-                <Button variant="outlined" onClick={handleClose} className=" mui-button-outlined create-auth-key-button">
+              {/* <Link to={`/authkeypage/${id}`} className="create-auth-key-link"> */}
+              <Button
+            variant="outlined"
+            className="mui-button-outlined create-auth-key-button"
+            onClick={()=>{props.handleClose();handleClosePopup()}} 
+          >
                   Cancel
                 </Button>
+              {/* </Link> */}
             </Box>
           </Box>
-          </Modal>
+        {/* </Box> */}
+      </Box>
     </>
   );
 }
 
 CreateAuthKey.propTypes = {
-  dbId: PropTypes.string,
-  open:PropTypes.any,
+  dbId: PropTypes.any,
   id:PropTypes.any,
-  handleClose:PropTypes.any,
-  location:PropTypes.any
+  handleClose:PropTypes.any
 };

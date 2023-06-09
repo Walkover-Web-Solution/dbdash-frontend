@@ -1,70 +1,69 @@
 .auth-key-page-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem;
-  }
-  
-  .auth-key-page-button {
-    text-decoration: none;
-    margin-right: 5px;
-  }
-  
-  .auth-key-page-navbar {
-    margin-bottom: 1rem;
-  }
-  
-  .auth-key-page-content {
-    margin-top: 2rem;
-  }
-  
-  .create-auth-key-main-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    width: 400px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .create-auth-key-content-container {
-    margin-bottom: 20px;
-  }
-  
-  .create-auth-key-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .create-auth-key-label {
-    width: 100px;
-    font-weight: bold;
-  }
-  
-  .create-webhook-label {
-    width: 160px;
-    font-weight: bold;
-  }
-  
-  .create-auth-key-dropdown {
-    width: 100%;
-    margin-left: 8px;
-  }
-  
-  .create-auth-key-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .create-auth-key-button {
-    padding: 8px 16px;
-  }
-  
-  .create-auth-key-link {
-    text-decoration: none;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
+}
+
+.auth-key-page-button {
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.auth-key-page-navbar {
+  margin-bottom: 1rem;
+}
+
+.auth-key-page-content {
+  margin-top: 2rem;
+}
+
+.create-auth-key-main-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 400px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.create-auth-key-content-container {
+  margin-bottom: 20px;
+}
+
+.create-auth-key-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.create-auth-key-label {
+  width: 100px;
+  font-weight: bold;
+}
+
+.create-webhook-label {
+  width: 160px;
+  font-weight: bold;
+}
+
+.create-auth-key-dropdown {
+  width: 100%;
+  margin-left: 8px;
+}
+
+.create-auth-key-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.create-auth-key-button {
+  padding: 8px 16px;
+}
+
+.create-auth-key-link {
+  text-decoration: none;
+}

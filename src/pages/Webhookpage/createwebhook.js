@@ -53,8 +53,9 @@ condition:action,
               <Typography className="create-auth-key-label">Name</Typography>
               <TextField
                 id="standard-basic"
-                label="Standard"
+                label="Name"
                 variant="standard"
+                style={{width:"300px"}}
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -112,8 +113,9 @@ condition:action,
               <Typography className="create-auth-key-label">URL</Typography>
               <TextField
                 id="standard-basic"
-                label="Standard"
+                label="URL"
                 variant="standard"
+                style={{width:"300px"}}
                 value={url}
                 onChange={(e) => {
                   setUrl(e.target.value);

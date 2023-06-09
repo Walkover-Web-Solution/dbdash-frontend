@@ -26,12 +26,13 @@ const MenuProps = {
 };
 
 export default function AuthAccessDropDown({ selected, setSelected, options, setOptions, dbId }) {
-
+console.log("inside AuthAccessDropDown",dbId)
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
+console.log(data.data.data.tables ,"tablesssssss")
+
     setOptions(data.data.data.tables || {});
   }
-
   const isAllSelected =
     options.length > 0 && selected.length === options.length;
 

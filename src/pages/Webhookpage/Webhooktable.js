@@ -33,27 +33,27 @@ export default function Webhooktable(props) {
     const currentDate = new Date();
     const createdDate = new Date(dateTime);
     const diff = currentDate - createdDate;
-  
+ 
     if (diff < 1000) {
       return "Just now";
     }
-  
+ 
     if (diff < 60 * 1000) {
       const seconds = Math.floor(diff / 1000);
-      return `${seconds} second${seconds !== 1 ? "s" : ""} ago`;
+      return` ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
     }
-  
+ 
     if (diff < 60 * 60 * 1000) {
       const minutes = Math.floor(diff / (60 * 1000));
       const seconds = Math.floor((diff % (60 * 1000)) / 1000);
       return `${minutes} minute${minutes !== 1 ? "s" : ""} and ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
     }
-  
+ 
     if (diff < 24 * 60 * 60 * 1000) {
       const hours = Math.floor(diff / (60 * 60 * 1000));
-      return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+      return `${hours} hour ${hours !== 1 ? "s" : ""} ago`;
     }
-  
+ 
     if (diff < 7 * 24 * 60 * 60 * 1000) {
       const days = Math.floor(diff / (24 * 60 * 60 * 1000));
       if (days === 1) {
@@ -71,11 +71,11 @@ export default function Webhooktable(props) {
         }
       }
     }
-  
+ 
     if (diff < 12 * 30 * 24 * 60 * 60 * 1000) {
       const weeks = Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
       return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
-      
+     
     }
     const year = createdDate.getFullYear();
     const monthName = createdDate.toLocaleString("default", { month: "long" });
@@ -123,7 +123,7 @@ const data={condition:condition};
     <TableRow key={webhookid} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell component="th" scope="row">
         {webhook.name}
-        
+       
       </TableCell>
       <TableCell component="th" scope="row">
         {webhook.url}

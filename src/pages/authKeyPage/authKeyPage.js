@@ -8,11 +8,13 @@ import CreateAuthKey from "../createAuth/createAuth";
 
 
 export default function AuthKeyPage(props) {
+  console.log("props AuthKeyPAge",props)
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
+ 
 
   return (
     <>
@@ -29,7 +31,7 @@ export default function AuthKeyPage(props) {
         </Button>
       </Box>
       {open && (
-        <CreateAuthKey open={open} handleClose={handleClose} id={props.dbtoredirect} />
+        <CreateAuthKey open={open} handleClose={handleClose}  id={props.dbtoredirect} />
       )}
       <Box className="auth-key-page-content">
         <AuthKey dbId={props.dbtoredirect} />

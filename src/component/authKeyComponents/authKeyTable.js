@@ -5,8 +5,12 @@ import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
 import { useSelector } from "react-redux";
 import { allOrg } from "../../store/database/databaseSelector";
+import { useParams } from "react-router";
 
 export default function AuthKey(props) {
+  console.log("propssssssssssss",props)
+  const parmas  = useParams();
+const id=parmas?.dbId
   const adminId = localStorage.getItem("userid");
   const [authKeys, setAuthKeys] = useState(null);
   const [createdBy, setCreatedBy] = useState(null);
@@ -15,15 +19,13 @@ export default function AuthKey(props) {
   useEffect(async () => {
      const arrayofUser = await getAuthkeyFun();
     setCreatedBy(arrayofUser);
-  }, [props.dbId]);
+  }, []);
 
   async function getAuthkeyFun() {
-    console.log("dbid",props.dbId)
-    const data = await getAuthkey(props.dbId, adminId);
+    const data = await getAuthkey(props?.dbId|| id, adminId);
     setAuthKeys(data?.data?.data);
     var array = [];
     Object.entries(Object.values(data?.data?.data)).map((key) => {
-
       user[0]?.users?.map((id) => {
         if (id?.user_id?._id == key[1].user) {
           array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
@@ -45,58 +47,36 @@ export default function AuthKey(props) {
     const createdDate = new Date(dateTime);
     const diff = currentDate - createdDate;
   
-    if (diff < 1000) {
-      return "Just now";
-    }
-  
     if (diff < 60 * 1000) {
-      const seconds = Math.floor(diff / 1000);
-      return `${seconds} second${seconds !== 1 ? "s" : ""} ago`;
-    }
-  
-    if (diff < 60 * 60 * 1000) {
+      return "Just now";
+    } else if (diff < 60 * 60 * 1000) {
       const minutes = Math.floor(diff / (60 * 1000));
-      const seconds = Math.floor((diff % (60 * 1000)) / 1000);
-      return `${minutes} minute${minutes !== 1 ? "s" : ""} and ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
-    }
-  
-    if (diff < 24 * 60 * 60 * 1000) {
+      return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+    } else if (diff < 24 * 60 * 60 * 1000) {
       const hours = Math.floor(diff / (60 * 60 * 1000));
       return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
-    }
-  
-    if (diff < 7 * 24 * 60 * 60 * 1000) {
+    } else if (diff < 7 * 24 * 60 * 60 * 1000) {
       const days = Math.floor(diff / (24 * 60 * 60 * 1000));
       if (days === 1) {
         return "Yesterday";
       } else {
-        const sameYear = currentDate.getFullYear() === createdDate.getFullYear();
-        if (sameYear) {
-          const monthName = createdDate.toLocaleString("default", { month: "long" });
-          const date = createdDate.getDate();
-          return `${date} ${monthName}`;
-        } else {
-          const year = createdDate.getFullYear();
-          const monthName = createdDate.toLocaleString("default ", { month: "long" });
-          return `${monthName} ${year}`;
-        }
+        return `${days} day${days !== 1 ? "s" : ""} ago`;
       }
-    }
-  
-    if (diff < 12 * 30 * 24 * 60 * 60 * 1000) {
+    } else if (diff < 4 * 7 * 24 * 60 * 60 * 1000) {
       const weeks = Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
       return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
-      
+    } else if (diff < 12 * 30 * 24 * 60 * 60 * 1000) {
+      const months = Math.floor(diff / (30 * 24 * 60 * 60 * 1000));
+      return `${months} month${months !== 1 ? "s" : ""} ago`;
+    } else {
+      const years = Math.floor(diff / (12 * 30 * 24 * 60 * 60 * 1000));
+      return `${years} year${years !== 1 ? "s" : ""} ago`;
     }
-    const year = createdDate.getFullYear();
-    const monthName = createdDate.toLocaleString("default", { month: "long" });
-    return `${monthName} ${year}`;
- 
   };
 
   return (
     <>
-      <Box sx={{ border: 1, m: 1 }}>
+      <Box sx={{ border: 1, m: 1, boxShadow: 10 }}>
         <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 533 }}>
           <Table sx={{ minWidth: 650 }} stickyHeader aria-label="sticky table">
             <TableHead>
@@ -165,6 +145,7 @@ export default function AuthKey(props) {
                         third={"Show AuthKey"}
                         title={keys}
                         deleteFunction={deleteAuthkeyFun}
+                        dbId={props.dbId}
                       />
                     </TableCell>
                   </TableRow>

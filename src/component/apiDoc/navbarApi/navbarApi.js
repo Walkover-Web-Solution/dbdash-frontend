@@ -70,6 +70,7 @@ export default function Navbar(props) {
     setTables(data.data.data.tables || {});
 
     setdataforwebhook(data.data.data.tables);
+    
     if (data.data.data.tables) {
       if (dbchanged === 0) {
         setSelectTable(selectTable || Object.keys(data.data.data.tables)[0]);
