@@ -259,7 +259,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           allowAdd: true
         };
       }
-      else if (dataType === "singleselect") {
+      else if (dataType === "singleselect"  && d != null) {
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
@@ -267,7 +267,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           data: {
             kind: "dropdown-cell",
             allowedValues: fields[col].metadata.option || [],
-            value: d || ""
+            value: d 
           }
           };
         }
