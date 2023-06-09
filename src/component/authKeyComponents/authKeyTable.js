@@ -15,13 +15,15 @@ export default function AuthKey(props) {
   useEffect(async () => {
      const arrayofUser = await getAuthkeyFun();
     setCreatedBy(arrayofUser);
-  }, []);
+  }, [props.dbId]);
 
   async function getAuthkeyFun() {
+    console.log("dbid",props.dbId)
     const data = await getAuthkey(props.dbId, adminId);
     setAuthKeys(data?.data?.data);
     var array = [];
     Object.entries(Object.values(data?.data?.data)).map((key) => {
+
       user[0]?.users?.map((id) => {
         if (id?.user_id?._id == key[1].user) {
           array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);

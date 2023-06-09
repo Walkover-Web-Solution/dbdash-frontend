@@ -26,7 +26,7 @@ export default function Webhookpage(props) {
           <Createwebhook
           dbId={props.dbId}
           tableId={props.table}
-  filters={props?.dataforwebhook[props?.table].filters}
+  filters={props?.dataforwebhook[props?.table]?.filters}
   open={addWebhook}
   setOpen={setAddWebhook}
   handleClose={handleAddWebhook}
@@ -35,7 +35,7 @@ export default function Webhookpage(props) {
       </Box>
 
       <Box className="auth-key-page-content">
-        <Webhooktable dbId={props.dbId}/>
+        <Webhooktable dbId={props.dbId} tableId={props.table}/>
       </Box>
     </>
   );

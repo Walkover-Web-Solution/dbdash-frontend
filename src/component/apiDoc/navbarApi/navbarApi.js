@@ -124,7 +124,7 @@ export default function Navbar(props) {
               </FormControl>
             )}
           </Box>
-          { selectTable && Object.keys(tables).length >= 1 && (
+          {showWebhookPage=="apidoc" && selectTable && Object.keys(tables).length >= 1 && (
             <Box>
               <FormControl sx={{ m: 1, minWidth: 120, mt: 2 }}>
                 <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>

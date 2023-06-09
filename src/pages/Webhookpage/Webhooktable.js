@@ -1,34 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell, Tooltip } from "@mui/material";
+import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell } from "@mui/material";
 import { PropTypes } from 'prop-types';
-import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
-import TableMenuDropdown from "./../../component/authKeyComponents/tableMenuDropdown";
-import { useSelector } from "react-redux";
-import { allOrg } from "../../store/database/databaseSelector";
-import { getWebhook } from "../../api/webhookApi";
+import Switch from '@mui/material/Switch';
+import { getWebhook, updateWebhook } from "../../api/webhookApi";
 
 export default function Webhooktable(props) {
-  const adminId = localStorage.getItem("userid");
-  const [authKeys, setAuthKeys] = useState(null);
-  const user = useSelector((state) => allOrg(state));
+   
 const [tabledata,setTabledata]=useState({})
   useEffect(async () => {
 
+    console.log("dbId");
     const data= await getWebhook(props.dbId);
     setTabledata(data.data.data);
-  }, []);
+  }, [props.dbId]);
 
   useEffect(()=>{
     console.log("dataaa",tabledata);
   },[tabledata])
   
-
-  async function deleteAuthkeyFun(authKey) {
-    const data = await deleteAuthkey(props.dbId, adminId, authKey);
-    const dataa = await getAuthkey(props.dbId, adminId);
-    setAuthKeys(dataa?.data?.data);
-    return data;
-  }
 
   const formatDateTime = (dateTime) => {
     const currentDate = new Date();
@@ -83,6 +72,14 @@ const [tabledata,setTabledata]=useState({})
     return `${monthName} ${year}`;
  
   };
+  const handleUpdateActive = (webhookId, active,condition) => {
+    const data = {
+condition:condition,
+      isActive:!active,
+    };
+    updateWebhook(props.dbId, props.tableId, webhookId, data);
+  };
+  
 
   return (
     <>
@@ -95,12 +92,11 @@ const [tabledata,setTabledata]=useState({})
                 <TableCell>URL</TableCell>
                 <TableCell>Condition</TableCell>
                 <TableCell>Created On</TableCell>
-                <TableCell>Last Used</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-            {Object.entries(tabledata).map(([condition, webhooks]) => (
+            {tabledata && Object.entries(tabledata).map(([condition, webhooks]) => (
   Object.entries(webhooks).map(([webhookid, webhook]) => (
     <TableRow key={webhookid} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell component="th" scope="row">
@@ -114,7 +110,7 @@ const [tabledata,setTabledata]=useState({})
       <TableCell>
         <span>{formatDateTime(webhook.createdAt)}</span>
       </TableCell>
-      <TableCell>{webhook.isActive}</TableCell>
+      <TableCell><Switch checked={webhook.isActive} onChange={()=>handleUpdateActive(webhookid,webhook.isActive,condition)}/></TableCell>
     </TableRow>
   ))
 ))}
@@ -129,6 +125,6 @@ const [tabledata,setTabledata]=useState({})
 
 Webhooktable.propTypes = {
   dbId: PropTypes.string,
-  scope: PropTypes.any,
-  selected: PropTypes.any
+  tableId:PropTypes.any,
+ 
 };
