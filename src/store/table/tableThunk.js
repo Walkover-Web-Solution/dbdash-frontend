@@ -134,14 +134,12 @@ export const filterData = createAsyncThunk(
             const filter =table?.filters?.[payload?.filterId];
             const filterFields = filter?.fields;
             const fieldArrayInFilter = filter?.fieldIds ;
-            console.log("filterFIelds",fieldArrayInFilter)
             if(payload?.filter)
             {
                 filterQuery = payload?.filter
             }else{
                 filterQuery = table?.filters?.[payload?.filterId].query
             }
-            console.log(filterQuery,"filterqueyr")
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
             const createdby = "fld" + payload?.tableId.substring(3) + "createdby"
@@ -165,7 +163,6 @@ export const filterData = createAsyncThunk(
             fieldArrayInFilter?.forEach((id) => {
                 columns[id] = table?.fields?.[id];
             });
-            console.log("columns",columns)
             // if(!fieldArrayInFilter)
             // {
             //     columns = { ...table?.fields,...viewFields}
@@ -188,7 +185,6 @@ export const filterData = createAsyncThunk(
                 // "isMoreData": !(querydata?.data?.data?.offset == null),
                 "filterId": payload?.filterId
             }
-            console.log(dataa)
             dispatch(setTableLoading(false))
                 return dataa;
             }
@@ -239,7 +235,6 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch }) => {
-        console.log(payload,"payload")
         const data = {
             filterId:payload?.filterId,
             newFieldName: payload?.label,
@@ -340,7 +335,6 @@ export const addColumsToLeft = createAsyncThunk(
 export const updateCells = createAsyncThunk(
     "table/updateCells",
     async (payload, { getState }) => {
-        console.log(payload,"payload")
         const { tableId, dbId } = getState().table
         const value = payload?.value
         const columnId = payload.columnId;
