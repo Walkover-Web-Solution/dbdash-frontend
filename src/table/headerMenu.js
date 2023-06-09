@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
 import { deleteColumns } from '../store/table/tableThunk';
 import { createDuplicateColumn, getPropertyIcon, handleRenameColumn, hideColumns } from './headerFunctionality';
 import AddOptionPopup from './addOptionPopup';
+import { Add } from '@mui/icons-material';
 
 
 const useStyles = makeStyles(() => ({
@@ -202,10 +203,10 @@ export default function Headermenu(props) {
                 })
             }}
               className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
-            {(dataType == "multipleselect" &&
+            {(dataType == "multipleselect" || dataType == "singleselect") && (
               <>
 
-                <div onClick={() => { handleOpen(); }} className={classes.menuItem}><NorthIcon fontSize='2px' />Add option</div></>)}
+                <div onClick={() => { handleOpen(); }} className={classes.menuItem}><Add fontSize='2px' />Add option</div></>)}
             <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
             <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
             {(dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") && (
