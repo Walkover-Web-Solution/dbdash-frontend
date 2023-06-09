@@ -126,8 +126,12 @@ const onCellEdited = useCallback((cell, newValue) => {
     {
       console.log("type object",newValue)
       newValue = newValue.value || newValue.data.value || newValue.data;
-      if(!arrr.includes(newValue))
+      if(!arrr.includes(newValue)){
+        arrr.push(newValue);
+      }
+      if(newValue != ""){
         editCell(cell, newValue, dispatch, fields,arrr,params,);
+      }
     }
   }
   else {
@@ -255,7 +259,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           allowAdd: true
         };
       }
-      else if (dataType === "singleselect"  && d != null) {
+      else if (dataType === "singleselect") {
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
@@ -263,7 +267,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           data: {
             kind: "dropdown-cell",
             allowedValues: fields[col].metadata.option || [],
-            value: d
+            value: d || ""
           }
           };
         }
