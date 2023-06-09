@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
 import { addColumnrightandleft, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
@@ -122,6 +123,8 @@ const onCellEdited = useCallback((cell, newValue) => {
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   if(fields[cell[0]].dataType == "singleselect"){
+    console.log(newValue,123456789);
+    // return ;
     if(typeof(newValue) == "object")
     {
       newValue = newValue.value || newValue.data.value || newValue.data;
@@ -256,11 +259,11 @@ const onCellEdited = useCallback((cell, newValue) => {
           allowAdd: true
         };
       }
-      else if (dataType === "singleselect" && d != null) {
+      else if (dataType === "singleselect" && d!= null) {
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
-          copyData: 4,
+          copyData: d,
           data: {
             kind: "dropdown-cell",
             allowedValues: fields[col].metadata.option || [],

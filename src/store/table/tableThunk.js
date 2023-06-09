@@ -287,9 +287,17 @@ export const addColumnrightandleft = createAsyncThunk(
             dbId:createdfield?.data?.data?.data?._id,
             tables: createdfield?.data?.data?.data?.tables
         }))
-        // dispatch(addColumnToLeft(payload));̉̉̉̉̉
+        
         const { tableId, dbId } = getState().table
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data?.fields }));
+        if(payload?.filterId){
+            dispatch(filterData({
+                filterId : payload?.filterId,
+                tableId: payload?.tableId ,
+                dbId: payload?.dbId
+              }))
+        }else{
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data?.fields }));
+        }
         return payload;
     }
 )
