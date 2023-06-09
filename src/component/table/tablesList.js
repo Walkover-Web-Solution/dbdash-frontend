@@ -1,3 +1,5 @@
+
+/*eslint-disable*/
 import React, { useState, useEffect } from "react";
 import ShareLinkPopUp from "./ShareLinkPopUp";
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
@@ -19,8 +21,9 @@ import { createTable } from "../../api/tableApi";
 import './tablesList.scss'
 import { createViewTable } from "../../api/viewTableApi";
 import HideFieldDropdown from "./hidefieldDropdown";
+import AddOptionPopup from "../../table/addOptionPopup";
 export default function TablesList({ dbData }) {
-
+  console.log(dbData.db.tables)
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
@@ -212,6 +215,9 @@ export default function TablesList({ dbData }) {
   const handleMenuOpen = (event) => {
     setMenuAnchorEl(event.currentTarget);
   };
+
+  const [opennn, setOpennn] = useState(false);
+  const handleOpennn = () => setOpennn(true);
   
   return (
     <>
@@ -283,9 +289,15 @@ export default function TablesList({ dbData }) {
             Add Filter
           </Button>
         </Box>
+        <div style={{ display: 'flex' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
           <HideFieldDropdown   menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Button sx={{ fontSize: "11px" }} onClick={()=>{handleOpennn()}}>Managae Fields</Button>
+        </div>
         </div>
         {open && (
           <PopupModal
@@ -357,7 +369,7 @@ export default function TablesList({ dbData }) {
 
         </Menu>
       </div>
-
+            {/* {console.log("fields",dbData?.db?.tables[params?.tableName].fields)} */}
       <div style={{ marginTop: "22vh" }}>
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
@@ -367,6 +379,14 @@ export default function TablesList({ dbData }) {
           </>
         )}
       </div>
+      {opennn && <AddOptionPopup  
+           title="Add option"
+           label="options"
+           open={opennn}
+          //  columnId={columnId}
+           // col={col}
+           fields = {dbData?.db?.tables[params?.tableName].fields}
+           setOpen={setOpennn} />}
     </>
   );
 }

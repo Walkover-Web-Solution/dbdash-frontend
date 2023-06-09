@@ -14,8 +14,8 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { deleteColumns } from '../store/table/tableThunk';
 import { createDuplicateColumn, getPropertyIcon, handleRenameColumn, hideColumns } from './headerFunctionality';
-import AddOptionPopup from './addOptionPopup';
-import { Add } from '@mui/icons-material';
+// import AddOptionPopup from './addOptionPopup';
+// import { Add } from '@mui/icons-material';
 
 
 const useStyles = makeStyles(() => ({
@@ -61,6 +61,8 @@ export default function Headermenu(props) {
   const classes = useStyles();
   const [header, setHeader] = useState(props?.fields[props?.menu?.col]?.title);
   const isOpen = props?.menu !== undefined;
+  const columnId =  props?.fields[props?.menu?.col]?.id
+  console.log(columnId,"colid")
   const [showduplicate, setShowDuplicate] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
   const dispatch = useDispatch();
@@ -123,8 +125,8 @@ export default function Headermenu(props) {
   let data_type = props?.fields[props?.menu?.col]?.dataType;
   // get column icons
   const propertyIcon = getPropertyIcon(data_type);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(true);
 
   const handleUniqueChange = () => {
     setDuplicateField((isDuplicate) =>
@@ -201,10 +203,10 @@ export default function Headermenu(props) {
                 })
             }}
               className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
-            {(dataType == "multipleselect" || dataType == "singleselect") && (
+            {/* {(dataType == "multipleselect" || dataType == "singleselect") && (
               <>
 
-                <div onClick={() => { handleOpen(); }} className={classes.menuItem}><Add fontSize='2px' />Add option</div></>)}
+                <div onClick={() => { handleOpen(); }} className={classes.menuItem}><Add fontSize='2px' />Add option</div></>)} */}
             <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
             <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
             {(dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") && (
@@ -217,13 +219,14 @@ export default function Headermenu(props) {
             )}
           </div>
         )}
-      <AddOptionPopup
+      {/* <AddOptionPopup
         title="Add option"
         label="options"
         open={open}
+        columnId={columnId}
         // col={col}
         setOpen={setOpen}
-      />
+      /> */}
     </>
   );
 }

@@ -1,5 +1,9 @@
+/*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
-import { addColumnrightandleft, updateColumnHeaders } from "../store/table/tableThunk";
+import { // CompactSelection
+  DataEditor, GridCellKind
+} from "@glideapps/glide-data-grid";
+import { addColumnrightandleft, deleteRows,updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,13 +14,14 @@ import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
 import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
-import DataEditor, {GridCellKind} from "@glideapps/glide-data-grid";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
-import "@glideapps/glide-data-grid/dist/index.css";
+// import "@glideapps/glide-data-grid/dist/index.css";
 import { cloneDeep } from 'lodash';
 import { getTableInfo } from "../store/table/tableSelector";
 
 // import "react-responsive-carousel/lib/styles/carousel.min.css";
+import SelectFilepopup from "./selectFilepopup";
+import { toast } from "react-toastify";
 
 export default function MainTable() {
 
@@ -25,12 +30,12 @@ export default function MainTable() {
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data);
- 
-
+  let todeleterows=false;
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
   const [open, setOpen] = useState(false);
+  const [openAttachment, setOpenAttachment] = useState(null);
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [linkedValueName, setLinkedValueName] = useState("")
   const [textValue, setTextValue] = useState('');
@@ -38,6 +43,7 @@ export default function MainTable() {
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
+  const [imageLink, setImageLink] = useState("");
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state));
  
@@ -67,6 +73,63 @@ export default function MainTable() {
   //           color: "#ff1eec35",
   //       },
   //   ];
+
+  const handleUploadFileClick = useCallback((cell) => {
+    if(!dataa)return ;
+    const [col, row] = cell;
+    console.log(row,"row")
+    console.log(dataa,"data")
+    const dataRow = dataa[row] || dataa[row-1];
+    console.log(dataRow,"dataRow");
+    console.log(fields[col]?.id)
+    const d = dataRow[fields[col]?.id];
+    const index = cell[0]
+    if(fields[index]?.dataType === "attachment" && (d==undefined || d?.length===0)){
+      setOpenAttachment(cell);
+    }
+  });
+
+  const onChangeUrl = (e, type) => {
+
+    const row=openAttachment[1];
+    const col=openAttachment[0];
+    if (imageLink !== null) {
+      dispatch(
+        updateCells({
+          columnId: fields[col]?.id,
+          rowIndex: Object.entries(dataa[row])[1][1],
+          value: null,
+          imageLink: imageLink,
+          dataTypes: type,
+        })
+      ).then(() => {
+        toast.success("Image uploaded successfully!");
+      });
+    }
+    e.target.value = null;
+  };
+
+
+  const onChangeFile = (e, type) => {
+    const row=openAttachment[1];
+    const col=openAttachment[0];
+    if (e.target.files[0] != null) {
+      dispatch(
+        updateCells({
+          columnId: fields[col]?.id,
+          rowIndex:Object.entries(dataa[row])[1][1],
+          value: e.target?.files[0],
+          imageLink: imageLink,
+          dataTypes: type,
+        })
+      ).then(() => {
+        toast.success("Image uploaded successfully!");
+      });
+    }
+    e.target.value = null;
+  };
+
+
   const createLeftorRightColumn = () => {
     if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
@@ -116,28 +179,30 @@ export default function MainTable() {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
 
-
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
+  if(todeleterows==false)
+  {
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   if(fields[cell[0]].dataType == "singleselect"){
+    console.log(newValue,123456789);
+    // return ;
     if(typeof(newValue) == "object")
     {
-      console.log("type object",newValue)
       newValue = newValue.value || newValue.data.value || newValue.data;
       if(!arrr.includes(newValue)){
         arrr.push(newValue);
-      }
-      if(newValue != ""){
-        editCell(cell, newValue, dispatch, fields,arrr,params,);
-      }
+      } 
+        editCell(cell, newValue, dispatch, fields,arrr,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
     }
   }
   else {
-    editCell(cell, newValue, dispatch, fields,false,params);
+    editCell(cell, newValue, dispatch, fields,false,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
   }
-}, [data, fields]);
+} 
+todeleterows=false;
+}, [dataa,data, fields]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -153,6 +218,43 @@ const onCellEdited = useCallback((cell, newValue) => {
       metaData: { width: newSize }
     }));
   };
+  const validateCell=useCallback((cell,newValue,oldValue)=>
+{
+  console.log(cell,oldValue)
+  if(newValue.kind==='number' )
+  {
+    if( newValue.data.toString().length<13)
+return newValue;
+else return false;
+
+  }
+},[dataa]);
+  const handleDeleteRow = useCallback((selection) => {
+    if(selection.current)
+    {return;
+    } 
+    const deletedRowIndices = [];
+    // const newData = [...dataa];
+  
+    for (const element of selection.rows.items) {
+      const [start, end] = element;
+  
+      for (let i = start; i < end; i++) {
+        deletedRowIndices.push(Object.entries(dataa[i])[1][1]);
+      }
+    }
+  
+    if (deletedRowIndices.length > 0) {
+      todeleterows = true;
+      dispatch(deleteRows({deletedRowIndices,dataa}))
+    }
+    // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
+    // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
+  });
+  
+
+
+
 
   const onHeaderMenuClick = useCallback((col, bounds) => {
     setMenu({ col, bounds });
@@ -165,6 +267,8 @@ const onCellEdited = useCallback((cell, newValue) => {
 
       const d = dataRow[fields[col]?.id];
       const { dataType } = fields[col] || "";
+
+      
       if (dataType === "autonumber") {
         return {
           allowOverlay: true,
@@ -174,7 +278,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           displayData: d.toString(),
         };
       }
-      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid") {
+      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat"   ) {
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
@@ -218,13 +322,13 @@ const onCellEdited = useCallback((cell, newValue) => {
         };
       }
       else if (dataType === "phone") {
-        const data = d || "";
-        const displayData = d !== null && d !== undefined ? d.toString() : "";
+
+        
         return {
           allowOverlay: true,
           kind: GridCellKind.Number,
-          data: data,
-          displayData: displayData,
+          data: d || "",
+          displayData:d || ""
         };
       }
       // else if (dataType === "multipleselect" && d != null) {
@@ -251,19 +355,27 @@ const onCellEdited = useCallback((cell, newValue) => {
       //   };
       // }
       
-      else if (dataType === "attachment" && d != null) {
+      else if (dataType === "multipleselect" && d != null) {
+        const bubbles = Array.isArray(d) ? d : [d];
         return {
-          kind: GridCellKind.Image,
-          data: d,
-          allowOverlay: true,
-          allowAdd: true
+          kind: GridCellKind.Bubble,
+          data: bubbles,
+          allowOverlay: true
         };
       }
-      else if (dataType === "singleselect"  && d != null) {
+      else if (dataType == "attachment" && d != null) {
+        return {
+          kind: GridCellKind.Image,
+          data: d ,
+          allowOverlay: true,
+          allowAdd: true,
+        };      
+      }
+      else if (dataType === "singleselect" && d!= null) {
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
-          copyData: 4,
+          copyData: d,
           data: {
             kind: "dropdown-cell",
             allowedValues: fields[col].metadata.option || [],
@@ -296,7 +408,7 @@ const onCellEdited = useCallback((cell, newValue) => {
 
 
   const realCols = useMemo(() => {
-    return fields.map((c) => ({
+    return fields?.map((c) => ({
       ...c,
       hasMenu: true,
     }));
@@ -304,7 +416,7 @@ const onCellEdited = useCallback((cell, newValue) => {
 
   return (
     <>
-      <div className="table-container" style={{height:`${((window.screen.height*65)/100)}px`}}>
+      <div className="table-container" style={{height:`${((window?.screen?.height*65)/100)}px`}}>
         <DataEditor
            {...cellProps}
           width={window.screen.width}
@@ -316,7 +428,10 @@ const onCellEdited = useCallback((cell, newValue) => {
           rowSelectionMode="multi"
           onCellEdited={onCellEdited}
           onRowMoved={handleRowMoved}
+          onDelete={handleDeleteRow}
+          validateCell={validateCell}
           getCellsForSelection={true}
+          onCellClicked={handleUploadFileClick}
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
@@ -354,12 +469,23 @@ const onCellEdited = useCallback((cell, newValue) => {
         setOpen={setOpen}
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
-        
         setLinkedValueName={setLinkedValueName}
         setTextValue={setTextValue}
       />}
       <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
-    </>
 
+      {openAttachment && (
+              <SelectFilepopup
+                title="uplaodfile"
+                label="UploadFileIcon"
+                open={openAttachment?true:false}
+                setImageLink={setImageLink}
+                onChangeUrl={onChangeUrl}
+                setOpen={setOpenAttachment}
+                imageLink={imageLink}
+                onChangeFile={onChangeFile}
+              />
+            )}
+    </>
   );
 }

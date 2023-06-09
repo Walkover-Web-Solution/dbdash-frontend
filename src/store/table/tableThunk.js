@@ -1,4 +1,5 @@
 
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
@@ -134,14 +135,12 @@ export const filterData = createAsyncThunk(
             const filter =table?.filters?.[payload?.filterId];
             const filterFields = filter?.fields;
             const fieldArrayInFilter = filter?.fieldIds ;
-            console.log("filterFIelds",fieldArrayInFilter)
             if(payload?.filter)
             {
                 filterQuery = payload?.filter
             }else{
                 filterQuery = table?.filters?.[payload?.filterId].query
             }
-            console.log(filterQuery,"filterqueyr")
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
             const createdby = "fld" + payload?.tableId.substring(3) + "createdby"
@@ -165,7 +164,6 @@ export const filterData = createAsyncThunk(
             fieldArrayInFilter?.forEach((id) => {
                 columns[id] = table?.fields?.[id];
             });
-            console.log("columns",columns)
             // if(!fieldArrayInFilter)
             // {
             //     columns = { ...table?.fields,...viewFields}
@@ -188,7 +186,6 @@ export const filterData = createAsyncThunk(
                 // "isMoreData": !(querydata?.data?.data?.offset == null),
                 "filterId": payload?.filterId
             }
-            console.log(dataa)
             dispatch(setTableLoading(false))
                 return dataa;
             }
@@ -239,7 +236,6 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch }) => {
-        console.log(payload,"payload")
         const data = {
             filterId:payload?.filterId,
             newFieldName: payload?.label,
@@ -292,9 +288,17 @@ export const addColumnrightandleft = createAsyncThunk(
             dbId:createdfield?.data?.data?.data?._id,
             tables: createdfield?.data?.data?.data?.tables
         }))
-        // dispatch(addColumnToLeft(payload));̉̉̉̉̉
+        
         const { tableId, dbId } = getState().table
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data?.fields }));
+        if(payload?.filterId){
+            dispatch(filterData({
+                filterId : payload?.filterId,
+                tableId: payload?.tableId ,
+                dbId: payload?.dbId
+              }))
+        }else{
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data?.fields }));
+        }
         return payload;
     }
 )
@@ -340,7 +344,6 @@ export const addColumsToLeft = createAsyncThunk(
 export const updateCells = createAsyncThunk(
     "table/updateCells",
     async (payload, { getState }) => {
-        console.log(payload,"payload")
         const { tableId, dbId } = getState().table
         const value = payload?.value
         const columnId = payload.columnId;
@@ -382,24 +385,35 @@ export const addRows = createAsyncThunk(
         return newRow?.data?.data;
     }
 )
-export const deleteRows = createAsyncThunk(
-    "table/deleteRows",
-    async (payload, { dispatch, getState }) => {
-        var arr = [];
-        const { tableId, dbId } = getState().table
-        for (var index in payload) {
-            arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
-        }
-        await deleteRow(dbId, tableId, { row_id: arr });
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-        return payload;
-    }
-)
+// export const deleteRows = createAsyncThunk(
+//     "table/deleteRows",
+//     async (payload, { dispatch, getState }) => {
+//         var arr = [];
+//         const { tableId, dbId } = getState().table
+//         for (var index in payload) {
+//             arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
+//         }
+//         await deleteRow(dbId, tableId, { row_id: arr });
+//         dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+//         return payload;
+//     }
+// )
 export const updateColumnsType = createAsyncThunk(
     "table/updateColumnsType",
     async (payload, { dispatch }) => {
         dispatch(updateColumnType(payload));
         return payload;
+    }
+)
+
+export const deleteRows = createAsyncThunk(
+    "table/deleteRows",
+    async (payload, {  getState }) => {
+         const { tableId, dbId } = getState().table
+    await deleteRow(dbId, tableId, { row_id: payload.deletedRowIndices });
+       let rows=payload.dataa;
+      let newrows=rows.filter(row=>{ return(!payload.deletedRowIndices.includes(Object.entries(row)[1][1]));})
+        return newrows;
     }
 )
 export const updateColumnOrder = createAsyncThunk(  

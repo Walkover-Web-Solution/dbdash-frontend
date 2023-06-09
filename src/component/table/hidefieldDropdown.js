@@ -50,8 +50,8 @@ export default function HideFieldDropdown(props) {
     );
   };
 
-  return (
-    <div>
+  return (<>
+    {fields1 && <div>
       <Menu
         anchorEl={props?.menuAnchorEl}
         open={Boolean(props?.menuAnchorEl)}
@@ -90,7 +90,8 @@ export default function HideFieldDropdown(props) {
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </div>}
+    </>
   );
 }
 

@@ -47,7 +47,7 @@ export default function AuthKeyPopup(props) {
             </Box>
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Link to={`/authkeypage/${props?.dbId}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/authkeypage/${props?.dbId}`} state={props.state} style={{ textDecoration: 'none' }}>
               <Button variant="outlined" className="mui-button-outlined" onClick={handleClose}>Cancel</Button>
             </Link>
           </Box>
@@ -61,6 +61,7 @@ AuthKeyPopup.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   label: PropTypes.string,
+  state:PropTypes.any,
   saveFunction: PropTypes.func,
   setVariable: PropTypes.func,
   id: PropTypes.string,

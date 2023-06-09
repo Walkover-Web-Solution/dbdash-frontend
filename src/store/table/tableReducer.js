@@ -1,6 +1,7 @@
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions } from './tableThunk.js';
+
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions,deleteRows } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
-import { current } from '@reduxjs/toolkit';
+// import { current } from '@reduxjs/toolkit';
 
 export const initialState = {
   columns: [],
@@ -8,10 +9,10 @@ export const initialState = {
   tableId: null,
   dbId: null,
   status: "idle",
-  pageNo : 0,
-  isTableLoading : true,
-  isMoreData : true,
-  filterId : null
+  pageNo: 0,
+  isTableLoading: true,
+  isMoreData: true,
+  filterId: null
 
 };
 
@@ -38,22 +39,22 @@ export const reducers = {
       state.skipReset = true;
     }
   },
-  resetData(){
-    return  {
+  resetData() {
+    return {
       columns: [],
       data: [],
       tableId: null,
       dbId: null,
       status: "idle",
-      pageNo : 0,
-      isTableLoading : true,
-      isMoreData : true,
-      filterId : null 
+      pageNo: 0,
+      isTableLoading: true,
+      isMoreData: true,
+      filterId: null
     }
   },
   deleteColumn(state, payload) {
     const action = payload.payload;
-    if(!(action?.fieldName)) return ;
+    if (!(action?.fieldName)) return;
     if (action) {
       var deleteIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
@@ -61,13 +62,32 @@ export const reducers = {
     }
     return {
       ...state,
-    
+
       columns: [
         ...state.columns.slice(0, deleteIndex),
         ...state.columns.slice(deleteIndex + 1, state.columns.length)
       ]
     };
-  }, 
+  },
+  updateColumnHeader(state, payload) {
+    const action = payload.payload;
+    if (action) {
+      var index = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+    }
+
+    return {
+      ...state,
+
+      columns: [
+        ...state.columns.slice(0, index),
+        { ...state.columns[index], label: action?.label },
+        ...state.columns.slice(index + 1, state.columns.length)
+      ]
+
+    };
+  },
   addColumnrightandleft(state, payload) {
     const action = payload.payload;
     if (action) {
@@ -78,7 +98,7 @@ export const reducers = {
     var rightId = shortId();
     return {
       ...state,
-    
+
       columns: [
         ...state.columns.slice(0, rightIndex + 1),
         {
@@ -88,7 +108,7 @@ export const reducers = {
           dataType: "text",
           created: action.focus && true,
           options: []
-          
+
         },
         ...state.columns.slice(rightIndex + 1, state.columns.length)
       ]
@@ -119,9 +139,9 @@ export const reducers = {
     }
   },
 
-  setTableLoading (state,{payload}){
+  setTableLoading(state, { payload }) {
     return {
-        ...state , isTableLoading : payload
+      ...state, isTableLoading: payload
     }
   },
   updateTableData(state, payload) {
@@ -133,29 +153,28 @@ export const reducers = {
 
   updateCell(state, payload) {
     const action = payload.payload
-    state.skipReset=true;
-    let arr= [];
-  
-    state.data.forEach((ele)=>{
-      if(ele.id!==action.rowIndex) {
-        arr=[...arr,{...ele}];
+
+    state.skipReset = true;
+    let arr = [];
+
+    state.data.forEach((ele) => {
+      if (ele.id !== action.rowIndex) {
+        arr = [...arr, { ...ele }];
       }
-      else{
-       
-        if(action?.dataTypes == "file")
-        {  
-        var arrr = ele?.[action?.columnId] == null ? 
-        [] : ele?.[action?.columnId]  ;
-        arrr.push(action.value)
-        arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
+      else {
+
+        if (action?.dataTypes == "file") {
+          var arrr = ele?.[action?.columnId] == null ?
+            [] : ele?.[action?.columnId];
+          arrr.push(action.value)
+          arr = [...arr, { ...ele, [action.columnId.toLowerCase()]: arrr }];
         }
-        else
-        {
-          arr=[...arr,{...ele,[action.columnId.toLowerCase()]:action.value}];
+        else {
+          arr = [...arr, { ...ele, [action.columnId.toLowerCase()]: action.value }];
         }
       }
     });
-    state.data=arr;
+    state.data = arr;
 
   },
 
@@ -222,7 +241,7 @@ export const reducers = {
               },
               ...state.columns.slice(typeIndex + 1, state.columns.length)
             ],
-          };  
+          };
         }
       case "longtext":
         if (state.columns[typeIndex].dataType === "text") {
@@ -230,7 +249,7 @@ export const reducers = {
         } else if (state.columns[typeIndex].dataType === "select") {
           return {
             ...state,
-          
+
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
@@ -240,7 +259,7 @@ export const reducers = {
         } else {
           return {
             ...state,
-          
+
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
@@ -252,73 +271,73 @@ export const reducers = {
             }))
           };
         }
-        
-        case "singleselect":
-          if (state.columns[typeIndex].dataType === "singleselect") {
-            return {
-              ...state,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
-                ...state.columns.slice(typeIndex + 1, state.columns.length)
-              ],
-            };
-          } else {
-            let options = [];
-            state.data.forEach((row) => {
-              if (row[action.columnId]) {
-                options.push({
-                  label: row[action.columnId],
-                  backgroundColor: randomColor()
-                });
-              }
-            });
-            return {
-              ...state,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                {
-                  ...state.columns[typeIndex],
-                  dataType: action.dataType,
-                  options: [...state.columns[typeIndex].options, ...options]
-                },
-                ...state.columns.slice(typeIndex + 1, state.columns.length)
-              ],
-            };
-          }
-          case "multipleselect":
-          if (state.columns[typeIndex].dataType === "multipleselect") {
-            return {
-              ...state,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
-                ...state.columns.slice(typeIndex + 1, state.columns.length)
-              ],
-            };
-          } else {
-            let options = [];
-            state.data.forEach((row) => {
-              if (row[action.columnId]) {
-                options.push({
-                  label: row[action.columnId],
-                  backgroundColor: randomColor()
-                });
-              }
-            });
-            return {
-              ...state,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                {
-                  ...state.columns[typeIndex],
-                  dataType: action.dataType,
-                  options: [...state.columns[typeIndex].options, ...options]
-                },
-                ...state.columns.slice(typeIndex + 1, state.columns.length)
-              ],
-            };
-          }
+
+      case "singleselect":
+        if (state.columns[typeIndex].dataType === "singleselect") {
+          return {
+            ...state,
+            columns: [
+              ...state.columns.slice(0, typeIndex),
+              { ...state.columns[typeIndex], dataType: action.dataType },
+              ...state.columns.slice(typeIndex + 1, state.columns.length)
+            ],
+          };
+        } else {
+          let options = [];
+          state.data.forEach((row) => {
+            if (row[action.columnId]) {
+              options.push({
+                label: row[action.columnId],
+                backgroundColor: randomColor()
+              });
+            }
+          });
+          return {
+            ...state,
+            columns: [
+              ...state.columns.slice(0, typeIndex),
+              {
+                ...state.columns[typeIndex],
+                dataType: action.dataType,
+                options: [...state.columns[typeIndex].options, ...options]
+              },
+              ...state.columns.slice(typeIndex + 1, state.columns.length)
+            ],
+          };
+        }
+      case "multipleselect":
+        if (state.columns[typeIndex].dataType === "multipleselect") {
+          return {
+            ...state,
+            columns: [
+              ...state.columns.slice(0, typeIndex),
+              { ...state.columns[typeIndex], dataType: action.dataType },
+              ...state.columns.slice(typeIndex + 1, state.columns.length)
+            ],
+          };
+        } else {
+          let options = [];
+          state.data.forEach((row) => {
+            if (row[action.columnId]) {
+              options.push({
+                label: row[action.columnId],
+                backgroundColor: randomColor()
+              });
+            }
+          });
+          return {
+            ...state,
+            columns: [
+              ...state.columns.slice(0, typeIndex),
+              {
+                ...state.columns[typeIndex],
+                dataType: action.dataType,
+                options: [...state.columns[typeIndex].options, ...options]
+              },
+              ...state.columns.slice(typeIndex + 1, state.columns.length)
+            ],
+          };
+        }
 
       case "singlelinetext":
         if (state.columns[typeIndex].dataType === "text") {
@@ -326,7 +345,7 @@ export const reducers = {
         } else if (state.columns[typeIndex].dataType === "select") {
           return {
             ...state,
-          
+
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
@@ -336,7 +355,7 @@ export const reducers = {
         } else {
           return {
             ...state,
-          
+
             columns: [
               ...state.columns.slice(0, typeIndex),
               { ...state.columns[typeIndex], dataType: action.dataType },
@@ -381,13 +400,13 @@ export function extraReducers(builder) {
     })
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
-        if(action.payload.columns) state.columns = action.payload.columns;
+        if (action.payload.columns) state.columns = action.payload.columns;
         state.data = action.payload.row;
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId;
-        state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo: state.pageNo + 1;
-        state.isMoreData  = action?.payload?.isMoreData;
-        state.filterId  = action?.payload?.filterId;
+        state.pageNo = action?.payload?.pageNo ? action?.payload?.pageNo : state.pageNo + 1;
+        state.isMoreData = action?.payload?.isMoreData;
+        state.filterId = action?.payload?.filterId;
         // state.page = 100;
       }
       state.status = "succeeded";
@@ -398,6 +417,16 @@ export function extraReducers(builder) {
       state.isTableLoading = false
     })
 
+    .addCase(deleteRows.pending,(state)=>{
+      state.status='loading'
+    })
+    .addCase(deleteRows.fulfilled, (state,action) => {
+      state.status = "succeeded";
+      state.data=action.payload;
+    })
+    .addCase(deleteRows.rejected, (state) => {
+      state.status = "failed";
+    })
 
 
     .addCase(deleteColumns.pending, (state) => {
@@ -433,17 +462,16 @@ export function extraReducers(builder) {
     })
     .addCase(updateColumnHeaders.rejected, (state) => {
       state.status = "failed";
-    }) 
-    
-     // for change in options array 
-     .addCase(updateMultiSelectOptions.pending, (state) => {
+    })
+
+    // for change in options array 
+    .addCase(updateMultiSelectOptions.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(updateMultiSelectOptions.fulfilled, (state,{payload}) => {
-     
-      state.columns.forEach((column , index) => {
-        if(column.id == payload.columnId)
-        {
+    .addCase(updateMultiSelectOptions.fulfilled, (state, { payload }) => {
+
+      state.columns.forEach((column, index) => {
+        if (column.id == payload.columnId) {
           state.columns[index].metadata.option = payload.metaData;
         }
       });
@@ -453,7 +481,7 @@ export function extraReducers(builder) {
     .addCase(updateMultiSelectOptions.rejected, (state) => {
       state.status = "failed";
     })
-   
+
 
 
     // for add column to right and left
@@ -485,52 +513,73 @@ export function extraReducers(builder) {
     .addCase(updateCells.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(updateCells.fulfilled, (state , {payload}) => {
-      
-      const action = payload
-      state.skipReset=true;
-      // let arr= [];
-      const table = current(state.data);
-      const updatedSeriesData = table?.map((series) => {
-        const id  = series.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
-        if(series[id]===action.rowIndex )  {
-          return action.newData;
-        }
-        return series;
-      });
-      // state.data.forEach((ele)=>{
-      //   const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
-      //   if(ele[id] !==action.rowIndex ) {
-      //     arr=[...arr,{...ele}];     }
-      //   else {
-         
-      //     if(action?.dataTypes == "file"  )
-      //     {  
-      //       var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
-      //       arrr.push(action.value)
-      //       arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
-      //     }
-      //     else
-      //     {
-      //       arr=[...arr,action.newData];
-      //     }
+    .addCase(updateCells.fulfilled, (state, { payload }) => {
+      // try {
+        const action = payload;
+        state.skipReset = true;
+      //   console.log("action", action)
+      //   let table =  [...state.data] ||  [];
+      //   console.log("tableeee", table);
+      //   let tableitem = table?.filter(item =>
+      //     Object.entries(item)[1][1] == action.rowIndex
+      //   );
+      //   tableitem[action.columnId] = action.value;
+      //   console.log("skkdkf", action.columnId, action.value)
+      //   const index = table.findIndex(item =>
+      //     Object.entries(item)[1][1] == action.rowIndex
+      //   );
+
+      //   if (index !== -1) {
+      //     table[index] = tableitem;
       //   }
+      //   console.log("state.data1", state.data)
+
+
+      //   state.data = table;
+      //   console.log("state.data2", state.data)
+      // }
+      // catch (e) {
+      //   console.log(e, "erorr");
+      // }
+      let arr = []
+      // let updatedSeriesData = table?.map((series) => {
+      //   console.log(series[action.columnId], "56778");
+      //   series[action.columnId] = payload.value;
+      //   return series; // Return the updated series object
       // });
-      state.data=updatedSeriesData;
+      state.data.forEach((ele)=>{
+        const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
+        if(ele[id] !==action.rowIndex ) {
+          arr=[...arr,{...ele}];     }
+        else {
+
+          if(action?.dataTypes == "file"  )
+          {  
+            var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
+            arrr.push(action.value)
+            arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
+          }
+          else
+          {
+            arr=[...arr,action.newData];
+          }
+        }
+      });
+      state.data= arr;
       state.status = "succeeded"
     })
     .addCase(updateCells.rejected, (state) => {
       state.status = "failed";
     })
 
-    .addCase(addRows.pending, (state ) => {
-     
+    .addCase(addRows.pending, (state) => {
+
       state.status = "loading"
-    
+
     })
-    .addCase(addRows.fulfilled, (state ,{payload}) => {
+    .addCase(addRows.fulfilled, (state, { payload }) => {
       let arr = [...state.data]
-      state.data = [...arr , payload]
+      state.data = [...arr, payload]
       state.status = "succeeded";
 
     })
@@ -553,7 +602,7 @@ export function extraReducers(builder) {
       state.status = "loading"
 
     })
-    .addCase(updateColumnOrder.fulfilled, (state,{payload}) => {
+    .addCase(updateColumnOrder.fulfilled, (state, { payload }) => {
       state.columns = payload.columns
       state.status = "succeeded";
 
@@ -562,3 +611,4 @@ export function extraReducers(builder) {
       state.status = "failed";
     })
 }
+

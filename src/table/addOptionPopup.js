@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import React, {useState } from "react";
+import { Box, Button, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { Add, Cancel } from "@mui/icons-material";
-import { updateColumnHeaders } from "../store/table/tableThunk";
-import { useDispatch } from "react-redux";
+import { updateColumnHeaders, updateMultiSelectOptions } from "../store/table/tableThunk";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { getTableInfo } from "../store/table/tableSelector";
 
 const style = {
   position: "absolute",
@@ -20,11 +21,23 @@ const style = {
 };
 
 export default function AddOptionPopup(props) {
+  console.log(props,"prrops")
   const handleClose = () => props.setOpen(false);
   const [inputValues, setInputValues] = useState([]);
+  // const [singleSelectFields,setSingleSelectFields] = useState("")
   const params = useParams();
   const dispatch = useDispatch();
+  const colors = ["#FFD4DF", "#CCE0FE", "#CEF5D2","whitesmoke","cadetblue"];
 
+  function getRandomColor(colors) {
+    let index = colors.indexOf(top100Films.slice(-1)[0]?.color) + 1;
+    index = index % colors.length;
+    return colors[index];
+  }
+
+  const tableInfo = useSelector((state) => getTableInfo(state));
+  const metaDataArray = tableInfo?.columns.filter(obj => obj.id === props?.columnId);
+  const top100Films = metaDataArray[0]?.metadata?.option || [];
   const handleAddClick = () => {
     setInputValues([...inputValues, ""]);
   };
@@ -32,19 +45,62 @@ export default function AddOptionPopup(props) {
   const handleInputChange = (event, index) => {
     const newInputValues = [...inputValues];
     newInputValues[index] = event.target.value;
+    console.log(newInputValues,"newinputvalues")
     setInputValues(newInputValues);
   };
 
+  // useEffect(()=>{
+  //   if(props?.fields != null){  
+  //     console.log(props?.fields,"props.fields")
+  //     const singleSelectObjects = [];
+  //     for (let key in props?.fields) {
+  //       if (object.hasOwnProperty(key)) {
+  //         const field = props?.fields[key];
+  //         if (field.fieldType === "singleselect") {
+  //           singleSelectObjects.push(field);
+  //         }
+  //       }
+  //     }
+  //       console.log(singleSelectFields,"fieldssssssssssssssssssssssssssss  ")
+  //   }
+  //     setSingleSelectFields(singleSelectFields)
+  //   },[singleSelectFields])
+    
+    // console.log(singleSelectFields,"fields of idngleselft")
   const handleInputKeyPress = (event) => {
+    console.log("top100Films",top100Films)
+    console.log("columnId",props?.columnId)
+    const updatedMetadata = [...top100Films,  { value: event?.target?.value
+      , color: getRandomColor(colors)
+     }];
     if (event.key === "Enter") {
+      console.log("jdfgbhxgbxhc")
+        if (props?.dataType == "multiselect") {
+            const data =
+             { value: event?.target?.value
+              , color: getRandomColor(colors)
+             };
+            console.log(data,"data")
+            const updatedMetadata = [...top100Films,  { value: event?.target?.value
+              , color: getRandomColor(colors)
+             }];
+            dispatch(updateMultiSelectOptions({
+                dbId: params?.dbId,
+                tableName: params?.tableName,
+              fieldName: props?.columnId,
+              columnId: props?.columnId,
+              dataTypes: "multipleselect",
+              metaData: { option: updatedMetadata},
+            }));
+          }
         dispatch(
             updateColumnHeaders({
               dbId: params?.dbId,
               tableName: params?.tableName,
-              fieldName: key,
-              columnId: key,
+              fieldName: props?.columnId,
+              columnId: props?.columnId,
               dataTypes: "singleselect",
-              metaData: { option: inputValues},
+              metaData: { option: updatedMetadata},
             })
           );
       // Perform the desired action with the input value
@@ -58,6 +114,15 @@ export default function AddOptionPopup(props) {
     setInputValues(newInputValues);
   };
 
+  const handleChangeSelectedOption = () => {
+    // if(event.target.value == "singleselect"){
+    //   const singleSelectFields = Object.entries(props?.fields)
+    //   .filter(([key, value]) => value.fieldType === "singleselect")
+    //   .map(([key, value]) => value.fieldName);
+        console.log(props?.fields,"fields")
+    // }
+  };
+
   return (
     <Box>
       <Modal
@@ -68,6 +133,17 @@ export default function AddOptionPopup(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+        <Select sx={{ width: 150 }}
+                    value={ "singleselect"}
+                    defaultValue="singleselect"
+                    // key={q?.value}
+                    onChange={(e) => handleChangeSelectedOption(e)}
+                    >
+                    <MenuItem value="singleselect">Single Select</MenuItem>
+                    <MenuItem value="multipleselect">Multiple Select</MenuItem>
+                  </Select>
+
+                  
           <Typography variant="h6" component="h2">
             Add options
           </Typography>
@@ -108,4 +184,7 @@ AddOptionPopup.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   submitData: PropTypes.func,
+  dataType :PropTypes.any,
+  columnId: PropTypes.any,
+  fields:PropTypes.any
 };

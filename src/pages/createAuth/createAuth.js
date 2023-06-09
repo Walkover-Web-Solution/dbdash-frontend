@@ -15,7 +15,8 @@ import "./createAuth.scss";
 export default function CreateAuthKey() {
   const location = useLocation();
   const { id } = useParams();
-  const dbId = location.state;
+  const dbId = null;
+  console.log("loco",dbId);
 
   const [selected, setSelected] = useState([]);
   const [scope, setScope] = useState("");
@@ -142,10 +143,10 @@ export default function CreateAuthKey() {
               >
                 {dbId ? "Update" : "Create"}
               </Button>
-              <AuthKeyPopup open={open} setOpen={setOpen} title={authKey} dbId={id} />
+              <AuthKeyPopup open={open} state={location.state} setOpen={setOpen} title={authKey} dbId={id} />
             </Box>
             <Box>
-              <Link to={`/authkeypage/${id}`} className="create-auth-key-link">
+              <Link to={`/authkeypage/${id}`} state={location.state} className="create-auth-key-link">
                 <Button variant="outlined" className=" mui-button-outlined create-auth-key-button">
                   Cancel
                 </Button>
