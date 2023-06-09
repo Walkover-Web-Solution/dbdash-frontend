@@ -57,6 +57,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 export default function Headermenu(props) {
+  // console.log("props",props?.fields[props?.menu?.col])
   const classes = useStyles();
   const [header, setHeader] = useState(props?.fields[props?.menu?.col]?.title);
   const isOpen = props?.menu !== undefined;
@@ -85,6 +86,7 @@ export default function Headermenu(props) {
       })
     );
   }
+
   const { layerProps, renderLayer } = useLayer({
     isOpen,
     auto: true,
@@ -123,10 +125,6 @@ export default function Headermenu(props) {
   const propertyIcon = getPropertyIcon(data_type);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-
-  // const handleAddOption = () => {
-
-  // }
 
   const handleUniqueChange = () => {
     setDuplicateField((isDuplicate) =>
@@ -223,6 +221,7 @@ export default function Headermenu(props) {
         title="Add option"
         label="options"
         open={open}
+        // col={col}
         setOpen={setOpen}
       />
     </>

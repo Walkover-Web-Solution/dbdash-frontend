@@ -3,6 +3,9 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { Add, Cancel } from "@mui/icons-material";
+import { updateColumnHeaders } from "../store/table/tableThunk";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -19,6 +22,8 @@ const style = {
 export default function AddOptionPopup(props) {
   const handleClose = () => props.setOpen(false);
   const [inputValues, setInputValues] = useState([]);
+  const params = useParams();
+  const dispatch = useDispatch();
 
   const handleAddClick = () => {
     setInputValues([...inputValues, ""]);
@@ -30,10 +35,20 @@ export default function AddOptionPopup(props) {
     setInputValues(newInputValues);
   };
 
-  const handleInputKeyPress = (event, index) => {
+  const handleInputKeyPress = (event) => {
     if (event.key === "Enter") {
+        dispatch(
+            updateColumnHeaders({
+              dbId: params?.dbId,
+              tableName: params?.tableName,
+              fieldName: key,
+              columnId: key,
+              dataTypes: "singleselect",
+              metaData: { option: inputValues},
+            })
+          );
       // Perform the desired action with the input value
-      console.log("Input value:", inputValues[index]);
+      console.log("Input value:", inputValues);
     }
   };
 
