@@ -1,4 +1,4 @@
-import { addRows, updateCells, addColumsToLeft,updateColumnOrder, updateColumnHeaders } from "../store/table/tableThunk";
+import { addRows, updateCells, addColumsToLeft,updateColumnOrder } from "../store/table/tableThunk";
 
 export const addRow = (dispatch) => { 
     dispatch(addRows({ type: "add_row" }))    
@@ -16,31 +16,20 @@ export const editCell = (cell, newValue,dispatch,fields,arrr,params,currentrow,d
   const col = cell[0];
 
   const key = fields[col].id;
-
-  if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1] && newValue && newValue.data && newValue.kind && key) 
+  console.log(key,newValue,"rdfrfr")
+  if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) 
     { 
       let newdata=dataType=='phone'?newValue?.data?.toString():newValue?.data;
           dispatch(
           updateCells({
             columnId: key,
             rowIndex :Object.entries(currentrow)[1][1],
-            value:newdata || newValue?.data,
+            value:  newValue?.data || newdata || newValue,
             dataTypes: newValue?.kind,
           })
-         );}
-         if(arrr){
-           dispatch(
-            updateColumnHeaders({
-              dbId: params?.dbId,
-              tableName: params?.tableName,
-              fieldName: key,
-              columnId: key,
-              dataTypes: "singleselect",
-              metaData: { option: arrr},
-            })
-          );
-         }
+         );
           return;
+}
 }
 
 export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,filterId,setFields) => { 
