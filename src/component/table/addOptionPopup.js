@@ -71,7 +71,6 @@ export default function AddOptionPopup(props) {
     const value= event?.target?.value
    
     if (event.key === "Enter") {
-      // fields1.map((field) => {
         if (props?.fieldType === "multipleselect") {
           const data = {
             value: event?.target?.value,
@@ -90,6 +89,7 @@ export default function AddOptionPopup(props) {
             metaData: updatedMetadata,
           }));
           toast.success("Option added sucessfully")
+          event.target.value = "";
         } 
         else if (props?.fieldType === "singleselect") {
           if( !(top100Films).includes(value)){
@@ -103,17 +103,14 @@ export default function AddOptionPopup(props) {
             metaData: { option: updatedMetadata} 
           }));
           toast.success("Option added sucessfully")
-          // setInputValues([...inputValues, ""]);
           }
         }
-      // });
     }
   };
   
   
 
   const handleCancelClick = (index,inputValues) => {
-    // inputValues(index,1)
     if(props?.fieldType == "multipleselect"){
       const newInputValues = [...valueAndColor];
       newInputValues.splice(index, 1);
