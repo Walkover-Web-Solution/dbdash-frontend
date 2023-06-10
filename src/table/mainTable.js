@@ -23,12 +23,13 @@ import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 
 export default function MainTable() {
+  
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data) || [];
-  let todeleterows=0;
+  let todeleterows=false;
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -47,7 +48,9 @@ export default function MainTable() {
   useEffect(()=>{
     setData(dataa)
   },[dataa])
-
+  document.addEventListener('keydown', function(event) {
+    todeleterows=false;
+  });
 
   const handleUploadFileClick = useCallback((cell) => {
     if(!data)return ;
@@ -152,7 +155,7 @@ export default function MainTable() {
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
-  if(todeleterows==0)
+  if(todeleterows==false )
   {
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
@@ -170,7 +173,6 @@ const onCellEdited = useCallback((cell, newValue) => {
     editCell(cell, newValue, dispatch, fields,false,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
   }
 } 
-todeleterows--;
 }, [dataa,data, fields]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
@@ -223,6 +225,7 @@ todeleterows--;
     }
 },[dataa]);
   const handleDeleteRow = useCallback((selection) => {
+    
     if(selection.current)
     {return;
     } 
@@ -238,7 +241,7 @@ todeleterows--;
     }
   
     if (deletedRowIndices.length > 0) {
-    todeleterows = Object.entries(dataa[0]).length*deletedRowIndices.length;
+    todeleterows = true;
 
       dispatch(deleteRows({deletedRowIndices,dataa}))
     }
@@ -301,7 +304,6 @@ todeleterows--;
         readonly: false,
         displayData: d || "",
         data: d || "",
-        provideEditor: true
       };
     }
       else if (dataType === "singlelinetext") {
@@ -316,8 +318,6 @@ todeleterows--;
         };
       }
       else if (dataType === "phone") {
-
-        
         return {
           allowOverlay: true,
           kind: GridCellKind.Number,
