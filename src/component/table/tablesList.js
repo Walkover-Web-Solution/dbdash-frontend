@@ -19,6 +19,7 @@ import { createTable } from "../../api/tableApi";
 import './tablesList.scss'
 import { createViewTable } from "../../api/viewTableApi";
 import HideFieldDropdown from "./hidefieldDropdown";
+import ManageFieldDropDown from "./manageFieldDropDown";
 export default function TablesList({ dbData }) {
 
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -45,6 +46,8 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
+  const [openManageField, setOpenManageField] = useState(false);
+
 
   const handleClick = (event, id) => {
     if (id === "share") {
@@ -55,6 +58,10 @@ export default function TablesList({ dbData }) {
     }
   };
 
+
+  const handleClickOpenManageField = () => {
+    setOpenManageField(true);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -285,8 +292,10 @@ export default function TablesList({ dbData }) {
         </Box>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
+          <Button sx={{ fontSize: "11px" }} onClick={handleClickOpenManageField}>Manage Fields</Button>
           <HideFieldDropdown   menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         </div>
+          {openManageField && <ManageFieldDropDown openManageField={openManageField} setOpenManageField={setOpenManageField}/>}
         {open && (
           <PopupModal
             title="Create Table"

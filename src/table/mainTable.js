@@ -18,7 +18,6 @@ import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 // import "@glideapps/glide-data-grid/dist/index.css";
 import { cloneDeep } from 'lodash';
 import { getTableInfo } from "../store/table/tableSelector";
-
 // import "react-responsive-carousel/lib/styles/carousel.min.css";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
@@ -45,8 +44,7 @@ export default function MainTable() {
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
   const [fields, setFields] = useState(fields1 || [])
-  const tableInfo = useSelector((state) => getTableInfo(state));
- 
+  const tableInfo = useSelector((state) => getTableInfo(state)); 
   // const possibleTags = [
   //       {
   //           tag: "Bug",
@@ -371,15 +369,15 @@ else return false;
           allowAdd: true,
         };      
       }
-      else if (dataType === "singleselect" && d!= null) {
+      else if (dataType === "singleselect") {
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
           copyData: d,
           data: {
             kind: "dropdown-cell",
-            allowedValues: fields[col].metadata.option || [],
-            value: d 
+            allowedValues: fields[col]?.metadata?.option || [],
+            value: d || ""
           }
           };
         }
@@ -448,7 +446,7 @@ else return false;
             sticky: true,
             tint: true,
             hint: "New row...",
-            targetColumn: 4
+            // targetColumn: 4
           }}
         />
       </div>
