@@ -4,7 +4,7 @@ import { UserAuth } from "../context/authContext.js"
 import { Link, useNavigate, useParams,useLocation} from 'react-router-dom';
 import { useSelector} from 'react-redux';
 import { selectActiveUser } from '../store/user/userSelector.js';
-import PropTypes from 'prop-types'; s
+import PropTypes from 'prop-types'; 
 import dbDashLogo from '../table/img/dbDashLogo.png';
 
 function MainNavbar(props) {
