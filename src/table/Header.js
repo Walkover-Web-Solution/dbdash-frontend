@@ -112,7 +112,6 @@ export default function Header({allColumns,
         selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
     }));
     setSelectValue('longtext')
-
   }
   const duplicateFields = (props) => {
     setShowDuplicate(false);
@@ -130,7 +129,6 @@ export default function Header({allColumns,
       dispatch(updateColumnHeaders({
         dbId: params?.dbId,
         tableName: params?.tableName,
-        fieldName: columnId,
         columnId: columnId,
         metaData: metaData
       }));
@@ -498,7 +496,7 @@ buttons.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
         columnId: id,
         dbId: tableInfo?.dbId,
         tableName: tableInfo?.tableId,
-        fieldName: id,
+        columnId: id,
         label: header
       }))
       setExpanded(false);
@@ -515,8 +513,7 @@ buttons.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
       dispatch(updateColumnHeaders({
         columnId: id,
         dbId: tableInfo?.dbId,
-        tableName: tableInfo?.tableId,
-        fieldName: id,
+        tableName: tableInfo?.tableId,        
         label: header
       }))
     }

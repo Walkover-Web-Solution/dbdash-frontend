@@ -1,0 +1,91 @@
+@import '../../assets/styling.scss';
+.tableslist{
+  margin-top: 6.5vh !important;
+  position:fixed !important;
+  top:0 !important;
+  z-index:100;
+  background-color: $bgColorValue !important;
+
+}
+.tables-list-container {
+    width: 99vw !important;
+    display: flex !important;
+    height: 5vh !important;
+    overflow: hidden !important;
+    
+  
+    .tabs-container {
+      display: flex !important;
+      overflow: hidden !important;
+      width: 100% !important;
+      height: 5vh !important;
+  
+      .add-button {
+        margin-left: 0.5rem !important;
+        margin-top: 4px !important;
+        width: fit-content !important;
+        height: 4vh !important;
+      }
+    }
+  }
+  .custom-box {
+    margin-left: 1px !important;
+  
+    .filter-box {
+      background-color: transparent !important;
+      width: 120px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: $filterColorValue !important;
+      border-radius: 0 !important;
+      padding: 7% !important;
+      margin-left: 1px !important;
+      margin-top: 10px !important;
+      margin-bottom: 6px !important;
+      margin-right: 20px !important;
+      border: 1px solid $filterColorValue!important;
+      height: 15px !important;
+      
+
+  
+      &:hover {
+        text-decoration: underline !important;
+      }
+  
+      .MuiIconButton-root {
+        color: $filterColorValue !important;
+      }
+    }
+  }
+  
+  
+  
+  .filter-button {
+    width: 100px !important;
+    margin-top: 1px !important;
+    margin-left: 10px !important;
+    margin-top: 10px !important;
+    margin-bottom: 6px !important;
+    font-size: 11px !important;
+    text-transform: none !important;
+   
+&.hover{
+  background-color: $responseboxbgcolor;
+}
+  }
+
+  
+ 
+  .moreverticon{
+    color:$filterColorValue !important;
+  }
+  
+  .table-loading {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+ 
+ 

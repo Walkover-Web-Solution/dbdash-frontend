@@ -28,7 +28,6 @@ const defaultColumn = {
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-
 const Table = memo(
   ({
     isNextPageLoading,
@@ -38,7 +37,6 @@ const Table = memo(
     update,
     hasNextPage,
   }) => {
-
     const sortTypes = useMemo(
       () => ({
         alphanumericFalsyLast(rowA, rowB, columnId, desc) {
@@ -58,7 +56,6 @@ const Table = memo(
       }),
       []
     );
-
     const {
       getTableProps,
       getTableBodyProps,
@@ -110,7 +107,6 @@ const Table = memo(
     const tableData = useSelector((state) => state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
     useEffect(() => {
-
       const firstColumnValue = tableData.data[lastRowIndex];
       const tableRowChildNodes = document.querySelector(`div[data-id="table-new-row-${firstColumnValue?.id}"]`)?.childNodes[1]
       if (tableRowChildNodes) {
@@ -145,12 +141,13 @@ const Table = memo(
               onClick={() => {
                 dataDispatch(deleteRows(selectedFlatRows));
               }}
-              variant="contained"
+              variant="contained"  className="mui-button"
             >
-              <DeleteOutlined style={{ fontSize: "19px" }} />
+              <DeleteOutlined  className="mui-button-outlined" style={{ fontSize: "19px" }} />
             </Button>
           </div>
         )}
+        {/* <div >  */}
         <DndProvider backend={HTML5Backend}>
            <ScrollingComponent id="scroll"
             style={{ display:"flex",overflowY:"scroll",overflowX:"scroll",height:(window.screen.height*57)/100,width:"99.6vw"}}
@@ -190,7 +187,6 @@ const Table = memo(
             </span>
             New
           </div>
-
           <Preview />
         </DndProvider>
       </>
@@ -200,7 +196,6 @@ const Table = memo(
 
 Table.displayName = "Table";
 export default Table;
-
 Table.propTypes = {
   columns: PropTypes.any,
   hasMore: PropTypes.any,

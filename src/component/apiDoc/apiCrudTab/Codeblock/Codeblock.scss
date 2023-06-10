@@ -1,0 +1,71 @@
+@import '../../../../assets/styling.scss';
+.response-box{
+  
+  color: $responseboxfontColor !important;
+  background-color: $responseboxbgcolor!important;
+  padding: 10px !important;
+  width: 70 !important;
+  height: 100% !important;
+  margin-bottom: 20px !important;
+
+  margin-top: 10px !important;
+  padding-bottom: 4vh !important;
+}
+.codeblock-header{
+  height: 30px !important;
+  background-color: $responseboxbgcolor !important;
+}
+
+.code-block {
+    
+    background-color: $fontColorVAlue !important;
+    color: $bgColorValue !important;
+    padding-bottom: 4vh !important;
+   
+    width:100%  !important;
+   
+   height: 100% !important;
+  margin-top: 30px !important;
+  }
+  
+  .code-block pre {
+    margin: 1 !important;
+    margin-left: 10px !important;
+  }
+  
+  .copy-button {
+
+
+
+    background-color: transparent !important;
+    color: $copybuttoncolorlight !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin-left: -20px !important;
+     padding: 4px 10px !important; 
+    cursor: pointer !important;
+  }
+  
+  .copy-button:hover {
+    opacity: 0.8 !important;
+  }
+  .code-block code {
+    white-space: pre-wrap !important;
+  }
+  
+  .button {
+    position: relative !important;
+    bottom: 65px  !important;
+    font-size: 15px  !important;
+  }
+  
+  .button-api {
+    background-color: $bgColorValue  !important;
+    color: $fontColorVAlue  !important;
+  }
+  
+  .button-curl {
+    background-color: $fontColorVAlue;
+    color: $bgColorValue
+  }
+  

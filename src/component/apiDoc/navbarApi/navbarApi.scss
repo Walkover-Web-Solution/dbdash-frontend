@@ -1,0 +1,49 @@
+.navbar-container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .org-db-select {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .form-control {
+    margin: 1rem;
+    min-width: 120px;
+  }
+  
+  .table-select {
+    margin: 1rem;
+  }
+  
+  .auth-key-button {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    position: fixed;
+    right: 0;
+    top: 10vh;
+  }
+  
+  .auth-key-link {
+    text-decoration: none;
+  }
+  
+  .fixed-button {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    margin-top: 70px
+  }
+  
+  
+  .fixed-button a {
+    text-decoration: none;
+  }
+  
+  .fixed-button a button {
+    text-decoration: none;
+  }
+  

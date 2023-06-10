@@ -115,6 +115,7 @@ export default function SingleDatabase(props) {
                 e.stopPropagation();
                 setOpenmove(false)
               }}
+              className="mui-button"
               variant="contained"
               sx={{
                 width: "8rem",
@@ -177,6 +178,7 @@ export default function SingleDatabase(props) {
                     );
 
                   }}
+                  className="mui-button"
                   variant="contained"
                   sx={{
                     width: "8rem",
@@ -236,6 +238,7 @@ export default function SingleDatabase(props) {
     e.stopPropagation();
     restoreDb(orgIdForRestore,props.db._id);
   }}
+  className="mui-button"
     variant="contained"
     size="small"
     sx={{ display: "flex" }}

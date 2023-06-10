@@ -1,0 +1,36 @@
+$bgColorValue:#fff;
+$fontColorVAlue:#000000;
+$filterColorValue:black;
+$responseboxfontColor:#fff;
+$responseboxbgcolor:#4A4A4A;
+$copybuttoncolorlight:#fff;
+$copybuttoncolordark:#0000;
+$googleauthbordercolor:#0000;
+$errorcolor:#a51226;
+$selectedtabfontcolor:white;
+$selectedtabbgcolor:black;
+$megatitlesize:30;
+
+$mainnavbartextcolor:$fontColorVAlue;
+$fontFamily:'Inter';
+$mainnavbarfontweight:200;
+$linecolor:#ccc;
+$mainnavbartabsfont:1rem;
+$bold:bold;
+$highlightedtabbgcolor:lightgrey;
+:export {
+  titlevariant:h2;
+titleweight:bold;
+  megatitlevariant:h3;
+    megatitlesize: $megatitlesize;
+    titlesize:24;
+    textsize:18;
+mainnavbartextcolor:$mainnavbartextcolor;
+fontFamily:Inter;
+mainnavbarfontweight:$mainnavbarfontweight;
+homebuttonvariant:h6;
+highlightedtabbgcolor:$highlightedtabbgcolor;
+profileiconheight:34px;
+profileiconwidth:36px;
+codeblockcopybuttonsize:20px;
+  }

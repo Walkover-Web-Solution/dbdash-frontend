@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
 import { setAllTablesData } from "../store/allTable/allTableSlice";
-import { bulkAddColumns } from "../store/table/tableThunk";
+// import { bulkAddColumns } from "../store/table/tableThunk";
 import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
@@ -206,7 +206,7 @@ export default function FilterModal(props) {
 
   const tableData = async () => {
     var columns = cloneDeep(tableInfo.columns)
-    columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
+    // columns = columns?.length > 2 ? columns?.splice(1, columns?.length - 2) : []
     setFieldData(columns)
   }
 
@@ -286,18 +286,16 @@ export default function FilterModal(props) {
         "tables": filter.data.data.data.tables
       }
     ))
-    dispatch(bulkAddColumns(
-      {
-        "dbId": props?.dbId,
-        "filter":data,
-        "pageNo":1,
-        "tableName": props?.tableName,
-        "tables": props?.dbData?.db?.tables
+    // dispatch(bulkAddColumns(
+    //   {
+    //     "dbId": props?.dbId,
+    //     "filter":data,
+    //     "pageNo":1,
+    //     "tableName": props?.tableName,
+    //     "tables": props?.dbData?.db?.tables
         
-      }
-    ))
-
-
+    //   }
+    // ))
     props?.setUnderLine(filterKey)
     navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
     return dataa;
@@ -369,7 +367,7 @@ export default function FilterModal(props) {
                   <Select value={q?.fields || fieldData[0]?.id} onChange={(e) => handleChangeField(e, index)} sx={{ width: 150 }}>
                     {fieldData && Object.entries(fieldData)?.map((fields, index) => (
                       <MenuItem key={index} value={fields[1]?.id} >
-                        {fields[1].label}
+                        {fields[1].title}
                       </MenuItem>
                     ))}
                   </Select>
@@ -411,7 +409,7 @@ export default function FilterModal(props) {
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {props?.edit == false && <Box>
-              <Button variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
+              <Button className="mui-button" variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
                 validate();
                 getQueryData();
                 handleClose();
@@ -421,14 +419,14 @@ export default function FilterModal(props) {
             </Box>}
 
             <Box>
-              {props?.edit == true && <Button onClick={() => {
+              {props?.edit == true && <Button className="mui-button" onClick={() => {
                 editQueryData()
                 handleClose()
               }} variant="contained">Edit</Button>}
             </Box>
 
             <Box>
-              <Button variant="outlined" onClick={handleClose}>
+              <Button variant="outlined" className="mui-button-outlined" onClick={handleClose}>
                 Cancel
               </Button>
             </Box>

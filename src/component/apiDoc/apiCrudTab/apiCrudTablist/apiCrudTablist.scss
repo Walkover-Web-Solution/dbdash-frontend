@@ -1,0 +1,37 @@
+@import '../../../../assets/styling.scss';
+.api-crud-tablist-container {
+  width: 100% !important;
+background-color: $bgColorValue !important;
+
+}
+
+.tab-container {
+  border-bottom: 1px solid $linecolor !important;
+  position:fixed !important;
+top: 16vh !important;
+width: 100% !important;
+background-color: $bgColorValue !important;
+z-index:100;
+}
+
+.custom-tab-indicator {
+  display: none !important
+}
+// ::-webkit-scrollbar{
+//   display: none !important;
+// }
+
+.custom-tab-label {
+  background-color: $bgColorValue !important ;
+  color: $fontColorVAlue !important ;
+  border:none !important;
+  position: relative !important ;
+  padding: 3px 35px !important ;
+}
+
+
+
+.custom-tab-label.Mui-selected {
+    background-color: $fontColorVAlue !important;
+    color: $bgColorValue !important;
+  }

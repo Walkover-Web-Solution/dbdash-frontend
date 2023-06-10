@@ -26,7 +26,6 @@ import Joi from "joi";
 import PropTypes from "prop-types";
 
 export default function FieldPopupModal(props) {
-
   // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
@@ -172,6 +171,10 @@ export default function FieldPopupModal(props) {
           onKeyDown={(e) => {
             if (e.target.value.length >= 1 && e.target.value.length <= 30) {
               if (e.key === "Enter") {
+                
+                handleClose();
+                e.stopPropagation();
+                e.preventDefault();
                 props?.submitData(false);
               }
             }

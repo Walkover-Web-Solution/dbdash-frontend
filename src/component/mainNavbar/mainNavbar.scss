@@ -1,0 +1,56 @@
+@import '../../assets/styling.scss';
+.main-navbar-container {
+  background-color: $bgColorValue !important;
+  border-bottom: 0.1px solid $linecolor !important;
+  height: 6.5vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  z-index:100;
+}
+
+.main-navbar-link {
+  text-decoration: none !important;
+  margin-bottom: 8px !important;
+  font-family: $fontFamily !important;
+  font-size: $mainnavbartabsfont !important;
+  color: $fontColorVAlue !important;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+.main-navbar-title {
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+.main-navbar-button {
+  font-family: $fontFamily !important;
+  font-size: $mainnavbartabsfont !important;
+  text-decoration: none !important;
+  color: $fontColorVAlue !important;
+  border-radius: 0 !important;
+  border: none !important;
+  margin-bottom: 2px !important;
+
+  &:hover {
+    border: none !important;
+    background-color: transparent !important;
+    color: $fontColorVAlue !important;
+    text-decoration: underline !important;
+  }
+}
+
+.main-navbar-avatar-button {
+  margin-left: 10px !important;
+  border-radius: 0 !important;
+}
+
+.main-navbar-menu {
+  margin-top: 45px !important;
+}

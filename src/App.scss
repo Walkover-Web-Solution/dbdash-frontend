@@ -1,0 +1,18 @@
+@import './assets/styling.scss';
+body{
+  background-color: $bgColorValue;
+  color:$fontColorVAlue;
+  font-family: 'Inter' !important;
+}
+Button{
+  border-radius:0 !important;
+
+}
+.mui-button{
+  background-color: $fontColorVAlue !important;
+  color:white !important;
+}
+.mui-button-outlined{
+  color:$fontColorVAlue !important;
+  border-color:$fontColorVAlue !important;
+}

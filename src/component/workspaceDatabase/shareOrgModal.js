@@ -95,6 +95,7 @@ export default function ShareOrgModal(props) {
         <Button onClick={handleClose}>Cancel</Button>
         <Button
           variant="contained"
+          className="mui-button"
           color="primary"
           onClick={handleSendInvite}
         >
@@ -127,7 +128,7 @@ export default function ShareOrgModal(props) {
                   <Typography>{user?.user_id?.email}</Typography>
                 </Box>
                 <Box sx={{ m: 1 }}>
-                  <Typography fontWeight="bold">{user?.user_type}</Typography>
+                  <Typography>{user?.user_type}</Typography>
                 </Box>
                 <Box sx={{ alignItems: "center" }}>
                   <IconButton

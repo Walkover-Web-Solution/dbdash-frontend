@@ -118,7 +118,7 @@ export default function selectFilepopup(props) {
             }
 
             <Box>
-            <Button variant="outlined" onClick={handleClose}>cancel</Button>
+            <Button variant="outlined" className="mui-button-outlined"  onClick={handleClose}>cancel</Button>
             </Box>
         </Box>
 

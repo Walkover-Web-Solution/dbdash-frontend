@@ -43,12 +43,12 @@ export default function AuthKeyPopup(props) {
               <TextField disabled label="Auth Key" variant="standard" value={props?.title} onChange={handleCopyText} />
             </Box>
             <Box>
-              <Button variant="contained" onClick={handleCopyClick} disabled={isCopied}> {isCopied ? "Copied" : "Copy"}</Button>
+              <Button variant="contained"  className="mui-button" onClick={handleCopyClick} disabled={isCopied}> {isCopied ? "Copied" : "Copy"}</Button>
             </Box>
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Link to={`/authkeypage/${props?.dbId}`} style={{ textDecoration: 'none' }}>
-              <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+            <Link to={`/authkeypage/${props?.dbId}`} state={props.state} style={{ textDecoration: 'none' }}>
+              <Button variant="outlined" className="mui-button-outlined" onClick={handleClose}>Cancel</Button>
             </Link>
           </Box>
         </Box>
@@ -61,6 +61,7 @@ AuthKeyPopup.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   label: PropTypes.string,
+  state:PropTypes.any,
   saveFunction: PropTypes.func,
   setVariable: PropTypes.func,
   id: PropTypes.string,

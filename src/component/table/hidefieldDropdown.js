@@ -1,59 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { updateColumnHeaders } from '../../store/table/tableThunk';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
-const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef()
-    const resolvedRef = ref || defaultRef
-
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate
-    }, [resolvedRef, indeterminate])
-
-    return (
-      <>
-        <input style={{ marginTop: "8px" }} type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
-  }
-)
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 
 export default function HideFieldDropdown(props) {
   const params = useParams();
   const dispatch = useDispatch();
+  const fields1 = useSelector((state) => state.table.columns);
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  
+  const [checkedColumns, setCheckedColumns] = useState([]);
+  const tableFieldArray = AllTableInfo?.tables[params?.tableName]?.fields
+  
+  for (const key in tableFieldArray) {
+      tableFieldArray[key].metaData;
+  }
+  let defaultArr= fields1.map((column) => {
+    return column?.metadata && column?.metadata?.hide ? (column?.metadata?.hide=="true"?true:false)  : false;
+  });
 
   const handleMenuClose = () => {
     props?.setMenuAnchorEl(null);
   };
 
+  const toggleColumn = (columnId) => {
+    setCheckedColumns((prevCheckedColumns) => {
+      if (prevCheckedColumns.includes(columnId)) {
+        return prevCheckedColumns.filter((id) => id !== columnId);
+      } else {
+        return [...prevCheckedColumns, columnId];
+      }
+    });
+    hideColumn(columnId, !checkedColumns.includes(columnId));
+  };
+
   const hideColumn = async (columnId, isChecked) => {
-  const metaData = { hide: isChecked ? "false" : "true" };
-    dispatch(updateColumnHeaders({
-      dbId: params?.dbId,
-      tableName: params?.tableName,
-      fieldName: columnId,
-      columnId: columnId,
-      metaData: metaData
-    }));
-  }
-
-  const hideAllColumn = async (isChecked) => {
-
-    const metaData = { isAllHide: isChecked  ? "false" : "true"};
-      dispatch(updateColumnHeaders({
+    const metaData = { hide: isChecked ? "false" : "true" };
+    dispatch(
+      updateColumnHeaders({
         dbId: params?.dbId,
         tableName: params?.tableName,
-        metaData: metaData
-      }));
-    }
-  return (
+        columnId: columnId,
+        metaData: metaData,
+      })
+    );
+  };
 
-    <div>
+  return (<>
+    {fields1 && <div>
       <Menu
         anchorEl={props?.menuAnchorEl}
         open={Boolean(props?.menuAnchorEl)}
@@ -74,13 +72,7 @@ export default function HideFieldDropdown(props) {
           },
         }}
       >
-        <div>
-          <IndeterminateCheckbox  onClick={(event) => {
-              hideAllColumn(event.target.checked); 
-            }}  {...props?.getToggleHideAllColumnsProps()} /> Hide All
-        </div>
-
-        {props?.columns?.slice(1, -1).map((column, index) => (
+        {fields1?.map((column, index) => (
           <MenuItem
             key={index}
             sx={{
@@ -89,25 +81,21 @@ export default function HideFieldDropdown(props) {
               padding: '2px 8px',
             }}
           >
-            <input type="checkbox" onClick={(event) => {
-              hideColumn(column?.id, event.target.checked); 
-            }} {...column?.getToggleHiddenProps()}/>
-            {column.label}
+            <input style={{width: "15px", height: "15px"}}
+              type="checkbox"
+              checked={defaultArr[index]}
+              onChange={() => toggleColumn(column?.id)}
+            />
+            {column?.title}
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </div>}
+    </>
   );
 }
-
-IndeterminateCheckbox.propTypes = {
-  indeterminate: PropTypes.any
-}
-IndeterminateCheckbox.displayName = 'IndeterminateCheckbox';
 
 HideFieldDropdown.propTypes = {
   setMenuAnchorEl: PropTypes.any,
   menuAnchorEl: PropTypes.any,
-  columns: PropTypes.any,
-  getToggleHideAllColumnsProps: PropTypes.any,
 };

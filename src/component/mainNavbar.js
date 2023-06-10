@@ -4,7 +4,7 @@ import { UserAuth } from "../context/authContext.js"
 import { Link, useNavigate, useParams,useLocation} from 'react-router-dom';
 import { useSelector} from 'react-redux';
 import { selectActiveUser } from '../store/user/userSelector.js';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; 
 import dbDashLogo from '../table/img/dbDashLogo.png';
 
 function MainNavbar(props) {
@@ -42,7 +42,7 @@ function MainNavbar(props) {
   };
 
   return (
-    <Container sx={{bgcolor: "#212529", height: '8vh'}} maxWidth="false" >
+    <Container sx={{bgcolor: "#212529", height: '8vh',position:'absolute',top:0}} maxWidth="false" >
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '8vh' }} disableGutters>
         <Box sx={{ display: 'flex', justifyContent: "space-between", alignItems: 'center', width: '20%', height: '50px' }}>
           <Box sx={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
@@ -67,8 +67,8 @@ function MainNavbar(props) {
 
                 <Box ml="auto">
          {shouldShowTypography && <Tooltip title="APIs">
-            <Button variant="outlined" component={Link} to={{ pathname: `/apiDoc/db/${dbId}` }} sx={{ textDecoration: 'none', color: '#fff', mb: '8px',fontWeight: 'bold',borderColor: 'green',  '&:hover': {
-          borderColor: '#7fc98d'} }}>APIs</Button>
+            <Button variant="outlined" className="mui-button-outlined"  component={Link} to={{ pathname: `/apiDoc/db/${dbId}` }} sx={{ textDecoration: 'none', color: '#fff', mb: '8px',fontWeight: 'bold',  
+          }}>APIs</Button>
           </Tooltip>}
 
           <Tooltip title="Open settings">

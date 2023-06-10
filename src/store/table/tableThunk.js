@@ -1,13 +1,17 @@
+
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
 import { insertRow, uploadImage, updateRow, deleteRow } from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
-import { addOptionToColumn, deleteColumn, setTableLoading, updateColumnHeader, updateColumnType } from "./tableSlice";
+import { addOptionToColumn, deleteColumn, setTableLoading, updateColumnType } from "./tableSlice";
 import { allOrg } from "../database/databaseSelector";
 import { runQueryonTable } from "../../api/filterApi";
 import { createView, deleteFieldInView } from "../../api/viewApi";
-import { getTableInfo } from "./tableSelector";
+// import { getTableInfo } from "./tableSelector";
+import { getAllTableInfo } from "../allTable/allTableSelector";
+import { setAllTablesData } from "../allTable/allTableSlice";
 
 
 const replaceCreatedByIdWithName = async (userInfo, org_id) => {
@@ -31,66 +35,70 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 const getHeaders = async (dbId, tableName, payloadfields) => {
     const fields = payloadfields || await getAllfields(dbId, tableName);
     let columns = [
-        {
-            id: 9999991,
-            width: 10,
-            label: "check",
-            disableResizing: true,
-            dataType: "check",
-            accessor: "check",
-        },
+        // {
+        //     id: 9999991,
+        //     width: 10,
+        //     label: "check",
+        //     disableResizing: true,
+        //     dataType: "check",
+        //     accessor: "check",
+        // },
     ];
 
     const arr = fields?.data?.data?.fields || fields;
 
     Object.entries(arr).forEach((field) => {
         var json = {
+            title: "",
             id: "",
-            label: "",
-            accessor: "",
-            minWidth: 100,
             dataType: "",
-            options: [],
+            hasMenu: true,
+            // minWidth: 100,
+            // options: [],
             metadata: {},
-            width: field[1].metaData?.width ? field[1].metaData?.width : 150
+            width: field[1]?.metaData?.width ? field[1]?.metaData?.width : 150
         }
         json.id = field[0];
-        json.label = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
-        json.accessor = field[0]?.toLowerCase();
+        json.title = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
+        // json.accessor = field[0]?.toLowerCase();
         json.metadata = field[1].metaData;
         json.dataType = field[1].fieldType?.toLowerCase();
         columns.push(json);
 
     }
     )
-    columns.push({
-        id: 999999,
-        width: 20,
-        label: "+",
-        disableResizing: true,
-        dataType: "null"
-    })
     return columns;
 }
 
 const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
-    const data = await getTable(dbId, tableName, page);
-    const obj = data.data.data?.rows || data.data.data;
+    // const data = await getTable(dbId, tableName, page);
+    // const obj = data.data.data?.rows || data.data.data;
     const userInfo = allOrg(getState());
-    const tableInfo = getTableInfo(getState())
+    // const tableInfo = getTableInfo(getState())
     const userJson = await replaceCreatedByIdWithName(userInfo, org_id)
-    const createdby = "fld" + tableName.substring(3) + "createdby"
-    obj.map((row) => {
-        row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
-    })
-    const dataAndPageNo = {}
-    dataAndPageNo.offset = data.data.data?.offset;
-    if (tableInfo.tableId == tableName && tableInfo.pageNo < page) {
-        dataAndPageNo.rows = [...tableInfo.data, ...obj];
-        return dataAndPageNo;
+    const createdby = "fld" + tableName.substring(3) + "createdby";
+    
+    const dataAndPageNo = {
+        offset : true,
+        rows : []
     }
-    dataAndPageNo.pageNo = 1;
-    dataAndPageNo.rows = obj;
+    page = 1; 
+    while (dataAndPageNo?.offset) {
+        const data = await getTable(dbId, tableName, page);
+        const obj = data.data.data?.rows || data.data.data;
+        obj.map((row) => {
+            row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
+        })
+        dataAndPageNo.offset = data.data.data?.offset;
+        dataAndPageNo.rows=[...dataAndPageNo.rows,...obj]
+        page = page +1;
+      }
+    // if (tableInfo.tableId == tableName && tableInfo.pageNo < page) {
+    //     dataAndPageNo.rows = [...tableInfo.data, ...obj];
+    //     return dataAndPageNo;
+    // }
+    // dataAndPageNo.pageNo = 1;
+    // dataAndPageNo.rows = obj;
     return dataAndPageNo;
 }
 export const addColumns = createAsyncThunk(
@@ -104,56 +112,85 @@ export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
         var columns = null
-        if ((payload?.pageNo <= 1) || !(payload?.pageNo)) {
-            columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
+        columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
+        const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
+        const dataa = {
+            "columns": columns,
+            "row": data?.rows,
+            "tableId": payload?.tableName,
+            "dbId": payload?.dbId,
+            "pageNo": data?.pageNo,
+            "isMoreData": !(data?.offset == null)
         }
-        if (payload?.filter != null) {
-            const tableInfo = getTableInfo(getState())
-            const querydata = await runQueryonTable(
-                payload.dbId,
-                payload?.filter,
-                payload?.pageNo
-            )
+        dispatch(setTableLoading(false))
+        return dataa;
+    }
+);
+export const filterData = createAsyncThunk(
+    "table/bulkAddColumns",
+    async (payload, { getState ,dispatch}) => {
+        try {
+            var filterQuery ; 
+            const table = getAllTableInfo(getState())?.tables?.[payload?.tableId]
+            const filter =table?.filters?.[payload?.filterId];
+            const filterFields = filter?.fields;
+            const fieldArrayInFilter = filter?.fieldIds ;
+            if(payload?.filter)
+            {
+                filterQuery = payload?.filter
+            }else{
+                filterQuery = table?.filters?.[payload?.filterId].query
+            }
             const userInfo = allOrg(getState());
             const userJson = await replaceCreatedByIdWithName(userInfo, payload?.org_id);
-            const createdby = "fld" + payload.tableName.substring(3) + "createdby"
-            querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
-                row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
-            })
-            if (tableInfo.filterId == payload?.filterId && tableInfo.pageNo < payload?.pageNo) {
-                querydata.data.data.rows = [
-                    ...(tableInfo?.data ?? []),
-                    ...(querydata?.data?.data?.rows ?? []),
-                ];
-            }
-            else {
-                querydata.data.data.pageNo = 1;
-            }
+            const createdby = "fld" + payload?.tableId.substring(3) + "createdby"
+           
+            var offset = true
+            var rows = [];
+            var page =1
+            while (offset) {
+                const querydata = await runQueryonTable(payload.dbId,filterQuery,page)
+                querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
+                    row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
+                })
+                const obj = querydata?.data?.data?.rows
+                offset = !!querydata?.data?.data?.offset;
+                rows=[...rows,...obj]
+                page = page +1;
+              }
+            let columns={} ;
+            // const viewFields =table.view?.fields;//views fields
+            // Create a new object with fields sorted based on the sorted fieldIds array;
+            fieldArrayInFilter?.forEach((id) => {
+                columns[id] = table?.fields?.[id];
+            });
+            // if(!fieldArrayInFilter)
+            // {
+            //     columns = { ...table?.fields,...viewFields}
+            // }
+          
+            filterFields && Object.entries(filterFields).map((entry) => {
+                const id = entry[0];
+                const hide =  entry[1].hide;
+                const width =  entry[1].width;
+                columns[id] = {...columns[id],metaData: {...columns[id]?.metaData,hide: hide,width: width}};
+            });
+            columns = await getHeaders(payload?.dbId, payload?.tableId,columns )
+
             const dataa = {
                 "columns": columns,
-                "row": querydata?.data?.data?.rows,
-                "tableId": payload?.tableName,
-                "dbId": payload.dbId,
-                "pageNo": querydata?.data?.data?.pageNo,
-                "isMoreData": !(querydata?.data?.data?.offset == null),
+                "row": rows,
+                "tableId":payload?.tableId,
+                "dbId": payload?.dbId,
+                // "pageNo": querydata?.data?.data?.pageNo,
+                // "isMoreData": !(querydata?.data?.data?.offset == null),
                 "filterId": payload?.filterId
             }
             dispatch(setTableLoading(false))
-            return dataa;
-        }
-        else {
-
-            const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
-            const dataa = {
-                "columns": columns,
-                "row": data?.rows,
-                "tableId": payload?.tableName,
-                "dbId": payload?.dbId,
-                "pageNo": data?.pageNo,
-                "isMoreData": !(data?.offset == null)
+                return dataa;
             }
-            dispatch(setTableLoading(false))
-            return dataa;
+         catch (error) {
+            console.log("error")
         }
     }
 );
@@ -176,49 +213,50 @@ export const deleteColumns = createAsyncThunk(
         }
         else {
             const deletedfield = await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
-
-            dispatch(deleteColumn(payload));
-            dispatch(getTable1({ dbId: payload?.dbId }))
-
+            dispatch(setAllTablesData({
+                dbId:deletedfield?.data?.data?.data?._id,
+                tables: deletedfield?.data?.data?.data?.tables
+            }))
+            // dispatch(addColumnToLeft(payload));
             const { tableId, dbId } = getState().table
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: deletedfield.data?.data }));
+            if(payload?.filterId){
+                dispatch(filterData({
+                    filterId : payload?.filterId,
+                    tableId: payload?.tableId ,
+                    dbId: payload?.dbId
+                  }))
+            }else{
+                dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: deletedfield?.data?.data?.fields }));
+            }
             return 2;
         }
     }
 )
+
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
-    async (payload, { dispatch, getState }) => {
+    async (payload, { dispatch }) => {
         const data = {
+            filterId:payload?.filterId,
             newFieldName: payload?.label,
             newFieldType: payload?.fieldType,
             metaData: payload?.metaData
         }
-        
-        if(payload?.metaData?.isAllHide){
-            await hideAllField(payload?.dbId, payload?.tableName,payload?.metaData)
-            return;   
-        }  
-        else{
-
-            await updateField(payload?.dbId, payload?.tableName, payload?.fieldName, data)
-        }
-        
-        if(payload?.metaData?.width) return;
-       
-        const { tableId, dbId } = getState().table
-        if(payload?.metaData?.hide){
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-            return;
-        }else{
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-        }
-        dispatch(getTable1({ dbId: payload?.dbId }))
-        if(payload?.metaData?.hide){
-            return;
-        }
-        dispatch(updateColumnHeader(payload));
-        return 2;
+        if (payload?.metaData?.isAllHide) {
+            await hideAllField(payload?.dbId, payload?.tableName, {metaData:payload?.metaData,filterId:payload?.filterId})
+            return ; }
+        //call api to update backend 
+        const  updatedDbdata = await updateField(payload?.dbId, payload?.tableName, payload?.columnId, data) ; 
+        // update the all table reducer so all tables in the db will be updated 
+        dispatch(setAllTablesData({
+            dbId:updatedDbdata?.data?.data?._id,
+            tables: updatedDbdata?.data?.data?.tables
+        }))
+        let  updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
+        updatedColumn = {[payload?.columnId]:updatedColumn}
+        updatedColumn = await getHeaders(null , null , updatedColumn)
+        // now will update the table reducer so current table fields  will be updated as well 
+        return updatedColumn[0] ;
     }
 )
 
@@ -228,6 +266,7 @@ export const addColumnrightandleft = createAsyncThunk(
         { dispatch, getState }
     ) => {
         const data = {
+            filterId:payload?.filterId,
             fieldName: payload?.fieldName,
             fieldType: payload?.fieldType,
             direction: payload?.direction,
@@ -245,10 +284,21 @@ export const addColumnrightandleft = createAsyncThunk(
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
         else
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
-            dispatch(getTable1({ dbId: payload?.dbId }))
-        // dispatch(addColumnToLeft(payload));
-            const { tableId, dbId } = getState().table
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data }));
+        dispatch(setAllTablesData({
+            dbId:createdfield?.data?.data?.data?._id,
+            tables: createdfield?.data?.data?.data?.tables
+        }))
+        
+        const { tableId, dbId } = getState().table
+        if(payload?.filterId){
+            dispatch(filterData({
+                filterId : payload?.filterId,
+                tableId: payload?.tableId ,
+                dbId: payload?.dbId
+              }))
+        }else{
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data?.fields }));
+        }
         return payload;
     }
 )
@@ -256,6 +306,7 @@ export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async (payload, { dispatch, getState }) => {
         const data = {
+            filterId:payload?.filterId,
             fieldName: payload?.fieldName,
             fieldType: payload?.fieldType,
             metaData: payload?.metaData,
@@ -270,11 +321,24 @@ export const addColumsToLeft = createAsyncThunk(
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
         else
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
-            dispatch(getTable1({ dbId: payload?.dbId }))
+
+
+        dispatch(setAllTablesData({
+            dbId:createdfield?.data?.data?.data?._id,
+            tables: createdfield?.data?.data?.data?.tables
+        }))
         // dispatch(addColumnToLeft(payload));
-            const { tableId, dbId } = getState().table
-            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data }));
-            return payload;
+        const { tableId, dbId } = getState().table
+        if(payload?.filterId){
+            dispatch(filterData({
+                filterId : payload?.filterId,
+                tableId: payload?.tableId ,
+                dbId: payload?.dbId
+              }))
+        }else{
+            dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId, fields: createdfield?.data?.data?.fields }));
+        }
+        return payload;
     }
 )
 export const updateCells = createAsyncThunk(
@@ -321,19 +385,19 @@ export const addRows = createAsyncThunk(
         return newRow?.data?.data;
     }
 )
-export const deleteRows = createAsyncThunk(
-    "table/deleteRows",
-    async (payload, { dispatch, getState }) => {
-        var arr = [];
-        const { tableId, dbId } = getState().table
-        for (var index in payload) {
-            arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
-        }
-        await deleteRow(dbId, tableId, { row_id: arr });
-        dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-        return payload;
-    }
-)
+// export const deleteRows = createAsyncThunk(
+//     "table/deleteRows",
+//     async (payload, { dispatch, getState }) => {
+//         var arr = [];
+//         const { tableId, dbId } = getState().table
+//         for (var index in payload) {
+//             arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
+//         }
+//         await deleteRow(dbId, tableId, { row_id: arr });
+//         dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
+//         return payload;
+//     }
+// )
 export const updateColumnsType = createAsyncThunk(
     "table/updateColumnsType",
     async (payload, { dispatch }) => {
@@ -341,10 +405,22 @@ export const updateColumnsType = createAsyncThunk(
         return payload;
     }
 )
-export const updateColumnOrder = createAsyncThunk(
+
+export const deleteRows = createAsyncThunk(
+    "table/deleteRows",
+    async (payload, {  getState }) => {
+         const { tableId, dbId } = getState().table
+    await deleteRow(dbId, tableId, { row_id: payload.deletedRowIndices });
+       let rows=payload.dataa;
+      let newrows=rows.filter(row=>{ return(!payload.deletedRowIndices.includes(Object.entries(row)[1][1]));})
+        return newrows;
+    }
+)
+export const updateColumnOrder = createAsyncThunk(  
     "table/updateColumnOrder",
     async (payload, { getState }) => {
         const data = {
+            filterId:payload?.filterId,
             oldIndex: payload?.oldIndex,
             newIndex: payload?.newIndex
         }
