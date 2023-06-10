@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell, Tooltip } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  Box,
+  Paper,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  Tooltip
+} from "@mui/material";
 import { PropTypes } from 'prop-types';
 import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
@@ -12,26 +22,23 @@ export default function AuthKey(props) {
   const [createdBy, setCreatedBy] = useState(null);
   const user = useSelector((state) => allOrg(state));
 
-  useEffect(async () => {
-     const arrayofUser = await getAuthkeyFun();
-    setCreatedBy(arrayofUser);
-  }, [props.dbId]);
+  useEffect(() => {
+    getAuthkeyFun();
+  }, [props.dbId, props.authkeycreatedorupdated]);
 
   async function getAuthkeyFun() {
-    console.log("dbid",props.dbId)
     const data = await getAuthkey(props.dbId, adminId);
     setAuthKeys(data?.data?.data);
-    console.log("authkeysssss",data?.data?.data);
+    console.log(data?.data?.data,"dataaaa");
     var array = [];
     Object.entries(Object.values(data?.data?.data)).map((key) => {
-
       user[0]?.users?.map((id) => {
-        if (id?.user_id?._id == key[1].user) {
+        if (id?.user_id?._id === key[1].user) {
           array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
         }
       });
     });
-    return array;
+    setCreatedBy(array);
   }
 
   async function deleteAuthkeyFun(authKey) {
@@ -45,27 +52,27 @@ export default function AuthKey(props) {
     const currentDate = new Date();
     const createdDate = new Date(dateTime);
     const diff = currentDate - createdDate;
-  
+
     if (diff < 1000) {
       return "Just now";
     }
-  
+
     if (diff < 60 * 1000) {
       const seconds = Math.floor(diff / 1000);
       return `${seconds} second${seconds !== 1 ? "s" : ""} ago`;
     }
-  
+
     if (diff < 60 * 60 * 1000) {
       const minutes = Math.floor(diff / (60 * 1000));
       const seconds = Math.floor((diff % (60 * 1000)) / 1000);
       return `${minutes} minute${minutes !== 1 ? "s" : ""} and ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
     }
-  
+
     if (diff < 24 * 60 * 60 * 1000) {
       const hours = Math.floor(diff / (60 * 60 * 1000));
       return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
     }
-  
+
     if (diff < 7 * 24 * 60 * 60 * 1000) {
       const days = Math.floor(diff / (24 * 60 * 60 * 1000));
       if (days === 1) {
@@ -78,21 +85,20 @@ export default function AuthKey(props) {
           return `${date} ${monthName}`;
         } else {
           const year = createdDate.getFullYear();
-          const monthName = createdDate.toLocaleString("default ", { month: "long" });
+          const monthName = createdDate.toLocaleString("default", { month: "long" });
           return `${monthName} ${year}`;
         }
       }
     }
-  
+
     if (diff < 12 * 30 * 24 * 60 * 60 * 1000) {
       const weeks = Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
       return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
-      
     }
+
     const year = createdDate.getFullYear();
     const monthName = createdDate.toLocaleString("default", { month: "long" });
     return `${monthName} ${year}`;
- 
   };
 
   return (
@@ -118,18 +124,15 @@ export default function AuthKey(props) {
                     <TableCell component="th" scope="row">
                       {authKeys[keys].name}
                     </TableCell>
-                    {createdBy && <TableCell>{createdBy[index]}</TableCell>}
-
+                    <TableCell>{createdBy && createdBy[index]}</TableCell>
                     <TableCell>
                       <Tooltip title={authKeys[keys].createDate} placement="top">
                         <span>{formatDateTime(authKeys[keys].createDate)}</span>
                       </Tooltip>
                     </TableCell>
-
                     <TableCell component="th" scope="row">
                       {keys.substring(0, 3) + "*".repeat(keys.length - 6) + keys.substring(keys.length - 3)}
                     </TableCell>
-
                     <TableCell>
                       {authKeys[keys].access === '1' ? (
                         <div>all</div>
@@ -138,27 +141,13 @@ export default function AuthKey(props) {
                           <div key={key}>{key}</div>
                         ))
                       )}
-
-                      
                     </TableCell>
-
-                    {/* <TableCell>
-                      {authKeys[keys].access === '1' ? (
-                        <div>all</div>
-                      ) : (
-                        Object.values(authKeys[keys].access).map((table) => (
-                          <div key={table.scope}>{table.scope}</div>
-                        ))
-                      )}
-                    </TableCell> */}
-
                     <TableCell>
                       {authKeys[keys].access === '1' ? (
                         <div>{authKeys[keys].scope}</div>
                       ) : (
                         <div>{Object.values(authKeys[keys].access)[0]?.scope}</div>
                       )}
-
                     </TableCell>
                     <TableCell>
                       <TableMenuDropdown
@@ -168,7 +157,9 @@ export default function AuthKey(props) {
                         third={"Show AuthKey"}
                         title={keys}
                         dbId={props.dbId}
+                        setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}
                         deleteFunction={deleteAuthkeyFun}
+                        authkeycreatedorupdated={props.authkeycreatedorupdated}
                       />
                     </TableCell>
                   </TableRow>
@@ -184,5 +175,7 @@ export default function AuthKey(props) {
 AuthKey.propTypes = {
   dbId: PropTypes.string,
   scope: PropTypes.any,
+  authkeycreatedorupdated: PropTypes.any,
+  setAuthkeycreatedorupdated: PropTypes.any,
   selected: PropTypes.any
 };

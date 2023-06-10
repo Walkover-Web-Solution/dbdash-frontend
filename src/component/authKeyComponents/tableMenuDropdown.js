@@ -17,10 +17,8 @@ const[open1,setOpen1]=useState(false);
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => {
-    // event.stopPropagation();
     setAnchorElUser(null);
   };
-  //const authKeylastThreeChar=
   
   const handleClose=()=>{
     setOpen1(false);
@@ -83,7 +81,9 @@ const[open1,setOpen1]=useState(false);
         />
         <DisplayAuthKeyPopup display={display} setDisplay={setDisplay} title={props?.title}/>
       </Menu>
-      {open1 && <CreateAuthKey open={open1} dbId={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
+                       
+                        
+      {open1 && <CreateAuthKey authkeycreatedorupdated={props.authkeycreatedorupdated}  setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}   open={open1} id={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
     </>
   );
 }
@@ -95,4 +95,6 @@ AuthDropdown.propTypes = {
   title: PropTypes.string,
   deleteFunction: PropTypes.func,
   authData :PropTypes.object,
+  authkeycreatedorupdated:PropTypes.any,
+  setAuthkeycreatedorupdated:PropTypes.any
 };

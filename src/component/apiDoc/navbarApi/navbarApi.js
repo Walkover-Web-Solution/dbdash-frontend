@@ -89,7 +89,7 @@ export default function Navbar(props) {
         <Box sx={{ display: "flex",alignItems:"center", flexDirection: "row" }}>
           <Box sx={{ display: "flex", flexDirection: "row" }}>
             {alldb && selectedDb && (
-              <FormControl sx={{ m: 1,mt:0, minWidth: 120}}>
+              <FormControl sx={{ m: 1,mt:0.9, minWidth: 120}}>
                 <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
                 <Select
                   id="grouped-select"
@@ -126,7 +126,7 @@ export default function Navbar(props) {
           </Box>
           {showWebhookPage=="apidoc" && selectTable && Object.keys(tables).length >= 1 && (
             <Box>
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <FormControl sx={{ m: 1, mt:0.9,minWidth: 120 }}>
                 <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
                 <Select
                   sx={{ borderRadius: 0, height: '36px' }}

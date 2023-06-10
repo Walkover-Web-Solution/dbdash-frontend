@@ -1,95 +1,111 @@
 import React, { useEffect, useState } from "react";
 import { Box, TextField, Typography, Button, Modal } from "@mui/material";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { PropTypes } from "prop-types";
 import AuthAccessDropDown from "../../component/authKeyComponents/authAccessDropdown";
 import AuthKeyDropdown from "../../component/authKeyComponents/authKeyDropdown/authKeyDropdown";
 import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup";
 import { createAuthkey, getAuthkey, updateAuthkey } from "../../api/authkeyApi";
-// import { selectActiveUser } from "../../store/user/userSelector.js";
+import { selectActiveUser } from "../../store/user/userSelector.js";
 import "./createAuth.scss";
 
 export default function CreateAuthKey(props) {
-  const dbId = props.dbId;
-  console.log("jhdfhjdshhjdbhj",props)
+  const id  = props.id;
+  console.log("props11111",props);
+  console.log("props",props)
+  let dbId=null;
+  if(props.authData && props.title)
+  {
+   dbId = {
+    authData:props?.authData,
+    title:props?.title
+  };
+}
 
   const [selected, setSelected] = useState([]);
   const [scope, setScope] = useState("");
   const [name, setName] = useState("");
-  // const userDetails = useSelector((state) => selectActiveUser(state));
-  const [authKey, setAuthKey] = useState(props.title || "");
+  const userDetails = useSelector((state) => selectActiveUser(state));
+  const [authKey, setAuthKey] = useState("");
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState([])
+  const handleOpen = () => setOpen(true);
+  const [options, setOptions] = useState([]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  }
-  
+
   const isDisabled = !name || !scope || selected.length === 0;
-
+  // const handleKeyDown = (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //   }
+  // };
   const createAuth = async () => {
+    // e.preventDefault();
     const adminId1 = localStorage.getItem("userid");
+    const adminId = userDetails?.fullName;
     let data = {
       name: name,
       scope: scope,
       access: selected,
       userId: adminId1,
     };
-
-    if (selected?.length === Object.entries(options)?.length) {
+    if(selected?.length === Object.entries(options)?.length){
       data.access = "1";
     }
-
-    if (!dbId) {
-      const create = await createAuthkey(props.id, adminId1, data);
+    if (!dbId) {    
+      const create = await createAuthkey(id, adminId, data);
       setOpen(true);
       setAuthKey(create?.data?.data?.authKey);
-      await getAuthkey(props.id, adminId1);
+      await getAuthkey(id, adminId);
+      props.setAuthkeycreatedorupdated(props.authkeycreatedorupdated+1);
+
       return;
     }
-console.log(props,)
-    await updateAuthkey(props.dbId, adminId1, props.title, data);
-    setAuthKey(props.title);
-    await getAuthkey(props.dbId, adminId1 );
+     const authKey = dbId.title
+     await updateAuthkey(id,adminId1,authKey,data)
+     setAuthKey(dbId.title);
+      await getAuthkey(id, adminId);
+      props.setAuthkeycreatedorupdated(props.authkeycreatedorupdated+1);
+
+
   };
 
   const updateValueOnEdit = () => {
-    if (props?.dbId) {
-      setName(props?.authData?.name);
-      if (Object.values(props?.authData?.access)[0] === "1") {
-        setScope(Object.values(props?.authData)[3]);
-        let all = [];
+    if (dbId) {
+      setName(dbId?.authData?.name);
+      if(Object.values(dbId?.authData?.access)[0] == "1"){
+        setScope(Object.values(dbId?.authData)[3]);
+        let all = []
         Object.entries(options).map((option) => {
-          all = [...all, option[1]?.tableName];
-        });
+          all = [...all, option[1].tableName]
+        })
         setSelected(all);
-      } else {
-        setScope(Object.values(props?.authData?.access)[0]?.scope);
-        const tableIds = Object.keys(props?.authData?.access);
+      }
+      else
+      {
+        setScope(Object.values(dbId?.authData?.access)[0]?.scope);
+        const tableIds = Object.keys(dbId?.authData?.access);
         const optionList = Object.entries(options).map(([id, { tableName }]) => ({
           id,
           tableName,
         }));
-
+ 
         const selectedTables = optionList
           .filter(({ id }) => tableIds.includes(id))
           .map(({ tableName }) => tableName);
         setSelected(selectedTables);
       }
-    }
+      }
   };
-
-  const handleClose = () => {
-    props.handleClose(); // Call the handleClose function from props to close the modal
-  };
-
+ 
   useEffect(() => {
-    updateValueOnEdit();
+    if (dbId !== null && options.length > 0) {
+      updateValueOnEdit();
+    }
   }, [dbId, options]);
-
+  
   return (
     <>
-      <Modal open={props.open} onClose={handleClose}>
+      <Modal open={props.open} onClose={props.handleClose}>
         <Box
           onClick={(e) => {
             e.stopPropagation();
@@ -132,7 +148,7 @@ console.log(props,)
             <Box>
               <Button
                 variant="contained"
-                disabled={isDisabled}
+                 disabled={isDisabled}
                 onClick={() => {
                   createAuth();
                   handleOpen();
@@ -144,7 +160,7 @@ console.log(props,)
               <AuthKeyPopup handleClose={props.handleClose} open={open} state={props.location} setOpen={setOpen} title={authKey} dbId={props.id} />
             </Box>
             <Box>
-              <Button variant="outlined" onClick={handleClose} className="mui-button-outlined create-auth-key-button">
+              <Button variant="outlined" onClick={props.handleClose} className="mui-button-outlined create-auth-key-button">
                 Cancel
               </Button>
             </Box>
@@ -159,6 +175,8 @@ CreateAuthKey.propTypes = {
   dbId: PropTypes.string,
   open: PropTypes.bool,
   authData: PropTypes.any,
+  authkeycreatedorupdated:PropTypes.any,
+  setAuthkeycreatedorupdated:PropTypes.any,
   title: PropTypes.any,
   id: PropTypes.any,
   handleClose: PropTypes.func,
