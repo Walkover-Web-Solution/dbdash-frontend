@@ -2,10 +2,8 @@ import React from 'react';
 
 import {Button,Dialog,DialogActions,DialogTitle} from '@mui/material';
 import { PropTypes } from 'prop-types';
-import { Link, useParams } from 'react-router-dom';
 //import { string } from 'joi';
 export default function DisplayAuthKeyPopup(props) {
-  const { id } = useParams();
   const handleClose = () => {
     props.setDisplay(false);
   };
@@ -31,9 +29,7 @@ export default function DisplayAuthKeyPopup(props) {
           <Button onClick={(e) => { e.preventDefault(); e.stopPropagation(); copyToClipboard() }}>
           {isCopied ? "Copied!" : "copy"}
           </Button>
-          <Link to={`/authkeypage/${id}`} style={{ textDecoration: 'none' }}>
           <Button onClick={handleClose} autoFocus>Cancel </Button>
-          </Link>
         </DialogActions>
       </Dialog>
     </>

@@ -21,6 +21,7 @@ export default function AuthKey(props) {
     console.log("dbid",props.dbId)
     const data = await getAuthkey(props.dbId, adminId);
     setAuthKeys(data?.data?.data);
+    console.log("authkeysssss",data?.data?.data);
     var array = [];
     Object.entries(Object.values(data?.data?.data)).map((key) => {
 
@@ -137,6 +138,8 @@ export default function AuthKey(props) {
                           <div key={key}>{key}</div>
                         ))
                       )}
+
+                      
                     </TableCell>
 
                     {/* <TableCell>
@@ -151,7 +154,7 @@ export default function AuthKey(props) {
 
                     <TableCell>
                       {authKeys[keys].access === '1' ? (
-                        <div>all</div>
+                        <div>{authKeys[keys].scope}</div>
                       ) : (
                         <div>{Object.values(authKeys[keys].access)[0]?.scope}</div>
                       )}
@@ -164,6 +167,7 @@ export default function AuthKey(props) {
                         second={"Delete"}
                         third={"Show AuthKey"}
                         title={keys}
+                        dbId={props.dbId}
                         deleteFunction={deleteAuthkeyFun}
                       />
                     </TableCell>

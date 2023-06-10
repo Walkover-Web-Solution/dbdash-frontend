@@ -86,14 +86,14 @@ export default function Navbar(props) {
     <div style={{ backgroundColor: "white" }}>
       <div style={{ position: "fixed", top: "8vh", zIndex: 100, width: "100%", backgroundColor: "white", paddingBottom: "2vh" }}>
         <Box align="center" ></Box>
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <Box sx={{ display: "flex",alignItems:"center", flexDirection: "row" }}>
           <Box sx={{ display: "flex", flexDirection: "row" }}>
             {alldb && selectedDb && (
-              <FormControl sx={{ m: 1, minWidth: 120, mt: 2 }}>
+              <FormControl sx={{ m: 1,mt:0, minWidth: 120}}>
                 <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
                 <Select
                   id="grouped-select"
-                  sx={{ borderRadius: 0, height: '30px' }}
+                  sx={{ borderRadius: 0, height: '36px' }}
                   label="Organization and dbs"
                   value={selectedDb}
                   onChange={handleChange}
@@ -126,10 +126,10 @@ export default function Navbar(props) {
           </Box>
           {showWebhookPage=="apidoc" && selectTable && Object.keys(tables).length >= 1 && (
             <Box>
-              <FormControl sx={{ m: 1, minWidth: 120, mt: 2 }}>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
                 <Select
-                  sx={{ borderRadius: 0, height: '30px' }}
+                  sx={{ borderRadius: 0, height: '36px' }}
                   value={selectTable}
                   label="Tables-Name"
                   onChange={handleChangeTable}

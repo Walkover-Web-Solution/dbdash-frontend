@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell, Button, Popover } from "@mui/material";
+import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell,  } from "@mui/material";
 import { PropTypes } from 'prop-types';
-import Switch from '@mui/material/Switch';
-import { deleteWebhook, getWebhook, updateWebhook } from "../../api/webhookApi";
-import MenuIcon from '@mui/icons-material/Menu';
+import {  deleteWebhook, getWebhook, updateWebhook } from "../../api/webhookApi";
+import MenuIcon from '@mui/icons-material/MoreHoriz';
+
+import Webhooktablemenu from "./Webhooktablemenu";
 export default function Webhooktable(props) {
+    
     console.log("propssss",props);
   const [anchorEl, setAnchorEl] = useState(null);
-  const isOpen = Boolean(anchorEl);
+  const[wbhookid,setWbhookid]=useState('');
+  const[wbhookcondition,setWbhookcondition]=useState('');
+  const[wbhookactive,setWbhookactive]=useState('');
 
   useEffect(async () => {
 
@@ -21,13 +25,30 @@ export default function Webhooktable(props) {
   },[props.tabledata])
 
   const toggleDropdown = (event) => {
+  
     setAnchorEl(event.currentTarget);
   };
 
   const closeDropdown = () => {
     setAnchorEl(null);
   };
-
+  const handleDeleteWebhook = async () => {
+    const data = { condition: wbhookcondition };
+    const data1 = await deleteWebhook(props.dbId, props.tableId, wbhookid, data);
+    console.log('delete', data1);
+    closeDropdown();
+    props.setTabledata(data1.data.data.webhook);
+  };
+  
+  const handleUpdateActive = async () => {
+    const data = {
+      condition: wbhookcondition,
+      isActive: wbhookactive === true ? false : true,
+    };
+    const data1 = await updateWebhook(props.dbId, props.tableId, wbhookid, data);
+    console.log('update', data1);
+    props.setTabledata(data1.data.data.webhook);
+  };
 
   const formatDateTime = (dateTime) => {
     const currentDate = new Date();
@@ -82,27 +103,15 @@ export default function Webhooktable(props) {
     return `${monthName} ${year}`;
  
   };
-  const handleUpdateActive =async (webhookId, active,condition) => {
-    const data = {
-condition:condition,
-      isActive:active==true ?false:true,
-    };
-    const data1=await updateWebhook(props.dbId, props.tableId, webhookId, data);
-    console.log("update",data1);
-    props.setTabledata(data1.data.data.webhook);
-
-  };
+ 
   
-const handleDeleteWebhook=async (webhookId,condition)=>{
-    console.log("condition",condition)
-const data={condition:condition};
-   const data1=await deleteWebhook(props.dbId,props.tableId,webhookId,data);
-   console.log("delete",data1);
-   setAnchorEl(null);
+{props.tabledata && Object.entries(props.tabledata).map(([condition, webhooks]) => (
+    Object.entries(webhooks).map(([webhookid, webhook])=> {
+        console.log("dkjfifjf", condition, webhooks, webhookid, webhook);
+        // Rest of the code logic here
+    })
+));}
 
-   props.setTabledata(data1.data.data.webhook);
-
-}
   return (
     <>
       <Box sx={{ border: 1, m: 1 }}>
@@ -132,35 +141,16 @@ const data={condition:condition};
       <TableCell>
         <span>{formatDateTime(webhook.createdAt)}</span>
       </TableCell>
-      <TableCell>
+      <TableCell >
       <div>
-        <MenuIcon onClick={toggleDropdown} />
-        {isOpen && anchorEl && <Popover
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={closeDropdown}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-        >
-          <div style={{ padding: '8px' }}>
-            <Switch
-              checked={webhook.isActive}
-              onChange={() => handleUpdateActive(webhookid, webhook.isActive, condition)}
-            />
-          </div>
-          <div style={{ padding: '8px' }}>
-            <Button variant="outlined" onClick={() => handleDeleteWebhook(webhookid, condition)}>
-              Delete
-            </Button>
-          </div>
-        </Popover>
-      }</div>
+
+        <MenuIcon onClick={(event)=>{
+          setWbhookactive(webhook.isActive);
+          setWbhookcondition(condition);
+          setWbhookid(webhookid);
+          toggleDropdown(event)}} />
+        {anchorEl &&   <Webhooktablemenu handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl} setTabledata={props.setTabledata}  closeDropdown={closeDropdown}   isActive={wbhookactive}            />
+       }</div>
     </TableCell>
     </TableRow>
   ))

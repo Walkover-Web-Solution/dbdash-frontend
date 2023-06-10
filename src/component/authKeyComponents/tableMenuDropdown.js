@@ -1,19 +1,18 @@
 
 import React, { useState } from 'react';
-import {useNavigate,useParams} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import {Typography,Menu,MenuItem,Tooltip,IconButton} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteAuthKeyPopup from './authKeyTablePopup/deleteAuthkeyPopup';
 import DisplayAuthKeyPopup from './authKeyTablePopup/displayAuthkeyPopup';
+import CreateAuthKey from '../../pages/createAuth/createAuth';
 
 export default function AuthDropdown(props) {
+  console.log(props,"propsss");
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setOpen] = useState(false);
   const[display,setDisplay]=useState(false);
-  const navigate = useNavigate();
-  const params = useParams();
-
+const[open1,setOpen1]=useState(false);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -23,6 +22,9 @@ export default function AuthDropdown(props) {
   };
   //const authKeylastThreeChar=
   
+  const handleClose=()=>{
+    setOpen1(false);
+  }
   return (
     <>
       <Tooltip>
@@ -55,7 +57,7 @@ export default function AuthDropdown(props) {
       >
 
         <MenuItem onClick={() => {handleCloseUserMenu(); 
-          navigate(`/authKeyCreate/${params.id}`,{state:{authData:props?.authData,title:props?.title}})
+        setOpen1(true);
           }}>
           <Typography textAlign="center">{props?.first}</Typography>
         </MenuItem>
@@ -81,6 +83,7 @@ export default function AuthDropdown(props) {
         />
         <DisplayAuthKeyPopup display={display} setDisplay={setDisplay} title={props?.title}/>
       </Menu>
+      {open1 && <CreateAuthKey open={open1} dbId={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
     </>
   );
 }
@@ -88,6 +91,7 @@ AuthDropdown.propTypes = {
   first: PropTypes.string,
   second: PropTypes.string,
   third: PropTypes.string,
+  dbId:PropTypes.any,
   title: PropTypes.string,
   deleteFunction: PropTypes.func,
   authData :PropTypes.object,

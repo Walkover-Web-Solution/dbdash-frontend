@@ -26,7 +26,7 @@ const MenuProps = {
 };
 
 export default function AuthAccessDropDown({ selected, setSelected, options, setOptions, dbId }) {
-
+console.log("propssssdrpdown")
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId)
     setOptions(data.data.data.tables || {});
@@ -130,7 +130,6 @@ AuthAccessDropDown.propTypes = {
   dbId: PropTypes.string,
   selected: PropTypes.any,
   setSelected: PropTypes.func,
-  dbIds: PropTypes.object,
   options: PropTypes.object,
   setOptions: PropTypes.func,
 };
