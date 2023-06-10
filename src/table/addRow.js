@@ -14,9 +14,8 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue,selecte
 
 export const editCell = (cell, newValue,dispatch,fields,arrr,params,currentrow,dataType) => { 
   const col = cell[0];
-
+if(newValue?.data && newValue.data.kind=='tags-cell') return;
   const key = fields[col].id;
-  console.log(key,newValue,"rdfrfr")
   if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) 
     { 
       let newdata=dataType=='phone'?newValue?.data?.toString():newValue?.data;

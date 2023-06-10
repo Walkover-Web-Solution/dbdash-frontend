@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useEffect, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { updateColumnHeaders, updateMultiSelectOptions } from "../../store/table/tableThunk";
 import { getTableInfo } from "../../store/table/tableSelector";
+import { toast } from 'react-toastify';
+
 
 const style = {
   position: "absolute",
@@ -29,11 +31,7 @@ export default function AddOptionPopup(props) {
 
   const colors = ["#FFD4DF", "#CCE0FE", "#CEF5D2","whitesmoke","cadetblue"];
 
-  function getRandomColor(colors) {
-    let index = colors.indexOf(top100Films.slice(-1)[0]?.color) + 1;
-    index = index % colors.length;
-    return colors[index];
-  }
+  
 
   const tableInfo = useSelector((state) => getTableInfo(state));
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === props?.columnId);
@@ -47,15 +45,32 @@ export default function AddOptionPopup(props) {
     setInputValues(newInputValues);
   };
 
+  useEffect(() => {
+    fields1.forEach((field) => {
+      if (field.id === props.columnId && field.dataType === "singleselect") {
+        const optionValue = field?.metadata?.option || [];
+        setInputValues(optionValue);
+      }
+      else if (field.id === props.columnId && field.dataType === "multipleselect") {
+        const optionValue = field?.metadata?.option || [];
+        const values = optionValue.map((item) => item.value); 
+        setInputValues(values);
+      }
+    });
+  }, [fields1, props.columnId]);
    
-      
+  function getRandomColor(colors) {
+    let index = colors.indexOf((top100Films).slice(-1)[0]?.color) + 1;
+    index = index % colors.length;
+    return colors[index];
+  }
 
   const handleInputKeyPress = (event) => {
     const value= event?.target?.value
    
     if (event.key === "Enter") {
-      fields1.map((field) => {
-        if (field.dataType === "multipleselect") {
+      // fields1.map((field) => {
+        if (props?.fieldType === "multipleselect") {
           const data = {
             value: event?.target?.value,
             color: getRandomColor(colors),
@@ -70,13 +85,11 @@ export default function AddOptionPopup(props) {
             fieldName: props?.columnId,
             columnId: props?.columnId,
             dataTypes: "multipleselect",
-            metaData: { option: updatedMetadata },
+            metaData: updatedMetadata,
           }));
-        } else if (field.dataType === "singleselect") {
-          if( !top100Films.includes(value)){
+        } else if (props?.fieldType === "singleselect") {
+          if( !(top100Films).includes(value)){
             const updatedMetadata = [...top100Films,value];
-            // top100Films.push(value);
-          console.log("arr",updatedMetadata)
           dispatch(updateColumnHeaders({
             dbId: params?.dbId,
             tableName: params?.tableName,
@@ -85,9 +98,11 @@ export default function AddOptionPopup(props) {
             dataTypes: "singleselect",
             metaData: { option: updatedMetadata} 
           }));
+          toast.success("Option added sucessfully")
+          // setInputValues([...inputValues, ""]);
           }
         }
-      });
+      // });
     }
   };
   
@@ -117,6 +132,7 @@ export default function AddOptionPopup(props) {
             {inputValues.map((value, index) => (
               <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
                 <TextField
+                autoFocus
                   id={`input-${index}`}
                   label="Standard"
                   variant="standard"
@@ -152,5 +168,6 @@ AddOptionPopup.propTypes = {
   submitData: PropTypes.func,
   dataType :PropTypes.any,
   columnId: PropTypes.any,
-  fields:PropTypes.any
+  fields:PropTypes.any,
+  fieldType:PropTypes.any
 };

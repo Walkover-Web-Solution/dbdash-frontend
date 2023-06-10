@@ -34,12 +34,14 @@ export default function ManageFieldDropDown(props) {
  const fields1 = useSelector((state) => state.table.columns);
  const [openAddFields, setOpenAddFields] = React.useState(false);
  const [fieldId,setFieldId] = useState("");
+ const [fieldType,setFieldType] = useState("");
 
   const handleClose = () => {
     props.setOpenManageField(false);
   };
-  const columnId = (fieldid)=>{
+  const columnId = (fieldid,fieldType)=>{
     setFieldId(fieldid)
+    setFieldType(fieldType)
   }
   const handleOpen = () => setOpenAddFields(true);
 
@@ -56,7 +58,7 @@ export default function ManageFieldDropDown(props) {
             <IconButton
               edge="start"
               color="inherit"
-              onClick={()=>{handleClose();console.log("close",props.setOpenManageField(false))}}
+              onClick={()=>{handleClose()}}
               aria-label="close"
             >
               <CloseIcon />
@@ -80,7 +82,7 @@ export default function ManageFieldDropDown(props) {
                   <TableRow key={index}>
                     <TableCell>{field.title}</TableCell>
                     <TableCell>{field.dataType}</TableCell>
-                    <TableCell><Button onClick={() => { handleOpen(); columnId(field.id)}} variant="contained">Add</Button></TableCell>
+                    <TableCell><Button onClick={() => { handleOpen(); columnId(field.id,field.dataType)}} variant="contained">Add option</Button></TableCell>
                   </TableRow>
                 );
               }
@@ -90,7 +92,7 @@ export default function ManageFieldDropDown(props) {
       </Table>
     </TableContainer>
       </Dialog>
-      <AddOptionPopup openAddFields={openAddFields} columnId={fieldId}  setOpenAddFields={setOpenAddFields}/>
+      <AddOptionPopup openAddFields={openAddFields} fieldType={fieldType} columnId={fieldId}  setOpenAddFields={setOpenAddFields}/>
     </div>
   );
 }

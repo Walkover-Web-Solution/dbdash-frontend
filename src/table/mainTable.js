@@ -23,13 +23,12 @@ import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 
 export default function MainTable() {
-
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
-  const dataa = useSelector((state) => state.table.data);
-  let todeleterows=false;
+  const dataa = useSelector((state) => state.table.data) || [];
+  let todeleterows=0;
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -45,44 +44,18 @@ export default function MainTable() {
   const [imageLink, setImageLink] = useState("");
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state)); 
-  // const possibleTags = [
-  //       {
-  //           tag: "Bug",
-  //           color: "#ff4d4d35",
-  //       },
-  //       {
-  //           tag: "Feature",
-  //           color: "#35f8ff35",
-  //       },
-  //       {
-  //           tag: "Enhancement",
-  //           color: "#48ff5735",
-  //       },
-  //       {
-  //           tag: "First Issue",
-  //           color: "#436fff35",
-  //       },
-  //       {
-  //           tag: "PR",
-  //           color: "#e0ff3235",
-  //       },
-  //       {
-  //           tag: "Assigned",
-  //           color: "#ff1eec35",
-  //       },
-  //   ];
+  useEffect(()=>{
+    setData(dataa)
+  },[dataa])
+
 
   const handleUploadFileClick = useCallback((cell) => {
-    if(!dataa)return ;
+    if(!data)return ;
     const [col, row] = cell;
-    console.log(row,"row")
-    console.log(dataa,"data")
-    const dataRow = dataa[row] || dataa[row-1];
-    console.log(dataRow,"dataRow");
-    console.log(fields[col]?.id)
-    const d = dataRow[fields[col]?.id];
-    const index = cell[0]
-    if(fields[index]?.dataType === "attachment" && (d==undefined || d?.length===0)){
+    const dataRow = data?.[row] || data?.[row-1];
+    const d = dataRow?.[fields?.[col]?.id];
+    const index = cell?.[0]
+    if(fields?.[index]?.dataType === "attachment" && (d==undefined || d?.length===0)){
       setOpenAttachment(cell);
     }
   });
@@ -179,13 +152,11 @@ export default function MainTable() {
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
-  if(todeleterows==false)
+  if(todeleterows==0)
   {
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   if(fields[cell[0]].dataType == "singleselect"){
-    console.log(newValue,123456789);
-    // return ;
     if(typeof(newValue) == "object")
     {
       newValue = newValue.value || newValue.data.value || newValue.data;
@@ -199,7 +170,7 @@ const onCellEdited = useCallback((cell, newValue) => {
     editCell(cell, newValue, dispatch, fields,false,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
   }
 } 
-todeleterows=false;
+todeleterows--;
 }, [dataa,data, fields]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
@@ -218,14 +189,38 @@ todeleterows=false;
   };
   const validateCell=useCallback((cell,newValue,oldValue)=>
 {
-  console.log(cell,oldValue)
-  if(newValue.kind==='number' )
-  {
-    if( newValue.data.toString().length<13)
-return newValue;
-else return false;
 
-  }
+  if(newValue.data.kind=='tags-cell')
+     {
+      
+      
+          let tag="";
+          let arr1=newValue.data.tags;
+          let arr2=oldValue.data.tags || [];
+          let arr=arr1.filter(x=>!arr2.includes(x));
+          
+          tag=arr[0]|| "";
+          if(  fields1[cell[0]]?.id && tag!="" ){
+            dispatch(
+              updateCells({
+                columnId:  fields1[cell[0]]?.id ,
+                rowIndex :Object.entries(dataa[cell[1]])[1][1],
+                value:  tag ,
+                dataTypes: newValue?.kind,
+              })
+             );
+          
+        
+     
+      }}
+    
+    if(newValue.kind==='number' )
+    {
+      if( newValue.data.toString().length<13)
+      return newValue;
+      else return false;
+
+    }
 },[dataa]);
   const handleDeleteRow = useCallback((selection) => {
     if(selection.current)
@@ -243,7 +238,8 @@ else return false;
     }
   
     if (deletedRowIndices.length > 0) {
-      todeleterows = true;
+    todeleterows = Object.entries(dataa[0]).length*deletedRowIndices.length;
+
       dispatch(deleteRows({deletedRowIndices,dataa}))
     }
     // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
@@ -260,7 +256,7 @@ else return false;
 
   const getData = useCallback((cell) => {
     const [col, row] = cell;
-    const dataRow = dataa[row];
+    const dataRow = dataa[row] || [];
     if (dataRow) {
 
       const d = dataRow[fields[col]?.id];
@@ -272,8 +268,8 @@ else return false;
           allowOverlay: true,
           kind: GridCellKind.Number,
           readonly: true,
-          data: d,
-          displayData: d.toString(),
+          data: d || "",
+          displayData: d.toString() || "",
         };
       }
       else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat"   ) {
@@ -329,38 +325,30 @@ else return false;
           displayData:d || ""
         };
       }
-      // else if (dataType === "multipleselect" && d != null) {
-      //   // const possibleTags = []; // Define your array of possible tags here
-      //   // const row = 0; // Replace 0 with the appropriate row index
-      //   const rand = () => Math.random();
-      //   const uniq = (arr) => Array.from(new Set(arr));
-        
-      //   return {
-      //     kind: GridCellKind.Custom,
-      //     allowOverlay: true,
-      //     copyData: "4",
-      //     data: {
-      //       kind: "tags-cell",
-      //       possibleTags: possibleTags,
-      //       readonly: false,
-      //       tags: uniq([
-      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
-      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
-      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
-      //         possibleTags[Math.round(rand() * 1000) % possibleTags.length].tag,
-      //       ]),
-      //     },
-      //   };
-      // }
-      
-      else if (dataType === "multipleselect" && d != null) {
-        const bubbles = Array.isArray(d) ? d : [d];
+      else if (dataType === "multipleselect") {
+         const possibleTags = fields[col]?.metadata?.option;
+        // const row = 0; // Replace 0 with the appropriate row index
+        let newarr=[];
+        possibleTags && possibleTags?.map(x=>{
+          let newx={
+            tag:x.value,
+            color:x.color
+          }
+          newarr.push(newx);
+        })
         return {
-          kind: GridCellKind.Bubble,
-          data: bubbles,
-          allowOverlay: true
+          kind: GridCellKind.Custom,
+          allowOverlay: true,
+          copyData: "4",
+          data: {
+            kind: "tags-cell",
+            possibleTags:  newarr || [],
+            readonly: false,
+            tags:d || [],
+          },
         };
       }
+      
       else if (dataType == "attachment" && d != null) {
         return {
           kind: GridCellKind.Image,

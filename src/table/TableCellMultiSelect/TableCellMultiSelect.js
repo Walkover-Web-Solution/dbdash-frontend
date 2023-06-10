@@ -12,17 +12,18 @@ import { updateCells, updateMultiSelectOptions } from "../../store/table/tableTh
 export default function TableCellMultiSelect(props) {
   const colors = ["#FFD4DF", "#CCE0FE", "#CEF5D2","whitesmoke","cadetblue"];
 
-  function getRandomColor(colors) {
-    let index = colors.indexOf(top100Films.slice(-1)[0]?.color) + 1;
-    index = index % colors.length;
-    return colors[index];
-  }
+  
 
   const tableInfo = useSelector((state) => getTableInfo(state));
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === props?.colid);
   const top100Films = metaDataArray[0]?.metadata?.option || [];
   const dispatch = useDispatch();
 
+  function getRandomColor(colors) {
+    let index = colors.indexOf(top100Films.slice(-1)[0]?.color) + 1;
+    index = index % colors.length;
+    return colors[index];
+  }
   const handleDeleteChip = (value) => {
     const rowtodel = (parseInt(props?.row?.id) || 0) + 1;
     dispatch(

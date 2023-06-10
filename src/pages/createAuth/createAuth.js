@@ -16,7 +16,6 @@ export default function CreateAuthKey() {
   const location = useLocation();
   const { id } = useParams();
   const dbId = null;
-  console.log("loco",dbId);
 
   const [selected, setSelected] = useState([]);
   const [scope, setScope] = useState("");
