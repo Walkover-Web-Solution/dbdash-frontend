@@ -31,7 +31,7 @@ export default function AddOptionPopup(props) {
 
   const colors = ["#FFD4DF", "#CCE0FE", "#CEF5D2","whitesmoke","cadetblue"];
 
-  
+  const [valueAndColor,setValueAndColor] = useState();
 
   const tableInfo = useSelector((state) => getTableInfo(state));
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === props?.columnId);
@@ -53,8 +53,10 @@ export default function AddOptionPopup(props) {
       }
       else if (field.id === props.columnId && field.dataType === "multipleselect") {
         const optionValue = field?.metadata?.option || [];
+        const valueandcolor = optionValue.map((item) => item);
         const values = optionValue.map((item) => item.value); 
         setInputValues(values);
+        setValueAndColor(valueandcolor)
       }
     });
   }, [fields1, props.columnId]);
@@ -87,7 +89,9 @@ export default function AddOptionPopup(props) {
             dataTypes: "multipleselect",
             metaData: updatedMetadata,
           }));
-        } else if (props?.fieldType === "singleselect") {
+          toast.success("Option added sucessfully")
+        } 
+        else if (props?.fieldType === "singleselect") {
           if( !(top100Films).includes(value)){
             const updatedMetadata = [...top100Films,value];
           dispatch(updateColumnHeaders({
@@ -108,10 +112,33 @@ export default function AddOptionPopup(props) {
   
   
 
-  const handleCancelClick = (index) => {
-    const newInputValues = [...inputValues];
-    newInputValues.splice(index, 1);
-    setInputValues(newInputValues);
+  const handleCancelClick = (index,inputValues) => {
+    // inputValues(index,1)
+    if(props?.fieldType == "multipleselect"){
+      const newInputValues = [...valueAndColor];
+      newInputValues.splice(index, 1);
+      dispatch(
+        updateColumnHeaders({
+          dbId: params?.dbId,
+          tableName: params?.tableName,
+          columnId: props?.columnId,
+          metaData: {option:newInputValues},
+        })
+      );
+    }
+    else{
+      const newInputValues = [...inputValues];
+      newInputValues.splice(index, 1);
+      setInputValues(newInputValues);
+      dispatch(
+        updateColumnHeaders({
+          dbId: params?.dbId,
+          tableName: params?.tableName,
+          columnId: props?.columnId,
+          metaData: {option:newInputValues},
+        })
+      );
+    }
   };
 
   return (
@@ -141,7 +168,7 @@ export default function AddOptionPopup(props) {
                   onKeyPress={(event) => handleInputKeyPress(event, index)}
                 />
                 <Cancel
-                  onClick={() => handleCancelClick(index)}
+                  onClick={() => handleCancelClick(index,inputValues)}
                   sx={{ cursor: "pointer", marginLeft: "8px" }}
                 />
               </Box>
