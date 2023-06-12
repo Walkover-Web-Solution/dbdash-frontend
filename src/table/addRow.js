@@ -12,23 +12,24 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue,selecte
     return;
 }
 
-export const editCell = (cell, newValue, dispatch, fields, currentrow,dataType) => {
+export const editCell = (cell, newValue,dispatch,fields,arrr,params,currentrow,dataType) => { 
   const col = cell[0];
-  const key = fields[col]?.id;
-  if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1] && newValue && newValue.data && newValue.kind && key) {
-    let newdata=dataType=='phone'?newValue?.data?.toString():newValue?.data;
-    dispatch(
-      updateCells({
-        columnId: key,
-        rowIndex: Object.entries(currentrow)[1][1],
-        value: newdata || newValue?.data,
-        dataTypes: newValue?.kind,
-      })
-    );
-  }
-  
-  return;
-};
+if(newValue?.data && newValue.data.kind=='tags-cell') return;
+  const key = fields[col].id;
+  if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) 
+    { 
+      let newdata=dataType=='phone'?newValue?.data?.toString():newValue?.data;
+          dispatch(
+          updateCells({
+            columnId: key,
+            rowIndex :Object.entries(currentrow)[1][1],
+            value:  newValue?.data || newdata || newValue,
+            dataTypes: newValue?.kind,
+          })
+         );
+          return;
+}
+}
 
 export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,filterId,setFields) => { 
 const newOrder = Array.from(fields);

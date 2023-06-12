@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ShareLinkPopUp from "./ShareLinkPopUp";
+// import ShareLinkPopUp from "./ShareLinkPopUp";
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../popupModal";
 import FilterModal from "../filterPopUp";
@@ -17,8 +17,9 @@ import { setTableLoading } from "../../store/table/tableSlice";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { createTable } from "../../api/tableApi";
 import './tablesList.scss'
-import { createViewTable } from "../../api/viewTableApi";
+// import { createViewTable } from "../../api/viewTableApi";
 import HideFieldDropdown from "./hidefieldDropdown";
+import ManageFieldDropDown from "./manageFieldDropDown";
 export default function TablesList({ dbData }) {
 
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -30,7 +31,7 @@ export default function TablesList({ dbData }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [shareLinkOpen, setShareLinkOpen] = useState(false);
+  // const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
   const [tabIndex, setTabIndex] = useState(0);
@@ -44,17 +45,24 @@ export default function TablesList({ dbData }) {
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
-  const [link, setLink] = useState("Link");
+  // const [link, setLink] = useState("Link");
+  // const [link, setLink] = useState("Link");
+  const [openManageField, setOpenManageField] = useState(false);
+
 
   const handleClick = (event, id) => {
-    if (id === "share") {
-      setShareLinkOpen(true);
-    } else {
+    // if (id === "share") {
+    //   setShareLinkOpen(true);
+    // } else {
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
-    }
+    // }
   };
 
+
+  const handleClickOpenManageField = () => {
+    setOpenManageField(true);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -67,8 +75,6 @@ export default function TablesList({ dbData }) {
 
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
-
-
     dispatch(createTable1({ tables: apiCreate.data.data.tables }));
 
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
@@ -77,7 +83,17 @@ export default function TablesList({ dbData }) {
     if (matchedKey) {
       navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
     }
-
+    // dispatch(
+    //   bulkAddColumns({
+    //     dbId: dbData?.db?._id,
+    //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
+    //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+    //     org_id: dbData?.db?.org_id,
+    //     pageNo: 1,
+    //     filterId : params?.filterName,
+    //     // fields:dbData?.db?.tables[params?.tableName]?.fields         
+    //   })       
+    // );
     const newTableIndex = Object.keys(AllTableInfo).length;
     setValue(newTableIndex);
   };
@@ -95,7 +111,7 @@ export default function TablesList({ dbData }) {
       filterId : id,
       tableId: params?.tableName ,
       filter: filter,
-          dbId: dbData?.db?._id,
+      dbId: dbData?.db?._id,
     }))
     // dispatch(
     //   bulkAddColumns({
@@ -138,9 +154,28 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
+    
+     if (dbData?.db?.tables && !(params?.filterName)) {
+      const tableNames = Object.keys(dbData.db.tables);
+      dispatch(setTableLoading(true));
+      dispatch(
+        bulkAddColumns({
+          dbId: dbData?.db?._id,
+          tableName: params?.tableName || tableNames[0],
+          pageNo: 1,
+          // fields: dbData?.db?.tables[params?.tableName]?.fields
+        })
+      );
+      setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
+      if (!params?.tableName) {
+        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+      }
+
+    }
+  }, [params?.tableName]);
+  useEffect(()=>{
     if (params?.filterName) {
       setUnderLine(params?.filterName)
-
       dispatch(filterData({
         filterId : params?.filterName,
         tableId: params?.tableName ,
@@ -159,44 +194,27 @@ export default function TablesList({ dbData }) {
       //   })       
       // );
     }
-    else if (dbData?.db?.tables) {
-      const tableNames = Object.keys(dbData.db.tables);
-      dispatch(setTableLoading(true));
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?.db?._id,
-          tableName: params?.tableName || tableNames[0],
-          pageNo: 1,
-          // fields: dbData?.db?.tables[params?.tableName]?.fields
-        })
-      );
-      setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
-      if (!params?.tableName) {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
-      }
+  },[params?.filterName])
 
-    }
-  }, []);
+  // let dataa1 = "";
+  // const shareLink = async () => {
+  //   const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
+  //   if (viewId) {
+  //     setLink(`localhost:3000/${viewId}`)
+  //   }
+  //   else {
+  //     const db_Id = dbData?.db?._id
+  //     const data = {
+  //       tableId: params?.tableName,
+  //       filterId: params?.filterName
+  //     }
 
-  let dataa1 = "";
-  const shareLink = async () => {
-    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
-    if (viewId) {
-      setLink(`localhost:3000/${viewId}`)
-    }
-    else {
-      const db_Id = dbData?.db?._id
-      const data = {
-        tableId: params?.tableName,
-        filterId: params?.filterName
-      }
+  //     dataa1 = await createViewTable(db_Id, data);
 
-      dataa1 = await createViewTable(db_Id, data);
+  //     setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+  //   }
 
-      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
-    }
-
-  }
+  // }
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   
   const handleMenuOpen = (event) => {
@@ -275,8 +293,10 @@ export default function TablesList({ dbData }) {
         </Box>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
+          <Button sx={{ fontSize: "11px" }} onClick={handleClickOpenManageField}>Manage Fields</Button>
           <HideFieldDropdown   menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         </div>
+          {openManageField && <ManageFieldDropDown openManageField={openManageField} setOpenManageField={setOpenManageField}/>}
         {open && (
           <PopupModal
             title="Create Table"
@@ -324,7 +344,7 @@ export default function TablesList({ dbData }) {
           >
             Delete
           </MenuItem>
-          <MenuItem
+          {/* <MenuItem
             onClick={(e) => {
               handleClick(e, "share");
               shareLink();
@@ -343,7 +363,7 @@ export default function TablesList({ dbData }) {
               textvalue={link}
 
             />
-          )}
+          )} */}
 
         </Menu>
       </div>
