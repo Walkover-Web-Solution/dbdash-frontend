@@ -11,8 +11,6 @@ import "./createAuth.scss";
 
 export default function CreateAuthKey(props) {
   const id  = props.id;
-  console.log("props11111",props);
-  console.log("props",props)
   let dbId=null;
   if(props.authData && props.title)
   {

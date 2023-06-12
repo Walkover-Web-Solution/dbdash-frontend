@@ -10,8 +10,8 @@ import PropTypes from "prop-types";
 export default function Webhookpage(props) {
     const [tabledata,setTabledata]=useState(null);
     const[addWebhook,setAddWebhook]=useState(false);
- 
-const[newcreated,setNewcreated]=useState(0);
+    const[newcreated,setNewcreated]=useState(0);
+
     const handleAddWebhook = () => {
         setAddWebhook(!addWebhook);
       };

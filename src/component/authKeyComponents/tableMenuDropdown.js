@@ -8,7 +8,6 @@ import DisplayAuthKeyPopup from './authKeyTablePopup/displayAuthkeyPopup';
 import CreateAuthKey from '../../pages/createAuth/createAuth';
 
 export default function AuthDropdown(props) {
-  console.log(props,"propsss");
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setOpen] = useState(false);
   const[display,setDisplay]=useState(false);

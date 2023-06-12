@@ -4,6 +4,7 @@ import { Popover, MenuItem, Box,Switch } from '@mui/material';
 import { withStyles } from '@mui/styles';
 
 import PropTypes from 'prop-types';
+import Createwebhook from './createwebhook';
 function Webhooktablemenu(props) {
   const { anchorEl, closeDropdown, handleUpdateActive,handleDeleteWebhook,isActive } = props;
 const[active,setActive]=useState(isActive);
@@ -44,8 +45,14 @@ const[active,setActive]=useState(isActive);
   
   // Create a custom Switch component with the applied styles
   const CustomSwitch = withStyles(styles)(Switch);
+  const[addWebhook,setAddWebhook]=useState(false);
+const[newcreated,setNewcreated]=useState(0);
+
+
   
- 
+  const handleAddWebhook = () => {
+    setAddWebhook(!addWebhook);
+  };
 
 
   return (
@@ -80,6 +87,20 @@ const[active,setActive]=useState(isActive);
           <Box sx={{ ml: 2 }}>
             <DeleteOutlineIcon />
           </Box>
+        </MenuItem>
+        <MenuItem onClick={handleAddWebhook}>
+        <Box >Edit</Box>
+        <Createwebhook
+          newcreated={newcreated}
+          setNewcreated={setNewcreated}
+          dbId={props.dbId}
+          // tableId={props.table}
+  // filters={props?.dataforwebhook[props?.table]?.filters}
+  open={addWebhook}
+  setOpen={setAddWebhook}
+  handleClose={handleAddWebhook}
+/>
+
         </MenuItem>
       </Popover>
     </div>

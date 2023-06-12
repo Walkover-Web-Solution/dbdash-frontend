@@ -10,18 +10,10 @@ import Webhooktablemenu from "./Webhooktablemenu";
 // import { allOrg } from "../../store/database/databaseSelector";
 export default function Webhooktable(props) {
     
-    console.log("propssss",props);
   const [anchorEl, setAnchorEl] = useState(null);
   const[wbhookid,setWbhookid]=useState('');
   const[wbhookcondition,setWbhookcondition]=useState('');
   const[wbhookactive,setWbhookactive]=useState('');
-
-//   const user = useSelector((state) => allOrg(state));
-// user.map(org=>{
-//   org.users.map()
-// })
-  
-//   console.log("userdetails",user);
 
   useEffect(async () => {
 
@@ -31,7 +23,6 @@ export default function Webhooktable(props) {
   }, [props.dbId,props.newcreated]);
 
   useEffect(()=>{
-    console.log("dataaa",props.tabledata);
   },[props.tabledata])
 
   const toggleDropdown = (event) => {
@@ -45,9 +36,9 @@ export default function Webhooktable(props) {
   const handleDeleteWebhook = async () => {
     const data = { condition: wbhookcondition };
     const data1 = await deleteWebhook(props.dbId, props.tableId, wbhookid, data);
-    console.log('delete', data1);
     closeDropdown();
-    props.setTabledata(data1.data.data.webhook);
+    props.setTabledata(data1.data.data);
+
   };
   
   const handleUpdateActive = async () => {
@@ -56,7 +47,9 @@ export default function Webhooktable(props) {
       isActive: wbhookactive === true ? false : true,
     };
     const data1 = await updateWebhook(props.dbId, props.tableId, wbhookid, data);
-    console.log('update', data1);
+    setWbhookactive('');
+    setWbhookcondition('');
+    setWbhookid('');
     props.setTabledata(data1.data.data.webhook);
   };
 
@@ -115,12 +108,13 @@ export default function Webhooktable(props) {
   };
  
   
-{props.tabledata && Object.entries(props.tabledata).map(([condition, webhooks]) => (
-    Object.entries(webhooks).map(([webhookid, webhook])=> {
-        console.log("dkjfifjf", condition, webhooks, webhookid, webhook);
-        // Rest of the code logic here
-    })
-));}
+// {props.tabledata && Object.entries(props.tabledata).map(([condition, webhooks]) => (
+//     Object.entries(webhooks).map(([webhookid, webhook])=> {
+//         console.log("dkjfifjf", condition, webhooks, webhookid, webhook);
+//         // Rest of the code logic here
+//     })
+// ));}
+
 
   return (
     <>
@@ -149,9 +143,10 @@ export default function Webhooktable(props) {
       </TableCell>
       <TableCell>{condition}</TableCell>
       <TableCell>
-        <span>{formatDateTime(webhook.createdAt)}</span>
+        <span>{formatDateTime(new Date(webhook.createdAt *1000))}</span>
       </TableCell>
       <TableCell >
+      
       <div>
 
         <MenuIcon onClick={(event)=>{
