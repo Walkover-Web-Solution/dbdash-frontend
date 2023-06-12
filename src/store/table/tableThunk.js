@@ -252,6 +252,7 @@ export const updateColumnHeaders = createAsyncThunk(
             dbId:updatedDbdata?.data?.data?._id,
             tables: updatedDbdata?.data?.data?.tables
         }))
+
         let  updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
         updatedColumn = {[payload?.columnId]:updatedColumn}
         updatedColumn = await getHeaders(null , null , updatedColumn)

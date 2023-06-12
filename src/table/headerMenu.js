@@ -191,7 +191,7 @@ export default function Headermenu(props) {
               className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
             <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
             <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
-            {(dataType !== "createdat" && dataType !== "createdby" && dataType !== "rowid" && dataType !== "autonumber") && (
+            {(dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") && (
             <>
                 <div onClick={() => { handleOpenDuplicate(); } } className={classes.menuItem}>
                 <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>

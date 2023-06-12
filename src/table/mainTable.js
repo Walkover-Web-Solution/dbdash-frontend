@@ -131,7 +131,7 @@ export default function MainTable() {
   useEffect(() => {
     var newcolumn = []
     fields1.forEach(column => {
-      if (column?.metadata?.hide != "true") {
+      if (column?.metadata?.hide != true) {
         newcolumn.push(column)
       }
     });

@@ -79,7 +79,7 @@ export function getPropertyIcon(data_type) {
       break;
 
     default:
-      propertyIcon = <MultiIcon />;
+      propertyIcon = <MultiIcon fontSize="2px"/>;
       break;
   }
 

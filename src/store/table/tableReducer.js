@@ -517,14 +517,11 @@ export function extraReducers(builder) {
       // try {
         const action = payload;
         state.skipReset = true;
-      //   console.log("action", action)
       //   let table =  [...state.data] ||  [];
-      //   console.log("tableeee", table);
       //   let tableitem = table?.filter(item =>
       //     Object.entries(item)[1][1] == action.rowIndex
       //   );
       //   tableitem[action.columnId] = action.value;
-      //   console.log("skkdkf", action.columnId, action.value)
       //   const index = table.findIndex(item =>
       //     Object.entries(item)[1][1] == action.rowIndex
       //   );
@@ -532,18 +529,15 @@ export function extraReducers(builder) {
       //   if (index !== -1) {
       //     table[index] = tableitem;
       //   }
-      //   console.log("state.data1", state.data)
 
 
       //   state.data = table;
-      //   console.log("state.data2", state.data)
       // }
       // catch (e) {
       //   console.log(e, "erorr");
       // }
       let arr = []
       // let updatedSeriesData = table?.map((series) => {
-      //   console.log(series[action.columnId], "56778");
       //   series[action.columnId] = payload.value;
       //   return series; // Return the updated series object
       // });
