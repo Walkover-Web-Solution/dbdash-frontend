@@ -6,6 +6,8 @@ import { withStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
 function Webhooktablemenu(props) {
+  
+
   const { anchorEl, closeDropdown, handleUpdateActive,handleDeleteWebhook,isActive } = props;
 const[active,setActive]=useState(isActive);
   const styles = {
@@ -46,7 +48,7 @@ const[active,setActive]=useState(isActive);
   // Create a custom Switch component with the applied styles
   const CustomSwitch = withStyles(styles)(Switch);
   const[addWebhook,setAddWebhook]=useState(false);
-const[newcreated,setNewcreated]=useState(0);
+  const[newcreated,setNewcreated]=useState(0);
 
 
   
@@ -88,12 +90,19 @@ const[newcreated,setNewcreated]=useState(0);
             <DeleteOutlineIcon />
           </Box>
         </MenuItem>
-        <MenuItem onClick={handleAddWebhook}>
+        <MenuItem onClick={handleAddWebhook} >
         <Box >Edit</Box>
+        
         <Createwebhook
           newcreated={newcreated}
           setNewcreated={setNewcreated}
+          condition={props.condition}
+          webhookname={props.webhookname}
+          webhookid={props.webhookid}
           dbId={props.dbId}
+          tableId={props?.tableId}
+          filterId={props.filterId}
+          weburl={props.weburl}
           // tableId={props.table}
   // filters={props?.dataforwebhook[props?.table]?.filters}
   open={addWebhook}
@@ -109,6 +118,13 @@ const[newcreated,setNewcreated]=useState(0);
 
 Webhooktablemenu.propTypes = {
     anchorEl: PropTypes.any,
+    // webhookid:PropTypes.any,
+    // condition:PropTypes.any,
+    
+    webhookname:PropTypes.any,
+    weburl:PropTypes.any,
+    filterId:PropTypes.any,
+
     closeDropdown: PropTypes.func.isRequired,
     webhookid: PropTypes.string.isRequired,
     isActive: PropTypes.bool.isRequired,

@@ -12,6 +12,7 @@ import { selectActiveUser } from '../../store/user/userSelector.js';
 import { toast } from 'react-toastify';
 
 import './SingleTable.scss';
+// import { color } from '@mui/system';
 
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                 <TextField
                   defaultValue={table[1]?.tableName || table[0]}
                   autoFocus
-                  sx={{ width: 75, fontWeight: 'bold' }}
+                  sx={{ width: 75, fontWeight: 'bold' , color: 'red' }}
                   value={tableNa}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -143,9 +144,12 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                     e.stopPropagation();
                     setName(false);
                     renameTableName(dbData?.db?._id, table[0]);
+                    
                   }}
                   variant="contained"
                   className="mui-button"
+                 // style={{color:'white'}}
+                  
                 >
                   Rename
                 </Button>

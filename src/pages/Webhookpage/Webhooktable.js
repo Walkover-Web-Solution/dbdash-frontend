@@ -9,11 +9,18 @@ import MenuIcon from '@mui/icons-material/MoreHoriz';
 import Webhooktablemenu from "./Webhooktablemenu";
 // import { allOrg } from "../../store/database/databaseSelector";
 export default function Webhooktable(props) {
-    
+
+
+
+
+
   const [anchorEl, setAnchorEl] = useState(null);
   const[wbhookid,setWbhookid]=useState('');
   const[wbhookcondition,setWbhookcondition]=useState('');
   const[wbhookactive,setWbhookactive]=useState('');
+  const[name,setName]=useState('');
+  const[url,setUrl]=useState('');
+  const[filters,setFilters]=useState('')
 
   useEffect(async () => {
 
@@ -40,7 +47,6 @@ export default function Webhooktable(props) {
     props.setTabledata(data1.data.data);
 
   };
-  
   const handleUpdateActive = async () => {
     const data = {
       condition: wbhookcondition,
@@ -108,12 +114,6 @@ export default function Webhooktable(props) {
   };
  
   
-// {props.tabledata && Object.entries(props.tabledata).map(([condition, webhooks]) => (
-//     Object.entries(webhooks).map(([webhookid, webhook])=> {
-//         console.log("dkjfifjf", condition, webhooks, webhookid, webhook);
-//         // Rest of the code logic here
-//     })
-// ));}
 
 
   return (
@@ -126,6 +126,7 @@ export default function Webhooktable(props) {
                 <TableCell>Name</TableCell>
                 <TableCell>URL</TableCell>
                 <TableCell>Condition</TableCell>
+                <TableCell>Filters</TableCell>
                 <TableCell>Created On</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
@@ -134,17 +135,27 @@ export default function Webhooktable(props) {
             {props.tabledata && Object.entries(props.tabledata).map(([condition, webhooks]) => (
   Object.entries(webhooks).map(([webhookid, webhook]) => (
     <TableRow key={webhookid} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+
       <TableCell component="th" scope="row">
-        {webhook.name}
-        
+        {webhook.name}    
       </TableCell>
+
       <TableCell component="th" scope="row">
         {webhook.url}
       </TableCell>
+
+      
+
       <TableCell>{condition}</TableCell>
-      <TableCell>
-        <span>{formatDateTime(new Date(webhook.createdAt *1000))}</span>
+
+      <TableCell component="th" scope="row">
+        {webhook.filterId}
       </TableCell>
+
+      <TableCell>
+        <span>{formatDateTime(webhook.createdAt * 1000)}</span>
+      </TableCell>
+
       <TableCell >
       
       <div>
@@ -152,9 +163,14 @@ export default function Webhooktable(props) {
         <MenuIcon onClick={(event)=>{
           setWbhookactive(webhook.isActive);
           setWbhookcondition(condition);
+          setName(webhook.name);
           setWbhookid(webhookid);
-          toggleDropdown(event)}} />
-        {anchorEl &&   <Webhooktablemenu handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl} setTabledata={props.setTabledata}  closeDropdown={closeDropdown}   isActive={wbhookactive}            />
+          setUrl(webhook.url);
+          setFilters(webhook.filterId)
+          toggleDropdown(event)}}           
+          />
+          
+        {anchorEl &&   <Webhooktablemenu  tableId={props?.tableId} dbId={props?.dbId} filterId={filters} weburl={url} condition={ wbhookcondition}  webhookname={name} webhookid={wbhookid} handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl}  closeDropdown={closeDropdown}   isActive={wbhookactive}        />
        }</div>
     </TableCell>
     </TableRow>
@@ -177,3 +193,7 @@ Webhooktable.propTypes = {
   newcreated:PropTypes.any
  
 };
+
+// sendwebId:PropTypes.any,
+// setwebhook:PropTypes.any,
+//sendwebId={webhookid} setwebhook={webhook} condition={condition}
