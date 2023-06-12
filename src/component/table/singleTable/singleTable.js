@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
-import Dropdown from '../dropdown';
-import { bulkAddColumns } from '../../store/table/tableThunk';
+import Dropdown from '../../dropdown';
+import { bulkAddColumns } from '../../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { removeTable1, updateTable1 } from '../../store/allTable/allTableThunk';
-import { resetData } from '../../store/table/tableSlice';
-import { deleteTable, exportCSV } from '../../api/tableApi';
-import { selectActiveUser } from '../../store/user/userSelector.js';
+import { removeTable1, updateTable1 } from '../../../store/allTable/allTableThunk';
+import { resetData } from '../../../store/table/tableSlice';
+import { deleteTable, exportCSV } from '../../../api/tableApi';
+import { selectActiveUser } from '../../../store/user/userSelector.js';
 import { toast } from 'react-toastify';
 
-import './SingleTable.scss';
+import './singleTable.scss';
 
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
   const navigate = useNavigate();

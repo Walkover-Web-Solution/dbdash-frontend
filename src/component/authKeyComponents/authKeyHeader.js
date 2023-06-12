@@ -20,8 +20,7 @@ export default function AuthKeyHeader(props) {
         </Link>
         <Button variant="outlined"  className="mui-button" sx={{
         pointerEvents: 'none',
-        // opacity: 0.5,
-        // Additional custom styles
+       
       }}>{'Auth Key'}</Button>
 
     </ButtonGroup>
