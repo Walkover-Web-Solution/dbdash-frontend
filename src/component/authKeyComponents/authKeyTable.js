@@ -18,7 +18,6 @@ import { allOrg } from "../../store/database/databaseSelector";
 
 export default function AuthKey(props) {
   const adminId = localStorage.getItem("userid");
-  const [authKeys, setAuthKeys] = useState(null);
   const [createdBy, setCreatedBy] = useState(null);
   const user = useSelector((state) => allOrg(state));
 
@@ -28,7 +27,7 @@ export default function AuthKey(props) {
 
   async function getAuthkeyFun() {
     const data = await getAuthkey(props.dbId, adminId);
-    setAuthKeys(data?.data?.data);
+    props.setAuthKeys(data?.data?.data);
     console.log(data?.data?.data,"dataaaa");
     var array = [];
     Object.entries(Object.values(data?.data?.data)).map((key) => {
@@ -44,7 +43,8 @@ export default function AuthKey(props) {
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props.dbId, adminId, authKey);
     const dataa = await getAuthkey(props.dbId, adminId);
-    setAuthKeys(dataa?.data?.data);
+    props.setAuthKeys(dataa?.data?.data);
+
     return data;
   }
 
@@ -104,8 +104,8 @@ export default function AuthKey(props) {
   return (
     <>
       <Box sx={{ border: 1, m: 1 }}>
-        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 533 }}>
-          <Table sx={{ minWidth: 650 }} stickyHeader aria-label="sticky table">
+        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh' }}>
+          <Table sx={{ minWidth: 650,overflowY:"scroll", }} stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -118,40 +118,40 @@ export default function AuthKey(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {authKeys &&
-                Object.keys(authKeys).map((keys, index) => (
+              {props.authKeys &&
+                Object.keys(props.authKeys).map((keys, index) => (
                   <TableRow key={keys} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
-                      {authKeys[keys].name}
+                      {props.authKeys[keys].name}
                     </TableCell>
                     <TableCell>{createdBy && createdBy[index]}</TableCell>
                     <TableCell>
-                      <Tooltip title={authKeys[keys].createDate} placement="top">
-                        <span>{formatDateTime(authKeys[keys].createDate)}</span>
+                      <Tooltip title={props.authKeys[keys].createDate} placement="top">
+                        <span>{formatDateTime(props.authKeys[keys].createDate)}</span>
                       </Tooltip>
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {keys.substring(0, 3) + "*".repeat(keys.length - 6) + keys.substring(keys.length - 3)}
                     </TableCell>
                     <TableCell>
-                      {authKeys[keys].access === '1' ? (
+                      {props.authKeys[keys].access === '1' ? (
                         <div>all</div>
                       ) : (
-                        Object.keys(authKeys[keys].access).map((key) => (
+                        Object.keys(props.authKeys[keys].access).map((key) => (
                           <div key={key}>{key}</div>
                         ))
                       )}
                     </TableCell>
                     <TableCell>
-                      {authKeys[keys].access === '1' ? (
-                        <div>{authKeys[keys].scope}</div>
+                      {props.authKeys[keys].access === '1' ? (
+                        <div>{props.authKeys[keys].scope}</div>
                       ) : (
-                        <div>{Object.values(authKeys[keys].access)[0]?.scope}</div>
+                        <div>{Object.values(props.authKeys[keys].access)[0]?.scope}</div>
                       )}
                     </TableCell>
                     <TableCell>
                       <TableMenuDropdown
-                        authData={authKeys[keys]}
+                        authData={props.authKeys[keys]}
                         first={"Edit"}
                         second={"Delete"}
                         third={"Show AuthKey"}
@@ -175,6 +175,8 @@ export default function AuthKey(props) {
 AuthKey.propTypes = {
   dbId: PropTypes.string,
   scope: PropTypes.any,
+  authKeys:PropTypes.any,
+  setAuthKeys:PropTypes.any,
   authkeycreatedorupdated: PropTypes.any,
   setAuthkeycreatedorupdated: PropTypes.any,
   selected: PropTypes.any

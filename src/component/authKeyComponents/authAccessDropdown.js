@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
-import { Checkbox, InputLabel, ListItemIcon, ListItemText, MenuItem, FormControl, Select } from "@mui/material"
-import { getDbById } from '../../api/dbApi';
+import {
+  Checkbox,
+  InputLabel,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
+import { getDbById } from "../../api/dbApi";
 import PropTypes from "prop-types";
 
 const ITEM_HEIGHT = 48;
@@ -9,35 +17,55 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
+      width: 250,
+    },
   },
   getContentAnchorEl: null,
   anchorOrigin: {
     vertical: "bottom",
-    horizontal: "center"
+    horizontal: "center",
   },
   transformOrigin: {
     vertical: "top",
-    horizontal: "center"
+    horizontal: "center",
   },
-  variant: "menu"
+  variant: "menu",
 };
 
-export default function AuthAccessDropDown({ selected, setSelected, options, setOptions, dbId }) {
+export default function AuthAccessDropDown({
+  selected,
+  setSelected,
+  options,
+  setOptions,
+  dbId,
+}) {
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId);
     setOptions(data.data.data.tables || {});
   };
 
-  const isAllSelected = options.length > 0 && selected.length === options.length;
+  const isAllSelected =
+  Object.values(options).every((option) => selected.includes(option.tableName)) &&
+  selected.length === Object.values(options).length;
+
 
   const handleChange = (event) => {
     const value = event.target.value;
-    if (value[value.length - 1] !== "all") {
-      setSelected(value);
+    if (value.includes("all")) {
+      // If "Select All" checkbox is clicked
+      if (selected.length === Object.values(options).length) {
+        // If all options were previously selected, deselect all options
+        setSelected([]);
+      } else {
+        // Select all options
+        const allTables = Object.values(options).map((option) => option.tableName);
+        setSelected(allTables);
+      }
+    } else {
+      setSelected(value.filter((val) => val !== "all"));
     }
   };
+  
 
   useEffect(() => {
     callFunc();
@@ -46,7 +74,6 @@ export default function AuthAccessDropDown({ selected, setSelected, options, set
   const callFunc = async () => {
     await getAllTableName(dbId);
   };
-
   const handleSelectAll = (event) => {
     if (event.target.checked) {
       const allTables = Object.values(options).map((option) => option.tableName);
@@ -55,6 +82,8 @@ export default function AuthAccessDropDown({ selected, setSelected, options, set
       setSelected([]);
     }
   };
+  
+  
 
   return (
     <FormControl sx={{ margin: 1, width: 300 }}>
@@ -74,15 +103,17 @@ export default function AuthAccessDropDown({ selected, setSelected, options, set
             ...(isAllSelected && {
               backgroundColor: "rgba(0, 0, 0, 0.08)",
               "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.08)"
-              }
-            })
+                backgroundColor: "rgba(0, 0, 0, 0.08)",
+              },
+            }),
           }}
+          onClick={handleSelectAll} // Add onClick event handler to handle "Select All"
         >
           <ListItemIcon>
             <Checkbox
-              onChange={handleSelectAll}
-              indeterminate={selected?.length > 0 && selected?.length < options.length}
+              indeterminate={
+                selected?.length > 0 && selected?.length < options.length
+              }
               checked={isAllSelected}
             />
           </ListItemIcon>
@@ -98,7 +129,11 @@ export default function AuthAccessDropDown({ selected, setSelected, options, set
                   if (!selected?.includes(e.target.value)) {
                     setSelected([...selected, e.target.value]);
                   } else {
-                    setSelected(selected.filter((removeVal) => removeVal !== e.target.value));
+                    setSelected(
+                      selected.filter(
+                        (removeVal) => removeVal !== e.target.value
+                      )
+                    );
                   }
                 }}
               />

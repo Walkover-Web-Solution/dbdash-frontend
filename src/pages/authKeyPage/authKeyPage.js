@@ -14,6 +14,7 @@ export default function AuthKeyPage(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  const [authKeys, setAuthKeys] = useState(null);
 
   return (
     <>
@@ -33,7 +34,7 @@ export default function AuthKeyPage(props) {
         <CreateAuthKey authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} open={open} handleClose={handleClose} id={props.dbtoredirect} />
       )}
       <Box className="auth-key-page-content">
-        <AuthKey authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} dbId={props.dbtoredirect}/>
+        <AuthKey authKeys={authKeys} setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} dbId={props.dbtoredirect}/>
       </Box>
     </>
   );
