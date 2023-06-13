@@ -116,7 +116,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                 <TextField
                   defaultValue={table[1]?.tableName || table[0]}
                   autoFocus
-                  sx={{ width: 75, fontWeight: 'bold' }}
+                  sx={{ width: 75, fontWeight: 'bold' ,backgroundColor: 'white'}}
                   value={tableNa}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
