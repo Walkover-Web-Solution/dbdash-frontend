@@ -1,8 +1,9 @@
 /*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
-import { // CompactSelection
+import { CompactSelection,
   DataEditor, GridCellKind
 } from "@glideapps/glide-data-grid";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { addColumnrightandleft, deleteRows,updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
@@ -29,7 +30,6 @@ export default function MainTable() {
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data) || [];
-  let todeleterows=false;
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -43,15 +43,19 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
+  const emptyselection={
+    columns: CompactSelection.empty(),
+    rows: CompactSelection.empty(),
+    current: undefined,
+};
+  const[selection1,setSelection1]=useState(emptyselection);
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state)); 
+  const tableId = tableInfo?.tableId
   useEffect(()=>{
     setData(dataa)
   },[dataa])
-  document.addEventListener('keydown', function(event) {
-    todeleterows=false;
-  });
-
+ 
   const handleUploadFileClick = useCallback((cell) => {
     if(!data)return ;
     const [col, row] = cell;
@@ -71,7 +75,7 @@ export default function MainTable() {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex: Object.entries(dataa[row])[1][1],
+          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: null,
           imageLink: imageLink,
           dataTypes: type,
@@ -91,7 +95,7 @@ export default function MainTable() {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex:Object.entries(dataa[row])[1][1],
+          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
@@ -131,7 +135,7 @@ export default function MainTable() {
   useEffect(() => {
     var newcolumn = []
     fields1.forEach(column => {
-      if (column?.metadata?.hide != "true") {
+      if (column?.metadata?.hide != true) {
         newcolumn.push(column)
       }
     });
@@ -144,19 +148,19 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName,setFields)
+      reorderFuncton(dispatch, item, newIndex, fields,fields1,params?.filterName,setFields)
     },
-    [fields]
+    [fields,fields1]
   );
 
   const handleRowMoved = useCallback((from, to) => {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
+  
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
-  if(todeleterows==false )
-  {
+
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   if(fields[cell[0]].dataType == "singleselect"){
@@ -173,7 +177,7 @@ const onCellEdited = useCallback((cell, newValue) => {
     editCell(cell, newValue, dispatch, fields,false,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
   }
 } 
-}, [dataa,data, fields]);
+, [dataa,data, fields]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -193,26 +197,22 @@ const onCellEdited = useCallback((cell, newValue) => {
 {
 
   if(newValue.data.kind=='tags-cell')
-     {
-      
-      
+     { 
           let tag="";
           let arr1=newValue.data.tags;
           let arr2=oldValue.data.tags || [];
           let arr=arr1.filter(x=>!arr2.includes(x));
           
           tag=arr[0]|| "";
-          if(  fields1[cell[0]]?.id && tag!="" ){
+          if(fields[cell[0]]?.id && tag!="" ){
             dispatch(
               updateCells({
-                columnId:  fields1[cell[0]]?.id ,
-                rowIndex :Object.entries(dataa[cell[1]])[1][1],
+                columnId:  fields[cell[0]]?.id ,
+                rowIndex :dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
                 value:  tag ,
                 dataTypes: newValue?.kind,
               })
-             );
-          
-        
+             );       
      
       }}
     
@@ -223,8 +223,8 @@ const onCellEdited = useCallback((cell, newValue) => {
       else return false;
 
     }
-},[dataa]);
-  const handleDeleteRow = useCallback((selection) => {
+},[dataa,fields]);
+  const handleDeleteRow = (selection) => {
     
     if(selection.current)
     {return;
@@ -234,20 +234,22 @@ const onCellEdited = useCallback((cell, newValue) => {
   
     for (const element of selection.rows.items) {
       const [start, end] = element;
-  
       for (let i = start; i < end; i++) {
-        deletedRowIndices.push(Object.entries(dataa[i])[1][1]);
+       
+        deletedRowIndices.push(dataa[i][`fld${tableId.substring(3)}autonumber`]);
       }
     }
   
     if (deletedRowIndices.length > 0) {
-    todeleterows = true;
 
       dispatch(deleteRows({deletedRowIndices,dataa}))
     }
+   setSelection1(emptyselection)
+
+    
     // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
     // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
-  });
+  };
   
 
 
@@ -285,18 +287,41 @@ const onCellEdited = useCallback((cell, newValue) => {
         };
       }
       else if (dataType === "datetime") {
-        return {
-          kind: GridCellKind.Custom,
-          allowOverlay: true,
-          copyData: "4",
-          data: {
-            kind: "date-picker-cell",
-            date: new Date(),
-            displayDate: new Date().toISOString(),
-            format: "date"
-          }
+        const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
+        if (currentDate instanceof Date && !isNaN(currentDate)) {
+          const day = currentDate.getDate().toString().padStart(2, "0");
+          const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+          const year = currentDate.getFullYear().toString().padStart(4, "0");
+          const formattedDate = `${day}-${month}-${year}`;
+          
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: "4",
+            data: {
+              kind: "date-picker-cell",
+              date: currentDate,
+              displayDate: formattedDate,
+              format: "date",
+            },
+          };
+        } else {
+          // Handle invalid time value
+          // For example, you can return a default value or show an error message
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: "4",
+            data: {
+              kind: "date-picker-cell",
+              date: new Date(),
+              displayDate: "",
+              format: "date",
+            },
+          };
+        }
       }
-    }
+      
     else if (dataType === "longtext") {
       return {
         kind: GridCellKind.Text,
@@ -325,6 +350,15 @@ const onCellEdited = useCallback((cell, newValue) => {
           displayData:d || ""
         };
       }
+      else if (dataType === "numeric") {
+        return {
+          allowOverlay: true,
+          kind: GridCellKind.Number,
+          data: d || "",
+          displayData:d || ""
+        };
+      }
+    
       else if (dataType === "multipleselect") {
          const possibleTags = fields[col]?.metadata?.option;
         // const row = 0; // Replace 0 with the appropriate row index
@@ -400,8 +434,36 @@ const onCellEdited = useCallback((cell, newValue) => {
     }));
   }, [fields]);
 
+ const handlegridselection=(event)=>{
+setSelection1(event);
+  // return event;
+ }
   return (
     <>
+    {JSON.stringify(selection1)!==JSON.stringify(emptyselection) && selection1.rows.items.length>0 && <button
+  style={{
+    position: "absolute",
+    display:'flex',
+    flexDirection:'row',
+
+    right: "3%",
+    top: "17%",
+    zIndex: "10000",
+    background: "none",
+    border: "none",
+    outline: "none",
+    cursor: "pointer",
+   
+  }}
+  onClick={() => handleDeleteRow(selection1)}
+>
+  <div style={{marginTop:"5px"}}>Delete Rows</div>
+  <div>
+    
+    <DeleteOutlineIcon />
+  </div>
+</button>
+}
       <div className="table-container" style={{height:`${((window?.screen?.height*65)/100)}px`}}>
         <DataEditor
            {...cellProps}
@@ -410,13 +472,15 @@ const onCellEdited = useCallback((cell, newValue) => {
           onRowAppended={addRows}
           columns={realCols}
           rows={dataa.length}
+          gridSelection={selection1}
           rowMarkers="both"
           rowSelectionMode="multi"
+          onGridSelectionChange={handlegridselection}
           onCellEdited={onCellEdited}
           onRowMoved={handleRowMoved}
-          onDelete={handleDeleteRow}
           validateCell={validateCell}
           getCellsForSelection={true}
+          // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana

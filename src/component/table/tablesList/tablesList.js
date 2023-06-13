@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 // import ShareLinkPopUp from "./ShareLinkPopUp";
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
-import PopupModal from "../popupModal";
-import FilterModal from "../filterPopUp";
+import PopupModal from "../../popupModal";
+import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
-import SingleTable from "./singleTable";
+import SingleTable from "../singleTable/singleTable";
 import { useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
-import { bulkAddColumns, filterData } from "../../store/table/tableThunk";
+import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
-import MainTable from "../../table/mainTable";
-import { createTable1 } from "../../store/allTable/allTableThunk";
+import MainTable from "../../../table/mainTable";
+import { createTable1 } from "../../../store/allTable/allTableThunk";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { deleteFilter } from "../../api/filterApi";
-import { setTableLoading } from "../../store/table/tableSlice";
-import { setAllTablesData } from "../../store/allTable/allTableSlice";
-import { createTable } from "../../api/tableApi";
+import { deleteFilter } from "../../../api/filterApi";
+import { setTableLoading } from "../../../store/table/tableSlice";
+import { setAllTablesData } from "../../../store/allTable/allTableSlice";
+import { createTable } from "../../../api/tableApi";
 import './tablesList.scss'
 // import { createViewTable } from "../../api/viewTableApi";
-import HideFieldDropdown from "./hidefieldDropdown";
-import ManageFieldDropDown from "./manageFieldDropDown";
+import HideFieldDropdown from "../hidefieldDropdown";
+import ManageFieldDropDown from "../manageFieldDropDown";
 export default function TablesList({ dbData }) {
 
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);

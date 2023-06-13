@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,40 +12,35 @@ export default function HideFieldDropdown(props) {
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-  
-  const [checkedColumns, setCheckedColumns] = useState([]);
+
   const tableFieldArray = AllTableInfo?.tables[params?.tableName]?.fields
-  
+
   for (const key in tableFieldArray) {
-      tableFieldArray[key].metaData;
+    tableFieldArray[key].metaData;
   }
-  let defaultArr= fields1.map((column) => {
-    return column?.metadata && column?.metadata?.hide ? (column?.metadata?.hide=="true"?true:false)  : false;
-  });
+  var defaultArr = fields1.map((column) => {
+    return !!column?.metadata?.hide;
+  })
 
   const handleMenuClose = () => {
     props?.setMenuAnchorEl(null);
   };
-
-  const toggleColumn = (columnId) => {
-    setCheckedColumns((prevCheckedColumns) => {
-      if (prevCheckedColumns.includes(columnId)) {
-        return prevCheckedColumns.filter((id) => id !== columnId);
-      } else {
-        return [...prevCheckedColumns, columnId];
-      }
-    });
-    hideColumn(columnId, !checkedColumns.includes(columnId));
+  const toggleColumn = (columnId, i) => {
+    var newArr = [...defaultArr]
+    newArr[i] = !newArr[i]
+    defaultArr = newArr
+    hideColumn(columnId, !newArr[i]);
   };
 
   const hideColumn = async (columnId, isChecked) => {
-    const metaData = { hide: isChecked ? "false" : "true" };
+    const metaData = { hide: !isChecked };
     dispatch(
       updateColumnHeaders({
         dbId: params?.dbId,
         tableName: params?.tableName,
         columnId: columnId,
         metaData: metaData,
+        filterId : params?.filterName
       })
     );
   };
@@ -81,17 +76,17 @@ export default function HideFieldDropdown(props) {
               padding: '2px 8px',
             }}
           >
-            <input style={{width: "15px", height: "15px"}}
+            <input style={{ width: "15px", height: "15px" }}
               type="checkbox"
               checked={defaultArr[index]}
-              onChange={() => toggleColumn(column?.id)}
+              onChange={() => toggleColumn(column?.id, index)}
             />
             {column?.title}
           </MenuItem>
         ))}
       </Menu>
     </div>}
-    </>
+  </>
   );
 }
 

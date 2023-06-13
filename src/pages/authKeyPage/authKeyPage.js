@@ -1,34 +1,55 @@
-import React from "react";
+import React,{useState} from "react";
 import AuthKey from "../../component/authKeyComponents/authKeyTable";
 import { Box, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import AuthKeyHeader from "../../component/authKeyComponents/authKeyHeader";
-import { Link, useParams ,useLocation} from "react-router-dom";
-import MainNavbar from "../../component/mainNavbar/mainNavbar";
 import "./authKeyPage.scss";
+import PropTypes from "prop-types";
+import CreateAuthKey from "../createAuth/createAuth";
+
+export default function AuthKeyPage(props) {
+  const [open, setOpen] = useState(false);
+  const[authkeycreatedorupdated,setAuthkeycreatedorupdated]=useState(0);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const [authKeys, setAuthKeys] = useState(null);
+  const [createdBy, setCreatedBy] = useState(null);
 
 
-export default function authKeyPage() {
-  const { id } = useParams();
   return (
     <>
-      <Box>
-        <MainNavbar dbtoredirect={useLocation().state[1]} tabletoredirect={useLocation().state[2]} className="auth-key-page-navbar" />
-      </Box>
-    
       <Box className="auth-key-page-container">
-        <Link to={`/authKeyCreate/${id}`} state={useLocation().state} className="auth-key-page-button">
-          <Button className="mui-button" variant="contained" endIcon={<AddIcon />}>
-            Create Authkey
-          </Button>
-        </Link>
-        
-        <AuthKeyHeader  tabletoredirect={useLocation().state[2]} id={id} />
+        <Button
+          className="mui-button"
+          variant="contained"
+          onClick={() => {
+            setOpen(true);
+          }}
+          endIcon={<AddIcon />}
+        >
+          Create Authkey
+        </Button>
       </Box>
-
+      {open && (
+        <CreateAuthKey 
+        createdBy={createdBy}
+        setCreatedBy={setCreatedBy}
+        setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} open={open} handleClose={handleClose} id={props.dbtoredirect} />
+      )}
       <Box className="auth-key-page-content">
-        <AuthKey dbId={id} />
+        <AuthKey authKeys={authKeys} 
+        createdBy={createdBy}
+        setCreatedBy={setCreatedBy}
+        setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} dbId={props.dbtoredirect}/>
       </Box>
     </>
   );
+}
+
+AuthKeyPage.propTypes={
+  dbId:PropTypes.any,
+  dbtoredirect:PropTypes.any,
+  selectedOption:PropTypes.any,
+  tabletoredirect:PropTypes.any
 }

@@ -20,9 +20,16 @@ export default function AuthKeyHeader(props) {
         </Link>
         <Button variant="outlined"  className="mui-button" sx={{
         pointerEvents: 'none',
-        // opacity: 0.5,
-        // Additional custom styles
+       
       }}>{'Auth Key'}</Button>
+      {/* <Link
+        to={`/authkeypage/${dbId}`}
+        state={[selectedOption,props.dbtoredirect,props.tabletoredirect]}
+        
+        style={{ textDecoration: 'none' }}
+      > */}
+        <Button className="mui-button-outlined" variant="outlined" >{'Webhook'}</Button>
+      {/* </Link> */}
 
     </ButtonGroup>
        
