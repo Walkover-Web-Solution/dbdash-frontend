@@ -127,6 +127,7 @@ export default function Headermenu(props) {
   const hideColumn = async () => {
     const metaData = { hide: true };
     hideColumns(dispatch, params, props,metaData);
+    props?.setMenu(null);
   }
 
   function handleChange(e) {

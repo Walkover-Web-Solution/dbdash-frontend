@@ -194,26 +194,22 @@ const onCellEdited = useCallback((cell, newValue) => {
 {
 
   if(newValue.data.kind=='tags-cell')
-     {
-      
-      
+     { 
           let tag="";
           let arr1=newValue.data.tags;
           let arr2=oldValue.data.tags || [];
           let arr=arr1.filter(x=>!arr2.includes(x));
           
           tag=arr[0]|| "";
-          if(  fields1[cell[0]]?.id && tag!="" ){
+          if(fields[cell[0]]?.id && tag!="" ){
             dispatch(
               updateCells({
-                columnId:  fields1[cell[0]]?.id ,
+                columnId:  fields[cell[0]]?.id ,
                 rowIndex :dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
                 value:  tag ,
                 dataTypes: newValue?.kind,
               })
-             );
-          
-        
+             );       
      
       }}
     
@@ -224,7 +220,7 @@ const onCellEdited = useCallback((cell, newValue) => {
       else return false;
 
     }
-},[dataa]);
+},[dataa,fields]);
   const handleDeleteRow = useCallback((selection) => {
     
     if(selection.current)
@@ -285,20 +281,41 @@ const onCellEdited = useCallback((cell, newValue) => {
         };
       }
       else if (dataType === "datetime") {
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().split("T")[0];
-        return {
-          kind: GridCellKind.Custom,
-          allowOverlay: true,
-          copyData: "4",
-          data: {
-            kind: "date-picker-cell",
-            date: currentDate,
-            displayDate: formattedDate,
-            format: "date"
-          }
-        };
-    }
+        const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
+        if (currentDate instanceof Date && !isNaN(currentDate)) {
+          const day = currentDate.getDate().toString().padStart(2, "0");
+          const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+          const year = currentDate.getFullYear().toString().padStart(4, "0");
+          const formattedDate = `${day}-${month}-${year}`;
+          
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: "4",
+            data: {
+              kind: "date-picker-cell",
+              date: currentDate,
+              displayDate: formattedDate,
+              format: "date",
+            },
+          };
+        } else {
+          // Handle invalid time value
+          // For example, you can return a default value or show an error message
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: "4",
+            data: {
+              kind: "date-picker-cell",
+              date: new Date(),
+              displayDate: "",
+              format: "date",
+            },
+          };
+        }
+      }
+      
     else if (dataType === "longtext") {
       return {
         kind: GridCellKind.Text,
