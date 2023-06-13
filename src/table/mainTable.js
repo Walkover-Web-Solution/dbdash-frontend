@@ -205,7 +205,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           if(fields[cell[0]]?.id && tag!="" ){
             dispatch(
               updateCells({
-                columnId:  fields1[cell[0]]?.id ,
+                columnId:  fields[cell[0]]?.id ,
                 rowIndex :dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
                 value:  tag ,
                 dataTypes: newValue?.kind,
