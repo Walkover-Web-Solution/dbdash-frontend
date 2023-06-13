@@ -91,7 +91,8 @@ const[active,setActive]=useState(isActive);
         </MenuItem>
         <MenuItem onClick={handleAddWebhook} >
         <Box >Edit</Box>
-        
+        </MenuItem>
+      </Popover>
         <Createwebhook
         filters={props.filters}
           newcreated={props.newcreated}
@@ -103,15 +104,13 @@ const[active,setActive]=useState(isActive);
           tableId={props?.tableId}
           filterId={props.filterId}
           weburl={props.weburl}
+          closeDropdown={props?.closeDropdown}
           // tableId={props.table}
   // filters={props?.dataforwebhook[props?.table]?.filters}
   open={addWebhook}
   setOpen={setAddWebhook}
   handleClose={handleAddWebhook}
 />
-
-        </MenuItem>
-      </Popover>
     </div>
   );
 }

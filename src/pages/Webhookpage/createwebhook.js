@@ -31,12 +31,13 @@ function Createwebhook(props) {
     };
   
     try {
-      if (!props.webhookid) {
+      if (!props?.webhookid) {
+        console.log("props create")
         await createWebhook(props.dbId, props.tableId, data);
       } else {
+        console.log("props update")
         await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
       }
-  
       handleClose();
       setName(null);
       setAction(null);
@@ -51,11 +52,13 @@ function Createwebhook(props) {
 
 
   const handleClose = () => {
-    if(!props.webhookid){
-    setName('');
-    setAction('');
-    setUrl('');}
-    props.handleClose(); // Call the handleClose function from props to close the modal
+    if(props.webhookid){
+    props?.closeDropdown();
+    }
+      props.handleClose(); // Call the handleClose function from props to close the modal
+      setName('');
+      setAction('');
+      setUrl('');
   };
 
 
@@ -115,7 +118,7 @@ function Createwebhook(props) {
               </FormControl>
             </Box>
 
-            {action !== 'deleteRow' || props.condition !=="deleteRow" ? (
+            {action !== 'deleteRow'  ? (
               <Box className="create-auth-key-row">
                 <Typography className="create-webhook-label">Filters</Typography>
                 <FormControl variant="standard" className="create-auth-key-dropdown">
@@ -194,8 +197,8 @@ Createwebhook.propTypes = {
   webhookid:PropTypes.any,
   webhookname:PropTypes.any,
   weburl:PropTypes.any,
-  filterId:PropTypes.any
-
+  filterId:PropTypes.any,
+  closeDropdown:PropTypes.any
 };
 
 export default Createwebhook;
