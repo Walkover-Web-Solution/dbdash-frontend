@@ -28,6 +28,13 @@ export default function AuthKeyPopup(props) {
     navigator.clipboard.writeText(props?.title);
     // setCopySuccess(true);
     setIsCopied(true)
+
+  };
+  
+  const handleButtonClick = () => {
+    handleCopyClick();
+
+    handleClose();
   };
   return (
     <Box>
@@ -44,7 +51,7 @@ export default function AuthKeyPopup(props) {
               <TextField disabled label="Auth Key" variant="standard" value={props?.title} onChange={handleCopyText} />
             </Box>
             <Box>
-              <Button variant="contained"  className="mui-button" onClick={handleCopyClick} disabled={isCopied}> {isCopied ? "Copied" : "Copy"}</Button>
+              <Button variant="contained"  className="mui-button" onClick={handleButtonClick} disabled={isCopied}> {isCopied ? "Copied" : "Copy"}</Button>
             </Box>
           </Box>
           <Box sx={{ mt: 3 }}>

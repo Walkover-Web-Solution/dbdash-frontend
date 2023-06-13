@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {Typography,Menu,MenuItem,Tooltip,IconButton} from '@mui/material';
@@ -82,7 +81,8 @@ const[open1,setOpen1]=useState(false);
       </Menu>
                        
                         
-      {open1 && <CreateAuthKey authkeycreatedorupdated={props.authkeycreatedorupdated}  setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}   open={open1} id={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
+      {open1 && <CreateAuthKey 
+      setAuthKeys={props?.setAuthKeys} authkeycreatedorupdated={props.authkeycreatedorupdated}  setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}   open={open1} id={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
     </>
   );
 }
@@ -95,5 +95,7 @@ AuthDropdown.propTypes = {
   deleteFunction: PropTypes.func,
   authData :PropTypes.object,
   authkeycreatedorupdated:PropTypes.any,
-  setAuthkeycreatedorupdated:PropTypes.any
+  setAuthkeycreatedorupdated:PropTypes.any,
+  setAuthKeys:PropTypes.any,
+  getCreatedByName:PropTypes.func
 };

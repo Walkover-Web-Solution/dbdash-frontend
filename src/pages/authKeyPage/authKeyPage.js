@@ -6,7 +6,6 @@ import "./authKeyPage.scss";
 import PropTypes from "prop-types";
 import CreateAuthKey from "../createAuth/createAuth";
 
-
 export default function AuthKeyPage(props) {
   const [open, setOpen] = useState(false);
   const[authkeycreatedorupdated,setAuthkeycreatedorupdated]=useState(0);
@@ -15,6 +14,8 @@ export default function AuthKeyPage(props) {
     setOpen(false);
   };
   const [authKeys, setAuthKeys] = useState(null);
+  const [createdBy, setCreatedBy] = useState(null);
+
 
   return (
     <>
@@ -31,10 +32,16 @@ export default function AuthKeyPage(props) {
         </Button>
       </Box>
       {open && (
-        <CreateAuthKey authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} open={open} handleClose={handleClose} id={props.dbtoredirect} />
+        <CreateAuthKey 
+        createdBy={createdBy}
+        setCreatedBy={setCreatedBy}
+        setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} open={open} handleClose={handleClose} id={props.dbtoredirect} />
       )}
       <Box className="auth-key-page-content">
-        <AuthKey authKeys={authKeys} setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} dbId={props.dbtoredirect}/>
+        <AuthKey authKeys={authKeys} 
+        createdBy={createdBy}
+        setCreatedBy={setCreatedBy}
+        setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} dbId={props.dbtoredirect}/>
       </Box>
     </>
   );

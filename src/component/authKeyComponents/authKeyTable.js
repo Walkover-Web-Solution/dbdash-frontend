@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -18,33 +18,36 @@ import { allOrg } from "../../store/database/databaseSelector";
 
 export default function AuthKey(props) {
   const adminId = localStorage.getItem("userid");
-  const [createdBy, setCreatedBy] = useState(null);
+  // const [createdBy, setCreatedBy] = useState(null);
   const user = useSelector((state) => allOrg(state));
 
   useEffect(() => {
     getAuthkeyFun();
-  }, [props.dbId, props.authkeycreatedorupdated]);
+  }, [props.dbId]);
 
-  async function getAuthkeyFun() {
-    const data = await getAuthkey(props.dbId, adminId);
-    props.setAuthKeys(data?.data?.data);
-    var array = [];
-    Object.entries(Object.values(data?.data?.data)).map((key) => {
-      user[0]?.users?.map((id) => {
+ function getCreatedByName (data){
+  var array = [];
+  Object.entries(Object.values(data)).map((key) => {
+    user.map((user)=>{
+      user?.users?.map((id) => {
         if (id?.user_id?._id === key[1].user) {
           array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
         }
       });
-    });
-    setCreatedBy(array);
+    })
+  });
+  props?.setCreatedBy(array);
+ }
+  async function getAuthkeyFun() {
+    const data = await getAuthkey(props.dbId, adminId);
+    props.setAuthKeys(data?.data?.data);
+    getCreatedByName(data?.data?.data);
   }
 
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props.dbId, adminId, authKey);
-    const dataa = await getAuthkey(props.dbId, adminId);
-    props.setAuthKeys(dataa?.data?.data);
-
-    return data;
+    props?.setAuthKeys(data?.data?.data?.auth_keys);
+    return data?.data?.data?.auth_keys;
   }
 
   const formatDateTime = (dateTime) => {
@@ -123,7 +126,7 @@ export default function AuthKey(props) {
                     <TableCell component="th" scope="row">
                       {props.authKeys[keys].name}
                     </TableCell>
-                    <TableCell>{createdBy && createdBy[index]}</TableCell>
+                    <TableCell>{props?.createdBy && props?.createdBy[index]}</TableCell>
                     <TableCell>
                       <Tooltip title={props.authKeys[keys].createDate} placement="top">
                         <span>{formatDateTime(props.authKeys[keys].createDate)}</span>
@@ -151,11 +154,13 @@ export default function AuthKey(props) {
                     <TableCell>
                       <TableMenuDropdown
                         authData={props.authKeys[keys]}
+                        getCreatedByName={getCreatedByName}
                         first={"Edit"}
                         second={"Delete"}
                         third={"Show AuthKey"}
                         title={keys}
                         dbId={props.dbId}
+                        setAuthKeys={props?.setAuthKeys}
                         setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}
                         deleteFunction={deleteAuthkeyFun}
                         authkeycreatedorupdated={props.authkeycreatedorupdated}
@@ -178,5 +183,8 @@ AuthKey.propTypes = {
   setAuthKeys:PropTypes.any,
   authkeycreatedorupdated: PropTypes.any,
   setAuthkeycreatedorupdated: PropTypes.any,
-  selected: PropTypes.any
+  selected: PropTypes.any,
+  setCreatedBy:PropTypes.any,
+  createdBy:PropTypes.any
+
 };
