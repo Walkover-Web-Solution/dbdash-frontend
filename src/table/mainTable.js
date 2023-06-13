@@ -144,9 +144,9 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields,params?.filterName,setFields)
+      reorderFuncton(dispatch, item, newIndex, fields,fields1,params?.filterName,setFields)
     },
-    [fields]
+    [fields,fields1]
   );
 
   const handleRowMoved = useCallback((from, to) => {
@@ -232,6 +232,7 @@ const onCellEdited = useCallback((cell, newValue) => {
     for (const element of selection.rows.items) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
+       
         deletedRowIndices.push(dataa[i][`fld${tableId.substring(3)}autonumber`]);
       }
     }

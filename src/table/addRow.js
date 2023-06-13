@@ -55,18 +55,21 @@ if(newValue?.data && newValue.data.kind=='tags-cell') return;
 }
 }
 
-export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,filterId,setFields) => { 
+export const reorderFuncton = (dispatch,currentIndex,newIndex,fields,fields1,filterId,setFields) => { 
 const newOrder = Array.from(fields);
 const key = fields[currentIndex].id;
+
+let newIndex1 = fields1.indexOf(newOrder[newIndex]);
 const [removedColumn] = newOrder.splice(currentIndex, 1);
 newOrder.splice(newIndex, 0, removedColumn);
+
 dispatch(
   updateColumnOrder({
     filterId:filterId,
     columns: newOrder,
     id: key,
     oldIndex: currentIndex, 
-    newIndex: newIndex,
+    newIndex: newIndex1,
   })
 );
 setFields(newOrder)
