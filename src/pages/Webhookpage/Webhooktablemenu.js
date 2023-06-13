@@ -16,7 +16,7 @@ const[active,setActive]=useState(isActive);
       height: 20,
       padding: 0,
       display: 'flex',
-      backgroundColor: 'transparent', // Added transparent background
+      backgroundColor: 'transparent', 
     },
     switchBase: {
       padding: 2,
@@ -48,7 +48,6 @@ const[active,setActive]=useState(isActive);
   // Create a custom Switch component with the applied styles
   const CustomSwitch = withStyles(styles)(Switch);
   const[addWebhook,setAddWebhook]=useState(false);
-  const[newcreated,setNewcreated]=useState(0);
 
 
   
@@ -94,8 +93,9 @@ const[active,setActive]=useState(isActive);
         <Box >Edit</Box>
         
         <Createwebhook
-          newcreated={newcreated}
-          setNewcreated={setNewcreated}
+        filters={props.filters}
+          newcreated={props.newcreated}
+          setNewcreated={props.setNewcreated}
           condition={props.condition}
           webhookname={props.webhookname}
           webhookid={props.webhookid}
@@ -118,15 +118,14 @@ const[active,setActive]=useState(isActive);
 
 Webhooktablemenu.propTypes = {
     anchorEl: PropTypes.any,
-    // webhookid:PropTypes.any,
-    // condition:PropTypes.any,
-    
     webhookname:PropTypes.any,
     weburl:PropTypes.any,
     filterId:PropTypes.any,
-
+    filters:PropTypes.any,
     closeDropdown: PropTypes.func.isRequired,
     webhookid: PropTypes.string.isRequired,
+    setNewcreated:PropTypes.any,
+    newcreated:PropTypes.any,
     isActive: PropTypes.bool.isRequired,
     condition: PropTypes.string.isRequired,
     dbId: PropTypes.string.isRequired,

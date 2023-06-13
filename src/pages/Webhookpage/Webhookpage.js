@@ -6,8 +6,8 @@ import Webhooktable from "./Webhooktable";
 import Createwebhook from "./createwebhook";
 import PropTypes from "prop-types";
 
-
 export default function Webhookpage(props) {
+
     const [tabledata,setTabledata]=useState(null);
     const[addWebhook,setAddWebhook]=useState(false);
     const[newcreated,setNewcreated]=useState(0);
@@ -17,9 +17,7 @@ export default function Webhookpage(props) {
       };
       
   return (
-    <>
-
-    
+    <>  
       <Box className="auth-key-page-container">
           <Button className="mui-button" variant="contained" onClick={handleAddWebhook} endIcon={<AddIcon />}>
             Add Webhook
@@ -38,7 +36,7 @@ export default function Webhookpage(props) {
       </Box>
 
       <Box className="auth-key-page-content">
-        <Webhooktable setNewcreated={setNewcreated} newcreated={newcreated} tabledata={tabledata} setTabledata={setTabledata} dbId={props.dbId} tableId={props.table}/>
+        <Webhooktable  filters={props?.dataforwebhook[props?.table]?.filters} setNewcreated={setNewcreated} newcreated={newcreated} tabledata={tabledata} setTabledata={setTabledata} dbId={props.dbId} tableId={props.table}/>
       </Box>
     </>
   );

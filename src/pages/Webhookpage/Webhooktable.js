@@ -11,9 +11,6 @@ import Webhooktablemenu from "./Webhooktablemenu";
 export default function Webhooktable(props) {
 
 
-
-
-
   const [anchorEl, setAnchorEl] = useState(null);
   const[wbhookid,setWbhookid]=useState('');
   const[wbhookcondition,setWbhookcondition]=useState('');
@@ -58,7 +55,7 @@ export default function Webhooktable(props) {
     setWbhookid('');
     props.setTabledata(data1.data.data.webhook);
   };
-
+console.log(props,"j")
   const formatDateTime = (dateTime) => {
     const currentDate = new Date();
     const createdDate = new Date(dateTime);
@@ -113,9 +110,8 @@ export default function Webhooktable(props) {
  
   };
  
-  
-
-
+//   const filterNames = Object.values(props.filters).map(filter => filter.filterName);
+// console.log(filterNames,"filterNames")
   return (
     <>
       <Box sx={{ border: 1, m: 1 }}>
@@ -147,10 +143,17 @@ export default function Webhooktable(props) {
       
 
       <TableCell>{condition}</TableCell>
-
-      <TableCell component="th" scope="row">
-        {webhook.filterId}
+{/* 
+      {filterNames.map((name, index) => (
+      <TableCell component="th" scope="row" key={index}>
+        {name}
       </TableCell>
+  ))} */}
+
+<TableCell>
+        <span>{webhook.filterId}</span>
+      </TableCell>
+
 
       <TableCell>
         <span>{formatDateTime(webhook.createdAt * 1000)}</span>
@@ -170,7 +173,8 @@ export default function Webhooktable(props) {
           toggleDropdown(event)}}           
           />
           
-        {anchorEl &&   <Webhooktablemenu  tableId={props?.tableId} dbId={props?.dbId} filterId={filters} weburl={url} condition={ wbhookcondition}  webhookname={name} webhookid={wbhookid} handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl}  closeDropdown={closeDropdown}   isActive={wbhookactive}        />
+        {anchorEl &&   <Webhooktablemenu newcreated={props.newcreated}
+          setNewcreated={props.setNewcreated} filters={props.filters} tableId={props?.tableId} dbId={props?.dbId} filterId={filters} weburl={url} condition={ wbhookcondition}  webhookname={name} webhookid={wbhookid} handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl}  closeDropdown={closeDropdown}   isActive={wbhookactive}   />
        }</div>
     </TableCell>
     </TableRow>
@@ -186,14 +190,14 @@ export default function Webhooktable(props) {
 }
 
 Webhooktable.propTypes = {
+
+  filters:PropTypes.any,
   dbId: PropTypes.string,
   tabledata:PropTypes.any,
   setTabledata:PropTypes.any,
   tableId:PropTypes.any,
+  setNewcreated:PropTypes.any,
   newcreated:PropTypes.any
  
 };
 
-// sendwebId:PropTypes.any,
-// setwebhook:PropTypes.any,
-//sendwebId={webhookid} setwebhook={webhook} condition={condition}

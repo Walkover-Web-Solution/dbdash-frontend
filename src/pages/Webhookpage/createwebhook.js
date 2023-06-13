@@ -14,42 +14,47 @@ import { createWebhook, updateWebhook } from '../../api/webhookApi';
 // import { Webhook } from '@mui/icons-material';
 
 function Createwebhook(props) {
-  
   const [name, setName] = useState(null);
   const [action, setAction] = useState('');
-  const [filters, setFilters] = useState( 'all');
+  // const [filters, setFilters] = useState( 'all');
   const [url, setUrl] = useState(null);
+  const [filterid,setFilterid]=useState(props.filterId||'all')
 
 
-  const createWebHook =  () => {
-
-    const data={
-        name:name,
-        url:url,
-filterId:filters,
-isActive: true,
-condition:action,
-
+  const createWebHook = async () => {
+    const data = {
+      name: name,
+      url: url,
+      filterId: filterid,
+      isActive: true,
+      condition: action,
+    };
+  
+    try {
+      if (!props.webhookid) {
+        await createWebhook(props.dbId, props.tableId, data);
+      } else {
+        await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
+      }
+  
+      handleClose();
+      setName(null);
+      setAction(null);
+      setUrl(null);
+    } catch (error) {
+      // Handle the error appropriately
     }
-    if(!props.webhookid){
-    createWebhook(props.dbId,props.tableId,data);
-   
-    // handleClose();
-   }
-   else{
-    updateWebhook(props?.dbId,props?.tableId,props?.webhookid,data);
-   }
-   props.setNewcreated(props.newcreated+1);
-    setName(null);
-    setAction(null);
-    setUrl(null);
+  
+    props.setNewcreated(props.newcreated + 1);
   };
+  
 
 
   const handleClose = () => {
+    if(!props.webhookid){
     setName('');
     setAction('');
-    setUrl('');
+    setUrl('');}
     props.handleClose(); // Call the handleClose function from props to close the modal
   };
 
@@ -59,28 +64,11 @@ condition:action,
       setName(props.webhookname);
       setAction(props.condition);
        setUrl(props.weburl)
-       setFilters(props.filterId)
+       setFilterid(props.filterId)
+       
     }
   }, [props.webhookid]);
 
-//   const updateWebHook =  () => {
-
-//     const data={
-//         name:name,
-//         url:url,
-// filterId:filters,
-// isActive: true,
-// condition:action,
-
-//     }
-//     updateWebhook(props?.dbId,props?.tableId,props?.webhookid,data);
-//     // props.setNewcreated(props.newcreated+1);
-//     handleClose();
-   
-//     setName(null);
-//     setAction(null);
-//     setUrl(null);
-//   };
 
   return (
     <>
@@ -127,7 +115,7 @@ condition:action,
               </FormControl>
             </Box>
 
-            {action !== 'deleteRow' || props.condition=="deleteRow" ? (
+            {action !== 'deleteRow' || props.condition !=="deleteRow" ? (
               <Box className="create-auth-key-row">
                 <Typography className="create-webhook-label">Filters</Typography>
                 <FormControl variant="standard" className="create-auth-key-dropdown">
@@ -135,20 +123,23 @@ condition:action,
                     id="filterColumn"
                     select
                     label="Filters"
-                    value={filters }
+                    value={filterid}
                     style={{ minWidth: '210px' }}
-                    onChange={(e) => setFilters(e.target.value)}
+                    onChange={(e) => setFilterid(e.target.value)}
+                    defaultValue={props.filterId}
                   >
-                    <MenuItem key={0} value={'all'}>
-                      Anywhere in the table
-                    </MenuItem>
-
-                    {props.filters &&
+                  {props.filters && 
                       Object.entries(props.filters).map(([key, value]) => (
                         <MenuItem key={key} value={key}>
                           {value.filterName}
+                         
                         </MenuItem>
                       ))}
+                    <MenuItem key={0} value={'all'}>
+                      Anywhere in the table
+                    </MenuItem>
+                    
+                    
                   </TextField>
                 </FormControl>
               </Box>
@@ -174,7 +165,8 @@ condition:action,
               <Button
                 variant="contained"
                 className="create-auth-key-button mui-button"
-                onClick={createWebHook}
+                onClick={() => {createWebHook();
+                handleClose()}}
               >
                 {props.webhookid ? "Update" : "Create"}
               </Button>
