@@ -5,7 +5,6 @@ import { deleteWebhook, getWebhook, updateWebhook } from "../../api/webhookApi";
 import MenuIcon from '@mui/icons-material/MoreHoriz';
 import Webhooktablemenu from "./Webhooktablemenu";
 export default function Webhooktable(props) {
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [wbhookid, setWbhookid] = useState('');
   const [wbhookcondition, setWbhookcondition] = useState('');
@@ -101,7 +100,6 @@ export default function Webhooktable(props) {
 
   };
 
-  //   const filterNames = Object.values(props.filters).map(filter => filter.filterName);
   return (
     <>
       <Box sx={{ border: 1, m: 1 }}>
@@ -112,7 +110,7 @@ export default function Webhooktable(props) {
                 <TableCell>Name</TableCell>
                 <TableCell>URL</TableCell>
                 <TableCell>Condition</TableCell>
-                <TableCell>Filters</TableCell>
+                {/* <TableCell>Filters</TableCell> */}
                 <TableCell>Created On</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
@@ -120,6 +118,7 @@ export default function Webhooktable(props) {
             <TableBody>
               {tabledata && Object.entries(tabledata).map(([condition, webhooks]) => (
                 Object.entries(webhooks).map(([webhookid, webhook]) => (
+
                   <TableRow key={webhookid} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
 
                     <TableCell component="th" scope="row">
@@ -133,16 +132,10 @@ export default function Webhooktable(props) {
 
 
                     <TableCell>{condition}</TableCell>
-                    {/* 
-      {filterNames.map((name, index) => (
-      <TableCell component="th" scope="row" key={index}>
-        {name}
-      </TableCell>
-  ))} */}
 
-                    <TableCell>
-                      <span>{webhook.filterId}</span>
-                    </TableCell>
+                    {/* <TableCell>
+  {webhook.filterId && props.filters[webhook.filterId]?.filterName}
+</TableCell> */}
 
 
                     <TableCell>
@@ -181,7 +174,6 @@ export default function Webhooktable(props) {
 }
 
 Webhooktable.propTypes = {
-
   filters: PropTypes.any,
   dbId: PropTypes.string,
   tabledata: PropTypes.any,
@@ -189,6 +181,5 @@ Webhooktable.propTypes = {
   tableId: PropTypes.any,
   setNewcreated: PropTypes.any,
   newcreated: PropTypes.any
-
 };
 

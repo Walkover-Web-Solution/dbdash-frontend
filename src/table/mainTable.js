@@ -52,7 +52,6 @@ export default function MainTable() {
   document.addEventListener('keydown', function(event) {
     todeleterows=false;
   });
-  console.log("tableInfo",tableId)
   const handleUploadFileClick = useCallback((cell) => {
     if(!data)return ;
     const [col, row] = cell;
@@ -233,8 +232,7 @@ const onCellEdited = useCallback((cell, newValue) => {
     for (const element of selection.rows.items) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
-        console.log("dataa[i][`fld${tableId}autonumber`]",dataa[i][`fld${tableId.substring(3)}autonumber`])
-        console.log("dataa[i]",dataa[i])
+       
         deletedRowIndices.push(dataa[i][`fld${tableId.substring(3)}autonumber`]);
       }
     }
