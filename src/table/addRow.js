@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { addRows, updateCells, addColumsToLeft,updateColumnOrder } from "../store/table/tableThunk";
 
 export const addRow = (dispatch) => { 
@@ -21,6 +22,11 @@ if(newValue?.data && newValue.data.kind=='tags-cell') return;
     {let newdata;
        if(dataType=="datetime")
     {
+      if(!newValue?.data?.date && newValue?.data?.date!="" )
+      {
+        toast.warning("Invalid or undefined date");
+        return;
+      }
       newdata=newValue?.data?.date;
       
     }else{
