@@ -77,6 +77,7 @@ const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
     // const tableInfo = getTableInfo(getState())
     const userJson = await replaceCreatedByIdWithName(userInfo, org_id)
     const createdby = "fld" + tableName.substring(3) + "createdby";
+    const updatedby = "fld" + tableName.substring(3) + "updatedby";
     
     const dataAndPageNo = {
         offset : true,
@@ -88,6 +89,7 @@ const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
         const obj = data.data.data?.rows || data.data.data;
         obj.map((row) => {
             row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
+            row[updatedby] = userJson?.[row[updatedby]] ? (userJson?.[row[updatedby]]?.first_name + " " + userJson?.[row[updatedby]]?.last_name) : row[updatedby];
         })
         dataAndPageNo.offset = data.data.data?.offset;
         dataAndPageNo.rows=[...dataAndPageNo.rows,...obj]
@@ -252,6 +254,7 @@ export const updateColumnHeaders = createAsyncThunk(
             dbId:updatedDbdata?.data?.data?._id,
             tables: updatedDbdata?.data?.data?.tables
         }))
+
         let  updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
         updatedColumn = {[payload?.columnId]:updatedColumn}
         updatedColumn = await getHeaders(null , null , updatedColumn)

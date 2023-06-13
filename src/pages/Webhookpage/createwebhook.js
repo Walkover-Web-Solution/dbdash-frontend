@@ -11,12 +11,10 @@ import {
 } from '@mui/material';
 import { PropTypes } from 'prop-types';
 import { createWebhook, updateWebhook } from '../../api/webhookApi';
-// import { Webhook } from '@mui/icons-material';
 
 function Createwebhook(props) {
   const [name, setName] = useState(null);
   const [action, setAction] = useState('');
-  // const [filters, setFilters] = useState( 'all');
   const [url, setUrl] = useState(null);
   const [filterid,setFilterid]=useState(props.filterId||'all')
 
@@ -30,32 +28,29 @@ function Createwebhook(props) {
       condition: action,
     };
   
-    try {
-      if (!props?.webhookid) {
-        console.log("props create")
-        await createWebhook(props.dbId, props.tableId, data);
-      } else {
-        console.log("props update")
+      if (props?.webhookid) {
+        if(props?.condition !==  action)
+        {
+            data.newCondition = action
+            data.condition = props?.condition
+        }
         await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
+      } else {
+        await createWebhook(props.dbId, props.tableId, data);
       }
       handleClose();
       setName(null);
       setAction(null);
       setUrl(null);
-    } catch (error) {
-      // Handle the error appropriately
-    }
-  
     props.setNewcreated(props.newcreated + 1);
   };
   
-
-
+  
   const handleClose = () => {
     if(props.webhookid){
     props?.closeDropdown();
     }
-      props.handleClose(); // Call the handleClose function from props to close the modal
+      props.handleClose(); 
       setName('');
       setAction('');
       setUrl('');
@@ -67,8 +62,7 @@ function Createwebhook(props) {
       setName(props.webhookname);
       setAction(props.condition);
        setUrl(props.weburl)
-       setFilterid(props.filterId)
-       
+       setFilterid(props.filterId) 
     }
   }, [props.webhookid]);
 
@@ -198,7 +192,7 @@ Createwebhook.propTypes = {
   webhookname:PropTypes.any,
   weburl:PropTypes.any,
   filterId:PropTypes.any,
-  closeDropdown:PropTypes.any
-};
+  closeDropdown:PropTypes.any,
+}
 
 export default Createwebhook;

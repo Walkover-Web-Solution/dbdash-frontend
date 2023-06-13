@@ -1,22 +1,19 @@
-import React ,{useState} from 'react';
+import React, { useState } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { Popover, MenuItem, Box,Switch } from '@mui/material';
+import { Popover, MenuItem, Box, Switch } from '@mui/material';
 import { withStyles } from '@mui/styles';
-
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
 function Webhooktablemenu(props) {
-  
-
-  const { anchorEl, closeDropdown, handleUpdateActive,handleDeleteWebhook,isActive } = props;
-const[active,setActive]=useState(isActive);
+  const { anchorEl, closeDropdown, handleUpdateActive, handleDeleteWebhook, isActive } = props;
+  const [active, setActive] = useState(isActive);
   const styles = {
     root: {
       width: 40,
       height: 20,
       padding: 0,
       display: 'flex',
-      backgroundColor: 'transparent', 
+      backgroundColor: 'transparent',
     },
     switchBase: {
       padding: 2,
@@ -44,17 +41,14 @@ const[active,setActive]=useState(isActive);
     },
     checked: {},
   };
-  
+
   // Create a custom Switch component with the applied styles
   const CustomSwitch = withStyles(styles)(Switch);
-  const[addWebhook,setAddWebhook]=useState(false);
+  const [addWebhook, setAddWebhook] = useState(false);
 
-
-  
   const handleAddWebhook = () => {
     setAddWebhook(!addWebhook);
   };
-
 
   return (
     <div>
@@ -77,7 +71,7 @@ const[active,setActive]=useState(isActive);
             <Box sx={{ ml: 2 }}>
               <CustomSwitch
                 checked={active}
-                onChange={() => {setActive(!active);handleUpdateActive()}}
+                onChange={() => { setActive(!active); handleUpdateActive() }}
               />
             </Box>
           </div>
@@ -90,46 +84,45 @@ const[active,setActive]=useState(isActive);
           </Box>
         </MenuItem>
         <MenuItem onClick={handleAddWebhook} >
-        <Box >Edit</Box>
+          <Box >Edit</Box>
         </MenuItem>
       </Popover>
-        <Createwebhook
+      <Createwebhook
         filters={props.filters}
-          newcreated={props.newcreated}
-          setNewcreated={props.setNewcreated}
-          condition={props.condition}
-          webhookname={props.webhookname}
-          webhookid={props.webhookid}
-          dbId={props.dbId}
-          tableId={props?.tableId}
-          filterId={props.filterId}
-          weburl={props.weburl}
-          closeDropdown={props?.closeDropdown}
-          // tableId={props.table}
-  // filters={props?.dataforwebhook[props?.table]?.filters}
-  open={addWebhook}
-  setOpen={setAddWebhook}
-  handleClose={handleAddWebhook}
-/>
+        newcreated={props.newcreated}
+        setNewcreated={props.setNewcreated}
+        condition={props.condition}
+        webhookname={props.webhookname}
+        webhookid={props.webhookid}
+        dbId={props.dbId}
+        tableId={props?.tableId}
+        filterId={props.filterId}
+        weburl={props.weburl}
+        closeDropdown={props?.closeDropdown}
+        open={addWebhook}
+        setOpen={setAddWebhook}
+        handleClose={handleAddWebhook}
+      />
     </div>
   );
 }
 
 Webhooktablemenu.propTypes = {
-    anchorEl: PropTypes.any,
-    webhookname:PropTypes.any,
-    weburl:PropTypes.any,
-    filterId:PropTypes.any,
-    filters:PropTypes.any,
-    closeDropdown: PropTypes.func.isRequired,
-    webhookid: PropTypes.string.isRequired,
-    setNewcreated:PropTypes.any,
-    newcreated:PropTypes.any,
-    isActive: PropTypes.bool.isRequired,
-    condition: PropTypes.string.isRequired,
-    dbId: PropTypes.string.isRequired,
-    tableId: PropTypes.string.isRequired,
-    setTabledata: PropTypes.func.isRequired,
-    handleUpdateActive:PropTypes.any,handleDeleteWebhook:PropTypes.any,
-  };
+  anchorEl: PropTypes.any,
+  webhookname: PropTypes.any,
+  weburl: PropTypes.any,
+  filterId: PropTypes.any,
+  filters: PropTypes.any,
+  closeDropdown: PropTypes.func.isRequired,
+  webhookid: PropTypes.string.isRequired,
+  setNewcreated: PropTypes.any,
+  newcreated: PropTypes.any,
+  isActive: PropTypes.bool.isRequired,
+  condition: PropTypes.string.isRequired,
+  dbId: PropTypes.string.isRequired,
+  tableId: PropTypes.string.isRequired,
+  setTabledata: PropTypes.func.isRequired,
+  handleUpdateActive: PropTypes.any, handleDeleteWebhook: PropTypes.any,
+  tabledata: PropTypes.any
+};
 export default Webhooktablemenu;
