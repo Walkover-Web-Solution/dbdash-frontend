@@ -120,10 +120,8 @@ export function extraReducers(builder) {
 
       state.status = "failed";
 
-      // MDBToast.error("Unable to fetch jamaats.");
     })
 
-    //   rename Org
 
     .addCase(renameOrgThunk.pending, (state) => {
 

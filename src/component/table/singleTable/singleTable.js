@@ -143,9 +143,12 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                     e.stopPropagation();
                     setName(false);
                     renameTableName(dbData?.db?._id, table[0]);
+                    
                   }}
                   variant="contained"
                   className="mui-button"
+                 // style={{color:'white'}}
+                  
                 >
                   Rename
                 </Button>

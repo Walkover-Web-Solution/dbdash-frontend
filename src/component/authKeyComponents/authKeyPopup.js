@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -19,7 +18,9 @@ export default function AuthKeyPopup(props) {
 
   const [, setCopyText] = useState('');
   const [isCopied, setIsCopied] = useState(false);
-  const handleClose = () => props.setOpen(false);
+  const handleClose = () =>{ 
+    props.handleClose();
+    props.setOpen(false)};
   const handleCopyText = () => {
     setCopyText(props?.title);
   }
@@ -47,9 +48,7 @@ export default function AuthKeyPopup(props) {
             </Box>
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Link to={`/authkeypage/${props?.dbId}`} state={props.state} style={{ textDecoration: 'none' }}>
               <Button variant="outlined" className="mui-button-outlined" onClick={handleClose}>Cancel</Button>
-            </Link>
           </Box>
         </Box>
       </Modal>
@@ -60,11 +59,7 @@ AuthKeyPopup.propTypes = {
   title: PropTypes.string,
   open: PropTypes.bool,
   setOpen: PropTypes.func,
-  label: PropTypes.string,
-  state:PropTypes.any,
-  saveFunction: PropTypes.func,
-  setVariable: PropTypes.func,
-  id: PropTypes.string,
+ 
   authkey: PropTypes.any,
-  dbId: PropTypes.any
+  handleClose:PropTypes.any,
 };
