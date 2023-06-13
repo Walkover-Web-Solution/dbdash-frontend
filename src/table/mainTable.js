@@ -29,7 +29,6 @@ export default function MainTable() {
   const dispatch = useDispatch();
   const fields1 = useSelector((state) => state.table.columns);
   const dataa = useSelector((state) => state.table.data) || [];
-  let todeleterows=false;
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState('longtext');
@@ -45,13 +44,15 @@ export default function MainTable() {
   const [imageLink, setImageLink] = useState("");
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state)); 
+  const tableId = tableInfo?.tableId
   useEffect(()=>{
     setData(dataa)
   },[dataa])
+  let todeleterows=false;
   document.addEventListener('keydown', function(event) {
     todeleterows=false;
   });
-
+  console.log("tableInfo",tableId)
   const handleUploadFileClick = useCallback((cell) => {
     if(!data)return ;
     const [col, row] = cell;
@@ -71,7 +72,7 @@ export default function MainTable() {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex: Object.entries(dataa[row])[1][1],
+          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: null,
           imageLink: imageLink,
           dataTypes: type,
@@ -91,7 +92,7 @@ export default function MainTable() {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex:Object.entries(dataa[row])[1][1],
+          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
@@ -131,7 +132,7 @@ export default function MainTable() {
   useEffect(() => {
     var newcolumn = []
     fields1.forEach(column => {
-      if (column?.metadata?.hide != "true") {
+      if (column?.metadata?.hide != true) {
         newcolumn.push(column)
       }
     });
@@ -152,6 +153,7 @@ export default function MainTable() {
   const handleRowMoved = useCallback((from, to) => {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
+  
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
@@ -193,26 +195,22 @@ const onCellEdited = useCallback((cell, newValue) => {
 {
 
   if(newValue.data.kind=='tags-cell')
-     {
-      
-      
+     { 
           let tag="";
           let arr1=newValue.data.tags;
           let arr2=oldValue.data.tags || [];
           let arr=arr1.filter(x=>!arr2.includes(x));
           
           tag=arr[0]|| "";
-          if(  fields1[cell[0]]?.id && tag!="" ){
+          if(fields[cell[0]]?.id && tag!="" ){
             dispatch(
               updateCells({
-                columnId:  fields1[cell[0]]?.id ,
-                rowIndex :Object.entries(dataa[cell[1]])[1][1],
+                columnId:  fields[cell[0]]?.id ,
+                rowIndex :dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
                 value:  tag ,
                 dataTypes: newValue?.kind,
               })
-             );
-          
-        
+             );       
      
       }}
     
@@ -223,7 +221,7 @@ const onCellEdited = useCallback((cell, newValue) => {
       else return false;
 
     }
-},[dataa]);
+},[dataa,fields]);
   const handleDeleteRow = useCallback((selection) => {
     
     if(selection.current)
@@ -234,9 +232,10 @@ const onCellEdited = useCallback((cell, newValue) => {
   
     for (const element of selection.rows.items) {
       const [start, end] = element;
-  
       for (let i = start; i < end; i++) {
-        deletedRowIndices.push(Object.entries(dataa[i])[1][1]);
+        console.log("dataa[i][`fld${tableId}autonumber`]",dataa[i][`fld${tableId.substring(3)}autonumber`])
+        console.log("dataa[i]",dataa[i])
+        deletedRowIndices.push(dataa[i][`fld${tableId.substring(3)}autonumber`]);
       }
     }
   
@@ -285,17 +284,19 @@ const onCellEdited = useCallback((cell, newValue) => {
         };
       }
       else if (dataType === "datetime") {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().split("T")[0];
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
           copyData: "4",
           data: {
             kind: "date-picker-cell",
-            date: new Date(),
-            displayDate: new Date().toISOString(),
+            date: currentDate,
+            displayDate: formattedDate,
             format: "date"
           }
-      }
+        };
     }
     else if (dataType === "longtext") {
       return {
