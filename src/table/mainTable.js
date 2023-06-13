@@ -1,8 +1,9 @@
 /*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
-import { // CompactSelection
+import { CompactSelection,
   DataEditor, GridCellKind
 } from "@glideapps/glide-data-grid";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { addColumnrightandleft, deleteRows,updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
@@ -42,16 +43,19 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
+  const emptyselection={
+    columns: CompactSelection.empty(),
+    rows: CompactSelection.empty(),
+    current: undefined,
+};
+  const[selection1,setSelection1]=useState(emptyselection);
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state)); 
   const tableId = tableInfo?.tableId
   useEffect(()=>{
     setData(dataa)
   },[dataa])
-  let todeleterows=false;
-  document.addEventListener('keydown', function(event) {
-    todeleterows=false;
-  });
+ 
   const handleUploadFileClick = useCallback((cell) => {
     if(!data)return ;
     const [col, row] = cell;
@@ -156,8 +160,7 @@ export default function MainTable() {
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
-  if(todeleterows==false )
-  {
+
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   if(fields[cell[0]].dataType == "singleselect"){
@@ -174,7 +177,7 @@ const onCellEdited = useCallback((cell, newValue) => {
     editCell(cell, newValue, dispatch, fields,false,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
   }
 } 
-}, [dataa,data, fields]);
+, [dataa,data, fields]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -221,7 +224,7 @@ const onCellEdited = useCallback((cell, newValue) => {
 
     }
 },[dataa,fields]);
-  const handleDeleteRow = useCallback((selection) => {
+  const handleDeleteRow = (selection) => {
     
     if(selection.current)
     {return;
@@ -238,13 +241,15 @@ const onCellEdited = useCallback((cell, newValue) => {
     }
   
     if (deletedRowIndices.length > 0) {
-    todeleterows = true;
 
       dispatch(deleteRows({deletedRowIndices,dataa}))
     }
+   setSelection1(emptyselection)
+
+    
     // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
     // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
-  });
+  };
   
 
 
@@ -345,6 +350,15 @@ const onCellEdited = useCallback((cell, newValue) => {
           displayData:d || ""
         };
       }
+      else if (dataType === "numeric") {
+        return {
+          allowOverlay: true,
+          kind: GridCellKind.Number,
+          data: d || "",
+          displayData:d || ""
+        };
+      }
+    
       else if (dataType === "multipleselect") {
          const possibleTags = fields[col]?.metadata?.option;
         // const row = 0; // Replace 0 with the appropriate row index
@@ -420,8 +434,36 @@ const onCellEdited = useCallback((cell, newValue) => {
     }));
   }, [fields]);
 
+ const handlegridselection=(event)=>{
+setSelection1(event);
+  // return event;
+ }
   return (
     <>
+    {JSON.stringify(selection1)!==JSON.stringify(emptyselection) && selection1.rows.items.length>0 && <button
+  style={{
+    position: "absolute",
+    display:'flex',
+    flexDirection:'row',
+
+    right: "3%",
+    top: "17%",
+    zIndex: "10000",
+    background: "none",
+    border: "none",
+    outline: "none",
+    cursor: "pointer",
+   
+  }}
+  onClick={() => handleDeleteRow(selection1)}
+>
+  <div style={{marginTop:"5px"}}>Delete Rows</div>
+  <div>
+    
+    <DeleteOutlineIcon />
+  </div>
+</button>
+}
       <div className="table-container" style={{height:`${((window?.screen?.height*65)/100)}px`}}>
         <DataEditor
            {...cellProps}
@@ -430,13 +472,15 @@ const onCellEdited = useCallback((cell, newValue) => {
           onRowAppended={addRows}
           columns={realCols}
           rows={dataa.length}
+          gridSelection={selection1}
           rowMarkers="both"
           rowSelectionMode="multi"
+          onGridSelectionChange={handlegridselection}
           onCellEdited={onCellEdited}
           onRowMoved={handleRowMoved}
-          onDelete={handleDeleteRow}
           validateCell={validateCell}
           getCellsForSelection={true}
+          // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
