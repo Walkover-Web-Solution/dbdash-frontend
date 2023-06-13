@@ -152,6 +152,7 @@ export default function MainTable() {
   const handleRowMoved = useCallback((from, to) => {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
+  
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
@@ -285,17 +286,19 @@ const onCellEdited = useCallback((cell, newValue) => {
         };
       }
       else if (dataType === "datetime") {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().split("T")[0];
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
           copyData: "4",
           data: {
             kind: "date-picker-cell",
-            date: new Date(),
-            displayDate: new Date().toISOString(),
+            date: currentDate,
+            displayDate: formattedDate,
             format: "date"
           }
-      }
+        };
     }
     else if (dataType === "longtext") {
       return {
