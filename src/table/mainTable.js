@@ -311,14 +311,13 @@ const onCellEdited = useCallback((cell, newValue) => {
             copyData: "4",
             data: {
               kind: "date-picker-cell",
-              date: null,
+              date: new Date(),
               displayDate: "",
               format: "date",
             },
           };
         }
       }
-            
       
     else if (dataType === "longtext") {
       return {
