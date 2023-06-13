@@ -254,8 +254,28 @@ export const updateColumnHeaders = createAsyncThunk(
             dbId:updatedDbdata?.data?.data?._id,
             tables: updatedDbdata?.data?.data?.tables
         }))
-
         let  updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
+        if(payload?.filterId){
+            try{
+                var  updatedFilterColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.filters?.[payload?.filterId]?.fields?.[payload?.columnId];
+                const updatedMetaData = {
+                    ...updatedColumn.metaData, // Copy the existing metaData properties
+                    hide: updatedFilterColumn.hide,// Update the hide property
+                    width:updatedFilterColumn.width  
+                  };
+                  // Create a new updatedColumn object with the updated metaData
+                   updatedColumn = {
+                    ...updatedColumn, // Copy the existing properties of updatedColumn
+                    metaData: updatedMetaData, // Update the metaData property
+                  };
+        //    updatedColumn.metaData.hide = updatedFilterColumn.hide
+        //    updatedColumn.metaData.width = updatedFilterColumn.width 
+            }
+            catch(e){
+                console.log(e)
+            }
+           
+        }
         updatedColumn = {[payload?.columnId]:updatedColumn}
         updatedColumn = await getHeaders(null , null , updatedColumn)
         // now will update the table reducer so current table fields  will be updated as well 

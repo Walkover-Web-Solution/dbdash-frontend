@@ -40,6 +40,7 @@ export default function HideFieldDropdown(props) {
         tableName: params?.tableName,
         columnId: columnId,
         metaData: metaData,
+        filterId : params?.filterName
       })
     );
   };
