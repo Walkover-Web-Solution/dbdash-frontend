@@ -72,7 +72,7 @@ export default function MainTable() {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex:row[`fld${tableId.substring(3)}autonumber`],
+          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: null,
           imageLink: imageLink,
           dataTypes: type,
@@ -92,7 +92,7 @@ export default function MainTable() {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex:row[`fld${tableId.substring(3)}autonumber`],
+          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
