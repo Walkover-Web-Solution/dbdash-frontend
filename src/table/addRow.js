@@ -18,9 +18,14 @@ const tableId = params?.tableName.substring(3);
 if(newValue?.data && newValue.data.kind=='tags-cell') return;
   const key = fields[col].id;
   if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) 
-    { 
-      let newdata=dataType=='phone' || dataType=='checkbox'?newValue?.data?.toString():newValue?.data;
-        if(dataType=="singleselect")
+    {let newdata;
+       if(dataType=="datetime")
+    {
+      newdata=newValue?.data?.date;
+      
+    }else{
+       newdata=dataType=='phone' || dataType=='checkbox' ?newValue?.data?.toString():newValue?.data;
+     } if(dataType=="singleselect")
         {  dispatch(
           updateCells({
             columnId: key,

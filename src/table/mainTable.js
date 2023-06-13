@@ -284,20 +284,42 @@ const onCellEdited = useCallback((cell, newValue) => {
         };
       }
       else if (dataType === "datetime") {
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().split("T")[0];
-        return {
-          kind: GridCellKind.Custom,
-          allowOverlay: true,
-          copyData: "4",
-          data: {
-            kind: "date-picker-cell",
-            date: currentDate,
-            displayDate: formattedDate,
-            format: "date"
-          }
-        };
-    }
+        const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
+        if (currentDate instanceof Date && !isNaN(currentDate)) {
+          const day = currentDate.getDate().toString().padStart(2, "0");
+          const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+          const year = currentDate.getFullYear().toString().padStart(4, "0");
+          const formattedDate = `${day}-${month}-${year}`;
+          
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: "4",
+            data: {
+              kind: "date-picker-cell",
+              date: currentDate,
+              displayDate: formattedDate,
+              format: "date",
+            },
+          };
+        } else {
+          // Handle invalid time value
+          // For example, you can return a default value or show an error message
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: "4",
+            data: {
+              kind: "date-picker-cell",
+              date: null,
+              displayDate: "",
+              format: "date",
+            },
+          };
+        }
+      }
+            
+      
     else if (dataType === "longtext") {
       return {
         kind: GridCellKind.Text,
