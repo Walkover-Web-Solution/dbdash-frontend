@@ -194,26 +194,22 @@ const onCellEdited = useCallback((cell, newValue) => {
 {
 
   if(newValue.data.kind=='tags-cell')
-     {
-      
-      
+     { 
           let tag="";
           let arr1=newValue.data.tags;
           let arr2=oldValue.data.tags || [];
           let arr=arr1.filter(x=>!arr2.includes(x));
           
           tag=arr[0]|| "";
-          if(  fields1[cell[0]]?.id && tag!="" ){
+          if(fields[cell[0]]?.id && tag!="" ){
             dispatch(
               updateCells({
-                columnId:  fields1[cell[0]]?.id ,
+                columnId:  fields[cell[0]]?.id ,
                 rowIndex :Object.entries(dataa[cell[1]])[1][1],
                 value:  tag ,
                 dataTypes: newValue?.kind,
               })
-             );
-          
-        
+             );       
      
       }}
     
@@ -224,7 +220,7 @@ const onCellEdited = useCallback((cell, newValue) => {
       else return false;
 
     }
-},[dataa]);
+},[dataa,fields]);
   const handleDeleteRow = useCallback((selection) => {
     
     if(selection.current)

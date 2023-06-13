@@ -19,8 +19,9 @@ if(newValue?.data && newValue.data.kind=='tags-cell') return;
   const key = fields[col].id;
   if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) 
     { 
-      let newdata=dataType=='phone'?newValue?.data?.toString():newValue?.data;
-          dispatch(
+      let newdata=dataType=='phone' || dataType=='checkbox'?newValue?.data?.toString():newValue?.data;
+        if(dataType=="singleselect")
+        {  dispatch(
           updateCells({
             columnId: key,
             rowIndex :  currentrow[`fld${tableId}autonumber`],
@@ -28,6 +29,17 @@ if(newValue?.data && newValue.data.kind=='tags-cell') return;
             dataTypes: newValue?.kind,
           })
          );
+        }
+        else{
+          dispatch(
+            updateCells({
+              columnId: key,
+              rowIndex :  currentrow[`fld${tableId}autonumber`],
+              value:  newdata || newValue?.data  ,
+              dataTypes: newValue?.kind,
+            })
+           );
+        }
           return;
 }
 }
