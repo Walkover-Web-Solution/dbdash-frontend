@@ -197,7 +197,7 @@ export default function Navbar(props) {
         </Box>
 
         {showWebhookPage=="webhook"  &&  (
-          <Webhookpage dataforwebhook={dataforwebhook} dbId={props?.dbtoredirect}  table={props?.tabletoredirect}/>
+          <Webhookpage tables={tables} dataforwebhook={dataforwebhook} dbId={props?.dbtoredirect}  table={props?.tabletoredirect}/>
         ) }
         {showWebhookPage=="apidoc" &&(
           <Box>

@@ -160,7 +160,7 @@ export default function MainTable() {
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
-
+  if(newValue?.readonly==true || newValue?.data==dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data=="" && !dataa[cell[1]][fields[cell[0]]?.id] )) return;
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   if(fields[cell[0]].dataType == "singleselect"){
@@ -445,9 +445,8 @@ setSelection1(event);
     position: "absolute",
     display:'flex',
     flexDirection:'row',
-
-    right: "3%",
-    top: "17%",
+    right: "1%",
+    top: "18.1%",
     zIndex: "10000",
     background: "none",
     border: "none",
