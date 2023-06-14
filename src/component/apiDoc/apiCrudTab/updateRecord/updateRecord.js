@@ -15,7 +15,7 @@ function UpdateRecord(props) {
 
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}/{:rowId}${value !== "" ? `?${value}` : ``}`} header={`-H auth-key: AUTH-TOKEN -H Content-Type: application/json `} body={arr} />
         <ResponseBox response={`{
   "employee": {

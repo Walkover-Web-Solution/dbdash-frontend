@@ -13,7 +13,7 @@ function AddRecord(props) {
 
   return (
     <>
-      <div className="add-record-container">
+      <div className="add-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
           header={`-H auth-key: YOUR_SECRET_API_TOKEN ${(
@@ -31,6 +31,8 @@ function AddRecord(props) {
 }`}
         />
       </div>
+      <div style={{width:'700px',overflowX:"hidden"}}>
+      
       <div className="records-container">
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
         <br />
@@ -45,6 +47,7 @@ function AddRecord(props) {
             />
           </Box>
         </Typography>
+      </div>
       </div>
     </>
   );
