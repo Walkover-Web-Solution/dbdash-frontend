@@ -23,13 +23,15 @@ const Chat = () => {
     try {
       const response = await adminPanelByAI(message);
       const data = response.data;
-      const actual_response = "Answer   :-" + data.success;
+      console.log(data);
+      const code=data?.success?.result||data?.success?.code||data?.success?.explanation||data?.success;
+      const actual_response = "Answer   :-" + code;
   
       setTimeout(() => {
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages];
           const loadingIndex = updatedMessages.findIndex((msg) => msg.key === loadingKey);
-          updatedMessages[loadingIndex] = { key: loadingKey, content: actual_response };
+          updatedMessages[loadingIndex] = { key: loadingKey, content: <div dangerouslySetInnerHTML={{ __html: actual_response }} /> };
           setIsLoading(false);
           return updatedMessages;
         });
