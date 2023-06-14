@@ -449,7 +449,7 @@ setSelection1(event);
     display:'flex',
     flexDirection:'row',
     right: "1%",
-    top: "18.1%",
+    top: "18.55%",
     zIndex: "10000",
     background: "none",
     border: "none",
@@ -466,7 +466,7 @@ setSelection1(event);
   </div>
 </button>
 }
-      <div className="table-container" style={{height:`${((window?.screen?.height*65)/100)}px`}}>
+      <div className="table-container" style={{height:`${((window?.screen?.height*63)/100)}px`}}>
         <DataEditor
            {...cellProps}
           width={window.screen.width}

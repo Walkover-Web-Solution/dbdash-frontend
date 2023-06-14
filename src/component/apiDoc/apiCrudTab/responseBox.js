@@ -6,8 +6,11 @@ function ResponseBox(props) {
 
     return (
         <div className='response-box'>
-
+ <div className="response-header">dummy response
+      </div>
+      <div className='response-body'>
             {props?.response}
+            </div>
         </div>
     )
 }
