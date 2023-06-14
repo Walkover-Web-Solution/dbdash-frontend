@@ -218,7 +218,7 @@ const onCellEdited = useCallback((cell, newValue) => {
     
     if(newValue.kind==='number' )
     {
-      if( newValue.data.toString().length<13)
+      if( newValue?.data?.toString().length<13)
       return newValue;
       else return false;
 
@@ -274,7 +274,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           kind: GridCellKind.Number,
           readonly: true,
           data: d || "",
-          displayData: d.toString() || "",
+          displayData: d?.toString() || "",
         };
       }
       else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat"   ) {
