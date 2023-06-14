@@ -5,6 +5,7 @@ import { withStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
 function Webhooktablemenu(props) {
+  console.log("propsss",props);
   const { anchorEl, closeDropdown, handleUpdateActive, handleDeleteWebhook, isActive } = props;
   const [active, setActive] = useState(isActive);
   const styles = {
@@ -94,6 +95,7 @@ function Webhooktablemenu(props) {
         condition={props.condition}
         webhookname={props.webhookname}
         webhookid={props.webhookid}
+        dataforwebhook={props?.dataforwebhook}
         dbId={props.dbId}
         tableId={props?.tableId}
         filterId={props.filterId}
@@ -116,6 +118,7 @@ Webhooktablemenu.propTypes = {
   closeDropdown: PropTypes.func.isRequired,
   webhookid: PropTypes.string.isRequired,
   setNewcreated: PropTypes.any,
+  dataforwebhook:PropTypes.any,
   newcreated: PropTypes.any,
   isActive: PropTypes.bool.isRequired,
   condition: PropTypes.string.isRequired,

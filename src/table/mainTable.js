@@ -160,6 +160,9 @@ export default function MainTable() {
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
+  if(newValue?.readonly==true || newValue?.data==dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data=="" && !dataa[cell[1]][fields[cell[0]]?.id] )) return;
+
+  console.log("newValue",newValue,"currentvalue",dataa[cell[1]],fields[cell[0]])
 
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
@@ -274,7 +277,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           kind: GridCellKind.Number,
           readonly: true,
           data: d || "",
-          displayData: d.toString() || "",
+          displayData: d?.toString() || "",
         };
       }
       else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat"   ) {
