@@ -5,7 +5,6 @@ import { withStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
 function Webhooktablemenu(props) {
-  console.log("propsss",props);
   const { anchorEl, closeDropdown, handleUpdateActive, handleDeleteWebhook, isActive } = props;
   const [active, setActive] = useState(isActive);
   const styles = {
