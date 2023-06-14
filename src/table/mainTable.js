@@ -445,9 +445,8 @@ setSelection1(event);
     position: "absolute",
     display:'flex',
     flexDirection:'row',
-
-    right: "3%",
-    top: "17%",
+    right: "1%",
+    top: "18.1%",
     zIndex: "10000",
     background: "none",
     border: "none",
