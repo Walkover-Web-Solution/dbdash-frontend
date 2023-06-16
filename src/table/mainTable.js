@@ -43,11 +43,13 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
+  const[showSearch,setShowSearch]=useState(false);
   const emptyselection={
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
     current: undefined,
 };
+
   const[selection1,setSelection1]=useState(emptyselection);
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state)); 
@@ -66,6 +68,15 @@ export default function MainTable() {
       setOpenAttachment(cell);
     }
   });
+  document.addEventListener(
+          "keydown",
+            React.useCallback(event => {
+                if ((event.ctrlKey || event.metaKey) && event.code === "KeyF") {
+                   setShowSearch(!showSearch);
+                  event.stopPropagation();
+                  event.preventDefault();
+              }
+          }, []));
 
   const onChangeUrl = (e, type) => {
 
@@ -480,6 +491,8 @@ setSelection1(event);
           onRowMoved={handleRowMoved}
           validateCell={validateCell}
           getCellsForSelection={true}
+          showSearch={showSearch}
+          onSearchClose={() => setShowSearch(false)}
           // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}
           onColumnResizeEnd={handleColumnResize}
@@ -517,6 +530,7 @@ setSelection1(event);
         metaData={metaData}
         setMetaData={setMetaData}
         setOpen={setOpen}
+       
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
         setLinkedValueName={setLinkedValueName}
