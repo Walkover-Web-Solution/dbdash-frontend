@@ -87,6 +87,7 @@
     ]
   },
   "devDependencies": {
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
     "eslint": "^8.33.0",
     "eslint-plugin-react": "^7.32.2"
   }
