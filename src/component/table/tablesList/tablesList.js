@@ -268,13 +268,13 @@ export default function TablesList({ dbData }) {
                 <Box key={index} className="custom-box">
                   <Box
                     className="filter-box"
-                    onClick={() => {
-                      onFilterClicked(filter[1].query, filter[0], filter[1]);
-                    }}
+                    
                     style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
                     variant="outlined"
                   >
-                    {filter[1]?.filterName}
+                    <div onClick={() => {
+                      onFilterClicked(filter[1].query, filter[0], filter[1]);
+                    }}>{filter[1]?.filterName}</div>
                     <IconButton onClick={(e) => handleClick(e, filter[0])}>
                       <MoreVertIcon className="moreverticon" />
                     </IconButton>

@@ -22,10 +22,11 @@ export default function Webhookpage(props) {
         </Button>
         <Createwebhook
           newcreated={newcreated}
+          tables={props?.tables}
           setNewcreated={setNewcreated}
           dbId={props.dbId}
-          tableId={props.table}
-          filters={props?.dataforwebhook[props?.table]?.filters}
+          tableId={props.table} 
+          dataforwebhook={props?.dataforwebhook}
           open={addWebhook}
           setOpen={setAddWebhook}
           handleClose={handleAddWebhook}
@@ -33,7 +34,7 @@ export default function Webhookpage(props) {
       </Box>
 
       <Box className="auth-key-page-content">
-        <Webhooktable filters={props?.dataforwebhook[props?.table]?.filters} setNewcreated={setNewcreated} newcreated={newcreated} dbId={props.dbId} tableId={props.table} />
+        <Webhooktable     dataforwebhook={props?.dataforwebhook}  setNewcreated={setNewcreated} newcreated={newcreated} dbId={props.dbId} tableId={props.table} />
       </Box>
     </>
   );
@@ -42,4 +43,5 @@ Webhookpage.propTypes = {
   dataforwebhook: PropTypes.any,
   table: PropTypes.any,
   dbId: PropTypes.any,
+  tables:PropTypes.any,
 }

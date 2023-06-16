@@ -48,6 +48,15 @@ const deleteDbForUser = async(orgId,id)=>
     return await axios.patch(URL+`/dbs/${orgId}/dbs/${id}/delete`);  
 }
 
+
+const adminPanelByAI = async (query) =>
+{
+     return await axios.post(URL +`/adminpanel/query/646b13964c684c360ed71d39` , {userQuery : query});
+}
+
+
+
+
 export {
     createDb,
     getAllDb,
@@ -57,5 +66,6 @@ export {
     deleteDb,
     moveDb,
     restoreDbForUser,
-    deleteDbForUser
+    deleteDbForUser,
+    adminPanelByAI
 }
