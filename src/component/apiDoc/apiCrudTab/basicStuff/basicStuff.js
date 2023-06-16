@@ -55,10 +55,10 @@ function BasicStuff(props) {
   return (
     <Box className="basic-stuff-container">
       <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)}   >
-        Database Id - {props.db} <span>{CopyButton(props.db, -1)}</span>
+       <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}><span> Database Id - {props.db}</span> <span >{CopyButton(props.db, -1)}</span></div>
       </Typography>
       <Typography variant={'h3'} fontSize={Number(variables.megatitlesize)} >
-        Table Id - {props.table} <span>{CopyButton(props.table, -2)}</span>
+      <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}> <span>Table Id - {props.table}</span> <span>{CopyButton(props.table, -2)}</span></div>   
       </Typography>
       <br />
       <Grid container spacing={2}>

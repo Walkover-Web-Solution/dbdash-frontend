@@ -3,10 +3,10 @@
   
   color: $responseboxfontColor !important;
   background-color: $responseboxbgcolor!important;
-  padding: 10px !important;
+  // padding: 10px !important;
   width: 70 !important;
   height: 100% !important;
-  margin-bottom: 20px !important;
+  margin-bottom: 12px !important;
 
   margin-top: 10px !important;
   padding-bottom: 4vh !important;
@@ -68,4 +68,11 @@
     background-color: $fontColorVAlue;
     color: $bgColorValue
   }
-  
+  .response-header{
+    height: 26px !important;
+
+    background-color: $fontColorVAlue  !important;
+  }
+  .response-body{
+    padding: 10px !important;
+  }

@@ -76,19 +76,38 @@ function ApiCrudTablist(props) {
       </Box>
       <div style={{marginTop:"8vh"}}>
       <TabPanel value={value} index={0}>
-        <BasicStuff db={props.db} table={props.table} />
+      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
+  <BasicStuff db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       <TabPanel value={value} index={1}>
+      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
+
         <ListRecord db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       <TabPanel value={value} index={2}>
+      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
+    
         <AddRecord db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       <TabPanel value={value} index={3}>
+      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
+     
         <UpdateRecord db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       <TabPanel value={value} index={4}>
+      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
+     
         <DeleteRecord db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       </div>
     </Box>
