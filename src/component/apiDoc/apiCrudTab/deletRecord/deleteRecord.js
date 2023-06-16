@@ -17,6 +17,7 @@ function DeleteRecord(props) {
     <>
       <div className="delete-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock
+        method="DELETE"
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}/{:rowId}${value != "" ? `?${value}` : ``}`}
           header="-H auth-key: AUTH_TOKEN"
           body={arr}

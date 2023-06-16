@@ -105,8 +105,8 @@ export default function AuthKey(props) {
 
   return (
     <>
-      <Box sx={{ border: 1, m: 1 }}>
-        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh' }}>
+      <Box sx={{  m: 1 }}>
+        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh',border:1 }}>
           <Table sx={{ minWidth: 650,overflowY:"scroll", }} stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

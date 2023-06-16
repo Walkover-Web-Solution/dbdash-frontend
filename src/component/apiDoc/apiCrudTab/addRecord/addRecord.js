@@ -15,6 +15,7 @@ function AddRecord(props) {
     <>
       <div className="add-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock
+        method="POST"
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
           header={`-H auth-key: YOUR_SECRET_API_TOKEN ${(
             <br />

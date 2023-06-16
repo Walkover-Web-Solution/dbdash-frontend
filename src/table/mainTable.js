@@ -449,7 +449,7 @@ setSelection1(event);
     display:'flex',
     flexDirection:'row',
     right: "1%",
-    top: "18.55%",
+    top: "18.10%",
     zIndex: "10000",
     background: "none",
     border: "none",
