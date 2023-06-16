@@ -12,21 +12,21 @@ const Chat = () => {
   const handleMessageSubmit = async (message) => {
     const actualMessage = "Question   :-" + message;
     const loadingKey = `loading-${messages.length}`;
-  
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { key: Date.now(), content: actualMessage },
       { key: loadingKey, content: <Box sx={{ display: 'flex', alignItems: "center", justifyContent: "center" }}><CircularProgress /></Box> },
     ]);
     setIsLoading(true);
-  
+
     try {
       const response = await adminPanelByAI(message);
       const data = response.data;
       console.log(data);
-      const code=data?.success?.result||data?.success?.code||data?.success?.explanation||data?.success;
-      const actual_response = "Answer   :-" + code;
-  
+      const code = data?.success?.result || data?.success?.code || data?.success?.explanation || data?.success;
+      const actual_response = typeof code === 'object' ? JSON.stringify(code) : "Answer   :-" + code;
+
       setTimeout(() => {
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages];
@@ -57,9 +57,6 @@ const Chat = () => {
       }, 100);
     }
   };
-  
-
-
 
   return (
     <div style={{ backgroundColor: "#dadada", position: "relative", overflow: "hidden" }}>

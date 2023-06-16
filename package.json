@@ -87,8 +87,15 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
+    "babel-jest": "^29.5.0",
     "eslint": "^8.33.0",
     "eslint-plugin-react": "^7.32.2"
-  }
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(js|jsx)$": "babel-jest"
+    }
+  }  
 }
