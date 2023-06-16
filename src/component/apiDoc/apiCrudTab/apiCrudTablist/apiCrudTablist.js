@@ -74,38 +74,37 @@ function ApiCrudTablist(props) {
           <StyledTab className="custom-tab-label" label="Delete" {...a11yProps(4)} />
         </Tabs>
       </Box>
-      <div style={{marginTop:"8vh"}}>
+      <div className="marginTop">
       <TabPanel value={value} index={0}>
-      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
   <BasicStuff db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
 
         <ListRecord db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
-    
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+
         <AddRecord db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={3}>
-      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
-     
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+ 
         <UpdateRecord db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
-      <TabPanel value={value} index={4}>
-      <div style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`, overflowY: "scroll",overflowX:"hidden" }}>
-     
-        <DeleteRecord db={props.db} table={props.table} />
+      <TabPanel  value={value} index={4}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+      <DeleteRecord db={props.db} table={props.table} />
 </div>
 
       </TabPanel>

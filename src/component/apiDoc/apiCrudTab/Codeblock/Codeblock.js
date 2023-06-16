@@ -57,74 +57,69 @@ const dummy=(type)=>{
   <button onClick={() => { setShowAPI(true) }} className={showAPI ? "button-api" : "button-curl"}>API</button>
   <button onClick={() => { setShowAPI(false) }} className={showAPI ? "button-curl" : "button-api"}>CURL</button>
 </div>
-      {showAPI ? <pre style={{ position: "relative", width: "400px", whiteSpace: "pre-wrap" }}>
-        <br />
-        <code style={{ whiteSpace: "pre-wrap", maxWidth: "400px", wordWrap: "break-word" }}>
-          {props.code}
-        </code>
-        <br />
-        <br />
-        <code style={{ color: "yellow" }}>
-          {props.header}
-        </code>
-        <br />
-        <br />
-        <br />
-        {props.body && typeof props.body === "object" && props.body.length > 0 && (
-         <code style={{ color: "white" }}>
-         {"-data{\n"}
-         {props.body.map((x, index) => (
-           <span key={index}>
-           <span style={{ color: "cyan", margin: "1px" }}>{`" ${x[0]} "`}</span>
-           <span style={{ color: "yellow", margin: "1px" }}>:  </span>
-           {x[1] === "number" || x[1] === "autonumber" ? (
-             <span style={{ color: "green", margin: "1px" }}>{` ${dummy(x[1])} `}</span>
-           ) : (
-             <span style={{ color: "magenta", margin: "1px" }}>{`" ${dummy(x[1])} "`}</span>
-           )}
-           <span style={{ color: "yellow", margin: "1px" }}>,</span>
-           <br />
-         </span>
-         ))}
-         {"}"}
-       </code>
-       
-        )}
-      </pre>:<pre style={{ position: "relative", width: "400px", whiteSpace: "pre-wrap" }}>
-<code style={{ whiteSpace: "pre-wrap", maxWidth: "400px", wordWrap: "break-word" }}>
-{ `curl -X ${props.method} '${props.code}' \\` }
-<br/>
-</code>
-<code style={{ color: "yellow" }}>
-{ ` -H "auth-key: YOUR_SECRET_API_TOKEN" \\` }
-<br/>
-</code>
-<code style={{ color: "yellow" }}>
-{ ` -H "Content-Type: application/json" \\` }
-<br/>
-</code>
-{props.body && typeof props.body === "object" && props.body.length > 0 && (
-  <code style={{ color: "white" }}>
-    {" -d '{\n"}
-    {props.body.map((x, index) => (
-           <span key={index}>
-           <span style={{ color: "cyan", margin: "1px" }}>{`" ${x[0]} "`}</span>
-           <span style={{ color: "yellow", margin: "1px" }}>:  </span>
-           {x[1] === "number" || x[1] === "autonumber" ? (
-             <span style={{ color: "green", margin: "1px" }}>{` ${dummy(x[1])} `}</span>
-           ) : (
-             <span style={{ color: "magenta", margin: "1px" }}>{`" ${dummy(x[1])} "`}</span>
-           )}
-           <span style={{ color: "yellow", margin: "1px" }}>,</span>
-           <br />
-         </span>
-         ))}
-    {"}' "}
-  </code>
-)}
-</pre>
+{showAPI ? (
+  <pre className="pre-wrapper">
+    <br />
+    <code className="code">{props.code}</code>
+    <br />
+    <br />
+    <code className="yellow">{props.header}</code>
+    <br />
+    <br />
+    <br />
+    {props.body && typeof props.body === "object" && props.body.length > 0 && (
+      <code className="white">
+        {"-data{\n"}
+        {props.body.map((x, index) => (
+          <span key={index}>
+            <span className="cyan">{`" ${x[0]} "`}</span>
+            <span className="yellow">: </span>
+            {x[1] === "number" || x[1] === "autonumber" ? (
+              <span className="green">{` ${dummy(x[1])} `}</span>
+            ) : (
+              <span className="magenta">{`" ${dummy(x[1])} "`}</span>
+            )}
+            <span className="yellow">,</span>
+            <br />
+          </span>
+        ))}
+        {"}"}
+      </code>
+    )}
+  </pre>
+) : (
+  <pre className="pre-wrapper">
+    <code className="code">
+      {`curl -X ${props.method} '${props.code}' \\`}
+      <br />
+    </code>
+    <code className="yellow">{` -H "auth-key: YOUR_SECRET_API_TOKEN" \\`}</code>
+    <br />
+    <code className="yellow">{` -H "Content-Type: application/json" \\`}</code>
+    <br />
 
-}
+    {props.body && typeof props.body === "object" && props.body.length > 0 && (
+      <code className="white">
+        {" -d '{\n"}
+        {props.body.map((x, index) => (
+          <span key={index}>
+            <span className="cyan">{`" ${x[0]} "`}</span>
+            <span className="yellow">: </span>
+            {x[1] === "number" || x[1] === "autonumber" ? (
+              <span className="green">{` ${dummy(x[1])} `}</span>
+            ) : (
+              <span className="magenta">{`" ${dummy(x[1])} "`}</span>
+            )}
+            <span className="yellow">,</span>
+            <br />
+          </span>
+        ))}
+        {"}' "}
+      </code>
+    )}
+  </pre>
+)}
+
 
     </div>
   );

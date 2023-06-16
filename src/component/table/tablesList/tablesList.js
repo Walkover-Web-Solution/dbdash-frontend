@@ -368,7 +368,7 @@ export default function TablesList({ dbData }) {
         </Menu>
       </div>
 
-      <div  style={{ marginTop: "170px" }}>
+      <div  className="tablesmargin">
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
         ) : (

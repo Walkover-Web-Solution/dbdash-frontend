@@ -76,3 +76,38 @@
   .response-body{
     padding: 10px !important;
   }
+  .pre-wrapper {
+    position: relative !important;
+    width: 500px !important;
+    white-space: pre-wrap !important;
+  }
+  
+  .code {
+    white-space: pre-wrap !important;
+    max-width: 400px !important;
+    word-wrap: break-word !important;
+  }
+  
+  .yellow {
+    color: yellow !important;
+  }
+  
+  .white {
+    color: white !important;
+  }
+  
+  .cyan {
+    color: cyan !important;
+    margin: 1px !important;
+  }
+  
+  .green {
+    color: green !important;
+    margin: 1px !important;
+  }
+  
+  .magenta {
+    color: magenta !important;
+    margin: 1px !important;
+  }
+  

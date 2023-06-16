@@ -24,27 +24,27 @@ function Records(props) {
     <div>
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <Typography  sx={{ textAlign: 'center' }}  fontSize={Number(variables.titlesize)}  fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Name</Typography>
+          <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)}  fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Name</Typography>
           {rowfieldData && Object?.entries(rowfieldData) && Object?.entries(rowfieldData).map((fields, index) => (
-            <Typography  sx={{ textAlign: 'center' }} className="field-name" key={index}>{fields[1].fieldName}</Typography>
+            <Typography  className="center-aligned field-name"key={index}>{fields[1].fieldName}</Typography>
           ))}
         </Grid>
         <Grid item xs={3}>
-          <Typography  sx={{ textAlign: 'center' }}  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Id</Typography>
+          <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Id</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
-            <Typography sx={{ textAlign: 'center' }} className="field-id" key={index}>{fields[0]}</Typography>
+            <Typography className="center-aligned field-id"  key={index}>{fields[0]}</Typography>
           ))}
         </Grid>
         <Grid item xs={3}>
-          <Typography  sx={{ textAlign: 'center' }}  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Type</Typography>
+          <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Type</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
-            <Typography sx={{ textAlign: 'center' }} className="field-type" key={index}>{fields[1].fieldType === "checkbox" ? "boolean" : fields[1].fieldType}</Typography>
+            <Typography className="center-aligned field-type"  key={index}>{fields[1].fieldType === "checkbox" ? "boolean" : fields[1].fieldType}</Typography>
           ))}
         </Grid>
         <Grid item xs={3} >
-          <Typography  sx={{ textAlign: 'center' }}  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant} className="add-remove">Add/Remove</Typography>
+          <Typography  className="center-aligned  add-remove "  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Add/Remove</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
-            <Typography sx={{ textAlign: 'center' }} key={index}>
+            <Typography className="center-aligned" key={index}>
               {props.arr && !props.arr.find(x => x[0] === fields[0]) ? (
                 <button
                   className="add-remove-button"

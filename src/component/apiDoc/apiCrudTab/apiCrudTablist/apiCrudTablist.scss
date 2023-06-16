@@ -35,3 +35,11 @@ z-index:100;
     background-color: $fontColorVAlue !important;
     color: $bgColorValue !important;
   }
+.componentscontainer{
+  overflow-y:scroll !important;
+  overflow-x: hidden !important;
+
+}
+.marginTop{
+  margin-top: 8vh !important;
+}
