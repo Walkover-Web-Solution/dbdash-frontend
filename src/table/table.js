@@ -16,7 +16,7 @@ import PlusIcon from './img/Plus'
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { DeleteOutlined } from "@mui/icons-material";
-import HideFieldDropdown from "../component/table/hidefieldDropdown";
+// import HideFieldDropdown from "../component/table/hidefieldDropdown";
 
 
 const ScrollingComponent = withScrolling("div");
@@ -63,7 +63,7 @@ const Table = memo(
       rows,
       prepareRow,
       selectedFlatRows,
-      getToggleHideAllColumnsProps,
+      // getToggleHideAllColumnsProps,
       state: { selectedCellIds, currentSelectedCellIds},
       totalColumnsWidth,
       allColumns
@@ -98,11 +98,11 @@ const Table = memo(
 
     const [selectedColumnIndex, setSelectedColumnIndex] = useState(null);
 
-    const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+    // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
-    const handleMenuOpen = (event) => {
-      setMenuAnchorEl(event.currentTarget);
-    };
+    // const handleMenuOpen = (event) => {
+    //   setMenuAnchorEl(event.currentTarget);
+    // };
 
     const tableData = useSelector((state) => state.table);//true
     const lastRowIndex = tableData?.data?.length - 1;
@@ -130,10 +130,11 @@ const Table = memo(
 
     return (
       <>
-        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+        {/* <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
           <HideFieldDropdown getToggleHideAllColumnsProps={getToggleHideAllColumnsProps} columns={allColumns} menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
-        </div>
+        </div> */}
+
         {selectedFlatRows?.length > 0 && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <Button

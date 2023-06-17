@@ -18,7 +18,7 @@ import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 import { createTable } from "../../../api/tableApi";
 import './tablesList.scss'
 // import { createViewTable } from "../../api/viewTableApi";
-import HideFieldDropdown from "../hidefieldDropdown";
+// import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
 export default function TablesList({ dbData }) {
 
@@ -215,11 +215,11 @@ export default function TablesList({ dbData }) {
   //   }
 
   // }
-  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   
-  const handleMenuOpen = (event) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
+  // const handleMenuOpen = (event) => {
+  //   setMenuAnchorEl(event.currentTarget);
+  // };
   
   return (
     <>
@@ -292,9 +292,8 @@ export default function TablesList({ dbData }) {
           </Button>
         </Box>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
+          {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
           <Button sx={{ fontSize: "11px" }} onClick={handleClickOpenManageField}>Manage Fields</Button>
-          <HideFieldDropdown   menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
         </div>
           {openManageField && <ManageFieldDropDown openManageField={openManageField} setOpenManageField={setOpenManageField}/>}
         {open && (

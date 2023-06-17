@@ -16,6 +16,7 @@ import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import AddOptionPopup from './addOptionPopup';
+import HideFieldDropdown from './hidefieldDropdown';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -45,6 +46,12 @@ export default function ManageFieldDropDown(props) {
   }
   const handleOpen = () => setOpenAddFields(true);
 
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
   return (
     <div>
       <Dialog
@@ -73,6 +80,11 @@ export default function ManageFieldDropDown(props) {
             <TableCell>Field Name</TableCell>
             <TableCell>Field Type</TableCell>
             <TableCell></TableCell>
+            <TableCell>
+          <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
+          <HideFieldDropdown   menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -82,8 +94,11 @@ export default function ManageFieldDropDown(props) {
                   <TableRow key={index}>
                     <TableCell>{field.title}</TableCell>
                     <TableCell>{field.dataType}</TableCell>
+                   
                     <TableCell><Button onClick={() => { handleOpen(); columnId(field.id,field.dataType)}} variant="contained">Add option</Button></TableCell>
+                  
                   </TableRow>
+
                 );
               }
               return null;
