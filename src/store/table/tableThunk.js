@@ -1,7 +1,7 @@
 
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
+import { createField, deleteField, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
 import { insertRow, uploadImage, updateRow, deleteRow } from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
@@ -12,6 +12,7 @@ import { createView, deleteFieldInView } from "../../api/viewApi";
 // import { getTableInfo } from "./tableSelector";
 import { getAllTableInfo } from "../allTable/allTableSelector";
 import { setAllTablesData } from "../allTable/allTableSlice";
+
 
 
 const replaceCreatedByIdWithName = async (userInfo, org_id) => {
@@ -32,8 +33,12 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 }
 
 
-const getHeaders = async (dbId, tableName, payloadfields) => {
-    const fields = payloadfields || await getAllfields(dbId, tableName);
+const getHeaders = async (dbId, tableName, payloadfields, { getState }) => {  
+    console.log("inside getHeaders")
+    const fields = payloadfields || getAllTableInfo(getState())?.tables?.[tableName]?.fields
+    const fieldIds = getAllTableInfo(getState())?.tables?.[tableName]?.fieldIds
+    console.log("fields",fieldIds,fields)
+    // const fields = payloadfields || await getAllfields(dbId, tableName);
     let columns = [
         // {
         //     id: 9999991,
@@ -44,29 +49,53 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
         //     accessor: "check",
         // },
     ];
+    const arr =  fields;
+    // const arr = fields;
+    // fields?.data?.data?.fields ||
 
-    const arr = fields?.data?.data?.fields || fields;
+    // Object.entries(arr).forEach((field) => {
+    //     var json = {
+    //         title: "",
+    //         id: "",
+    //         dataType: "",
+    //         hasMenu: true,
+    //         // minWidth: 100,
+    //         // options: [],
+    //         metadata: {},
+    //         width: field[1]?.metaData?.width ? field[1]?.metaData?.width : 150
+    //     }
+    //     json.id = field[0];
+    //     json.title = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
+    //     // json.accessor = field[0]?.toLowerCase();
+    //     json.metadata = field[1].metaData;
+    //     json.dataType = field[1].fieldType?.toLowerCase();
+    //     columns.push(json);
 
-    Object.entries(arr).forEach((field) => {
-        var json = {
-            title: "",
-            id: "",
-            dataType: "",
-            hasMenu: true,
-            // minWidth: 100,
-            // options: [],
-            metadata: {},
-            width: field[1]?.metaData?.width ? field[1]?.metaData?.width : 150
+    // }
+    // )
+    fieldIds.forEach((fieldId, index) => {
+        const field = arr[fieldId];
+        
+        if (field) {
+            var json = {
+                title: "",
+                id: "",
+                dataType: "",
+                hasMenu: true,
+                // minWidth: 100,
+                // options: [],
+                metadata: {},
+                width: field.metaData?.width ? field.metaData.width : 150
+            }
+            json.id = fieldId;
+            json.title = field.fieldName?.toLowerCase() || fieldId.toLowerCase();
+            // json.accessor = fieldId.toLowerCase();
+            json.metadata = field.metaData;
+            json.dataType = field.fieldType?.toLowerCase();
+            columns[index] = json; // Replace the existing object at the corresponding index
         }
-        json.id = field[0];
-        json.title = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
-        // json.accessor = field[0]?.toLowerCase();
-        json.metadata = field[1].metaData;
-        json.dataType = field[1].fieldType?.toLowerCase();
-        columns.push(json);
-
-    }
-    )
+    });
+    console.log("columns",columns)
     return columns;
 }
 
@@ -114,7 +143,7 @@ export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
         var columns = null
-        columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
+        columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields, { getState })
         const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
         const dataa = {
             "columns": columns,
@@ -177,7 +206,7 @@ export const filterData = createAsyncThunk(
                 const width =  entry[1].width;
                 columns[id] = {...columns[id],metaData: {...columns[id]?.metaData,hide: hide,width: width}};
             });
-            columns = await getHeaders(payload?.dbId, payload?.tableId,columns )
+            columns = await getHeaders(payload?.dbId, payload?.tableId,columns, { getState } )
 
             const dataa = {
                 "columns": columns,

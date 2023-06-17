@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { Box, Card, Typography, TextField, Button, IconButton, ClickAwayListener } from "@mui/material";
 import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
-import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk } from "../../store/database/databaseThunk";
+import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../store/database/databaseThunk";
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
@@ -95,6 +95,11 @@ Object.entries(props?.dbs).forEach(([, value]) => {
     const adminId = localStorage.getItem("userid")
     dispatch(removeUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
   }
+  const updateUserTypeInOrg = async (email,user_type) => {
+    const adminId = localStorage.getItem("userid")
+    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email,user_type:user_type }))
+  }
+  
 
   return (
     <>
@@ -183,6 +188,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                         setShareOrg={setShareOrg}
                         shareWorkspace={shareWorkspace}
                         removeUserFromWorkspace={removeUserFromWorkspace}
+                        updateUserTypeInOrg = {updateUserTypeInOrg}
                       />
                     </Box>
                   </>

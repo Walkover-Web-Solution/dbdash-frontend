@@ -3,13 +3,13 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormCon
 import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify'
-
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState("");
   const userId = localStorage.getItem("userid");
   const { users } = props.org;
-  
+  const [editable,setEditable]=useState(null);
   const handleClose = () => {
       props.setShareOrg(false);
       setEmail("");
@@ -56,6 +56,11 @@ export default function ShareOrgModal(props) {
     }
   };
 
+  const handleUpdateUserType = (email,user_type)=>{
+    console.log("email,user_type",email,user_type)
+     props.updateUserTypeInOrg(email,user_type);
+  }
+
   const handleRemoveUser = (email) => {
     const currentUser = users.find((user) => user.user_id?.email === email);
 
@@ -67,6 +72,7 @@ export default function ShareOrgModal(props) {
     props.removeUserFromWorkspace(email);
     toast.success("User removed successfully");
   };
+   
 
   return (
     <Dialog open={props.shareOrg} onClose={handleClose}>
@@ -110,6 +116,7 @@ export default function ShareOrgModal(props) {
       </Box>
       <Box>
         {users.map((user) => {
+          
           if (
             user?.user_id?._id !== userId &&
             (user?.user_type !== "owner" || user?.user_type !== "admin" || userId !== user?.user_id?._id)
@@ -128,8 +135,20 @@ export default function ShareOrgModal(props) {
                   <Typography>{user?.user_id?.email}</Typography>
                 </Box>
                 <Box sx={{ m: 1 }}>
-                  <Typography>{user?.user_type}</Typography>
-                </Box>
+
+     {editable==user ? <Select sx={{height:'30px'}} value={user?.user_type} onChange={(e)=>{handleUpdateUserType(user?.user_id?.email,e.target.value)}}>
+        <MenuItem value="user">User</MenuItem>
+        <MenuItem value="admin">Admin</MenuItem>
+      </Select>:<Typography>{user?.user_type}</Typography>}
+    </Box>
+    <Box sx={{ m: 1 }}>
+     <ModeEditIcon onClick={()=>{
+      if(editable!=user)
+      {
+        setEditable(user);
+      }
+      else setEditable(null)}}/>
+    </Box>
                 <Box sx={{ alignItems: "center" }}>
                   <IconButton
                     aria-label="delete"
@@ -156,5 +175,6 @@ ShareOrgModal.propTypes = {
   org: PropTypes.shape({
     users: PropTypes.array
   }),
-  removeUserFromWorkspace: PropTypes.func
+  removeUserFromWorkspace: PropTypes.func,
+  updateUserTypeInOrg:PropTypes.func
 };
