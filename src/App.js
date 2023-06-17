@@ -16,13 +16,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Chat from './component/Chat/Chat';
 
-// import ViewTable from './pages/viewTable/viewTable';
+import ViewTable from './pages/viewTable/viewTable';
 
 
   
 
 function App() {
-
   return (
    <>
    <AuthContextProvider>
@@ -38,9 +37,8 @@ function App() {
       <Route exact path ="/apiDoc/db/:dbId" element ={<Protected><ApiDocPage /></Protected>}/>
       <Route exact path="*" element={<Navigate to="/notFound" />} />
       <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
-      
       <Route exact path = "/msg91bi" element = {<Chat />} />
-      {/* <Route exact path ="/:viewid" element ={<ViewTable/>}/> */}
+      <Route exact path ="/:viewid" element ={<ViewTable/>}/>
     </Routes>
 
     </AuthContextProvider>
