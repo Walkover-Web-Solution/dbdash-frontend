@@ -71,9 +71,7 @@ function OptionalParameter(props) {
         <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant}style={{ paddingTop: '10px' }}>Where</Typography>
         <Typography style={{ paddingBottom: '15px' }}>To filter record based on certain</Typography>
         <CustomAutoSuggest getInputValueWithContext={handleTextChange} suggestion={fields} setHtml={setHtml} setText={setText} defaultValue={html} />
-        <br />
-        <br />
-        <br />
+       
         <Link href="#" style={{ fontSize: `${variables.textsize}px` }}>
           Learn more about the where clause
         </Link>
