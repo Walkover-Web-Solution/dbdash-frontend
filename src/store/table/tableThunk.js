@@ -347,7 +347,8 @@ export const addColumsToLeft = createAsyncThunk(
             selectedFieldName: payload?.selectedFieldName,
             selectedTable: payload?.selectedTable,
             linkedForeignKey: payload?.linkedValueName,
-            foreignKey: payload?.foreignKey
+            foreignKey: payload?.foreignKey,
+            userQuery : payload?.userQuery
         }
         let createdfield= {};
         if (payload?.fieldType == "lookup")
