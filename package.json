@@ -56,7 +56,6 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
-    "sass": "^1.62.1",
     "simplebar-react": "^3.2.4",
     "source-map-loader": "^4.0.1",
     "stream-browserify": "^3.0.0",
@@ -65,7 +64,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -87,15 +86,30 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
+    "@babel/preset-react": "^7.22.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
-    "babel-jest": "^29.5.0",
+    "babel-jest": "^27.5.1",
+    "babel-preset-react-app": "^10.0.1",
+    "dotenv": "^16.3.0",
     "eslint": "^8.33.0",
-    "eslint-plugin-react": "^7.32.2"
+    "eslint-plugin-react": "^7.32.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.5.1",
+    "jest-dom": "^4.0.0",
+    "react-testing-library": "^8.0.1",
+    "sass": "^1.63.4"
   },
   "jest": {
     "transform": {
-      "^.+\\.(js|jsx)$": "babel-jest"
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "\\.(scss)$": "./src/pages/test/styleMock.js"
     }
-  }  
+  }
 }

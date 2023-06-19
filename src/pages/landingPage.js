@@ -26,35 +26,45 @@ export default function LandingPage() {
          dispatch(bulkAdd({ email: emailId.email }))
    }, [])
    return (
-      <Container maxWidth='true'>
-
-         <Box >
-
-            <Box>
-               <MainNavbar />
-            </Box>
-
-            <Box>
-               <WorkspaceCombined />
-            </Box>
-               <Box>
-               {dbs.length > 0 && (
-                  <Typography variant="h5" sx={{ ml: 1, fontWeight: "bold" }}>
-                     Deleted DataBase
-                  </Typography>
-               )}
-               <Grid style={{marginLeft:"8px"}} container spacing={2}>
-                  {dbs.map((db, index) => (
-                     <Box key={db._id} sx={{ m:4, display: "flex" }}>
-                     <SingleDatabase db={db} orgId={db.org_id} dblength={dbs?.length} index={index} />
-                     </Box>
-                  ))}
-               </Grid>
-               </Box>
-
-         </Box>
-
+      <Container maxWidth="true">
+        <Box>
+          <Box data-testid="main-navbar">
+            <MainNavbar />
+          </Box>
+          
+  
+          <Box data-testid="workspace-combined">
+            <WorkspaceCombined />
+          </Box>
+  
+          <Box>
+            {dbs.length > 0 && (
+              <Typography
+                variant="h5"
+                sx={{ ml: 1, fontWeight: "bold" }}
+                data-testid="deleted-databases"
+              >
+                Deleted DataBase
+              </Typography>
+            )}
+            <Grid style={{ marginLeft: "8px" }} container spacing={2}>
+              {dbs.map((db, index) => (
+                <Box
+                  key={db._id}
+                  sx={{ m: 4, display: "flex" }}
+                  data-testid="single-database"
+                >
+                  <SingleDatabase
+                    db={db}
+                    orgId={db.org_id}
+                    dblength={dbs?.length}
+                    index={index}
+                  />
+                </Box>
+              ))}
+            </Grid>
+          </Box>
+        </Box>
       </Container>
-
-   )
-}
+    );
+  }

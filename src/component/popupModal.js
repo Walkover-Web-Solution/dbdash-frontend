@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
-import useValidator from "react-joi";
 import Joi from "joi";
+import useValidator from "react-joi";
 
 const style = {
   position: "absolute",

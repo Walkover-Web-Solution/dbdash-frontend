@@ -22,16 +22,24 @@ const Chat = () => {
 
     try {
       const response = await adminPanelByAI(message);
-      const data = response.data;
-      console.log(data);
-      const code = data?.success?.result || data?.success?.code || data?.success?.explanation || data?.success;
-      const actual_response = typeof code === 'object' ? JSON.stringify(code) : "Answer   :-" + code;
+      const data = response.success;
+      const actual_response = data.result || data.code || data.explanation || data;
 
       setTimeout(() => {
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages];
           const loadingIndex = updatedMessages.findIndex((msg) => msg.key === loadingKey);
-          updatedMessages[loadingIndex] = { key: loadingKey, content: <div dangerouslySetInnerHTML={{ __html: actual_response }} /> };
+          if (typeof actual_response === 'object') {
+            updatedMessages[loadingIndex] = {
+              key: loadingKey,
+              content: JSON.stringify(actual_response)
+            };
+          } else {
+            updatedMessages[loadingIndex] = {
+              key: loadingKey,
+              content: <div dangerouslySetInnerHTML={{ __html: `Answer :- ${actual_response}` }} />
+            };
+          }
           setIsLoading(false);
           return updatedMessages;
         });
@@ -41,7 +49,7 @@ const Chat = () => {
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages];
           const loadingIndex = updatedMessages.findIndex((msg) => msg.key === loadingKey);
-          const errorMessage = error.response.data["try again some error "];
+          const errorMessage = error.response.data.error;
           const errorContent = (
             <Typography
               variant='body1'
@@ -79,12 +87,27 @@ const Chat = () => {
                   <Typography
                     variant='body1'
                     className="message"
-                    sx={{ backgroundColor: '#fff', padding: '8px', borderRadius: '4px', marginBottom: '8px' }}
+                    sx={{
+                      backgroundColor: index % 2 === 0 ? '#fff' : 'transparent',
+                      padding: '8px',
+                      borderRadius: '4px',
+                      marginBottom: '8px'
+                    }}
                   >
                     {message.content}
                   </Typography>
                 ) : (
-                  <Typography variant='body1' className="message" sx={{ fontStyle: 'italic', marginBottom: '8px' }}>
+                  <Typography
+                    variant='body1'
+                    className="message"
+                    sx={{
+                      fontStyle: 'italic',
+                      marginBottom: '8px',
+                      backgroundColor: index % 2 === 0 ? '#fff' : 'transparent',
+                      padding: '8px',
+                      borderRadius: '4px',
+                    }}
+                  >
                     {message.key}
                   </Typography>
                 )}

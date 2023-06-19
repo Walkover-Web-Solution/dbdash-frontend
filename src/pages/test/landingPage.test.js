@@ -1,39 +1,53 @@
-import { shallow } from 'enzyme';
-// import LandingPage from '../LandingPage';
-// import MainNavbar from '../../component/mainNavbar/mainNavbar';
-// import WorkspaceCombined from '../../component/workspaceDatabase/workspaceCombined';
-// import SingleDatabase from '../../component/workspaceDatabase/singleDatabase';
-import {LandingPage} from '../landingPage';
-import {MainNavbar} from '../../component/mainNavbar/mainNavbar';
-import {WorkspaceCombined} from '../../component/workspaceDatabase/workspaceCombined';
-import {SingleDatabase} from '../../component/workspaceDatabase/singleDatabase';
+const { render } = require('@testing-library/react');
+const LandingPage = require('../landingPage').default;
 
-describe('LandingPage', () => {
-  it('renders MainNavbar component', () => {
-    const wrapper = shallow(<LandingPage />);
-    expect(wrapper.find(MainNavbar)).toHaveLength(1);
-  });
+test('renders main navbar component', () => {
+  const { getByTestId } = render(<LandingPage />);
+  const mainNavbar = getByTestId('main-navbar');
+  expect(mainNavbar).toBeInTheDocument();
+});
 
-  it('renders WorkspaceCombined component', () => {
-    const wrapper = shallow(<LandingPage />);
-    expect(wrapper.find(WorkspaceCombined)).toHaveLength(1);
-  });
+test('renders workspace combined component', () => {
+  const { getByTestId } = render(<LandingPage />);
+  const workspaceCombined = getByTestId('workspace-combined');
+  expect(workspaceCombined).toBeInTheDocument();
+});
 
-  it('renders "Deleted DataBase" heading when dbs array has elements', () => {
-    const wrapper = shallow(<LandingPage />);
-    wrapper.setState({ dbs: [{ _id: 1 }] }); // Set a mock value for dbs array
-    expect(wrapper.find('Typography').text()).toEqual('Deleted DataBase');
-  });
+test('renders deleted databases section when there are deleted databases', () => {
+  const mockDbs = [
+    { _id: '1', deleted: true },
+    { _id: '2', deleted: true },
+  ];
+  jest.mock('../store/database/databaseSelector', () => ({
+    selectOrgandDb: jest.fn(() => mockDbs),
+  }));
 
-  it('does not render "Deleted DataBase" heading when dbs array is empty', () => {
-    const wrapper = shallow(<LandingPage />);
-    wrapper.setState({ dbs: [] }); // Set an empty array for dbs
-    expect(wrapper.find('Typography')).toHaveLength(0);
-  });
+  const { getByTestId } = render(<LandingPage />);
+  const deletedDatabases = getByTestId('deleted-databases');
+  expect(deletedDatabases).toBeInTheDocument();
+});
 
-  it('renders SingleDatabase component for each item in dbs array', () => {
-    const wrapper = shallow(<LandingPage />);
-    wrapper.setState({ dbs: [{ _id: 1 }, { _id: 2 }, { _id: 3 }] }); // Set a mock value for dbs array
-    expect(wrapper.find(SingleDatabase)).toHaveLength(3);
-  });
+test('does not render deleted databases section when there are no deleted databases', () => {
+  const mockDbs = [];
+  jest.mock('../store/database/databaseSelector', () => ({
+    selectOrgandDb: jest.fn(() => mockDbs),
+  }));
+
+  const { queryByTestId } = render(<LandingPage />);
+  const deletedDatabases = queryByTestId('deleted-databases');
+  expect(deletedDatabases).not.toBeInTheDocument();
+});
+
+test('renders single database components', () => {
+  const mockDbs = [
+    { _id: '1', org_id: 'org1' },
+    { _id: '2', org_id: 'org2' },
+  ];
+  jest.mock('../store/database/databaseSelector', () => ({
+    selectOrgandDb: jest.fn(() => mockDbs),
+  }));
+
+  const { getAllByTestId } = render(<LandingPage />);
+  const singleDatabases = getAllByTestId('single-database');
+  expect(singleDatabases.length).toBe(mockDbs.length);
 });

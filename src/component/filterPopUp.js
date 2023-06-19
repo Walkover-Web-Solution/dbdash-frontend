@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import Joi from "joi"
 import { useValidator } from "react-joi"
-import { Select, MenuItem, TextField } from '@mui/material';
+import {  TextField } from '@mui/material';
 import { createFilter, updateQuery } from "../api/filterApi"
 import { getTableInfo } from "../store/table/tableSelector";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
@@ -351,7 +351,10 @@ export default function FilterModal(props) {
               {state.$errors?.filterName?.map((data) => data.$message).join(",")}
             </div>
 
-            <Box>
+
+
+
+            {/* <Box>
               {query.map((q, index) => (<Box key={index} sx={{ display: "flex", flexDirection: "row" }}>
                 {index == 0 && <Box><Typography sx={{ mt: 2, mr: 1, color: 'blue' }}>WHERE</Typography></Box>}
 
@@ -398,7 +401,7 @@ export default function FilterModal(props) {
                   handleRemove(index)
                 }}>Remove</Button>}
               </Box>))}
-            </Box>
+            </Box> */}
 
             <Box sx={{ mb: 2, ml: 1 }}>
               <Button onClick={handleAddInput}> <AddIcon sx={addBtnStyle} /> </Button>
@@ -409,7 +412,7 @@ export default function FilterModal(props) {
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {props?.edit == false && <Box>
-              <Button className="mui-button" variant="contained" disabled={filterName.length < 1 || filterName.length > 15 || lastValue.length === 0} onClick={() => {
+              <Button className="mui-button" variant="contained"onClick={() => {
                 validate();
                 getQueryData();
                 handleClose();
