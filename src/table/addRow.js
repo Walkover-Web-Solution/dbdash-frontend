@@ -5,16 +5,17 @@ export const addRow = (dispatch) => {
     dispatch(addRows({ type: "add_row" }))    
     return;
 }
-export const addColumn = (dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName) => { 
+export const addColumn = (dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName,queryToSend,userQuery) => { 
       dispatch(addColumsToLeft({
       filterId:params?.filterName,fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
-        selectValue, metaData: metaData,selectedTable,selectedFieldName,linkedValueName
+        selectValue, metaData: metaData,selectedTable,selectedFieldName,linkedValueName,
+        query: queryToSend ,
+        userQuery :userQuery
     }));
     return;
 }
 
 export const editCell = (cell, newValue,dispatch,fields,arrr,params,currentrow,dataType) => { 
-  console.log(newValue,dataType,"fjkgjjg");
   const col = cell[0];
 const tableId = params?.tableName.substring(3);
 if(newValue?.data && newValue.data.kind=='tags-cell') return;
