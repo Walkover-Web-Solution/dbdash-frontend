@@ -6,6 +6,7 @@ export const initialState = {
 };
 export const reducers = {
   setAllTablesData (state,{payload}){
+    console.log(payload,"reducerpayload")
     return { ...state , 
       tables : payload.tables,
       dbId : payload.dbId
@@ -18,6 +19,7 @@ export function extraReducers(builder) {
       state.status = "loading"
     })
     .addCase(createTable1.fulfilled, (state,action) => {
+      console.log(action.payload,"createtable1")
       if (action.payload) {
       state.tables = action.payload;
       }

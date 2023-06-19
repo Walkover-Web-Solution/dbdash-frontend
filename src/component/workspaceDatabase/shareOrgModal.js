@@ -57,7 +57,6 @@ export default function ShareOrgModal(props) {
   };
 
   const handleUpdateUserType = (email,user_type)=>{
-    console.log("email,user_type",email,user_type)
      props.updateUserTypeInOrg(email,user_type);
   }
 

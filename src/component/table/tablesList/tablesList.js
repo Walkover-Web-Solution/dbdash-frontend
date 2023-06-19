@@ -10,7 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../../table/mainTable";
-import { createTable1 } from "../../../store/allTable/allTableThunk";
+// import { createTable1 } from "../../../store/allTable/allTableThunk";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
@@ -20,6 +20,7 @@ import './tablesList.scss'
 // import { createViewTable } from "../../api/viewTableApi";
 import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
+import { createTable1 } from "../../../store/allTable/allTableThunk";
 export default function TablesList({ dbData }) {
 
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -75,6 +76,12 @@ export default function TablesList({ dbData }) {
 
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
+    
+    // setAllTablesData({
+    //   dbId:apiCreate.data.data._id,
+    //   tables :apiCreate.data.data.tables
+    // })
+    
     dispatch(createTable1({ tables: apiCreate.data.data.tables }));
 
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
@@ -83,6 +90,7 @@ export default function TablesList({ dbData }) {
     if (matchedKey) {
       navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
     }
+    
     // dispatch(
     //   bulkAddColumns({
     //     dbId: dbData?.db?._id,
@@ -154,10 +162,11 @@ export default function TablesList({ dbData }) {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
-    
-     if (dbData?.db?.tables && !(params?.filterName)) {
+    if (dbData?.db?.tables && !(params?.filterName)) {
+       console.log("inisde useEffect")
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(setTableLoading(true));
+      console.log("inside bulk add column ");
       dispatch(
         bulkAddColumns({
           dbId: dbData?.db?._id,
@@ -173,6 +182,9 @@ export default function TablesList({ dbData }) {
 
     }
   }, [params?.tableName]);
+
+  // New useEffect to listen for changes in the tables state
+
   useEffect(()=>{
     if (params?.filterName) {
       setUnderLine(params?.filterName)

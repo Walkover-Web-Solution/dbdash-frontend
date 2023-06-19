@@ -33,11 +33,11 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
 }
 
 
-const getHeaders = async (dbId, tableName, payloadfields, { getState }) => {  
-    console.log("inside getHeaders")
-    const fields = payloadfields || getAllTableInfo(getState())?.tables?.[tableName]?.fields
+const getHeaders = async (dbId, tableName, payloadfields, { getState }) => { 
+    console.log("insidegetheadera",getAllTableInfo(getState())?.tables) 
+    const fields =  getAllTableInfo(getState())?.tables?.[tableName]?.fields || payloadfields
+    // console.lof(fields,"fields")
     const fieldIds = getAllTableInfo(getState())?.tables?.[tableName]?.fieldIds
-    console.log("fields",fieldIds,fields)
     // const fields = payloadfields || await getAllfields(dbId, tableName);
     let columns = [
         // {
@@ -95,7 +95,6 @@ const getHeaders = async (dbId, tableName, payloadfields, { getState }) => {
             columns[index] = json; // Replace the existing object at the corresponding index
         }
     });
-    console.log("columns",columns)
     return columns;
 }
 
@@ -142,6 +141,7 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
+        console.log(payload,"payload")
         var columns = null
         columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields, { getState })
         const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
@@ -153,6 +153,7 @@ export const bulkAddColumns = createAsyncThunk(
             "pageNo": data?.pageNo,
             "isMoreData": !(data?.offset == null)
         }
+        console.log(dataa,"return data")
         dispatch(setTableLoading(false))
         return dataa;
     }

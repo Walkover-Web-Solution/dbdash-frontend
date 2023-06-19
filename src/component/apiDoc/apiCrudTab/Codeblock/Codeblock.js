@@ -10,7 +10,6 @@ function CodeBlock(props) {
   function handleCopyClick() {
     const codeElement = document.querySelector(".code-block pre ");
     if (codeElement) {
-      console.log("codeElement",codeElement.textContent);
       navigator.clipboard.writeText(codeElement.textContent);
       setIsCopied(true);
   
