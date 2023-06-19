@@ -304,14 +304,24 @@ export const addColumnrightandleft = createAsyncThunk(
         }
         let createdfield;
         if (payload?.fieldType == "lookup")
+        {
+            console.log("llokup")
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
+            dispatch(setAllTablesData({
+                dbId:createdfield?.data?.data?._id,
+                tables: createdfield?.data?.data?.tables
+            }))
+
+        }
         else
+        {
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
-        dispatch(setAllTablesData({
-            dbId:createdfield?.data?.data?.data?._id,
-            tables: createdfield?.data?.data?.data?.tables
-        }))
-        
+            dispatch(setAllTablesData({
+                dbId:createdfield?.data?.data?.data?._id,
+                tables: createdfield?.data?.data?.data?.tables
+            })) 
+        }
+                 
         const { tableId, dbId } = getState().table
         if(payload?.filterId){
             dispatch(filterData({
@@ -339,17 +349,25 @@ export const addColumsToLeft = createAsyncThunk(
             linkedForeignKey: payload?.linkedValueName,
             foreignKey: payload?.foreignKey
         }
-        let createdfield;
+        let createdfield= {};
         if (payload?.fieldType == "lookup")
-            createdfield = await createView(payload?.dbId, payload?.tableId, data);
+        {
+            createdfield.data = await createView(payload?.dbId, payload?.tableId, data);
+            dispatch(setAllTablesData({ 
+                dbId:createdfield?.data?.data?.data?._id,
+                tables: createdfield?.data?.data?.data?.tables
+            }))
+        }
         else
+        {
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
+            dispatch(setAllTablesData({ 
+                dbId:createdfield?.data?.data?.data?._id,
+                tables: createdfield?.data?.data?.data?.tables
+            }))
+        }
 
 
-        dispatch(setAllTablesData({
-            dbId:createdfield?.data?.data?.data?._id,
-            tables: createdfield?.data?.data?.data?.tables
-        }))
         // dispatch(addColumnToLeft(payload));
         const { tableId, dbId } = getState().table
         if(payload?.filterId){

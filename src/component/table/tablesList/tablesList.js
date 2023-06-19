@@ -43,7 +43,7 @@ export default function TablesList({ dbData }) {
   const [edit, setEdit] = useState(false);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const tableLength = Object.keys(AllTableInfo).length;
+  const tableLength = Object.keys(AllTableInfo)?.length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
