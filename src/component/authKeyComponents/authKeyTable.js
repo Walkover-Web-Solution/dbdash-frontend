@@ -25,19 +25,19 @@ export default function AuthKey(props) {
     getAuthkeyFun();
   }, [props.dbId]);
 
- function getCreatedByName (data){
-  var array = [];
-  Object.entries(Object.values(data)).map((key) => {
-    user.map((user)=>{
-      user?.users?.map((id) => {
-        if (id?.user_id?._id === key[1].user) {
-          array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
-        }
-      });
-    })
-  });
-  props?.setCreatedBy(array);
- }
+  function getCreatedByName(data) {
+    var array = [];
+    Object.entries(Object.values(data)).map((key) => {
+      user.map((user) => {
+        user?.users?.map((id) => {
+          if (id?.user_id?._id === key[1].user) {
+            array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
+          }
+        });
+      })
+    });
+    props?.setCreatedBy(array);
+  }
   async function getAuthkeyFun() {
     const data = await getAuthkey(props.dbId, adminId);
     props.setAuthKeys(data?.data?.data);
@@ -105,9 +105,9 @@ export default function AuthKey(props) {
 
   return (
     <>
-      <Box sx={{  m: 1 }}>
-        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh',border:1 }}>
-          <Table sx={{ minWidth: 650,overflowY:"scroll", }} stickyHeader aria-label="sticky table">
+      <Box sx={{ m: 1 }}>
+        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh', border: 1 }}>
+          <Table sx={{ minWidth: 650, overflowY: "scroll", }} stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -136,7 +136,7 @@ export default function AuthKey(props) {
                       {keys.substring(0, 3) + "*".repeat(keys.length - 6) + keys.substring(keys.length - 3)}
                     </TableCell>
                     <TableCell>
-                      {props.authKeys[keys].access === '1' ? (
+                      {props.authKeys[keys].access === '1' || props.authKeys[keys].access === '11' ? (
                         <div>all</div>
                       ) : (
                         Object.keys(props.authKeys[keys].access).map((key) => (
@@ -147,10 +147,13 @@ export default function AuthKey(props) {
                     <TableCell>
                       {props.authKeys[keys].access === '1' ? (
                         <div>{props.authKeys[keys].scope}</div>
+                      ) : props.authKeys[keys].access === '11' ? (
+                        <div>{props.authKeys[keys].schema}</div>
                       ) : (
                         <div>{Object.values(props.authKeys[keys].access)[0]?.scope}</div>
                       )}
                     </TableCell>
+
                     <TableCell>
                       <TableMenuDropdown
                         authData={props.authKeys[keys]}
@@ -179,12 +182,12 @@ export default function AuthKey(props) {
 AuthKey.propTypes = {
   dbId: PropTypes.string,
   scope: PropTypes.any,
-  authKeys:PropTypes.any,
-  setAuthKeys:PropTypes.any,
+  authKeys: PropTypes.any,
+  setAuthKeys: PropTypes.any,
   authkeycreatedorupdated: PropTypes.any,
   setAuthkeycreatedorupdated: PropTypes.any,
   selected: PropTypes.any,
-  setCreatedBy:PropTypes.any,
-  createdBy:PropTypes.any
+  setCreatedBy: PropTypes.any,
+  createdBy: PropTypes.any
 
 };
