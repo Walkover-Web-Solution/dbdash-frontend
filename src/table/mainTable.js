@@ -43,6 +43,8 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
+  const [queryByAi, setQueryByAi] = useState(false);
+
   const[showSearch,setShowSearch]=useState(false);
   const emptyselection={
     columns: CompactSelection.empty(),
@@ -530,7 +532,8 @@ setSelection1(event);
         metaData={metaData}
         setMetaData={setMetaData}
         setOpen={setOpen}
-       
+        queryByAi ={queryByAi}
+        setQueryByAi = {setQueryByAi}
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
         setLinkedValueName={setLinkedValueName}
