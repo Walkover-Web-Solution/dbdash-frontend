@@ -46,6 +46,7 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
+  const [viewID,setViewId] = useState("");
   // const [link, setLink] = useState("Link");
   const [openManageField, setOpenManageField] = useState(false);
 
@@ -196,11 +197,15 @@ export default function TablesList({ dbData }) {
     }
   },[params?.filterName])
 
+
   let dataa1 = "";
   const shareLink = async () => {
-    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
-    if (viewId) {
+    let viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName]?.viewId
+    if (viewId){
       setLink(`localhost:3000/${viewId}`)
+    }
+    else if (viewID ){
+      setLink(`localhost:3000/${viewID}`)
     }
     else {
       const db_Id = dbData?.db?._id
@@ -210,16 +215,13 @@ export default function TablesList({ dbData }) {
       }
 
       dataa1 = await createViewTable(db_Id, data);
-
-      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+      setViewId(Object.keys(Object.values(dataa1?.data?.data)[0])[0])
+      console.log(dataa1,"sdara1viewtabelr")
+      setLink(`localhost:3000/${Object.keys(Object.values(dataa1?.data?.data)[0])[0]}`)
     }
 
   }
-  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-  
-  // const handleMenuOpen = (event) => {
-  //   setMenuAnchorEl(event.currentTarget);
-  // };
+
   
   return (
     <>
