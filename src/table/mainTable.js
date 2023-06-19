@@ -1,10 +1,11 @@
 /*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
-import { CompactSelection,
+import {
+  CompactSelection,
   DataEditor, GridCellKind
 } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { addColumnrightandleft, deleteRows,updateCells, updateColumnHeaders } from "../store/table/tableThunk";
+import { addColumnrightandleft, deleteRows, updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -24,7 +25,7 @@ import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 
 export default function MainTable() {
-  
+
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
@@ -43,6 +44,8 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
+  const [queryByAi, setQueryByAi] = useState(false);
+
   const[showSearch,setShowSearch]=useState(false);
   const emptyselection={
     columns: CompactSelection.empty(),
@@ -52,19 +55,19 @@ export default function MainTable() {
 
   const[selection1,setSelection1]=useState(emptyselection);
   const [fields, setFields] = useState(fields1 || [])
-  const tableInfo = useSelector((state) => getTableInfo(state)); 
+  const tableInfo = useSelector((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId
-  useEffect(()=>{
+  useEffect(() => {
     setData(dataa)
-  },[dataa])
- 
+  }, [dataa])
+
   const handleUploadFileClick = useCallback((cell) => {
-    if(!data)return ;
+    if (!data) return;
     const [col, row] = cell;
-    const dataRow = data?.[row] || data?.[row-1];
+    const dataRow = data?.[row] || data?.[row - 1];
     const d = dataRow?.[fields?.[col]?.id];
     const index = cell?.[0]
-    if(fields?.[index]?.dataType === "attachment" && (d==undefined || d?.length===0)){
+    if (fields?.[index]?.dataType === "attachment" && (d == undefined || d?.length === 0)) {
       setOpenAttachment(cell);
     }
   });
@@ -80,13 +83,13 @@ export default function MainTable() {
 
   const onChangeUrl = (e, type) => {
 
-    const row=openAttachment[1];
-    const col=openAttachment[0];
+    const row = openAttachment[1];
+    const col = openAttachment[0];
     if (imageLink !== null) {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
+          rowIndex: dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: null,
           imageLink: imageLink,
           dataTypes: type,
@@ -100,13 +103,13 @@ export default function MainTable() {
 
 
   const onChangeFile = (e, type) => {
-    const row=openAttachment[1];
-    const col=openAttachment[0];
+    const row = openAttachment[1];
+    const col = openAttachment[0];
     if (e.target.files[0] != null) {
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
-          rowIndex:dataa[row][`fld${tableId.substring(3)}autonumber`],
+          rowIndex: dataa[row][`fld${tableId.substring(3)}autonumber`],
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
@@ -123,7 +126,7 @@ export default function MainTable() {
     if (directionAndId.direction == "left" || directionAndId.direction == "right") {
       setOpen(false);
       dispatch(addColumnrightandleft({
-        filterId:params?.filterName,fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
+        filterId: params?.filterName, fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
           selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
       }));
       setSelectValue('longtext')
@@ -137,8 +140,12 @@ export default function MainTable() {
           tableId: selectedTable
         }
       }
+      if(selectValue=="formula")
+      {
+        var queryToSend = JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED;`
+      }
       setOpen(false);
-      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName);
+      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
       setSelectValue('longtext')
     }
   };
@@ -159,36 +166,35 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields,fields1,params?.filterName,setFields)
+      reorderFuncton(dispatch, item, newIndex, fields, fields1, params?.filterName, setFields)
     },
-    [fields,fields1]
+    [fields, fields1]
   );
 
   const handleRowMoved = useCallback((from, to) => {
     reorderRows(from, to, data, setData);
   }, [data, setData]);
-  
 
-let arrr=[];
-const onCellEdited = useCallback((cell, newValue) => {
-  if(newValue?.readonly==true || newValue?.data==dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data=="" && !dataa[cell[1]][fields[cell[0]]?.id] )) return;
-  const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
+
+  let arrr = [];
+  const onCellEdited = useCallback((cell, newValue) => {
+    if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
+    const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
-  if(fields[cell[0]].dataType == "singleselect"){
-    if(typeof(newValue) == "object")
-    {
-      newValue = newValue.value || newValue.data.value || newValue.data;
-      if(!arrr.includes(newValue)){
-        arrr.push(newValue);
-      } 
-        editCell(cell, newValue, dispatch, fields,arrr,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
+    if (fields[cell[0]].dataType == "singleselect") {
+      if (typeof (newValue) == "object") {
+        newValue = newValue.value || newValue.data.value || newValue.data;
+        if (!arrr.includes(newValue)) {
+          arrr.push(newValue);
+        }
+        editCell(cell, newValue, dispatch, fields, arrr, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
+      }
+    }
+    else {
+      editCell(cell, newValue, dispatch, fields, false, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
     }
   }
-  else {
-    editCell(cell, newValue, dispatch, fields,false,params,dataa[cell?.[1] ?? []],fields[cell[0]].dataType);
-  }
-} 
-, [dataa,data, fields]);
+    , [dataa, data, fields]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -197,71 +203,69 @@ const onCellEdited = useCallback((cell, newValue) => {
     newarrr[colIndex] = obj;
     setFields(newarrr);
     dispatch(updateColumnHeaders({
-      filterId:params?.filterName,
+      filterId: params?.filterName,
       dbId: params?.dbId,
       tableName: params?.tableName,
       columnId: field?.id,
       metaData: { width: newSize }
     }));
   };
-  const validateCell=useCallback((cell,newValue,oldValue)=>
-{
+  const validateCell = useCallback((cell, newValue, oldValue) => {
 
-  if(newValue.data.kind=='tags-cell')
-     { 
-          let tag="";
-          let arr1=newValue.data.tags;
-          let arr2=oldValue.data.tags || [];
-          let arr=arr1.filter(x=>!arr2.includes(x));
-          
-          tag=arr[0]|| "";
-          if(fields[cell[0]]?.id && tag!="" ){
-            dispatch(
-              updateCells({
-                columnId:  fields[cell[0]]?.id ,
-                rowIndex :dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
-                value:  tag ,
-                dataTypes: newValue?.kind,
-              })
-             );       
-     
-      }}
-    
-    if(newValue.kind==='number' )
-    {
-      if( newValue?.data?.toString().length<13)
-      return newValue;
+    if (newValue.data.kind == 'tags-cell') {
+      let tag = "";
+      let arr1 = newValue.data.tags;
+      let arr2 = oldValue.data.tags || [];
+      let arr = arr1.filter(x => !arr2.includes(x));
+
+      tag = arr[0] || "";
+      if (fields[cell[0]]?.id && tag != "") {
+        dispatch(
+          updateCells({
+            columnId: fields[cell[0]]?.id,
+            rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
+            value: tag,
+            dataTypes: newValue?.kind,
+          })
+        );
+
+      }
+    }
+
+    if (newValue.kind === 'number') {
+      if (newValue?.data?.toString().length < 13)
+        return newValue;
       else return false;
 
     }
-},[dataa,fields]);
+  }, [dataa, fields]);
   const handleDeleteRow = (selection) => {
-    
-    if(selection.current)
-    {return;
-    } 
+
+    if (selection.current) {
+      return;
+    }
     const deletedRowIndices = [];
     // const newData = [...dataa];
-  
+
     for (const element of selection.rows.items) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
-       
+
         deletedRowIndices.push(dataa[i][`fld${tableId.substring(3)}autonumber`]);
       }
     }
-  
+
     if (deletedRowIndices.length > 0) {
 
-      dispatch(deleteRows({deletedRowIndices,dataa}))
+      dispatch(deleteRows({ deletedRowIndices, dataa }))
     }
-   setSelection1(emptyselection)
+    setSelection1(emptyselection)
 
-    
+
     // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
     // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
   };
-  
+
 
 
 
@@ -278,7 +282,7 @@ const onCellEdited = useCallback((cell, newValue) => {
       const d = dataRow[fields[col]?.id];
       const { dataType } = fields[col] || "";
 
-      
+
       if (dataType === "autonumber") {
         return {
           allowOverlay: true,
@@ -288,7 +292,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           displayData: d?.toString() || "",
         };
       }
-      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat"   ) {
+      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat") {
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
@@ -304,7 +308,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
           const year = currentDate.getFullYear().toString().padStart(4, "0");
           const formattedDate = `${day}-${month}-${year}`;
-          
+
           return {
             kind: GridCellKind.Custom,
             allowOverlay: true,
@@ -332,16 +336,16 @@ const onCellEdited = useCallback((cell, newValue) => {
           };
         }
       }
-      
-    else if (dataType === "longtext") {
-      return {
-        kind: GridCellKind.Text,
-        allowOverlay: true,
-        readonly: false,
-        displayData: d || "",
-        data: d || "",
-      };
-    }
+
+      else if (dataType === "longtext") {
+        return {
+          kind: GridCellKind.Text,
+          allowOverlay: true,
+          readonly: false,
+          displayData: d || "",
+          data: d || "",
+        };
+      }
       else if (dataType === "singlelinetext") {
         return {
           kind: GridCellKind.Text,
@@ -358,7 +362,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           allowOverlay: true,
           kind: GridCellKind.Number,
           data: d || "",
-          displayData:d || ""
+          displayData: d || ""
         };
       }
       else if (dataType === "numeric") {
@@ -366,18 +370,18 @@ const onCellEdited = useCallback((cell, newValue) => {
           allowOverlay: true,
           kind: GridCellKind.Number,
           data: d || "",
-          displayData:d || ""
+          displayData: d || ""
         };
       }
-    
+
       else if (dataType === "multipleselect") {
-         const possibleTags = fields[col]?.metadata?.option;
+        const possibleTags = fields[col]?.metadata?.option;
         // const row = 0; // Replace 0 with the appropriate row index
-        let newarr=[];
-        possibleTags && possibleTags?.map(x=>{
-          let newx={
-            tag:x.value,
-            color:x.color
+        let newarr = [];
+        possibleTags && possibleTags?.map(x => {
+          let newx = {
+            tag: x.value,
+            color: x.color
           }
           newarr.push(newx);
         })
@@ -387,20 +391,20 @@ const onCellEdited = useCallback((cell, newValue) => {
           copyData: "4",
           data: {
             kind: "tags-cell",
-            possibleTags:  newarr || [],
+            possibleTags: newarr || [],
             readonly: false,
-            tags:d || [],
+            tags: d || [],
           },
         };
       }
-      
+
       else if (dataType == "attachment" && d != null) {
         return {
           kind: GridCellKind.Image,
-          data: d ,
+          data: d,
           allowOverlay: true,
           allowAdd: true,
-        };      
+        };
       }
       else if (dataType === "singleselect") {
         return {
@@ -412,16 +416,16 @@ const onCellEdited = useCallback((cell, newValue) => {
             allowedValues: fields[col]?.metadata?.option || [],
             value: d || ""
           }
-          };
-        }
-        else if (dataType === "checkbox" ) {
-          return {
-            kind: GridCellKind.Boolean,
-            data: d,
-            allowOverlay: false,
-          };
-        }
-      
+        };
+      }
+      else if (dataType === "checkbox") {
+        return {
+          kind: GridCellKind.Boolean,
+          data: d,
+          allowOverlay: false,
+        };
+      }
+
       else {
         return {
           kind: GridCellKind.Text,
@@ -445,10 +449,10 @@ const onCellEdited = useCallback((cell, newValue) => {
     }));
   }, [fields]);
 
- const handlegridselection=(event)=>{
-setSelection1(event);
-  // return event;
- }
+  const handlegridselection = (event) => {
+    setSelection1(event);
+    // return event;
+  }
   return (
     <>
     {JSON.stringify(selection1)!==JSON.stringify(emptyselection) && selection1.rows.items.length>0 && <button
@@ -476,7 +480,7 @@ setSelection1(event);
 }
       <div className="table-container" style={{height:`${((window?.screen?.height*63)/100)}px`}}>
         <DataEditor
-           {...cellProps}
+          {...cellProps}
           width={window.screen.width}
           fillHandle={true}
           getCellContent={getData}
@@ -499,7 +503,7 @@ setSelection1(event);
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
           // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
-          
+
           onColumnMoved={reorder}
           onPaste={true}
           rightElement={
@@ -524,32 +528,35 @@ setSelection1(event);
         selectedTable={selectedTable}
         setSelectedTable={setSelectedTable}
         setSelectValue={setSelectValue}
+        selectValue={selectValue}
         showFieldsDropdown={showFieldsDropdown}
         setShowFieldsDropdown={setShowFieldsDropdown}
         open={open}
         metaData={metaData}
         setMetaData={setMetaData}
         setOpen={setOpen}
-       
+        queryByAi ={queryByAi}
+        setQueryByAi = {setQueryByAi}
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
         setLinkedValueName={setLinkedValueName}
         setTextValue={setTextValue}
+       
       />}
       <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
 
       {openAttachment && (
-              <SelectFilepopup
-                title="uplaodfile"
-                label="UploadFileIcon"
-                open={openAttachment?true:false}
-                setImageLink={setImageLink}
-                onChangeUrl={onChangeUrl}
-                setOpen={setOpenAttachment}
-                imageLink={imageLink}
-                onChangeFile={onChangeFile}
-              />
-            )}
+        <SelectFilepopup
+          title="uplaodfile"
+          label="UploadFileIcon"
+          open={openAttachment ? true : false}
+          setImageLink={setImageLink}
+          onChangeUrl={onChangeUrl}
+          setOpen={setOpenAttachment}
+          imageLink={imageLink}
+          onChangeFile={onChangeFile}
+        />
+      )}
     </>
   );
 }

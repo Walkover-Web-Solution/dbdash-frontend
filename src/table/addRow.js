@@ -5,10 +5,12 @@ export const addRow = (dispatch) => {
     dispatch(addRows({ type: "add_row" }))    
     return;
 }
-export const addColumn = (dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName) => { 
+export const addColumn = (dispatch,params,selectValue,metaData,textValue,selectedTable,selectedFieldName,linkedValueName,queryToSend,userQuery) => { 
       dispatch(addColumsToLeft({
       filterId:params?.filterName,fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
-        selectValue, metaData: metaData,selectedTable,selectedFieldName,linkedValueName
+        selectValue, metaData: metaData,selectedTable,selectedFieldName,linkedValueName,
+        query: queryToSend ,
+        userQuery :userQuery
     }));
     return;
 }
