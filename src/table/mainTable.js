@@ -43,11 +43,13 @@ export default function MainTable() {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
+  const[showSearch,setShowSearch]=useState(false);
   const emptyselection={
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
     current: undefined,
 };
+
   const[selection1,setSelection1]=useState(emptyselection);
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state)); 
@@ -66,6 +68,15 @@ export default function MainTable() {
       setOpenAttachment(cell);
     }
   });
+  document.addEventListener(
+          "keydown",
+            React.useCallback(event => {
+                if ((event.ctrlKey || event.metaKey) && event.code === "KeyF") {
+                   setShowSearch(!showSearch);
+                  event.stopPropagation();
+                  event.preventDefault();
+              }
+          }, []));
 
   const onChangeUrl = (e, type) => {
 
@@ -160,7 +171,7 @@ export default function MainTable() {
 
 let arrr=[];
 const onCellEdited = useCallback((cell, newValue) => {
-
+  if(newValue?.readonly==true || newValue?.data==dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data=="" && !dataa[cell[1]][fields[cell[0]]?.id] )) return;
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
   if(fields[cell[0]].dataType == "singleselect"){
@@ -218,7 +229,7 @@ const onCellEdited = useCallback((cell, newValue) => {
     
     if(newValue.kind==='number' )
     {
-      if( newValue.data.toString().length<13)
+      if( newValue?.data?.toString().length<13)
       return newValue;
       else return false;
 
@@ -274,7 +285,7 @@ const onCellEdited = useCallback((cell, newValue) => {
           kind: GridCellKind.Number,
           readonly: true,
           data: d || "",
-          displayData: d.toString() || "",
+          displayData: d?.toString() || "",
         };
       }
       else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat"   ) {
@@ -445,9 +456,8 @@ setSelection1(event);
     position: "absolute",
     display:'flex',
     flexDirection:'row',
-
-    right: "3%",
-    top: "17%",
+    right: "1%",
+    top: "18.10%",
     zIndex: "10000",
     background: "none",
     border: "none",
@@ -464,10 +474,11 @@ setSelection1(event);
   </div>
 </button>
 }
-      <div className="table-container" style={{height:`${((window?.screen?.height*65)/100)}px`}}>
+      <div className="table-container" style={{height:`${((window?.screen?.height*63)/100)}px`}}>
         <DataEditor
            {...cellProps}
           width={window.screen.width}
+          fillHandle={true}
           getCellContent={getData}
           onRowAppended={addRows}
           columns={realCols}
@@ -480,6 +491,8 @@ setSelection1(event);
           onRowMoved={handleRowMoved}
           validateCell={validateCell}
           getCellsForSelection={true}
+          showSearch={showSearch}
+          onSearchClose={() => setShowSearch(false)}
           // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}
           onColumnResizeEnd={handleColumnResize}
@@ -517,6 +530,7 @@ setSelection1(event);
         metaData={metaData}
         setMetaData={setMetaData}
         setOpen={setOpen}
+       
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
         setLinkedValueName={setLinkedValueName}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import ShareLinkPopUp from "./ShareLinkPopUp";
+import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
 import FilterModal from "../../filterPopUp";
@@ -17,7 +17,7 @@ import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 import { createTable } from "../../../api/tableApi";
 import './tablesList.scss'
-// import { createViewTable } from "../../api/viewTableApi";
+import { createViewTable } from "../../../api/viewTableApi";
 // import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
 export default function TablesList({ dbData }) {
@@ -31,7 +31,7 @@ export default function TablesList({ dbData }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  // const [shareLinkOpen, setShareLinkOpen] = useState(false);
+  const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
   const [tabIndex, setTabIndex] = useState(0);
@@ -45,18 +45,18 @@ export default function TablesList({ dbData }) {
   const tableLength = Object.keys(AllTableInfo).length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
-  // const [link, setLink] = useState("Link");
+  const [link, setLink] = useState("Link");
   // const [link, setLink] = useState("Link");
   const [openManageField, setOpenManageField] = useState(false);
 
 
   const handleClick = (event, id) => {
-    // if (id === "share") {
-    //   setShareLinkOpen(true);
-    // } else {
+    if (id === "share") {
+      setShareLinkOpen(true);
+    } else {
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
-    // }
+    }
   };
 
 
@@ -196,25 +196,25 @@ export default function TablesList({ dbData }) {
     }
   },[params?.filterName])
 
-  // let dataa1 = "";
-  // const shareLink = async () => {
-  //   const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
-  //   if (viewId) {
-  //     setLink(`localhost:3000/${viewId}`)
-  //   }
-  //   else {
-  //     const db_Id = dbData?.db?._id
-  //     const data = {
-  //       tableId: params?.tableName,
-  //       filterId: params?.filterName
-  //     }
+  let dataa1 = "";
+  const shareLink = async () => {
+    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
+    if (viewId) {
+      setLink(`localhost:3000/${viewId}`)
+    }
+    else {
+      const db_Id = dbData?.db?._id
+      const data = {
+        tableId: params?.tableName,
+        filterId: params?.filterName
+      }
 
-  //     dataa1 = await createViewTable(db_Id, data);
+      dataa1 = await createViewTable(db_Id, data);
 
-  //     setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
-  //   }
+      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+    }
 
-  // }
+  }
   // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   
   // const handleMenuOpen = (event) => {
@@ -268,13 +268,13 @@ export default function TablesList({ dbData }) {
                 <Box key={index} className="custom-box">
                   <Box
                     className="filter-box"
-                    onClick={() => {
-                      onFilterClicked(filter[1].query, filter[0], filter[1]);
-                    }}
+                    
                     style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
                     variant="outlined"
                   >
-                    {filter[1]?.filterName}
+                    <div onClick={() => {
+                      onFilterClicked(filter[1].query, filter[0], filter[1]);
+                    }}>{filter[1]?.filterName}</div>
                     <IconButton onClick={(e) => handleClick(e, filter[0])}>
                       <MoreVertIcon className="moreverticon" />
                     </IconButton>
@@ -343,7 +343,7 @@ export default function TablesList({ dbData }) {
           >
             Delete
           </MenuItem>
-          {/* <MenuItem
+          <MenuItem
             onClick={(e) => {
               handleClick(e, "share");
               shareLink();
@@ -362,23 +362,24 @@ export default function TablesList({ dbData }) {
               textvalue={link}
 
             />
-          )} */}
+          )}
 
         </Menu>
       </div>
 
-      <div style={{ marginTop: "22vh" }}>
+      <div  style={{ marginTop: "200px" }}>
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
         ) : (
-          <>
+          <div>
             <MainTable setPage={setPage} page={page} />
-          </>
+          </div>
         )}
       </div>
     </>
   );
 }
+
 TablesList.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.string,

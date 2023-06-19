@@ -110,6 +110,8 @@ export default function Webhooktable(props) {
                 <TableCell>Name</TableCell>
                 <TableCell>URL</TableCell>
                 <TableCell>Condition</TableCell>
+                <TableCell>Table</TableCell>
+
                 {/* <TableCell>Filters</TableCell> */}
                 <TableCell>Created On</TableCell>
                 <TableCell>Action</TableCell>
@@ -132,6 +134,8 @@ export default function Webhooktable(props) {
 
 
                     <TableCell>{condition}</TableCell>
+                    
+                    <TableCell>{ props?.dataforwebhook[webhook.tableId]?.tableName}</TableCell>
 
                     {/* <TableCell>
   {webhook.filterId && props.filters[webhook.filterId]?.filterName}
@@ -157,8 +161,10 @@ export default function Webhooktable(props) {
                         }}
                         />
 
-                        {anchorEl && <Webhooktablemenu newcreated={props.newcreated}
-                          tabledata={tabledata} setNewcreated={props.setNewcreated} filters={props.filters} tableId={props?.tableId} dbId={props?.dbId} filterId={filters} weburl={url} condition={wbhookcondition} webhookname={name} webhookid={wbhookid} handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl} closeDropdown={closeDropdown} isActive={wbhookactive} />
+                        {anchorEl && <Webhooktablemenu
+                        dataforwebhook={props?.dataforwebhook}
+                         newcreated={props.newcreated}
+                          tabledata={tabledata} setNewcreated={props.setNewcreated} tableId={webhook.tableId} dbId={props?.dbId} filterId={filters} weburl={url} condition={wbhookcondition} webhookname={name} webhookid={wbhookid} handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl} closeDropdown={closeDropdown} isActive={wbhookactive} />
                         }</div>
                     </TableCell>
                   </TableRow>
@@ -177,6 +183,7 @@ Webhooktable.propTypes = {
   filters: PropTypes.any,
   dbId: PropTypes.string,
   tabledata: PropTypes.any,
+  dataforwebhook:PropTypes.any,
   setTabledata: PropTypes.any,
   tableId: PropTypes.any,
   setNewcreated: PropTypes.any,

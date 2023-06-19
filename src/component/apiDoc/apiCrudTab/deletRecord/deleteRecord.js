@@ -15,8 +15,9 @@ function DeleteRecord(props) {
 
   return (
     <>
-      <div className="delete-record-container">
+      <div className="delete-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock
+        method="DELETE"
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}/{:rowId}${value != "" ? `?${value}` : ``}`}
           header="-H auth-key: AUTH_TOKEN"
           body={arr}
@@ -30,7 +31,7 @@ function DeleteRecord(props) {
           }`} />
       </div>
 
-      <div className="records-container">
+      <div style={{width:'700px',overflowX:"hidden"}}>
         <Box className="records-container">
           <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Table Records</Typography>
           <Typography>

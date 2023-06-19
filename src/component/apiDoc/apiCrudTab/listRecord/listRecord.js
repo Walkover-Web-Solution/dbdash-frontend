@@ -16,8 +16,9 @@ function ListRecord(props) {
     <>
     <div
       className="list-record-container"
+      style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}
       >
-     <CodeBlock   code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
+     <CodeBlock method="GET"  code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: YOUR_SECRET_API_TOKEN `}/>
      <ResponseBox response={`{
 "employee": {
 "name": "sonoo",
@@ -26,6 +27,8 @@ function ListRecord(props) {
 }
 }`} />
      </div>
+     <div style={{width:'700px',overflowX:"hidden"}}>
+
      <div className='records-container'>
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >List records</Typography>
         <Typography  fontSize={variables.textsize} >
@@ -36,7 +39,7 @@ function ListRecord(props) {
         <OptionalParameter  db={props?.db} table={props?.table}  setValue={setValue} age={age} value={value} setAge={setAge}/>
         </Typography>
         <br/>
-   
+   </div>
    
     </div>
     </>

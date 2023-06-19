@@ -14,6 +14,7 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue,selecte
 }
 
 export const editCell = (cell, newValue,dispatch,fields,arrr,params,currentrow,dataType) => { 
+  console.log(newValue,dataType,"fjkgjjg");
   const col = cell[0];
 const tableId = params?.tableName.substring(3);
 if(newValue?.data && newValue.data.kind=='tags-cell') return;
