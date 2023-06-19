@@ -395,17 +395,24 @@ export const updateCells = createAsyncThunk(
             payload.value = data?.data?.data;
             return payload;
         }
-        const data = await updateRow(dbId, tableId, payload.rowIndex, { [columnId]: value })
+        const data = await updateRow(dbId, tableId,
+            {"records":[{
+                    "where" :`fld${tableId.substring(3)}autonumber = ${payload.rowIndex}`,
+                    "fields": { [columnId]: value }
+             }] })
+
         const createdby = "fld" + tableId.substring(3) + "createdby"
+        const updatedby = "fld" + tableId.substring(3) + "updatedby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {
-                if (user?.user_id?._id == data?.data?.data?.[createdby]) {
-                    data.data.data[createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
+                if (user?.user_id?._id == data?.data?.data[0]?.[createdby]) {
+                    data.data.data[0][createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
+                    data.data.data[0][updatedby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
                     return;
                 }
             });
         })
-        payload.newData = data?.data?.data;
+        payload.newData = data?.data?.data[0];
         return payload;
     }
 )
@@ -418,13 +425,13 @@ export const addRows = createAsyncThunk(
         const createdby = "fld" + tableId.substring(3) + "createdby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {
-                if (user?.user_id?._id == newRow?.data?.data?.[createdby]) {
-                    newRow.data.data[createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
+                if (user?.user_id?._id == newRow?.data?.data[0]?.[createdby]) {
+                    newRow.data.data[0][createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
                     return;
                 }
             });
         })
-        return newRow?.data?.data;
+        return newRow?.data?.data[0];
     }
 )
 // export const deleteRows = createAsyncThunk(
