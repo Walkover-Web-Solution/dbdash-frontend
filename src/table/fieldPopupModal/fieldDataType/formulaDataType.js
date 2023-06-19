@@ -8,25 +8,22 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
 import CustomAutoSuggest from "../../../component/customAutoSuggest/customAutoSuggest"
-
-
+import { getQueryByAi } from '../../../api/fieldApi';
 
 
 export default function FormulaDataType(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const params = useParams();
-  // const [searchValue, setSearchValue] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions,setSuggestions] = useState();
   const [html,setHtml] = useState(false)
   const [text,setText] = useState(false)
+  const [queryResult,setQueryResult] = useState();
  
   useEffect(() => {
     const data = AllTableInfo.tables[params?.tableName]?.fields;
     var arr =[]
-    
     Object.entries(data).map((fields)=>{
-      console.log("fields",fields)
       var json={}
       json.name =fields[1].fieldName
       json.content =  fields[0] 
@@ -34,86 +31,31 @@ export default function FormulaDataType(props) {
     })
     setSuggestions(arr)
   }, [])
-  console.log("suigesrtion",suggestions);
 
 
   useEffect(() => {
     let query = props?.queryByAi;
     try {
-      query = JSON.parse(query)?.add_column?.new_column_name?.generated?.expression;
-      props.setQueryResult(query);
+      query = JSON.parse(query?.pgQuery)?.add_column?.new_column_name?.generated?.expression;
+      
+      setQueryResult(query);
       setIsLoading(false);
     } catch (err) {
       query = 'enter valid query';
     }
-  }, [props?.queryByAi, props?.setQueryResult]);
+  }, [props?.queryByAi ]);
 
-  // const getSuggestions = (value) => {
-  //   const inputValues = value.trim().toLowerCase().split(' ');
-  //   const inputLength = inputValues.length;
-  //   const searchTerm = inputValues[inputLength - 1];
 
-  //   let response = [];
-  //   if (searchTerm.length !== 0) {
-  //     response = Object.entries(searchValue.fields).filter((lang) =>
-  //       lang[1]?.fieldName?.toLowerCase().startsWith(searchTerm)
-  //     );
-  //   }
-  //   return response;
-  // };
-
-  // const getSuggestionValue = (suggestion) => {
-  //   const newVal = value.split(' ');
-  //   let newdata = '';
-  //   for (let i = 0; i < newVal.length - 1; i++) {
-  //     newdata += newVal[i] + ' ';
-  //   }
-  //   newdata = newdata ? newdata + suggestion[1].fieldName : suggestion[1]?.fieldName;
-  //   return newdata;
-  // };
-
-  // const renderSuggestion = (suggestion) => <MenuItem>{suggestion[1].fieldName}</MenuItem>;
-
-  // const onChange = (event, { newValue }) => {
-  //   setValue(newValue);
-  // };
-
-  // const onSuggestionsFetchRequested = ({ value }) => {
-  //   setSuggestions(getSuggestions(value));
-  // };
-
-  // const onSuggestionsClearRequested = () => {
-  //   setSuggestions([]);
-  // };
-
-  // const inputProps = {
-  //   placeholder: 'ask a query to ai',
-  //   value,
-  //   onChange,
-  //   style: {
-  //     width: '360px',
-  //     height: '50px',
-  //     border: '1px solid black',
-  //     borderRadius: '5px',
-  //     marginTop: 10,
-  //   },
-  // };
-  // const renderSuggestionsContainer = (options) => {
-  //   const { containerProps, children } = options;
-  //   return (
-  //     <Paper {...containerProps} square style={{ maxHeight: "100px", overflowY: "auto" }}>
-  //       {children}
-  //     </Paper>
-  //   );
-  // };
-
-  const handleClick = () => {
+  const handleClick = async () => {
     setIsLoading(true);
-    console.log("html",html)
-    console.log("text",text)
-    // setTimeout(() => {
-    //   props.submitData(value);
-    // }, 2000);
+  
+    props?.setQueryByAi(false);
+    const response = await getQueryByAi(params?.dbId, params?.tableName, { userQuery: text })
+    props?.setQueryByAi({
+    pgQuery:  response?.data?.data , 
+    userQuery : html
+    });
+
   };
 
   return (
@@ -121,15 +63,6 @@ export default function FormulaDataType(props) {
       <Box>
         Write a query in a human-friendly way to manipulate the column, and the resultant query will be given to you!
       </Box>
-      {/* <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-        renderSuggestionsContainer={renderSuggestionsContainer}
-      /> */}
       <CustomAutoSuggest
         id={'editableDivid'}
         suggestion={suggestions}
@@ -142,9 +75,10 @@ export default function FormulaDataType(props) {
         disable={false}
         groupByGroupName={false}
       />
-      <Button onClick={handleClick} color="primary">
+    { !isLoading && <Button onClick={handleClick} color="primary">
         Ask AI
       </Button>
+}
       {isLoading && <Box sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -153,7 +87,7 @@ export default function FormulaDataType(props) {
         <CircularProgress />
       </Box>}
 
-      {props.queryByAi && (
+      {props?.queryByAi && (
         <TextField
           autoFocus
           margin="dense"
@@ -162,7 +96,7 @@ export default function FormulaDataType(props) {
           type="text"
           readOnly="readonly"
           placeholder="Resultant query"
-          value={props.queryResult}
+          value={queryResult}
           fullWidth
         />
       )}
@@ -174,6 +108,7 @@ export default function FormulaDataType(props) {
 
 FormulaDataType.propTypes = {
   queryByAi: PropTypes.any,
+  setQueryByAi: PropTypes.any,
   submitData: PropTypes.func,
   queryResult: PropTypes.any,
   setQueryResult: PropTypes.any,

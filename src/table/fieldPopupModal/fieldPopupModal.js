@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Switch,FormGroup,FormControlLabel} from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Switch, FormGroup, FormControlLabel } from "@mui/material";
 // import { useSelector } from "react-redux";
 // import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 import CheckIcon from "@mui/icons-material/Check";
@@ -34,7 +34,7 @@ export default function FieldPopupModal(props) {
   const [errors, setErrors] = useState({});
   const [showNumericOptions, setShowNumericOptions] = useState(false);
   const [showDecimalOptions, setShowDecimalOptions] = useState(false);
-  const [queryResult, setQueryResult] = useState(false);
+
 
   const schema = Joi.object({
     fieldName: Joi.string().min(1).max(30).required(),
@@ -55,7 +55,7 @@ export default function FieldPopupModal(props) {
     }
     props?.setTextValue(event.target.value);
   };
-  
+
   const handleSelectChange = (event) => {
     setShowLinkField(false)
     setShowNumericOptions(false);
@@ -72,7 +72,7 @@ export default function FieldPopupModal(props) {
       setShowFormulaField(true)
       props?.setSelectValue(event.target.value);
     }
-    else if(event.target.value == "email"){
+    else if (event.target.value == "email") {
       setShowSwitch(true);
       props?.setSelectValue(event.target.value);
     }
@@ -111,7 +111,7 @@ export default function FieldPopupModal(props) {
     }
     else if (event.target.value === "singlelinetext") {
       setShowSwitch(true);
-    
+
       props?.setSelectValue(event.target.value);
     }
     else if (event.target.value === "email" || event.target.value === "phone") {
@@ -145,6 +145,7 @@ export default function FieldPopupModal(props) {
     props?.setSelectValue("longtext");
     props?.setTextValue("");
     props?.setMetaData({});
+    props?.setQueryByAi(false);
   };
 
   return (
@@ -171,7 +172,7 @@ export default function FieldPopupModal(props) {
           onKeyDown={(e) => {
             if (e.target.value.length >= 1 && e.target.value.length <= 30) {
               if (e.key === "Enter") {
-                
+
                 handleClose();
                 e.stopPropagation();
                 e.preventDefault();
@@ -222,15 +223,16 @@ export default function FieldPopupModal(props) {
             {/* <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{ mr: 1 }} /> Row id</MenuItem> */}
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single line text</MenuItem>
             <MenuItem value="singleselect"><ExpandCircleDownOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
-            
+
           </Select>
 
           <NumberDataType selectValue={props?.selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
 
-          {showFormulaField && <FormulaDataType setQueryByAi={props?.setQueryByAi}  queryByAi={props?.queryByAi} submitData={props?.submitData} queryResult={queryResult} setQueryResult={setQueryResult} />}
+          {showFormulaField && <FormulaDataType setQueryByAi={props?.setQueryByAi} queryByAi={props?.queryByAi} submitData={props?.submitData}
+          />}
 
           {showLinkField && <LinkDataType selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} />}
-          
+
           {showLookupField && <LoookupDataType linkedValueName={props?.linkedValueName} setLinkedValueName={props?.setLinkedValueName} selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} key={props.selectedTable} tableId={props?.tableId} />}
 
           {showSwitch && (
@@ -249,20 +251,23 @@ export default function FieldPopupModal(props) {
             </FormGroup>
           )}
         </DialogContent>
-        <Button sx={{textTransform: "none"}}
-          onClick={() => {
-            handleClose();
-            props?.submitData(false);
-          }}
-          color="primary"
-          disabled={
-            errors.fieldName ||
-            props?.textValue?.length < 1 ||
-            props?.textValue?.length > 30
-          }
-        >
-          Create Column
-        </Button>
+        {props?.selectValue !== "formula" || props?.queryByAi ? (
+          <Button
+            sx={{ textTransform: "none" }}
+            onClick={() => {
+              handleClose();
+              props?.submitData(false);
+            }}
+            color="primary"
+            disabled={
+              errors.fieldName ||
+              props?.textValue?.length < 1 ||
+              props?.textValue?.length > 30
+            }
+          >
+            Create Column
+          </Button>
+        ) : null}
       </Dialog>
     </div>
   );
