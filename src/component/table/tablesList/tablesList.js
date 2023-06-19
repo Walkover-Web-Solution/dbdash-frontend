@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
+import { toast } from 'react-toastify';
 import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
@@ -100,12 +101,16 @@ export default function TablesList({ dbData }) {
 
   const handleEdit = async () => {
     setEdit(true);
-    setOpenn(true);
+    if(filterId){
+      setOpenn(true);
+    }else{
+      toast.error("choose the filter First");
+    }
   };
 
   function onFilterClicked(filter, id) {
     setUnderLine(id)
-    setFilterId(id);
+    setFilterId(params?.filterName || id);
     // setPage(1);
     dispatch(filterData({
       filterId : id,
