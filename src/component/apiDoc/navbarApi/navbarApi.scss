@@ -1,12 +1,15 @@
+@import '../../../assets/styling.scss';
 .navbar-container {
     display: flex;
     flex-direction: row;
+    color:$fontColorVAlue !important;
   }
   
   .org-db-select {
     display: flex;
     flex-direction: row;
   }
+ 
   
   .form-control {
     margin: 1rem;

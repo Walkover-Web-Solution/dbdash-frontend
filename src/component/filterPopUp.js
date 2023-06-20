@@ -95,13 +95,14 @@ export default function FilterModal(props) {
   };
   
   useEffect(() => {
-    if (props?.edit == true) {
-      const editDataValues = AllTableInfo.tables[props?.tableName].filters[props?.filterId].query
-      setFilterName(AllTableInfo.tables[props?.tableName].filters[props?.filterId].filterName)
-      const whereIndex = editDataValues.indexOf("where");
-      const whereClause = editDataValues.substring(whereIndex + 5);
-      if (whereClause.includes('and') || whereClause.includes('or')) {
-        var conditions = whereClause.split(/\s+(or|and)\s+/i)
+
+    if (props?.edit == true && props?.filterId) {
+      const editDataValues = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.query
+      setFilterName(AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.filterName)
+      const whereIndex = editDataValues?.indexOf("where");
+      const whereClause = editDataValues?.substring(whereIndex + 5);
+      if (whereClause?.includes('and') || whereClause?.includes('or')) {
+        var conditions = whereClause?.split(/\s+(or|and)\s+/i)
       }
       else {
         conditions = whereClause

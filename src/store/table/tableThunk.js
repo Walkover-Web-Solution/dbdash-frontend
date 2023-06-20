@@ -304,14 +304,24 @@ export const addColumnrightandleft = createAsyncThunk(
         }
         let createdfield;
         if (payload?.fieldType == "lookup")
+        {
+            console.log("llokup")
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
+            dispatch(setAllTablesData({
+                dbId:createdfield?.data?.data?._id,
+                tables: createdfield?.data?.data?.tables
+            }))
+
+        }
         else
+        {
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
-        dispatch(setAllTablesData({
-            dbId:createdfield?.data?.data?.data?._id,
-            tables: createdfield?.data?.data?.data?.tables
-        }))
-        
+            dispatch(setAllTablesData({
+                dbId:createdfield?.data?.data?.data?._id,
+                tables: createdfield?.data?.data?.data?.tables
+            })) 
+        }
+                 
         const { tableId, dbId } = getState().table
         if(payload?.filterId){
             dispatch(filterData({
@@ -337,19 +347,28 @@ export const addColumsToLeft = createAsyncThunk(
             selectedFieldName: payload?.selectedFieldName,
             selectedTable: payload?.selectedTable,
             linkedForeignKey: payload?.linkedValueName,
-            foreignKey: payload?.foreignKey
+            foreignKey: payload?.foreignKey,
+            userQuery : payload?.userQuery
         }
-        let createdfield;
+        let createdfield= {};
         if (payload?.fieldType == "lookup")
-            createdfield = await createView(payload?.dbId, payload?.tableId, data);
+        {
+            createdfield.data = await createView(payload?.dbId, payload?.tableId, data);
+            dispatch(setAllTablesData({ 
+                dbId:createdfield?.data?.data?.data?._id,
+                tables: createdfield?.data?.data?.data?.tables
+            }))
+        }
         else
+        {
             createdfield = await createField(payload?.dbId, payload?.tableId, data);
+            dispatch(setAllTablesData({ 
+                dbId:createdfield?.data?.data?.data?._id,
+                tables: createdfield?.data?.data?.data?.tables
+            }))
+        }
 
 
-        dispatch(setAllTablesData({
-            dbId:createdfield?.data?.data?.data?._id,
-            tables: createdfield?.data?.data?.data?.tables
-        }))
         // dispatch(addColumnToLeft(payload));
         const { tableId, dbId } = getState().table
         if(payload?.filterId){
@@ -376,17 +395,24 @@ export const updateCells = createAsyncThunk(
             payload.value = data?.data?.data;
             return payload;
         }
-        const data = await updateRow(dbId, tableId, payload.rowIndex, { [columnId]: value })
+        const data = await updateRow(dbId, tableId,
+            {"records":[{
+                    "where" :`fld${tableId.substring(3)}autonumber = ${payload.rowIndex}`,
+                    "fields": { [columnId]: value }
+             }] })
+
         const createdby = "fld" + tableId.substring(3) + "createdby"
+        const updatedby = "fld" + tableId.substring(3) + "updatedby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {
-                if (user?.user_id?._id == data?.data?.data?.[createdby]) {
-                    data.data.data[createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
+                if (user?.user_id?._id == data?.data?.data[0]?.[createdby]) {
+                    data.data.data[0][createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
+                    data.data.data[0][updatedby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
                     return;
                 }
             });
         })
-        payload.newData = data?.data?.data;
+        payload.newData = data?.data?.data[0];
         return payload;
     }
 )
@@ -399,13 +425,13 @@ export const addRows = createAsyncThunk(
         const createdby = "fld" + tableId.substring(3) + "createdby"
         userInfo.forEach(obj => {
             obj.users.forEach(user => {
-                if (user?.user_id?._id == newRow?.data?.data?.[createdby]) {
-                    newRow.data.data[createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
+                if (user?.user_id?._id == newRow?.data?.data[0]?.[createdby]) {
+                    newRow.data.data[0][createdby] = user?.user_id?.first_name + " " + user?.user_id?.last_name
                     return;
                 }
             });
         })
-        return newRow?.data?.data;
+        return newRow?.data?.data[0];
     }
 )
 // export const deleteRows = createAsyncThunk(

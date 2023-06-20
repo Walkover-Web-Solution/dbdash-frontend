@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-// import ShareLinkPopUp from "./ShareLinkPopUp";
+import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
+import { toast } from 'react-toastify';
 import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
@@ -17,8 +18,8 @@ import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 import { createTable } from "../../../api/tableApi";
 import './tablesList.scss'
-// import { createViewTable } from "../../api/viewTableApi";
-import HideFieldDropdown from "../hidefieldDropdown";
+import { createViewTable } from "../../../api/viewTableApi";
+// import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
 export default function TablesList({ dbData }) {
 
@@ -31,7 +32,7 @@ export default function TablesList({ dbData }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  // const [shareLinkOpen, setShareLinkOpen] = useState(false);
+  const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
   const [tabIndex, setTabIndex] = useState(0);
@@ -42,21 +43,21 @@ export default function TablesList({ dbData }) {
   const [edit, setEdit] = useState(false);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const tableLength = Object.keys(AllTableInfo).length;
+  const tableLength = Object.keys(AllTableInfo)?.length;
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
-  // const [link, setLink] = useState("Link");
+  const [link, setLink] = useState("Link");
   // const [link, setLink] = useState("Link");
   const [openManageField, setOpenManageField] = useState(false);
 
 
   const handleClick = (event, id) => {
-    // if (id === "share") {
-    //   setShareLinkOpen(true);
-    // } else {
+    if (id === "share") {
+      setShareLinkOpen(true);
+    } else {
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
-    // }
+    }
   };
 
 
@@ -100,12 +101,16 @@ export default function TablesList({ dbData }) {
 
   const handleEdit = async () => {
     setEdit(true);
-    setOpenn(true);
+    if(filterId){
+      setOpenn(true);
+    }else{
+      toast.error("choose the filter First");
+    }
   };
 
   function onFilterClicked(filter, id) {
     setUnderLine(id)
-    setFilterId(id);
+    setFilterId(params?.filterName || id);
     // setPage(1);
     dispatch(filterData({
       filterId : id,
@@ -196,30 +201,30 @@ export default function TablesList({ dbData }) {
     }
   },[params?.filterName])
 
-  // let dataa1 = "";
-  // const shareLink = async () => {
-  //   const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
-  //   if (viewId) {
-  //     setLink(`localhost:3000/${viewId}`)
-  //   }
-  //   else {
-  //     const db_Id = dbData?.db?._id
-  //     const data = {
-  //       tableId: params?.tableName,
-  //       filterId: params?.filterName
-  //     }
+  let dataa1 = "";
+  const shareLink = async () => {
+    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
+    if (viewId) {
+      setLink(`localhost:3000/${viewId}`)
+    }
+    else {
+      const db_Id = dbData?.db?._id
+      const data = {
+        tableId: params?.tableName,
+        filterId: params?.filterName
+      }
 
-  //     dataa1 = await createViewTable(db_Id, data);
+      dataa1 = await createViewTable(db_Id, data);
 
-  //     setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
-  //   }
+      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+    }
 
-  // }
-  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+  }
+  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   
-  const handleMenuOpen = (event) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
+  // const handleMenuOpen = (event) => {
+  //   setMenuAnchorEl(event.currentTarget);
+  // };
   
   return (
     <>
@@ -261,7 +266,7 @@ export default function TablesList({ dbData }) {
             </Button>
           </Box>
         </Box>
-        <Box display="flex" flexWrap="nowrap">
+        <Box sx={{paddingLeft:'24px',paddingRight:'20px'}}  display="flex" flexWrap="nowrap">
           {AllTableInfo[params?.tableName]?.filters &&
             Object.entries(AllTableInfo[params?.tableName]?.filters).map(
               (filter, index) => (
@@ -291,10 +296,9 @@ export default function TablesList({ dbData }) {
             Add Filter
           </Button>
         </Box>
-        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button>
-          <Button sx={{ fontSize: "11px" }} onClick={handleClickOpenManageField}>Manage Fields</Button>
-          <HideFieldDropdown   menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+        <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
+          {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
+          <Button sx={{ fontSize: "11px",paddingLeft:0,paddingRight:0 }} onClick={handleClickOpenManageField}>Manage Fields</Button>
         </div>
           {openManageField && <ManageFieldDropDown openManageField={openManageField} setOpenManageField={setOpenManageField}/>}
         {open && (
@@ -344,7 +348,7 @@ export default function TablesList({ dbData }) {
           >
             Delete
           </MenuItem>
-          {/* <MenuItem
+          <MenuItem
             onClick={(e) => {
               handleClick(e, "share");
               shareLink();
@@ -363,12 +367,12 @@ export default function TablesList({ dbData }) {
               textvalue={link}
 
             />
-          )} */}
+          )}
 
         </Menu>
       </div>
 
-      <div  className="tablesmargin">
+      <div  style={{ marginTop: "200px" }}>
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
         ) : (
@@ -380,6 +384,7 @@ export default function TablesList({ dbData }) {
     </>
   );
 }
+
 TablesList.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.string,

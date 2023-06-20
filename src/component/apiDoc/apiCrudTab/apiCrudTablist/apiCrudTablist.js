@@ -60,8 +60,10 @@ function ApiCrudTablist(props) {
           TabIndicatorProps={{
             style: {
               display: 'none',
+
             },
             className: 'custom-tab-indicator',
+
           }}
           value={value}
           onChange={handleChange}
@@ -76,34 +78,34 @@ function ApiCrudTablist(props) {
       </Box>
       <div className="marginTop">
       <TabPanel value={value} index={0}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`}}>
   <BasicStuff db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`}}>
 
         <ListRecord db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
 
         <AddRecord db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={3}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
  
         <UpdateRecord db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel  value={value} index={4}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${window?.screen?.width}px`}}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
       <DeleteRecord db={props.db} table={props.table} />
 </div>
 

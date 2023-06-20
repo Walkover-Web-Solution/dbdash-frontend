@@ -5,11 +5,34 @@ import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader, 
 import ApiCrudTablist from '../apiCrudTab/apiCrudTablist/apiCrudTablist';
 import { getDbById } from '../../../api/dbApi';
 import PropTypes from "prop-types";
-
 import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
 import Webhookpage from '../../../pages/Webhookpage/Webhookpage';
+import variables from '../../../assets/styling.scss';
+
 import AuthKeyPage from '../../../pages/authKeyPage/authKeyPage';
 
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    
+    },
+  },
+  getContentAnchorEl: null,
+  anchorOrigin: {
+    vertical: 'bottom',
+    horizontal: 'center',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'center',
+  },
+  variant: 'menu',
+};
 export default function Navbar(props) {
   let dbchanged = 0;
   const [tables, setTables] = useState({});
@@ -23,8 +46,7 @@ export default function Navbar(props) {
   const [loading, setLoading] = useState(false);
   const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
  const [dataforwebhook,setdataforwebhook]=useState(null);
-
-
+ 
   if (selectedDb) {
     props?.setDbtoredirect(selectedDb);
   }
@@ -81,21 +103,23 @@ export default function Navbar(props) {
       setLoading(true);
     }
   };
-
   return (
     <div style={{ backgroundColor: "white" }}>
       <div style={{ position: "fixed", top: "8vh", zIndex: 100, width: "100%", backgroundColor: "white", paddingBottom: "2vh" }}>
         <Box align="center" ></Box>
         <Box sx={{ display: "flex",alignItems:"center", flexDirection: "row" }}>
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <Box sx={{ display: "flex", flexDirection: "row" ,paddingLeft:'24px'}}>
             {alldb && selectedDb && (
-              <FormControl sx={{ m: 1,mt:0.9, minWidth: 120}}>
+              <FormControl className="singletypemuiselect" sx={{ m: 1,ml:0,mt:0.9, minWidth: 120}}>
                 <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
                 <Select
+              
                   id="grouped-select"
-                  sx={{ borderRadius: 0, height: '36px' }}
+                  sx={{ borderRadius: 0, height: '36px' ,color:`${variables.basictextcolor}`,}}
                   label="Organization and dbs"
                   value={selectedDb}
+                MenuProps={MenuProps}
+
                   onChange={handleChange}
                 >
                   {Object.entries(alldb)
@@ -110,11 +134,12 @@ export default function Navbar(props) {
                       );
 
                       return [
-                        <ListSubheader key={`${orgId}-header`} name={orgId}>
-                          {dbs[0]?.org_id?.name}
+                        <ListSubheader sx={{display:'flex',flexDirection:'row'}}key={`${orgId}-header`} name={orgId}>
+                          
+                         {dbs[0]?.org_id?.name}
                         </ListSubheader>,
                         sortedDbs.map((db, index) => (
-                          <MenuItem key={index} value={db?._id}>
+                          <MenuItem sx={{color:`${variables.basictextcolor}`}} key={index} value={db?._id}>
                             {db?.name}
                           </MenuItem>
                         )),
@@ -124,25 +149,29 @@ export default function Navbar(props) {
               </FormControl>
             )}
           </Box>
-          {showWebhookPage=="apidoc" && selectTable && Object.keys(tables).length >= 1 && (
-            <Box>
-              <FormControl sx={{ m: 1, mt:0.9,minWidth: 120 }}>
-                <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
-                <Select
-                  sx={{ borderRadius: 0, height: '36px' }}
-                  value={selectTable}
-                  label="Tables-Name"
-                  onChange={handleChangeTable}
-                >
-                  {Object.entries(tables)?.map((table) => (
-                    <MenuItem key={table[0]} value={table[0]}>
-                      {table[1].tableName || table[0]}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          )}
+            {showWebhookPage=="apidoc" && selectTable && Object.keys(tables).length >= 1 && (
+              <Box>
+                <FormControl sx={{ m: 1, mt:0.9,minWidth: 120 }}>
+                  <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
+                  <Select
+                    sx={{ borderRadius: 0, height: '36px',color:`${variables.basictextcolor}`,
+                   
+                  }}
+                    value={selectTable}
+                    label="Tables-Nameee"
+                    onChange={handleChangeTable}
+                MenuProps={MenuProps}
+
+                  >
+                    {Object.entries(tables)?.map((table) => (
+                      <MenuItem  sx={{color:`${variables.basictextcolor}`}} key={table[0]} value={table[0]}>
+                        {table[1].tableName || table[0]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            )}
           {Object.keys(tables).length >= 1 && (
             <Box
               sx={{
@@ -154,7 +183,7 @@ export default function Navbar(props) {
                 top: '9vh'
               }}
             >
-              <ButtonGroup color="primary" style={{ borderRadius: 0 }}>
+              <ButtonGroup color="primary" style={{ borderRadius: 0,paddingRight:'20px' }}>
                 <Button
                   className={showWebhookPage=="apidoc"?"mui-button":"mui-button-outlined"}
                   variant="outlined"

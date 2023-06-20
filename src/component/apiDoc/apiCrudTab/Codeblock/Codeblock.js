@@ -1,126 +1,166 @@
-import { PropTypes } from 'prop-types';
-import React, { useState } from 'react';
-import './Codeblock.scss'
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import variables from '../../../../assets/styling.scss';
+import { PropTypes } from "prop-types";
+import React, { useState } from "react";
+import "./Codeblock.scss";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import variables from "../../../../assets/styling.scss";
 function CodeBlock(props) {
-  
   const [isCopied, setIsCopied] = useState(false);
-  const [showAPI, setShowAPI] = useState(true)
+  const [showAPI, setShowAPI] = useState(true);
   function handleCopyClick() {
     const codeElement = document.querySelector(".code-block pre ");
     if (codeElement) {
-      console.log("codeElement",codeElement.textContent);
       navigator.clipboard.writeText(codeElement.textContent);
       setIsCopied(true);
-  
+
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
     }
   }
-  
-const dummy=(type)=>{
-  switch(type){
-    case "number":
-      return 124553;
+  const headers = props?.header.split(",");
+
+  const dummy = (type) => {
+    switch (type) {
+      case "number":
+        return 124553;
       case "rowid":
         return "row34";
-        case "createdat":
-          return new Date().toISOString();
-          case "longtext":
-            return "it is a long long text";
-            case "autonumber":
-              return 4564443;
-              case "createdby":
-                 return "chirag devlani";
-                 case "checkbox":
-                  return true;
-                  case "updatedat":
-                    return new Date().toISOString();
-                    case "updatedby":
-                      return "chirag devlani";
-            default :
-            return "hello";
-  }
-}
+      case "createdat":
+        return new Date().toISOString();
+      case "longtext":
+        return "it is a long long text";
+      case "autonumber":
+        return 4564443;
+      case "createdby":
+        return "chirag devlani";
+      case "checkbox":
+        return true;
+      case "updatedat":
+        return new Date().toISOString();
+      case "updatedby":
+        return "chirag devlani";
+      default:
+        return "hello";
+    }
+  };
   return (
-
-
-    <div className="code-block" >
-      <div className="codeblock-header">     <button className="copy-button" onClick={(handleCopyClick)}>
-        {isCopied ? <span style={{fontSize:variables.codeblockcopybuttonsize}}>Copied!</span> : <ContentPasteIcon />}
-      </button>
+    <div className="code-block">
+      <div className="codeblock-header">
+        {" "}
+        <button className="copy-button" onClick={handleCopyClick}>
+          {isCopied ? (
+            <span style={{ fontSize: variables.codeblockcopybuttonsize }}>
+              Copied!
+            </span>
+          ) : (
+            <ContentPasteIcon />
+          )}
+        </button>
       </div>
- 
+
       <div className="button">
-  <button onClick={() => { setShowAPI(true) }} className={showAPI ? "button-api" : "button-curl"}>API</button>
-  <button onClick={() => { setShowAPI(false) }} className={showAPI ? "button-curl" : "button-api"}>CURL</button>
-</div>
-{showAPI ? (
-  <pre className="pre-wrapper">
-    <br />
-    <code className="code">{props.code}</code>
-    <br />
-    <br />
-    <code className="yellow">{props.header}</code>
-    <br />
-    <br />
-    <br />
-    {props.body && typeof props.body === "object" && props.body.length > 0 && (
-      <code className="white">
-        {"-data{\n"}
-        {props.body.map((x, index) => (
-          <span key={index}>
-            <span className="cyan">{`" ${x[0]} "`}</span>
-            <span className="yellow">: </span>
-            {x[1] === "number" || x[1] === "autonumber" ? (
-              <span className="green">{` ${dummy(x[1])} `}</span>
-            ) : (
-              <span className="magenta">{`" ${dummy(x[1])} "`}</span>
+        <button
+          onClick={() => {
+            setShowAPI(true);
+          }}
+          className={showAPI ? "button-api " : "button-curl active "}
+        >
+          API
+        </button>
+        <button
+          onClick={() => {
+            setShowAPI(false);
+          }}
+          className={showAPI ? "button-curl active" : "button-api "}
+        >
+          CURL
+        </button>
+      </div>
+      {showAPI ? (
+        <pre className="pre-wrapper">
+          <br />
+          <code className="code">{props.code}</code>
+          <br />
+          <code className="yellow">
+            {headers.map((header) => `${header}\n`)}
+          </code>
+          <br />
+          <br />
+          <br />
+       
+          {props.body &&
+            typeof props.body === "object" &&
+            props.body.length > 0 && (
+              <code className="white">
+                {"-data{\n"}
+                {props.body.map((x, index) => (
+                  <span key={index}>
+                    <span
+                      contentEditable={true}
+                      className="cyan"
+                    >{`" ${x[0]} "`}</span>
+                    <span className="yellow">: </span>
+                    {x[1] === "number" || x[1] === "autonumber" ? (
+                      <span contentEditable={true} className="green">{` ${dummy(
+                        x[1]
+                      )} `}</span>
+                    ) : (
+                      <span
+                        contentEditable={true}
+                        className="magenta"
+                      >{`" ${dummy(x[1])} "`}</span>
+                    )}
+                    <span className="yellow">,</span>
+                    <br />
+                  </span>
+                ))}
+                {"}"}\
+              </code>
             )}
-            <span className="yellow">,</span>
+        </pre>
+      ) : (
+        <pre className="pre-wrapper">
+          <code className="code">
+            {`curl -X ${props.method} '${props.code}' \\`}
             <br />
-          </span>
-        ))}
-        {"}"}
-      </code>
-    )}
-  </pre>
-) : (
-  <pre className="pre-wrapper">
-    <code className="code">
-      {`curl -X ${props.method} '${props.code}' \\`}
-      <br />
-    </code>
-    <code className="yellow">{` -H "auth-key: YOUR_SECRET_API_TOKEN" \\`}</code>
-    <br />
-    <code className="yellow">{` -H "Content-Type: application/json" \\`}</code>
-    <br />
-
-    {props.body && typeof props.body === "object" && props.body.length > 0 && (
-      <code className="white">
-        {" -d '{\n"}
-        {props.body.map((x, index) => (
-          <span key={index}>
-            <span className="cyan">{`" ${x[0]} "`}</span>
-            <span className="yellow">: </span>
-            {x[1] === "number" || x[1] === "autonumber" ? (
-              <span className="green">{` ${dummy(x[1])} `}</span>
-            ) : (
-              <span className="magenta">{`" ${dummy(x[1])} "`}</span>
+            <br />
+          </code>
+          <code className="yellow">
+            {headers.map((header) => `${header} \\\n`)}
+          </code>{" "}
+          <br />
+        
+          {props.body &&
+            typeof props.body === "object" &&
+            props.body.length > 0 && (
+              <code className="white">
+                {" -d '{\n"}
+                {props.body.map((x, index) => (
+                  <span key={index}>
+                    <span
+                      contentEditable={true}
+                      className="cyan"
+                    >{`" ${x[0]} "`}</span>
+                    <span className="yellow">: </span>
+                    {x[1] === "number" || x[1] === "autonumber" ? (
+                      <span contentEditable={true} className="green">{` ${dummy(
+                        x[1]
+                      )} `}</span>
+                    ) : (
+                      <span
+                        contentEditable={true}
+                        className="magenta"
+                      >{`" ${dummy(x[1])} "`}</span>
+                    )}
+                    <span className="yellow">,</span>
+                    <br />
+                  </span>
+                ))}
+                {"}' "}
+              </code>
             )}
-            <span className="yellow">,</span>
-            <br />
-          </span>
-        ))}
-        {"}' "}
-      </code>
-    )}
-  </pre>
-)}
-
-
+        </pre>
+      )}
     </div>
   );
 }
@@ -130,13 +170,9 @@ export default CodeBlock;
 CodeBlock.propTypes = {
   code: PropTypes.any,
   header: PropTypes.any,
-  method:PropTypes.any,
+  method: PropTypes.any,
   body: PropTypes.any,
-
-}
-
-
-
+};
 
 // import { PropTypes } from 'prop-types';
 // import React, { useState } from 'react';
@@ -180,7 +216,6 @@ CodeBlock.propTypes = {
 //             return "hello";
 //   }
 // }
-  
 
 //   const getCodeToDisplay = () => {
 //     if (showAPI) {

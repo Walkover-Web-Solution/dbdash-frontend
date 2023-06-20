@@ -7,26 +7,29 @@
   width: 70 !important;
   height: 100% !important;
   margin-bottom: 12px !important;
+  font-size:$codeblockfontsize !important;
 
   margin-top: 10px !important;
   padding-bottom: 4vh !important;
 }
 .codeblock-header{
   height: 30px !important;
+  padding-left: 15px !important;
   background-color: $responseboxbgcolor !important;
 }
 
 .code-block {
-    
-    background-color: $fontColorVAlue !important;
-    color: $bgColorValue !important;
-    padding-bottom: 4vh !important;
+  background-color: $fontColorVAlue !important;
+  color: $bgColorValue !important;
+  padding-bottom: 4vh !important;
    
     width:100%  !important;
    
    height: 100% !important;
   margin-top: 30px !important;
-  }
+  font-size:$codeblockfontsize !important;
+}
+
   
   .code-block pre {
     margin: 1 !important;
@@ -60,13 +63,16 @@
   }
   
   .button-api {
+    background-color: $fontColorVAlue;
+    color: $bgColorValue;
+    font-size: 24px !important;
+  }
+  .button-curl {
+   
+    font-size: 24px !important;
     background-color: $bgColorValue  !important;
     color: $fontColorVAlue  !important;
-  }
-  
-  .button-curl {
-    background-color: $fontColorVAlue;
-    color: $bgColorValue
+
   }
   .response-header{
     height: 26px !important;
@@ -110,4 +116,6 @@
     color: magenta !important;
     margin: 1px !important;
   }
-  
+  .active{
+    cursor:  pointer !important;
+      }

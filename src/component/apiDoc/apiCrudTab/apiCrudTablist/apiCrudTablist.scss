@@ -10,6 +10,7 @@ background-color: $bgColorValue !important;
   position:fixed !important;
 top: 16vh !important;
 width: 100% !important;
+padding-left: 24px !important;
 background-color: $bgColorValue !important;
 z-index:100;
 }
@@ -34,6 +35,7 @@ z-index:100;
 .custom-tab-label.Mui-selected {
     background-color: $fontColorVAlue !important;
     color: $bgColorValue !important;
+    pointer-events: none !important;
   }
 .componentscontainer{
   overflow-y:scroll !important;

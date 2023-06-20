@@ -5,6 +5,7 @@ import { PropTypes } from 'prop-types';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
+
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import './records.scss'; // Import the CSS file
 import variables from '../../../../assets/styling.scss';
@@ -19,23 +20,47 @@ function Records(props) {
   useEffect(() => {
     tableData();
   }, [props.db, props.table]);
-
+  
   return (
     <div>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
+      <Grid  container spacing={2}>
+        <Grid item xs={props?.CopyButton?2:3}>
           <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)}  fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Name</Typography>
           {rowfieldData && Object?.entries(rowfieldData) && Object?.entries(rowfieldData).map((fields, index) => (
-            <Typography  className="center-aligned field-name"key={index}>{fields[1].fieldName}</Typography>
-          ))}
+  props?.CopyButton ? (
+    <div className="field-name-container" key={index}>
+      <Typography className="center-aligned field-name" key={index}>
+        {fields[1].fieldName}
+      </Typography>
+    </div>
+  ) : (
+    <Typography className="center-aligned field-name" key={index}>
+      {fields[1].fieldName}
+    </Typography>
+  )
+))}
+
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={props?.CopyButton?2:3}>
           <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Id</Typography>
-          {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
-            <Typography className="center-aligned field-id"  key={index}>{fields[0]}</Typography>
-          ))}
+          {rowfieldData && Object.entries(rowfieldData).map((fields, index) => {
+  return props?.CopyButton ? (
+    <div className="field-id-container" key={index}>
+      <Typography className="center-aligned field-id" key={index}>
+        {fields[0]}
+      </Typography>
+      <div>{props.CopyButton(fields[0], index)}</div>
+    </div>
+  ) : (
+    <Typography className="center-aligned field-id" key={index}>
+      {fields[0]}
+    </Typography>
+  );
+})}
+
         </Grid>
-        <Grid item xs={3}>
+      { (!props?.parent || props?.parent!='basicstuff') && (
+        <>      <Grid item xs={3}>
           <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Type</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
             <Typography className="center-aligned field-type"  key={index}>{fields[1].fieldType === "checkbox" ? "boolean" : fields[1].fieldType}</Typography>
@@ -63,6 +88,9 @@ function Records(props) {
             </Typography>
           ))}
         </Grid>
+        </>
+
+        )}
       </Grid>
     </div>
   )
@@ -72,7 +100,9 @@ Records.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
   setArr: PropTypes.func,
-  arr: PropTypes.any
+  arr: PropTypes.any,
+  parent:PropTypes.any,
+  CopyButton:PropTypes.any
 }
 
 export default Records;
