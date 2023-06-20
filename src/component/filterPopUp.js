@@ -95,7 +95,6 @@ export default function FilterModal(props) {
   };
   
   useEffect(() => {
-
     if (props?.edit == true && props?.filterId) {
       const editDataValues = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.query
       setFilterName(AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.filterName)
@@ -155,9 +154,9 @@ export default function FilterModal(props) {
             }
           }
           else{
-            json.fields = pqrs[0];
+              json.fields = pqrs[0];
               json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
-              valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
+              valuee = pqrs[pqrs.length - 1];
               if (valuee.indexOf('%') !== -1) {
                 valuee = valuee.substring(1, valuee.length - 1);
               }
