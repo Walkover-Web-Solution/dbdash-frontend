@@ -22,10 +22,11 @@
   background-color: $fontColorVAlue !important;
   color: $bgColorValue !important;
   padding-bottom: 4vh !important;
+  overflow-y:visible !important;
    
     width:100%  !important;
    
-   height: 100% !important;
+   height: fit-content !important;
   margin-top: 30px !important;
   font-size:$codeblockfontsize !important;
 }
@@ -85,6 +86,8 @@
   .pre-wrapper {
     position: relative !important;
     width: 500px !important;
+    height:auto !important;
+    
     white-space: pre-wrap !important;
   }
   

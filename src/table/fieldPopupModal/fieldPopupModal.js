@@ -88,6 +88,8 @@ export default function FieldPopupModal(props) {
     }
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
+      props?.setSelectValue('numeric');
+
       setShowNumericOptions(true);
     }
     else if (event.target.value === 'integer') {

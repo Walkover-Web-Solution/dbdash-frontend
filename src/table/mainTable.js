@@ -8,6 +8,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { addColumnrightandleft, deleteRows, updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
@@ -178,6 +179,7 @@ export default function MainTable() {
 
   let arrr = [];
   const onCellEdited = useCallback((cell, newValue) => {
+    console.log("newvalue",newValue);
     if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
     const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
@@ -212,7 +214,8 @@ export default function MainTable() {
   };
   const validateCell = useCallback((cell, newValue, oldValue) => {
 
-    if (newValue.data.kind == 'tags-cell') {
+    console.log("newvalue",newValue);
+    if (newValue?.data && newValue?.data?.kind == 'tags-cell') {
       let tag = "";
       let arr1 = newValue.data.tags;
       let arr2 = oldValue.data.tags || [];
@@ -233,8 +236,9 @@ export default function MainTable() {
     }
 
     if (newValue.kind === 'number') {
-      if (newValue?.data?.toString().length < 13)
-        return newValue;
+      if (newValue?.data?.toString().length < 13 || !newValue?.data)
+    {  console.log("heello");
+        return newValue;}
       else return false;
 
     }
@@ -456,12 +460,13 @@ export default function MainTable() {
   return (
     <>
     {JSON.stringify(selection1)!==JSON.stringify(emptyselection) && selection1.rows.items.length>0 && <button
+    className="fontsize"
   style={{
     position: "absolute",
     display:'flex',
     flexDirection:'row',
     right: "1%",
-    top: "18.10%",
+    top: "19.9%",
     zIndex: "10000",
     background: "none",
     border: "none",

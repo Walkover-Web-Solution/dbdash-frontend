@@ -18,6 +18,86 @@ function CodeBlock(props) {
     }
   }
   const headers = props?.header.split(",");
+const body = () => {
+  if( props?.parent=='addrecord')
+  {return (
+    <pre className="pre-wrapper">
+
+    <span >{`"records"`}</span>
+    <span className="yellow">: </span>
+    {"[\n"}
+    {"{\n"}
+    {props.body.map((x, index) => (
+      <span key={index}>
+        <span contentEditable={true} className="cyan">{`"${x[0]}"`}</span>
+        <span className="yellow">: </span>
+        {x[1] === "number" || x[1] === "autonumber" ? (
+          <span contentEditable={true} className="green">{`${dummy(x[1])}`}</span>
+        ) : (
+          <span contentEditable={true} className="magenta">{`"${dummy(x[1])}"`}</span>
+        )}
+        <span className="yellow">,</span>
+        <br />
+      </span>
+    ))}
+    {"}\n"}
+    {" ]\n"}
+  </pre>
+  );}
+  if(props?.parent=='updaterecord')
+  {
+    return(
+    <>
+      
+      <span >{`"records"`}</span>
+    <span className="yellow">: </span>
+    {"[\n{\n"}
+    <span >{`"where"`}</span>
+    <span className="yellow">: </span>
+    <span >{`"${props?.where}"`}</span>
+    <span className="yellow">,</span>
+{"\n"}
+<span >{`"fields"`}</span>
+<span className="yellow">: </span>
+{"{\n"}
+{props.body.map((x, index) => (
+      <span key={index}>
+        <span contentEditable={true} className="cyan">{`"${x[0]}"`}</span>
+        <span className="yellow">: </span>
+        {x[1] === "number" || x[1] === "autonumber" ? (
+          <span contentEditable={true} className="green">{`${dummy(x[1])}`}</span>
+        ) : (
+          <span contentEditable={true} className="magenta">{`"${dummy(x[1])}"`}</span>
+        )}
+        <span className="yellow">,</span>
+        <br />
+      </span>
+    ))}
+    {"}\n"}
+    {"}\n"}
+    {" ]\n"}
+
+      </>
+    )
+  }
+  else return(
+    <>
+      {props.body.map((x, index) => (
+        <span key={index}>
+          <span contentEditable={true} className="cyan">{`" ${x[0]} "`}</span>
+          <span className="yellow">: </span>
+          {x[1] === "number" || x[1] === "autonumber" ? (
+            <span contentEditable={true} className="green">{` ${dummy(x[1])} `}</span>
+          ) : (
+            <span contentEditable={true} className="magenta">{`" ${dummy(x[1])} "`}</span>
+          )}
+          <span className="yellow">,</span>
+          <br />
+        </span>
+      ))}
+    </>
+  );
+};
 
   const dummy = (type) => {
     switch (type) {
@@ -93,28 +173,8 @@ function CodeBlock(props) {
             props.body.length > 0 && (
               <code className="white">
                 {"-data{\n"}
-                {props.body.map((x, index) => (
-                  <span key={index}>
-                    <span
-                      contentEditable={true}
-                      className="cyan"
-                    >{`" ${x[0]} "`}</span>
-                    <span className="yellow">: </span>
-                    {x[1] === "number" || x[1] === "autonumber" ? (
-                      <span contentEditable={true} className="green">{` ${dummy(
-                        x[1]
-                      )} `}</span>
-                    ) : (
-                      <span
-                        contentEditable={true}
-                        className="magenta"
-                      >{`" ${dummy(x[1])} "`}</span>
-                    )}
-                    <span className="yellow">,</span>
-                    <br />
-                  </span>
-                ))}
-                {"}"}\
+               {body()}
+                {"}"}
               </code>
             )}
         </pre>
@@ -135,28 +195,9 @@ function CodeBlock(props) {
             props.body.length > 0 && (
               <code className="white">
                 {" -d '{\n"}
-                {props.body.map((x, index) => (
-                  <span key={index}>
-                    <span
-                      contentEditable={true}
-                      className="cyan"
-                    >{`" ${x[0]} "`}</span>
-                    <span className="yellow">: </span>
-                    {x[1] === "number" || x[1] === "autonumber" ? (
-                      <span contentEditable={true} className="green">{` ${dummy(
-                        x[1]
-                      )} `}</span>
-                    ) : (
-                      <span
-                        contentEditable={true}
-                        className="magenta"
-                      >{`" ${dummy(x[1])} "`}</span>
-                    )}
-                    <span className="yellow">,</span>
-                    <br />
-                  </span>
-                ))}
-                {"}' "}
+                {body()}
+               
+                {"}' "}\
               </code>
             )}
         </pre>
@@ -172,6 +213,8 @@ CodeBlock.propTypes = {
   header: PropTypes.any,
   method: PropTypes.any,
   body: PropTypes.any,
+  parent:PropTypes.any,
+  where:PropTypes.any,
 };
 
 // import { PropTypes } from 'prop-types';

@@ -16,6 +16,7 @@ export const addColumn = (dispatch,params,selectValue,metaData,textValue,selecte
 }
 
 export const editCell = (cell, newValue,dispatch,fields,arrr,params,currentrow,dataType) => { 
+  console.log("neewValue",newValue,dataType);
   const col = cell[0];
 const tableId = params?.tableName.substring(3);
 if(newValue?.data && newValue.data.kind=='tags-cell') return;
@@ -42,6 +43,17 @@ if(newValue?.data && newValue.data.kind=='tags-cell') return;
             dataTypes: newValue?.kind,
           })
          );
+        }
+        else if(dataType=='numeric')
+        {
+          dispatch(
+            updateCells({
+              columnId: key,
+              rowIndex :  currentrow[`fld${tableId}autonumber`],
+              value:  newdata || newValue?.data || null ,
+              dataTypes: newValue?.kind,
+            })
+           );
         }
         else{
           dispatch(
