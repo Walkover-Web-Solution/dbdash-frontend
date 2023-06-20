@@ -20,8 +20,8 @@ export default function FormulaDataType(props) {
   const [text,setText] = useState(false)
   const [queryResult,setQueryResult] = useState();
  
+  const data = AllTableInfo.tables[params?.tableName]?.fields;
   useEffect(() => {
-    const data = AllTableInfo.tables[params?.tableName]?.fields;
     var arr =[]
     Object.entries(data).map((fields)=>{
       var json={}
@@ -37,7 +37,14 @@ export default function FormulaDataType(props) {
     let query = props?.queryByAi;
     try {
       query = JSON.parse(query?.pgQuery)?.add_column?.new_column_name?.generated?.expression;
+      const regex = /data-attribute="([^"]*)"/g;
+      const matches = [];
+      let match;
+      while ((match = regex.exec(html))) {
+        matches.push(match[1]);
       
+        query =   query.replaceAll(match[1], data[match[1]].fieldName)
+      }
       setQueryResult(query);
       setIsLoading(false);
     } catch (err) {
