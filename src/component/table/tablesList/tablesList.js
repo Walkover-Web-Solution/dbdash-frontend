@@ -62,7 +62,6 @@ export default function TablesList({ dbData }) {
       setShareLinkOpen(true);
     } else {
       setFilterId( id);
-      console.log(id)
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
     }

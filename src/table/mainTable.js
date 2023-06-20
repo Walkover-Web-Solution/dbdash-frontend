@@ -179,7 +179,6 @@ export default function MainTable() {
 
   let arrr = [];
   const onCellEdited = useCallback((cell, newValue) => {
-    console.log("newvalue",newValue);
     if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
     const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
     arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
@@ -214,7 +213,6 @@ export default function MainTable() {
   };
   const validateCell = useCallback((cell, newValue, oldValue) => {
 
-    console.log("newvalue",newValue);
     if (newValue?.data && newValue?.data?.kind == 'tags-cell') {
       let tag = "";
       let arr1 = newValue.data.tags;
@@ -237,7 +235,7 @@ export default function MainTable() {
 
     if (newValue.kind === 'number') {
       if (newValue?.data?.toString().length < 13 || !newValue?.data)
-    {  console.log("heello");
+    {  
         return newValue;}
       else return false;
 
@@ -457,6 +455,7 @@ export default function MainTable() {
     setSelection1(event);
     // return event;
   }
+
   return (
     <>
     {JSON.stringify(selection1)!==JSON.stringify(emptyselection) && selection1.rows.items.length>0 && <button
@@ -520,6 +519,14 @@ export default function MainTable() {
             sticky: true,
             tint: true,
             hint: "New row...",
+            targetColumn: realCols.length - 1, 
+            render: () => (
+              <select className="dropdown">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                {/* Add more options as needed */}
+              </select>
+            ),
             // targetColumn: 4
           }}
         />
