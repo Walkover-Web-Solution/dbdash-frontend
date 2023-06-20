@@ -105,9 +105,9 @@ export default function AuthKey(props) {
 
   return (
     <>
-      <Box sx={{ m: 1 }}>
-        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh', border: 1 }}>
-          <Table sx={{ minWidth: 650, overflowY: "scroll", }} stickyHeader aria-label="sticky table">
+      <Box sx={{  my: 1,paddingLeft:'24px',paddingRight:'31px' }}>
+        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh',border:1,borderRadius:0 }}>
+          <Table sx={{ minWidth: 650,overflowY:"scroll", }} stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -148,7 +148,7 @@ export default function AuthKey(props) {
                       {props.authKeys[keys].access === '1' ? (
                         <div>{props.authKeys[keys].scope}</div>
                       ) : props.authKeys[keys].access === '11' ? (
-                        <div>{props.authKeys[keys].schema}</div>
+                        <div>{props.authKeys[keys].scope}</div>
                       ) : (
                         <div>{Object.values(props.authKeys[keys].access)[0]?.scope}</div>
                       )}

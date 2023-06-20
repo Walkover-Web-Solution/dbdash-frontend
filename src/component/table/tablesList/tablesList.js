@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
@@ -56,6 +56,8 @@ export default function TablesList({ dbData }) {
     if (id === "share") {
       setShareLinkOpen(true);
     } else {
+      setFilterId( id);
+      console.log(id)
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
     }
@@ -101,12 +103,14 @@ export default function TablesList({ dbData }) {
   };
 
   const handleEdit = async () => {
-    setEdit(true);
-    if(filterId){
+    // if(params?.filterName){
+      setEdit(true);
       setOpenn(true);
-    }else{
-      toast.error("choose the filter First");
-    }
+    // }else{
+    //   setEdit(false);
+    //   setOpenn(false);
+    //   toast.error("choose the filter First");
+    // }
   };
 
   function onFilterClicked(filter, id) {
@@ -268,7 +272,7 @@ export default function TablesList({ dbData }) {
             </Button>
           </Box>
         </Box>
-        <Box display="flex" flexWrap="nowrap">
+        <Box sx={{paddingLeft:'24px',paddingRight:'20px'}}  display="flex" flexWrap="nowrap">
           {AllTableInfo[params?.tableName]?.filters &&
             Object.entries(AllTableInfo[params?.tableName]?.filters).map(
               (filter, index) => (
@@ -298,9 +302,9 @@ export default function TablesList({ dbData }) {
             Add Filter
           </Button>
         </Box>
-        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
-          <Button sx={{ fontSize: "11px" }} onClick={handleClickOpenManageField}>Manage Fields</Button>
+          <Button sx={{ fontSize: "11px",paddingLeft:0,paddingRight:0 }} onClick={handleClickOpenManageField}>Manage Fields</Button>
         </div>
           {openManageField && <ManageFieldDropDown openManageField={openManageField} setOpenManageField={setOpenManageField}/>}
         {open && (

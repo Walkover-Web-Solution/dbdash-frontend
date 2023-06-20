@@ -1,5 +1,5 @@
 $bgColorValue:#fff;
-$fontColorVAlue:#000000;
+$fontColorVAlue:#000;
 $filterColorValue:black;
 $responseboxfontColor:#fff;
 $responseboxbgcolor:#4A4A4A;
@@ -10,21 +10,23 @@ $errorcolor:#a51226;
 $selectedtabfontcolor:white;
 $selectedtabbgcolor:black;
 $megatitlesize:30;
-
 $mainnavbartextcolor:$fontColorVAlue;
 $fontFamily:'Inter';
 $mainnavbarfontweight:200;
 $linecolor:#ccc;
 $mainnavbartabsfont:1rem;
+$codeblockfontsize:20px;
 $bold:bold;
 $highlightedtabbgcolor:lightgrey;
 :export {
+  bgcolorvalue:$bgColorValue;
   titlevariant:h2;
 titleweight:bold;
   megatitlevariant:h3;
     megatitlesize: $megatitlesize;
     titlesize:24;
     textsize:18;
+    basictextcolor:$fontColorVAlue;
 mainnavbartextcolor:$mainnavbartextcolor;
 fontFamily:Inter;
 mainnavbarfontweight:$mainnavbarfontweight;
@@ -33,4 +35,5 @@ highlightedtabbgcolor:$highlightedtabbgcolor;
 profileiconheight:34px;
 profileiconwidth:36px;
 codeblockcopybuttonsize:20px;
+linksizeoptionalparameter:14;
   }

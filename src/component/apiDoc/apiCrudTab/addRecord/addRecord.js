@@ -10,41 +10,54 @@ import variables from '../../../../assets/styling.scss';
 
 function AddRecord(props) {
   const [arr, setArr] = useState([]);
-
+const response=`
+{
+  "success": true,
+  "message": "'tblzpf863'row created successfully",
+  "data": {
+    "fldzpf863rowid": "rowghnrkd",
+    "fldzpf863autonumber": 11,
+    "fldzpf863createdat": "2023-06-19T08:50:38.670Z",
+    "fldzpf863createdby": "6433a9f57992c87a61237f7c",
+    "fldzpf863updatedby": "chirag devlani",
+    "fldzpf863sow": "it is a long long text"
+  }
+}`
   return (
     <>
       <div className="add-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock
         method="POST"
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
-          header={`-H auth-key: YOUR_SECRET_API_TOKEN ${(
-            <br />
-          )} -H Content-Type: application/json`}
+          header={`-H auth-key: AUTH_TOKEN,-H Content-Type: application/json`}
           body={arr}
         />
         <ResponseBox
-          response={`{
-"employee": {
-"name": "sonoo",
-"salary": 56000,
-"married": true.
-}
-}`}
+          response={response}
         />
       </div>
       <div style={{width:'700px',overflowX:"hidden"}}>
       
       <div className="records-container">
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
-        <br />
-        <br />
+        <Typography  fontSize={variables.textsize} >
+        Please provide the fields you would like to fill with data, and you can replace the dummy values with your desired information.
+</Typography>
+<br/>
+
         <Typography>
+       
+
           <Box>
+            
+
             <Records
               db={props?.db}
               setArr={setArr}
               arr={arr}
               table={props?.table}
+        alltabledata={props?.alltabledata}
+
             />
           </Box>
         </Typography>
@@ -56,6 +69,8 @@ function AddRecord(props) {
 
 AddRecord.propTypes = {
   db: PropTypes.string,
+  alltabledata:PropTypes.any,
+
   table: PropTypes.string,
 };
 

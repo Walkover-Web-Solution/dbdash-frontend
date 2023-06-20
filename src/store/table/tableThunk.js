@@ -305,13 +305,11 @@ export const addColumnrightandleft = createAsyncThunk(
         let createdfield;
         if (payload?.fieldType == "lookup")
         {
-            console.log("llokup")
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
             dispatch(setAllTablesData({
                 dbId:createdfield?.data?.data?._id,
                 tables: createdfield?.data?.data?.tables
             }))
-
         }
         else
         {
