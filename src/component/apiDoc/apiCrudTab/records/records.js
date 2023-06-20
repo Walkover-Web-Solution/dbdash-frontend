@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { getAllfields } from '../../../../api/fieldApi';
 import Grid from '@mui/material/Grid';
 import { PropTypes } from 'prop-types';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -13,14 +12,14 @@ function Records(props) {
   const [rowfieldData, setRowFieldData] = useState(null)
 
   const tableData = async () => {
-    const data = await getAllfields(props.db, props.table)
-    setRowFieldData(data?.data?.data?.fields)
+
+    setRowFieldData(props?.alltabledata[props?.table]?.fields)
   }
 
   useEffect(() => {
     tableData();
   }, [props.db, props.table]);
-  
+
   return (
     <div>
       <Grid  container spacing={2}>
@@ -102,7 +101,9 @@ Records.propTypes = {
   setArr: PropTypes.func,
   arr: PropTypes.any,
   parent:PropTypes.any,
-  CopyButton:PropTypes.any
+  CopyButton:PropTypes.any,
+  alltabledata:PropTypes.any,
+
 }
 
 export default Records;

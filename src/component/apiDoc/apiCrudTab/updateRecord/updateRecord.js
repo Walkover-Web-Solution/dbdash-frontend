@@ -39,9 +39,10 @@ function UpdateRecord(props) {
         <Typography  fontSize={variables.textsize} >
         Please provide the fields for which you would like to update the data, and you can replace the existing values with their desired information.</Typography>
         <br />
-        <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} />
+        <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
+        />
         <br />
-        <OptionalParameter parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
+        <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
       </div>
     </>
   )
@@ -49,7 +50,9 @@ function UpdateRecord(props) {
 
 UpdateRecord.propTypes = {
   db: PropTypes.string,
-  table: PropTypes.string
+  table: PropTypes.string,
+  alltabledata:PropTypes.any,
+
 }
 
 export default UpdateRecord;

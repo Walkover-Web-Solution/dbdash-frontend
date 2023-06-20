@@ -56,6 +56,8 @@ const response=`
               setArr={setArr}
               arr={arr}
               table={props?.table}
+        alltabledata={props?.alltabledata}
+
             />
           </Box>
         </Typography>
@@ -67,6 +69,8 @@ const response=`
 
 AddRecord.propTypes = {
   db: PropTypes.string,
+  alltabledata:PropTypes.any,
+
   table: PropTypes.string,
 };
 

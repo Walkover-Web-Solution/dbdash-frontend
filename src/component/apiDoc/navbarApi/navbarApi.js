@@ -5,6 +5,8 @@ import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader, 
 import ApiCrudTablist from '../apiCrudTab/apiCrudTablist/apiCrudTablist';
 import { getDbById } from '../../../api/dbApi';
 import PropTypes from "prop-types";
+import { makeStyles } from '@mui/styles';
+
 import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
 import Webhookpage from '../../../pages/Webhookpage/Webhookpage';
 import variables from '../../../assets/styling.scss';
@@ -46,7 +48,42 @@ export default function Navbar(props) {
   const [loading, setLoading] = useState(false);
   const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
  const [dataforwebhook,setdataforwebhook]=useState(null);
- 
+ const useStyles = makeStyles(() => ({
+  formControl: {
+    margin: 1,
+    marginLeft:0,
+    marginTop:0.9,
+    marginRight:3,
+
+    minWidth: 120,
+    '& .MuiInputLabel-root': {
+      color: `${variables.basictextcolor}`, // Change the label color here
+    },
+    '& .MuiSelect-icon': {
+      color: `${variables.basictextcolor}`, // Change the icon color here
+    },
+    '& .MuiSelect-root': {
+      borderColor: `${variables.basictextcolor}`, // Change the border color here
+      borderRadius: 0,
+      height: '36px',
+      color: `${variables.basictextcolor}`,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'black', // Change the border color here
+      },
+    },
+   
+
+
+  },
+  selectEmpty: {
+    marginTop: 2,
+  },
+}));
+
+const classes = useStyles();
+
   if (selectedDb) {
     props?.setDbtoredirect(selectedDb);
   }
@@ -71,6 +108,7 @@ export default function Navbar(props) {
   };
 
   const filterDbsBasedOnOrg = async () => {
+
     Object.keys(alldb).forEach(async (orgId) => {
       const dbObj = alldb[orgId].find((db) => db?._id === params.dbId);
       if (dbObj) {
@@ -88,6 +126,7 @@ export default function Navbar(props) {
   }, [alldb]);
 
   const getAllTableName = async (dbId) => {
+
     const data = await getDbById(dbId);
     setTables(data.data.data.tables || {});
 
@@ -110,12 +149,18 @@ export default function Navbar(props) {
         <Box sx={{ display: "flex",alignItems:"center", flexDirection: "row" }}>
           <Box sx={{ display: "flex", flexDirection: "row" ,paddingLeft:'24px'}}>
             {alldb && selectedDb && (
-              <FormControl className="singletypemuiselect" sx={{ m: 1,ml:0,mt:0.9, minWidth: 120}}>
+      <FormControl className={`singletypemuiselect ${classes.formControl}`} >
+
                 <InputLabel htmlFor="grouped-select">Organization-db</InputLabel>
                 <Select
               
+              inputProps={{
+                style: {
+                  border:'none'
+    
+              }}}
                   id="grouped-select"
-                  sx={{ borderRadius: 0, height: '36px' ,color:`${variables.basictextcolor}`,}}
+                  sx={{ borderRadius: 0, height: '36px' ,color:`${variables.basictextcolor}`}}
                   label="Organization and dbs"
                   value={selectedDb}
                 MenuProps={MenuProps}
@@ -151,7 +196,7 @@ export default function Navbar(props) {
           </Box>
             {showWebhookPage=="apidoc" && selectTable && Object.keys(tables).length >= 1 && (
               <Box>
-                <FormControl sx={{ m: 1, mt:0.9,minWidth: 120 }}>
+                <FormControl  className={` ${classes.formControl}`} >
                   <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
                   <Select
                     sx={{ borderRadius: 0, height: '36px',color:`${variables.basictextcolor}`,
@@ -230,7 +275,7 @@ export default function Navbar(props) {
         ) }
         {showWebhookPage=="apidoc" &&(
           <Box>
-            {loading && <ApiCrudTablist dbId={dbId} db={selectedOption} table={selectTable} />}
+            {loading && <ApiCrudTablist  alltabledata={dataforwebhook} dbId={dbId} db={selectedOption} table={selectTable} />}
           </Box>
         )}
         { showWebhookPage=="authkey" && 

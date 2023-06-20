@@ -14,9 +14,12 @@ import {
   ListItemText,
 } from '@mui/material';
 import './optionalParameter.scss'; // Import the CSS file
+import { makeStyles } from '@mui/styles';
+
 import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
-import { getAllfields } from '../../../../api/fieldApi';
 import variables from '../../../../assets/styling.scss';
+
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -49,6 +52,36 @@ function OptionalParameter(props) {
   const [descending, setDescending] = useState('asc');
   const [selectedFields, setSelectedFields] = useState(['all']);
 
+  
+const useStyles = makeStyles(() => ({
+  formControl: {
+  
+
+    '& .MuiInputLabel-root': {
+      color: `${variables.basictextcolor}`, // Change the label color here
+    },
+    '& .MuiSelect-icon': {
+      color: `${variables.basictextcolor}`, // Change the icon color here
+    },
+    '& .MuiSelect-root': {
+      borderColor: `${variables.basictextcolor}`, // Change the border color here
+      borderRadius: 0,
+      height: '36px',
+      color: `${variables.basictextcolor}`,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'black', // Change the border color here
+      },
+    },
+
+  },
+  selectEmpty: {
+    marginTop: 2,
+  },
+}));
+
+const classes = useStyles();
   useEffect(() => {
     tableData();
   }, [props.db, props.table]);
@@ -77,8 +110,7 @@ function OptionalParameter(props) {
   }, [text, fieldtosort, descending, props.age, offset, selectedFields]);
 
   const tableData = async () => {
-    const data = await getAllfields(props.db, props.table);
-    const myObj = data.data.data.fields;
+    const myObj =props?.alltabledata[props?.table]?.fields;
     const arr = Object.keys(myObj).map((key) => ({
       name: myObj[key].fieldName,
       content: key,
@@ -151,7 +183,7 @@ function OptionalParameter(props) {
             </Typography>
             <Typography>Select the columns you want.</Typography>
 
-            <FormControl sx={{ m: 1, mt: 0, minWidth: 200 }}>
+            <FormControl  className={` ${classes.formControl}`} sx={{ m: 1, mt: 0, minWidth: 200 }}>
               <Select
                 labelId="mutiple-select-label"
                 multiple
@@ -186,7 +218,7 @@ function OptionalParameter(props) {
             <Typography>Select the column and its order to sort the data.</Typography>
 
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <FormControl sx={{ m: 1, minWidth: 200 }}>
+              <FormControl className={` ${classes.formControl}`} sx={{ m: 1, minWidth: 200 }}>
                 <InputLabel id="demo-simple-select-helper-label">Sort by</InputLabel>
                 <Select
                   id="demo-simple-select-helper"
@@ -208,7 +240,7 @@ function OptionalParameter(props) {
               </FormControl>
 
               {fieldtosort !== '' && (
-                <FormControl sx={{ m: 1 }}>
+                <FormControl sx={{ m: 1 }} className={` ${classes.formControl}`} >
                   <Select
                     value={descending}
                     onChange={(e) => setDescending(e.target.value)}
@@ -227,7 +259,7 @@ function OptionalParameter(props) {
 
             <Typography>Limit number of records in response.</Typography>
             <Box>
-              <FormControl sx={{ m: 1, minWidth: 200 }}>
+              <FormControl className={` ${classes.formControl}`} sx={{ m: 1, minWidth: 200 }}>
                 <TextField
                   id="demo-simple-select-helper"
                   value={props?.age}
@@ -247,7 +279,7 @@ function OptionalParameter(props) {
 
             <Typography>Enter number of records to skip.</Typography>
 
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
+            <FormControl className={` ${classes.formControl}`} sx={{ m: 1, minWidth: 200 }}>
               <TextField
                 id="demo-simple-select-helper"
                 value={offset}
@@ -274,6 +306,7 @@ OptionalParameter.propTypes = {
   setValue: PropTypes.func,
   db: PropTypes.func,
   table: PropTypes.any,
+  alltabledata:PropTypes.any,
 };
 
 export default OptionalParameter;

@@ -35,7 +35,7 @@ const response=`
         <Box className="records-container">
           <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Table Records</Typography>
         <Typography fontSize={variables.textsize}>
-          In order to expunge records from the table, kindly furnish the indices or autonumbers pertaining to the respective rows.
+          In order to expunge records from the table, kindly furnish the conditions pertaining to the respective rows.
           </Typography>
           <Typography>
             <Box>

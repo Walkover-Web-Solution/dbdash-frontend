@@ -55,7 +55,9 @@ function BasicStuff(props) {
         db={props?.db}
         parent='basicstuff'
         CopyButton={CopyButton}
-        table={props?.table}/>
+        table={props?.table}
+        alltabledata={props?.alltabledata}
+        />
     </Box>
   );
 }
@@ -63,6 +65,8 @@ function BasicStuff(props) {
 BasicStuff.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
+  alltabledata:PropTypes.any,
+
 };
 
 export default BasicStuff;
