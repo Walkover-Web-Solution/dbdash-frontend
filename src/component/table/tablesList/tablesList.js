@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
@@ -55,6 +55,8 @@ export default function TablesList({ dbData }) {
     if (id === "share") {
       setShareLinkOpen(true);
     } else {
+      setFilterId( id);
+      console.log(id)
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
     }
@@ -100,12 +102,14 @@ export default function TablesList({ dbData }) {
   };
 
   const handleEdit = async () => {
-    setEdit(true);
-    if(filterId){
+    // if(params?.filterName){
+      setEdit(true);
       setOpenn(true);
-    }else{
-      toast.error("choose the filter First");
-    }
+    // }else{
+    //   setEdit(false);
+    //   setOpenn(false);
+    //   toast.error("choose the filter First");
+    // }
   };
 
   function onFilterClicked(filter, id) {
