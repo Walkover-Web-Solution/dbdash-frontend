@@ -165,7 +165,7 @@ const classes = useStyles();
         <div style={{marginLeft:'1%'}}>
         <CustomAutoSuggest
           getInputValueWithContext={handleTextChange}
-          width="80%"
+          width="70%"
           suggestion={fields}
           setHtml={setHtml}
           setText={setText}
