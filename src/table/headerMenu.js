@@ -86,7 +86,8 @@ export default function Headermenu(props) {
       dbId: params?.dbId,
       filterId:params?.filterName
     })
-  );}
+  );
+}
   const { layerProps, renderLayer } = useLayer({
     isOpen,
     auto: true,

@@ -6,7 +6,8 @@ import {
 } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { addColumnrightandleft, deleteRows, updateCells, updateColumnHeaders } from "../store/table/tableThunk";
-import "@glideapps/glide-data-grid/dist/index.css";
+// import "@glideapps/glide-data-grid/dist/index.css";
+import './Glidedatagrid.css';
 import "../../src/App.scss";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -62,6 +63,9 @@ export default function MainTable() {
     setData(dataa)
   }, [dataa])
 
+
+
+  
   const handleUploadFileClick = useCallback((cell) => {
     if (!data) return;
     const [col, row] = cell;
@@ -130,7 +134,7 @@ export default function MainTable() {
       setOpen(false);
       dispatch(addColumnrightandleft({
         filterId: params?.filterName, fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
-          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
+          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable,selectedFieldName: selectedFieldName[0] || selectedFieldName , linkedValueName
       }));
       setSelectValue('longtext')
       setDirectionAndId({})
@@ -139,8 +143,9 @@ export default function MainTable() {
       var data1 = metaData;
       if (selectValue == "link") {
         data1.foreignKey = {
-          fieldId: selectedFieldName,
-          tableId: selectedTable
+          fieldId: selectedFieldName[0],
+          tableId: selectedTable, 
+          fieldType:selectedFieldName[1]
         }
       }
       if(selectValue=="formula")
@@ -148,7 +153,7 @@ export default function MainTable() {
         var queryToSend = JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       }
       setOpen(false);
-      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
+      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName[0] || selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
       setSelectValue('longtext')
     }
   };
@@ -180,13 +185,14 @@ export default function MainTable() {
 
 
   const onCellEdited = useCallback((cell, newValue) => {
+    
     if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
     if (fields[cell[0]].dataType == "singleselect" && (typeof (newValue) == "object") ) {
         newValue = newValue.value || newValue.data.value || newValue.data;
       }
       editCell(cell, newValue, dispatch, fields, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
   }
-    , [dataa, data, fields]);
+    , [dataa, data, fields,fields1]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -256,10 +262,7 @@ export default function MainTable() {
     setSelection1(emptyselection)
 
 
-    // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
-    // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
   };
-
 
 
 
@@ -271,17 +274,26 @@ export default function MainTable() {
   const getData = useCallback((cell) => {
     const [col, row] = cell;
     const dataRow = dataa[row] || [];
+
     if (dataRow) {
 
       const d = dataRow[fields[col]?.id];
-      const { dataType } = fields[col] || "";
-
+      
+      let { dataType } = fields[col] || "";
+      let linkdatatype=false;
+      
+      if(dataType=='link')
+      {
+        linkdatatype=true;
+        dataType=fields[col]?.metadata?.foreignKey?.fieldType;
+       
+      }
 
       if (dataType === "autonumber") {
         return {
           allowOverlay: true,
           kind: GridCellKind.Number,
-          readonly: true,
+          readonly: linkdatatype?false:true,
           data: d || "",
           displayData: d?.toString() || "",
         };
@@ -290,7 +302,8 @@ export default function MainTable() {
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
-          readonly: true,
+          readonly: linkdatatype?false:true,
+
           displayData: d || "",
           data: d || "",
         };
@@ -440,7 +453,7 @@ export default function MainTable() {
       ...c,
       hasMenu: true,
     }));
-  }, [fields]);
+  }, [fields,fields1]);
 
   const handlegridselection = (event) => {
     setSelection1(event);
