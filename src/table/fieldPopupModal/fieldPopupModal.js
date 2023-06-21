@@ -26,6 +26,7 @@ import Joi from "joi";
 import PropTypes from "prop-types";
 
 export default function FieldPopupModal(props) {
+console.log("Props",props)
   // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
@@ -37,7 +38,11 @@ export default function FieldPopupModal(props) {
 
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(1).max(30).required(),
+    fieldName: Joi.string().min(1).max(30).pattern(/^[^\s]+$/).required()
+    .messages({
+      "string.min": `$ Column is required`,
+      "string.pattern.base": ` column must not contain spaces`,
+    }),
   });
 
   const handleSwitchChange = (event) => {
@@ -172,7 +177,7 @@ export default function FieldPopupModal(props) {
           value={props?.textValue}
           onChange={handleTextChange}
           onKeyDown={(e) => {
-            if (e.target.value.length >= 1 && e.target.value.length <= 30) {
+            if (e.target.value.length >= 1 && e.target.value.length <= 30 && !e.target.value.includes(" ")  ){
               if (e.key === "Enter") {
 
                 handleClose();
@@ -256,16 +261,19 @@ export default function FieldPopupModal(props) {
         {props?.selectValue !== "formula" || props?.queryByAi ? (
           <Button
             sx={{ textTransform: "none" }}
+          
+            // color="primary"
+            disabled={
+              errors.fieldName ||
+              props?.textValue?.length < 1 ||
+              props?.textValue?.length > 30 ||
+              props?.textValue?.includes(" ")
+
+            }
             onClick={() => {
               handleClose();
               props?.submitData(false);
             }}
-            color="primary"
-            disabled={
-              errors.fieldName ||
-              props?.textValue?.length < 1 ||
-              props?.textValue?.length > 30
-            }
           >
             Create Column
           </Button>

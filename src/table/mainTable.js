@@ -552,6 +552,7 @@ export default function MainTable() {
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
         setLinkedValueName={setLinkedValueName}
+        textValue={textValue}
         setTextValue={setTextValue}
        
       />}

@@ -72,13 +72,48 @@ Object.entries(props?.dbs).forEach(([, value]) => {
      })).then(()=>{
     });
   };
-  const renameWorkspace = async (orgId,x) => {
+  // const renameWorkspace = async (orgId,x) => {
+  //   const userid = localStorage.getItem("userid");
+  //   const data = {
+  //     name: x || name,
+  //   };
+  //   dispatch(renameOrgThunk({ orgId, data, userid }))
+  // };
+
+  const renameWorkspace = async (orgId, newName) => {
+    if (!newName) {
+      toast.error("Workspace name is same");
+      return;
+    }
+    if (!newName || newName.trim() === "") {
+      toast.error("Workspace name cannot be empty");
+      return;
+    }
+    
+    if (newName.length < 3) {
+      toast.error("Workspace name must be at least 3 characters long");
+      return;
+    }
+  
+    if (newName.length > 30) {
+      toast.error("Workspace name cannot exceed 30 characters");
+      return;
+    }
+  
+    if (newName.includes(" ")) {
+      toast.error("Workspace name cannot contain spaces");
+      return;
+    }
+  
     const userid = localStorage.getItem("userid");
     const data = {
-      name: x || name,
+      name: newName,
     };
-    dispatch(renameOrgThunk({ orgId, data, userid }))
+  
+    dispatch(renameOrgThunk({ orgId, data, userid }));
   };
+  
+
   const deleteOrganization = async () => {
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({ orgId: props?.orgId, userid }))

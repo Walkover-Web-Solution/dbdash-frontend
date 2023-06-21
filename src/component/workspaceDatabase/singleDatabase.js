@@ -7,6 +7,9 @@ import Dropdown from "../dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { renameDBThunk, moveDbThunk, restoreDbThunk, deleteDbThunk } from "../../store/database/databaseThunk";
 import { allOrg } from "../../store/database/databaseSelector";
+import { toast } from 'react-toastify';
+
+
 export default function SingleDatabase(props) {
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState();
@@ -30,13 +33,47 @@ export default function SingleDatabase(props) {
     dispatch(moveDbThunk({ orgid, dbid, data }))
   };
 
-  const renameDatabase = async (orgId, id, name) => {
+  // const renameDatabase = async (orgId, id, name) => {
+  //   const data = {
+  //     name: dbname || name,
+  //   };
+  //   dispatch(renameDBThunk({ orgId, id, data }))
+  //   setDbname();
+  // };
+  const renameDatabase = async (orgId, id ,name) => {
+    if (!dbname ) {
+      toast.error("Database name is same");
+      return;
+    }
+    if ( dbname.trim() === "") {
+      toast.error("Database name cannot be empty");
+      return;
+    }
+    
+    if (dbname.length < 3) {
+      toast.error("Database name must be at least 3 characters long");
+      return;
+    }
+  
+    if (dbname.length > 30) {
+      toast.error("Database name cannot exceed 30 characters");
+      return;
+    }
+  
+    if (dbname.includes(" ")) {
+      toast.error("Database name cannot contain spaces");
+      return;
+    }
+  
     const data = {
       name: dbname || name,
     };
-    dispatch(renameDBThunk({ orgId, id, data }))
+  
+    dispatch(renameDBThunk({ orgId, id, data }));
     setDbname();
   };
+  
+
   const handleOpen = () => {
     setName(false);
   };

@@ -25,10 +25,7 @@ import { createViewTable } from "../../../api/viewTableApi";
 import ManageFieldDropDown from "../manageFieldDropDown";
 export default function TablesList({ dbData }) {
 
-
-
-
-  
+  const shareViewUrl = process.env.REACT_APP_SHAREDVIEW_URL
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
@@ -53,6 +50,7 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
+  const [view, setView] = useState(null)
   // const [link, setLink] = useState("Link");
   const [openManageField, setOpenManageField] = useState(false);
 
@@ -213,9 +211,13 @@ export default function TablesList({ dbData }) {
 
   let dataa1 = "";
   const shareLink = async () => {
-    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
+    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName]?.viewId
     if (viewId) {
-      setLink(`localhost:3000/${viewId}`)
+      setLink(shareViewUrl + `/${viewId}`)
+    }
+    else if (view){
+      setLink(shareViewUrl + `/${view}`)
+
     }
     else {
       const db_Id = dbData?.db?._id
@@ -225,8 +227,9 @@ export default function TablesList({ dbData }) {
       }
 
       dataa1 = await createViewTable(db_Id, data);
+      setView(Object.keys(Object.values(dataa1.data.data)[0])[0])
 
-      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+      setLink(shareViewUrl + `/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
     }
 
   }
