@@ -12,9 +12,10 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DuplicateFieldPopup from './duplicateFieldPopup';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { deleteColumns } from '../store/table/tableThunk';
+import { deleteColumns, updateColumnHeaders } from '../store/table/tableThunk';
 import { createDuplicateColumn, getPropertyIcon,handleRenameColumn, hideColumns } from './headerFunctionality';
 import { toast } from 'react-toastify';
+import UpdateQueryPopup from './updateQueryPopup';
 
 
 
@@ -62,9 +63,12 @@ export default function Headermenu(props) {
   const isOpen = props?.menu !== undefined;
   const [showduplicate, setShowDuplicate] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
+  const [queryResult, setQueryResult] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+
   const dispatch = useDispatch();
   const params = useParams();
-
   //current column value in input box 
   useEffect(() => {
   setHeader(props?.fields[props?.menu?.col]?.title);
@@ -88,7 +92,11 @@ export default function Headermenu(props) {
     auto: true,
     placement: "bottom-end",
     triggerOffset: 2,
-    onOutsideClick: () => props?.setMenu(undefined),
+    onOutsideClick: () => {
+      props?.setMenu(undefined);
+      setQueryResult(false);
+      setIsPopupOpen(false);
+    },
     trigger: {
       getBounds: () => ({
         left: props?.menu ? props?.menu.bounds?.x : 0,
@@ -104,10 +112,35 @@ export default function Headermenu(props) {
   const handleClose = () => {
     setShowDuplicate(false);
     props.setMenu(null);
+    setIsPopupOpen(false);
+    setQueryResult(false);
   };
 
   const handleOpenDuplicate = () => {
     setShowDuplicate(true)
+  }
+
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    props?.setMenu(null);
+    setQueryResult(false);
+    setIsPopupOpen(false);
+  };
+
+  const updateColumnQuery = ()=>{
+    let metaData = {} ;
+    var queryToSend = JSON.parse(queryResult.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryResult.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED`
+    metaData.query = queryToSend ;
+    metaData.userQuery = queryResult.userQuery
+    dispatch(updateColumnHeaders({
+      dbId: params?.dbId,
+      tableName: params?.tableName,
+      columnId: props?.fields[props?.menu?.col]?.id,
+      metaData: metaData
+    }));
   }
 
   const handleDuplicate = () => {
@@ -115,6 +148,7 @@ export default function Headermenu(props) {
     createDuplicateColumn(params, props, dispatch,duplicateField);
     setDuplicateField(true);
   };
+
 
   let data_type = props?.fields[props?.menu?.col]?.dataType;
   // get column icons
@@ -181,6 +215,7 @@ export default function Headermenu(props) {
               handleUniqueChange={handleUniqueChange}
               duplicateField={duplicateField}
             />}
+           
              <div className='is-fullwidth' style={{ marginBottom: 5,display:"flex",justifyContent:"center" }} >
                   <input
                     className='form-input'
@@ -214,12 +249,32 @@ export default function Headermenu(props) {
             <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
             {(dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") && (
             <>
+              {dataType === "formula" && (
+                  <div onClick={handleOpenPopup} className={classes.menuItem}>
+                    <QueueOutlinedIcon fontSize='2px' />Query Update
+                  </div>
+                )}
                 <div onClick={() => { handleOpenDuplicate(); } } className={classes.menuItem}>
                 <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
                 <div onClick={() => {handleDelete();props.setMenu(false);}} className={classes.menuItem}>
                 <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
             </>
             )}
+              {/* {isPopupOpen && <UpdateQueryPopup
+               isOpen={isPopupOpen} handleClosePopup={handleClosePopup} onClose={handleClosePopup} queryByAi={props?.queryByAi} submitData={props?.submitData} queryResult={queryResult} setQueryResult={setQueryResult}
+            />} */}
+            {isPopupOpen && (
+  <UpdateQueryPopup
+    isOpen={isPopupOpen}
+    onClose={handleClosePopup}
+    queryByAi={queryResult}
+    setQueryByAi={setQueryResult}
+    submitData={updateColumnQuery}
+    fields={props?.fields}
+    menu={props?.menu}
+    // Pass any other necessary props to the UpdateQueryPopup component
+  />
+)}
           </div>
         )}
     </>
@@ -232,4 +287,7 @@ Headermenu.propTypes = {
   setOpen: PropTypes.any,
   fields: PropTypes.any,
   setDirectionAndId: PropTypes.any,
+  submitData: PropTypes.func,
+  queryByAi: PropTypes.any,
+  setQueryByAi: PropTypes.func,
 };

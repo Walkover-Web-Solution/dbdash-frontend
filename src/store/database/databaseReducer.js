@@ -1,5 +1,5 @@
 
-import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk} from './databaseThunk';
+import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk, updateUserInOrgThunk} from './databaseThunk';
 export const initialState = {
   status: 'idle',
   orgId: {
@@ -291,7 +291,27 @@ export function extraReducers(builder) {
     })
 
     //   Remove user from Org
+    .addCase(updateUserInOrgThunk.pending, (state) => {
 
+      state.status = "loading"
+    })
+    .addCase(updateUserInOrgThunk.fulfilled, (state, action) => {
+
+      var arr = state.allOrg;
+      arr.find((temp,index)=>{
+        if(temp._id==action.payload.allorgs[0]._id)
+        {
+          arr[index]= action.payload.allorgs[0];
+        }
+      })
+      state.allOrg = arr
+      state.status = "succeeded";
+    })
+    .addCase(updateUserInOrgThunk.rejected, (state) => {
+
+      state.status = "failed";
+      // MDBToast.error("Unable to fetch jamaats.");
+    })
     .addCase(removeUserInOrgThunk.pending, (state) => {
 
       state.status = "loading"

@@ -20,12 +20,11 @@ export default function NumberDataType(props) {
                 id="numeric-select"
                 value={props?.selectValue}
                 onChange={(e)=>props?.handleSelectChange(e)}
-                defaultValue="value"
+                defaultValue="numeric"
                 displayEmpty
                 sx={{ margin: 1, minWidth: 120 }}
               >
-                <MenuItem value="value">Select Type</MenuItem>
-                <MenuItem value="integer">Integer</MenuItem>
+                <MenuItem value="numeric">Integer</MenuItem>
                 <MenuItem value="decimal">Decimal</MenuItem>
               </Select>
             )}

@@ -24,6 +24,13 @@ const addUserInOrg = async (id, adminId, data) =>
     return  await axios.patch(URL + `/orgs/${id}/adduser/${adminId}`,data)
 }
 
+const updateUserType = async (id, adminId, data) =>
+{
+    return  await axios.patch(URL + `/orgs/${id}/updateuserinorg/${adminId}`,data)  
+}
+
+
+
 const updateOrg = async (id ,data,userId) =>
 {
     return await axios.patch(URL + `/orgs/${id}/${userId}`,data)
@@ -49,5 +56,6 @@ export {
     addUserInOrg,
     updateOrg,
     removeUserInOrg,
-    deleteOrg
+    deleteOrg,
+    updateUserType
 }
