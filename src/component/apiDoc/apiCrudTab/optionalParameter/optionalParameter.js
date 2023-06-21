@@ -89,9 +89,12 @@ const classes = useStyles();
   useEffect(() => {
     let queryParams = '';
 
-    if (text) {
-      queryParams += `filter=${text.trim()}`;
+    if (text && props?.parent=='updaterecord') {
+      queryParams += `${text.trim()}`;
     }
+    else if(text)
+    {      queryParams += `filter=${text.trim()}`;
+  }
     if (!selectedFields.includes('all')) {
       queryParams += `${queryParams ? '&' : ''}fields=${selectedFields.join(',')}`;
     }

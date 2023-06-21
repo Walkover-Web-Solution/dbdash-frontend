@@ -12,17 +12,23 @@ import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../../table/mainTable";
 import { createTable1 } from "../../../store/allTable/allTableThunk";
+
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 import { createTable } from "../../../api/tableApi";
 import './tablesList.scss'
+import variables from '../../../assets/styling.scss';
 import { createViewTable } from "../../../api/viewTableApi";
 // import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
 export default function TablesList({ dbData }) {
 
+
+
+
+  
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
@@ -56,7 +62,6 @@ export default function TablesList({ dbData }) {
       setShareLinkOpen(true);
     } else {
       setFilterId( id);
-      console.log(id)
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
     }
@@ -168,6 +173,7 @@ export default function TablesList({ dbData }) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(setTableLoading(true));
       dispatch(
+
         bulkAddColumns({
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
@@ -240,8 +246,9 @@ export default function TablesList({ dbData }) {
               onChange={handleChange}
               TabIndicatorProps={{
                 style: { display: "none" },
+
               }}
-              className="tabs"
+              className={`tabs `}
               variant="scrollable"
               scrollButtons="fixed"
               aria-label="scrollable auto tabs example"
@@ -302,7 +309,7 @@ export default function TablesList({ dbData }) {
         </Box>
         <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
-          <Button sx={{ fontSize: "11px",paddingLeft:0,paddingRight:0 }} onClick={handleClickOpenManageField}>Manage Fields</Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 }} onClick={handleClickOpenManageField}>Manage Fields</Button>
         </div>
           {openManageField && <ManageFieldDropDown openManageField={openManageField} setOpenManageField={setOpenManageField}/>}
         {open && (

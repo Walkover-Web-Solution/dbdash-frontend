@@ -191,7 +191,7 @@ export default function AddOptionPopup(props) {
             ))}
           </Box>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" startIcon={<Add />} onClick={handleAddClick}>
+            <Button  className="mui-button" variant="contained" startIcon={<Add />} onClick={handleAddClick}>
               Add
             </Button>
           </Box>

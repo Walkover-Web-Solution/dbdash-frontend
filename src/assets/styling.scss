@@ -6,6 +6,7 @@ $responseboxbgcolor:#4A4A4A;
 $copybuttoncolorlight:#fff;
 $copybuttoncolordark:#0000;
 $googleauthbordercolor:#0000;
+$tablepagefontsize:16px;
 $errorcolor:#a51226;
 $selectedtabfontcolor:white;
 $selectedtabbgcolor:black;
@@ -25,7 +26,9 @@ titleweight:bold;
   megatitlevariant:h3;
     megatitlesize: $megatitlesize;
     titlesize:24;
+    titlefontsize:24px;
     textsize:18;
+    tablepagefontsize:$tablepagefontsize;
     basictextcolor:$fontColorVAlue;
 mainnavbartextcolor:$mainnavbartextcolor;
 fontFamily:Inter;
@@ -35,5 +38,6 @@ highlightedtabbgcolor:$highlightedtabbgcolor;
 profileiconheight:34px;
 profileiconwidth:36px;
 codeblockcopybuttonsize:20px;
+
 linksizeoptionalparameter:14;
   }

@@ -30,7 +30,7 @@ function UpdateRecord(props) {
   return (
     <>
       <div className="container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll",paddingRight:""}}>
-        <CodeBlock  method={'PATCH'}code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}${value !== "" ? `?${value}` : ``}`} header={`-H auth-key: AUTH_TOKEN,-H Content-Type: application/json `} body={arr} />
+        <CodeBlock  method={'PATCH'} parent='updaterecord' code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} where={value} header={`-H auth-key: AUTH_TOKEN,-H Content-Type: application/json `} body={arr} />
         <ResponseBox response={response} />
       </div>
 

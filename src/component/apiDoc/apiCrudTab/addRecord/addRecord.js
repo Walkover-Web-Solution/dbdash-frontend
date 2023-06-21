@@ -27,6 +27,7 @@ const response=`
     <>
       <div className="add-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock
+        parent='addrecord'
         method="POST"
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
           header={`-H auth-key: AUTH_TOKEN,-H Content-Type: application/json`}

@@ -16,6 +16,8 @@ import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem } from '@mui/material';
 import { useSelector,useDispatch } from 'react-redux';
 import AddOptionPopup from './addOptionPopup';
+import variables from '../../assets/styling.scss';
+
 import { useParams } from 'react-router-dom';
 import { updateColumnHeaders } from '../../store/table/tableThunk';
 
@@ -26,6 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const useStyles = makeStyles({
     table: {
+
       minWidth: 650,
     },
   });
@@ -78,8 +81,8 @@ export default function ManageFieldDropDown(props) {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
+        <AppBar sx={{ position: 'relative' ,backgroundColor:`${variables.basictextcolor}`}}>
+          <Toolbar >
             <IconButton
               edge="start"
               color="inherit"
@@ -93,23 +96,23 @@ export default function ManageFieldDropDown(props) {
 
         <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="My Table">
-        <TableHead>
+        <TableHead >
           <TableRow>
-            <TableCell>Field Name</TableCell>
-            <TableCell>Field Type</TableCell>
+            <TableCell sx={{fontSize:`${variables.titlefontsize}`}}>Field Name</TableCell>
+            <TableCell sx={{fontSize:`${variables.titlefontsize}`}}>Field Type</TableCell>
             <TableCell></TableCell>
-            <TableCell>Hide Fields</TableCell>
+            <TableCell sx={{fontSize:`${variables.titlefontsize}`}}>Hide Fields</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
   {fields1.map((field, index) => {
     return (
       <TableRow key={index}>
-        <TableCell>{field.title}</TableCell>
-        <TableCell>{field.dataType}</TableCell>
+        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`}}>{field.title}</TableCell>
+        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`}}>{field.dataType}</TableCell>
         {field.dataType === "singleselect" || field.dataType === "multipleselect" ? (
-          <TableCell>
-            <Button onClick={() => { handleOpen(); columnId(field.id, field.dataType) }} variant="contained">Add option</Button>
+          <TableCell sx={{fontSize:`${variables.tablepagefontsize}`}}>
+            <Button onClick={() => { handleOpen(); columnId(field.id, field.dataType) }} className="mui-button" variant="contained">Add option</Button>
           </TableCell>
         ) : (
           <TableCell></TableCell>
@@ -118,7 +121,7 @@ export default function ManageFieldDropDown(props) {
           <MenuItem
             key={index}
             sx={{
-              fontSize: '12px',
+              fontSize:`${variables.tablepagefontsize}` ,
               minHeight: 'auto',
               padding: '2px 8px',
             }}
