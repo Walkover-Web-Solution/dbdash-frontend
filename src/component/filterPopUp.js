@@ -127,7 +127,6 @@ export default function FilterModal(props) {
             }
           }
           else{
-
             json.fields = pqrs[0];
               json.selectedOption = (pqrs[1] == "NOT" ? "NOT LIKE" : pqrs[1])
               valuee = pqrs[pqrs.length - 1].substring(1, pqrs[pqrs.length - 1].length - 1);
