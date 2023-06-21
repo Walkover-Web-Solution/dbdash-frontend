@@ -17,18 +17,17 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
-import { createTable } from "../../../api/tableApi";
+import { createTable, exportCSV } from "../../../api/tableApi";
 import './tablesList.scss'
 import variables from '../../../assets/styling.scss';
 import { createViewTable } from "../../../api/viewTableApi";
 // import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
+import { toast } from "react-toastify";
+import { selectActiveUser } from "../../../store/user/userSelector";
 export default function TablesList({ dbData }) {
 
-
-
-
-  
+  const shareViewUrl = process.env.REACT_APP_SHAREDVIEW_URL
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
@@ -53,10 +52,10 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(null)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
+  const [view, setView] = useState(null)
   // const [link, setLink] = useState("Link");
   const [openManageField, setOpenManageField] = useState(false);
-
-
+  const userDetails = useSelector((state) => selectActiveUser(state));
   const handleClick = (event, id) => {
     if (id === "share") {
       setShareLinkOpen(true);
@@ -67,24 +66,19 @@ export default function TablesList({ dbData }) {
     }
   };
 
-
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const saveTable = async () => {
     const data = {
       tableName: table,
     };
-
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
     dispatch(createTable1({ tables: apiCreate.data.data.tables }));
-
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
       return apiCreate?.data?.data?.tables[key].tableName === table;
     });
@@ -105,7 +99,6 @@ export default function TablesList({ dbData }) {
     const newTableIndex = Object.keys(AllTableInfo).length;
     setValue(newTableIndex);
   };
-
   const handleEdit = async () => {
     // if(params?.filterName){
       setEdit(true);
@@ -116,7 +109,6 @@ export default function TablesList({ dbData }) {
     //   toast.error("choose the filter First");
     // }
   };
-
   function onFilterClicked(filter, id) {
     setUnderLine(id)
     setFilterId(params?.filterName || id);
@@ -140,7 +132,6 @@ export default function TablesList({ dbData }) {
     // );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
-
   const deleteFilterInDb = async (filterId) => {
     const data = {
       filterId: filterId,
@@ -186,7 +177,6 @@ export default function TablesList({ dbData }) {
       if (!params?.tableName) {
         navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
       }
-
     }
   }, [params?.tableName]);
   useEffect(()=>{
@@ -211,12 +201,15 @@ export default function TablesList({ dbData }) {
       // );
     }
   },[params?.filterName])
-
   let dataa1 = "";
   const shareLink = async () => {
-    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName].viewId
+    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName]?.viewId
     if (viewId) {
-      setLink(`localhost:3000/${viewId}`)
+      setLink(shareViewUrl + `/${viewId}`)
+    }
+    else if (view){
+      setLink(shareViewUrl + `/${view}`)
+
     }
     else {
       const db_Id = dbData?.db?._id
@@ -224,19 +217,27 @@ export default function TablesList({ dbData }) {
         tableId: params?.tableName,
         filterId: params?.filterName
       }
-
       dataa1 = await createViewTable(db_Id, data);
+      setView(Object.keys(Object.values(dataa1.data.data)[0])[0])
 
-      setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
+      setLink(shareViewUrl + `/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
     }
-
   }
   // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   
   // const handleMenuOpen = (event) => {
   //   setMenuAnchorEl(event.currentTarget);
   // };
-  
+  const exportCSVTable = async () => {
+    const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query
+    const data = {
+      query: query,
+      userName: userDetails?.fullName,
+      email: userDetails?.email
+    };
+    await exportCSV(dbData?.db?._id,params?.tableName, data);
+    toast.success("Your CSV file has been mailed successfully");
+  };
   return (
     <>
       <div className="tableslist">
@@ -297,7 +298,6 @@ export default function TablesList({ dbData }) {
                     </IconButton>
                   </Box>
                 </Box>
-
               )
             )}
           <Button
@@ -346,7 +346,6 @@ export default function TablesList({ dbData }) {
             onClick={() => {
               handleEdit();
               handleClose();
-
             }}
           >
             Edit
@@ -356,7 +355,6 @@ export default function TablesList({ dbData }) {
               deleteFilterInDb(currentTable);
               handleClose();
             }}
-
           >
             Delete
           </MenuItem>
@@ -366,9 +364,17 @@ export default function TablesList({ dbData }) {
               shareLink();
             }
             }
-
           >
             Share this view
+          </MenuItem>
+          <MenuItem
+              onClick={() => {
+                // deleteFilterInDb(currentTable);
+                exportCSVTable();
+                handleClose();
+              }}
+          >
+            Export CSV
           </MenuItem>
           {shareLinkOpen && (
             <ShareLinkPopUp
@@ -377,13 +383,10 @@ export default function TablesList({ dbData }) {
               setOpen={setShareLinkOpen}
               label="Link"
               textvalue={link}
-
             />
           )}
-
         </Menu>
       </div>
-
       <div  style={{ marginTop: "200px" }}>
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
@@ -396,7 +399,6 @@ export default function TablesList({ dbData }) {
     </>
   );
 }
-
 TablesList.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.string,
@@ -408,3 +410,4 @@ TablesList.propTypes = {
   label: PropTypes.any,
   setTables: PropTypes.any,
 };
+// select * from tblv1ry0d where CAST(fldv1ry0dautonumber as CHAR)  LIKE '%1%'

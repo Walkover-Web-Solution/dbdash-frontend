@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { Box, Card, Typography, TextField, Button, IconButton, ClickAwayListener } from "@mui/material";
 import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
-import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk } from "../../store/database/databaseThunk";
+import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../store/database/databaseThunk";
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
@@ -72,13 +72,48 @@ Object.entries(props?.dbs).forEach(([, value]) => {
      })).then(()=>{
     });
   };
-  const renameWorkspace = async (orgId,x) => {
+  // const renameWorkspace = async (orgId,x) => {
+  //   const userid = localStorage.getItem("userid");
+  //   const data = {
+  //     name: x || name,
+  //   };
+  //   dispatch(renameOrgThunk({ orgId, data, userid }))
+  // };
+
+  const renameWorkspace = async (orgId, newName) => {
+    // if (!newName) {
+    //   toast.error("Workspace name is same");
+    //   return;
+    // }
+    if (!newName || newName.trim() === "") {
+      toast.error("Workspace name cannot be empty");
+      return;
+    }
+    
+    if (newName.length < 3) {
+      toast.error("Workspace name must be at least 3 characters long");
+      return;
+    }
+  
+    if (newName.length > 30) {
+      toast.error("Workspace name cannot exceed 30 characters");
+      return;
+    }
+  
+    if (newName.includes(" ")) {
+      toast.error("Workspace name cannot contain spaces");
+      return;
+    }
+  
     const userid = localStorage.getItem("userid");
     const data = {
-      name: x || name,
+      name: newName,
     };
-    dispatch(renameOrgThunk({ orgId, data, userid }))
+  
+    dispatch(renameOrgThunk({ orgId, data, userid }));
   };
+  
+
   const deleteOrganization = async () => {
     const userid = localStorage.getItem("userid");
     dispatch(deleteOrgThunk({ orgId: props?.orgId, userid }))
@@ -95,6 +130,11 @@ Object.entries(props?.dbs).forEach(([, value]) => {
     const adminId = localStorage.getItem("userid")
     dispatch(removeUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
   }
+  const updateUserTypeInOrg = async (email,user_type) => {
+    const adminId = localStorage.getItem("userid")
+    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email,user_type:user_type }))
+  }
+  
 
   return (
     <>
@@ -183,6 +223,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                         setShareOrg={setShareOrg}
                         shareWorkspace={shareWorkspace}
                         removeUserFromWorkspace={removeUserFromWorkspace}
+                        updateUserTypeInOrg = {updateUserTypeInOrg}
                       />
                     </Box>
                   </>

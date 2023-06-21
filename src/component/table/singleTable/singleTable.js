@@ -56,15 +56,42 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   );
 
   const renameTableName = async (db_id, tableName) => {
+    // if (!tableNa) {
+    //   toast.error("Table name is same");
+    //   return;
+    // }
+    if ( !tableNa|| tableNa.trim() === "") {
+      toast.error("Table name cannot be empty");
+      return;
+    }
+    
+    if (tableNa.length < 3) {
+      toast.error("Table name must be at least 3 characters long");
+      return;
+    }
+  
+    if (tableNa.length > 30) {
+      toast.error("Table name cannot exceed 30 characters");
+      return;
+    }
+  
+    if (tableNa.includes(" ")) {
+      toast.error("Table name cannot contain spaces");
+      return;
+    }
+  
     const data1 = {
-      newTableName: tableNa !== null ? tableNa : table[0]
+      newTableName: tableNa,
     };
+  
     if (tableName === data1.newTableName) {
       return;
     }
+  
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
+  
 
   const deleteTableName = async (tableid) => {
     const keys = Object.keys(AllTableInfo);

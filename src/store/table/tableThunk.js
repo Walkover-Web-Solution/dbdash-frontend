@@ -1,5 +1,3 @@
-
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
@@ -12,7 +10,6 @@ import { createView, deleteFieldInView } from "../../api/viewApi";
 // import { getTableInfo } from "./tableSelector";
 import { getAllTableInfo } from "../allTable/allTableSelector";
 import { setAllTablesData } from "../allTable/allTableSlice";
-
 
 const replaceCreatedByIdWithName = async (userInfo, org_id) => {
     const users = userInfo?.find((org) => org?._id == org_id)?.users;
@@ -31,7 +28,6 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
     return userJson;
 }
 
-
 const getHeaders = async (dbId, tableName, payloadfields) => {
     const fields = payloadfields || await getAllfields(dbId, tableName);
     let columns = [
@@ -44,9 +40,7 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
         //     accessor: "check",
         // },
     ];
-
     const arr = fields?.data?.data?.fields || fields;
-
     Object.entries(arr).forEach((field) => {
         var json = {
             title: "",
@@ -64,12 +58,10 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
         json.metadata = field[1].metaData;
         json.dataType = field[1].fieldType?.toLowerCase();
         columns.push(json);
-
     }
     )
     return columns;
 }
-
 const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
     // const data = await getTable(dbId, tableName, page);
     // const obj = data.data.data?.rows || data.data.data;
@@ -175,8 +167,7 @@ export const filterData = createAsyncThunk(
                 const width = entry[1].width;
                 columns[id] = { ...columns[id], metaData: { ...columns[id]?.metaData, hide: hide, width: width } };
             });
-            columns = await getHeaders(payload?.dbId, payload?.tableId, columns)
-
+            columns = await getHeaders(payload?.dbId, payload?.tableId,columns )
             const dataa = {
                 "columns": columns,
                 "row": rows,
@@ -191,18 +182,15 @@ export const filterData = createAsyncThunk(
        
     }
 );
-
 export const deleteColumns = createAsyncThunk(
     "table/deleteColumns",
     async (payload, { dispatch, getState }) => {
-
         if (payload?.fieldDataType == "lookup") {
             const data = {
                 viewFieldId: payload?.fieldName
             }
             await deleteFieldInView(payload?.dbId, payload?.tableId, data)
             dispatch(getTable1({ dbId: payload?.dbId }))
-
             dispatch(deleteColumn(payload));
             const { tableId, dbId } = getState().table
             dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
@@ -230,10 +218,10 @@ export const deleteColumns = createAsyncThunk(
         }
     }
 )
-
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch }) => {
+        // console.log("payload",payload?.metaData?.query)
         const data = {
             filterId: payload?.filterId,
             newFieldName: payload?.label,
@@ -252,9 +240,13 @@ export const updateColumnHeaders = createAsyncThunk(
             tables: updatedDbdata?.data?.data?.tables,
             orgId: updatedDbdata?.data?.data?.org_id,
         }))
-        let updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
-        if (payload?.filterId) {
-                var updatedFilterColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.filters?.[payload?.filterId]?.fields?.[payload?.columnId];
+        if(payload?.metaData?.query){
+            dispatch(bulkAddColumns({ tableName: payload?.tableName, dbId: payload?.dbId })); 
+            return ;
+        }
+        let  updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
+        if(payload?.filterId){
+                var  updatedFilterColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.filters?.[payload?.filterId]?.fields?.[payload?.columnId];
                 const updatedMetaData = {
                     ...updatedColumn.metaData, // Copy the existing metaData properties
                     hide: updatedFilterColumn.hide,// Update the hide property
@@ -276,7 +268,6 @@ export const updateColumnHeaders = createAsyncThunk(
         return updatedColumn[0];
     }
 )
-
 export const addColumnrightandleft = createAsyncThunk(
     "table/addColmunsrightandleft",
     async (payload,
@@ -360,7 +351,6 @@ export const addColumsToLeft = createAsyncThunk(
                 orgId: createdfield?.data?.data?.data?.org_id
             }))
         }
-
 
         // dispatch(addColumnToLeft(payload));
         const { tableId, dbId } = getState().table
@@ -450,7 +440,6 @@ export const updateColumnsType = createAsyncThunk(
         return payload;
     }
 )
-
 export const deleteRows = createAsyncThunk(
     "table/deleteRows",
     async (payload, { getState }) => {
