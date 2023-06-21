@@ -12,6 +12,7 @@ import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../../table/mainTable";
 import { createTable1 } from "../../../store/allTable/allTableThunk";
+
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
@@ -161,6 +162,7 @@ export default function TablesList({ dbData }) {
       const tableNames = Object.keys(dbData.db.tables);
       dispatch(setTableLoading(true));
       dispatch(
+
         bulkAddColumns({
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
@@ -228,6 +230,7 @@ export default function TablesList({ dbData }) {
               onChange={handleChange}
               TabIndicatorProps={{
                 style: { display: "none" },
+
               }}
               className={`tabs `}
               variant="scrollable"

@@ -10,6 +10,8 @@ import { resetData } from '../../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../../api/tableApi';
 import { selectActiveUser } from '../../../store/user/userSelector.js';
 import { toast } from 'react-toastify';
+import variables from '../../../assets/styling.scss';
+
 
 import './singleTable.scss';
 
@@ -25,6 +27,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Tab
+      textColor={`${variables.bgcolorvalue}`}
         label={
           label.length > 10 ? (
             <>
@@ -43,7 +46,9 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
           overflowX: 'auto',
           flexDirection: 'row',
           textTransform: 'none',
-          height: '10px'
+          height: '10px',
+  fontSize:`${variables.tablepagefontsize}`
+
         }}
         title={label}
       />
@@ -134,7 +139,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                 <Button
                   sx={{
                     width: 2,
-                    fontSize: 8,
+                    fontSize: `${variables.tablepagefontsize}`,
                     mt: 1
                   }}
                   type='submit'
@@ -161,7 +166,6 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
               <Box sx={{ mt: -1 }}>
                 <TabWithDropdown
                   sx={{ width: 100 }}
-                  
                   label={table[1]?.tableName || table[0]}
                   dropdown={
                     <Dropdown
@@ -186,6 +190,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                 <TabWithDropdown
                 
                   sx={{ width: 100 }}
+
                   label={table[1]?.tableName || table[0]}
                   dropdown={
                     <Dropdown
@@ -221,6 +226,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setPage: PropTypes.any,
-  label: PropTypes.string,       
+  label: PropTypes.string,      
   dropdown: PropTypes.node,      
 };

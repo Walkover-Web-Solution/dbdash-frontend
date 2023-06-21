@@ -225,6 +225,7 @@ export const deleteColumns = createAsyncThunk(
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
     async (payload, { dispatch }) => {
+        // console.log("payload",payload?.metaData?.query)
         const data = {
             filterId:payload?.filterId,
             newFieldName: payload?.label,
@@ -241,6 +242,10 @@ export const updateColumnHeaders = createAsyncThunk(
             dbId:updatedDbdata?.data?.data?._id,
             tables: updatedDbdata?.data?.data?.tables
         }))
+        if(payload?.metaData?.query){
+            dispatch(bulkAddColumns({ tableName: payload?.tableName, dbId: payload?.dbId })); 
+            return ;
+        }
         let  updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
         if(payload?.filterId){
             try{

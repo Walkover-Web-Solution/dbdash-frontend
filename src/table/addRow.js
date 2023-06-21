@@ -43,6 +43,17 @@ if(newValue?.data && newValue.data.kind=='tags-cell') return;
           })
          );
         }
+        else if(dataType=='numeric')
+        {
+          dispatch(
+            updateCells({
+              columnId: key,
+              rowIndex :  currentrow[`fld${tableId}autonumber`],
+              value:  newdata || newValue?.data || null ,
+              dataTypes: newValue?.kind,
+            })
+           );
+        }
         else{
           dispatch(
             updateCells({
