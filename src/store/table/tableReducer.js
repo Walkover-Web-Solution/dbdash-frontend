@@ -513,59 +513,22 @@ export function extraReducers(builder) {
       state.status = "loading"
     })
     .addCase(updateCells.fulfilled, (state, { payload }) => {
-      // try {
       const action = payload;
       state.skipReset = true;
-      //   let table =  [...state.data] ||  [];
-      //   let tableitem = table?.filter(item =>
-      //     Object.entries(item)[1][1] == action.rowIndex
-      //   );
-      //   tableitem[action.columnId] = action.value;
-      //   const index = table.findIndex(item =>
-      //     Object.entries(item)[1][1] == action.rowIndex
-      //   );
-
-      //   if (index !== -1) {
-      //     table[index] = tableitem;
-      //   }
-
-
-      //   state.data = table;
-      // }
-      // catch (e) {
-      //   console.log(e, "erorr");
-      // }
-      let arr = []
-      // let updatedSeriesData = table?.map((series) => {
-      //   series[action.columnId] = payload.value;
-      //   return series; // Return the updated series object
-      // });
-      if (action?.updatedArray) {
-        arr = state.data.map(obj1 => {
-          const matchedObj = action.newData.find(obj2 => obj2["fld" + state.tableId.substring(3) + "autonumber"] === obj1["fld" + state.tableId.substring(3) + "autonumber"]);
-          return matchedObj ? matchedObj : obj1;
-        });
+      let arr = [...state.data];
+      const autonumberId = "fld" + state.tableId.substring(3) + "autonumber"
+      const indexIdMapping = action?.indexIdMapping
+      action?.newData?.forEach((row) => {
+        arr[indexIdMapping[row?.[autonumberId]]] = row
+      })
+      if (action?.dataTypes == "file"){
+        var row = arr[indexIdMapping[action?.rowIndex]] ;
+        var imageArray =  row[action?.columnId] || [] ; 
+        imageArray = [...imageArray ,action.value ]
+        row[action?.columnId] =  imageArray      ;
+        arr[indexIdMapping[action?.rowIndex]] = row
       }
-      else {
-        state.data.forEach((ele) => {
-          const id = ele.id ? "id " : "fld" + state.tableId.substring(3) + "autonumber"
-          if (ele[id] !== action.rowIndex) {
-            arr = [...arr, { ...ele }];
-          }
-          else {
-
-            if (action?.dataTypes == "file") {
-              var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId];
-              arrr.push(action.value)
-              arr = [...arr, { ...ele, [action.columnId.toLowerCase()]: arrr }];
-            }
-            else {
-              arr = [...arr, action.newData[0]];
-            }
-          }
-        });
-      }
-
+  
       state.data = arr;
       state.status = "succeeded"
     })

@@ -131,7 +131,6 @@ export const bulkAddColumns = createAsyncThunk(
 export const filterData = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
-        try {
             var filterQuery;
             const table = getAllTableInfo(getState())?.tables?.[payload?.tableId]
             const filter = table?.filters?.[payload?.filterId];
@@ -189,10 +188,7 @@ export const filterData = createAsyncThunk(
             }
             dispatch(setTableLoading(false))
             return dataa;
-        }
-        catch (error) {
-            console.log("error")
-        }
+       
     }
 );
 
@@ -258,7 +254,6 @@ export const updateColumnHeaders = createAsyncThunk(
         }))
         let updatedColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.fields?.[payload?.columnId];
         if (payload?.filterId) {
-            try {
                 var updatedFilterColumn = updatedDbdata?.data?.data?.tables?.[payload?.tableName]?.filters?.[payload?.filterId]?.fields?.[payload?.columnId];
                 const updatedMetaData = {
                     ...updatedColumn.metaData, // Copy the existing metaData properties
@@ -272,10 +267,7 @@ export const updateColumnHeaders = createAsyncThunk(
                 };
                 //    updatedColumn.metaData.hide = updatedFilterColumn.hide
                 //    updatedColumn.metaData.width = updatedFilterColumn.width 
-            }
-            catch (e) {
-                console.log(e)
-            }
+
 
         }
         updatedColumn = { [payload?.columnId]: updatedColumn }
@@ -306,7 +298,6 @@ export const addColumnrightandleft = createAsyncThunk(
         }
         let createdfield;
         if (payload?.fieldType == "lookup") {
-            console.log("llokup")
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
             dispatch(setAllTablesData({
                 dbId: createdfield?.data?.data?._id,
@@ -389,7 +380,6 @@ export const updateCells = createAsyncThunk(
     "table/updateCells",
     async (payload, { getState }) => {
         const { tableId, dbId } = getState().table
-        console.log();
         const value = payload?.value
         const columnId = payload?.columnId;
         const userInfo = allOrg(getState());
@@ -408,19 +398,16 @@ export const updateCells = createAsyncThunk(
             jsonToSend = { "records": payload?.updatedArray }
         }
         const data = await updateRow(dbId, tableId, jsonToSend)
-        console.log("hello in update cells of table")
 
         const createdby = "fld" + tableId.substring(3) + "createdby"
         const updatedby = "fld" + tableId.substring(3) + "updatedby"
         // const tableInfo = getTableInfo(getState())
         const userJson = await replaceCreatedByIdWithName(userInfo, getState().tables?.orgId)
-        console.log(userJson);
         data.data.data.map((row) => {
             row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
             row[updatedby] = userJson?.[row[updatedby]] ? (userJson?.[row[updatedby]]?.first_name + " " + userJson?.[row[updatedby]]?.last_name) : row[updatedby];
         })
        
-        console.log("data?.data?.data", data?.data?.data);
         payload.newData = data?.data?.data;
         return payload;
     }

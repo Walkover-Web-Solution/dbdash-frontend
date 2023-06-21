@@ -15,15 +15,16 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
   return;
 }
 let valuesArray = [];
+let indexIdMapping = {}
 const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
-   dispatch(
-        updateCells({
-          updatedArray : valuesArray
-        })
-      );
- console.log(valuesArray)
-  valuesArray=[]
-}, 1000);
+  dispatch(
+    updateCells({
+      updatedArray: valuesArray,
+      indexIdMapping : indexIdMapping
+    })
+  );
+  valuesArray = []
+}, 300);
 
 export const editCell = (cell, newValue, dispatch, fields, params, currentrow, dataType) => {
   if (newValue?.data && newValue.data.kind == 'tags-cell') return;
@@ -42,40 +43,24 @@ export const editCell = (cell, newValue, dispatch, fields, params, currentrow, d
     } else {
       newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
     }
-     if (dataType == "singleselect") {
+    if (dataType == "singleselect") {
       valuesArray.push({
-        "where" :`fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}` , 
-        "fields":{
+        "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
+        "fields": {
           [key]: newValue?.data || newdata || newValue,
         }
       });
-    
-      // dispatch(
-      //   updateCells({
-      //     columnId: key,
-      //     rowIndex: currentrow[`fld${tableId}autonumber`],
-      //     value: newValue?.data || newdata || newValue,
-      //     dataTypes: newValue?.kind,
-      //   })
-      // );
+
     }
     else {
       valuesArray.push({
-        "where" :`fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}` , 
-        "fields":{
+        "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
+        "fields": {
           [key]: newdata || newValue?.data,
         }
       });
-      // dispatch(
-      //   updateCells({
-      //     columnId: key,
-      //     rowIndex: currentrow[`fld${tableId}autonumber`],
-      //     value: newdata || newValue?.data,
-      //     dataTypes: newValue?.kind,
-      //   })
-      // );
     }
-    console.log(" currentrow[`fld${tableId}autonumber`]", currentrow[`fld${tableId}autonumber`])
+    indexIdMapping[currentrow[`fld${tableId}autonumber`]] =  cell[1]
     updateCellsAfterSomeDelay(dispatch)
     return;
   }

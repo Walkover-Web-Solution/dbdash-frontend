@@ -93,6 +93,7 @@ export default function MainTable() {
           value: null,
           imageLink: imageLink,
           dataTypes: type,
+          indexIdMapping : { [dataa[row][`fld${tableId.substring(3)}autonumber`]] :  row } 
         })
       ).then(() => {
         toast.success("Image uploaded successfully!");
@@ -113,6 +114,7 @@ export default function MainTable() {
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
+          indexIdMapping : { [dataa[row][`fld${tableId.substring(3)}autonumber`]] :  row } 
         })
       ).then(() => {
         toast.success("Image uploaded successfully!");
@@ -215,6 +217,7 @@ export default function MainTable() {
             rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
             value: tag,
             dataTypes: newValue?.kind,
+            indexIdMapping : { [dataa[cell[1]][`fld${tableId.substring(3)}autonumber`]] : cell[1] } 
           })
         );
 
@@ -490,7 +493,7 @@ export default function MainTable() {
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
-          // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
+          // onGridSelectionChange={(ele)=>{}}
 
           onColumnMoved={reorder}
           onPaste={true}
