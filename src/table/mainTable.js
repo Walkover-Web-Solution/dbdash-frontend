@@ -8,6 +8,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { addColumnrightandleft, deleteRows, updateCells, updateColumnHeaders } from "../store/table/tableThunk";
 import "@glideapps/glide-data-grid/dist/index.css";
 import "../../src/App.scss";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
@@ -203,7 +204,7 @@ export default function MainTable() {
   };
   const validateCell = useCallback((cell, newValue, oldValue) => {
 
-    if (newValue.data.kind == 'tags-cell') {
+    if (newValue?.data && newValue?.data?.kind == 'tags-cell') {
       let tag = "";
       let arr1 = newValue.data.tags;
       let arr2 = oldValue.data.tags || [];
@@ -225,8 +226,9 @@ export default function MainTable() {
     }
 
     if (newValue.kind === 'number') {
-      if (newValue?.data?.toString().length < 13)
-        return newValue;
+      if (newValue?.data?.toString().length < 13 || !newValue?.data)
+    {  
+        return newValue;}
       else return false;
 
     }
@@ -444,15 +446,17 @@ export default function MainTable() {
     setSelection1(event);
     // return event;
   }
+
   return (
     <>
     {JSON.stringify(selection1)!==JSON.stringify(emptyselection) && selection1.rows.items.length>0 && <button
+    className="fontsize"
   style={{
     position: "absolute",
     display:'flex',
     flexDirection:'row',
     right: "1%",
-    top: "18.10%",
+    top: "19.9%",
     zIndex: "10000",
     background: "none",
     border: "none",
@@ -469,7 +473,7 @@ export default function MainTable() {
   </div>
 </button>
 }
-      <div className="table-container" style={{height:`${((window?.screen?.height*63)/100)}px`}}>
+      <div className="table-container" style={{height:`${((window?.screen?.height*58)/100)}px`}}>
         <DataEditor
           {...cellProps}
           width={window.screen.width}
@@ -506,6 +510,14 @@ export default function MainTable() {
             sticky: true,
             tint: true,
             hint: "New row...",
+            targetColumn: realCols.length - 1, 
+            render: () => (
+              <select className="dropdown">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                {/* Add more options as needed */}
+              </select>
+            ),
             // targetColumn: 4
           }}
         />

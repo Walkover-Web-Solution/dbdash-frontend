@@ -297,14 +297,14 @@ export const addColumnrightandleft = createAsyncThunk(
             duplicateField: payload?.duplicateField
         }
         let createdfield;
-        if (payload?.fieldType == "lookup") {
+        if (payload?.fieldType == "lookup")
+        {
             createdfield = await createView(payload?.dbId, payload?.tableId, data);
             dispatch(setAllTablesData({
                 dbId: createdfield?.data?.data?._id,
                 tables: createdfield?.data?.data?.tables,
                 orgId: createdfield?.data?.data?.org_id,
             }))
-
         }
         else {
             createdfield = await createField(payload?.dbId, payload?.tableId, data);

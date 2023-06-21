@@ -195,11 +195,11 @@ Object.entries(props?.dbs).forEach(([, value]) => {
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
               {Dbs.map((db,index) => (
-                <Box key={db._id} sx={{ m: 4, display: "flex" }}>
+                <Box key={db._id} sx={{ m: 4,mt:0,ml:2, display: "flex" }}>
                   <SingleDatabase db={db} dblength={Dbs.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
               ))}
-              <Card sx={{ m: 4, minWidth: 250, minHeight: 200, boxShadow: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Card sx={{ m: 4,mt:0,ml:2, minWidth: 250, minHeight: 200, boxShadow: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
 
                 <IconButton sx={{ color: "black" }}
                   onClick={(e) => {
