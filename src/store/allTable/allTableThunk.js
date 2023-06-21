@@ -3,7 +3,6 @@ import { getDbById } from "../../api/dbApi"
 import { updateTable } from "../../api/tableApi";
 export const createTable1 = createAsyncThunk (
     "tables/createTable1", async (payload) =>{
-        console.log(payload,"createtablepayload")
         return payload?.tables
     }
 );
