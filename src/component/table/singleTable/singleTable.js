@@ -56,11 +56,11 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   );
 
   const renameTableName = async (db_id, tableName) => {
-    if (!tableNa) {
-      toast.error("Table name is same");
-      return;
-    }
-    if (tableNa.trim() === "") {
+    // if (!tableNa) {
+    //   toast.error("Table name is same");
+    //   return;
+    // }
+    if ( !tableNa|| tableNa.trim() === "") {
       toast.error("Table name cannot be empty");
       return;
     }

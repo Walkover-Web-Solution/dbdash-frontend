@@ -81,10 +81,10 @@ Object.entries(props?.dbs).forEach(([, value]) => {
   // };
 
   const renameWorkspace = async (orgId, newName) => {
-    if (!newName) {
-      toast.error("Workspace name is same");
-      return;
-    }
+    // if (!newName) {
+    //   toast.error("Workspace name is same");
+    //   return;
+    // }
     if (!newName || newName.trim() === "") {
       toast.error("Workspace name cannot be empty");
       return;

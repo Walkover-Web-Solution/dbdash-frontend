@@ -41,11 +41,11 @@ export default function SingleDatabase(props) {
   //   setDbname();
   // };
   const renameDatabase = async (orgId, id ,name) => {
-    if (!dbname ) {
-      toast.error("Database name is same");
-      return;
-    }
-    if ( dbname.trim() === "") {
+    // if (!dbname ) {
+    //   toast.error("Database name is same");
+    //   return;
+    // }
+    if ( !dbname || dbname.trim() === "") {
       toast.error("Database name cannot be empty");
       return;
     }
