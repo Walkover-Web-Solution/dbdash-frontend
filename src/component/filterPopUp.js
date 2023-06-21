@@ -282,7 +282,8 @@ export default function FilterModal(props) {
     dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
-        "tables": filter.data.data.data.tables
+        "tables": filter.data.data.data.tables,
+        "orgId" : filter.data.data.data.org_id
       }
     ))
     // dispatch(bulkAddColumns(
@@ -311,7 +312,8 @@ export default function FilterModal(props) {
     dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
-        "tables": updatedFilter.data.data.tables
+        "tables": updatedFilter.data.data.tables , 
+        "orgId" :  updatedFilter.data.data.org_id
       }
     ))
   }

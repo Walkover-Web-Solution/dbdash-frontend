@@ -2,13 +2,15 @@ import { createTable1,updateTable1,getTable1, removeTable1 } from './allTableThu
 export const initialState = {
   dbId  : "",
   tables : {},
+  orgId :  "", 
   status : "idel"
 };
 export const reducers = {
   setAllTablesData (state,{payload}){
     return { ...state , 
       tables : payload.tables,
-      dbId : payload.dbId
+      dbId : payload.dbId ,
+      orgId : payload?.orgId 
     }
   }
 };
