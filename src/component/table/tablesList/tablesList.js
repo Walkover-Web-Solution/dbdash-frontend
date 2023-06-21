@@ -12,7 +12,7 @@ import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../../table/mainTable";
 import { createTable1 } from "../../../store/allTable/allTableThunk";
-
+import AddFilterPopup from "../../addFIlterPopup";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
@@ -24,9 +24,6 @@ import { createViewTable } from "../../../api/viewTableApi";
 // import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
 export default function TablesList({ dbData }) {
-
-
-
 
   
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -44,6 +41,7 @@ export default function TablesList({ dbData }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false);
+  // const [openFilter,setOpenFilter]=useState(false)
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false);
@@ -66,7 +64,7 @@ export default function TablesList({ dbData }) {
       setAnchorEl(event.currentTarget);
     }
   };
-
+ 
 
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
@@ -108,8 +106,11 @@ export default function TablesList({ dbData }) {
 
   const handleEdit = async () => {
     // if(params?.filterName){
-      setEdit(true);
+      console.log("jjjdj")
       setOpenn(true);
+      setEdit(true);
+      // setOpenFilter(true);
+      console.log(edit,"edit123")
     // }else{
     //   setEdit(false);
     //   setOpenn(false);
@@ -197,19 +198,24 @@ export default function TablesList({ dbData }) {
         filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
         dbId: dbData?.db?._id,
       }))
-      // dispatch(
-      //   bulkAddColumns({
-      //     dbId: dbData?.db?._id,
-      //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-      //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-      //     org_id: dbData?.db?.org_id,
-      //     pageNo: 1,
-      //     filterId : params?.filterName,
-      //     fields:dbData?.db?.tables[params?.tableName]?.fields         
-      //   })       
-      // );
     }
   },[params?.filterName])
+//   useEffect(() => {
+//     if (edit == true) {
+// <AddFilterPopup
+//    dbData={dbData}
+//             open={openn}
+//             edit={edit}
+//             setEdit={setEdit}
+//             setOpen={setOpenn}
+//             filterId={filterId}
+//             dbId={dbData?.db?._id}
+//             tableName={params?.tableName}
+//             setUnderLine={setUnderLine}
+// />
+//     }
+//   })
+
 
   let dataa1 = "";
   const shareLink = async () => {
@@ -304,7 +310,7 @@ export default function TablesList({ dbData }) {
             variant="contained"
             className="mui-button filter-button"
           >
-            Add Filter
+            Add View
           </Button>
         </Box>
         <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
@@ -323,7 +329,7 @@ export default function TablesList({ dbData }) {
             joiMessage={"Table name"}
           />
         )}
-        {openn && (
+        {openn &&  !edit && (
           <FilterModal
             dbData={dbData}
             open={openn}
@@ -344,12 +350,24 @@ export default function TablesList({ dbData }) {
           <MenuItem
             onClick={() => {
               handleEdit();
-              handleClose();
-
+              // handleClose();
             }}
           >
-            Edit
+            Edit Filter
           </MenuItem>
+          {openn&& edit && (<AddFilterPopup
+        dbData={dbData}
+        open={openn}
+        edit={edit}
+        setEdit={setEdit}
+        setOpen={setOpenn}
+        filterId={filterId}
+        dbId={dbData?.db?._id}
+        tableName={params?.tableName}
+        setUnderLine={setUnderLine}
+      />)
+      
+      }
           <MenuItem
             onClick={() => {
               deleteFilterInDb(currentTable);
