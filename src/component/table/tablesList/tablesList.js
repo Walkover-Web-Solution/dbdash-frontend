@@ -17,12 +17,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
-import { createTable } from "../../../api/tableApi";
+import { createTable, exportCSV } from "../../../api/tableApi";
 import './tablesList.scss'
 import variables from '../../../assets/styling.scss';
 import { createViewTable } from "../../../api/viewTableApi";
 // import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
+import { toast } from "react-toastify";
+import { selectActiveUser } from "../../../store/user/userSelector";
 export default function TablesList({ dbData }) {
 
 
@@ -53,7 +55,7 @@ export default function TablesList({ dbData }) {
   const [link, setLink] = useState("Link");
   // const [link, setLink] = useState("Link");
   const [openManageField, setOpenManageField] = useState(false);
-
+  const userDetails = useSelector((state) => selectActiveUser(state));
   const handleClick = (event, id) => {
     if (id === "share") {
       setShareLinkOpen(true);
@@ -219,7 +221,16 @@ export default function TablesList({ dbData }) {
   // const handleMenuOpen = (event) => {
   //   setMenuAnchorEl(event.currentTarget);
   // };
-  
+  const exportCSVTable = async () => {
+    const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query
+    const data = {
+      query: query,
+      userName: userDetails?.fullName,
+      email: userDetails?.email
+    };
+    await exportCSV(dbData?.db?._id,params?.tableName, data);
+    toast.success("Your CSV file has been mailed successfully");
+  };
   return (
     <>
       <div className="tableslist">
@@ -349,6 +360,15 @@ export default function TablesList({ dbData }) {
           >
             Share this view
           </MenuItem>
+          <MenuItem
+              onClick={() => {
+                // deleteFilterInDb(currentTable);
+                exportCSVTable();
+                handleClose();
+              }}
+          >
+            Export CSV
+          </MenuItem>
           {shareLinkOpen && (
             <ShareLinkPopUp
               title="Share Link"
@@ -383,3 +403,4 @@ TablesList.propTypes = {
   label: PropTypes.any,
   setTables: PropTypes.any,
 };
+// select * from tblv1ry0d where CAST(fldv1ry0dautonumber as CHAR)  LIKE '%1%'
