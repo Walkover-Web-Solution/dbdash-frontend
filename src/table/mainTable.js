@@ -23,6 +23,7 @@ import { getTableInfo } from "../store/table/tableSelector";
 // import "react-responsive-carousel/lib/styles/carousel.min.css";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
+import  debounce  from 'lodash.debounce';
 
 export default function MainTable() {
 
@@ -45,18 +46,17 @@ export default function MainTable() {
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
-
   const[showSearch,setShowSearch]=useState(false);
   const emptyselection={
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
     current: undefined,
 };
-
   const[selection1,setSelection1]=useState(emptyselection);
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state));
-  const tableId = tableInfo?.tableId
+  const tableId = tableInfo?.tableId;
+ 
   useEffect(() => {
     setData(dataa)
   }, [dataa])
@@ -176,23 +176,12 @@ export default function MainTable() {
   }, [data, setData]);
 
 
-  let arrr = [];
   const onCellEdited = useCallback((cell, newValue) => {
     if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
-    const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
-    arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
-    if (fields[cell[0]].dataType == "singleselect") {
-      if (typeof (newValue) == "object") {
+    if (fields[cell[0]].dataType == "singleselect" && (typeof (newValue) == "object") ) {
         newValue = newValue.value || newValue.data.value || newValue.data;
-        if (!arrr.includes(newValue)) {
-          arrr.push(newValue);
-        }
-        editCell(cell, newValue, dispatch, fields, arrr, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
       }
-    }
-    else {
-      editCell(cell, newValue, dispatch, fields, false, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
-    }
+      editCell(cell, newValue, dispatch, fields, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
   }
     , [dataa, data, fields]);
 
@@ -440,7 +429,6 @@ export default function MainTable() {
       return {};
     }
   }, [dataa, fields]);
-
 
   const realCols = useMemo(() => {
     return fields?.map((c) => ({

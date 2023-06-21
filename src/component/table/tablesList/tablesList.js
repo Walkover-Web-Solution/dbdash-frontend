@@ -145,6 +145,7 @@ export default function TablesList({ dbData }) {
       setAllTablesData({
         dbId: dbData?.db?._id,
         tables: deletedFilter.data.data.tables,
+        orgId :  deletedFilter.data.data.org_id
       })
     );
     dispatch(

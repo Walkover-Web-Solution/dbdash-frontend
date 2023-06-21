@@ -1,5 +1,5 @@
 
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions,deleteRows } from './tableThunk.js';
+import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions, deleteRows } from './tableThunk.js';
 import { randomColor, shortId } from "../../table/utils";
 // import { current } from '@reduxjs/toolkit';
 
@@ -417,12 +417,12 @@ export function extraReducers(builder) {
       state.isTableLoading = false
     })
 
-    .addCase(deleteRows.pending,(state)=>{
-      state.status='loading'
+    .addCase(deleteRows.pending, (state) => {
+      state.status = 'loading'
     })
-    .addCase(deleteRows.fulfilled, (state,action) => {
+    .addCase(deleteRows.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.data=action.payload;
+      state.data = action.payload;
     })
     .addCase(deleteRows.rejected, (state) => {
       state.status = "failed";
@@ -445,15 +445,14 @@ export function extraReducers(builder) {
     .addCase(updateColumnHeaders.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(updateColumnHeaders.fulfilled, (state,{payload}) => {
-      let allColumns= [];
+    .addCase(updateColumnHeaders.fulfilled, (state, { payload }) => {
+      let allColumns = [];
       state.columns.forEach(column => {
-        if(column.id == payload?.id )
-        {
-          allColumns = [...allColumns,{...payload}]; 
+        if (column.id == payload?.id) {
+          allColumns = [...allColumns, { ...payload }];
         }
         else {
-          allColumns=[...allColumns,{...column}];
+          allColumns = [...allColumns, { ...column }];
         }
       });
       state.columns = allColumns
@@ -515,8 +514,8 @@ export function extraReducers(builder) {
     })
     .addCase(updateCells.fulfilled, (state, { payload }) => {
       // try {
-        const action = payload;
-        state.skipReset = true;
+      const action = payload;
+      state.skipReset = true;
       //   let table =  [...state.data] ||  [];
       //   let tableitem = table?.filter(item =>
       //     Object.entries(item)[1][1] == action.rowIndex
@@ -541,25 +540,33 @@ export function extraReducers(builder) {
       //   series[action.columnId] = payload.value;
       //   return series; // Return the updated series object
       // });
-      state.data.forEach((ele)=>{
-        const id  = ele.id ?  "id " :"fld"+state.tableId.substring(3)+"autonumber" 
-        if(ele[id] !==action.rowIndex ) {
-          arr=[...arr,{...ele}];     }
-        else {
+      if (action?.updatedArray) {
+        arr = state.data.map(obj1 => {
+          const matchedObj = action.newData.find(obj2 => obj2["fld" + state.tableId.substring(3) + "autonumber"] === obj1["fld" + state.tableId.substring(3) + "autonumber"]);
+          return matchedObj ? matchedObj : obj1;
+        });
+      }
+      else {
+        state.data.forEach((ele) => {
+          const id = ele.id ? "id " : "fld" + state.tableId.substring(3) + "autonumber"
+          if (ele[id] !== action.rowIndex) {
+            arr = [...arr, { ...ele }];
+          }
+          else {
 
-          if(action?.dataTypes == "file"  )
-          {  
-            var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId]  ;
-            arrr.push(action.value)
-            arr=[...arr,{...ele, [action.columnId.toLowerCase()] : arrr}];
+            if (action?.dataTypes == "file") {
+              var arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId];
+              arrr.push(action.value)
+              arr = [...arr, { ...ele, [action.columnId.toLowerCase()]: arrr }];
+            }
+            else {
+              arr = [...arr, action.newData[0]];
+            }
           }
-          else
-          {
-            arr=[...arr,action.newData];
-          }
-        }
-      });
-      state.data= arr;
+        });
+      }
+
+      state.data = arr;
       state.status = "succeeded"
     })
     .addCase(updateCells.rejected, (state) => {
