@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
@@ -47,11 +47,12 @@ export default function TablesList({ dbData }) {
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false);
+  const buttonRef = useRef(null);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const tableLength = Object.keys(AllTableInfo)?.length;
-  const [underLine, setUnderLine] = useState(null);
-  const [currentTable, setcurrentTable] = useState(null);
+  const [underLine, setUnderLine] = useState(params?.filterName)
+  const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
   // const [view, setView] = useState(null)
   // const [link, setLink] = useState("Link");
@@ -103,14 +104,16 @@ export default function TablesList({ dbData }) {
     setValue(newTableIndex);
   };
   const handleEdit = async () => {
-    // if(params?.filterName){
-    setEdit(true);
-    setOpenn(true);
-    // }else{
-    //   setEdit(false);
-    //   setOpenn(false);
-    //   toast.error("choose the filter First");
-    // }
+    if(params?.filterName){
+    
+      setOpenn(true);
+      setEdit(true);
+      // setOpenFilter(true); 
+    }else{
+      setEdit(false);
+      setOpenn(false);
+      toast.error("choose the filter First");
+    }
   };
   function onFilterClicked(filter, id) {
     setUnderLine(id);
@@ -267,11 +270,9 @@ export default function TablesList({ dbData }) {
             </Button>
           </Box>
         </Box>
-        <Box
-          sx={{ paddingLeft: "24px", paddingRight: "20px" }}
-          display="flex"
-          flexWrap="nowrap"
-        >
+        <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap'}}   >
+        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden'}}>
+        <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*88)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
           {AllTableInfo[params?.tableName]?.filters &&
             Object.entries(AllTableInfo[params?.tableName]?.filters).map(
               (filter, index) => (
@@ -296,34 +297,47 @@ export default function TablesList({ dbData }) {
                     </IconButton>
                   </Box>
                 </Box>
-              )
+
+              ) 
             )}
+            </div>
+            </div>
           <Button
             onClick={() => handleOpenn()}
             variant="contained"
+            ref={buttonRef}
             className="mui-button filter-button"
           >
             Add View
           </Button>
         </Box>
-        <div
-          style={{
-            paddingLeft: "24px",
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
+        {openn &&  !edit &&  (
+         
+         <FilterModal
+           dbData={dbData}
+           buttonRef={buttonRef}
+           open={openn }
+           edit={edit}
+           setEdit={setEdit}
+           setOpen={setOpenn}
+           filterId={filterId}
+           dbId={dbData?.db?._id}
+           tableName={params?.tableName}
+           setUnderLine={setUnderLine}
+         />
+      
+       )}
+   
+        <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
-          <Button
-            sx={{
-              fontSize: `${variables.tablepagefontsize}`,
-              paddingLeft: 0,
-              paddingRight: 0,
-            }}
-            onClick={handleClickOpenManageField}
-          >
-            Manage Fields
-          </Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}} onClick={handleClickOpenManageField}>Manage Fields</Button>
+          {  params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0,mr:2 }} onClick={handleEdit}>Edit filter</Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}}  onClick={(e) => {
+              handleClick(e, "share");
+              shareLink();
+            }
+            }>share view</Button></>}
+
         </div>
         {openManageField && (
           <ManageFieldDropDown
@@ -342,45 +356,14 @@ export default function TablesList({ dbData }) {
             joiMessage={"Table name"}
           />
         )}
-        {openn &&  !edit && (
-          <FilterModal
-            dbData={dbData}
-            open={openn}
-            edit={edit}
-            setEdit={setEdit}
-            setOpen={setOpenn}
-            filterId={filterId}
-            dbId={dbData?.db?._id}
-            tableName={params?.tableName}
-            setUnderLine={setUnderLine}
-          />
-        )}
+      
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={() => handleClose()}
         >
-          <MenuItem
-            onClick={() => {
-              handleEdit();
-              handleClose();
-            }}
-          >
-            Edit Filter
-          </MenuItem>
-          {openn&& edit && (<AddFilterPopup
-        dbData={dbData}
-        open={openn}
-        edit={edit}
-        setEdit={setEdit}
-        setOpen={setOpenn}
-        filterId={filterId}
-        dbId={dbData?.db?._id}
-        tableName={params?.tableName}
-        setUnderLine={setUnderLine}
-      />)
-      
-      }
+        
+        
           <MenuItem
             onClick={() => {
               deleteFilterInDb(currentTable);
@@ -390,24 +373,32 @@ export default function TablesList({ dbData }) {
             Delete
           </MenuItem>
           <MenuItem
-            onClick={(e) => {
-              if(!params?.filterName)return ;
-              handleClick(e, "share");
-              shareLink();
-            }}
-          >
-            Share this view
-          </MenuItem>
-          <MenuItem
             onClick={() => {
-              // deleteFilterInDb(currentTable);
-              exportCSVTable();
-              handleClose();
+            // deleteFilterInDb(currentTable);
+            exportCSVTable();
+            handleClose();
             }}
-          >
+            >
             Export CSV
-          </MenuItem>
-          {shareLinkOpen && (
+            </MenuItem>
+        
+
+        </Menu>
+      </div>
+      {openn&& edit && (<AddFilterPopup
+        dbData={dbData}
+        open={openn}
+        edit={edit}
+        setEdit={setEdit}
+        setOpen={setOpenn}
+        filterId={params?.filterName}
+        dbId={dbData?.db?._id}
+        tableName={params?.tableName}
+        setUnderLine={setUnderLine}
+      />)
+      
+      }
+      {shareLinkOpen && (
             <ShareLinkPopUp
               title="Share Link"
               open={shareLinkOpen}
@@ -416,9 +407,7 @@ export default function TablesList({ dbData }) {
               textvalue={link}
             />
           )}
-        </Menu>
-      </div>
-      <div style={{ marginTop: "200px" }}>
+      <div  style={{ marginTop: "200px" }}>
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
         ) : (

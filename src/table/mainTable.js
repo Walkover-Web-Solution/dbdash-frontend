@@ -484,7 +484,7 @@ export default function MainTable() {
   </div>
 </button>
 }
-      <div className="table-container" style={{height:`${((window?.screen?.height*58)/100)}px`}}>
+      <div className="table-container" style={{height:`${((window?.screen?.height*50)/100)}px`}}>
         <DataEditor
           {...cellProps}
           width={window.screen.width}
