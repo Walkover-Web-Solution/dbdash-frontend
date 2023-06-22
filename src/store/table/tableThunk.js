@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createField, deleteField, getAllfields, hideAllField, updateField } from "../../api/fieldApi";
+import { createField, deleteField, hideAllField, updateField } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
 import { insertRow, uploadImage, updateRow, deleteRow } from "../../api/rowApi";
 import { getTable1 } from "../allTable/allTableThunk";
@@ -28,8 +28,10 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
     return userJson;
 }
 
-const getHeaders = async (dbId, tableName, payloadfields) => {
-    const fields = payloadfields || await getAllfields(dbId, tableName);
+const getHeaders = async (dbId, tableName, payloadfields, { getState }) => { 
+    // const fields = payloadfields || await getAllfields(dbId, tableName);
+    const fields =payloadfields|| await  getAllTableInfo(getState())?.tables?.[tableName]?.fields;
+    const fieldIds = await getAllTableInfo(getState())?.tables?.[tableName]?.fieldIds
     let columns = [
         // {
         //     id: 9999991,
@@ -40,29 +42,35 @@ const getHeaders = async (dbId, tableName, payloadfields) => {
         //     accessor: "check",
         // },
     ];
-    const arr = fields?.data?.data?.fields || fields;
-    Object.entries(arr).forEach((field) => {
-        var json = {
-            title: "",
-            id: "",
-            dataType: "",
-            hasMenu: true,
-            // minWidth: 100,
-            // options: [],
-            metadata: {},
-            width: field[1]?.metaData?.width ? field[1]?.metaData?.width : 150
+    const arr =  fields;
+    
+    fieldIds.forEach((fieldId, index) => {
+        const field = arr[fieldId];
+        
+        if (field) {
+            var json = {
+                title: "",
+                id: "",
+                dataType: "",
+                hasMenu: true,
+                // minWidth: 100,
+                // options: [],
+                metadata: {},
+                width: field.metaData?.width ? field.metaData.width : 150
+            }
+            json.id = fieldId;
+            json.title = field.fieldName?.toLowerCase() || fieldId.toLowerCase();
+            // json.accessor = fieldId.toLowerCase();
+            json.metadata = field.metaData;
+            json.dataType = field.fieldType?.toLowerCase();
+            columns[index] = json; // Replace the existing object at the corresponding index
         }
-        json.id = field[0];
-        json.title = field[1].fieldName?.toLowerCase() || field[0]?.toLowerCase();
-        // json.accessor = field[0]?.toLowerCase();
-        json.metadata = field[1].metaData;
-        json.dataType = field[1].fieldType?.toLowerCase();
-        columns.push(json);
-    }
-    )
-    return columns;
+    });
+    let result = columns.filter(el=>el!=="empty");
+    return result;
 }
 const getRowData = async (dbId, tableName, { getState }, org_id, page) => {
+    
     // const data = await getTable(dbId, tableName, page);
     // const obj = data.data.data?.rows || data.data.data;
     const userInfo = allOrg(getState());
@@ -106,7 +114,7 @@ export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
         var columns = null
-        columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields)
+        columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields, { getState })
         const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
         const dataa = {
             "columns": columns,
@@ -167,7 +175,8 @@ export const filterData = createAsyncThunk(
                 const width = entry[1].width;
                 columns[id] = { ...columns[id], metaData: { ...columns[id]?.metaData, hide: hide, width: width } };
             });
-            columns = await getHeaders(payload?.dbId, payload?.tableId, columns)
+
+            columns = await getHeaders(payload?.dbId,payload?.tableId,columns,{getState});
 
             const dataa = {
                 "columns": columns,
@@ -221,8 +230,7 @@ export const deleteColumns = createAsyncThunk(
 )
 export const updateColumnHeaders = createAsyncThunk(
     "table/updateColumnHeaders",
-    async (payload, { dispatch }) => {
-        // console.log("payload",payload?.metaData?.query)
+    async (payload, { dispatch,getState }) => {
         const data = {
             filterId: payload?.filterId,
             newFieldName: payload?.label,
@@ -264,7 +272,7 @@ export const updateColumnHeaders = createAsyncThunk(
 
         }
         updatedColumn = { [payload?.columnId]: updatedColumn }
-        updatedColumn = await getHeaders(null, null, updatedColumn)
+        updatedColumn = await getHeaders(payload.dbId, payload.tableName ,updatedColumn,{getState})
         // now will update the table reducer so current table fields  will be updated as well 
         return updatedColumn[0];
     }
@@ -476,3 +484,4 @@ export const updateMultiSelectOptions = createAsyncThunk(
         return payload;
     }
 )
+

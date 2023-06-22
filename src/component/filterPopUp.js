@@ -279,7 +279,7 @@ export default function FilterModal(props) {
     const filter = await createFilter(props?.dbId, props?.tableName, dataa)
     const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
     const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName);
-    dispatch(setAllTablesData(
+    await dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
         "tables": filter.data.data.data.tables,
@@ -309,7 +309,7 @@ export default function FilterModal(props) {
       query: data
     }
     const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa)
-    dispatch(setAllTablesData(
+     dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
         "tables": updatedFilter.data.data.tables , 

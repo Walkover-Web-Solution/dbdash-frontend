@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../../dropdown';
-import { bulkAddColumns } from '../../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../../store/allTable/allTableThunk';
@@ -11,9 +10,9 @@ import { deleteTable, exportCSV } from '../../../api/tableApi';
 import { selectActiveUser } from '../../../store/user/userSelector.js';
 import { toast } from 'react-toastify';
 import variables from '../../../assets/styling.scss';
-
-
 import './singleTable.scss';
+import { useParams } from "react-router-dom";
+import { bulkAddColumns } from '../../../store/table/tableThunk';
 
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
   const navigate = useNavigate();
@@ -21,6 +20,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const [name, setName] = useState();
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const userDetails = useSelector((state) => selectActiveUser(state));
+  const params = useParams();
 
   const dispatch = useDispatch();
 
@@ -65,7 +65,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
-
+  
   const deleteTableName = async (tableid) => {
     const keys = Object.keys(AllTableInfo);
     let i = 0;
@@ -92,15 +92,19 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     toast.success("Your CSV file has been mailed successfully");
   };
 
+
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setPage(1);
     dispatch(resetData());
-    dispatch(bulkAddColumns({
-      "dbId": dbData?.db?._id,
-      "tableName": table[0],
-      "pageNo": 1,
-    }));
+    if(table[0]==params?.tableName){
+      dispatch(bulkAddColumns({
+        "dbId": dbData?.db?._id,
+        "tableName": table[0],
+        "pageNo": 1,
+      }));
+    }
+   
   }
 
   const location = useLocation();

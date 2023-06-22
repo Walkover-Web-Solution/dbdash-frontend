@@ -21,6 +21,7 @@ export function extraReducers(builder) {
     })
     .addCase(createTable1.fulfilled, (state,action) => {
       if (action.payload) {
+        console.log("action.payload",action.payload)
       state.tables = action.payload;
       }
       state.status = "succeeded";

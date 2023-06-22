@@ -72,33 +72,51 @@ export default function TablesList({ dbData }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const saveTable = async () => {
-    const data = {
-      tableName: table,
-    };
-    setOpen(false);
-    const apiCreate = await createTable(dbData?.db?._id, data);
-    dispatch(createTable1({ tables: apiCreate.data.data.tables }));
-    const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
-      return apiCreate?.data?.data?.tables[key].tableName === table;
-    });
-    if (matchedKey) {
-      navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
-    }
-    // dispatch(
-    //   bulkAddColumns({
-    //     dbId: dbData?.db?._id,
-    //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-    //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-    //     org_id: dbData?.db?.org_id,
-    //     pageNo: 1,
-    //     filterId : params?.filterName,
-    //     // fields:dbData?.db?.tables[params?.tableName]?.fields         
-    //   })       
-    // );
-    const newTableIndex = Object.keys(AllTableInfo).length;
-    setValue(newTableIndex);
+const saveTable = async () => {
+  const data = {
+    tableName: table,
   };
+
+  setOpen(false);
+  const apiCreate = await createTable(dbData?.db?._id, data);
+  // setAllTablesData({
+  //   dbId:apiCreate.data.data._id,
+  //   tables :apiCreate.data.data.tables
+  // })
+  await dispatch(createTable1({ tables: apiCreate.data.data.tables }));
+  const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
+    return apiCreate?.data?.data?.tables[key].tableName === table;
+  });
+//   if(matchedKey)
+//   {
+//     console.log("mathedkey")
+//   setPage(1);
+//   // dispatch(resetData());
+//     dispatch(bulkAddColumns({
+//     "dbId": dbData?.db?._id,
+//     "tableName": matchedKey,
+//     "pageNo": 1,
+//   })).then(()=> navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`));
+ 
+// }
+  if (matchedKey) {
+    navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
+  }
+  
+  // dispatch(
+  //   bulkAddColumns({
+  //     dbId: dbData?.db?._id,
+  //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
+  //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+  //     org_id: dbData?.db?.org_id,
+  //     pageNo: 1,
+  //     filterId : params?.filterName,
+  //     // fields:dbData?.db?.tables[params?.tableName]?.fields         
+  //   })       
+  // );
+  const newTableIndex = Object.keys(AllTableInfo).length;
+  setValue(newTableIndex);
+};
   const handleEdit = async () => {
     // if(params?.filterName){
       setEdit(true);
@@ -112,24 +130,16 @@ export default function TablesList({ dbData }) {
   function onFilterClicked(filter, id) {
     setUnderLine(id)
     setFilterId(params?.filterName || id);
-    // setPage(1);
-    dispatch(filterData({
-      filterId : id,
-      tableId: params?.tableName ,
-      filter: filter,
-      dbId: dbData?.db?._id,
-    }))
-    // dispatch(
-    //   bulkAddColumns({
-    //     dbId: dbData?.db?._id,
-    //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-    //     filter: filter,
-    //     org_id: dbData?.db?.org_id,
-    //     pageNo: 1,
-    //     filterId : id,
-    //     fields:dbData?.db?.tables[params?.tableName]?.fields 
-    //   })
-    // );
+    if(params?.filterName == id )
+    {
+      dispatch(filterData({
+        filterId : id,
+        tableId: params?.tableName ,
+        filter: filter,
+        dbId: dbData?.db?._id,
+      }))
+    }
+  
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
   const deleteFilterInDb = async (filterId) => {
@@ -159,26 +169,24 @@ export default function TablesList({ dbData }) {
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
-  useEffect(() => {
-    
-     if (dbData?.db?.tables && !(params?.filterName)) {
-      const tableNames = Object.keys(dbData.db.tables);
-      dispatch(setTableLoading(true));
+useEffect(() => {
+  
+    const tableNames = Object.keys(dbData.db.tables);
+    dispatch(setTableLoading(true));
+    if(params?.tableName){
       dispatch(
-
         bulkAddColumns({
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
           pageNo: 1,
-          // fields: dbData?.db?.tables[params?.tableName]?.fields
         })
       );
-      setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
-      if (!params?.tableName) {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
-      }
     }
-  }, [params?.tableName]);
+    setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
+    if (!params?.tableName) {
+      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+    }
+}, [params?.tableName]);
   useEffect(()=>{
     if (params?.filterName) {
       setUnderLine(params?.filterName)
@@ -188,17 +196,7 @@ export default function TablesList({ dbData }) {
         filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
         dbId: dbData?.db?._id,
       }))
-      // dispatch(
-      //   bulkAddColumns({
-      //     dbId: dbData?.db?._id,
-      //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-      //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-      //     org_id: dbData?.db?.org_id,
-      //     pageNo: 1,
-      //     filterId : params?.filterName,
-      //     fields:dbData?.db?.tables[params?.tableName]?.fields         
-      //   })       
-      // );
+   
     }
   },[params?.filterName])
   let dataa1 = "";
@@ -217,11 +215,7 @@ export default function TablesList({ dbData }) {
       setLink(`localhost:3000/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
     }
   }
-  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-  
-  // const handleMenuOpen = (event) => {
-  //   setMenuAnchorEl(event.currentTarget);
-  // };
+ 
   const exportCSVTable = async () => {
     const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query
     const data = {
@@ -404,4 +398,4 @@ TablesList.propTypes = {
   label: PropTypes.any,
   setTables: PropTypes.any,
 };
-// select * from tblv1ry0d where CAST(fldv1ry0dautonumber as CHAR)  LIKE '%1%'
+
