@@ -9,7 +9,6 @@ import { addColumnrightandleft, deleteRows, updateCells, updateColumnHeaders } f
 // import "@glideapps/glide-data-grid/dist/index.css";
 import './Glidedatagrid.css';
 import "../../src/App.scss";
-
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
