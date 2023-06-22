@@ -13,6 +13,8 @@ const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
+  maxHeight:'500px',
+  overflowY:'auto',
   transform: "translate(-50%, -50%)",
   width: 300,
   bgcolor: "background.paper",
@@ -171,7 +173,7 @@ export default function AddOptionPopup(props) {
           <Typography variant="h6" component="h2">
             Add options
           </Typography>
-          <Box sx={{ my: 2 }}>
+          <Box sx={{ my: 2, maxHeight:'300px',overflowY:'auto' }}>
             {inputValues.map((value, index) => (
               <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
                 <TextField

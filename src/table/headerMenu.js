@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { deleteColumns, updateColumnHeaders } from '../store/table/tableThunk';
 import { createDuplicateColumn, getPropertyIcon,handleRenameColumn, hideColumns } from './headerFunctionality';
+import { toast } from 'react-toastify';
 import UpdateQueryPopup from './updateQueryPopup';
 
 
@@ -85,7 +86,8 @@ export default function Headermenu(props) {
       dbId: params?.dbId,
       filterId:params?.filterName
     })
-  );}
+  );
+}
   const { layerProps, renderLayer } = useLayer({
     isOpen,
     auto: true,
@@ -172,14 +174,41 @@ export default function Headermenu(props) {
   //rename column name --> outside click
   function handleBlur(e) {
      e.preventDefault();
-      if (props?.fields[props?.menu?.col]?.title !== header) {
-        handleRenameColumn(props, header, params, dispatch);
-      }
+      if (props?.fields[props?.menu?.col]?.title == header) 
+      {toast.error(" Field is same ")
+      return;
+    }
+      if (header.trim() === "") {
+        toast.error("Filed is not empty ")
+        return;
+    }
+    if (header.includes(" ")) {
+      toast.error("Table name cannot contain spaces");
+      return;
+    }
+    
+      handleRenameColumn(props, header, params, dispatch);
   }
 
   //rename column name --> enter
   function handleKeyDown(e) {
     if (e.key === "Enter") {
+      if (props?.fields[props?.menu?.col]?.title == header) 
+      {toast.error(" Field is same ")
+      return;
+    }
+      if (header.trim() === "") {
+        toast.error("Filed is not empty ")
+        return;
+    }
+    
+    if (header.includes(" ")) {
+      toast.error("Table name cannot contain spaces");
+      return;
+    }
+    
+      handleRenameColumn(props, header, params, dispatch);
+
     handleRenameColumn(props, header, params, dispatch);
       props.setMenu(false);
     }

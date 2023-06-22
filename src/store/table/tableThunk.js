@@ -207,6 +207,7 @@ export const deleteColumns = createAsyncThunk(
         }
         else {
             const deletedfield = await deleteField(payload?.dbId, payload?.tableId, payload?.fieldName)
+            console.log(deletedfield,"deletedfield")
             dispatch(setAllTablesData({
                 dbId: deletedfield?.data?.data?.data?._id,
                 tables: deletedfield?.data?.data?.data?.tables,
