@@ -167,7 +167,7 @@ function CodeBlock(props) {
           <br />
           <code className="code">{props.code}</code>
           <br />
-          <code className="yellow">{props.header?.split(",")?.join("\n")}</code>
+          <code className="yellow">{props.header?.split(",")?.map((head) => `-H ${head.trim()} \n`)}</code>
           <br />
           <br />
           <br />
@@ -189,7 +189,7 @@ function CodeBlock(props) {
             <br />
             <br />
           </code>
-          <code className="yellow">{props.header?.split(",")?.join(" \\\n")}\</code>{" "}
+          <code className="yellow">{props.header?.split(",")?.map((head) => `-H '${head.trim()}' \\\n`)}</code>{" "}
           <br />
 
           {props.body &&
@@ -198,7 +198,7 @@ function CodeBlock(props) {
               <code className="white">
                 {" -d '{\n"}
                 {renderBody()}
-                {"   }' \\"}
+                {"   }' "}
               </code>
             )}
         </pre>
