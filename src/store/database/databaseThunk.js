@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { renameDb, deleteDb,moveDb,deleteDbForUser, restoreDbForUser} from "../../api/dbApi";
-import { addUserInOrg, createOrg, deleteOrg, getAllOrgs, removeUserInOrg, updateOrg } from "../../api/orgApi";
+import { addUserInOrg, createOrg, deleteOrg, getAllOrgs, removeUserInOrg, updateOrg, updateUserType } from "../../api/orgApi";
 import { findUserByEmail } from "../../api/userApi";
 
 export const bulkAdd = createAsyncThunk(
@@ -115,7 +115,16 @@ export const createOrgThunk = createAsyncThunk(
             return allData;
         }
 );  
-
+export const updateUserInOrgThunk=createAsyncThunk(
+    "organdDb/updateUserInOrgThunk", async (payload) => { 
+        await updateUserType(payload.orgId, payload.adminId,{email:payload.email,user_type:payload.user_type}); 
+        const allorgs = await getAllOrgs(payload.orgId)
+        const allData= {
+            allorgs:allorgs?.data?.data
+        }
+        return allData;
+    } 
+)
 export const removeUserInOrgThunk = createAsyncThunk(
     "organdDb/removeUserInOrgThunk", async (payload) => {
          await removeUserInOrg(payload.orgId, payload.adminId,{email:payload.email});

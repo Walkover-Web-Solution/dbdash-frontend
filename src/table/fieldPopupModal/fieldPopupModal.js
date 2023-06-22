@@ -10,6 +10,8 @@ import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
 import ReadMoreOutlinedIcon from "@mui/icons-material/ReadMoreOutlined";
 import TextFormatIcon from "@mui/icons-material/TextFormat";
 import NotesIcon from "@mui/icons-material/Notes";
+import { withStyles } from '@mui/styles';
+
 // import PersonPinIcon from "@mui/icons-material/PersonPin";
 // import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import NumbersIcon from "@mui/icons-material/Numbers";
@@ -24,6 +26,46 @@ import LoookupDataType from "./fieldDataType/lookupDataType";
 import NumberDataType from "./fieldDataType/numberDataType";
 import Joi from "joi";
 import PropTypes from "prop-types";
+const styles = {
+  root: {
+    width: 40,
+    height: 20,
+
+    padding: 0,
+  
+    display: 'flex',
+    backgroundColor: 'transparent',
+  },
+  switchBase: {
+    padding: 2,
+    
+    '&$checked': {
+      transform: 'translateX(20px)',
+      color: '#fff',
+      '& + $track': {
+        opacity: 0.7,
+        backgroundColor: '006400',
+      },
+    },
+  },
+  thumb: {
+    width: 16,
+    height: 16,
+    boxShadow: 'none',
+  },
+  track: {
+    width: '100%',
+    height: 17,
+    borderRadius: 10,
+    borderColor: 'black',
+    opacity: 0.7,
+    backgroundColor: '#000',
+  },
+  checked: {},
+};
+
+// Create a custom Switch component with the applied styles
+const CustomSwitch = withStyles(styles)(Switch);
 
 export default function FieldPopupModal(props) {
   // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -37,7 +79,11 @@ export default function FieldPopupModal(props) {
 
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(1).max(30).required(),
+    fieldName: Joi.string().min(1).max(30).pattern(/^[^\s]+$/).required()
+    .messages({
+      "string.min": `$ Column is required`,
+      "string.pattern.base": ` column must not contain spaces`,
+    }),
   });
 
   const handleSwitchChange = (event) => {
@@ -92,11 +138,7 @@ export default function FieldPopupModal(props) {
 
       setShowNumericOptions(true);
     }
-    else if (event.target.value === 'integer') {
-      setShowNumericOptions(true);
-      props?.setSelectValue('numeric')
-      setShowSwitch(true);
-    }
+  
     else if (event.target.value === 'id') {
       props?.setSelectValue('id')
       var data = props?.metaData;
@@ -104,7 +146,7 @@ export default function FieldPopupModal(props) {
       props?.setMetaData(data);
     }
     else if (event.target.value === 'decimal' && showNumericOptions) {
-      props?.setSelectValue('numeric')
+      props?.setSelectValue('decimal')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
       setShowSwitch(true);
@@ -160,6 +202,7 @@ export default function FieldPopupModal(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          borderRadius:0,
         }}
       >
         <DialogTitle id="form-dialog-title">Create Column</DialogTitle>
@@ -172,7 +215,7 @@ export default function FieldPopupModal(props) {
           value={props?.textValue}
           onChange={handleTextChange}
           onKeyDown={(e) => {
-            if (e.target.value.length >= 1 && e.target.value.length <= 30) {
+            if (e.target.value.length >= 1 && e.target.value.length <= 30 && !e.target.value.includes(" ")  ){
               if (e.key === "Enter") {
 
                 handleClose();
@@ -238,34 +281,40 @@ export default function FieldPopupModal(props) {
           {showLookupField && <LoookupDataType linkedValueName={props?.linkedValueName} setLinkedValueName={props?.setLinkedValueName} selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} key={props.selectedTable} tableId={props?.tableId} />}
 
           {showSwitch && (
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={props?.metaData?.unique}
-                    onClick={(e) => {
-                      handleSwitchChange(e);
-                    }}
-                  />
-                }
-                label="Unique"
+          <FormGroup >
+          <FormControlLabel
+            control={
+              <CustomSwitch
+              
+                checked={props?.metaData?.unique}
+                onClick={(e) => {
+                  handleSwitchChange(e);
+                }}
               />
-            </FormGroup>
+            }
+            label="Unique"
+          />
+        </FormGroup>
+        
           )}
         </DialogContent>
         {props?.selectValue !== "formula" || props?.queryByAi ? (
           <Button
             sx={{ textTransform: "none" }}
+            // className="mui-button"
+          
+            // color="primary"
+            disabled={
+              errors.fieldName ||
+              props?.textValue?.length < 1 ||
+              props?.textValue?.length > 30 ||
+              props?.textValue?.includes(" ")
+
+            }
             onClick={() => {
               handleClose();
               props?.submitData(false);
             }}
-            color="primary"
-            disabled={
-              errors.fieldName ||
-              props?.textValue?.length < 1 ||
-              props?.textValue?.length > 30
-            }
           >
             Create Column
           </Button>

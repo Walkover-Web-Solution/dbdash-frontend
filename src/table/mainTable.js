@@ -1,4 +1,3 @@
-/*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
 import {
   CompactSelection,
@@ -6,9 +5,9 @@ import {
 } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { addColumnrightandleft, deleteRows, updateCells, updateColumnHeaders } from "../store/table/tableThunk";
-import "@glideapps/glide-data-grid/dist/index.css";
+// import "@glideapps/glide-data-grid/dist/index.css";
+import './Glidedatagrid.css';
 import "../../src/App.scss";
-
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
@@ -19,11 +18,12 @@ import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 // import "@glideapps/glide-data-grid/dist/index.css";
-import { cloneDeep } from 'lodash';
+// import { cloneDeep } from 'lodash';
 import { getTableInfo } from "../store/table/tableSelector";
 // import "react-responsive-carousel/lib/styles/carousel.min.css";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
+// import  debounce  from 'lodash.debounce';
 
 export default function MainTable() {
 
@@ -46,22 +46,24 @@ export default function MainTable() {
   const [directionAndId, setDirectionAndId] = useState({})
   const [imageLink, setImageLink] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
-
   const[showSearch,setShowSearch]=useState(false);
   const emptyselection={
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
     current: undefined,
 };
-
   const[selection1,setSelection1]=useState(emptyselection);
   const [fields, setFields] = useState(fields1 || [])
   const tableInfo = useSelector((state) => getTableInfo(state));
-  const tableId = tableInfo?.tableId
+  const tableId = tableInfo?.tableId;
+ 
   useEffect(() => {
     setData(dataa)
   }, [dataa])
 
+
+
+  
   const handleUploadFileClick = useCallback((cell) => {
     if (!data) return;
     const [col, row] = cell;
@@ -94,6 +96,7 @@ export default function MainTable() {
           value: null,
           imageLink: imageLink,
           dataTypes: type,
+          indexIdMapping : { [dataa[row][`fld${tableId.substring(3)}autonumber`]] :  row } 
         })
       ).then(() => {
         toast.success("Image uploaded successfully!");
@@ -114,6 +117,7 @@ export default function MainTable() {
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
+          indexIdMapping : { [dataa[row][`fld${tableId.substring(3)}autonumber`]] :  row } 
         })
       ).then(() => {
         toast.success("Image uploaded successfully!");
@@ -128,7 +132,7 @@ export default function MainTable() {
       setOpen(false);
       dispatch(addColumnrightandleft({
         filterId: params?.filterName, fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
-          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable, selectedFieldName, linkedValueName
+          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable,selectedFieldName: selectedFieldName[0] || selectedFieldName , linkedValueName
       }));
       setSelectValue('longtext')
       setDirectionAndId({})
@@ -137,8 +141,9 @@ export default function MainTable() {
       var data1 = metaData;
       if (selectValue == "link") {
         data1.foreignKey = {
-          fieldId: selectedFieldName,
-          tableId: selectedTable
+          fieldId: selectedFieldName[0],
+          tableId: selectedTable, 
+          fieldType:selectedFieldName[1]
         }
       }
       if(selectValue=="formula")
@@ -146,7 +151,7 @@ export default function MainTable() {
         var queryToSend = JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       }
       setOpen(false);
-      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
+      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName[0] || selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
       setSelectValue('longtext')
     }
   };
@@ -177,25 +182,15 @@ export default function MainTable() {
   }, [data, setData]);
 
 
-  let arrr = [];
   const onCellEdited = useCallback((cell, newValue) => {
+    
     if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
-    const metaDataArray = tableInfo?.columns.filter(obj => obj.id === fields[cell[0]]?.id);
-    arrr = cloneDeep(metaDataArray[0]?.metadata?.option || []);
-    if (fields[cell[0]].dataType == "singleselect") {
-      if (typeof (newValue) == "object") {
+    if (fields[cell[0]].dataType == "singleselect" && (typeof (newValue) == "object") ) {
         newValue = newValue.value || newValue.data.value || newValue.data;
-        if (!arrr.includes(newValue)) {
-          arrr.push(newValue);
-        }
-        editCell(cell, newValue, dispatch, fields, arrr, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
       }
-    }
-    else {
-      editCell(cell, newValue, dispatch, fields, false, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
-    }
+      editCell(cell, newValue, dispatch, fields, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
   }
-    , [dataa, data, fields]);
+    , [dataa, data, fields,fields1]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -227,6 +222,7 @@ export default function MainTable() {
             rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
             value: tag,
             dataTypes: newValue?.kind,
+            indexIdMapping : { [dataa[cell[1]][`fld${tableId.substring(3)}autonumber`]] : cell[1] } 
           })
         );
 
@@ -264,10 +260,7 @@ export default function MainTable() {
     setSelection1(emptyselection)
 
 
-    // const escapeKeyEvent = new KeyboardEvent("keydown", { key: "Escape" });
-    // dataEditorRef.current.dispatchEvent(escapeKeyEvent);
   };
-
 
 
 
@@ -279,17 +272,26 @@ export default function MainTable() {
   const getData = useCallback((cell) => {
     const [col, row] = cell;
     const dataRow = dataa[row] || [];
+
     if (dataRow) {
 
       const d = dataRow[fields[col]?.id];
-      const { dataType } = fields[col] || "";
-
+      
+      let { dataType } = fields[col] || "";
+      let linkdatatype=false;
+      
+      if(dataType=='link')
+      {
+        linkdatatype=true;
+        dataType=fields[col]?.metadata?.foreignKey?.fieldType;
+       
+      }
 
       if (dataType === "autonumber") {
         return {
           allowOverlay: true,
           kind: GridCellKind.Number,
-          readonly: true,
+          readonly: linkdatatype?false:true,
           data: d || "",
           displayData: d?.toString() || "",
         };
@@ -298,7 +300,8 @@ export default function MainTable() {
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
-          readonly: true,
+          readonly: linkdatatype?false:true,
+
           displayData: d || "",
           data: d || "",
         };
@@ -443,13 +446,12 @@ export default function MainTable() {
     }
   }, [dataa, fields]);
 
-
   const realCols = useMemo(() => {
     return fields?.map((c) => ({
       ...c,
       hasMenu: true,
     }));
-  }, [fields]);
+  }, [fields,fields1]);
 
   const handlegridselection = (event) => {
     setSelection1(event);
@@ -506,7 +508,7 @@ export default function MainTable() {
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
-          // onGridSelectionChange={(ele)=>{console.log("ele",ele);}}
+          // onGridSelectionChange={(ele)=>{}}
 
           onColumnMoved={reorder}
           onPaste={true}
@@ -552,6 +554,7 @@ export default function MainTable() {
         submitData={createLeftorRightColumn}
         linkedValueName={linkedValueName}
         setLinkedValueName={setLinkedValueName}
+        textValue={textValue}
         setTextValue={setTextValue}
        
       />}
