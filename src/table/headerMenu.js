@@ -182,6 +182,10 @@ export default function Headermenu(props) {
         toast.error("Filed is not empty ")
         return;
     }
+    if (header.includes(" ")) {
+      toast.error("Table name cannot contain spaces");
+      return;
+    }
     
       handleRenameColumn(props, header, params, dispatch);
   }
@@ -196,6 +200,11 @@ export default function Headermenu(props) {
       if (header.trim() === "") {
         toast.error("Filed is not empty ")
         return;
+    }
+    
+    if (header.includes(" ")) {
+      toast.error("Table name cannot contain spaces");
+      return;
     }
     
       handleRenameColumn(props, header, params, dispatch);

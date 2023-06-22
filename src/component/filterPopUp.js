@@ -1,6 +1,6 @@
 import React, {  useState } from "react";
 import PropTypes from "prop-types";
-import { Box, Typography, TextField, Button } from "@mui/material"; 
+import { Box, Typography, TextField, Button,ClickAwayListener } from "@mui/material"; 
 import { useNavigate } from "react-router-dom";
 import { createFilter } from "../api/filterApi";
 import { useDispatch } from "react-redux";
@@ -70,6 +70,9 @@ const style = {
   //   }
   //   return queryToSend;
   // };
+  const handleClickAway = () => {
+    handleClose();
+  };
 
   const handleCreateFilter = async () => {
     // const data = await updateFilter();
@@ -114,6 +117,7 @@ const style = {
 
   
   return (
+    <ClickAwayListener onClickAway={handleClickAway}>
     <Box sx={style}>
       <Typography sx={{mt:-1,mb:1}}variant="h5">
         Create Filter
@@ -150,6 +154,8 @@ const style = {
         </Button>
       </Box>
     </Box>
+    </ClickAwayListener>
+
   );
 };
 
@@ -158,10 +164,8 @@ FilterModal.propTypes = {
   setOpen: PropTypes.func,
   dbId: PropTypes.any,
   tableName: PropTypes.any,
-  edit: PropTypes.any,
   filterId: PropTypes.any,
   dbData: PropTypes.any,
-  setEdit: PropTypes.func,
   setUnderLine: PropTypes.any,
   buttonRef:PropTypes.any
 };
