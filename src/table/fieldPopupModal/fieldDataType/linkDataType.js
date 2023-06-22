@@ -9,9 +9,9 @@ import { useEffect } from 'react';
 
 export default function LinkDataType(props) {
   const allTables = useSelector((state) => getAllTableInfo(state));
-  const tableId = useSelector((state) => state.table.tableId);
+  // const tableId = useSelector((state) => state.table.tableId);
   const AllTableInfo = cloneDeep(allTables)
-  delete AllTableInfo?.tables[tableId]
+  // delete AllTableInfo?.tables[tableId]
   const [showUniqueFieldsDropdown, setShowUniqueFieldsDropdown] = useState(true);
   let uniqueFields = AllTableInfo?.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo?.tables[props?.selectedTable]?.fields)?.filter((fields) => {
     if (fields[1]?.metaData?.unique) {
@@ -20,7 +20,7 @@ export default function LinkDataType(props) {
   })
   useEffect(()=>{
     if(uniqueFields?.length > 0){
-      props?.setSelectedFieldName(uniqueFields?.[0][0])
+      props?.setSelectedFieldName([uniqueFields[0][0],uniqueFields[0][1]?.fieldType]);
     }
   },[props?.selectedTable])
 
@@ -48,34 +48,33 @@ export default function LinkDataType(props) {
           ))}
         </Select>
       }
+{
+  showUniqueFieldsDropdown && uniqueFields?.length > 0 && props?.selectedFieldName ? (
+    <Select
+      labelId="select-label"
+      id="select"
+      value={props?.selectedFieldName[0]}
+      sx={{
+        margin: 1,
+        minWidth: 120,
+      }}
+      onChange={(e) => 
+       {
+        props?.setSelectedFieldName([e.target.value,uniqueFields.find(x=>x[0]==e.target.value)[1]?.fieldType || ""])}}
+    >
+      {uniqueFields.map((fields) => (
+        <MenuItem key={fields[0]} value={fields[0]}>
+          {fields[1]?.fieldName}
+        </MenuItem>
+      ))}
+    </Select>
+  ) : (
+    showUniqueFieldsDropdown && (
+      <Typography sx={{ color: "red" }}>No unique key</Typography>
+    )
+  )
+}
 
-
-      {
-        showUniqueFieldsDropdown && uniqueFields?.length > 0 && props.selectedTable !== tableId ?
-          (<Select
-            labelId="select-label"
-            id="select"
-            value={props?.selectedFieldName}
-            sx={{
-              margin: 1,
-              minWidth: 120,
-            }}
-            onChange={(e) => props?.setSelectedFieldName(e.target.value)}
-          >
-            {
-              uniqueFields
-                .map((fields) =>
-                (
-                  <MenuItem key={fields[0]} value={fields[0]}>
-                    {fields[1]?.fieldName}
-                  </MenuItem>
-                ))
-            }
-          </Select>
-          ) : (
-            showUniqueFieldsDropdown && props.selectedTable !== tableId && <Typography sx={{ color: "red" }}>No unique key</Typography>
-          )
-      }
     </>
   )
 }

@@ -30,7 +30,7 @@ const response=`
         parent='addrecord'
         method="POST"
           code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
-          header={`-H auth-key: AUTH_TOKEN,-H Content-Type: application/json`}
+          header={`auth-key: AUTH_TOKEN,Content-Type: application/json`}
           body={arr}
         />
         <ResponseBox
