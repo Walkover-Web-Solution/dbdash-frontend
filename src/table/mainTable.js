@@ -1,4 +1,3 @@
-/*eslint-disable */
 import React, { useState, useCallback, useEffect } from "react";
 import {
   CompactSelection,
@@ -19,12 +18,12 @@ import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 // import "@glideapps/glide-data-grid/dist/index.css";
-import { cloneDeep } from 'lodash';
+// import { cloneDeep } from 'lodash';
 import { getTableInfo } from "../store/table/tableSelector";
 // import "react-responsive-carousel/lib/styles/carousel.min.css";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-import  debounce  from 'lodash.debounce';
+// import  debounce  from 'lodash.debounce';
 
 export default function MainTable() {
 
