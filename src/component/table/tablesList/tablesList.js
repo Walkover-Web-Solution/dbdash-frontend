@@ -173,7 +173,7 @@ useEffect(() => {
   
     const tableNames = Object.keys(dbData.db.tables);
     dispatch(setTableLoading(true));
-    if(params?.tableName){
+    if(params?.tableName && !params?.filterName){
       dispatch(
         bulkAddColumns({
           dbId: dbData?.db?._id,

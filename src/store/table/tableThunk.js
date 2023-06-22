@@ -28,24 +28,18 @@ const replaceCreatedByIdWithName = async (userInfo, org_id) => {
     return userJson;
 }
 
-const getHeaders = async (dbId, tableName, payloadfields, { getState }) => { 
-    // const fields = payloadfields || await getAllfields(dbId, tableName);
-    const fields =payloadfields|| await  getAllTableInfo(getState())?.tables?.[tableName]?.fields;
-    const fieldIds = await getAllTableInfo(getState())?.tables?.[tableName]?.fieldIds
-    let columns = [
-        // {
-        //     id: 9999991,
-        //     width: 10,
-        //     label: "check",
-        //     disableResizing: true,
-        //     dataType: "check",
-        //     accessor: "check",
-        // },
-    ];
-    const arr =  fields;
-    
+const getHeaders = async (dbId, tableName, payloadfields, { getState },fieldArrayInFilter) => { 
+    // console.log("getAllTableInfo(getState())?.tables?.[tableName]",getAllTableInfo(getState())?.tables?.[tableName])
+    let fields =payloadfields|| await  getAllTableInfo(getState())?.tables?.[tableName]?.fields;
+    const fieldIds = fieldArrayInFilter || await getAllTableInfo(getState())?.tables?.[tableName]?.fieldIds
+    let columns = [];
+    const viewFields  = getAllTableInfo(getState())?.tables?.[tableName]?.view?.fields;
+    if(!fieldArrayInFilter){
+        fields={...fields ,...viewFields }
+    }
+
     fieldIds.forEach((fieldId, index) => {
-        const field = arr[fieldId];
+        const field = fields[fieldId];
         
         if (field) {
             var json = {
@@ -113,19 +107,22 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
-        var columns = null
-        columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields, { getState })
-        const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
-        const dataa = {
-            "columns": columns,
-            "row": data?.rows,
-            "tableId": payload?.tableName,
-            "dbId": payload?.dbId,
-            "pageNo": data?.pageNo,
-            "isMoreData": !(data?.offset == null)
-        }
-        dispatch(setTableLoading(false))
-        return dataa;
+       
+            var columns = null
+            columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields, { getState })
+            const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)
+            const dataa = {
+                "columns": columns,
+                "row": data?.rows,
+                "tableId": payload?.tableName,
+                "dbId": payload?.dbId,
+                "pageNo": data?.pageNo,
+                "isMoreData": !(data?.offset == null)
+            }
+            dispatch(setTableLoading(false))
+            return dataa;
+        
+        
     }
 );
 export const filterData = createAsyncThunk(
@@ -134,7 +131,10 @@ export const filterData = createAsyncThunk(
             var filterQuery;
             const table = getAllTableInfo(getState())?.tables?.[payload?.tableId]
             const filter = table?.filters?.[payload?.filterId];
-            const filterFields = filter?.fields;
+            let  filterFields = filter?.fields  ;
+            if(filterFields && Object.keys(filterFields).length==0){
+                filterFields = table?.fields
+            }
             const fieldArrayInFilter = filter?.fieldIds;
             if (payload?.filter) {
                 filterQuery = payload?.filter
@@ -159,14 +159,13 @@ export const filterData = createAsyncThunk(
                 page = page + 1;
             }
             let columns = {};
-            // const viewFields =table.view?.fields;//views fields
-            // Create a new object with fields sorted based on the sorted fieldIds array;
+            const viewFields =table.view?.fields;//views fields
             fieldArrayInFilter?.forEach((id) => {
                 columns[id] = table?.fields?.[id];
             });
             // if(!fieldArrayInFilter)
             // {
-            //     columns = { ...table?.fields,...viewFields}
+                columns = { ...table?.fields,...viewFields}
             // }
 
             filterFields && Object.entries(filterFields).map((entry) => {
@@ -176,7 +175,7 @@ export const filterData = createAsyncThunk(
                 columns[id] = { ...columns[id], metaData: { ...columns[id]?.metaData, hide: hide, width: width } };
             });
 
-            columns = await getHeaders(payload?.dbId,payload?.tableId,columns,{getState});
+            columns = await getHeaders(payload?.dbId,payload?.tableId,columns,{getState},fieldArrayInFilter);
 
             const dataa = {
                 "columns": columns,
@@ -429,19 +428,7 @@ export const addRows = createAsyncThunk(
         return newRow?.data?.data[0];
     }
 )
-// export const deleteRows = createAsyncThunk(
-//     "table/deleteRows",
-//     async (payload, { dispatch, getState }) => {
-//         var arr = [];
-//         const { tableId, dbId } = getState().table
-//         for (var index in payload) {
-//             arr.push(payload[index].original.id || payload[index].original["fld" + tableId.substring(3) + "autonumber"])
-//         }
-//         await deleteRow(dbId, tableId, { row_id: arr });
-//         dispatch(bulkAddColumns({ tableName: tableId, dbId: dbId }));
-//         return payload;
-//     }
-// )
+
 export const updateColumnsType = createAsyncThunk(
     "table/updateColumnsType",
     async (payload, { dispatch }) => {

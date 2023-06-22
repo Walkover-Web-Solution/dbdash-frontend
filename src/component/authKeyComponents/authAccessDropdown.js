@@ -68,7 +68,6 @@ export default function AuthAccessDropDown({
   
 
   useEffect(() => {
-    console.log("hello");
     callFunc();
   }, []);
 
