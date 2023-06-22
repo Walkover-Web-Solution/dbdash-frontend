@@ -27,7 +27,7 @@ import { toast } from "react-toastify";
 import { selectActiveUser } from "../../../store/user/userSelector";
 import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
 export default function TablesList({ dbData }) {
-  const shareViewUrl = process.env.REACT_APP_SHAREDVIEW_URL
+  const shareViewUrl = process.env.REACT_APP_API_BASE_URL
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
