@@ -212,6 +212,8 @@ export default function MainTable() {
       let tag = "";
       let arr1 = newValue.data.tags;
       let arr2 = oldValue.data.tags || [];
+      if(arr1.length>arr2.length)
+      {
       let arr = arr1.filter(x => !arr2.includes(x));
 
       tag = arr[0] || "";
@@ -228,6 +230,25 @@ export default function MainTable() {
 
       }
     }
+    else if(arr1.length<arr2.length)
+    {
+      let arr = arr2.filter(x => !arr1.includes(x));
+      tag = arr[0] || "";
+
+      if (fields[cell[0]]?.id && tag != "") {
+        dispatch(
+          updateCells({
+            columnId: fields[cell[0]]?.id,
+            rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
+            value: {delete:tag},
+            dataTypes: newValue?.kind,
+            indexIdMapping : { [dataa[cell[1]][`fld${tableId.substring(3)}autonumber`]] : cell[1] } 
+          })
+        );
+
+      }
+    }
+  }
 
     if (newValue.kind === 'number') {
       if (newValue?.data?.toString().length < 13 || !newValue?.data)
@@ -237,6 +258,7 @@ export default function MainTable() {
 
     }
   }, [dataa, fields]);
+  
   const handleDeleteRow = (selection) => {
 
     if (selection.current) {
