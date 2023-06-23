@@ -2,10 +2,7 @@ import axios from "../interceptor/interceptor.js";
 const URL = process.env.REACT_APP_API_BASE_URL;
 
 const insertRow = async (db_id, tableName) => {
-    for(var i =0;i<1500; i++)
-    {
-          await axios.post(URL + `/${db_id}/${tableName}`, {"records": [{ }] })
-    }
+    await axios.post(URL + `/${db_id}/${tableName}`, {"records": [{ }] })   
 }
 
 
