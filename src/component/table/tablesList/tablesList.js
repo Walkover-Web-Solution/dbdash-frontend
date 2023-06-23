@@ -43,7 +43,6 @@ export default function TablesList({ dbData }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false);
-  // const [openFilter,setOpenFilter]=useState(false)
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false);
@@ -54,8 +53,6 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(params?.filterName)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
-  // const [view, setView] = useState(null)
-  // const [link, setLink] = useState("Link");
   const AllTable = useSelector((state) => getAllTableInfo(state));
   const [openManageField, setOpenManageField] = useState(false);
   const userDetails = useSelector((state) => selectActiveUser(state));
@@ -83,41 +80,15 @@ const saveTable = async () => {
 
   setOpen(false);
   const apiCreate = await createTable(dbData?.db?._id, data);
-  // setAllTablesData({
-  //   dbId:apiCreate.data.data._id,
-  //   tables :apiCreate.data.data.tables
-  // })
   await dispatch(createTable1({ tables: apiCreate.data.data.tables }));
   const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
     return apiCreate?.data?.data?.tables[key].tableName === table;
   });
-//   if(matchedKey)
-//   {
-//     console.log("mathedkey")
-//   setPage(1);
-//   // dispatch(resetData());
-//     dispatch(bulkAddColumns({
-//     "dbId": dbData?.db?._id,
-//     "tableName": matchedKey,
-//     "pageNo": 1,
-//   })).then(()=> navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`));
- 
-// }
+
   if (matchedKey) {
     navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
   }
   
-  // dispatch(
-  //   bulkAddColumns({
-  //     dbId: dbData?.db?._id,
-  //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-  //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-  //     org_id: dbData?.db?.org_id,
-  //     pageNo: 1,
-  //     filterId : params?.filterName,
-  //     // fields:dbData?.db?.tables[params?.tableName]?.fields         
-  //   })       
-  // );
   const newTableIndex = Object.keys(AllTableInfo).length;
   setValue(newTableIndex);
 };
@@ -409,6 +380,7 @@ useEffect(() => {
             <ShareLinkPopUp
               title="Share Link"
               open={shareLinkOpen}
+  
               setOpen={setShareLinkOpen}
               label="Link"
               textvalue={link}

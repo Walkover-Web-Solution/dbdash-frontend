@@ -150,7 +150,6 @@ export default function MainTable() {
         var queryToSend = JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       }
       setOpen(false);
-      console.log(selectedFieldName,"assfd")
       addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable,  selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
       setSelectValue('longtext')
     }
