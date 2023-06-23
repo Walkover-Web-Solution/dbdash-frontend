@@ -1,31 +1,43 @@
 @import '../../../../assets/styling.scss';
 
 .basic-stuff-container {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
 }
-
 .bold-text {
   font-weight: $bold !important;
 }
 
 .field-name-container {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   margin-bottom: 10px; /* Add margin bottom for spacing between field names */
 }
 
 .field-name {
   font-size: 20px;
-  margin-left: 5px; /* Add margin left for spacing between field name and copy button */
 }
 
 .field-id-container {
   display: flex;
   align-items: center;
   font-size: 20px;
+  justify-content: center !important;
   margin-bottom: 10px; /* Add margin bottom for spacing between field IDs */
+  position: relative; /* Add position relative to create a stacking context */
+
+  .copied-text {
+    position: absolute; /* Position the copied text relative to the field ID container */
+    right: -5% !important ; /* Position the copied text to the left of the field ID */
+    top: 50%; /* Position the copied text vertically in the middle */
+    transform: translateY(-50%); /* Adjust the vertical positioning */
+    font-size: 12px;
+    color: $fontColorVAlue;
+  }
 }
+
 
 span {
   padding: 0 !important;
@@ -54,4 +66,10 @@ span {
   font-size: 12px;
   color: $fontColorVAlue;
   margin-left: 5px; /* Add margin left for spacing between copied text and copy button */
+}
+.left{
+  text-align: left !important;
+}
+.right{
+  text-align: right !important;
 }

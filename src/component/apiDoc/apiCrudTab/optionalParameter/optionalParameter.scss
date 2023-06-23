@@ -4,11 +4,12 @@ font-family: 'Inter' !important;
 }
 
 .optional-parameter-container {
-    border: 2px solid $fontColorVAlue !important;
+  border-top: 0.1px solid $linecolor !important;
+
     border-radius: 0px !important;
     padding: 10px !important;
-
-    width: 34.5vw !important;
+padding-left: 0px !important;
+    width: 50vw !important;
     background-color: $bgColorValue !important;
     padding-bottom: 20px !important;
   }

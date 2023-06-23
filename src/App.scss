@@ -3,10 +3,14 @@ body{
   background-color: $bgColorValue;
   color:$fontColorVAlue;
   font-family: 'Inter' !important;
+ 
 }
 Button{
   border-radius:0 !important;
 
+}
+.fontsize{
+  font-size: $tablepagefontsize !important;
 }
 .mui-button{
   background-color: $fontColorVAlue !important;
@@ -15,4 +19,8 @@ Button{
 .mui-button-outlined{
   color:$fontColorVAlue !important;
   border-color:$fontColorVAlue !important;
+}
+.Mui-selected  {
+  background-color: $fontColorVAlue !important;
+  color: $bgColorValue !important;
 }
