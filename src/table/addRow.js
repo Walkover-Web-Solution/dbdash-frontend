@@ -16,14 +16,23 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
 }
 let valuesArray = [];
 let indexIdMapping = {}
+
 const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
-  dispatch(
-    updateCells({
-      updatedArray: valuesArray,
-      indexIdMapping : indexIdMapping
-    })
-  );
+  const batchSize = 1000; // Set the batch size to 1000
+  const totalRows = valuesArray.length;
+
+  for (let i = 0; i < totalRows; i += batchSize) {
+    const batch = valuesArray.slice(i, i + batchSize);
+    dispatch(
+      updateCells({
+        updatedArray: batch,
+        indexIdMapping: indexIdMapping
+      })
+    );
+  }
+ 
   valuesArray = []
+  indexIdMapping = {}
 }, 300);
 
 export const editCell = (cell, newValue, dispatch, fields, params, currentrow, dataType) => {
@@ -60,7 +69,7 @@ export const editCell = (cell, newValue, dispatch, fields, params, currentrow, d
         }
       });
     }
-    indexIdMapping[currentrow[`fld${tableId}autonumber`]] =  cell[1]
+    indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
     updateCellsAfterSomeDelay(dispatch)
     return;
   }

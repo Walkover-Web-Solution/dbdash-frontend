@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
@@ -12,22 +12,22 @@ import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../../table/mainTable";
 import { createTable1 } from "../../../store/allTable/allTableThunk";
-
+import AddFilterPopup from "../../addFIlterPopup";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 import { createTable, exportCSV } from "../../../api/tableApi";
-import './tablesList.scss'
-import variables from '../../../assets/styling.scss';
+import "./tablesList.scss";
+import variables from "../../../assets/styling.scss";
 import { createViewTable } from "../../../api/viewTableApi";
 // import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown";
 import { toast } from "react-toastify";
 import { selectActiveUser } from "../../../store/user/userSelector";
+import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
 export default function TablesList({ dbData }) {
-
-  const shareViewUrl = process.env.REACT_APP_SHAREDVIEW_URL
+  const shareViewUrl = process.env.REACT_APP_API_BASE_URL
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
@@ -46,25 +46,26 @@ export default function TablesList({ dbData }) {
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false);
+  const buttonRef = useRef(null);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const tableLength = Object.keys(AllTableInfo)?.length;
-  const [underLine, setUnderLine] = useState(null)
+  const [underLine, setUnderLine] = useState(params?.filterName)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
-  const [view, setView] = useState(null)
-  // const [link, setLink] = useState("Link");
+  const AllTable = useSelector((state) => getAllTableInfo(state));
   const [openManageField, setOpenManageField] = useState(false);
   const userDetails = useSelector((state) => selectActiveUser(state));
   const handleClick = (event, id) => {
     if (id === "share") {
       setShareLinkOpen(true);
     } else {
-      setFilterId( id);
+      setFilterId(id);
       setcurrentTable(id);
       setAnchorEl(event.currentTarget);
     }
   };
+ 
 
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
@@ -72,64 +73,50 @@ export default function TablesList({ dbData }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const saveTable = async () => {
-    const data = {
-      tableName: table,
-    };
-    setOpen(false);
-    const apiCreate = await createTable(dbData?.db?._id, data);
-    dispatch(createTable1({ tables: apiCreate.data.data.tables }));
-    const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
-      return apiCreate?.data?.data?.tables[key].tableName === table;
-    });
-    if (matchedKey) {
-      navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
-    }
-    // dispatch(
-    //   bulkAddColumns({
-    //     dbId: dbData?.db?._id,
-    //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-    //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-    //     org_id: dbData?.db?.org_id,
-    //     pageNo: 1,
-    //     filterId : params?.filterName,
-    //     // fields:dbData?.db?.tables[params?.tableName]?.fields         
-    //   })       
-    // );
-    const newTableIndex = Object.keys(AllTableInfo).length;
-    setValue(newTableIndex);
+const saveTable = async () => {
+  const data = {
+    tableName: table,
   };
+
+  setOpen(false);
+  const apiCreate = await createTable(dbData?.db?._id, data);
+  await dispatch(createTable1({ tables: apiCreate.data.data.tables }));
+  const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
+    return apiCreate?.data?.data?.tables[key].tableName === table;
+  });
+
+  if (matchedKey) {
+    navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
+  }
+  
+  const newTableIndex = Object.keys(AllTableInfo).length;
+  setValue(newTableIndex);
+};
   const handleEdit = async () => {
-    // if(params?.filterName){
-      setEdit(true);
+    if(params?.filterName){
+    
       setOpenn(true);
-    // }else{
-    //   setEdit(false);
-    //   setOpenn(false);
-    //   toast.error("choose the filter First");
-    // }
+      setEdit(true);
+      // setOpenFilter(true); 
+    }else{
+      setEdit(false);
+      setOpenn(false);
+      toast.error("choose the filter First");
+    }
   };
   function onFilterClicked(filter, id) {
-    setUnderLine(id)
+    setUnderLine(id);
     setFilterId(params?.filterName || id);
-    // setPage(1);
-    dispatch(filterData({
-      filterId : id,
-      tableId: params?.tableName ,
-      filter: filter,
-      dbId: dbData?.db?._id,
-    }))
-    // dispatch(
-    //   bulkAddColumns({
-    //     dbId: dbData?.db?._id,
-    //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-    //     filter: filter,
-    //     org_id: dbData?.db?.org_id,
-    //     pageNo: 1,
-    //     filterId : id,
-    //     fields:dbData?.db?.tables[params?.tableName]?.fields 
-    //   })
-    // );
+    if(params?.filterName == id )
+    {
+      dispatch(filterData({
+        filterId : id,
+        tableId: params?.tableName ,
+        filter: filter,
+        dbId: dbData?.db?._id,
+      }))
+    }
+  
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
   const deleteFilterInDb = async (filterId) => {
@@ -145,7 +132,7 @@ export default function TablesList({ dbData }) {
       setAllTablesData({
         dbId: dbData?.db?._id,
         tables: deletedFilter.data.data.tables,
-        orgId :  deletedFilter.data.data.org_id
+        orgId: deletedFilter.data.data.org_id,
       })
     );
     dispatch(
@@ -159,26 +146,24 @@ export default function TablesList({ dbData }) {
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
-  useEffect(() => {
-    
-     if (dbData?.db?.tables && !(params?.filterName)) {
-      const tableNames = Object.keys(dbData.db.tables);
-      dispatch(setTableLoading(true));
+useEffect(() => {
+  
+    const tableNames = Object.keys(dbData.db.tables);
+    dispatch(setTableLoading(true));
+    if(params?.tableName && !params?.filterName){
       dispatch(
-
         bulkAddColumns({
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
           pageNo: 1,
-          // fields: dbData?.db?.tables[params?.tableName]?.fields
         })
       );
-      setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
-      if (!params?.tableName) {
-        navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
-      }
     }
-  }, [params?.tableName]);
+    setValue(tableNames?.indexOf(params?.tableName) !== -1? tableNames?.indexOf(params?.tableName): 0);
+    if (!params?.tableName) {
+      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+    }
+}, [params?.tableName]);
   useEffect(()=>{
     if (params?.filterName) {
       setUnderLine(params?.filterName)
@@ -188,54 +173,39 @@ export default function TablesList({ dbData }) {
         filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
         dbId: dbData?.db?._id,
       }))
-      // dispatch(
-      //   bulkAddColumns({
-      //     dbId: dbData?.db?._id,
-      //     tableName: params?.tableName || Object.keys(dbData?.db?.tables)[0],
-      //     filter: AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-      //     org_id: dbData?.db?.org_id,
-      //     pageNo: 1,
-      //     filterId : params?.filterName,
-      //     fields:dbData?.db?.tables[params?.tableName]?.fields         
-      //   })       
-      // );
+   
     }
-  },[params?.filterName])
-  let dataa1 = "";
+  }, [params?.filterName]);
+
   const shareLink = async () => {
-    const viewId = dbData?.db?.tables[params?.tableName]?.filters[params?.filterName]?.viewId
-    if (viewId) {
-      setLink(shareViewUrl + `/${viewId}`)
-    }
-    else if (view){
-      setLink(shareViewUrl + `/${view}`)
-
-    }
-    else {
-      const db_Id = dbData?.db?._id
-      const data = {
-        tableId: params?.tableName,
-        filterId: params?.filterName
-      }
-      dataa1 = await createViewTable(db_Id, data);
-      setView(Object.keys(Object.values(dataa1.data.data)[0])[0])
-
-      setLink(shareViewUrl + `/${Object.keys(Object.values(dataa1.data.data)[0])[0]}`)
-    }
+  const isViewExits  = AllTable?.tables?.[params?.tableName]?.filters?.[params?.filterName]?.viewId;
+  if(isViewExits)
+  {
+    setLink(shareViewUrl +`/${isViewExits}`);
+    return;
   }
-  // const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-  
-  // const handleMenuOpen = (event) => {
-  //   setMenuAnchorEl(event.currentTarget);
-  // };
+    const db_Id = AllTable.dbId;
+    const data = {
+      tableId: params?.tableName,
+      filterId: params?.filterName,
+    };
+    const dataa1 = await createViewTable(db_Id, data);
+     dispatch( setAllTablesData({
+        dbId: dataa1.data.data.dbData._id,
+        tables: dataa1.data.data.dbData.tables,
+        orgId: dataa1.data.data.dbData.org_id
+      }))
+    setLink(shareViewUrl+`/${dataa1.data.data.viewId}`);
+  };
+
   const exportCSVTable = async () => {
-    const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query
+    const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query;
     const data = {
       query: query,
       userName: userDetails?.fullName,
-      email: userDetails?.email
+      email: userDetails?.email,
     };
-    await exportCSV(dbData?.db?._id,params?.tableName, data);
+    await exportCSV(dbData?.db?._id, params?.tableName, data);
     toast.success("Your CSV file has been mailed successfully");
   };
   return (
@@ -248,7 +218,6 @@ export default function TablesList({ dbData }) {
               onChange={handleChange}
               TabIndicatorProps={{
                 style: { display: "none" },
-
               }}
               className={`tabs `}
               variant="scrollable"
@@ -257,7 +226,7 @@ export default function TablesList({ dbData }) {
             >
               {AllTableInfo &&
                 Object.entries(AllTableInfo).map((table, index) => (
-                  <Box key={index} >
+                  <Box key={index}>
                     <SingleTable
                       table={table}
                       tableLength={tableLength}
@@ -279,40 +248,81 @@ export default function TablesList({ dbData }) {
             </Button>
           </Box>
         </Box>
-        <Box sx={{paddingLeft:'24px',paddingRight:'20px'}}  display="flex" flexWrap="nowrap">
+        <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap'}}   >
+        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden'}}>
+        <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*88)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
           {AllTableInfo[params?.tableName]?.filters &&
             Object.entries(AllTableInfo[params?.tableName]?.filters).map(
               (filter, index) => (
                 <Box key={index} className="custom-box">
                   <Box
                     className="filter-box"
-                    
-                    style={{ textDecoration: underLine === filter[0] ? 'underline' : 'none' }}
+                    style={{
+                      textDecoration:
+                        underLine === filter[0] ? "underline" : "none",
+                    }}
                     variant="outlined"
                   >
-                    <div onClick={() => {
-                      onFilterClicked(filter[1].query, filter[0], filter[1]);
-                    }}>{filter[1]?.filterName}</div>
+                    <div
+                      onClick={() => {
+                        onFilterClicked(filter[1].query, filter[0], filter[1]);
+                      }}
+                    >
+                      {filter[1]?.filterName}
+                    </div>
                     <IconButton onClick={(e) => handleClick(e, filter[0])}>
                       <MoreVertIcon className="moreverticon" />
                     </IconButton>
                   </Box>
                 </Box>
-              )
+
+              ) 
             )}
+            </div>
+            </div>
           <Button
             onClick={() => handleOpenn()}
             variant="contained"
+            ref={buttonRef}
             className="mui-button filter-button"
           >
-            Add Filter
+            Add View
           </Button>
         </Box>
+        {openn &&  !edit &&  (
+         
+         <FilterModal
+           dbData={dbData}
+           buttonRef={buttonRef}
+           open={openn }
+           edit={edit}
+           setEdit={setEdit}
+           setOpen={setOpenn}
+           filterId={filterId}
+           dbId={dbData?.db?._id}
+           tableName={params?.tableName}
+           setUnderLine={setUnderLine}
+         />
+      
+       )}
+   
         <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
-          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 }} onClick={handleClickOpenManageField}>Manage Fields</Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}} onClick={handleClickOpenManageField}>Manage Fields</Button>
+          {  params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0,mr:2 }} onClick={handleEdit}>Edit filter</Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}}  onClick={(e) => {
+              handleClick(e, "share");
+              shareLink();
+            }
+            }>share view</Button></>}
+
         </div>
-          {openManageField && <ManageFieldDropDown openManageField={openManageField} setOpenManageField={setOpenManageField}/>}
+        {openManageField && (
+          <ManageFieldDropDown
+            openManageField={openManageField}
+            setOpenManageField={setOpenManageField}
+          />
+        )}
         {open && (
           <PopupModal
             title="Create Table"
@@ -324,32 +334,14 @@ export default function TablesList({ dbData }) {
             joiMessage={"Table name"}
           />
         )}
-        {openn && (
-          <FilterModal
-            dbData={dbData}
-            open={openn}
-            edit={edit}
-            setEdit={setEdit}
-            setOpen={setOpenn}
-            filterId={filterId}
-            dbId={dbData?.db?._id}
-            tableName={params?.tableName}
-            setUnderLine={setUnderLine}
-          />
-        )}
+      
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={() => handleClose()}
         >
-          <MenuItem
-            onClick={() => {
-              handleEdit();
-              handleClose();
-            }}
-          >
-            Edit
-          </MenuItem>
+        
+        
           <MenuItem
             onClick={() => {
               deleteFilterInDb(currentTable);
@@ -359,35 +351,42 @@ export default function TablesList({ dbData }) {
             Delete
           </MenuItem>
           <MenuItem
-            onClick={(e) => {
-              handleClick(e, "share");
-              shareLink();
-            }
-            }
-          >
-            Share this view
-          </MenuItem>
-          <MenuItem
-              onClick={() => {
-                // deleteFilterInDb(currentTable);
-                exportCSVTable();
-                handleClose();
-              }}
-          >
+            onClick={() => {
+            // deleteFilterInDb(currentTable);
+            exportCSVTable();
+            handleClose();
+            }}
+            >
             Export CSV
-          </MenuItem>
-          {shareLinkOpen && (
+            </MenuItem>
+        
+
+        </Menu>
+      </div>
+      {openn&& edit && (<AddFilterPopup
+        dbData={dbData}
+        open={openn}
+        edit={edit}
+        setEdit={setEdit}
+        setOpen={setOpenn}
+        filterId={params?.filterName}
+        dbId={dbData?.db?._id}
+        tableName={params?.tableName}
+        setUnderLine={setUnderLine}
+      />)
+      
+      }
+      {shareLinkOpen && (
             <ShareLinkPopUp
               title="Share Link"
               open={shareLinkOpen}
+  
               setOpen={setShareLinkOpen}
               label="Link"
               textvalue={link}
             />
           )}
-        </Menu>
-      </div>
-      <div  style={{ marginTop: "200px" }}>
+      <div  style={{ marginTop: "250px" }}>
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
         ) : (
@@ -410,4 +409,3 @@ TablesList.propTypes = {
   label: PropTypes.any,
   setTables: PropTypes.any,
 };
-// select * from tblv1ry0d where CAST(fldv1ry0dautonumber as CHAR)  LIKE '%1%'

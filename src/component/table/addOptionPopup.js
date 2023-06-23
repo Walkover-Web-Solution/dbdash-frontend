@@ -13,6 +13,8 @@ const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
+  maxHeight:'500px',
+  overflowY:'auto',
   transform: "translate(-50%, -50%)",
   width: 300,
   bgcolor: "background.paper",
@@ -26,9 +28,10 @@ export default function AddOptionPopup(props) {
   const [inputValues, setInputValues] = useState([]);
   const params = useParams();
   const dispatch = useDispatch();
+  const [value, setValue] = useState("");
   const fields1 = useSelector((state) => state.table.columns);
 
-  const colors = ["#FFD4DF", "#CCE0FE", "#CEF5D2","whitesmoke","cadetblue"];
+  const colors = ["#FFD4DF", "#CCE0FE", "#CEF5D2", "whitesmoke", "cadetblue"];
 
   const [valueAndColor, setValueAndColor] = useState();
 
@@ -36,16 +39,55 @@ export default function AddOptionPopup(props) {
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === props?.columnId);
   let top100Films = metaDataArray[0]?.metadata?.option || [];
 
-  // const handleAddClick = () => {
-  //   setInputValues([...inputValues, ""]);
-  // };
-
   const handleAddClick = () => {
-    if (inputValues[inputValues.length - 1] === "") {
+    if (value !== "") {
+      if (props?.fieldType === "multipleselect") {
+        if (top100Films.some((item) => item.value.trim() === value)) {
+          toast.error("This option already exists");
+        } else {
+          const data = {
+            value: value,
+            color: getRandomColor(colors),
+          };
+          const updatedMetadata = [...top100Films, data];
+
+          dispatch(
+            updateMultiSelectOptions({
+              dbId: params?.dbId,
+              tableName: params?.tableName,
+              fieldName: props?.columnId,
+              columnId: props?.columnId,
+              dataTypes: "multipleselect",
+              metaData: updatedMetadata,
+            })
+          );
+          toast.success("Option added successfully");
+          setValue("");
+        }
+      } else if (props?.fieldType === "singleselect") {
+        if (top100Films.includes(value.trim())) {
+          toast.error("The value is already available");
+        } else {
+          const updatedMetadata = [...top100Films, value];
+          dispatch(
+            updateColumnHeaders({
+              dbId: params?.dbId,
+              tableName: params?.tableName,
+              fieldName: props?.columnId,
+              columnId: props?.columnId,
+              dataTypes: "singleselect",
+              metaData: { option: updatedMetadata },
+            })
+          );
+          toast.success("Option added successfully");
+         setValue("");
+        }
+      }
+    } else {
       toast.error("Please enter a value");
-      return; // Don't add a new TextField if the most recent one is empty
     }
-    setInputValues([...inputValues, ""]);
+    const textField = document.getElementById("myTextField");
+    textField.focus();
   };
 
   const handleInputChange = (event, index) => {
@@ -76,58 +118,10 @@ export default function AddOptionPopup(props) {
   }
 
   const handleInputKeyPress = (event) => {
-    const value = event?.target?.value.trim();
 
     if (event.key === "Enter") {
-      if (value !== "") {
-        if (props?.fieldType === "multipleselect") {
-          if (top100Films.some((item) => item.value.trim() === value)) {
-            toast.error("The value is already available");
-          } else {
-            const data = {
-              value: event?.target?.value,
-              color: getRandomColor(colors),
-            };
-            const updatedMetadata = [...top100Films, data];
-
-            dispatch(
-              updateMultiSelectOptions({
-                dbId: params?.dbId,
-                tableName: params?.tableName,
-                fieldName: props?.columnId,
-                columnId: props?.columnId,
-                dataTypes: "multipleselect",
-                metaData: updatedMetadata,
-              })
-            );
-            toast.success("Option added successfully");
-            event.target.value = "";
-            // setInputValues([...inputValues, ""]); // Show another option to be filled
-          }
-        } else if (props?.fieldType === "singleselect") {
-          if (top100Films.includes(value.trim())) {
-            toast.error("The value is already available");
-          } else {
-            const updatedMetadata = [...top100Films, value];
-            dispatch(
-              updateColumnHeaders({
-                dbId: params?.dbId,
-                tableName: params?.tableName,
-                fieldName: props?.columnId,
-                columnId: props?.columnId,
-                dataTypes: "singleselect",
-                metaData: { option: updatedMetadata },
-              })
-            );
-            toast.success("Option added successfully");
-            event.target.value = "";
-
-            // setInputValues([...inputValues, ""]); // Show another option to be filled
-          }
-        }
-      } else {
-        toast.error("Please enter a value");
-      }
+     event.target.value="";
+     handleAddClick();
     }
   };
 
@@ -171,11 +165,10 @@ export default function AddOptionPopup(props) {
           <Typography variant="h6" component="h2">
             Add options
           </Typography>
-          <Box sx={{ my: 2 }}>
+          <Box sx={{ my: 2,maxHeight:'300px',overflowY:'auto' }}>
             {inputValues.map((value, index) => (
               <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
                 <TextField
-                  autoFocus
                   id={`input-${index}`}
                   label="Standard"
                   variant="standard"
@@ -189,9 +182,20 @@ export default function AddOptionPopup(props) {
                 />
               </Box>
             ))}
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <TextField
+                autoFocus
+                id="myTextField"
+                label="Standard"
+                variant="standard"
+                value={value}
+                onChange={(event) => setValue(event.target.value.trim())}
+                onKeyPress={handleInputKeyPress}
+              />
+            </Box>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button  className="mui-button" variant="contained" startIcon={<Add />} onClick={handleAddClick}>
+            <Button className="mui-button" variant="contained" startIcon={<Add />} onClick={handleAddClick}>
               Add
             </Button>
           </Box>

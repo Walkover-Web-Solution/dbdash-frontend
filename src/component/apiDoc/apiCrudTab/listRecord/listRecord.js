@@ -35,7 +35,7 @@ function ListRecord(props) {
       className="list-record-container"
       style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}
       >
-     <CodeBlock method="GET"  code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`-H auth-key: AUTH_TOKEN `}/>
+     <CodeBlock method="GET"  code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`auth-key: AUTH_TOKEN `}/>
      <ResponseBox response={response} />
      </div>
      <div style={{width:'700px',overflowX:"hidden"}}>

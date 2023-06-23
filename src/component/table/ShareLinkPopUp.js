@@ -29,6 +29,7 @@ export default function ShareLinkPopUp(props) {
       .catch((error) => {
         console.error("Failed to copy text to clipboard:", error);
       });
+      handleClose()
   };
   
 
