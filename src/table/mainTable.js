@@ -132,7 +132,7 @@ export default function MainTable() {
       setOpen(false);
       dispatch(addColumnrightandleft({
         filterId: params?.filterName, fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
-          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable,selectedFieldName: selectedFieldName[0] || selectedFieldName , linkedValueName
+          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable,selectedFieldName: selectedFieldName , linkedValueName
       }));
       setSelectValue('longtext')
       setDirectionAndId({})
@@ -141,9 +141,8 @@ export default function MainTable() {
       var data1 = metaData;
       if (selectValue == "link") {
         data1.foreignKey = {
-          fieldId: selectedFieldName[0],
+          fieldId: selectedFieldName,
           tableId: selectedTable, 
-          fieldType:selectedFieldName[1]
         }
       }
       if(selectValue=="formula")
@@ -151,7 +150,8 @@ export default function MainTable() {
         var queryToSend = JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED;`
       }
       setOpen(false);
-      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName[0] || selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
+      console.log(selectedFieldName,"assfd")
+      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable,  selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
       setSelectValue('longtext')
     }
   };
@@ -300,20 +300,20 @@ export default function MainTable() {
       const d = dataRow[fields[col]?.id];
       
       let { dataType } = fields[col] || "";
-      let linkdatatype=false;
+      // let linkdatatype=false;
       
-      if(dataType=='link')
-      {
-        linkdatatype=true;
-        dataType=fields[col]?.metadata?.foreignKey?.fieldType;
+      // if(dataType=='link')
+      // {
+      //   linkdatatype=true;
+      //   dataType=fields[col]?.metadata?.foreignKey?.fieldType;
        
-      }
+      // }
 
       if (dataType === "autonumber") {
         return {
           allowOverlay: true,
           kind: GridCellKind.Number,
-          readonly: linkdatatype?false:true,
+          readonly: true,
           data: d || "",
           displayData: d?.toString() || "",
         };
@@ -322,7 +322,7 @@ export default function MainTable() {
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
-          readonly: linkdatatype?false:true,
+          readonly: true,
 
           displayData: d || "",
           data: d || "",

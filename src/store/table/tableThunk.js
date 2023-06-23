@@ -323,6 +323,7 @@ export const addColumnrightandleft = createAsyncThunk(
 export const addColumsToLeft = createAsyncThunk(
     "table/addColumsToLeft",
     async (payload, { dispatch, getState }) => {
+       
         const data = {
             filterId: payload?.filterId,
             fieldName: payload?.fieldName,

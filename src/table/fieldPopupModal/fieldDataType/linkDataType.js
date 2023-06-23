@@ -20,7 +20,7 @@ export default function LinkDataType(props) {
   })
   useEffect(()=>{
     if(uniqueFields?.length > 0){
-      props?.setSelectedFieldName([uniqueFields[0][0],uniqueFields[0][1]?.fieldType]);
+      props?.setSelectedFieldName(uniqueFields[0][0]);
     }
   },[props?.selectedTable])
 
@@ -53,14 +53,14 @@ export default function LinkDataType(props) {
     <Select
       labelId="select-label"
       id="select"
-      value={props?.selectedFieldName[0]}
+      value={props?.selectedFieldName}
       sx={{
         margin: 1,
         minWidth: 120,
       }}
       onChange={(e) => 
        {
-        props?.setSelectedFieldName([e.target.value,uniqueFields.find(x=>x[0]==e.target.value)[1]?.fieldType || ""])}}
+        props?.setSelectedFieldName(e.target.value)}}
     >
       {uniqueFields.map((fields) => (
         <MenuItem key={fields[0]} value={fields[0]}>
