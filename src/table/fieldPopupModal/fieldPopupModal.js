@@ -265,9 +265,9 @@ export default function FieldPopupModal(props) {
             <MenuItem value="multipleselect"><QueueOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{ mr: 1 }} /> Number</MenuItem>
             <MenuItem value="phone"><LocalPhoneIcon fontSize="2px" sx={{ mr: 1 }} />Phone number</MenuItem>
-            {/* <MenuItem value="id"><FormatListNumberedIcon fontSize="2px" sx={{ mr: 1 }} /> Row id</MenuItem> */}
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single line text</MenuItem>
             <MenuItem value="singleselect"><ExpandCircleDownOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
+            <MenuItem value="Uri"> URL</MenuItem> 
 
           </Select>
 

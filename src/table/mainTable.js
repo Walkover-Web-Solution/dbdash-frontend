@@ -299,6 +299,7 @@ export default function MainTable() {
       const d = dataRow[fields[col]?.id];
       
       let { dataType } = fields[col] || "";
+      console.log("datatyoe",dataType)
       // let linkdatatype=false;
       
       // if(dataType=='link')
@@ -364,6 +365,8 @@ export default function MainTable() {
       }
 
       else if (dataType === "longtext") {
+        console.log("longgg");
+
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
@@ -372,9 +375,18 @@ export default function MainTable() {
           data: d || "",
         };
       }
+      else if (dataType === "uri") {
+        return {
+          kind: GridCellKind.Uri,
+          allowOverlay: true,
+          readonly: false,
+          displayData: d || "",
+          data: d || "",
+        };
+      }
       else if (dataType === "singlelinetext") {
         return {
-          kind: GridCellKind.Text,
+          kind: GridCellKind.Uri,
           allowOverlay: true,
           readonly: false,
           displayData: d || "",
