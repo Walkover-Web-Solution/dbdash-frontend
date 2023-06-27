@@ -11,7 +11,7 @@ import ReadMoreOutlinedIcon from "@mui/icons-material/ReadMoreOutlined";
 import TextFormatIcon from "@mui/icons-material/TextFormat";
 import NotesIcon from "@mui/icons-material/Notes";
 import { withStyles } from '@mui/styles';
-
+import LinkIcon from '@mui/icons-material/Link';
 // import PersonPinIcon from "@mui/icons-material/PersonPin";
 // import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import NumbersIcon from "@mui/icons-material/Numbers";
@@ -267,7 +267,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="phone"><LocalPhoneIcon fontSize="2px" sx={{ mr: 1 }} />Phone number</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single line text</MenuItem>
             <MenuItem value="singleselect"><ExpandCircleDownOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
-            <MenuItem value="Uri"> URL</MenuItem> 
+            <MenuItem value="Uri"><LinkIcon fontSize="2px" sx={{ mr: 1 }} /> URL</MenuItem> 
 
           </Select>
 
