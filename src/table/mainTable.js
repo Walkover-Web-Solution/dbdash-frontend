@@ -299,7 +299,6 @@ export default function MainTable() {
       const d = dataRow[fields[col]?.id];
       
       let { dataType } = fields[col] || "";
-      console.log("datatyoe",dataType)
       // let linkdatatype=false;
       
       // if(dataType=='link')
@@ -365,7 +364,6 @@ export default function MainTable() {
       }
 
       else if (dataType === "longtext") {
-        console.log("longgg");
 
         return {
           kind: GridCellKind.Text,
