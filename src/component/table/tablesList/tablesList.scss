@@ -11,7 +11,7 @@
 }
 
 .tables-list-container {
-    width: 99vw !important;
+    width: 99.3vw !important;
     display: flex !important;
     height: 5vh !important;
   font-size: $tablepagefontsize !important;
@@ -47,11 +47,10 @@
   margin-right: 10px !important;
     .filter-box {
       background-color: transparent !important;
-      width: 100px !important;
+    width: 100px !important;
       display: flex !important;
       align-items: center !important;
   font-size: $tablepagefontsize !important;
-
       justify-content: center !important;
       color: $filterColorValue !important;
       border-radius: 0 !important;
@@ -78,9 +77,11 @@
   
   .filter-button {
     width: 110px!important;
-    margin-top: 2px !important;
-    height: 15px !important;
+    margin-top: 12px !important;
+    
     padding: 1% !important;
+    padding-bottom: 1.2% !important;
+    height: 15px !important;
 
 
 

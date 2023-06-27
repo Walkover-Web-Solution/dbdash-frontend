@@ -108,18 +108,23 @@ export default function AddFilterPopup(props) {
   }, [props])
 
 
-  const updateFilter =async()=>{
-    var queryToSend = " ";
-    console.log(query,"qwury")
+  const updateFilter = async () => {
+    let queryToSend = '';
+    console.log(query, "qwury");
+    console.log(text, "text");
+    
     if (props?.dbData?.db?.tables[props?.tableName]?.view &&
       Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
-      const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
-      queryToSend = "select * from " + viewId + " where "+ text.trim();
+      const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
+      queryToSend = `select * from ${viewId} where ${text.trim()}`;
     } else {
-      queryToSend = "select * from " + props?.tableName + " where "+ text.trim();
+      queryToSend = `select * from ${props?.tableName} where ${text.trim()}`;
     }
+    
+    console.log("queryToSend", queryToSend);
     return queryToSend;
-  }
+  };
+  
 
   
   
@@ -148,14 +153,21 @@ export default function AddFilterPopup(props) {
   // }
 
   const editQueryData = async () => {
-   const data = await updateFilter();
-   console.log(data,"wuerydaya")
-    const dataa = {
+   let data = await updateFilter();
+   if(data.includes('"'))
+   {
+    
+data = data.replace(/"/g, "'");
+   }
+    let dataa = {
       filterId: props?.filterId,
       filterName: filterName,
       query: data,
       htmlToShow:html
     }
+    
+    
+    console.log("dataaa",dataa);
     const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa)
     dispatch(setAllTablesData(
       {

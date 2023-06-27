@@ -136,6 +136,13 @@ const style = {
           label="Filter Name"
           variant="outlined"
           value={filterName}
+          onKeyDown={(e)=>{
+            if(e.key=="Enter" && filterName)
+            {
+              handleCreateFilter();
+              handleClose();
+            }
+          }}
           onChange={(e) => setFilterName(e.target.value)}
         />
       </Box>

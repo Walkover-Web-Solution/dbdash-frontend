@@ -249,8 +249,8 @@ useEffect(() => {
           </Box>
         </Box>
         <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap'}}   >
-        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden'}}>
-        <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*88)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
+        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden',marginRight:'5px'}}>
+        <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*89)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
           {AllTableInfo[params?.tableName]?.filters &&
             Object.entries(AllTableInfo[params?.tableName]?.filters).map(
               (filter, index) => (
