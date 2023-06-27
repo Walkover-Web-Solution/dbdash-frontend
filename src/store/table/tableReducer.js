@@ -88,6 +88,25 @@ export const reducers = {
 
     };
   },
+  updatecellbeforeapi(state,payload){
+    const action = payload.payload;
+    state.skipReset = true;
+    let arr = [...state.data];
+    
+    const autonumberId = "fld" + state.tableId.substring(3) + "autonumber"
+    const indexIdMapping = action?.indexIdMapping
+    action?.newData?.forEach((row) => {
+      arr[indexIdMapping[row?.[autonumberId]]] = row
+    })
+    if (action?.dataTypes == "file"){
+      var row = arr[indexIdMapping[action?.rowIndex]] ;
+      var imageArray =  row[action?.columnId] || [] ; 
+      imageArray = [...imageArray ,action.value ]
+      row[action?.columnId] =  imageArray      ;
+      arr[indexIdMapping[action?.rowIndex]] = row
+    }
+    state.data = arr;
+  },
   addColumnrightandleft(state, payload) {
     const action = payload.payload;
     if (action) {

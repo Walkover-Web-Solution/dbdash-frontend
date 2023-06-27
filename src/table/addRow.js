@@ -1,10 +1,13 @@
 import { toast } from "react-toastify";
 import { addRows, updateCells, addColumsToLeft, updateColumnOrder } from "../store/table/tableThunk";
 import debounce from 'lodash.debounce';
+import { updatecellbeforeapi } from "../store/table/tableSlice";
+
 export const addRow = (dispatch) => {
   dispatch(addRows({ type: "add_row" }))
   return;
 }
+
 export const addColumn = (dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName, queryToSend, userQuery) => {
   dispatch(addColumsToLeft({
     filterId: params?.filterName, fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
@@ -16,7 +19,6 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
 }
 let valuesArray = [];
 let indexIdMapping = {}
-
 const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   const batchSize = 1000; // Set the batch size to 1000
   const totalRows = valuesArray.length;
@@ -35,7 +37,33 @@ const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   indexIdMapping = {}
 }, 300);
 
-export const editCell = (cell, newValue, dispatch, fields, params, currentrow, dataType) => {
+const callreducerforupdatecellsbeforeapi=(dispatch,updatedArray,indexIdMapping,data)=>
+{
+  let tabledata=[...data];
+  let newDatatemp=[];
+  updatedArray?.map((row)=>{
+    let index=row?.where?.indexOf('=')+1;
+    const autonumber=row?.where?.slice(index).trim();
+    let obj={...tabledata[indexIdMapping[autonumber]]};
+    Object.entries(row.fields).map(([key,value])=>{
+
+      if(typeof value=='number')
+      {
+          obj[key]=value? value+"" : null;
+
+      }
+      else obj[key]=value || null;
+
+    });
+    
+    tabledata[indexIdMapping[autonumber]]=obj;
+    newDatatemp.push(obj);
+    });
+
+ dispatch(updatecellbeforeapi({updatedArray,indexIdMapping,newData:tabledata}));
+}
+export const editCell = (cell, newValue, dispatch, fields, params, dataType,tabledata) => {
+const currentrow=tabledata[cell?.[1] ?? []];
   if (newValue?.data && newValue.data.kind == 'tags-cell') return;
   const col = cell[0];
   const tableId = params?.tableName.substring(3);
@@ -50,7 +78,7 @@ export const editCell = (cell, newValue, dispatch, fields, params, currentrow, d
       newdata = newValue?.data?.date;
 
     } else {
-      newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
+       newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
     }
     if (dataType == "singleselect") {
       valuesArray.push({
@@ -65,11 +93,18 @@ export const editCell = (cell, newValue, dispatch, fields, params, currentrow, d
       valuesArray.push({
         "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
         "fields": {
-          [key]: newdata || newValue?.data,
+          [key]: newdata || newValue?.data || null,
         }
       });
     }
+    let lastElement = [valuesArray[valuesArray.length - 1]];
+
+   
     indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
+    let currentcellindexIdMapping = {};
+    currentcellindexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1];
+    
+    callreducerforupdatecellsbeforeapi(dispatch,lastElement,currentcellindexIdMapping,tabledata);
     updateCellsAfterSomeDelay(dispatch)
     return;
   }

@@ -185,9 +185,9 @@ export default function MainTable() {
     
     if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
     if (fields[cell[0]].dataType == "singleselect" && (typeof (newValue) == "object") ) {
-        newValue = newValue.value || newValue.data.value || newValue.data;
+        newValue = newValue.data.value ;
       }
-      editCell(cell, newValue, dispatch, fields, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
+      editCell(cell, newValue, dispatch, fields, params, fields[cell[0]].dataType,dataa);
   }
     , [dataa, data, fields,fields1]);
 
@@ -444,10 +444,19 @@ export default function MainTable() {
           }
         };
       }
-      else if (dataType === "checkbox") {
+      else if (dataType === "checkbox" ) {
+        let show=false;
+        if(d)
+        {
+          if(typeof d=='string')
+          {
+            show=d=='true'?true:false;
+          }
+          else show=d;
+        }
         return {
           kind: GridCellKind.Boolean,
-          data: d,
+          data: show,
           allowOverlay: false,
         };
       }
