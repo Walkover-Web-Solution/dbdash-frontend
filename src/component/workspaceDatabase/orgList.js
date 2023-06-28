@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { Box, Card, Typography, TextField, Button, IconButton, ClickAwayListener } from "@mui/material";
 import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
-import { createDbThunk, deleteOrgThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../store/database/databaseThunk";
+import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../store/database/databaseThunk";
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "./shareOrgModal";
 import { allOrg } from "../../store/database/databaseSelector";
@@ -114,10 +114,10 @@ Object.entries(props?.dbs).forEach(([, value]) => {
   };
   
 
-  const deleteOrganization = async () => {
-    const userid = localStorage.getItem("userid");
-    dispatch(deleteOrgThunk({ orgId: props?.orgId, userid }))
-  };
+  // const deleteOrganization = async () => {
+  //   const userid = localStorage.getItem("userid");
+  //   dispatch(deleteOrgThunk({ orgId: props?.orgId, userid }))
+  // };
   const shareWorkspace = async (email,user_type) => {
     const adminId = localStorage.getItem("userid")
     const data={
@@ -195,10 +195,10 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                         setTabIndex={props?.setTabIndex}
                         tabIndex={props?.index}
                         first={"Rename workspace"}
-                        second={"Delete workspace"}
+                        // second={""}
                         setName={setName}
-                        idToDelete={props?.orgId}
-                        deleteFunction={deleteOrganization}
+                        // idToDelete={props?.orgId}
+                        // deleteFunction={deleteOrganization}
                         title="Organization"
                       />
                     </Box>
