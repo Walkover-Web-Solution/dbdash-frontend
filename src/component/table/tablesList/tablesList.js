@@ -284,7 +284,7 @@ useEffect(() => {
             onClick={() => handleOpenn()}
             variant="contained"
             ref={buttonRef}
-            className="mui-button filter-button"
+            className="mui-button filter-button custom-button-add-view"
           >
             Add View
           </Button>
@@ -314,6 +314,8 @@ useEffect(() => {
               handleClick(e, "share");
               shareLink();
             }
+
+            
             }>share view</Button></>}
 
         </div>
