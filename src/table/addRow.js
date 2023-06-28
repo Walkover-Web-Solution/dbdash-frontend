@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import { updatecellbeforeapi } from "../store/table/tableSlice";
 
 export const addRow = (dispatch) => {
+  
   dispatch(addRows({ type: "add_row" }))
   return;
 }
@@ -37,24 +38,9 @@ const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   indexIdMapping = {}
 }, 300);
 
-const callreducerforupdatecellsbeforeapi=(dispatch,updateditem,indexIdMapping,data)=>
-{
-  let tabledata=[...data];
-    let index=updateditem?.where?.indexOf('=')+1;
-    const autonumber=updateditem?.where?.slice(index).trim();
-    let obj={...tabledata[indexIdMapping[autonumber]]};
-    const [key, value] = Object.entries(updateditem.fields)[0];
-    if(typeof value=='number')   obj[key]=value? value+"" : null;
-    else obj[key]=value || null;
-    tabledata[indexIdMapping[autonumber]]=obj;
-  let newDatatemp=[obj];
 
-    let updatedArray=[updateditem];
+export const editCell = (cell, newValue, dispatch, fields,currentrow, params, dataType) => {
 
- dispatch(updatecellbeforeapi({updatedArray,indexIdMapping,newData:newDatatemp}));
-}
-export const editCell = (cell, newValue, dispatch, fields, params, dataType,tabledata) => {
-const currentrow=tabledata[cell?.[1] ?? []];
   if (newValue?.data && newValue.data.kind == 'tags-cell') return;
   const col = cell[0];
   const tableId = params?.tableName.substring(3);
@@ -71,32 +57,23 @@ const currentrow=tabledata[cell?.[1] ?? []];
     } else {
        newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
     }
-    if (dataType == "singleselect") {
-      valuesArray.push({
-        "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
-        "fields": {
-          [key]: newValue?.data || newdata || newValue,
-        }
-      });
-
-    }
-    else {
-      valuesArray.push({
-        "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
-        "fields": {
-          [key]: newdata || newValue?.data || null,
-        }
-      });
-    }
-    let lastElement =valuesArray[valuesArray.length - 1];
-
-   
-    indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
-    let currentcellindexIdMapping = {};
-    currentcellindexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1];
     
-    callreducerforupdatecellsbeforeapi(dispatch,lastElement,currentcellindexIdMapping,tabledata);
-    updateCellsAfterSomeDelay(dispatch)
+    let currentupdatedvalue = {
+      "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
+      "fields": {}
+    };
+    
+    if (dataType == "singleselect") {
+      currentupdatedvalue.fields[key] = newValue;
+    } else {
+      currentupdatedvalue.fields[key] = newdata || newValue?.data || null;
+    }
+    
+    valuesArray.push(currentupdatedvalue);
+    indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
+  
+      updateCellsAfterSomeDelay(dispatch);
+      dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentrow }))
     return;
   }
 }

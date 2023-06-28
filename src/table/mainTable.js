@@ -58,6 +58,7 @@ export default function MainTable() {
   const tableId = tableInfo?.tableId;
  
   useEffect(() => {
+    console.log("djdjd");
     setData(dataa)
   }, [dataa])
 
@@ -187,7 +188,8 @@ export default function MainTable() {
     if (fields[cell[0]].dataType == "singleselect" && (typeof (newValue) == "object") ) {
         newValue = newValue.data.value ;
       }
-      editCell(cell, newValue, dispatch, fields, params, fields[cell[0]].dataType,dataa);
+
+      editCell(cell, newValue, dispatch, fields,dataa[cell?.[1] ?? []], params, fields[cell[0]].dataType);
   }
     , [dataa, data, fields,fields1]);
 
@@ -485,7 +487,6 @@ export default function MainTable() {
 
   const handlegridselection = (event) => {
     setSelection1(event);
-    // return event;
   }
 
   return (

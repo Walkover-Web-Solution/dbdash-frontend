@@ -89,24 +89,15 @@ export const reducers = {
     };
   },
   updatecellbeforeapi(state,payload){
+
     const action = payload.payload;
-    state.skipReset = true;
-    let arr = [...state.data];
-    
-    const autonumberId = "fld" + state.tableId.substring(3) + "autonumber"
-    const indexIdMapping = action?.indexIdMapping
-    let updatedrow= action?.newData[0];
-   
-      arr[indexIdMapping[updatedrow?.[autonumberId]]] = updatedrow;
-    
-    if (action?.dataTypes == "file"){
-      var row = arr[indexIdMapping[action?.rowIndex]] ;
-      var imageArray =  row[action?.columnId] || [] ; 
-      imageArray = [...imageArray ,action.value ]
-      row[action?.columnId] =  imageArray      ;
-      arr[indexIdMapping[action?.rowIndex]] = row
-    }
-    state.data = arr;
+    let rows = [...state.data];
+    let rowtoupdatecell={...action?.row};
+    const [key, value] = Object.entries(action?.updatedvalue?.fields)[0];
+    rowtoupdatecell[key]=typeof value=='number'?value.toString():value;
+      rows[action?.rowIndex] = rowtoupdatecell;
+    state.data = rows;
+
   },
   addColumnrightandleft(state, payload) {
     const action = payload.payload;
