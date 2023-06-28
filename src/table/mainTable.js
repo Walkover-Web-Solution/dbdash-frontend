@@ -47,6 +47,7 @@ export default function MainTable() {
   const [imageLink, setImageLink] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
   const[showSearch,setShowSearch]=useState(false);
+  const[multipleselectvalues,setMultipleselectvalues]=useState({});
   const emptyselection={
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -182,14 +183,22 @@ export default function MainTable() {
 
 
   const onCellEdited = useCallback((cell, newValue) => {
-    
+   
+    if(fields[cell[0]]?.dataType == 'multipleselect')
+    {
+      editmultipleselect( dataa[cell[1]][fields[cell[0]]?.id],multipleselectvalues,cell);
+      return;
+    }
     if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
+    // if(fields[cell[0]]?.dataType == 'multipleselect'){
+    //   newValue=multipleselectvalues?.data?.tags;
+    // }
     if (fields[cell[0]].dataType == "singleselect" && (typeof (newValue) == "object") ) {
         newValue = newValue.value || newValue.data.value || newValue.data;
       }
       editCell(cell, newValue, dispatch, fields, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
   }
-    , [dataa, data, fields,fields1]);
+    , [dataa, data, fields,fields1,multipleselectvalues]);
 
   const handleColumnResize = (field, newSize, colIndex) => {
     let newarrr = [...fields || fields1];
@@ -205,48 +214,47 @@ export default function MainTable() {
       metaData: { width: newSize }
     }));
   };
-  const validateCell = useCallback((cell, newValue, oldValue) => {
-
-    if (newValue?.data && newValue?.data?.kind == 'tags-cell') {
-      let tag = "";
-      let arr1 = newValue.data.tags;
-      let arr2 = oldValue.data.tags || [];
-      if(arr1.length>arr2.length)
-      {
-      let arr = arr1.filter(x => !arr2.includes(x));
-
-      tag = arr[0] || "";
-      if (fields[cell[0]]?.id && tag != "") {
+  const editmultipleselect = (oldValuetags, newValue, cell) => {
+    const newValuetags = newValue.data.tags;
+    const addedTags = newValuetags.filter(tag => !oldValuetags.includes(tag));
+    const removedTags = oldValuetags.filter(tag => !newValuetags.includes(tag));
+  
+    if (fields[cell[0]]?.id) {
+      const rowIndex = dataa[cell[1]][`fld${tableId.substring(3)}autonumber`];
+  
+      addedTags.forEach(tag => {
         dispatch(
           updateCells({
             columnId: fields[cell[0]]?.id,
-            rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
+            rowIndex,
             value: tag,
             dataTypes: newValue?.kind,
-            indexIdMapping : { [dataa[cell[1]][`fld${tableId.substring(3)}autonumber`]] : cell[1] } 
+            indexIdMapping: { [rowIndex]: cell[1] },
           })
         );
-
-      }
-    }
-    else if(arr1.length<arr2.length)
-    {
-      let arr = arr2.filter(x => !arr1.includes(x));
-      tag = arr[0] || "";
-
-      if (fields[cell[0]]?.id && tag != "") {
+      });
+  
+      removedTags.forEach(tag => {
         dispatch(
           updateCells({
             columnId: fields[cell[0]]?.id,
-            rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
-            value: {delete:tag},
+            rowIndex,
+            value: { delete: tag },
             dataTypes: newValue?.kind,
-            indexIdMapping : { [dataa[cell[1]][`fld${tableId.substring(3)}autonumber`]] : cell[1] } 
+            indexIdMapping: { [rowIndex]: cell[1] },
           })
         );
-
-      }
+      });
     }
+  };
+  
+  
+  
+  
+  const validateCell = useCallback((cell, newValue) => {
+
+    if (newValue?.data && fields[cell[0]]?.dataType == 'multipleselect') {
+      setMultipleselectvalues(newValue);
   }
 
     if (newValue.kind === 'number') {
