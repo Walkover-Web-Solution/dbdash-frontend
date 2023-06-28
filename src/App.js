@@ -15,7 +15,6 @@ import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Chat from './component/Chat/Chat';
-import 'remixicon/fonts/remixicon.css'
 import ViewTable from './pages/viewTable/viewTable';
 import Msg91bi_id_page from './component/msg91bi/msg91bi_id_page';
 
