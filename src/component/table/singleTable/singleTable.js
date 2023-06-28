@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
 import Dropdown from '../../dropdown';
-import { bulkAddColumns } from '../../../store/table/tableThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { removeTable1, updateTable1 } from '../../../store/allTable/allTableThunk';
@@ -10,8 +9,10 @@ import { resetData } from '../../../store/table/tableSlice';
 import { deleteTable, exportCSV } from '../../../api/tableApi';
 import { selectActiveUser } from '../../../store/user/userSelector.js';
 import { toast } from 'react-toastify';
-
+import variables from '../../../assets/styling.scss';
 import './singleTable.scss';
+import { useParams } from "react-router-dom";
+import { bulkAddColumns } from '../../../store/table/tableThunk';
 
 export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
   const navigate = useNavigate();
@@ -19,12 +20,14 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const [name, setName] = useState();
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const userDetails = useSelector((state) => selectActiveUser(state));
+  const params = useParams();
 
   const dispatch = useDispatch();
 
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Tab
+      textColor={`${variables.bgcolorvalue}`}
         label={
           label.length > 10 ? (
             <>
@@ -43,7 +46,9 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
           overflowX: 'auto',
           flexDirection: 'row',
           textTransform: 'none',
-          height: '10px'
+          height: '10px',
+  fontSize:`${variables.tablepagefontsize}`
+
         }}
         title={label}
       />
@@ -51,16 +56,42 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   );
 
   const renameTableName = async (db_id, tableName) => {
+    // if (!tableNa) {
+    //   toast.error("Table name is same");
+    //   return;
+    // }
+    if ( !tableNa|| tableNa.trim() === "") {
+      toast.error("Table name cannot be empty");
+      return;
+    }
+    
+    if (tableNa.length < 3) {
+      toast.error("Table name must be at least 3 characters long");
+      return;
+    }
+  
+    if (tableNa.length > 30) {
+      toast.error("Table name cannot exceed 30 characters");
+      return;
+    }
+  
+    if (tableNa.includes(" ")) {
+      toast.error("Table name cannot contain spaces");
+      return;
+    }
+  
     const data1 = {
-      newTableName: tableNa !== null ? tableNa : table[0]
+      newTableName: tableNa,
     };
+  
     if (tableName === data1.newTableName) {
       return;
     }
+  
     dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
     setTableNa(null);
   };
-
+  
   const deleteTableName = async (tableid) => {
     const keys = Object.keys(AllTableInfo);
     let i = 0;
@@ -87,15 +118,19 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     toast.success("Your CSV file has been mailed successfully");
   };
 
+
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setPage(1);
     dispatch(resetData());
-    dispatch(bulkAddColumns({
-      "dbId": dbData?.db?._id,
-      "tableName": table[0],
-      "pageNo": 1,
-    }));
+    if(table[0]==params?.tableName){
+      dispatch(bulkAddColumns({
+        "dbId": dbData?.db?._id,
+        "tableName": table[0],
+        "pageNo": 1,
+      }));
+    }
+   
   }
 
   const location = useLocation();
@@ -134,7 +169,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                 <Button
                   sx={{
                     width: 2,
-                    fontSize: 8,
+                    fontSize: `${variables.tablepagefontsize}`,
                     mt: 1
                   }}
                   type='submit'
@@ -161,7 +196,6 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
               <Box sx={{ mt: -1 }}>
                 <TabWithDropdown
                   sx={{ width: 100 }}
-                  
                   label={table[1]?.tableName || table[0]}
                   dropdown={
                     <Dropdown
@@ -186,6 +220,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                 <TabWithDropdown
                 
                   sx={{ width: 100 }}
+
                   label={table[1]?.tableName || table[0]}
                   dropdown={
                     <Dropdown
@@ -221,6 +256,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setPage: PropTypes.any,
-  label: PropTypes.string,       
+  label: PropTypes.string,      
   dropdown: PropTypes.node,      
 };

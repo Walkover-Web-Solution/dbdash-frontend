@@ -8,9 +8,9 @@ import {
   TableHead,
   TableContainer,
   TableCell,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
-import { PropTypes } from 'prop-types';
+import { PropTypes } from "prop-types";
 import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
 import TableMenuDropdown from "./tableMenuDropdown";
 import { useSelector } from "react-redux";
@@ -25,19 +25,19 @@ export default function AuthKey(props) {
     getAuthkeyFun();
   }, [props.dbId]);
 
- function getCreatedByName (data){
-  var array = [];
-  Object.entries(Object.values(data)).map((key) => {
-    user.map((user)=>{
-      user?.users?.map((id) => {
-        if (id?.user_id?._id === key[1].user) {
-          array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
-        }
+  function getCreatedByName(data) {
+    var array = [];
+    Object.entries(Object.values(data)).map((key) => {
+      user.map((user) => {
+        user?.users?.map((id) => {
+          if (id?.user_id?._id === key[1].user) {
+            array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
+          }
+        });
       });
-    })
-  });
-  props?.setCreatedBy(array);
- }
+    });
+    props?.setCreatedBy(array);
+  }
   async function getAuthkeyFun() {
     const data = await getAuthkey(props.dbId, adminId);
     props.setAuthKeys(data?.data?.data);
@@ -67,7 +67,9 @@ export default function AuthKey(props) {
     if (diff < 60 * 60 * 1000) {
       const minutes = Math.floor(diff / (60 * 1000));
       const seconds = Math.floor((diff % (60 * 1000)) / 1000);
-      return `${minutes} minute${minutes !== 1 ? "s" : ""} and ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
+      return `${minutes} minute${
+        minutes !== 1 ? "s" : ""
+      } and ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
     }
 
     if (diff < 24 * 60 * 60 * 1000) {
@@ -80,14 +82,19 @@ export default function AuthKey(props) {
       if (days === 1) {
         return "Yesterday";
       } else {
-        const sameYear = currentDate.getFullYear() === createdDate.getFullYear();
+        const sameYear =
+          currentDate.getFullYear() === createdDate.getFullYear();
         if (sameYear) {
-          const monthName = createdDate.toLocaleString("default", { month: "long" });
+          const monthName = createdDate.toLocaleString("default", {
+            month: "long",
+          });
           const date = createdDate.getDate();
           return `${date} ${monthName}`;
         } else {
           const year = createdDate.getFullYear();
-          const monthName = createdDate.toLocaleString("default", { month: "long" });
+          const monthName = createdDate.toLocaleString("default", {
+            month: "long",
+          });
           return `${monthName} ${year}`;
         }
       }
@@ -105,9 +112,16 @@ export default function AuthKey(props) {
 
   return (
     <>
-      <Box sx={{ border: 1, m: 1 }}>
-        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: '60vh' }}>
-          <Table sx={{ minWidth: 650,overflowY:"scroll", }} stickyHeader aria-label="sticky table">
+      <Box sx={{ my: 1, paddingLeft: "24px", paddingRight: "31px" }}>
+        <TableContainer
+          component={Paper}
+          sx={{ width: "100%", maxHeight: "60vh", border: 1, borderRadius: 0 }}
+        >
+          <Table
+            sx={{ minWidth: 650, overflowY: "scroll" }}
+            stickyHeader
+            aria-label="sticky table"
+          >
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -122,21 +136,34 @@ export default function AuthKey(props) {
             <TableBody>
               {props.authKeys &&
                 Object.keys(props.authKeys).map((keys, index) => (
-                  <TableRow key={keys} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow
+                    key={keys}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell component="th" scope="row">
                       {props.authKeys[keys].name}
                     </TableCell>
-                    <TableCell>{props?.createdBy && props?.createdBy[index]}</TableCell>
                     <TableCell>
-                      <Tooltip title={props.authKeys[keys].createDate} placement="top">
-                        <span>{formatDateTime(props.authKeys[keys].createDate)}</span>
+                      {props?.createdBy && props?.createdBy[index]}
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip
+                        title={props.authKeys[keys].createDate}
+                        placement="top"
+                      >
+                        <span>
+                          {formatDateTime(props.authKeys[keys].createDate)}
+                        </span>
                       </Tooltip>
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {keys.substring(0, 3) + "*".repeat(keys.length - 6) + keys.substring(keys.length - 3)}
+                      {keys.substring(0, 3) +
+                        "*".repeat(keys.length - 6) +
+                        keys.substring(keys.length - 3)}
                     </TableCell>
                     <TableCell>
-                      {props.authKeys[keys].access === '1' ? (
+                      {props.authKeys[keys].access === "1" ||
+                      props.authKeys[keys].access === "11" ? (
                         <div>all</div>
                       ) : (
                         Object.keys(props.authKeys[keys].access).map((key) => (
@@ -145,10 +172,13 @@ export default function AuthKey(props) {
                       )}
                     </TableCell>
                     <TableCell>
-                      {props.authKeys[keys].access === '1' ? (
+                      {props.authKeys[keys].access === "1" ||
+                      props.authKeys[keys].access === "11" ? (
                         <div>{props.authKeys[keys].scope}</div>
                       ) : (
-                        <div>{Object.values(props.authKeys[keys].access)[0]?.scope}</div>
+                        <div>
+                          {Object.values(props.authKeys[keys].access)[0]?.scope}
+                        </div>
                       )}
                     </TableCell>
                     <TableCell>
@@ -161,7 +191,9 @@ export default function AuthKey(props) {
                         title={keys}
                         dbId={props.dbId}
                         setAuthKeys={props?.setAuthKeys}
-                        setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}
+                        setAuthkeycreatedorupdated={
+                          props.setAuthkeycreatedorupdated
+                        }
                         deleteFunction={deleteAuthkeyFun}
                         authkeycreatedorupdated={props.authkeycreatedorupdated}
                       />
@@ -179,12 +211,11 @@ export default function AuthKey(props) {
 AuthKey.propTypes = {
   dbId: PropTypes.string,
   scope: PropTypes.any,
-  authKeys:PropTypes.any,
-  setAuthKeys:PropTypes.any,
+  authKeys: PropTypes.any,
+  setAuthKeys: PropTypes.any,
   authkeycreatedorupdated: PropTypes.any,
   setAuthkeycreatedorupdated: PropTypes.any,
   selected: PropTypes.any,
-  setCreatedBy:PropTypes.any,
-  createdBy:PropTypes.any
-
+  setCreatedBy: PropTypes.any,
+  createdBy: PropTypes.any,
 };

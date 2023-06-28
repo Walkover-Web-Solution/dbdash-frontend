@@ -102,9 +102,9 @@ export default function Webhooktable(props) {
 
   return (
     <>
-      <Box sx={{ border: 1, m: 1 }}>
-        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 533 }}>
-          <Table sx={{ minWidth: 650 }} stickyHeader aria-label="sticky table">
+      <Box sx={{  my: 1,paddingLeft:'24px',paddingRight:'31px' }}>
+        <TableContainer component={Paper} sx={{border: 1,borderRadius:0, width: "100%", maxHeight: 533 }}>
+          <Table sx={{ minWidth: 650}} stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>

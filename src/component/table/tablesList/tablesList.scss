@@ -4,13 +4,18 @@
   position:fixed !important;
   top:0 !important;
   z-index:100;
+  color: $fontColorVAlue !important;
   background-color: $bgColorValue !important;
+  font-size: $tablepagefontsize !important;
 
 }
+
 .tables-list-container {
     width: 99vw !important;
     display: flex !important;
     height: 5vh !important;
+  font-size: $tablepagefontsize !important;
+
     overflow: hidden !important;
     
   
@@ -18,8 +23,18 @@
       display: flex !important;
       overflow: hidden !important;
       width: 100% !important;
+      padding-left: 24px !important;
+      padding-right: 20px !important;
       height: 5vh !important;
-  
+
+
+
+
+
+
+
+
+
       .add-button {
         margin-left: 0.5rem !important;
         margin-top: 4px !important;
@@ -29,21 +44,21 @@
     }
   }
   .custom-box {
-    margin-left: 1px !important;
-  
+  margin-right: 10px !important;
     .filter-box {
       background-color: transparent !important;
-      width: 120px !important;
+      width: 100px !important;
       display: flex !important;
       align-items: center !important;
+  font-size: $tablepagefontsize !important;
+
       justify-content: center !important;
       color: $filterColorValue !important;
       border-radius: 0 !important;
       padding: 7% !important;
-      margin-left: 1px !important;
-      margin-top: 10px !important;
+      margin-top: 12px !important;
       margin-bottom: 6px !important;
-      margin-right: 20px !important;
+      margin-right: 10px !important;
       border: 1px solid $filterColorValue!important;
       height: 15px !important;
       
@@ -62,13 +77,17 @@
   
   
   .filter-button {
-    width: 100px !important;
-    margin-top: 1px !important;
-    margin-left: 10px !important;
-    margin-top: 10px !important;
+    width: 110px!important;
+    margin-top: 2px !important;
+    height: 15px !important;
+    padding: 1% !important;
+
+
+
     margin-bottom: 6px !important;
-    font-size: 11px !important;
     text-transform: none !important;
+  font-size: $tablepagefontsize !important;
+
    
 &.hover{
   background-color: $responseboxbgcolor;
@@ -88,4 +107,7 @@
   }
   
  
+ .tablesmargin{
+  margin-top: 170px !important;
+ }
  

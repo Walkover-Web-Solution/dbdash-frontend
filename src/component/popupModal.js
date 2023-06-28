@@ -26,11 +26,7 @@ export default function PopupModal(props) {
       [props?.id]: null,
     },
     schema: Joi.object({
-      [props?.id]: Joi.string()
-        .min(3)
-        .max(30)
-        .pattern(/^[^\s]+$/)
-        .required()
+      [props?.id]: Joi.string().min(3).max(30).pattern(/^[^\s]+$/).required()
         .messages({
           "string.min": `${props?.joiMessage} must be at least {#limit} characters long`,
           "string.max": `${props?.joiMessage} must not exceed {#limit} characters`,
@@ -91,7 +87,11 @@ export default function PopupModal(props) {
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
               onKeyDown={(e) => {
-                if (textFieldValue.length >= 3 && textFieldValue.length <= 30 || textFieldValue.includes(" ")) {
+                if (
+                  textFieldValue.length >= 3 &&
+                  textFieldValue.length <= 30 &&
+                  !textFieldValue.includes(" ")
+                ) {
                   if (e.key === "Enter") {
                     props.submitData(e);
                     handleClose();
