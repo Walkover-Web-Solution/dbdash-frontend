@@ -244,7 +244,7 @@ const Chat = () => {
                     >
                       {message.content}
                       {index % 2 !== 0 && (
-                        <div style={{ marginLeft: "95%", font: "10px" }}>
+                        <div style={{ marginLeft: "85%", font: "10px" }}>
                           <Button onClick={() => handleThumbUpClick(messageIndex)} startIcon={messageLikes > 0 ? <ThumbUp /> : <ThumbUpOutlined />}>
                             {messageLikes}
                           </Button>
