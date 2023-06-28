@@ -47,6 +47,7 @@ export default function SingleDatabase(props) {
     // }
     if ( !dbname || dbname.trim() === "") {
       toast.error("Database name cannot be empty");
+      setDbname(props?.db?.name)
       return;
     }
     
