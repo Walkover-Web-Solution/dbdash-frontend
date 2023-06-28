@@ -95,9 +95,10 @@ export const reducers = {
     
     const autonumberId = "fld" + state.tableId.substring(3) + "autonumber"
     const indexIdMapping = action?.indexIdMapping
-    action?.newData?.forEach((row) => {
-      arr[indexIdMapping[row?.[autonumberId]]] = row
-    })
+    let updatedrow= action?.newData[0];
+   
+      arr[indexIdMapping[updatedrow?.[autonumberId]]] = updatedrow;
+    
     if (action?.dataTypes == "file"){
       var row = arr[indexIdMapping[action?.rowIndex]] ;
       var imageArray =  row[action?.columnId] || [] ; 

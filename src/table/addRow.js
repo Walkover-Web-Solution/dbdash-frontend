@@ -37,30 +37,21 @@ const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   indexIdMapping = {}
 }, 300);
 
-const callreducerforupdatecellsbeforeapi=(dispatch,updatedArray,indexIdMapping,data)=>
+const callreducerforupdatecellsbeforeapi=(dispatch,updateditem,indexIdMapping,data)=>
 {
   let tabledata=[...data];
-  let newDatatemp=[];
-  updatedArray?.map((row)=>{
-    let index=row?.where?.indexOf('=')+1;
-    const autonumber=row?.where?.slice(index).trim();
+    let index=updateditem?.where?.indexOf('=')+1;
+    const autonumber=updateditem?.where?.slice(index).trim();
     let obj={...tabledata[indexIdMapping[autonumber]]};
-    Object.entries(row.fields).map(([key,value])=>{
-
-      if(typeof value=='number')
-      {
-          obj[key]=value? value+"" : null;
-
-      }
-      else obj[key]=value || null;
-
-    });
-    
+    const [key, value] = Object.entries(updateditem.fields)[0];
+    if(typeof value=='number')   obj[key]=value? value+"" : null;
+    else obj[key]=value || null;
     tabledata[indexIdMapping[autonumber]]=obj;
-    newDatatemp.push(obj);
-    });
+  let newDatatemp=[obj];
 
- dispatch(updatecellbeforeapi({updatedArray,indexIdMapping,newData:tabledata}));
+    let updatedArray=[updateditem];
+
+ dispatch(updatecellbeforeapi({updatedArray,indexIdMapping,newData:newDatatemp}));
 }
 export const editCell = (cell, newValue, dispatch, fields, params, dataType,tabledata) => {
 const currentrow=tabledata[cell?.[1] ?? []];
@@ -97,7 +88,7 @@ const currentrow=tabledata[cell?.[1] ?? []];
         }
       });
     }
-    let lastElement = [valuesArray[valuesArray.length - 1]];
+    let lastElement =valuesArray[valuesArray.length - 1];
 
    
     indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
