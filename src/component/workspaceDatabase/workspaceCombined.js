@@ -42,11 +42,11 @@ export default function WorkspaceCombined() {
         });
   
         return (
-          <>
-          <Box key={orgId}>
+        
+          <Box key={index}>
             <OrgList orgId={orgId} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} dbs={sortedDbs} />
           </Box>
-          </>
+        
         );
       });
   };

@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import PropTypes from 'prop-types';
-import { Typography, Menu, MenuItem, Tooltip, IconButton } from '@mui/material'
+import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from './alertPopup';
 export default function Dropdown(props) {
@@ -20,13 +20,12 @@ export default function Dropdown(props) {
   return (
     <>
         <Tooltip>
-            <IconButton onClick={(e)=>{
+              <MoreHorizIcon  onClick={(e)=>{
               e.preventDefault();
               e.stopPropagation();
-              handleOpenUserMenu(e)}}>
-              <MoreHorizIcon />
-            </IconButton>
-          </Tooltip>
+              handleOpenUserMenu(e)}} />
+        </Tooltip>
+
           <Menu
             sx={{ mt: '45px' }}
             id="menu-appbar"

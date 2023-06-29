@@ -236,7 +236,9 @@ Object.entries(props?.dbs).forEach(([, value]) => {
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
               {Dbs.map((db,index) => (
+            // {console.log("DBID",db._id)},
                 <Box key={db._id} sx={{ m: 4,mt:0,ml:2, display: "flex" }}>
+                    {/* {console.log("DBID", db._id)} */}
                   <SingleDatabase db={db} dblength={Dbs.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
               ))}

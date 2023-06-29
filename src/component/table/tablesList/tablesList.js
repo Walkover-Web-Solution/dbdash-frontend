@@ -219,14 +219,13 @@ useEffect(() => {
               TabIndicatorProps={{
                 style: { display: "none" },
               }}
-              className={`tabs `}
+              className={`tabs`}
               variant="scrollable"
-              scrollButtons="fixed"
+              scrollButtons={false}
               aria-label="scrollable auto tabs example"
             >
               {AllTableInfo &&
                 Object.entries(AllTableInfo).map((table, index) => (
-                  <Box key={index}>
                     <SingleTable
                       table={table}
                       tableLength={tableLength}
@@ -235,8 +234,8 @@ useEffect(() => {
                       index={index}
                       dbData={dbData}
                       setPage={setPage}
+                      key={index}
                     />
-                  </Box>
                 ))}
             </Tabs>
             <Button
