@@ -1,12 +1,18 @@
 import React, { useState, useCallback, useEffect } from "react";
 import {
   CompactSelection,
-  DataEditor, GridCellKind
+  DataEditor,
+  GridCellKind,
 } from "@glideapps/glide-data-grid";
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { addColumnrightandleft, deleteRows, updateCells, updateColumnHeaders } from "../store/table/tableThunk";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {
+  addColumnrightandleft,
+  deleteRows,
+  updateCells,
+  updateColumnHeaders,
+} from "../store/table/tableThunk";
 // import "@glideapps/glide-data-grid/dist/index.css";
-import './Glidedatagrid.css';
+import "./Glidedatagrid.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -26,7 +32,6 @@ import { toast } from "react-toastify";
 // import  debounce  from 'lodash.debounce';
 
 export default function MainTable() {
-
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
@@ -34,58 +39,58 @@ export default function MainTable() {
   const dataa = useSelector((state) => state.table.data) || [];
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
-  const [selectValue, setSelectValue] = useState('longtext');
+  const [selectValue, setSelectValue] = useState("longtext");
   const [open, setOpen] = useState(false);
   const [openAttachment, setOpenAttachment] = useState(null);
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
-  const [linkedValueName, setLinkedValueName] = useState("")
-  const [textValue, setTextValue] = useState('');
+  const [linkedValueName, setLinkedValueName] = useState("");
+  const [textValue, setTextValue] = useState("");
   const [data, setData] = useState(dataa);
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
-  const [directionAndId, setDirectionAndId] = useState({})
+  const [directionAndId, setDirectionAndId] = useState({});
   const [imageLink, setImageLink] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
-  const[showSearch,setShowSearch]=useState(false);
-  const emptyselection={
+  const [showSearch, setShowSearch] = useState(false);
+  const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
     current: undefined,
-};
-  const[selection1,setSelection1]=useState(emptyselection);
-  const [fields, setFields] = useState(fields1 || [])
+  };
+  const [selection1, setSelection1] = useState(emptyselection);
+  const [fields, setFields] = useState(fields1 || []);
   const tableInfo = useSelector((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId;
- 
+
   useEffect(() => {
-    setData(dataa)
-  }, [dataa])
+    setData(dataa);
+  }, [dataa]);
 
-
-
-  
   const handleUploadFileClick = useCallback((cell) => {
     if (!data) return;
     const [col, row] = cell;
     const dataRow = data?.[row] || data?.[row - 1];
     const d = dataRow?.[fields?.[col]?.id];
-    const index = cell?.[0]
-    if (fields?.[index]?.dataType === "attachment" && (d == undefined || d?.length === 0)) {
+    const index = cell?.[0];
+    if (
+      fields?.[index]?.dataType === "attachment" &&
+      (d == undefined || d?.length === 0)
+    ) {
       setOpenAttachment(cell);
     }
   });
   document.addEventListener(
-          "keydown",
-            React.useCallback(event => {
-                if ((event.ctrlKey || event.metaKey) && event.code === "KeyF") {
-                   setShowSearch(!showSearch);
-                  event.stopPropagation();
-                  event.preventDefault();
-              }
-          }, []));
+    "keydown",
+    React.useCallback((event) => {
+      if ((event.ctrlKey || event.metaKey) && event.code === "KeyF") {
+        setShowSearch(!showSearch);
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }, [])
+  );
 
   const onChangeUrl = (e, type) => {
-
     const row = openAttachment[1];
     const col = openAttachment[0];
     if (imageLink !== null) {
@@ -96,7 +101,9 @@ export default function MainTable() {
           value: null,
           imageLink: imageLink,
           dataTypes: type,
-          indexIdMapping : { [dataa[row][`fld${tableId.substring(3)}autonumber`]] :  row } 
+          indexIdMapping: {
+            [dataa[row][`fld${tableId.substring(3)}autonumber`]]: row,
+          },
         })
       ).then(() => {
         toast.success("Image uploaded successfully!");
@@ -104,7 +111,6 @@ export default function MainTable() {
     }
     e.target.value = null;
   };
-
 
   const onChangeFile = (e, type) => {
     const row = openAttachment[1];
@@ -117,7 +123,9 @@ export default function MainTable() {
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
-          indexIdMapping : { [dataa[row][`fld${tableId.substring(3)}autonumber`]] :  row } 
+          indexIdMapping: {
+            [dataa[row][`fld${tableId.substring(3)}autonumber`]]: row,
+          },
         })
       ).then(() => {
         toast.success("Image uploaded successfully!");
@@ -126,40 +134,68 @@ export default function MainTable() {
     e.target.value = null;
   };
 
-
   const createLeftorRightColumn = () => {
-    if (directionAndId.direction == "left" || directionAndId.direction == "right") {
+    if (
+      directionAndId.direction == "left" ||
+      directionAndId.direction == "right"
+    ) {
       setOpen(false);
-      dispatch(addColumnrightandleft({
-        filterId: params?.filterName, fieldName: textValue, dbId: params?.dbId, tableId: params?.tableName, fieldType:
-          selectValue, direction: directionAndId.direction, position: directionAndId.position, metaData: metaData, selectedTable,selectedFieldName: selectedFieldName , linkedValueName
-      }));
-      setSelectValue('longtext')
-      setDirectionAndId({})
-    }
-    else {
+      dispatch(
+        addColumnrightandleft({
+          filterId: params?.filterName,
+          fieldName: textValue,
+          dbId: params?.dbId,
+          tableId: params?.tableName,
+          fieldType: selectValue,
+          direction: directionAndId.direction,
+          position: directionAndId.position,
+          metaData: metaData,
+          selectedTable,
+          selectedFieldName: selectedFieldName,
+          linkedValueName,
+        })
+      );
+      setSelectValue("longtext");
+      setDirectionAndId({});
+    } else {
       var data1 = metaData;
       if (selectValue == "link") {
         data1.foreignKey = {
           fieldId: selectedFieldName,
-          tableId: selectedTable, 
-        }
+          tableId: selectedTable,
+        };
       }
-      if(selectValue=="formula")
-      {
-        var queryToSend = JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED;`
+      if (selectValue == "formula") {
+        var queryToSend =
+          JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name
+            ?.data_type +
+          ` GENERATED ALWAYS AS (${
+            JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name
+              ?.generated?.expression
+          }) STORED;`;
       }
       setOpen(false);
-      addColumn(dispatch, params, selectValue, metaData, textValue, selectedTable,  selectedFieldName, linkedValueName ,queryToSend ,queryByAi.userQuery);
-      setSelectValue('longtext')
+      addColumn(
+        dispatch,
+        params,
+        selectValue,
+        metaData,
+        textValue,
+        selectedTable,
+        selectedFieldName,
+        linkedValueName,
+        queryToSend,
+        queryByAi.userQuery
+      );
+      setSelectValue("longtext");
     }
   };
 
   useEffect(() => {
-    var newcolumn = []
-    fields1.forEach(column => {
+    var newcolumn = [];
+    fields1.forEach((column) => {
       if (column?.metadata?.hide != true) {
-        newcolumn.push(column)
+        newcolumn.push(column);
       }
     });
     setFields(newcolumn);
@@ -171,341 +207,360 @@ export default function MainTable() {
 
   const reorder = useCallback(
     (item, newIndex) => {
-      reorderFuncton(dispatch, item, newIndex, fields, fields1, params?.filterName, setFields)
+      reorderFuncton(
+        dispatch,
+        item,
+        newIndex,
+        fields,
+        fields1,
+        params?.filterName,
+        setFields
+      );
     },
     [fields, fields1]
   );
 
-  const handleRowMoved = useCallback((from, to) => {
-    reorderRows(from, to, data, setData);
-  }, [data, setData]);
+  const handleRowMoved = useCallback(
+    (from, to) => {
+      reorderRows(from, to, data, setData);
+    },
+    [data, setData]
+  );
 
-
-  const onCellEdited = useCallback((cell, newValue) => {
-    
-    if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] || (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
-    if (fields[cell[0]].dataType == "singleselect" && (typeof (newValue) == "object") ) {
-        newValue = newValue.value || newValue.data.value || newValue.data;
+  const onCellEdited = useCallback(
+    (cell, newValue) => {
+      if (fields[cell[0]]?.dataType == "multipleselect") {
+        editmultipleselect(newValue,dataa[cell[1]][fields[cell[0]]?.id] || [],cell);
+        return;
       }
-      editCell(cell, newValue, dispatch, fields, params, dataa[cell?.[1] ?? []], fields[cell[0]].dataType);
-  }
-    , [dataa, data, fields,fields1]);
+      if (newValue?.readonly == true ||newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] ||
+        (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id]) ) return;
+      if (fields[cell[0]].dataType == "singleselect") {
+        newValue =  newValue.data.value ;
+      }
+      editCell(
+        cell,
+        newValue,
+        dispatch,
+        fields,
+        params,
+        dataa[cell?.[1] ?? []],
+        fields[cell[0]].dataType
+      );
+    },
+    [dataa, data, fields, fields1]
+  );
 
   const handleColumnResize = (field, newSize, colIndex) => {
-    let newarrr = [...fields || fields1];
+    let newarrr = [...(fields || fields1)];
     let obj = Object.assign({}, newarrr[colIndex]);
     obj.width = newSize;
     newarrr[colIndex] = obj;
     setFields(newarrr);
-    dispatch(updateColumnHeaders({
-      filterId: params?.filterName,
-      dbId: params?.dbId,
-      tableName: params?.tableName,
-      columnId: field?.id,
-      metaData: { width: newSize }
-    }));
+    dispatch(
+      updateColumnHeaders({
+        filterId: params?.filterName,
+        dbId: params?.dbId,
+        tableName: params?.tableName,
+        columnId: field?.id,
+        metaData: { width: newSize },
+      })
+    );
   };
-  const validateCell = useCallback((cell, newValue, oldValue) => {
+  const editmultipleselect = (newValue, oldValuetags, cell) => {
+    if (!fields[cell[0]]?.id) return;
+    const newValuetags = newValue.data.tags;
+    const addedTags = newValuetags.filter((tag) => !oldValuetags.includes(tag));
+    const removedTags = oldValuetags.filter((tag) => !newValuetags.includes(tag));
+    const joinedString = addedTags.map((element) => `'${element}'`).join(",");
+    let updateArray = [];
+    const rowIndex = dataa[cell[1]][`fld${tableId.substring(3)}autonumber`];
 
-    if (newValue?.data && newValue?.data?.kind == 'tags-cell') {
-      let tag = "";
-      let arr1 = newValue.data.tags;
-      let arr2 = oldValue.data.tags || [];
-      if(arr1.length>arr2.length)
-      {
-      let arr = arr1.filter(x => !arr2.includes(x));
+    addedTags?.length > 0 &&
+      updateArray.push({
+        where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
+        fields: {
+          [fields[cell[0]]?.id]: joinedString.slice(1, -1),
+        },
+      });
+    removedTags?.length > 0 &&
+      updateArray.push({
+        where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
+        fields: {
+          [fields[cell[0]]?.id]: { delete: removedTags },
+        },
+      });
+    dispatch(
+      updateCells({
+        updatedArray: updateArray,
+        indexIdMapping: { [rowIndex]: cell[1] },
+      })
+    );
+  };
 
-      tag = arr[0] || "";
-      if (fields[cell[0]]?.id && tag != "") {
-        dispatch(
-          updateCells({
-            columnId: fields[cell[0]]?.id,
-            rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
-            value: tag,
-            dataTypes: newValue?.kind,
-            indexIdMapping : { [dataa[cell[1]][`fld${tableId.substring(3)}autonumber`]] : cell[1] } 
-          })
-        );
-
+  const validateCell = useCallback(
+    (cell, newValue) => {
+    
+      if (newValue.kind === "number") {
+        if (newValue?.data?.toString().length < 13 || !newValue?.data) {
+          return newValue;
+        } else return false;
       }
-    }
-    else if(arr1.length<arr2.length)
-    {
-      let arr = arr2.filter(x => !arr1.includes(x));
-      tag = arr[0] || "";
+    },
+    [dataa, fields]
+  );
 
-      if (fields[cell[0]]?.id && tag != "") {
-        dispatch(
-          updateCells({
-            columnId: fields[cell[0]]?.id,
-            rowIndex: dataa[cell[1]][`fld${tableId.substring(3)}autonumber`],
-            value: {delete:tag},
-            dataTypes: newValue?.kind,
-            indexIdMapping : { [dataa[cell[1]][`fld${tableId.substring(3)}autonumber`]] : cell[1] } 
-          })
-        );
-
-      }
-    }
-  }
-
-    if (newValue.kind === 'number') {
-      if (newValue?.data?.toString().length < 13 || !newValue?.data)
-    {  
-        return newValue;}
-      else return false;
-
-    }
-  }, [dataa, fields]);
-  
   const handleDeleteRow = (selection) => {
-
     if (selection.current) {
       return;
     }
     const deletedRowIndices = [];
-    // const newData = [...dataa];
 
     for (const element of selection.rows.items) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
-
-        deletedRowIndices.push(dataa[i][`fld${tableId.substring(3)}autonumber`]);
+        deletedRowIndices.push(
+          dataa[i][`fld${tableId.substring(3)}autonumber`]
+        );
       }
     }
 
     if (deletedRowIndices.length > 0) {
-
-      dispatch(deleteRows({ deletedRowIndices, dataa }))
+      dispatch(deleteRows({ deletedRowIndices, dataa }));
     }
-    setSelection1(emptyselection)
-
-
+    setSelection1(emptyselection);
   };
-
-
-
 
   const onHeaderMenuClick = useCallback((col, bounds) => {
     setMenu({ col, bounds });
   }, []);
 
-  const getData = useCallback((cell) => {
-    const [col, row] = cell;
-    const dataRow = dataa[row] || [];
+  const getData = useCallback(
+    (cell) => {
+      const [col, row] = cell;
+      const dataRow = dataa[row] || [];
 
-    if (dataRow) {
+      if (dataRow) {
+        const d = dataRow[fields[col]?.id];
 
-      const d = dataRow[fields[col]?.id];
-      
-      let { dataType } = fields[col] || "";
-      // let linkdatatype=false;
-      
-      // if(dataType=='link')
-      // {
-      //   linkdatatype=true;
-      //   dataType=fields[col]?.metadata?.foreignKey?.fieldType;
-       
-      // }
+        let { dataType } = fields[col] || "";
+        // let linkdatatype=false;
 
-      if (dataType === "autonumber") {
-        return {
-          allowOverlay: true,
-          kind: GridCellKind.Number,
-          readonly: true,
-          data: d || "",
-          displayData: d?.toString() || "",
-        };
-      }
-      else if (dataType === "createdat" || dataType === "createdby" || dataType === "rowid" || dataType === "updatedby" || dataType === "updatedat") {
-        return {
-          kind: GridCellKind.Text,
-          allowOverlay: true,
-          readonly: true,
+        // if(dataType=='link')
+        // {
+        //   linkdatatype=true;
+        //   dataType=fields[col]?.metadata?.foreignKey?.fieldType;
 
-          displayData: d || "",
-          data: d || "",
-        };
-      }
-      else if (dataType === "datetime") {
-        const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
-        if (currentDate instanceof Date && !isNaN(currentDate)) {
-          const day = currentDate.getDate().toString().padStart(2, "0");
-          const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-          const year = currentDate.getFullYear().toString().padStart(4, "0");
-          const formattedDate = `${day}-${month}-${year}`;
+        // }
 
+        if (dataType === "autonumber") {
           return {
-            kind: GridCellKind.Custom,
             allowOverlay: true,
-            copyData: "4",
-            data: {
-              kind: "date-picker-cell",
-              date: currentDate,
-              displayDate: formattedDate,
-              format: "date",
-            },
+            kind: GridCellKind.Number,
+            readonly: true,
+            data: d || "",
+            displayData: d?.toString() || "",
           };
-        } else {
-          // Handle invalid time value
-          // For example, you can return a default value or show an error message
+        } else if (
+          dataType === "createdat" ||
+          dataType === "createdby" ||
+          dataType === "rowid" ||
+          dataType === "updatedby" ||
+          dataType === "updatedat"
+        ) {
           return {
-            kind: GridCellKind.Custom,
+            kind: GridCellKind.Text,
             allowOverlay: true,
-            copyData: "4",
-            data: {
-              kind: "date-picker-cell",
-              date: new Date(),
-              displayDate: "",
-              format: "date",
-            },
+            readonly: true,
+
+            displayData: d || "",
+            data: d || "",
+          };
+        } else if (dataType === "datetime") {
+          const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
+          if (currentDate instanceof Date && !isNaN(currentDate)) {
+            const day = currentDate.getDate().toString().padStart(2, "0");
+            const month = (currentDate.getMonth() + 1)
+              .toString()
+              .padStart(2, "0");
+            const year = currentDate.getFullYear().toString().padStart(4, "0");
+            const formattedDate = `${day}-${month}-${year}`;
+
+            return {
+              kind: GridCellKind.Custom,
+              allowOverlay: true,
+              copyData: "4",
+              data: {
+                kind: "date-picker-cell",
+                date: currentDate,
+                displayDate: formattedDate,
+                format: "date",
+              },
+            };
+          } else {
+            // Handle invalid time value
+            // For example, you can return a default value or show an error message
+            return {
+              kind: GridCellKind.Custom,
+              allowOverlay: true,
+              copyData: "4",
+              data: {
+                kind: "date-picker-cell",
+                date: new Date(),
+                displayDate: "",
+                format: "date",
+              },
+            };
+          }
+        } else if (dataType === "longtext") {
+          return {
+            kind: GridCellKind.Text,
+            allowOverlay: true,
+            readonly: false,
+            displayData: d || "",
+            data: d || "",
+          };
+        
+        } 
+
+        else if (dataType === "uri") {
+          return {
+            kind: GridCellKind.Uri,
+            allowOverlay: true,
+            readonly: false,
+            displayData: d || "",
+            data: d || "",
           };
         }
-      }
-
-      else if (dataType === "longtext") {
-        return {
-          kind: GridCellKind.Text,
-          allowOverlay: true,
-          readonly: false,
-          displayData: d || "",
-          data: d || "",
-        };
-      }
-      else if (dataType === "singlelinetext") {
-        return {
-          kind: GridCellKind.Text,
-          allowOverlay: true,
-          readonly: false,
-          displayData: d || "",
-          data: d || "",
-          wrapText: false,
-          multiline: false
-        };
-      }
-      else if (dataType === "phone") {
-        return {
-          allowOverlay: true,
-          kind: GridCellKind.Number,
-          data: d || "",
-          displayData: d || ""
-        };
-      }
-      else if (dataType === "numeric") {
-        return {
-          allowOverlay: true,
-          kind: GridCellKind.Number,
-          data: d || "",
-          displayData: d || ""
-        };
-      }
-
-      else if (dataType === "multipleselect") {
-        const possibleTags = fields[col]?.metadata?.option;
-        // const row = 0; // Replace 0 with the appropriate row index
-        let newarr = [];
-        possibleTags && possibleTags?.map(x => {
-          let newx = {
-            tag: x.value,
-            color: x.color
-          }
-          newarr.push(newx);
-        })
-        return {
-          kind: GridCellKind.Custom,
-          allowOverlay: true,
-          copyData: "4",
-          data: {
-            kind: "tags-cell",
-            possibleTags: newarr || [],
+        else if (dataType === "singlelinetext") {
+          return {
+            kind: GridCellKind.Text,
+            allowOverlay: true,
             readonly: false,
-            tags: d || [],
-          },
-        };
+            displayData: d || "",
+            data: d || "",
+            wrapText: false,
+            multiline: false,
+          };
+        } else if (dataType === "phone") {
+          return {
+            allowOverlay: true,
+            kind: GridCellKind.Number,
+            data: d || "",
+            displayData: d || "",
+          };
+        } else if (dataType === "numeric") {
+          return {
+            allowOverlay: true,
+            kind: GridCellKind.Number,
+            data: d || "",
+            displayData: d || "",
+          };
+        } else if (dataType === "multipleselect") {
+          const possibleTags = fields[col]?.metadata?.option;
+          // const row = 0; // Replace 0 with the appropriate row index
+          let newarr = [];
+          possibleTags &&
+            possibleTags?.map((x) => {
+              let newx = {
+                tag: x.value,
+                color: x.color,
+              };
+              newarr.push(newx);
+            });
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: "4",
+            data: {
+              kind: "tags-cell",
+              possibleTags: newarr || [],
+              readonly: false,
+              tags: d || [],
+            },
+          };
+        } else if (dataType == "attachment" && d != null) {
+          return {
+            kind: GridCellKind.Image,
+            data: d,
+            allowOverlay: true,
+            allowAdd: true,
+          };
+        } else if (dataType === "singleselect") {
+          return {
+            kind: GridCellKind.Custom,
+            allowOverlay: true,
+            copyData: d,
+            data: {
+              kind: "dropdown-cell",
+              allowedValues: fields[col]?.metadata?.option || [],
+              value: d || "",
+            },
+          };
+        } else if (dataType === "checkbox") {
+          return {
+            kind: GridCellKind.Boolean,
+            data: d,
+            allowOverlay: false,
+          };
+        } else {
+          return {
+            kind: GridCellKind.Text,
+            allowOverlay: true,
+            readonly: false,
+            displayData: d || "",
+            data: d || "",
+          };
+        }
+      } else {
+        return {};
       }
-
-      else if (dataType == "attachment" && d != null) {
-        return {
-          kind: GridCellKind.Image,
-          data: d,
-          allowOverlay: true,
-          allowAdd: true,
-        };
-      }
-      else if (dataType === "singleselect") {
-        return {
-          kind: GridCellKind.Custom,
-          allowOverlay: true,
-          copyData: d,
-          data: {
-            kind: "dropdown-cell",
-            allowedValues: fields[col]?.metadata?.option || [],
-            value: d || ""
-          }
-        };
-      }
-      else if (dataType === "checkbox") {
-        return {
-          kind: GridCellKind.Boolean,
-          data: d,
-          allowOverlay: false,
-        };
-      }
-
-      else {
-        return {
-          kind: GridCellKind.Text,
-          allowOverlay: true,
-          readonly: false,
-          displayData: d || "",
-          data: d || "",
-        };
-      }
-    }
-    else {
-      return {};
-    }
-  }, [dataa, fields]);
+    },
+    [dataa, fields]
+  );
 
   const realCols = useMemo(() => {
     return fields?.map((c) => ({
       ...c,
       hasMenu: true,
     }));
-  }, [fields,fields1]);
+  }, [fields, fields1]);
 
   const handlegridselection = (event) => {
     setSelection1(event);
     // return event;
-  }
+  };
 
   return (
     <>
-    {JSON.stringify(selection1)!==JSON.stringify(emptyselection) && selection1.rows.items.length>0 && <button
-    className="fontsize"
-  style={{
-    position: "absolute",
-    display:'flex',
-    flexDirection:'row',
-    right: "1%",
-    top: "19.9%",
-    zIndex: "10000",
-    background: "none",
-    border: "none",
-    outline: "none",
-    cursor: "pointer",
-   
-  }}
-  onClick={() => handleDeleteRow(selection1)}
->
-  <div style={{marginTop:"5px"}}>Delete Rows</div>
-  <div>
-    
-    <DeleteOutlineIcon />
-  </div>
-</button>
-}
-      <div className="table-container" style={{height:`${((window?.screen?.height*50)/100)}px`}}>
+      {JSON.stringify(selection1) !== JSON.stringify(emptyselection) &&
+        selection1.rows.items.length > 0 && (
+          <button
+            className="fontsize"
+            style={{
+              position: "absolute",
+              display: "flex",
+              flexDirection: "row",
+              right: "1%",
+              top: "19.9%",
+              zIndex: "10000",
+              background: "none",
+              border: "none",
+              outline: "none",
+              cursor: "pointer",
+            }}
+            onClick={() => handleDeleteRow(selection1)}
+          >
+            <div style={{ marginTop: "5px" }}>Delete Rows</div>
+            <div>
+              <DeleteOutlineIcon />
+            </div>
+          </button>
+        )}
+      <div
+        className="table-container"
+        style={{ height: `${(window?.screen?.height * 50) / 100}px` }}
+      >
         <DataEditor
           {...cellProps}
           width={window.screen.width}
@@ -542,7 +597,7 @@ export default function MainTable() {
             sticky: true,
             tint: true,
             hint: "New row...",
-            targetColumn: realCols.length - 1, 
+            targetColumn: realCols.length - 1,
             render: () => (
               <select className="dropdown">
                 <option value="option1">Option 1</option>
@@ -554,32 +609,39 @@ export default function MainTable() {
           }}
         />
       </div>
-      {open && <FieldPopupModal
-        title="create column"
-        label="Column Name"
-        setSelectedFieldName={setSelectedFieldName}
-        tableId={params?.tableName}
-        selectedFieldName={selectedFieldName}
-        selectedTable={selectedTable}
-        setSelectedTable={setSelectedTable}
-        setSelectValue={setSelectValue}
-        selectValue={selectValue}
-        showFieldsDropdown={showFieldsDropdown}
-        setShowFieldsDropdown={setShowFieldsDropdown}
-        open={open}
-        metaData={metaData}
-        setMetaData={setMetaData}
+      {open && (
+        <FieldPopupModal
+          title="create column"
+          label="Column Name"
+          setSelectedFieldName={setSelectedFieldName}
+          tableId={params?.tableName}
+          selectedFieldName={selectedFieldName}
+          selectedTable={selectedTable}
+          setSelectedTable={setSelectedTable}
+          setSelectValue={setSelectValue}
+          selectValue={selectValue}
+          showFieldsDropdown={showFieldsDropdown}
+          setShowFieldsDropdown={setShowFieldsDropdown}
+          open={open}
+          metaData={metaData}
+          setMetaData={setMetaData}
+          setOpen={setOpen}
+          queryByAi={queryByAi}
+          setQueryByAi={setQueryByAi}
+          submitData={createLeftorRightColumn}
+          linkedValueName={linkedValueName}
+          setLinkedValueName={setLinkedValueName}
+          textValue={textValue}
+          setTextValue={setTextValue}
+        />
+      )}
+      <Headermenu
+        menu={menu}
+        setMenu={setMenu}
         setOpen={setOpen}
-        queryByAi ={queryByAi}
-        setQueryByAi = {setQueryByAi}
-        submitData={createLeftorRightColumn}
-        linkedValueName={linkedValueName}
-        setLinkedValueName={setLinkedValueName}
-        textValue={textValue}
-        setTextValue={setTextValue}
-       
-      />}
-      <Headermenu menu={menu} setMenu={setMenu} setOpen={setOpen} setDirectionAndId={setDirectionAndId} fields={fields} />
+        setDirectionAndId={setDirectionAndId}
+        fields={fields}
+      />
 
       {openAttachment && (
         <SelectFilepopup

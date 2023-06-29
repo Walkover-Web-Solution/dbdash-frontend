@@ -87,12 +87,13 @@ Object.entries(props?.dbs).forEach(([, value]) => {
     // }
     if (!newName || newName.trim() === "") {
       toast.error("Workspace name cannot be empty");
-      return;
+      setOrgName(props.dbs[0]?.org_id?.name);
+      return ;
     }
     
     if (newName.length < 3) {
       toast.error("Workspace name must be at least 3 characters long");
-      return;
+      return ;
     }
   
     if (newName.length > 30) {
