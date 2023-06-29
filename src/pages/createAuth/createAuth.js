@@ -45,8 +45,10 @@ export default function CreateAuthKey(props) {
 
   const isDisabled = !name || scope == "" || scope == [] || !scope;
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter"  && !isDisabled ) {
       event.preventDefault();
+
+      createAuth();
     }
   };
   const createAuth = async () => {
@@ -92,22 +94,21 @@ export default function CreateAuthKey(props) {
   };
   useEffect(() => {
     setDataforEdit(EditAuthKeyData);
-  }, [EditAuthKeyData]);
+  }, []);
 
   const setDataforEdit=(authkeydata)=>{
     if (!authkeydata) return;
     setName(authkeydata?.authData?.name);
     if (!authkeydata?.authData?.access) return;
     if (typeof authkeydata?.authData?.access == "string") {
-      if (authkeydata?.authData?.access == "1") {
-        setScope(`alltables_${authkeydata?.authData?.scope}`);
-      } else setScope(`schema_${authkeydata?.authData?.scope}`);
+      if (authkeydata?.authData?.access == "1") setScope(`alltables_${authkeydata?.authData?.scope}`);
+      else setScope(`schema_${authkeydata?.authData?.scope}`);
     } else {
       let arr = [...scope];
       Object.entries(authkeydata?.authData?.access).map(([key, value]) => {
         arr.push(`${key}_${value?.scope}`);
       });
-      setScope(arr);
+      setScope([...arr]);
     }
   }
 
@@ -131,26 +132,7 @@ export default function CreateAuthKey(props) {
             />
           </Box>
           <Selectaccessandscope scope={scope} setScope={setScope} alltabledata={props?.alltabledata}/>
-          {/* <Box className="create-auth-key-row">
-            <Typography className="create-auth-key-label">Table Access</Typography>
-            <Box className="create-auth-key-dropdown">
-              <AuthAccessDropDown
-              EditAuthKeyDatas={EditAuthKeyData}
-                selected={selected}
-                setSelected={setSelected}
-                EditAuthKeyData={props.id}
-                options={options}
-                setOptions={setOptions}
-              />
-            </Box>
-          </Box>
-          <Box className="create-auth-key-row">
-            <Typography className="create-auth-key-label">Scope</Typography>
-            <Box className="create-auth-key-dropdown">
-              <AuthKeyDropdown scope={scope} setScope={setScope} />
-            </Box>
-          </Box> */}
-
+         
           <Box className="create-auth-key-actions">
             <Box>
               <Button
@@ -191,14 +173,12 @@ CreateAuthKey.propTypes = {
   EditAuthKeyData: PropTypes.string,
   open: PropTypes.bool,
   authData: PropTypes.any,
-  authkeycreatedorupdated: PropTypes.any,
-  setAuthkeycreatedorupdated: PropTypes.any,
+  
   title: PropTypes.any,
   id: PropTypes.any,
   alltabledata: PropTypes.any,
 
   handleClose: PropTypes.func,
-  location: PropTypes.any,
   setAuthKeys: PropTypes.any,
   getCreatedByName: PropTypes.func,
   setCreatedBy: PropTypes.any,

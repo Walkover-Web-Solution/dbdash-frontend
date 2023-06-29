@@ -8,7 +8,6 @@ import CreateAuthKey from "../createAuth/createAuth";
 
 export default function AuthKeyPage(props) {
   const [open, setOpen] = useState(false);
-  const[authkeycreatedorupdated,setAuthkeycreatedorupdated]=useState(0);
 
   const handleClose = () => {
     setOpen(false);
@@ -36,14 +35,14 @@ export default function AuthKeyPage(props) {
         createdBy={createdBy}
         setCreatedBy={setCreatedBy}
         alltabledata={props?.alltabledata}
-        setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} open={open} handleClose={handleClose} id={props.dbtoredirect} />
+        setAuthKeys={setAuthKeys}  open={open} handleClose={handleClose} id={props.dbtoredirect} />
       )}
       <Box className="auth-key-page-content">
         <AuthKey authKeys={authKeys} 
         createdBy={createdBy}
         alltabledata={props?.alltabledata}
         setCreatedBy={setCreatedBy}
-        setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} dbId={props.dbtoredirect}/>
+        setAuthKeys={setAuthKeys}  dbId={props.dbtoredirect}/>
       </Box>
     </>
   );

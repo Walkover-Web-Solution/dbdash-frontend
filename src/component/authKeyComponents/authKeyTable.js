@@ -195,11 +195,8 @@ console.log("dkjfjkf",props.authKeys);
 
                         dbId={props.dbId}
                         setAuthKeys={props?.setAuthKeys}
-                        setAuthkeycreatedorupdated={
-                          props.setAuthkeycreatedorupdated
-                        }
+                       
                         deleteFunction={deleteAuthkeyFun}
-                        authkeycreatedorupdated={props.authkeycreatedorupdated}
                       />
                     </TableCell>
                   </TableRow>
@@ -217,8 +214,6 @@ AuthKey.propTypes = {
   scope: PropTypes.any,
   authKeys: PropTypes.any,
   setAuthKeys: PropTypes.any,
-  authkeycreatedorupdated: PropTypes.any,
-  setAuthkeycreatedorupdated: PropTypes.any,
   selected: PropTypes.any,
   setCreatedBy: PropTypes.any,
   createdBy: PropTypes.any,
