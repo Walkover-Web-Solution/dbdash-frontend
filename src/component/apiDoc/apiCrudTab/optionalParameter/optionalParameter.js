@@ -254,7 +254,7 @@ const classes = useStyles();
                   </Select>
                 </FormControl>
               )}
-            </Box>
+            </Box>  
 
             <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} style={{ paddingTop: '10px' }}>
               Limit

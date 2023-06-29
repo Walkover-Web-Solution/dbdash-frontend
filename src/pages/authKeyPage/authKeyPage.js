@@ -35,11 +35,13 @@ export default function AuthKeyPage(props) {
         <CreateAuthKey 
         createdBy={createdBy}
         setCreatedBy={setCreatedBy}
+        alltabledata={props?.alltabledata}
         setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} open={open} handleClose={handleClose} id={props.dbtoredirect} />
       )}
       <Box className="auth-key-page-content">
         <AuthKey authKeys={authKeys} 
         createdBy={createdBy}
+        alltabledata={props?.alltabledata}
         setCreatedBy={setCreatedBy}
         setAuthKeys={setAuthKeys} authkeycreatedorupdated={authkeycreatedorupdated} setAuthkeycreatedorupdated={setAuthkeycreatedorupdated} dbId={props.dbtoredirect}/>
       </Box>
@@ -51,5 +53,6 @@ AuthKeyPage.propTypes={
   dbId:PropTypes.any,
   dbtoredirect:PropTypes.any,
   selectedOption:PropTypes.any,
-  tabletoredirect:PropTypes.any
+  tabletoredirect:PropTypes.any,
+  alltabledata:PropTypes.any
 }

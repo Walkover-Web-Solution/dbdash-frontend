@@ -279,7 +279,7 @@ const classes = useStyles();
           </Box>
         )}
         { showWebhookPage=="authkey" && 
-        <AuthKeyPage  id={dbId} selectedOption={selectedOption} dbtoredirect={props.dbtoredirect} tabletoredirect={props.tabletoredirect}/>
+        <AuthKeyPage  id={dbId} selectedOption={selectedOption} alltabledata={dataforwebhook} dbtoredirect={props.dbtoredirect} tabletoredirect={props.tabletoredirect}/>
 }
       </div>
     </div>

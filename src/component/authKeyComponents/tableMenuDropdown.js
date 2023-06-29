@@ -82,7 +82,8 @@ const[open1,setOpen1]=useState(false);
                        
                         
       {open1 && <CreateAuthKey 
-      setAuthKeys={props?.setAuthKeys} authkeycreatedorupdated={props.authkeycreatedorupdated}  setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}   open={open1} id={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
+        alltabledata={props?.alltabledata}
+        setAuthKeys={props?.setAuthKeys}  authkeycreatedorupdated={props.authkeycreatedorupdated}  setAuthkeycreatedorupdated={props.setAuthkeycreatedorupdated}   open={open1} id={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
     </>
   );
 }
@@ -97,5 +98,6 @@ AuthDropdown.propTypes = {
   authkeycreatedorupdated:PropTypes.any,
   setAuthkeycreatedorupdated:PropTypes.any,
   setAuthKeys:PropTypes.any,
+  alltabledata:PropTypes.any,
   getCreatedByName:PropTypes.func
 };

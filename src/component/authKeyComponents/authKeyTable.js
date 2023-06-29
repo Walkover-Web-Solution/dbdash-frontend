@@ -22,6 +22,7 @@ export default function AuthKey(props) {
   const user = useSelector((state) => allOrg(state));
 
   useEffect(() => {
+
     getAuthkeyFun();
   }, [props.dbId]);
 
@@ -109,7 +110,7 @@ export default function AuthKey(props) {
     const monthName = createdDate.toLocaleString("default", { month: "long" });
     return `${monthName} ${year}`;
   };
-
+console.log("dkjfjkf",props.authKeys);
   return (
     <>
       <Box sx={{ my: 1, paddingLeft: "24px", paddingRight: "31px" }}>
@@ -135,7 +136,7 @@ export default function AuthKey(props) {
             </TableHead>
             <TableBody>
               {props.authKeys &&
-                Object.keys(props.authKeys).map((keys, index) => (
+                Object.keys(props?.authKeys).map((keys, index) => (
                   <TableRow
                     key={keys}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -172,15 +173,16 @@ export default function AuthKey(props) {
                       )}
                     </TableCell>
                     <TableCell>
-                      {props.authKeys[keys].access === "1" ||
-                      props.authKeys[keys].access === "11" ? (
-                        <div>{props.authKeys[keys].scope}</div>
-                      ) : (
-                        <div>
-                          {Object.values(props.authKeys[keys].access)[0]?.scope}
-                        </div>
-                      )}
-                    </TableCell>
+  {props.authKeys[keys].access === "1" || props.authKeys[keys].access === "11" ? (
+    <div>{props.authKeys[keys].scope}</div>
+  ) : (
+    Object.entries(props.authKeys[keys].access).map(([key,value]) => (
+      <div key={key}>{value.scope}</div>
+    ))
+    
+  )}
+</TableCell>
+
                     <TableCell>
                       <TableMenuDropdown
                         authData={props.authKeys[keys]}
@@ -189,6 +191,8 @@ export default function AuthKey(props) {
                         second={"Delete"}
                         third={"Show AuthKey"}
                         title={keys}
+        alltabledata={props?.alltabledata}
+
                         dbId={props.dbId}
                         setAuthKeys={props?.setAuthKeys}
                         setAuthkeycreatedorupdated={
@@ -218,4 +222,6 @@ AuthKey.propTypes = {
   selected: PropTypes.any,
   setCreatedBy: PropTypes.any,
   createdBy: PropTypes.any,
+  alltabledata:PropTypes.any
+
 };
