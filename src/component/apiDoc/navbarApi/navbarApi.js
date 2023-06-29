@@ -174,8 +174,8 @@ const classes = useStyles();
                         : 0
                     )
                     .map(([orgId, dbs]) => {
-                      const sortedDbs = [...dbs].sort((db1, db2) =>
-                        db1.name.localeCompare(db2.name)
+                      const sortedDbs = [...dbs]?.sort((db1, db2) =>
+                        db1?.name?.localeCompare(db2.name)
                       );
 
                       return [
