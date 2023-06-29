@@ -241,7 +241,7 @@ export default function SingleDatabase(props) {
             <Typography sx={{ fontWeight: "bold" }}>
               {props.db.name}{" "}
             </Typography>
-            <Box sx={{ mt: -1 }}>
+            <Box >
             {arr1.length > 1 && !props?.db?.deleted ? (
   <Dropdown
     setTabIndex={props?.setTabIndex}
