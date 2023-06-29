@@ -154,9 +154,8 @@ export default function SingleTable({
   return (
     <>
       <Box
-        className={`single-table ${
-          location.pathname.includes(`table/${table[0]}`) ? "active" : ""
-        }`}
+        className={`single-table ${location.pathname.includes(`table/${table[0]}`) ? "active" : ""
+          }`}
         onClick={() => {
           onTableClicked(table[0]);
         }}
@@ -169,8 +168,9 @@ export default function SingleTable({
               }}
             >
               <Box>
-                <TextField
-                  defaultValue={table[1]?.tableName || table[0]}
+                {/* <TextField
+                  // defaultValue={table[1]?.tableName || table[0]}
+
                   autoFocus
                   sx={{
                     width: 75,
@@ -192,7 +192,31 @@ export default function SingleTable({
                     setTableNa(e.target.value);
                   }}
                   size="small"
+                /> */}
+                <TextField
+                  defaultValue={table[1]?.tableName || table[0] || " "}
+                  autoFocus
+                  sx={{
+                    width: 75,
+                    fontWeight: "bold",
+                    backgroundColor: "white",
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      renameTableName(dbData?.db?._id, table[0]);
+                      setName(false);
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onChange={(e) => {
+                    setTableNa(e.target.value);
+                  }}
+                  size="small"
                 />
+
                 <Button
                   sx={{
                     width: 2,
@@ -208,7 +232,7 @@ export default function SingleTable({
                   }}
                   variant="contained"
                   className="mui-button"
-                  // style={{color:'white'}}
+                // style={{color:'white'}}
                 >
                   Rename
                 </Button>
