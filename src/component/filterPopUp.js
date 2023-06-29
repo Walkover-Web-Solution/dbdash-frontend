@@ -82,7 +82,6 @@ const style = {
       htmlToShow : ""
     };
     const filter = await createFilter(props?.dbId, props?.tableName, dataa);
-    console.log(filter,"filterdata")
     const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
     const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName);
     await dispatch(setAllTablesData(

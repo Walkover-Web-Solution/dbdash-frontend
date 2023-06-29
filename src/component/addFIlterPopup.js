@@ -84,7 +84,6 @@ export default function AddFilterPopup(props) {
 
 
   useEffect(() => {
-    console.log("inuseffect")
     if (props?.edit == true) {
       const editDataValues = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.query;
       const htmlToShow=AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow;
@@ -95,7 +94,6 @@ export default function AddFilterPopup(props) {
         const index = editDataValues.indexOf(searchString); 
         if (index !== -1) {
          valueAfterWhere = editDataValues.substring(index + searchString.length).trim();
-        console.log(valueAfterWhere);
         setQuery(valueAfterWhere)
       }
       } else{

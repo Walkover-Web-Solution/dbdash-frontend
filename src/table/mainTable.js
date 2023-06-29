@@ -420,7 +420,19 @@ export default function MainTable() {
             displayData: d || "",
             data: d || "",
           };
-        } else if (dataType === "singlelinetext") {
+        
+        } 
+
+        else if (dataType === "uri") {
+          return {
+            kind: GridCellKind.Uri,
+            allowOverlay: true,
+            readonly: false,
+            displayData: d || "",
+            data: d || "",
+          };
+        }
+        else if (dataType === "singlelinetext") {
           return {
             kind: GridCellKind.Text,
             allowOverlay: true,
