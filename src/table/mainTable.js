@@ -436,7 +436,7 @@ export default function MainTable(props) {
 
         }
 
-        else if (dataType === "uri") {
+        else if (dataType === "url") {
           return {
             kind: GridCellKind.Uri,
             allowOverlay: true,
@@ -567,7 +567,7 @@ export default function MainTable(props) {
       ,
 
 
-      uri: p => `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      url: p => `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M16.222 2H3.778C2.8 2 2 2.8 2 3.778v12.444C2 17.2 2.8 18 3.778 18h12.444c.978 0 1.77-.8 1.77-1.778L18 3.778C18 2.8 17.2 2 16.222 2z" fill="${p.bgColor}"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M10.29 4.947a3.368 3.368 0 014.723.04 3.375 3.375 0 01.041 4.729l-.009.009-1.596 1.597a3.367 3.367 0 01-5.081-.364.71.71 0 011.136-.85 1.95 1.95 0 002.942.21l1.591-1.593a1.954 1.954 0 00-.027-2.733 1.95 1.95 0 00-2.732-.027l-.91.907a.709.709 0 11-1.001-1.007l.915-.911.007-.007z" fill="${p.fgColor}"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M6.55 8.678a3.368 3.368 0 015.082.364.71.71 0 01-1.136.85 1.95 1.95 0 00-2.942-.21l-1.591 1.593a1.954 1.954 0 00.027 2.733 1.95 1.95 0 002.73.028l.906-.906a.709.709 0 111.003 1.004l-.91.91-.008.01a3.368 3.368 0 01-4.724-.042 3.375 3.375 0 01-.041-4.728l.009-.009L6.55 8.678z" fill="${p.fgColor}"/>
@@ -597,7 +597,6 @@ export default function MainTable(props) {
 <circle cx="12" cy="12" r="10" fill="${p.fgColor}" />
 <path d="M7 10l5 5 5-5" />
 </svg>`
-
       ,
       multipleselect: p => `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
   <circle cx="10" cy="10" r="8" fill="${p.bgColor}" stroke="${p.fgColor}" stroke-width="2"/>
