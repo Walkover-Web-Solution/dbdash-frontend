@@ -250,13 +250,15 @@ export default function MainTable() {
     },
     [dataa, data, fields, fields1]
   );
-
-  const handleColumnResize = (field, newSize, colIndex) => {
-    let newarrr = [...(fields || fields1)];
-    let obj = Object.assign({}, newarrr[colIndex]);
-    obj.width = newSize;
-    newarrr[colIndex] = obj;
-    setFields(newarrr);
+ const handleColumnResizeWithoutAPI=useCallback((_,newSize,colIndex)=>{
+  let newarrr = [...(fields || fields1)];
+  let obj = Object.assign({}, newarrr[colIndex]);
+  obj.width = newSize;
+  newarrr[colIndex] = obj;
+  setFields(newarrr);
+ });
+  const handleColumnResize = (field, newSize) => {
+    
     dispatch(
       updateColumnHeaders({
         filterId: params?.filterName,
@@ -332,6 +334,7 @@ export default function MainTable() {
   };
 
   const onHeaderMenuClick = useCallback((col, bounds) => {
+    
     setMenu({ col, bounds });
   }, []);
 
@@ -581,6 +584,7 @@ export default function MainTable() {
           onSearchClose={() => setShowSearch(false)}
           // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}
+          onColumnResize={handleColumnResizeWithoutAPI}
           onColumnResizeEnd={handleColumnResize}
           onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
           // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
