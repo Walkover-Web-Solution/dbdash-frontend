@@ -39,6 +39,16 @@ export const reducers = {
       state.skipReset = true;
     }
   },
+  updatecellbeforeapi(state,payload){
+    const action = payload.payload;
+    let rows = [...state.data];
+    let rowtoupdatecell={...action?.row};
+    const [key, value] = Object.entries(action?.updatedvalue?.fields)[0];
+    rowtoupdatecell[key]=typeof value=='number'?value.toString():value;
+      rows[action?.rowIndex] = rowtoupdatecell;
+    state.data = rows;
+
+  },
   resetData() {
     return {
       columns: [],

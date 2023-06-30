@@ -38,7 +38,6 @@ export default function AddFilterPopup(props) {
   const [html, setHtml] = useState('');
   const [text, setText] = useState('');
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("")
   const [fields, setFields] = useState([]);
   const [defaultValue,setDefaultValue]=useState(AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow || "");
   const tableData = async () => {
@@ -89,15 +88,16 @@ export default function AddFilterPopup(props) {
       const htmlToShow=AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow;
       setDefaultValue(htmlToShow);
       const searchString = "where";
-      let valueAfterWhere = ""
+      // let valueAfterWhere = ""
       if(editDataValues.includes(searchString)){
         const index = editDataValues.indexOf(searchString); 
         if (index !== -1) {
-         valueAfterWhere = editDataValues.substring(index + searchString.length).trim();
-        setQuery(valueAfterWhere)
+        //  valueAfterWhere =
+          editDataValues.substring(index + searchString.length).trim();
+        // setQuery(valueAfterWhere)
       }
       } else{
-        setQuery("")
+        // setQuery("")
       }     
       setFilterName(AllTableInfo.tables[props?.tableName].filters[props?.filterId].filterName)
       
@@ -108,7 +108,7 @@ export default function AddFilterPopup(props) {
 
   const updateFilter =async()=>{
     var queryToSend = " ";
-    console.log(query,"qwury")
+    // console.log(query,"qwury")
     if (props?.dbData?.db?.tables[props?.tableName]?.view &&
       Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
