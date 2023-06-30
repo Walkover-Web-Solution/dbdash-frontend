@@ -13,7 +13,6 @@ const ViewTable = () => {
     const fetchData = async () => {
       try {
         const response = await getViewTable(viewid);
-        // console.log("respose",response)
         const responseData = response.data.data;
 
         const fetchedRows = responseData.offsetAndRows.rows;
