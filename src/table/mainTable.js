@@ -57,7 +57,7 @@ export default function MainTable() {
     rows: CompactSelection.empty(),
     current: undefined,
   };
-  const [selection1, setSelection1] = useState(emptyselection);
+  const [selection, setSelection] = useState(emptyselection);
   const [fields, setFields] = useState(fields1 || []);
   const tableInfo = useSelector((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId;
@@ -67,6 +67,7 @@ export default function MainTable() {
   }, [dataa]);
 
   const isSingleCellSelected=(selection)=>{
+    console.log("isSingleCellSelected",selection)
     return selection.current && (selection.current.range.height*selection.current.range.width==1);
   }
   const handleUploadFileClick = useCallback((cell) => {
@@ -250,11 +251,11 @@ export default function MainTable() {
         params,
         dataa[cell?.[1] ?? []],
         fields[cell[0]].dataType,
-   isSingleCellSelected(selection1)
+   isSingleCellSelected(selection)
 
       );
     },
-    [dataa, data, fields, fields1]
+    [dataa,fields,selection]
   );
 
   const handleColumnResize = (field, newSize, colIndex) => {
@@ -334,7 +335,7 @@ export default function MainTable() {
     if (deletedRowIndices.length > 0) {
       dispatch(deleteRows({ deletedRowIndices, dataa }));
     }
-    setSelection1(emptyselection);
+    setSelection(emptyselection);
   };
 
   const onHeaderMenuClick = useCallback((col, bounds) => {
@@ -546,13 +547,13 @@ export default function MainTable() {
   }, [fields, fields1]);
 
   const handlegridselection = (event) => {
-    setSelection1(event);
+    setSelection(event);
   };
 
   return (
     <>
-      {JSON.stringify(selection1) !== JSON.stringify(emptyselection) &&
-        selection1.rows.items.length > 0 && (
+      {JSON.stringify(selection) !== JSON.stringify(emptyselection) &&
+        selection.rows.items.length > 0 && (
           <button
             className="fontsize"
             style={{
@@ -567,7 +568,7 @@ export default function MainTable() {
               outline: "none",
               cursor: "pointer",
             }}
-            onClick={() => handleDeleteRow(selection1)}
+            onClick={() => handleDeleteRow(selection)}
           >
             <div style={{ marginTop: "5px" }}>Delete Rows</div>
             <div>
@@ -587,7 +588,7 @@ export default function MainTable() {
           onRowAppended={addRows}
           columns={realCols}
           rows={dataa.length}
-          gridSelection={selection1}
+          gridSelection={selection}
           rowMarkers="both"
           rowSelectionMode="multi"
           onGridSelectionChange={handlegridselection}
