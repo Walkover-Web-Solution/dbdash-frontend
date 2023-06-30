@@ -66,6 +66,9 @@ export default function MainTable() {
     setData(dataa);
   }, [dataa]);
 
+  const isSingleCellSelected=(selection)=>{
+    return selection.current && (selection.current.range.height*selection.current.range.width==1);
+  }
   const handleUploadFileClick = useCallback((cell) => {
     if (!data) return;
     const [col, row] = cell;
@@ -238,6 +241,7 @@ export default function MainTable() {
       if (fields[cell[0]].dataType == "singleselect") {
         newValue =  newValue.data.value ;
       }
+     
       editCell(
         cell,
         newValue,
@@ -245,7 +249,9 @@ export default function MainTable() {
         fields,
         params,
         dataa[cell?.[1] ?? []],
-        fields[cell[0]].dataType
+        fields[cell[0]].dataType,
+   isSingleCellSelected(selection1)
+
       );
     },
     [dataa, data, fields, fields1]
@@ -497,13 +503,26 @@ export default function MainTable() {
               value: d || "",
             },
           };
-        } else if (dataType === "checkbox") {
-          return {
-            kind: GridCellKind.Boolean,
-            data: d,
-            allowOverlay: false,
-          };
-        } else {
+        } 
+
+        else if (dataType === "checkbox" ) {
+               let show=false;
+               if(d)
+               {
+                 if(typeof d=='string')
+                 {
+                   show=d=='true'?true:false;
+                 }
+                 else show=d;
+               }
+               return {
+                 kind: GridCellKind.Boolean,
+                 data: show,
+                 allowOverlay: false,
+               };
+             }
+       
+       else {
           return {
             kind: GridCellKind.Text,
             allowOverlay: true,
@@ -528,7 +547,6 @@ export default function MainTable() {
 
   const handlegridselection = (event) => {
     setSelection1(event);
-    // return event;
   };
 
   return (
