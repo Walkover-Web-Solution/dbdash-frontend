@@ -179,6 +179,9 @@ useEffect(() => {
       }))
    
     }
+    else {
+      setUnderLine(null);
+    }
   }, [params?.filterName]);
 
   const shareLink = async () => {
