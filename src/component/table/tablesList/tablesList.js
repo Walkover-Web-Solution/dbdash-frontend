@@ -3,6 +3,9 @@ import ShareLinkPopUp from "../ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal";
 // import { toast } from 'react-toastify';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
 import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
@@ -53,6 +56,7 @@ export default function TablesList({ dbData }) {
   const [underLine, setUnderLine] = useState(params?.filterName)
   const [currentTable, setcurrentTable] = useState(null)
   const [link, setLink] = useState("Link");
+  const [minimap, setMinimap] = useState(false);
   const AllTable = useSelector((state) => getAllTableInfo(state));
   const [openManageField, setOpenManageField] = useState(false);
   const userDetails = useSelector((state) => selectActiveUser(state));
@@ -308,6 +312,8 @@ useEffect(() => {
         <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
           <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}} onClick={handleClickOpenManageField}>Manage Fields</Button>
+                  
+          <Button onClick={()=>setMinimap(!minimap)}>Minimap {!minimap?<CheckBoxOutlineBlankIcon fontSize="4px" />:<CheckBoxIcon fontSize="2px" />}</Button>
           {  params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0,mr:2 }} onClick={handleEdit}>Edit filter</Button>
           <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}}  onClick={(e) => {
               handleClick(e, "share");
@@ -392,7 +398,7 @@ useEffect(() => {
           <CircularProgress className="table-loading" />
         ) : (
           <div>
-            <MainTable setPage={setPage} page={page} />
+            <MainTable setPage={setPage} page={page} minimap={minimap}/>
           </div>
         )}
       </div>
