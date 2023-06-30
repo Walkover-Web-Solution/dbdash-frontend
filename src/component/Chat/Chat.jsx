@@ -89,6 +89,8 @@ const Chat = () => {
       } else {
         // myVariable is not a string, stringify it
         code = JSON.stringify(myVariable);
+        console.log("myvariable  : -" , myVariable)
+        console.log("cide   :-" , code)
       }
 
       // const code = JSON.stringify(myVariable) ;

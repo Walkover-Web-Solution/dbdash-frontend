@@ -38,8 +38,8 @@ function App() {
       <Route exact path ="/apiDoc/db/:dbId" element ={<Protected><ApiDocPage /></Protected>}/>
       <Route exact path="*" element={<Navigate to="/notFound" />} />
       <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
-      <Route exact path = "/msg91bi" element = {<Msg91bi_id_page />} />
-      <Route exact path = "//chat/:id" element = {<Chat />} />
+      <Route exact path = "/bi" element = {<Protected><Msg91bi_id_page /></Protected>} />
+      <Route exact path = "/chat/:id" element = {<Protected><Chat /></Protected>} />
       <Route exact path ="/:viewid" element ={<ViewTable/>}/>
     </Routes>
 
