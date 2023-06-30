@@ -4,10 +4,8 @@ import { Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem
 // import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 import FunctionsIcon from "@mui/icons-material/Functions";
 import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
-import ReadMoreOutlinedIcon from "@mui/icons-material/ReadMoreOutlined";
 import TextFormatIcon from "@mui/icons-material/TextFormat";
 import NotesIcon from "@mui/icons-material/Notes";
 import { withStyles } from '@mui/styles';
@@ -18,12 +16,15 @@ import NumbersIcon from "@mui/icons-material/Numbers";
 // import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
+// import FontDownloadIcon from '@mui/icons-material/FontDownload';
 import FormulaDataType from "./fieldDataType/formulaDataType";
 import LinkDataType from "./fieldDataType/linkDataType";
 import LoookupDataType from "./fieldDataType/lookupDataType";
 import NumberDataType from "./fieldDataType/numberDataType";
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Joi from "joi";
 import PropTypes from "prop-types";
 const styles = {
@@ -252,21 +253,21 @@ export default function FieldPopupModal(props) {
               minWidth: 120,
             }}
           >
-            <MenuItem value="attachment"><AttachFileIcon fontSize="2px" sx={{ mr: 1 }} /> Attachment</MenuItem>
+            <MenuItem value="attachment"><InsertDriveFileIcon fontSize="2px" sx={{ mr: 1 }} /> Attachment</MenuItem>
             <MenuItem value="checkbox"> <CheckIcon fontSize="2px" sx={{ mr: 1 }} />Checkbox</MenuItem>
             {/* <MenuItem value="createdat"> <MoreTimeIcon fontSize="2px" sx={{ mr: 1 }} />Created at</MenuItem>
             <MenuItem value="createdby"><PersonPinIcon fontSize="2px" sx={{ mr: 1 }} />Created by </MenuItem> */}
             <MenuItem value="datetime"><DateRangeIcon fontSize="2px" sx={{ mr: 1 }} /> Datetime </MenuItem>
             <MenuItem value="email"><EmailIcon fontSize="2px" sx={{ mr: 1 }} />Email</MenuItem>
             <MenuItem value="formula"><FunctionsIcon fontSize="2px" sx={{ mr: 1 }} />Formula  </MenuItem>
-            <MenuItem value="link"><ReadMoreOutlinedIcon fontSize="2px" sx={{ mr: 1 }} /> Link </MenuItem>
+            <MenuItem value="link"><ArrowForwardIcon fontSize="2px" sx={{ mr: 1 }} /> Link </MenuItem>
             <MenuItem value="longtext" defaultValue="longtext"><NotesIcon fontSize="2px" sx={{ mr: 1 }} /> Long text </MenuItem>
             <MenuItem value="lookup"><ManageSearchOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Lookup</MenuItem>
-            <MenuItem value="multipleselect"><QueueOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
+            <MenuItem value="multipleselect"><DoneAllIcon fontSize="2px" sx={{ mr: 1 }} />Multiple select</MenuItem>
             <MenuItem value="numeric"><NumbersIcon fontSize="2px" sx={{ mr: 1 }} /> Number</MenuItem>
             <MenuItem value="phone"><LocalPhoneIcon fontSize="2px" sx={{ mr: 1 }} />Phone number</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon fontSize="2px" sx={{ mr: 1 }} />Single line text</MenuItem>
-            <MenuItem value="singleselect"><ExpandCircleDownOutlinedIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
+            <MenuItem value="singleselect"><ArrowDropDownCircleIcon fontSize="2px" sx={{ mr: 1 }} />Single select</MenuItem>
             <MenuItem value="Uri"><LinkIcon fontSize="2px" sx={{ mr: 1 }} /> URL</MenuItem> 
 
           </Select>
