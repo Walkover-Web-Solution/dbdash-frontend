@@ -17,6 +17,7 @@ import { selectActiveUser } from "../../store/user/userSelector.js";
 import "./createAuth.scss";
 import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
+// import { toast } from "react-toastify";
 
 export default function CreateAuthKey(props) {
   const id = props.id;
@@ -74,8 +75,24 @@ export default function CreateAuthKey(props) {
       data.access = accesstosend;
       data.scope = scopetosend;
     }
+    // if (
+    //   name === '' ||
+    //   (name === EditAuthKeyData?.authData?.name &&
+    //     ((!Object.prototype.hasOwnProperty.call(data, 'scope') && !Object.prototype.hasOwnProperty.call(EditAuthKeyData?.authData, 'scope')) ||
+    //       (Object.prototype.hasOwnProperty.call(data, 'scope') && Object.prototype.hasOwnProperty.call(EditAuthKeyData?.authData, 'scope') && data.scope === EditAuthKeyData?.authData?.scope)) &&
+    //       (
+    //         (typeof data.access === typeof EditAuthKeyData?.authData?.access) &&
+    //         (
+    //           (typeof data.access === 'string' && data.access === EditAuthKeyData?.authData?.access) ||
+    //           (typeof data.access === 'object' && JSON.stringify(data.access) === JSON.stringify(EditAuthKeyData?.authData?.access))
+    //         )
+    //       )   )
+    // ) {
+    //   toast.error('Nothing changed.');
+    //   return;
+    // }
     
-
+    
     if (!props?.authData) {
       const create = await createAuthkey(id, admin_name, data);
       setOpen(true);

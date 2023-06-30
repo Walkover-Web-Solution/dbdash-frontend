@@ -7,6 +7,7 @@ import { PropTypes } from "prop-types";
 function Selectaccessandscope(props) {
   const {scope,setScope}=props;
 
+  
   const isSelected = (value) => Array.isArray(scope) && scope.includes(value);
   const handleScopeChange = (event,key) => {
     const value = event.target.value;
@@ -49,7 +50,37 @@ function Selectaccessandscope(props) {
     <Box className="create-auth-key-row">
       <Typography className="create-auth-key-label">Scope</Typography>
       <Box sx={{ display: "flex", flexDirection: "column", width: "300px" }} >
-        <Box>
+      <Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" ,paddingRight:'5px'}}>
+            <div>
+              <Typography className="create-auth-key-label">
+                Schema
+              </Typography>
+            </div>
+            <div>
+            <RadioGroup row value={scope} onChange={(e) => setScope(e.target.value)}>
+  <FormControlLabel
+    value="schema_read"
+    control={<Radio icon={<CheckBoxOutlineBlankIcon fontSize="small" />} checkedIcon={<CheckBoxIcon fontSize="small" />} />}
+    label="Read"
+    labelPlacement="end"
+    onClick={(e)=>{if(scope==e.target.value) {setScope('')}}}
+
+  />
+  <FormControlLabel
+    value="schema_write"
+    control={<Radio icon={<CheckBoxOutlineBlankIcon fontSize="small" />} checkedIcon={<CheckBoxIcon fontSize="small" />} />}
+    label="Write"
+    onClick={(e)=>{if(scope==e.target.value) {setScope('')}}}
+
+    labelPlacement="end"
+  />
+</RadioGroup>
+
+            </div>
+          </Box>
+        </Box>
+      {!scope.includes('schema') && <Box>
           <Box
             sx={{
               display: "flex",
@@ -83,8 +114,8 @@ function Selectaccessandscope(props) {
 
             </div>
           </Box>
-        </Box>
-        <Box
+        </Box>}
+       {(Array.isArray(scope) || scope=='') && <Box
           sx={{
             maxHeight: "350px",
             overflowY: "auto",
@@ -147,37 +178,8 @@ function Selectaccessandscope(props) {
                 </Box>
               </React.Fragment>
             ))}
-        </Box>
-        <Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" ,paddingRight:'5px'}}>
-            <div>
-              <Typography className="create-auth-key-label">
-                Schema
-              </Typography>
-            </div>
-            <div>
-            <RadioGroup row value={scope} onChange={(e) => setScope(e.target.value)}>
-  <FormControlLabel
-    value="schema_read"
-    control={<Radio icon={<CheckBoxOutlineBlankIcon fontSize="small" />} checkedIcon={<CheckBoxIcon fontSize="small" />} />}
-    label="Read"
-    labelPlacement="end"
-    onClick={(e)=>{if(scope==e.target.value) {setScope('')}}}
-
-  />
-  <FormControlLabel
-    value="schema_write"
-    control={<Radio icon={<CheckBoxOutlineBlankIcon fontSize="small" />} checkedIcon={<CheckBoxIcon fontSize="small" />} />}
-    label="Write"
-    onClick={(e)=>{if(scope==e.target.value) {setScope('')}}}
-
-    labelPlacement="end"
-  />
-</RadioGroup>
-
-            </div>
-          </Box>
-        </Box>
+        </Box>}
+        
       </Box>
     </Box></div>
   )
