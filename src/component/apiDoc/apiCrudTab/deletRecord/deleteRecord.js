@@ -73,7 +73,7 @@ const response=`
               
 
 
-              <OptionalParameter  db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
+              <OptionalParameter  parent={'delete'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
             </Box>
           </Typography>
         </Box>

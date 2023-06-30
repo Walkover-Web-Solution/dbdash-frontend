@@ -1,20 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Box, TextField, Tab, Button, ClickAwayListener } from '@mui/material';
-import Dropdown from '../../dropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { removeTable1, updateTable1 } from '../../../store/allTable/allTableThunk';
-import { resetData } from '../../../store/table/tableSlice';
-import { deleteTable, exportCSV } from '../../../api/tableApi';
-import { selectActiveUser } from '../../../store/user/userSelector.js';
-import { toast } from 'react-toastify';
-import variables from '../../../assets/styling.scss';
-import './singleTable.scss';
+import { Box, TextField, Tab, Button, ClickAwayListener } from "@mui/material";
+import Dropdown from "../../dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+  removeTable1,
+  updateTable1,
+} from "../../../store/allTable/allTableThunk";
+import { resetData } from "../../../store/table/tableSlice";
+import { deleteTable, exportCSV } from "../../../api/tableApi";
+import { selectActiveUser } from "../../../store/user/userSelector.js";
+import { toast } from "react-toastify";
+import variables from "../../../assets/styling.scss";
+import "./singleTable.scss";
 import { useParams } from "react-router-dom";
-import { bulkAddColumns } from '../../../store/table/tableThunk';
+import { bulkAddColumns } from "../../../store/table/tableThunk";
 
-export default function SingleTable({ dbData, table, setTabIndex, tableLength, index, tabIndex, setPage }) {
+export default function SingleTable({
+  dbData,
+  table,
+  setTabIndex,
+  tableLength,
+  index,
+  tabIndex,
+  setPage,
+}) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
@@ -25,9 +36,9 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
   const dispatch = useDispatch();
 
   const TabWithDropdown = ({ label, dropdown }) => (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Box sx={{ display: "flex", alignItems: "center" }}>
       <Tab
-      textColor={`${variables.bgcolorvalue}`}
+        textColor={`${variables.bgcolorvalue}`}
         label={
           label.length > 10 ? (
             <>
@@ -42,13 +53,12 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
           )
         }
         sx={{
-          minWidth: 'auto',
-          overflowX: 'auto',
-          flexDirection: 'row',
-          textTransform: 'none',
-          height: '10px',
-  fontSize:`${variables.tablepagefontsize}`
-
+          minWidth: "auto",
+          overflowX: "auto",
+          flexDirection: "row",
+          textTransform: "none",
+          height: "10px",
+          fontSize: `${variables.tablepagefontsize}`,
         }}
         title={label}
       />
@@ -60,38 +70,44 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     //   toast.error("Table name is same");
     //   return;
     // }
-    if ( !tableNa|| tableNa.trim() === "") {
+    if (!tableNa || tableNa.trim() === "") {
       toast.error("Table name cannot be empty");
       return;
     }
-    
+
     if (tableNa.length < 3) {
       toast.error("Table name must be at least 3 characters long");
       return;
     }
-  
+
     if (tableNa.length > 30) {
       toast.error("Table name cannot exceed 30 characters");
       return;
     }
-  
+
     if (tableNa.includes(" ")) {
       toast.error("Table name cannot contain spaces");
       return;
     }
-  
+
     const data1 = {
       newTableName: tableNa,
     };
-  
+
     if (tableName === data1.newTableName) {
       return;
     }
-  
-    dispatch(updateTable1({ "dbId": dbData?.db?._id, "tableName": tableName, "data1": data1 }));
+
+    dispatch(
+      updateTable1({
+        dbId: dbData?.db?._id,
+        tableName: tableName,
+        data1: data1,
+      })
+    );
     setTableNa(null);
   };
-  
+
   const deleteTableName = async (tableid) => {
     const keys = Object.keys(AllTableInfo);
     let i = 0;
@@ -100,11 +116,11 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
         break;
       }
     }
-    i = (i === keys.length - 1) ? 0 : i + 1;
+    i = i === keys.length - 1 ? 0 : i + 1;
     let last = keys[i];
 
     const deleteTableData = await deleteTable(dbData?.db?._id, tableid);
-    dispatch(removeTable1({ "tableData": deleteTableData?.data?.data?.tables }));
+    dispatch(removeTable1({ tableData: deleteTableData?.data?.data?.tables }));
     navigate(`/db/${dbData.db._id}/table/${last}`);
   };
 
@@ -112,49 +128,58 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
     const data = {
       query: `select * from ${tableid}`,
       userName: userDetails?.fullName,
-      email: userDetails?.email
+      email: userDetails?.email,
     };
     await exportCSV(dbData?.db?._id, tableid, data);
     toast.success("Your CSV file has been mailed successfully");
   };
 
-
   function onTableClicked() {
     navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
     setPage(1);
     dispatch(resetData());
-    if(table[0]==params?.tableName){
-      dispatch(bulkAddColumns({
-        "dbId": dbData?.db?._id,
-        "tableName": table[0],
-        "pageNo": 1,
-      }));
+    if (table[0] == params?.tableName) {
+      dispatch(
+        bulkAddColumns({
+          dbId: dbData?.db?._id,
+          tableName: table[0],
+          pageNo: 1,
+        })
+      );
     }
-   
   }
 
   const location = useLocation();
-  
 
   return (
     <>
       <Box
-        className={`single-table ${location.pathname.includes(`table/${table[0]}`) ? 'active' : ''}`}
+        className={`single-table ${location.pathname.includes(`table/${table[0]}`) ? "active" : ""
+          }`}
         onClick={() => {
           onTableClicked(table[0]);
         }}
       >
         {name && tabIndex === index ? (
           <>
-            <ClickAwayListener onClickAway={() => { setName(false) }}>
+            <ClickAwayListener
+              onClickAway={() => {
+                setName(false);
+              }}
+            >
               <Box>
-                <TextField
-                  defaultValue={table[1]?.tableName || table[0]}
+                {/* <TextField
+                  // defaultValue={table[1]?.tableName || table[0]}
+
                   autoFocus
-                  sx={{ width: 75, fontWeight: 'bold' ,backgroundColor: 'white'}}
+                  sx={{
+                    width: 75,
+                    fontWeight: "bold",
+                    backgroundColor: "white",
+                  }}
                   value={tableNa}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === "Enter") {
                       renameTableName(dbData?.db?._id, table[0]);
                       setName(false);
                     }
@@ -163,27 +188,51 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
                     e.preventDefault();
                     e.stopPropagation();
                   }}
-                  onChange={(e) => { setTableNa(e.target.value) }}
+                  onChange={(e) => {
+                    setTableNa(e.target.value);
+                  }}
+                  size="small"
+                /> */}
+                <TextField
+                  defaultValue={table[1]?.tableName || table[0] || " "}
+                  autoFocus
+                  sx={{
+                    width: 75,
+                    fontWeight: "bold",
+                    backgroundColor: "white",
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      renameTableName(dbData?.db?._id, table[0]);
+                      setName(false);
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onChange={(e) => {
+                    setTableNa(e.target.value);
+                  }}
                   size="small"
                 />
+
                 <Button
                   sx={{
                     width: 2,
                     fontSize: `${variables.tablepagefontsize}`,
-                    mt: 1
+                    mt: 1,
                   }}
-                  type='submit'
+                  type="submit"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     setName(false);
                     renameTableName(dbData?.db?._id, table[0]);
-                    
                   }}
                   variant="contained"
                   className="mui-button"
-                 // style={{color:'white'}}
-                  
+                // style={{color:'white'}}
                 >
                   Rename
                 </Button>
@@ -218,9 +267,7 @@ export default function SingleTable({ dbData, table, setTabIndex, tableLength, i
             ) : (
               <Box sx={{ mt: -1 }}>
                 <TabWithDropdown
-                
                   sx={{ width: 100 }}
-
                   label={table[1]?.tableName || table[0]}
                   dropdown={
                     <Dropdown
@@ -256,6 +303,6 @@ SingleTable.propTypes = {
   index: PropTypes.number,
   tabIndex: PropTypes.number,
   setPage: PropTypes.any,
-  label: PropTypes.string,      
-  dropdown: PropTypes.node,      
+  label: PropTypes.string,
+  dropdown: PropTypes.node,
 };

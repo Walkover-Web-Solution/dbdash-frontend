@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import PropTypes from 'prop-types';
-import { Typography, Menu, MenuItem, Tooltip, IconButton } from '@mui/material'
+import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from './alertPopup';
 export default function Dropdown(props) {
@@ -20,13 +20,14 @@ export default function Dropdown(props) {
   return (
     <>
         <Tooltip>
-            <IconButton onClick={(e)=>{
+          {/* <IconButton> */}
+              <MoreHorizIcon  onClick={(e)=>{
               e.preventDefault();
               e.stopPropagation();
-              handleOpenUserMenu(e)}}>
-              <MoreHorizIcon />
-            </IconButton>
-          </Tooltip>
+              handleOpenUserMenu(e)}} />
+              {/* </IconButton> */}
+        </Tooltip>
+
           <Menu
             sx={{ mt: '45px' }}
             id="menu-appbar"
@@ -53,7 +54,7 @@ export default function Dropdown(props) {
               }
               }}>{props?.first}</Typography>
             </MenuItem>
-            {props?.second!=="" && <MenuItem onClick={(e)=>{e.preventDefault();
+            {props?.second!=="" && props?.second && <MenuItem onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e);setOpen(true);}}>
               <Typography  onClick={handleClickOpen} textAlign="center" >{props?.second}</Typography>
             </MenuItem>}
