@@ -110,7 +110,6 @@ export default function AuthKey(props) {
     const monthName = createdDate.toLocaleString("default", { month: "long" });
     return `${monthName} ${year}`;
   };
-console.log("dkjfjkf",props.authKeys);
   return (
     <>
       <Box sx={{ my: 1, paddingLeft: "24px", paddingRight: "31px" }}>

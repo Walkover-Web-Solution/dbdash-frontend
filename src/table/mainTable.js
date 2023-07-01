@@ -70,7 +70,6 @@ export default function MainTable(props) {
   }, [dataa]);
 
   const isSingleCellSelected=(selection)=>{
-    console.log("isSingleCellSelected",selection)
     return selection.current && (selection.current.range.height*selection.current.range.width==1);
   }
   const handleUploadFileClick = useCallback((cell) => {
@@ -235,6 +234,7 @@ export default function MainTable(props) {
 
   const onCellEdited = useCallback(
     (cell, newValue) => {
+      if(fields[cell[0]]?.dataType == "attachment") return;
       if (fields[cell[0]]?.dataType == "multipleselect") {
         editmultipleselect(newValue, dataa[cell[1]][fields[cell[0]]?.id] || [], cell);
         return;
