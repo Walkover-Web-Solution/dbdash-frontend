@@ -17,11 +17,12 @@ import { selectActiveUser } from "../../store/user/userSelector.js";
 import "./createAuth.scss";
 import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
+import { toast } from "react-toastify";
 // import { toast } from "react-toastify";
 
 export default function CreateAuthKey(props) {
   const id = props.id;
-  const [scope, setScope] = useState([]);
+  const [scope, setScope] = useState({});
   const [name, setName] = useState("");
   const userDetails = useSelector((state) => selectActiveUser(state));
   const [authKey, setAuthKey] = useState("");
@@ -44,9 +45,8 @@ export default function CreateAuthKey(props) {
     props?.setCreatedBy(array);
   }
 
-  const isDisabled = !name || scope == "" || scope == [] || !scope;
   const handleKeyDown = (event) => {
-    if (event.key === "Enter"  && !isDisabled ) {
+    if (event.key === "Enter"  ) {
       event.preventDefault();
 
       createAuth();
@@ -55,44 +55,42 @@ export default function CreateAuthKey(props) {
   const createAuth = async () => {
     const admin_id = localStorage.getItem("userid");
     const admin_name = userDetails?.fullName;
+    if(!name || name=='')
+    {
+      toast.warning("Please provide a name.")
+      return;
+    }
     let data = {
       name: name,
       userId: admin_id,
     };
+    let jsontosend={};
+
     
-    if (Array.isArray(scope)) {
-      data.access = {};
-      scope.forEach(element => {
-        const lastIndex = element.lastIndexOf("_");
-        const tableid = element.substring(0, lastIndex);
-        const scope1 = element.substring(lastIndex + 1);
-        data.access[tableid] = { scope: scope1 };
-      });
-    } else if (typeof scope === "string") {
-      const lastIndex = scope.lastIndexOf("_");
-      const accesstosend = scope.substring(0, lastIndex) === "schema" ? "11" : "1";
-      const scopetosend = scope.substring(lastIndex + 1);
-      data.access = accesstosend;
-      data.scope = scopetosend;
+    if(scope["schema"] && scope["schema"]!='')
+    {
+      data.access='11';
+      data.scope=scope["schema"];
     }
-    // if (
-    //   name === '' ||
-    //   (name === EditAuthKeyData?.authData?.name &&
-    //     ((!Object.prototype.hasOwnProperty.call(data, 'scope') && !Object.prototype.hasOwnProperty.call(EditAuthKeyData?.authData, 'scope')) ||
-    //       (Object.prototype.hasOwnProperty.call(data, 'scope') && Object.prototype.hasOwnProperty.call(EditAuthKeyData?.authData, 'scope') && data.scope === EditAuthKeyData?.authData?.scope)) &&
-    //       (
-    //         (typeof data.access === typeof EditAuthKeyData?.authData?.access) &&
-    //         (
-    //           (typeof data.access === 'string' && data.access === EditAuthKeyData?.authData?.access) ||
-    //           (typeof data.access === 'object' && JSON.stringify(data.access) === JSON.stringify(EditAuthKeyData?.authData?.access))
-    //         )
-    //       )   )
-    // ) {
-    //   toast.error('Nothing changed.');
-    //   return;
-    // }
-    
-    
+   else if(scope["alltables"] && scope["alltables"]!='')
+    {
+      data.access='1';
+      data.scope=scope["alltables"];
+    }
+
+
+    else {
+      Object.entries(scope).map(([key,value])=>{
+        if(key!='schema' && key!='alltables' && (value!=''))
+        {
+          jsontosend[key]={scope:value};
+        }
+        data.access=jsontosend;
+      })
+    }
+    if(!data.access || Object.keys(data?.access)?.length==0){ 
+      toast.warning('It is required to make atleast one table accessable.')
+      return;}
     if (!props?.authData) {
       const create = await createAuthkey(id, admin_name, data);
       setOpen(true);
@@ -117,16 +115,22 @@ export default function CreateAuthKey(props) {
     if (!authkeydata) return;
     setName(authkeydata?.authData?.name);
     if (!authkeydata?.authData?.access) return;
+    let obj={};
     if (typeof authkeydata?.authData?.access == "string") {
-      if (authkeydata?.authData?.access == "1") setScope(`alltables_${authkeydata?.authData?.scope}`);
-      else setScope(`schema_${authkeydata?.authData?.scope}`);
+      if (authkeydata?.authData?.access == "1") {
+        obj['alltables']=authkeydata?.authData?.scope;
+      }
+      else{
+        obj['schema']=authkeydata?.authData?.scope;
+
+      }
     } else {
-      let arr = [...scope];
       Object.entries(authkeydata?.authData?.access).map(([key, value]) => {
-        arr.push(`${key}_${value?.scope}`);
+        obj[key]=value.scope;
       });
-      setScope([...arr]);
     }
+    setScope(obj);
+
   }
 
   return (
@@ -154,7 +158,6 @@ export default function CreateAuthKey(props) {
             <Box>
               <Button
                 variant="contained"
-                disabled={isDisabled}
                 onClick={() => {
                   createAuth();
                 }}

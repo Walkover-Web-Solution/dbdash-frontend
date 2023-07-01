@@ -346,10 +346,7 @@ export default function MainTable(props) {
     setMenu({ col, bounds });
   }, []);
 
-  const handleRightClickOnHeader = useCallback((col, event) => {
-    event.preventDefault();
-    setMenu({ col, bounds: event.bounds });
-  })
+ 
 
   const getData = useCallback(
     (cell) => {
@@ -642,33 +639,7 @@ export default function MainTable(props) {
     setSelection(event);
   };
 
-  const theme = {
-      accentColor: "#4F5DFF",
-      accentLight: "rgba(62, 116, 253, 0.1)",
-      textDark: "#313139",
-      textMedium: "#737383",
-      textLight: "#B2B2C0",
-      textBubble: "#313139",
-      bgIconHeader: "#737383",
-      fgIconHeader: "#FFFFFF",
-      textHeader: "#313139",
-      textHeaderSelected: "#FFFFFF",
-      bgCell: "#FFFFFF",
-      bgCellMedium: "#FAFAFB",
-      bgHeader: "#F7F7F8",
-      bgHeaderHasFocus: "#E9E9EB",
-      bgHeaderHovered: "#EFEFF1",
-      bgBubble: "#EDEDF3",
-      bgBubbleSelected: "#FFFFFF",
-      bgSearchResult: "#fff9e3",
-      borderColor: "rgba(115, 116, 131, 0.16)",
-      drilldownBorder: "rgba(0, 0, 0, 0)",
-      linkColor: "#4F5DFF",
-      headerFontStyle: "600 13px",
-      baseFontStyle: "13px",
-      fontFamily:
-          "Inter, Roboto, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, noto, arial, sans-serif",
-    };
+
  
 const handleRightClickOnHeader=useCallback((col,event)=>{
   event.preventDefault();
@@ -711,8 +682,6 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           width={window.screen.width}
           fillHandle={true}
           getCellContent={getData}
-          theme={theme}
-          
           onRowAppended={addRows}
           columns={realCols}
           rows={dataa.length}
@@ -727,7 +696,6 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           getCellsForSelection={true}
           showSearch={showSearch}
           onSearchClose={() => setShowSearch(false)}
-          onHeaderContextMenu={handleRightClickOnHeader}
           // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}
           onColumnResize={handleColumnResizeWithoutAPI}

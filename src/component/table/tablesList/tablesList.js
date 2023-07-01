@@ -264,8 +264,8 @@ useEffect(() => {
                   <Box
                     className="filter-box"
                     style={{
-                      textDecoration:
-                        underLine === filter[0] ? "underline" : "none",
+                      backgroundColor:
+                        underLine === filter[0] ? "#CCE0FE" : "transparent",
                     }}
                     variant="outlined"
                   >
