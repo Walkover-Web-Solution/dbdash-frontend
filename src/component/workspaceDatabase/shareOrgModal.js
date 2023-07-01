@@ -24,6 +24,7 @@ export default function ShareOrgModal(props) {
   };
 
   const handleSendInvite = () => {
+    console.log("hello");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
       toast.error("Email field cannot be empty");
@@ -34,7 +35,7 @@ export default function ShareOrgModal(props) {
       return;
     }
 
-    const existingUser = users.find(user => user.user_id?.email === email);
+    const existingUser = users?.find(user => user.user_id?.email === email);
     if (existingUser) {
       if (existingUser.user_id._id === userId) {
         toast.error("You cannot invite yourself");
@@ -74,8 +75,8 @@ export default function ShareOrgModal(props) {
    
 
   return (
-    <Dialog open={props.shareOrg} onClose={handleClose}>
-      <DialogTitle sx={{ width: 500 }}>Add User to Organization</DialogTitle>
+    <Dialog open={props.shareOrg} onClick={(e)=>{e.preventDefault();e.stopPropagation()}}onClose={handleClose}>
+      <DialogTitle sx={{ width: 500 }}>{props?.title}</DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
   <TextField
     autoFocus
@@ -93,6 +94,7 @@ export default function ShareOrgModal(props) {
     <Select value={userType} onChange={handleUserTypeChange}>
       <MenuItem value="user">User</MenuItem>
       <MenuItem value="admin">Admin</MenuItem>
+      {props?.useCase=='sharedb' &&<MenuItem value='owner'>Owner</MenuItem>}
     </Select>
   </FormControl>
 </DialogContent>
@@ -114,7 +116,7 @@ export default function ShareOrgModal(props) {
         </Typography>
       </Box>
       <Box>
-        {users.map((user) => {
+        {users?.map((user) => {
           
           if (
             user?.user_id?._id !== userId &&
@@ -171,9 +173,11 @@ ShareOrgModal.propTypes = {
   shareOrg: PropTypes.bool,
   setShareOrg: PropTypes.func,
   shareWorkspace: PropTypes.func,
+  title:PropTypes.any,
   org: PropTypes.shape({
     users: PropTypes.array
   }),
+  useCase:PropTypes.any,
   removeUserFromWorkspace: PropTypes.func,
   updateUserTypeInOrg:PropTypes.func
 };

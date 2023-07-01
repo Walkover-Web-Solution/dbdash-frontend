@@ -54,6 +54,15 @@ const adminPanelByAI = async (query) =>
      return await axios.post(URL +`/adminpanel/query/646b13964c684c360ed71d39` , {userQuery : query});
 }
 
+const addDbInUser=async(dbId,adminId,data)=>{
+    return await axios.patch(URL+`/dbs/${dbId}/admin/${adminId}`,data);
+}
+const removeDbInUser=async(dbId,adminId,data)=>{
+    return await axios.patch(URL+`/dbs/${dbId}/${adminId}/deletedbfromuser`,data);
+}
+const updateAccessOfUserInDb=async(dbId,adminId,data)=>{
+    return await axios.patch(URL+`/dbs/${dbId}/admin/${adminId}/updateuseraccess`,data);
+}
 
 
 
@@ -67,5 +76,8 @@ export {
     moveDb,
     restoreDbForUser,
     deleteDbForUser,
-    adminPanelByAI
+    adminPanelByAI,
+    addDbInUser,
+    removeDbInUser,
+    updateAccessOfUserInDb
 }

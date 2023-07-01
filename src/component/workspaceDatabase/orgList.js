@@ -220,6 +220,7 @@ Object.entries(props?.dbs).forEach(([, value]) => {
                       userType={userType}
                       setUserType={setUserType}
                         shareOrg={shareOrg}
+                        title={'Add User to Organization'}
                         org={orgUsers}
                         setShareOrg={setShareOrg}
                         shareWorkspace={shareWorkspace}

@@ -250,6 +250,7 @@ export default function SingleDatabase(props) {
     first={"Rename Database"}
     second={"Delete Database"}
     third={"Move"}
+    shareDb={"Share Database"}
     setOpenmove={setOpenmove}
     orgid={props?.db?.org_id?._id}
     dbid={props?.db?._id}
@@ -264,6 +265,8 @@ export default function SingleDatabase(props) {
     tabIndex={props?.index}
     first={"Rename Database"}
     second={""}
+    shareDb={"Share Database"}
+
     third={""}
     orgid={props?.db?.org_id?._id}
     dbid={props?.db?._id}
