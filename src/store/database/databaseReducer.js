@@ -1,5 +1,5 @@
 
-import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk, deleteOrgThunk, createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk, updateUserInOrgThunk} from './databaseThunk';
+import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk,  createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk, updateUserInOrgThunk} from './databaseThunk';
 export const initialState = {
   status: 'idle',
   orgId: {
@@ -190,25 +190,25 @@ export function extraReducers(builder) {
 
     //   Delete Org
 
-    .addCase(deleteOrgThunk.pending, (state) => {
+    // .addCase(deleteOrgThunk.pending, (state) => {
 
-      state.status = "loading"
-    })
-    .addCase(deleteOrgThunk.fulfilled, (state, action) => {
+    //   state.status = "loading"
+    // })
+    // .addCase(deleteOrgThunk.fulfilled, (state, action) => {
 
-      state.status = "succeeded";
-      const deletedOrgId = action.payload;
-      let orgIdArr = state.orgId;
-      delete orgIdArr[deletedOrgId];
-      state.orgId = { ...orgIdArr };
-      state.allOrg = state.allOrg.filter(org => org._id !== deletedOrgId);
+    //   state.status = "succeeded";
+    //   const deletedOrgId = action.payload;
+    //   let orgIdArr = state.orgId;
+    //   delete orgIdArr[deletedOrgId];
+    //   state.orgId = { ...orgIdArr };
+    //   state.allOrg = state.allOrg.filter(org => org._id !== deletedOrgId);
       
-    })
-    .addCase(deleteOrgThunk.rejected, (state) => {
+    // })
+    // .addCase(deleteOrgThunk.rejected, (state) => {
 
-      state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
-    })
+    //   state.status = "failed";
+    //   // MDBToast.error("Unable to fetch jamaats.");
+    // })
 
     //   Delete Db
 

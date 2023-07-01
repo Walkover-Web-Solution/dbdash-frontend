@@ -83,7 +83,7 @@ const useStyles = makeStyles(() => ({
 
 const classes = useStyles();
   useEffect(() => {
-    tableData();
+    props?.parent!='delete' && tableData();
   }, [props.db, props.table]);
 
   useEffect(() => {
@@ -113,7 +113,7 @@ const classes = useStyles();
   }, [text, fieldtosort, descending, props.age, offset, selectedFields]);
 
   const tableData = async () => {
-    const myObj =props?.alltabledata[props?.table]?.fields;
+    const myObj =props?.alltabledata[props?.table]?.fields ;
     const arr = Object.keys(myObj).map((key) => ({
       name: myObj[key].fieldName,
       content: key,
@@ -302,12 +302,12 @@ const classes = useStyles();
 }
 
 OptionalParameter.propTypes = {
-  age: PropTypes.number,
+  age: PropTypes.any,
   setAge: PropTypes.func,
   value: PropTypes.any,
   parent: PropTypes.any,
   setValue: PropTypes.func,
-  db: PropTypes.func,
+  db: PropTypes.any,
   table: PropTypes.any,
   alltabledata:PropTypes.any,
 };
