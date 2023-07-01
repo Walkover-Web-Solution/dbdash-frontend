@@ -63,7 +63,7 @@ export default function ShareOrgModal(props) {
   const handleRemoveUser = (email) => {
     const currentUser = users.find((user) => user.user_id?.email === email);
 
-    if (currentUser && currentUser.user_type === "owner") {
+    if (currentUser && currentUser.user_type === "1") {
       toast.error("You cannot remove an owner");
       return;
     }
@@ -118,7 +118,7 @@ export default function ShareOrgModal(props) {
           
           if (
             user?.user_id?._id !== userId &&
-            (user?.user_type !== "owner" || user?.user_type !== "admin" || userId !== user?.user_id?._id)
+            (user?.user_type !== "1" || user?.user_type !== "11" || userId !== user?.user_id?._id)
           ) {
 
             return (

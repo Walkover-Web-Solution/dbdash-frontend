@@ -166,7 +166,7 @@ export default function AuthKey(props) {
                       props.authKeys[keys].access === "11" ? (
                         <div>all</div>
                       ) : (
-                        Object.keys(props.authKeys[keys].access).map((key) => (
+                        Object.keys(props?.authKeys[keys]?.access).map((key) => (
                           <div key={key}>{key}</div>
                         ))
                       )}
