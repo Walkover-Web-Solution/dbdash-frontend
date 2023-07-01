@@ -54,6 +54,7 @@ export default function MainTable(props) {
   const [imageLink, setImageLink] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [hoveredRow,setHoveredRow]=useState(false);
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -646,7 +647,14 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
   setMenu({col,bounds:event.bounds});
 })
   
+  const getRowThemeOverride=(row)=>{
+    if(row!=hoveredRow) return;
+    return { bgCell: "#EAF5FF",bgCellMedium: "#DCEFFB"}; 
+  }
   
+  const getHoveredItemsInfo=(event)=>{
+    setHoveredRow(event?.location[1]);
+  }
   return (
     <>
       {JSON.stringify(selection) !== JSON.stringify(emptyselection) &&
@@ -688,6 +696,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           gridSelection={selection}
           rowMarkers="both"
           rowSelectionMode="multi"
+          onItemHovered={getHoveredItemsInfo}
           onGridSelectionChange={handlegridselection}
           onCellEdited={onCellEdited}
           onRowMoved={handleRowMoved}
@@ -695,6 +704,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           onHeaderContextMenu={handleRightClickOnHeader}
           getCellsForSelection={true}
           showSearch={showSearch}
+          getRowThemeOverride={getRowThemeOverride}
           onSearchClose={() => setShowSearch(false)}
           // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}

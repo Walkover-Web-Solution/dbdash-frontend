@@ -265,7 +265,7 @@ useEffect(() => {
                     className="filter-box"
                     style={{
                       backgroundColor:
-                        underLine === filter[0] ? "#CCE0FE" : "transparent",
+                        underLine === filter[0] ? variables.highlightedfilterboxcolor : "transparent",
                     }}
                     variant="outlined"
                   >

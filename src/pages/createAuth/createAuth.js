@@ -77,8 +77,6 @@ export default function CreateAuthKey(props) {
       data.access='1';
       data.scope=scope["alltables"];
     }
-
-
     else {
       Object.entries(scope).map(([key,value])=>{
         if(key!='schema' && key!='alltables' && (value!=''))
@@ -90,7 +88,8 @@ export default function CreateAuthKey(props) {
     }
     if(!data.access || Object.keys(data?.access)?.length==0){ 
       toast.warning('It is required to make atleast one table accessable.')
-      return;}
+      return;
+    }
     if (!props?.authData) {
       const create = await createAuthkey(id, admin_name, data);
       setOpen(true);
@@ -116,16 +115,13 @@ export default function CreateAuthKey(props) {
     setName(authkeydata?.authData?.name);
     if (!authkeydata?.authData?.access) return;
     let obj={};
-    if (typeof authkeydata?.authData?.access == "string") {
       if (authkeydata?.authData?.access == "1") {
         obj['alltables']=authkeydata?.authData?.scope;
       }
-      else{
+      else if(authkeydata?.authData?.access == "11"){
         obj['schema']=authkeydata?.authData?.scope;
-
       }
-    } else {
-      Object.entries(authkeydata?.authData?.access).map(([key, value]) => {
+     else {Object.entries(authkeydata?.authData?.access).map(([key, value]) => {
         obj[key]=value.scope;
       });
     }
