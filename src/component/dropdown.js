@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from './alertPopup';
+import DuplicateDbPopup from './workspaceDatabase/duplicateDbPopup';
+import CreateTemplatePopup from './workspaceDatabase/createTemplatePopup';
 export default function Dropdown(props) {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
-
+    const [openDuplicate,setOpenDuplicate]=useState(false);
+    const [openTemplate,setOpenTemplate]=useState(false);
+console.log(openTemplate)
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
@@ -69,10 +73,21 @@ export default function Dropdown(props) {
               <Typography   textAlign="center" >{props?.third}</Typography>
             </MenuItem> }
 
+           <MenuItem onClick={(e)=>{e.preventDefault();
+              e.stopPropagation();handleCloseUserMenu(e); setOpenDuplicate(true);}}>
+           <Typography>{props?.fourth}</Typography>
+           </MenuItem>
+           <MenuItem onClick={(e)=>{e.preventDefault();
+              e.stopPropagation();handleCloseUserMenu(e); setOpenTemplate(true); }}>
+           <Typography>{props?.fifth}</Typography>
+           </MenuItem>
+
             {props?.exportCSV==="Export CSV" && <MenuItem onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e); props?.exportCSVTable(props?.tableId)}}>
               <Typography  textAlign="center" >{props?.exportCSV}</Typography>
             </MenuItem>}
+<DuplicateDbPopup dbId={props?.dbid} db={props?.dbname} open={openDuplicate} setOpen={setOpenDuplicate}/>
+<CreateTemplatePopup dbId={props?.dbid} db={props?.dbname} open={openTemplate} setOpen={setOpenTemplate}/>
 
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>
@@ -84,6 +99,8 @@ Dropdown.propTypes = {
   first: PropTypes.string,
   second: PropTypes.string,
   third: PropTypes.string,
+  fourth: PropTypes.string,
+  fifth: PropTypes.string,
   setName: PropTypes.func,
   title: PropTypes.string,
   tableId : PropTypes.string,
@@ -93,6 +110,8 @@ Dropdown.propTypes = {
   tables:PropTypes.any,
   setOpenmove:PropTypes.func,
   exportCSV: PropTypes.any,
-  exportCSVTable: PropTypes.any
+  exportCSVTable: PropTypes.any,
+  dbid:PropTypes.any,
+  dbname:PropTypes.any
   
 };

@@ -39,6 +39,7 @@ function App() {
       <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
       <Route exact path = "/msg91bi" element = {<Chat />} />
       <Route exact path ="/:viewid" element ={<ViewTable/>}/>
+      {/* <Route exact path ="/templates" element ={<templatePage/>}/> */}
     </Routes>
 
     </AuthContextProvider>

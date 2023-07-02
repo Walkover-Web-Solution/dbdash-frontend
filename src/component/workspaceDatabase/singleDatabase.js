@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 
 
 export default function SingleDatabase(props) {
+
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState();
   const [openmove, setOpenmove] = useState(false);
@@ -250,9 +251,12 @@ export default function SingleDatabase(props) {
     first={"Rename Database"}
     second={"Delete Database"}
     third={"Move"}
+    fourth={"Duplicate Database"}
+    fifth={"Make template of this db"}
     setOpenmove={setOpenmove}
     orgid={props?.db?.org_id?._id}
     dbid={props?.db?._id}
+    dbname={props?.db?.name}
     setName={setName}
     idToDelete={props?.db?._id}
     deleteFunction={deletDatabases}
@@ -267,6 +271,7 @@ export default function SingleDatabase(props) {
     third={""}
     orgid={props?.db?.org_id?._id}
     dbid={props?.db?._id}
+    dbname={props?.db}
     setName={setName}
     title={"Database"}
   />

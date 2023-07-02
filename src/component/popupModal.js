@@ -103,7 +103,8 @@ export default function PopupModal(props) {
               {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
             </div>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+         {props?.templateoption && <div style={{height:'40px'}}><Typography>To create a base using template <a target="_blank" rel="noreferrer" href='http://localhost:5000/649fb393381b05b410dbef48'> click here</a></Typography></div>
+         } <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
               <Button
               className="mui-button"
@@ -138,6 +139,7 @@ PopupModal.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   label: PropTypes.string,
+  templateoption:PropTypes.any,
   submitData: PropTypes.func,
   setVariable: PropTypes.func,
   id: PropTypes.string,

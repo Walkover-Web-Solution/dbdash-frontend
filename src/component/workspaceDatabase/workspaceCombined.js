@@ -16,7 +16,8 @@ export default function WorkspaceCombined() {
   const dispatch = useDispatch();
   const [org, setOrg] = useState();
   const [open, setOpen] = useState(false);
-
+const [openTemplate,setOpenTemplate]=useState(false);
+  
   const handleOpen = () => setOpen(true);
   const sortAndRenderOrgList = () => {
     return Object.entries(alldbs)
@@ -60,21 +61,40 @@ export default function WorkspaceCombined() {
     });
     setOpen(false);
   };
+  const handleTemplate = () => {
+    window.location.href = 'http://localhost:5000/649fb393381b05b410dbef48';
+  };
+  
 
   return (
     <>
       <Box>
-        <Box sx={{ display: 'flex', m: 3 ,mt:"8.5vh"}}>
+        <Box sx={{ display: 'flex', m: 3 ,mt:"8.5vh",width:'21vw',justifyContent:'space-between'}}>
           <Button onClick={handleOpen}  className="mui-button" variant="contained">Create Organisation</Button>
-          <PopupModal
-            title="create organisation"
-            label="Organization Name"
-            open={open}
-            setOpen={setOpen}
-            submitData={saveOrgToDB}
-            setVariable={setOrg}
-            joiMessage={"Organization name"}
-          />
+          <Button onClick={handleTemplate}  className="mui-button" variant="contained">Template</Button>
+          {(open || openTemplate) && (open ? (
+  <PopupModal
+    title="create organisation"
+    label="Organization Name"
+    open={open}
+    setOpen={setOpen}
+    submitData={saveOrgToDB}
+    setVariable={setOrg}
+    joiMessage={"Organization name"}
+  />
+) : (
+  <PopupModal
+  title="create Template"
+  label="Template Name"
+  open={openTemplate}
+  setOpen={setOpenTemplate}
+  submitData={saveOrgToDB}
+  setVariable={setOrg}
+  joiMessage={"Organization name"}
+/>
+))}
+
+
         </Box>
         <Box>
           {sortAndRenderOrgList()}

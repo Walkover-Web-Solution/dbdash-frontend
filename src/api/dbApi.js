@@ -3,8 +3,12 @@ const URL = process.env.REACT_APP_API_BASE_URL;
 
 const createDb = async (orgId , data) =>
 {
-    return await axios.post(URL + `/dbs/${orgId}/dbs`,data)
-    
+    return await axios.post(URL + `/dbs/${orgId}/dbs`,data) 
+}
+
+const duplicateDb = async (dbId, data) =>
+{
+     return await axios.post(URL +`/dbs/${dbId}/duplicate`,data);
 }
 
 const getAllDb = async () =>
@@ -67,5 +71,6 @@ export {
     moveDb,
     restoreDbForUser,
     deleteDbForUser,
-    adminPanelByAI
+    adminPanelByAI,
+    duplicateDb
 }
