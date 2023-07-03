@@ -1,20 +1,20 @@
-import React,{useEffect, useState} from 'react'
+import React,{ useState,useEffect} from 'react'
 import PropTypes from 'prop-types';
 import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from './alertPopup';
 import ShareOrgModal from './workspaceDatabase/shareOrgModal';
-import {  addDbInUser } from '../api/dbApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectOrgandDb } from '../store/database/databaseSelector';
+import { addDbInUserThunk, removeDbInUserThunk, updateAccessOfUserInDbThunk } from '../store/database/databaseThunk';
 export default function Dropdown(props) {
-  
+  const dispatch=useDispatch();
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
     const [dbUsers,setDbUsers]=useState('');
     const [userType,setUserType]=useState('');
   const alldb = useSelector((state) => selectOrgandDb(state));
-  
+  const adminId = localStorage.getItem("userid");
 
 const[openShareDb,setOpenShareDb]=useState(false);
     const handleOpenUserMenu = (event) => {
@@ -27,25 +27,56 @@ const[openShareDb,setOpenShareDb]=useState(false);
     const handleClickOpen = () => {
       setOpen(true);
     };
-const sharedatabase=(email,user_type)=>{
-  const adminId = localStorage.getItem("userid");
+    useEffect(() => {
+      const org = alldb?.[props?.orgid];
+
+      const db = org?.filter(db=>db._id==props?.dbid)[0];
+      setDbUsers(db);
+    }, [alldb, props.orgid, props.dbid]);
+    
+
+    
+const sharedatabase=async(email,user_type)=>{
   let userAccess;
   switch(user_type)
   {
-    case 'owner': userAccess='1'; break;
-    case 'admin': userAccess='11'; break;
-    case 'user':userAccess='111'; break;
+    case 'owner': userAccess=1; break;
+    case 'admin': userAccess=11; break;
+    case 'user':userAccess=111; break;
+    default:break;
+  }
+
+  const data={
+    email:email,
+    userAccess:userAccess
+  }
+
+  dispatch(addDbInUserThunk({dbId:props?.dbid,adminId,data}))
+}
+const updateUserinsharedb=(email,user_type)=>{
+  let userAccess;
+  switch(user_type)
+  {
+    case 'owner': userAccess=1; break;
+    case 'admin': userAccess=11; break;
+    case 'user':userAccess=111; break;
     default:break;
   }
   const data={
     email:email,
     userAccess:userAccess
   }
-  console.log("dklngg",adminId,data);
+  dispatch(updateAccessOfUserInDbThunk({dbId:props?.dbid,adminId,data}))
 
-  addDbInUser(props?.dbid,adminId,data);
+
 }
-// const updateUserinsharedb=()
+const removeUserFromDb=(email,userId)=>{
+  const data={
+    email:email
+  }
+  dispatch(removeDbInUserThunk({dbId:props?.dbid,adminId,data,userId}))
+
+}
   return (
     <>
         <Tooltip>
@@ -110,9 +141,7 @@ const sharedatabase=(email,user_type)=>{
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>
           <ShareOrgModal title={'Share Database'} useCase={'sharedb'} shareOrg={openShareDb} setShareOrg={setOpenShareDb} userType={userType} setUserType={setUserType} org={dbUsers} setOrg={setDbUsers}
-           shareWorkspace={sharedatabase}
-          //               removeUserFromWorkspace={}
-          //               updateUserTypeInOrg = {} 
+           shareWorkspace={sharedatabase} updateUserTypeInOrg={updateUserinsharedb} removeUserFromWorkspace={removeUserFromDb}
                         />
     </>
   )
@@ -122,7 +151,7 @@ Dropdown.propTypes = {
   second: PropTypes.string,
   third: PropTypes.string,
   shareDb:PropTypes.any,
-
+orgid:PropTypes.any,
   setName: PropTypes.func,
   title: PropTypes.string,
   tableId : PropTypes.string,

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { renameDb, deleteDb,moveDb,deleteDbForUser, restoreDbForUser} from "../../api/dbApi";
+import { renameDb, deleteDb,moveDb,deleteDbForUser, restoreDbForUser, addDbInUser, updateAccessOfUserInDb, removeDbInUser} from "../../api/dbApi";
 import { addUserInOrg, createOrg, getAllOrgs, removeUserInOrg, updateOrg, updateUserType } from "../../api/orgApi";
 import { findUserByEmail } from "../../api/userApi";
 
@@ -57,6 +57,29 @@ export const renameDBThunk = createAsyncThunk(
     }
 );
 
+export const updateAccessOfUserInDbThunk=createAsyncThunk(
+    "organdDb/updateAccessOfUserInDbThunk",async(payload)=>{
+       const response= await updateAccessOfUserInDb(payload.dbId,payload.adminId,payload.data);
+       return response;
+    }
+)
+export const removeDbInUserThunk=createAsyncThunk(
+    "organdDb/removeDbInUserThunk",async(payload)=>{
+       const response= await removeDbInUser(payload.dbId,payload.adminId,payload.data);
+const responsetosend={
+    response:response,
+    userId:payload?.userId
+}
+       return responsetosend;
+    }
+)
+export const addDbInUserThunk=createAsyncThunk(
+    "organdDb/addDbInUserThunk",async(payload)=>{
+       const response= await addDbInUser(payload.dbId,payload.adminId,payload.data);
+
+       return response;
+    }
+)
 export const removeDbThunk = createAsyncThunk(
     "organdDb/removeDbThunk", async (payload) => {
         await deleteDb(payload.orgId, payload.dbId);

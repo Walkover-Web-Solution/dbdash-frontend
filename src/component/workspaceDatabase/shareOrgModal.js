@@ -6,14 +6,13 @@ import { toast } from 'react-toastify'
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState("user");
   const userId = localStorage.getItem("userid");
-  const { users } = props.org;
   const [editable,setEditable]=useState(null);
   const handleClose = () => {
       props.setShareOrg(false);
       setEmail("");
-      setUserType(""); // Reset user type state
+      setUserType("user"); 
     };
     const handleUserTypeChange = (event) => {
       setUserType(event.target.value);
@@ -35,7 +34,9 @@ export default function ShareOrgModal(props) {
       return;
     }
 
-    const existingUser = users?.find(user => user.user_id?.email === email);
+    if(Array.isArray( props?.org?.users))
+    {
+    const existingUser = props?.org?.users?.find(user => user.user_id?.email === email);
     if (existingUser) {
       if (existingUser.user_id._id === userId) {
         toast.error("You cannot invite yourself");
@@ -44,7 +45,7 @@ export default function ShareOrgModal(props) {
       }
       return;
     }
-
+  }
     props.shareWorkspace(email,userType);
     handleClose();
     toast.success("Invitation sent successfully");
@@ -62,7 +63,7 @@ export default function ShareOrgModal(props) {
   }
 
   const handleRemoveUser = (email) => {
-    const currentUser = users.find((user) => user.user_id?.email === email);
+    const currentUser = props?.org?.users.find((user) => user.user_id?.email === email);
 
     if (currentUser && currentUser.user_type === "1") {
       toast.error("You cannot remove an owner");
@@ -75,23 +76,24 @@ export default function ShareOrgModal(props) {
    
 
   return (
-    <Dialog open={props.shareOrg} onClick={(e)=>{e.preventDefault();e.stopPropagation()}}onClose={handleClose}>
+    <Dialog open={props.shareOrg} onClick={(e)=>{e.preventDefault();e.stopPropagation()}}>
       <DialogTitle sx={{ width: 500 }}>{props?.title}</DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
   <TextField
     autoFocus
     margin="dense"
-    label="Email Address"
+    placeholder="Email Address"
     type="email"
     fullWidth
     value={email}
     onChange={handleEmailChange}
     onKeyDown={handleKeyDown}
+    
     sx={{ flex: "3", marginRight: "1rem" }} 
   />
   <FormControl sx={{ flex: "1.2", marginLeft: "1" }}> 
     <InputLabel>User Type</InputLabel>
-    <Select value={userType} onChange={handleUserTypeChange}>
+    <Select value={userType} label={'selectusertype'} onChange={handleUserTypeChange}>
       <MenuItem value="user">User</MenuItem>
       <MenuItem value="admin">Admin</MenuItem>
       {props?.useCase=='sharedb' &&<MenuItem value='owner'>Owner</MenuItem>}
@@ -116,7 +118,7 @@ export default function ShareOrgModal(props) {
         </Typography>
       </Box>
       <Box>
-        {users?.map((user) => {
+        {Array.isArray(props?.org?.users) && props?.org?.users?.map((user) => {
           
           if (
             user?.user_id?._id !== userId &&
@@ -140,6 +142,7 @@ export default function ShareOrgModal(props) {
      {editable==user ? <Select sx={{height:'30px'}} value={user?.user_type} onChange={(e)=>{handleUpdateUserType(user?.user_id?.email,e.target.value)}}>
         <MenuItem value="user">User</MenuItem>
         <MenuItem value="admin">Admin</MenuItem>
+        {props?.useCase=='sharedb' &&<MenuItem value='owner'>Owner</MenuItem>}
       </Select>:<Typography>{user?.user_type}</Typography>}
     </Box>
     <Box sx={{ m: 1 }}>
@@ -174,9 +177,10 @@ ShareOrgModal.propTypes = {
   setShareOrg: PropTypes.func,
   shareWorkspace: PropTypes.func,
   title:PropTypes.any,
-  org: PropTypes.shape({
-    users: PropTypes.array
-  }),
+  // org: PropTypes.shape({
+  //   props?.org?.users: PropTypes.any
+  // }),
+  org:PropTypes.any,
   useCase:PropTypes.any,
   removeUserFromWorkspace: PropTypes.func,
   updateUserTypeInOrg:PropTypes.func
