@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {
-  Box,
+  
   Button,
   Dialog,
   DialogActions,
@@ -17,18 +17,16 @@ import { duplicateDb } from '../../api/dbApi';
 import { toast } from "react-toastify";
 
 const DuplicateDbPopup = (props) => {
-  const [databaseName, setDatabaseName] = useState('');
-const [duplicateRecords,setDuplicateRecords]=useState(false);
+  const [databaseName, setDatabaseName] = useState(props?.db+"_copy");
+  const [duplicateRecords,setDuplicateRecords]=useState(false);
   
   const handleClose = () => {
     props?.setOpen(false);
   };
 
   const handleDuplicate = async () =>  {
-    const userId = localStorage.getItem("userid");
     const data = {
-      user_id: userId,
-      name: name,
+      name: databaseName,
     };
      await duplicateDb(props?.dbId,data);
     toast.success('Database created successfully!');
@@ -61,12 +59,10 @@ const [duplicateRecords,setDuplicateRecords]=useState(false);
             onChange={handleChange}
             fullWidth
           />
+           <Typography sx={{display:"flex", alignItems:"center", justifyContent:"center"}}onClick={()=>{setDuplicateRecords(!duplicateRecords)}} variant="contained" color="primary">
+              Duplicate records {duplicateRecords ? <CheckBoxIcon fontSize='small'/> : <CheckBoxOutlineBlankIcon fontSize='small'/>}
+            </Typography>
         </DialogContent>
-        <Box sx={{alignContent:'center'}}>
-        <Typography  onClick={()=>{setDuplicateRecords(!duplicateRecords)}} variant="contained" color="primary">
-            Duplicate records {duplicateRecords?<CheckBoxIcon fontSize='4px'/>:<CheckBoxOutlineBlankIcon fontSize='4px'/>}
-          </Typography>
-        </Box>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleDuplicate} variant="contained" color="primary">

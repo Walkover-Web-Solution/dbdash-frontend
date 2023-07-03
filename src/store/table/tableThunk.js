@@ -35,7 +35,6 @@ const getHeaders = async (dbId, tableName, payloadfields, { getState },fieldArra
     if(!fieldArrayInFilter){
         fields={...fields ,...viewFields }
     }
-
     fieldIds.forEach((fieldId, index) => {
         const field = fields[fieldId];
         
@@ -58,6 +57,7 @@ const getHeaders = async (dbId, tableName, payloadfields, { getState },fieldArra
             columns[index] = json; // Replace the existing object at the corresponding index
         }
     });
+
     let result = columns.filter(el=>el!=="empty");
     return result;
 }
@@ -105,7 +105,6 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
     "table/bulkAddColumns",
     async (payload, { getState, dispatch }) => {
-       
             var columns = null
             columns = await getHeaders(payload.dbId, payload.tableName, payload?.fields, { getState })
             const data = await getRowData(payload.dbId, payload.tableName, { getState }, payload.org_id, payload.pageNo)

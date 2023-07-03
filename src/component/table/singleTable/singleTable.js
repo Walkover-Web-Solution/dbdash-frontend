@@ -25,6 +25,7 @@ export default function SingleTable({
   index,
   tabIndex,
   setPage,
+  setTableIdForFilter
 }) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
@@ -135,17 +136,29 @@ export default function SingleTable({
   };
 
   function onTableClicked() {
-    navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
-    setPage(1);
-    dispatch(resetData());
-    if (table[0] == params?.tableName) {
+    if(params?.templateId){
+      setTableIdForFilter(table[0])
       dispatch(
         bulkAddColumns({
-          dbId: dbData?.db?._id,
+          dbId: dbData?._id,
           tableName: table[0],
           pageNo: 1,
         })
       );
+    }else
+    {
+      navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
+      setPage(1);
+      dispatch(resetData());
+      if (table[0] == params?.tableName) {
+        dispatch(
+          bulkAddColumns({
+            dbId: dbData?.db?._id,
+            tableName: table[0],
+            pageNo: 1,
+          })
+        );
+      }
     }
   }
 
@@ -305,4 +318,5 @@ SingleTable.propTypes = {
   setPage: PropTypes.any,
   label: PropTypes.string,
   dropdown: PropTypes.node,
+  setTableIdForFilter:PropTypes.any
 };

@@ -108,7 +108,6 @@ export default function AddFilterPopup(props) {
 
   const updateFilter =async()=>{
     var queryToSend = " ";
-    // console.log(query,"qwury")
     if (props?.dbData?.db?.tables[props?.tableName]?.view &&
       Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
@@ -130,7 +129,6 @@ export default function AddFilterPopup(props) {
 
       
   //   }
-  //   // console.log(query,"filterdata")
   //   const filter = await createFilter(props?.dbId, props?.tableName, dataa)
   //   const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
   //   const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName);
@@ -147,7 +145,6 @@ export default function AddFilterPopup(props) {
 
   const editQueryData = async () => {
    const data = await updateFilter();
-   console.log(data,"wuerydaya")
     const dataa = {
       filterId: props?.filterId,
       filterName: filterName,

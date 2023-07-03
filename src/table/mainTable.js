@@ -683,11 +683,11 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
         )}
       <div
         className="table-container"
-        style={{ height: `${(window?.screen?.height * 50) / 100}px` }}
+        style={{ height:props?.height ||  `${(window?.screen?.height * 50) / 100}px` }}
       >
         <DataEditor
           {...cellProps}
-          width={window.screen.width}
+          width={props?.width || window.screen.width}
           fillHandle={true}
           getCellContent={getData}
           onRowAppended={addRows}
@@ -789,5 +789,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
   );
 }
 MainTable.propTypes = {
-  minimap: PropTypes.any
+  minimap: PropTypes.any,
+  height:PropTypes.any,
+  width:PropTypes.any,
 }

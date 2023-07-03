@@ -10,7 +10,6 @@ export default function Dropdown(props) {
     const [open, setOpen] = useState(false);
     const [openDuplicate,setOpenDuplicate]=useState(false);
     const [openTemplate,setOpenTemplate]=useState(false);
-console.log(openTemplate)
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };

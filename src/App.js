@@ -15,7 +15,7 @@ import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Chat from './component/Chat/Chat';
-
+import TemplatePage from "./pages/templatePage/templatePage.js"
 import ViewTable from './pages/viewTable/viewTable';
 
 
@@ -39,7 +39,7 @@ function App() {
       <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
       <Route exact path = "/msg91bi" element = {<Chat />} />
       <Route exact path ="/:viewid" element ={<ViewTable/>}/>
-      {/* <Route exact path ="/templates" element ={<templatePage/>}/> */}
+      <Route exact path ="/template/:templateId" element ={<TemplatePage/>}/>
     </Routes>
 
     </AuthContextProvider>
