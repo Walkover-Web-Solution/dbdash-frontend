@@ -238,12 +238,12 @@ export function extraReducers(builder) {
     })
     .addCase(deleteDbThunk.fulfilled, (state, actions) => {
       state.status = "succeeded";
-      const arr = state.orgId[actions.payload.org_id];
+      const arr = state.orgId[actions.payload.org_id._id];
       let newArr = arr.filter(ele => {
         return ele._id !== actions.payload._id;
       });
       newArr.push(actions?.payload)
-      state.orgId[actions.payload.org_id] = newArr;
+      state.orgId[actions.payload.org_id._id] = newArr;
     })
     .addCase(deleteDbThunk.rejected, (state) => {
       state.status = "failed";
@@ -254,12 +254,12 @@ export function extraReducers(builder) {
     })
     .addCase(restoreDbThunk.fulfilled, (state, actions) => {
       state.status = "succeeded";
-      const arr = state.orgId[actions.payload.org_id];
+      const arr = state.orgId[actions.payload.org_id._id];
       let newArr = arr.filter(ele => {
         return ele._id !== actions.payload._id;
       });
       newArr.push(actions?.payload)
-      state.orgId[actions.payload.org_id] = newArr;
+      state.orgId[actions.payload.org_id._id] = newArr;
     })
     .addCase(restoreDbThunk.rejected, (state) => {
       state.status = "failed";
