@@ -7,6 +7,10 @@ const createTemplate = async (db_id,data) =>
     return await axios.post(URL +`/dbs/template/${db_id}`,data)
 }
 
+const getAllCategoryName = async () =>
+{
+    return await axios.get(URL +`/dbs/template/`)
+}
 const getTemplate = async (templateId) =>
 {
     return await axios.get(URL +`/dbs/template/${templateId}`)
@@ -23,5 +27,5 @@ const deleteTemplate = async (templateId) =>
 }
 
 export {
-    createTemplate,getTemplate,deleteTemplate,useTemplate
+    createTemplate,getTemplate,deleteTemplate,useTemplate,getAllCategoryName
 }

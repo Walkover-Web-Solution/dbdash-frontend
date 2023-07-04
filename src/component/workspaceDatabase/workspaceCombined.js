@@ -69,9 +69,15 @@ const [openTemplate,setOpenTemplate]=useState(false);
   return (
     <>
       <Box>
-        <Box sx={{ display: 'flex', m: 3 ,mt:"8.5vh",width:'21vw',justifyContent:'space-between'}}>
-          <Button onClick={handleOpen}  className="mui-button" variant="contained">Create Organisation</Button>
-          <Button onClick={handleTemplate}  className="mui-button" variant="contained">Template</Button>
+      <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '8.5vh', width: '100%' }}>
+  <Button onClick={handleOpen} className="mui-button" variant="contained" sx={{  }}>
+    Create Organisation
+  </Button>
+  <Button onClick={handleTemplate} className="mui-button" variant="contained" sx={{ justifyContent:'left' }}>
+    Template
+  </Button>
+</Box>
           {(open || openTemplate) && (open ? (
   <PopupModal
     title="create organisation"

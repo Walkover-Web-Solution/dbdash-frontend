@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+// import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+// import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {
   
   Button,
@@ -10,8 +10,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
-  Typography,
+  TextField
 } from '@mui/material';
 import { duplicateDb } from '../../api/dbApi';
 import { toast } from "react-toastify";
@@ -19,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import {createDbThunk} from "../../store/database/databaseThunk";
 const DuplicateDbPopup = (props) => {
   const [databaseName, setDatabaseName] = useState(props?.db+"_copy");
-  const [duplicateRecords,setDuplicateRecords]=useState(false);
+  // const [duplicateRecords,setDuplicateRecords]=useState(false);
   const dispatch = useDispatch()
   const handleClose = () => {
     props?.setOpen(false);
@@ -64,9 +63,9 @@ const DuplicateDbPopup = (props) => {
             onChange={handleChange}
             fullWidth
           />
-           <Typography sx={{display:"flex", alignItems:"center", justifyContent:"center"}}onClick={()=>{setDuplicateRecords(!duplicateRecords)}} variant="contained" color="primary">
+           {/* <Typography sx={{display:"flex", alignItems:"center", justifyContent:"center"}}onClick={()=>{setDuplicateRecords(!duplicateRecords)}} variant="contained" color="primary">
               Duplicate records {duplicateRecords ? <CheckBoxIcon fontSize='small'/> : <CheckBoxOutlineBlankIcon fontSize='small'/>}
-            </Typography>
+            </Typography> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

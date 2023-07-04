@@ -139,14 +139,15 @@ export default function TemplatePage() {
 
   return (
     <>
-      <div style={{ fontSize: '25px' }}>{categoryName}</div>
-      <div style={{ fontSize: '25px', display: 'flex' }}>
+      {/* <div style={{ fontSize: '25px' }}>{categoryName}</div> */}
+      <div style={{marginTop: "5px", fontSize: '25px', display: 'flex' }}>
   <div style={{ marginRight: 'auto' }}>{templateName}</div>
-  <Button variant="contained" sx={{ marginLeft: '2px' }} onClick={()=>{ setOpenUseTemplate(true);}}>Use Template</Button>
+  <Button variant="contained" sx={{ marginRight: '20px' }} onClick={()=>{ setOpenUseTemplate(true);}}>Use Template</Button>
   <UseTemplatePopup open={openUseTemplate} categoryName={categoryName} setOpen={setOpenUseTemplate}/>
 </div>
 
-      <div  style={{marginBottom:'5px' }} className="tableslist">
+
+      <div  className="tableslist">
         <Box className="tables-list-container">
           <Box className="tabs-container">
             <Tabs
@@ -267,15 +268,15 @@ export default function TemplatePage() {
         </Menu>
       </div>
       
-      <div style={{ marginTop: "100px" }}>
+      <div style={{ marginTop: "120px" }}>
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
         ) : (
           <div style={{padding:'2%'}}>
             <MainTable setPage={setPage} width={'60vw'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} />
-            <div style={{ marginTop: "25px" }}>{description}</div>
           </div>
         )}
+        <div style={{ marginTop: "25px" }}>{description}</div>
       </div>
 
     </>

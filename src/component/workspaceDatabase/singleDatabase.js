@@ -9,7 +9,6 @@ import { renameDBThunk, moveDbThunk, restoreDbThunk, deleteDbThunk } from "../..
 import { allOrg } from "../../store/database/databaseSelector";
 import { toast } from 'react-toastify';
 
-
 export default function SingleDatabase(props) {
 
   const [name, setName] = useState(false);
@@ -42,10 +41,7 @@ export default function SingleDatabase(props) {
   //   setDbname();
   // };
   const renameDatabase = async (orgId, id ,name) => {
-    // if (!dbname ) {
-    //   toast.error("Database name is same");
-    //   return;
-    // }
+  
     if ( !dbname || dbname.trim() === "") {
       toast.error("Database name cannot be empty");
       setDbname(props?.db?.name)
@@ -248,10 +244,10 @@ export default function SingleDatabase(props) {
   <Dropdown
     setTabIndex={props?.setTabIndex}
     tabIndex={props?.index}
-    first={"Rename Database"}
-    second={"Delete Database"}
+    first={"Rename"}
+    second={"Delete"}
     third={"Move"}
-    fourth={"Duplicate Database"}
+    fourth={"Duplicate"}
     fifth={"Make template of this db"}
     setOpenmove={setOpenmove}
     orgid={props?.db?.org_id?._id}
@@ -266,12 +262,12 @@ export default function SingleDatabase(props) {
   <Dropdown
     setTabIndex={props?.setTabIndex}
     tabIndex={props?.index}
-    first={"Rename Database"}
-    second={""}
-    third={""}
-    orgid={props?.db?.org_id?._id}
+    first={"Rename"}
+    fourth={"Duplicate"}
+    fifth={"Make template of this db"}
+    orgid={props?.db?.org_id._id } 
     dbid={props?.db?._id}
-    dbname={props?.db}
+    dbname={props?.db?.name}
     setName={setName}
     title={"Database"}
   />
