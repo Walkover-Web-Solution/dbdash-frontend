@@ -23,7 +23,6 @@ const CreateTemplatePopup = (props) => {
   const [description, setDescription] = useState("");
   const [newCategory, setNewCategory] = useState(false);
   const [allCategory, setAllCategory] = useState(false);
-  console.log(newCategory,"newCategory")
   const handleClose = () => {
     props?.setOpen(false);
   };

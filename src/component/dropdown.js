@@ -89,7 +89,7 @@ export default function Dropdown(props) {
               <Typography  textAlign="center" >{props?.exportCSV}</Typography>
             </MenuItem>}
 <DuplicateDbPopup dbId={props?.dbid} db={props?.dbname} open={openDuplicate} setOpen={setOpenDuplicate}/>
-<CreateTemplatePopup dbId={props?.dbid} db={props?.dbname} open={openTemplate} setOpen={setOpenTemplate}/>
+{openTemplate && <CreateTemplatePopup dbId={props?.dbid} db={props?.dbname} open={openTemplate} setOpen={setOpenTemplate}/>}
 
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>

@@ -62,7 +62,7 @@ const [openTemplate,setOpenTemplate]=useState(false);
     setOpen(false);
   };
   const handleTemplate = () => {
-    window.location.href = 'http://localhost:5000/649fb393381b05b410dbef48';
+    window.location.href = 'https://dbdash-backend-h7duexlbuq-el.a.run.app/64a3fb1f135d26837027e15e'
   };
   
 
