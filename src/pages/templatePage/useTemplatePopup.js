@@ -27,7 +27,10 @@ const UseTemplatePopup = (props) => {
   };
 
   const handleUseTemplate = async () => {
-    await useTemplate(props?.categoryName,params?.templateId);
+    const data = {
+        org_id: selectedOrg
+    }
+    await useTemplate(props?.categoryName,params?.templateId,data);
     toast.success('Database created successfully!');
     handleClose();
   };

@@ -12,9 +12,9 @@ const getTemplate = async (templateId) =>
     return await axios.get(URL +`/dbs/template/${templateId}`)
 }
 
-const useTemplate = async (categoryName,templateId) =>
+const useTemplate = async (categoryName,templateId,data) =>
 {
-    return await axios.post(URL +`/dbs/template/${categoryName}/${templateId}`)
+    return await axios.post(URL +`/dbs/template/${categoryName}/${templateId}`,data)
 }
 
 const deleteTemplate = async (templateId) =>
