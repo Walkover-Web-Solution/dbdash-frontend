@@ -17,6 +17,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Chat from './component/Chat/Chat';
 import TemplatePage from "./pages/templatePage/templatePage.js"
 import ViewTable from './pages/viewTable/viewTable';
+import Msg91bi_id_page from './component/msg91bi/msg91bi_id_page';
+
 
 
   
@@ -37,7 +39,8 @@ function App() {
       <Route exact path ="/apiDoc/db/:dbId" element ={<Protected><ApiDocPage /></Protected>}/>
       <Route exact path="*" element={<Navigate to="/notFound" />} />
       <Route exact path ="/db/:dbId/table/:tableName/filter/:filterName" element ={<Protected><DbDetail/></Protected>}/>
-      <Route exact path = "/msg91bi" element = {<Chat />} />
+      <Route exact path = "/bi" element = {<Protected><Msg91bi_id_page /></Protected>} />
+      <Route exact path = "/chat/:id" element = {<Protected><Chat /></Protected>} />
       <Route exact path ="/:viewid" element ={<ViewTable/>}/>
       <Route exact path ="/template/:templateId" element ={<TemplatePage/>}/>
     </Routes>
