@@ -68,13 +68,13 @@ const [openTemplate,setOpenTemplate]=useState(false);
 
   return (
     <>
-      <Box>
+      <Box >
       <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '8.5vh', width: '100%' }}>
-  <Button onClick={handleOpen} className="mui-button" variant="contained" sx={{  }}>
+  <Button sx={{marginLeft:'24px'}}onClick={handleOpen} className="mui-button" variant="contained" >
     Create Organisation
   </Button>
-  <Button onClick={handleTemplate} className="mui-button" variant="contained" sx={{ justifyContent:'left' }}>
+  <Button  sx={{marginRight:'30px'}} onClick={handleTemplate} className="mui-button" variant="contained" >
     Template
   </Button>
 </Box>

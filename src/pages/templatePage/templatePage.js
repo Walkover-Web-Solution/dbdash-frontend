@@ -12,12 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../table/mainTable";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { setTableLoading } from "../../store/table/tableSlice";
-import "../../component/table/tablesList/tablesList.scss";
+import './templatePage.scss'
 import variables from "../../assets/styling.scss";
 import ManageFieldDropDown from "../../component/table/manageFieldDropDown";
 import { toast } from "react-toastify";
 import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
+import { display } from "@mui/system";
 
 
 
@@ -139,17 +140,17 @@ export default function TemplatePage() {
 
   return (
     <>
+    <div className="main-box">
       {/* <div style={{ fontSize: '25px' }}>{categoryName}</div> */}
-      <div style={{marginTop: "5px", fontSize: '25px', display: 'flex' }}>
+      <div style={{ fontSize: '25px', display: 'flex' ,justifyContent:"center" }}>
   <div style={{ marginRight: 'auto' }}>{templateName}</div>
-  <Button variant="contained" sx={{ marginRight: '20px' }} onClick={()=>{ setOpenUseTemplate(true);}}>Use Template</Button>
-  <UseTemplatePopup open={openUseTemplate} categoryName={categoryName} setOpen={setOpenUseTemplate}/>
+  <Button variant="contained" sx={{ marginRight: '20px' }} className={'mui-button'} onClick={()=>{ setOpenUseTemplate(true);}}>Use Template</Button>
 </div>
+  <UseTemplatePopup open={openUseTemplate} categoryName={categoryName} setOpen={setOpenUseTemplate}/>
 
-
-      <div  className="tableslist">
-        <Box className="tables-list-container">
-          <Box className="tabs-container">
+<div style={{display:'flex',padding:"10px", flexDirection:"column", justifyContent:"center",width:"100%"}}>
+      <div  className="tableslist1">
+          <Box className="tabs-container1">
             <Tabs
               value={value}
               onChange={handleChange}
@@ -177,16 +178,13 @@ export default function TemplatePage() {
             </Tabs>
            
           </Box>
-        </Box>
-        <Box sx={{ paddingLeft: '24px', paddingRight: '20px', display: "flex", justifyContent: 'left', flexWrap: 'nowrap' }}   >
-          <div style={{ display: 'flex', flexDirection: 'row', height: '8vh', overflowY: 'hidden' }}>
-            <div style={{ paddingBottom: '100vh', maxWidth: `${(window.screen.width * 88) / 100}px`, overflowX: 'scroll', overflowY: 'hidden', display: 'flex', flexDirection: 'row' }}>
+        <Box sx={{ }}   >
               {templateData?.dbId?.tables[tableIdForFilter]?.filters &&
                 Object.entries(templateData?.dbId?.tables[tableIdForFilter]?.filters).map(
                   (filter, index) => (
-                    <Box key={index} className="custom-box">
+                    <Box key={index} className="custom-box1">
                       <Box
-                        className="filter-box"
+                        className="filter-box1"
                         style={{
                           backgroundColor:
                             underLine === filter[0] ? variables.highlightedfilterboxcolor : "transparent",
@@ -194,6 +192,7 @@ export default function TemplatePage() {
                         variant="outlined"
                       >
                         <div
+                        style={{}}
                           onClick={() => {
                             onFilterClicked(filter[1].query, filter[0], filter[1]);
                           }}
@@ -208,8 +207,6 @@ export default function TemplatePage() {
 
                   )
                 )}
-            </div>
-          </div>
         </Box>
         {openn && !edit && (
           <FilterModal
@@ -227,8 +224,8 @@ export default function TemplatePage() {
 
         )}
 
-        <div style={{ paddingLeft: '24px', display: 'flex', justifyContent: 'flex-start' }}>
-          <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={handleClickOpenManageField}>Manage Fields</Button>
+        <div style={{  }}>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,}} onClick={handleClickOpenManageField}>Manage Fields</Button>
 
           <Button onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon fontSize="2px" />}</Button>
           {params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={handleEdit}>Edit filter</Button>
@@ -268,15 +265,17 @@ export default function TemplatePage() {
         </Menu>
       </div>
       
-      <div style={{ marginTop: "120px" }}>
+      <div >
         {isTableLoading ? (
           <CircularProgress className="table-loading" />
         ) : (
-          <div style={{padding:'2%'}}>
-            <MainTable setPage={setPage} width={'60vw'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} />
+          <div style={{width:"100%",display:"flex", alignItems:"center", justifyContent:"center"}}>
+            <MainTable  setPage={setPage} width={'60%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{padding:'0 auto'}}/>
           </div>
         )}
+      </div>
         <div style={{ marginTop: "25px" }}>{description}</div>
+      </div>
       </div>
 
     </>

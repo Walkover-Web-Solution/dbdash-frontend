@@ -375,7 +375,8 @@ export default function MainTable(props) {
             data: d || "",
             displayData: d?.toString() || "",
           };
-        } else if (
+        } 
+        else if (
           dataType === "createdat" ||
           dataType === "createdby" ||
           dataType === "rowid" ||
@@ -539,8 +540,8 @@ export default function MainTable(props) {
             kind: GridCellKind.Text,
             allowOverlay: true,
             readonly: false,
-            displayData: d || "",
-            data: d || "",
+            displayData: d?.toString()|| "",
+            data:  d?.toString() || "",
           };
         }
       } else {

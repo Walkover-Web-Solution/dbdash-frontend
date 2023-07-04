@@ -13,6 +13,7 @@
 .tables-list-container {
     width: 99vw !important;
     display: flex !important;
+    
     height: 5vh !important;
   font-size: $tablepagefontsize !important;
 
@@ -22,7 +23,7 @@
     .tabs-container {
       display: flex !important;
       overflow: hidden !important;
-      width: 100% !important;
+      width: 90% !important;
       padding-left: 24px !important;
       padding-right: 20px !important;
       height: 5vh !important;

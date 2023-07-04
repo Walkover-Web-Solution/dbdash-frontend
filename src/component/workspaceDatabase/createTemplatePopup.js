@@ -62,14 +62,14 @@ const CreateTemplatePopup = (props) => {
             }}
           >
             <Box className="create-auth-key-content-container">
-              <Box className="create-auth-key-row">
+              <Box className="create-auth-key-row" sx={{display:'flex',flexDirection:'column'}}>
                 <FormControlLabel
+                  label="New Category"
                   control={
-                    <Typography sx={{display:"flex", alignItems:"center", justifyContent:"center"}}onClick={()=>{setNewCategory(!newCategory)}} variant="contained" color="primary">
+                    <Typography sx={{display:"flex", alignItems:"center", justifyContent:"center",color:'black'}}onClick={()=>{setNewCategory(!newCategory)}} variant="contained" color="primary">
               {newCategory ? <CheckBoxIcon fontSize='small'/> : <CheckBoxOutlineBlankIcon fontSize='small'/>}
             </Typography>
                   }
-                  label="New Category"
                 />
                 {newCategory ? (
                   <TextField
@@ -95,7 +95,6 @@ const CreateTemplatePopup = (props) => {
                     >
                       {allCategory &&
                         Object.entries(allCategory).map(([key, value]) => {
-                          console.log("key",value)
                           return (
                             <MenuItem key={key} value={value}>
                               {value}

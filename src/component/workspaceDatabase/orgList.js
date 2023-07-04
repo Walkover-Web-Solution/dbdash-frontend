@@ -47,10 +47,10 @@ export const OrgList = (props) => {
     const userId = localStorage.getItem("userid")
     if (obj?.users) {
       Object.entries(obj?.users).map((user) => {
-        if (user[1]?.user_id?._id == userId && user[1]?.user_type == "1") {
+        if (user[1]?.user_id?._id == userId && user[1]?.user_type == 1) {
           setIsOwner(true);
         }
-        if (user[1]?.user_id?._id == userId && user[1]?.user_type == "11") {
+        if (user[1]?.user_id?._id == userId && user[1]?.user_type == 11) {
           setIsAdmin(true);
         }
       });
@@ -132,7 +132,8 @@ export const OrgList = (props) => {
   }
   const updateUserTypeInOrg = async (email, user_type) => {
     const adminId = localStorage.getItem("userid")
-    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email, user_type: user_type }))
+
+    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email,user_type }))
   }
 
 
@@ -219,7 +220,9 @@ export const OrgList = (props) => {
                         userType={userType}
                         setUserType={setUserType}
                         shareOrg={shareOrg}
+                        title={'Add User to Organization'}
                         org={orgUsers}
+                        setOrg={setOrgUsers}
                         setShareOrg={setShareOrg}
                         shareWorkspace={shareWorkspace}
                         removeUserFromWorkspace={removeUserFromWorkspace}

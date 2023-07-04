@@ -1,4 +1,3 @@
-
 import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk,  createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk, updateUserInOrgThunk} from './databaseThunk';
 export const initialState = {
   status: 'idle',
@@ -17,7 +16,7 @@ export const reducers = {
     }
   },
 
-  
+ 
 moveDb(state)
 {
 
@@ -32,7 +31,7 @@ moveDb(state)
 
 
   },
-  
+ 
 
   removeDb(state) {
     state.dbId = '';
@@ -49,19 +48,19 @@ export function extraReducers(builder) {
       state.status="loading"
     })
     .addCase(moveDbThunk.fulfilled,(state,action)=>{
-    
+   
       state.status = "succeeded";
     let oldArr = state.orgId[action.payload.orgId] || [];
     let newArr = state.orgId[action.payload.data1.org_id] || [];
-    
+   
     let object = oldArr.find((obj) => obj._id === action.payload.data1._id);
     if (object) {
     oldArr = oldArr.filter((obj) => obj._id !== action.payload.data1._id);
-    
+   
     object.org_id._id = action.payload.data1.org_id;
-    
+   
     newArr.push(object);
-    
+   
      state.orgId = {
     ...state.orgId,
     [action.payload.orgId]: oldArr,
@@ -70,11 +69,11 @@ export function extraReducers(builder) {
      }
     })
     .addCase(moveDbThunk.rejected, (state) => {
-    
+   
       state.status = "failed";
      
     })
-    
+   
 
     .addCase(renameDBThunk.pending, (state) => {
 
@@ -123,6 +122,9 @@ export function extraReducers(builder) {
     })
 
 
+
+
+
     .addCase(renameOrgThunk.pending, (state) => {
 
       state.status = "loading"
@@ -162,7 +164,7 @@ export function extraReducers(builder) {
       else
       state.allOrg = [action.payload.allorgs[0]]
     })
-    
+   
     .addCase(createOrgThunk.rejected, (state) => {
 
       state.status = "failed";
@@ -202,7 +204,7 @@ export function extraReducers(builder) {
     //   delete orgIdArr[deletedOrgId];
     //   state.orgId = { ...orgIdArr };
     //   state.allOrg = state.allOrg.filter(org => org._id !== deletedOrgId);
-      
+     
     // })
     // .addCase(deleteOrgThunk.rejected, (state) => {
 
@@ -229,19 +231,19 @@ export function extraReducers(builder) {
     })
 
 
-     //  add deleted db time for restoring again 
+     //  add deleted db time for restoring again
 
      .addCase(deleteDbThunk.pending, (state) => {
       state.status = "loading"
     })
     .addCase(deleteDbThunk.fulfilled, (state, actions) => {
       state.status = "succeeded";
-      const arr = state.orgId[actions.payload.org_id];
+      const arr = state.orgId[actions.payload.org_id._id];
       let newArr = arr.filter(ele => {
         return ele._id !== actions.payload._id;
       });
       newArr.push(actions?.payload)
-      state.orgId[actions.payload.org_id] = newArr;
+      state.orgId[actions.payload.org_id._id] = newArr;
     })
     .addCase(deleteDbThunk.rejected, (state) => {
       state.status = "failed";
@@ -252,18 +254,18 @@ export function extraReducers(builder) {
     })
     .addCase(restoreDbThunk.fulfilled, (state, actions) => {
       state.status = "succeeded";
-      const arr = state.orgId[actions.payload.org_id];
+      const arr = state.orgId[actions.payload.org_id._id];
       let newArr = arr.filter(ele => {
         return ele._id !== actions.payload._id;
       });
       newArr.push(actions?.payload)
-      state.orgId[actions.payload.org_id] = newArr;
+      state.orgId[actions.payload.org_id._id] = newArr;
     })
     .addCase(restoreDbThunk.rejected, (state) => {
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
-    
+   
 
 
     //   Add user in Org
@@ -312,7 +314,7 @@ export function extraReducers(builder) {
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
-    .addCase(removeUserInOrgThunk.pending, (state) => {
+    .addCase(removeUserInOrgThunk.pending, (state) => { 
 
       state.status = "loading"
     })
@@ -337,4 +339,3 @@ export function extraReducers(builder) {
 
 
 }
-

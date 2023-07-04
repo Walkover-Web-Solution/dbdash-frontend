@@ -66,17 +66,17 @@ export const editCell = (cell, newValue, dispatch, fields, params, currentrow, d
     valuesArray.push(currentupdatedvalue);
     indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
   
-    updateCellsAfterSomeDelay(dispatch);
-  if(isSingleCellSelected) {
-       dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentrow }))
+    if (isSingleCellSelected) {
+      dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentrow }));
+      dispatch(updateCells({
+        updatedArray: [currentupdatedvalue],
+        indexIdMapping: { [currentrow[`fld${tableId}autonumber`]]: cell[1]},
+        oldData : currentrow[key]
+      }))
+
     }
-    
-
+    else updateCellsAfterSomeDelay(dispatch);
     return;
-
-
-
-   
   }
 }
 

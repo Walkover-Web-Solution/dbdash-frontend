@@ -29,6 +29,7 @@ import ManageFieldDropDown from "../manageFieldDropDown";
 import { toast } from "react-toastify";
 import { selectActiveUser } from "../../../store/user/userSelector";
 import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
+import Sharedb from "./Sharedb";
 export default function TablesList({ dbData }) {
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -252,7 +253,10 @@ useEffect(() => {
             >
               <AddIcon />
             </Button>
+           
           </Box>
+          <Sharedb/>
+         
         </Box>
         <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap'}}   >
         <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden'}}>

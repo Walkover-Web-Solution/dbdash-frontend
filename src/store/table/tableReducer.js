@@ -440,7 +440,7 @@ export function extraReducers(builder) {
 
 
     .addCase(deleteColumns.pending, (state) => {
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(deleteColumns.fulfilled, (state) => {
       state.status = "succeeded";
@@ -520,6 +520,7 @@ export function extraReducers(builder) {
 
 
     .addCase(updateCells.pending, (state) => {
+    
       state.status = "loading"
     })
     .addCase(updateCells.fulfilled, (state, { payload }) => {
@@ -542,7 +543,17 @@ export function extraReducers(builder) {
       state.data = arr;
       state.status = "succeeded"
     })
-    .addCase(updateCells.rejected, (state) => {
+    .addCase(updateCells.rejected, (state,payload) => {  
+      const action=payload.meta.arg;
+      let arr = [...state.data];
+      const indexIdMapping = action?.indexIdMapping;
+      const updatedArray = action?.updatedArray;
+      const fieldsObject = Object.values(updatedArray)[0].fields;
+      const fieldsKey = Object.keys(fieldsObject)[0];
+      let row=arr[Object.values(indexIdMapping)[0]];
+       row[fieldsKey]= action?.oldData
+       arr[Object.values(indexIdMapping)[0]]=row;
+      state.data = arr;
       state.status = "failed";
     })
 

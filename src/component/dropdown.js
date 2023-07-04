@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{ useState} from 'react'
 import PropTypes from 'prop-types';
 import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -20,6 +20,9 @@ export default function Dropdown(props) {
     const handleClickOpen = () => {
       setOpen(true);
     };
+  
+    
+
   return (
     <>
         <Tooltip>
@@ -90,7 +93,7 @@ export default function Dropdown(props) {
 
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>
-          
+         
     </>
   )
 }
@@ -103,6 +106,7 @@ Dropdown.propTypes = {
   setName: PropTypes.func,
   title: PropTypes.string,
   tableId : PropTypes.string,
+  dbid:PropTypes.any,
   deleteFunction : PropTypes.func, 
   setTabIndex:PropTypes.func,
   tabIndex:PropTypes.number,
@@ -110,7 +114,6 @@ Dropdown.propTypes = {
   setOpenmove:PropTypes.func,
   exportCSV: PropTypes.any,
   exportCSVTable: PropTypes.any,
-  dbid:PropTypes.any,
   dbname:PropTypes.any
   
 };

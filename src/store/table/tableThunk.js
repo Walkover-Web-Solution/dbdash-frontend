@@ -373,6 +373,7 @@ export const addColumsToLeft = createAsyncThunk(
 export const updateCells = createAsyncThunk(
     "table/updateCells",
     async (payload, { getState }) => {
+
         const { tableId, dbId } = getState().table
         const value = payload?.value
         const columnId = payload?.columnId;
@@ -391,8 +392,8 @@ export const updateCells = createAsyncThunk(
         if (payload?.updatedArray) {
             jsonToSend = { "records": payload?.updatedArray }
         }
-        const data = await updateRow(dbId, tableId, jsonToSend)
 
+        const data = await updateRow(dbId, tableId, jsonToSend)
         const createdby = "fld" + tableId.substring(3) + "createdby"
         const updatedby = "fld" + tableId.substring(3) + "updatedby"
         // const tableInfo = getTableInfo(getState())
