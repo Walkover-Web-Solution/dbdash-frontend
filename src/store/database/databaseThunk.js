@@ -10,7 +10,8 @@ export const bulkAdd = createAsyncThunk(
         var result = {};
         try {
             data?.data?.data?.dbs.map((item) => {
-                result[item?.org_id?._id] = result[item?.org_id?._id] ? [...result[item?.org_id?._id], item] : [item]
+                console.log("hii",item)
+                result[item.org_id._id] = result[item.org_id._id] ? [...result[item.org_id._id], item] : [item]
             })
         } catch (error) {
             console.log(error)
@@ -40,7 +41,7 @@ export const moveDbThunk=createAsyncThunk(
              data1 : response?.data?.data,
              orgId : orgid
        }
-        return moveData ; 
+        return moveData ;
     }
 );
 
@@ -96,7 +97,7 @@ export const createOrgThunk = createAsyncThunk(
     "organdDb/createOrgThunk", async (payload) => {
         const data = await createOrg({ name: payload.name, user_id: payload.user_id });
         const allorgs = await getAllOrgs(data.data.data.org_id._id)
-      
+     
         const allData= {
             data:data.data.data,
             allorgs:allorgs?.data?.data
@@ -116,14 +117,14 @@ export const createOrgThunk = createAsyncThunk(
         }
 );  
 export const updateUserInOrgThunk=createAsyncThunk(
-    "organdDb/updateUserInOrgThunk", async (payload) => { 
-        await updateUserType(payload.orgId, payload.adminId,{email:payload.email,user_type:payload.user_type}); 
+    "organdDb/updateUserInOrgThunk", async (payload) => {
+        await updateUserType(payload.orgId, payload.adminId,{email:payload.email,user_type:payload.user_type});
         const allorgs = await getAllOrgs(payload.orgId)
         const allData= {
             allorgs:allorgs?.data?.data
         }
         return allData;
-    } 
+    }
 )
 export const removeUserInOrgThunk = createAsyncThunk(
     "organdDb/removeUserInOrgThunk", async (payload) => {
@@ -135,3 +136,5 @@ export const removeUserInOrgThunk = createAsyncThunk(
         return allData;
     }
 );  
+
+
