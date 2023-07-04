@@ -75,14 +75,14 @@ export default function Dropdown(props) {
               <Typography   textAlign="center" >{props?.third}</Typography>
             </MenuItem> }
 
-           <MenuItem onClick={(e)=>{e.preventDefault();
+          { props?.fourth && <MenuItem onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e); setOpenDuplicate(true);}}>
            <Typography>{props?.fourth}</Typography>
-           </MenuItem>
-           <MenuItem onClick={(e)=>{e.preventDefault();
+           </MenuItem>}
+           {props?.fifth && <MenuItem onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e); setOpenTemplate(true); }}>
            <Typography>{props?.fifth}</Typography>
-           </MenuItem>
+           </MenuItem>}
 
             {props?.exportCSV==="Export CSV" && <MenuItem onClick={(e)=>{e.preventDefault();
               e.stopPropagation();handleCloseUserMenu(e); props?.exportCSVTable(props?.tableId)}}>

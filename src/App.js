@@ -19,8 +19,6 @@ import TemplatePage from "./pages/templatePage/templatePage.js"
 import ViewTable from './pages/viewTable/viewTable';
 import Msg91bi_id_page from './component/msg91bi/msg91bi_id_page';
 
-
-
   
 
 function App() {
