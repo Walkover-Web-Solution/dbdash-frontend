@@ -1,5 +1,5 @@
 
-import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk,  createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk, updateUserInOrgThunk, addDbInUserThunk, removeDbInUserThunk} from './databaseThunk';
+import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk,  createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk, updateUserInOrgThunk} from './databaseThunk';
 export const initialState = {
   status: 'idle',
   orgId: {
@@ -122,55 +122,6 @@ export function extraReducers(builder) {
 
     })
 
-
-    .addCase(addDbInUserThunk.pending, (state) => {
-
-      state.status = "loading"
-    })
-    .addCase(addDbInUserThunk.fulfilled, (state, action) => {
-const payloadData=action.payload?.data?.data;
-      state.status = "succeeded";
-      let arr = state.orgId[payloadData.org_id] || [];
-      arr.map((obj) => {
-        if(obj._id==payloadData._id)
-        obj.users = payloadData.users
-      })
-      state.orgId = { ...state.orgId, [payloadData._id]: arr };
-
-    })
-    .addCase(addDbInUserThunk.rejected, (state) => {
-
-      state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
-    })
-
-    .addCase(removeDbInUserThunk.pending, (state) => {
-
-      state.status = "loading"
-    })
-    .addCase(removeDbInUserThunk.fulfilled, (state, action) => {
-
-      console.log("lgi",action.payload);
-const payloadData=action.payload?.response?.data?.data;
-      state.status = "succeeded";
-      let arr = state.orgId[payloadData._id] || [];
-      console.log("hfgkh")
-      arr.map((obj) => {
-        if(obj._id==payloadData._id)
-        delete obj.users[action.payload?.userId];
-      })
-
-      
-      state.orgId = { ...state.orgId, [payloadData._id]: arr };
-      console.log("ofhg",state.orgId);
-
-
-    })
-    .addCase(removeDbInUserThunk.rejected, (state) => {
-
-      state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
-    })
 
 
 
