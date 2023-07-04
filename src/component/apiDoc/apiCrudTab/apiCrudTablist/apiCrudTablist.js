@@ -60,8 +60,10 @@ function ApiCrudTablist(props) {
           TabIndicatorProps={{
             style: {
               display: 'none',
+
             },
             className: 'custom-tab-indicator',
+
           }}
           value={value}
           onChange={handleChange}
@@ -74,21 +76,39 @@ function ApiCrudTablist(props) {
           <StyledTab className="custom-tab-label" label="Delete" {...a11yProps(4)} />
         </Tabs>
       </Box>
-      <div style={{marginTop:"8vh"}}>
+      <div className="marginTop">
       <TabPanel value={value} index={0}>
-        <BasicStuff db={props.db} table={props.table} />
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`}}>
+  <BasicStuff alltabledata={props?.alltabledata} db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ListRecord db={props.db} table={props.table} />
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`}}>
+
+        <ListRecord alltabledata={props?.alltabledata} db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <AddRecord db={props.db} table={props.table} />
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
+
+        <AddRecord  alltabledata={props?.alltabledata} db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <UpdateRecord db={props.db} table={props.table} />
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
+ 
+        <UpdateRecord  alltabledata={props?.alltabledata} db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
-      <TabPanel value={value} index={4}>
-        <DeleteRecord db={props.db} table={props.table} />
+      <TabPanel  value={value} index={4}>
+      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
+      <DeleteRecord alltabledata={props?.alltabledata} db={props.db} table={props.table} />
+</div>
+
       </TabPanel>
       </div>
     </Box>
@@ -98,6 +118,7 @@ function ApiCrudTablist(props) {
 ApiCrudTablist.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
+  alltabledata:PropTypes.any,
 };
 
 export default ApiCrudTablist;

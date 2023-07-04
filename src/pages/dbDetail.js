@@ -30,7 +30,10 @@ function DbDetails() {
         dispatch(setAllTablesData(
             { 
                 "dbId":dbId,
-                "tables" :data.data.data.tables
+                "tables" :data.data.data.tables,
+                "orgId" :  data.data.data?.org_id,
+                "userAcess":data.data.data?.users,
+                "userDetail" :data.data.data?.usersMapping
             }
         ))
         setDbData(object);

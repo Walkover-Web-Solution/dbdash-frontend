@@ -1,28 +1,31 @@
 .bold-heading {
-    font-weight: bold !important ;
-  }
-  
-  .field-name {
-    font-size: 18px !important ;
-  }
-  
-  .field-id {
-    font-size: 18px !important ;
-  }
-  
-  .field-type {
-    font-size: 18px !important ;
-  }
-  
-  .add-remove {
- 
-    padding-bottom: 7px !important ;
-  }
-  
-  .add-remove-button {
-    font-size: 18px !important ;
-    background-color: transparent !important ;
-    border: none !important ;
-    display: inline-block !important ;
-  }
-  
+  font-weight: bold !important;
+}
+
+.field-name {
+  font-size: 18px !important;
+}
+
+.field-id {
+  font-size: 18px !important;
+}
+
+
+.field-type {
+  font-size: 18px !important;
+}
+
+.add-remove {
+  padding-bottom: 6px !important;
+}
+
+.add-remove-button {
+  font-size: 18.4px !important;
+  background-color: transparent !important;
+  border: none !important;
+  display: inline-block !important;
+  vertical-align: middle !important; /* Add this line to align checkboxes vertically */
+}
+.center-aligned{
+  text-align: center !important;
+}

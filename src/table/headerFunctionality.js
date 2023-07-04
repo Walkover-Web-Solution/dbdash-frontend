@@ -1,22 +1,30 @@
 import React from 'react';
 import MultiIcon from "./img/Multi";
 import TagIcon from '@mui/icons-material/Tag';
-import PlusOneIcon from '@mui/icons-material/PlusOne';
+// import PlusOneIcon from '@mui/icons-material/PlusOne';
 import CheckIcon from '@mui/icons-material/Check';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FunctionsIcon from '@mui/icons-material/Functions';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import NotesIcon from '@mui/icons-material/Notes';
 import TextFormatIcon from '@mui/icons-material/TextFormat';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+// import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
+// import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+// import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import { addColumnrightandleft, updateColumnHeaders } from '../store/table/tableThunk';
+// import FontDownloadIcon from '@mui/icons-material/FontDownload';
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import PinIcon from '@mui/icons-material/Pin';
+import KeyIcon from '@mui/icons-material/Key';
+import PersonIcon from '@mui/icons-material/Person';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+
 
 
 export function getPropertyIcon(data_type) {
@@ -42,11 +50,11 @@ export function getPropertyIcon(data_type) {
       propertyIcon = <NotesIcon fontSize="2px" />
       break;
     case "singleselect":
-      propertyIcon = <ExpandCircleDownOutlinedIcon fontSize="2px" />;
+      propertyIcon = <ArrowDropDownCircleIcon fontSize="2px" />;
       break;
-    case "multiselect":
-      propertyIcon = <MultiIcon fontSize="2px" />;
-      break;
+    // case "multiselect":
+    //   propertyIcon = <DoneAllIcon fontSize="2px" />;
+    //   break;
     case "createdby":
       propertyIcon = <PersonPinIcon fontSize="2px" />;
       break;
@@ -54,16 +62,16 @@ export function getPropertyIcon(data_type) {
       propertyIcon = <MoreTimeIcon fontSize="2px" />;
       break;
     case "attachment":
-      propertyIcon = <AttachFileIcon fontSize="2px" />;
+      propertyIcon = <InsertDriveFileIcon fontSize="2px" />;
       break;
     case "link":
-      propertyIcon = <NotesIcon  fontSize="2px"/>
+      propertyIcon = <ArrowForwardIcon  fontSize="2px"/>
       break;
     case "lookup":
       propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
       break;
     case "rowid":
-      propertyIcon = <FormatListNumberedIcon fontSize="2px" />;
+      propertyIcon = <KeyIcon fontSize="2px" />;
       break;
     case "email":
       propertyIcon = <EmailIcon fontSize="2px" />;
@@ -72,12 +80,14 @@ export function getPropertyIcon(data_type) {
       propertyIcon = <LocalPhoneIcon fontSize="2px" />;
       break;
     case "multipleselect":
-      propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
+      propertyIcon = <DoneAllIcon fontSize="2px" />;
       break;
     case "autonumber":
-      propertyIcon = <PlusOneIcon fontSize="2px" />;
+      propertyIcon = <PinIcon fontSize="2px" />;
       break;
-
+      case "updatedby":
+        propertyIcon = <PersonIcon fontSize="2px" />;
+        break;
     default:
       propertyIcon = <MultiIcon fontSize="2px"/>;
       break;

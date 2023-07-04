@@ -1,127 +1,138 @@
-import React, { useEffect, useState } from "react";
-import { Box, TextField, Typography, Button, Modal } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  Modal,
+ 
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import { PropTypes } from "prop-types";
-import AuthAccessDropDown from "../../component/authKeyComponents/authAccessDropdown";
-import AuthKeyDropdown from "../../component/authKeyComponents/authKeyDropdown/authKeyDropdown";
+
 import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup";
 import { createAuthkey, updateAuthkey } from "../../api/authkeyApi";
 import { selectActiveUser } from "../../store/user/userSelector.js";
-import { toast } from 'react-toastify';
-
+// import { toast } from 'react-toastify';
 import "./createAuth.scss";
 import { allOrg } from "../../store/database/databaseSelector";
+import Selectaccessandscope from "./Selectaccessandscope";
+import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 export default function CreateAuthKey(props) {
-  const id  = props.id;
-  const [selected, setSelected] = useState([]);
-  const [scope, setScope] = useState("");
+  const id = props.id;
+  const [scope, setScope] = useState({});
   const [name, setName] = useState("");
   const userDetails = useSelector((state) => selectActiveUser(state));
   const [authKey, setAuthKey] = useState("");
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const [options, setOptions] = useState({});
-  const [dbId, ] = useState({
-    authData:props?.authData,
-    title:props?.title
-  });
+  const EditAuthKeyData =  props?.authData && props?.title  ? {     authData: props?.authData,   title: props?.title, } : undefined;
+  
+
   const user = useSelector((state) => allOrg(state));
-  function getCreatedByName (data){
+  function getCreatedByName(data) {
     var array = [];
     Object.entries(Object.values(data.updatedDoc.auth_keys)).map((key) => {
-      user.map((user)=>{
+      user.map((user) => {
         user?.users?.map((id) => {
           if (id?.user_id?._id === key[1].user) {
             array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
           }
         });
-      })
+      });
     });
     props?.setCreatedBy(array);
-   }
- 
-  const isDisabled = !name || !scope || selected.length === 0;
+  }
+
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter"  ) {
       event.preventDefault();
+
+      createAuth();
     }
   };
   const createAuth = async () => {
-    const adminId1 = localStorage.getItem("userid");
-    const adminId = userDetails?.fullName;
+    const admin_id = localStorage.getItem("userid");
+    const admin_name = userDetails?.fullName;
+    if(!name || name=='')
+    {
+      toast.warning("Please provide a name.")
+      return;
+    }
     let data = {
       name: name,
-      scope: scope,
-      access: selected,
-      userId: adminId1,
+      userId: admin_id,
     };
-    if (selected?.length === Object.entries(options)?.length) 
+    let jsontosend={};
+
+    
+    if(scope["schema"] && scope["schema"]!='')
     {
-      data.access = "1";
+      data.access='11';
+      data.scope=scope["schema"];
     }
-    if (!props?.authData ) {
-      const create = await createAuthkey(id, adminId, data);
+   else if(scope["alltables"] && scope["alltables"]!='')
+    {
+      data.access='1';
+      data.scope=scope["alltables"];
+    }
+    else {
+      Object.entries(scope).map(([key,value])=>{
+        if(key!='schema' && key!='alltables' && (value!=''))
+        {
+          jsontosend[key]={scope:value};
+        }
+        data.access=jsontosend;
+      })
+    }
+    if(!data.access || Object.keys(data?.access)?.length==0){ 
+      toast.warning('It is required to make atleast one table accessable.')
+      return;
+    }
+    if (!props?.authData) {
+      const create = await createAuthkey(id, admin_name, data);
       setOpen(true);
-      setAuthKey(create?.data?.data?.authKey);     
+      setAuthKey(create?.data?.data?.authKey);
       props?.setAuthKeys(create?.data?.data?.updatedDoc?.auth_keys);
       getCreatedByName(create?.data?.data);
-      // props.setAuthkeycreatedorupdated(props.authkeycreatedorupdated+1);  
       return;
     }
 
-    if (
-      name === dbId?.authData?.name &&scope === dbId?.authData?.scope && selected.length === Object.keys(dbId?.authData?.access || {}).length) 
-    {
-      toast.error("Nothing is Change");
-      return;
-    }
-    const authKey = dbId.title;
-    const updatedAuthKey = await updateAuthkey(id, adminId1, authKey, data);
-    setAuthKey(dbId.title);
-    handleOpen();
-    props?.setAuthKeys(updatedAuthKey?.data?.data?.auth_keys)
+    const authKey = EditAuthKeyData?.title;
+    const updatedAuthKey = await updateAuthkey(id, admin_id, authKey, data);
+    setAuthKey(EditAuthKeyData?.title);
+    setOpen(true);
+
+    props?.setAuthKeys(updatedAuthKey?.data?.data?.auth_keys);
   };
-  
-useEffect(() => {
-  if (dbId && Object.keys(options).length > 0) {
-    setName(dbId?.authData?.name);
-    if (dbId?.authData?.access && Object.values(dbId.authData.access)[0] === "1") {
-      setScope(dbId?.authData.scope);
+  useEffect(() => {
+    setDataforEdit(EditAuthKeyData);
+  }, []);
 
-      let all = [];
-      Object.entries(options).map((option) => {
-        all = [...all, option[1].tableName];
-      });
-      setSelected(all);
-    } else {
-      setScope(dbId?.authData?.access && Object.values(dbId.authData.access)[0]?.scope || "");
-      const tableIds = Object.keys(dbId?.authData?.access || "");
-      const optionList = Object.entries(options).map(([id, { tableName }]) => ({
-        id,
-        tableName,
-      }));
-      const selectedTables = [];
-      for (let i = 0; i < optionList.length; i++) {
-        const { id, tableName } = optionList[i];
-        if (tableIds.includes(id)) {
-          selectedTables.push(tableName);
-        }
+  const setDataforEdit=(authkeydata)=>{
+    if (!authkeydata) return;
+    setName(authkeydata?.authData?.name);
+    if (!authkeydata?.authData?.access) return;
+    let obj={};
+      if (authkeydata?.authData?.access == "1") {
+        obj['alltables']=authkeydata?.authData?.scope;
       }
-      setSelected(selectedTables);
+      else if(authkeydata?.authData?.access == "11"){
+        obj['schema']=authkeydata?.authData?.scope;
+      }
+     else {Object.entries(authkeydata?.authData?.access).map(([key, value]) => {
+        obj[key]=value.scope;
+      });
     }
-  }
-}, [dbId, options]);
+    setScope(obj);
 
-  
+  }
+
   return (
     <>
       <Modal open={props.open} onClose={props.handleClose}>
         <Box
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
           className="create-auth-key-main-container"
         >
           <Box className="create-auth-key-row">
@@ -137,31 +148,12 @@ useEffect(() => {
               onKeyDown={handleKeyDown}
             />
           </Box>
-          <Box className="create-auth-key-row">
-            <Typography className="create-auth-key-label">Table Access</Typography>
-            <Box className="create-auth-key-dropdown">
-              <AuthAccessDropDown
-              dbIds={dbId}
-                selected={selected}
-                setSelected={setSelected}
-                dbId={props.id}
-                options={options}
-                setOptions={setOptions}
-              />
-            </Box>
-          </Box>
-          <Box className="create-auth-key-row">
-            <Typography className="create-auth-key-label">Scope</Typography>
-            <Box className="create-auth-key-dropdown">
-              <AuthKeyDropdown scope={scope} setScope={setScope} />
-            </Box>
-          </Box>
-
+          <Selectaccessandscope scope={scope} setScope={setScope} alltabledata={props?.alltabledata}/>
+         
           <Box className="create-auth-key-actions">
             <Box>
               <Button
                 variant="contained"
-                 disabled={isDisabled}
                 onClick={() => {
                   createAuth();
                 }}
@@ -169,10 +161,20 @@ useEffect(() => {
               >
                 {props?.authData ? "Update" : "Create"}
               </Button>
-              <AuthKeyPopup handleClose={props?.handleClose} open={open}  setOpen={setOpen} title={authKey} dbId={props.id} />
+              <AuthKeyPopup
+                handleClose={props?.handleClose}
+                open={open}
+                setOpen={setOpen}
+                title={authKey}
+                EditAuthKeyData={props.id}
+              />
             </Box>
             <Box>
-              <Button variant="outlined" onClick={props.handleClose} className="mui-button-outlined create-auth-key-button">
+              <Button
+                variant="outlined"
+                onClick={props.handleClose}
+                className="mui-button-outlined create-auth-key-button"
+              >
                 Cancel
               </Button>
             </Box>
@@ -184,16 +186,16 @@ useEffect(() => {
 }
 
 CreateAuthKey.propTypes = {
-  dbId: PropTypes.string,
+  EditAuthKeyData: PropTypes.string,
   open: PropTypes.bool,
   authData: PropTypes.any,
-  authkeycreatedorupdated:PropTypes.any,
-  setAuthkeycreatedorupdated:PropTypes.any,
+  
   title: PropTypes.any,
   id: PropTypes.any,
+  alltabledata: PropTypes.any,
+
   handleClose: PropTypes.func,
-  location: PropTypes.any,
-  setAuthKeys:PropTypes.any,
-  getCreatedByName:PropTypes.func,
-  setCreatedBy:PropTypes.any
+  setAuthKeys: PropTypes.any,
+  getCreatedByName: PropTypes.func,
+  setCreatedBy: PropTypes.any,
 };

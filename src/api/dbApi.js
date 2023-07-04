@@ -3,8 +3,12 @@ const URL = process.env.REACT_APP_API_BASE_URL;
 
 const createDb = async (orgId , data) =>
 {
-    return await axios.post(URL + `/dbs/${orgId}/dbs`,data)
-    
+    return await axios.post(URL + `/dbs/${orgId}/dbs`,data) 
+}
+
+const duplicateDb = async (dbId, data) =>
+{
+     return await axios.post(URL +`/dbs/${dbId}/duplicate`,data);
 }
 
 const getAllDb = async () =>
@@ -54,6 +58,15 @@ const adminPanelByAI = async (query) =>
      return await axios.post(URL +`/adminpanel/query/646b13964c684c360ed71d39` , {userQuery : query});
 }
 
+const addDbInUser=async(dbId,adminId,data)=>{
+    return await axios.patch(URL+`/dbs/${dbId}/admin/${adminId}`,data);
+}
+const removeDbInUser=async(dbId,adminId,data)=>{
+    return await axios.patch(URL+`/dbs/${dbId}/${adminId}/deletedbfromuser`,data);
+}
+const updateAccessOfUserInDb=async(dbId,adminId,data)=>{
+    return await axios.patch(URL+`/dbs/${dbId}/admin/${adminId}/updateuseraccess`,data);
+}
 
 
 
@@ -67,5 +80,9 @@ export {
     moveDb,
     restoreDbForUser,
     deleteDbForUser,
-    adminPanelByAI
+    adminPanelByAI,
+    duplicateDb,
+    addDbInUser,
+    removeDbInUser,
+    updateAccessOfUserInDb,
 }

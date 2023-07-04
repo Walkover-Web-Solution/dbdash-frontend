@@ -7,7 +7,10 @@ import Dropdown from "../dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { renameDBThunk, moveDbThunk, restoreDbThunk, deleteDbThunk } from "../../store/database/databaseThunk";
 import { allOrg } from "../../store/database/databaseSelector";
+import { toast } from 'react-toastify';
+
 export default function SingleDatabase(props) {
+
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState();
   const [openmove, setOpenmove] = useState(false);
@@ -30,13 +33,45 @@ export default function SingleDatabase(props) {
     dispatch(moveDbThunk({ orgid, dbid, data }))
   };
 
-  const renameDatabase = async (orgId, id, name) => {
+  // const renameDatabase = async (orgId, id, name) => {
+  //   const data = {
+  //     name: dbname || name,
+  //   };
+  //   dispatch(renameDBThunk({ orgId, id, data }))
+  //   setDbname();
+  // };
+  const renameDatabase = async (orgId, id ,name) => {
+  
+    if ( !dbname || dbname.trim() === "") {
+      toast.error("Database name cannot be empty");
+      setDbname(props?.db?.name)
+      return;
+    }
+    
+    if (dbname.length < 3) {
+      toast.error("Database name must be at least 3 characters long");
+      return;
+    }
+  
+    if (dbname.length > 30) {
+      toast.error("Database name cannot exceed 30 characters");
+      return;
+    }
+  
+    if (dbname.includes(" ")) {
+      toast.error("Database name cannot contain spaces");
+      return;
+    }
+  
     const data = {
       name: dbname || name,
     };
-    dispatch(renameDBThunk({ orgId, id, data }))
+  
+    dispatch(renameDBThunk({ orgId, id, data }));
     setDbname();
   };
+  
+
   const handleOpen = () => {
     setName(false);
   };
@@ -204,17 +239,20 @@ export default function SingleDatabase(props) {
             <Typography sx={{ fontWeight: "bold" }}>
               {props.db.name}{" "}
             </Typography>
-            <Box sx={{ mt: -1 }}>
+            <Box >
             {arr1.length > 1 && !props?.db?.deleted ? (
   <Dropdown
     setTabIndex={props?.setTabIndex}
     tabIndex={props?.index}
-    first={"Rename Database"}
-    second={"Delete Database"}
+    first={"Rename"}
+    second={"Delete"}
     third={"Move"}
+    fourth={"Duplicate"}
+    fifth={"Make template of this db"}
     setOpenmove={setOpenmove}
     orgid={props?.db?.org_id?._id}
     dbid={props?.db?._id}
+    dbname={props?.db?.name}
     setName={setName}
     idToDelete={props?.db?._id}
     deleteFunction={deletDatabases}
@@ -224,11 +262,12 @@ export default function SingleDatabase(props) {
   <Dropdown
     setTabIndex={props?.setTabIndex}
     tabIndex={props?.index}
-    first={"Rename Database"}
-    second={""}
-    third={""}
-    orgid={props?.db?.org_id?._id}
+    first={"Rename"}
+    fourth={"Duplicate"}
+    fifth={"Make template of this db"}
+    orgid={props?.db?.org_id._id } 
     dbid={props?.db?._id}
+    dbname={props?.db?.name}
     setName={setName}
     title={"Database"}
   />

@@ -1,5 +1,5 @@
 export const getAllTableInfo=(state)=>{
     const {tables }=state.tables;
-    const {dbId}=state.tables;
-    return {tables,dbId};
+    const {dbId ,userAcess,userDetail}=state.tables; 
+    return {tables,dbId,userAcess,userDetail};  
 }
