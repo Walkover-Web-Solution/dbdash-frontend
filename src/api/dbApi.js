@@ -59,13 +59,13 @@ const adminPanelByAI = async (query , id) =>
 }
 
 const addDbInUser=async(dbId,adminId,data)=>{
-    return await axios.patch(URL+`/dbs/${dbId}/admin/${adminId}`,data);
+    return await axios.patch(URL+`/dbs/${dbId}/sharedb?operation=add`,data);
 }
 const removeDbInUser=async(dbId,adminId,data)=>{
-    return await axios.patch(URL+`/dbs/${dbId}/${adminId}/deletedbfromuser`,data);
+    return await axios.patch(URL+`/dbs/${dbId}/sharedb?operation=delete`,data);
 }
 const updateAccessOfUserInDb=async(dbId,adminId,data)=>{
-    return await axios.patch(URL+`/dbs/${dbId}/admin/${adminId}/updateuseraccess`,data);
+    return await axios.patch(URL+`/dbs/${dbId}/sharedb?operation=update`,data);
 }
 
 export {
