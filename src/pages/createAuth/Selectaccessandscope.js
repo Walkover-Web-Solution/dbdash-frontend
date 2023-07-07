@@ -63,7 +63,7 @@ function Selectaccessandscope(props) {
                   }}
                 >
                   <FormControlLabel
-                    value="read"
+                    value="Read"
                     control={
                       <Radio
                         icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
@@ -72,13 +72,13 @@ function Selectaccessandscope(props) {
                     }
                     label="Read"
                     labelPlacement="end"
-                    checked={isSelected("schema", "read")}
+                    checked={isSelected("schema", "Read")}
                     onClick={(e) => {
                       handleRemoveChecked(`schema`, e.target.value);
                     }}
                   />
                   <FormControlLabel
-                    value="write"
+                    value="Write"
                     control={
                       <Radio
                         icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
@@ -86,7 +86,7 @@ function Selectaccessandscope(props) {
                       />
                     }
                     label="Write"
-                    checked={isSelected("schema", "write")}
+                    checked={isSelected("schema", "Write")}
                     onClick={(e) => {
                       handleRemoveChecked(`schema`, e.target.value);
                     }}
@@ -122,7 +122,7 @@ function Selectaccessandscope(props) {
                     }}
                   >
                     <FormControlLabel
-                      value="read"
+                      value="Read"
                       control={
                         <Radio
                           icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
@@ -130,14 +130,14 @@ function Selectaccessandscope(props) {
                         />
                       }
                       label="Read"
-                      checked={isSelected("alltables", "read")}
+                      checked={isSelected("alltables", "Read")}
                       onClick={(e) => {
                         handleRemoveChecked(`alltables`, e.target.value);
                       }}
                       labelPlacement="end"
                     />
                     <FormControlLabel
-                      value="write"
+                      value="Write"
                       control={
                         <Radio
                           icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
@@ -145,7 +145,7 @@ function Selectaccessandscope(props) {
                         />
                       }
                       label="Write"
-                      checked={isSelected("alltables", "write")}
+                      checked={isSelected("alltables", "Write")}
                       onClick={(e) => {
                         handleRemoveChecked(`alltables`, e.target.value);
                       }}
@@ -189,7 +189,7 @@ function Selectaccessandscope(props) {
                             onChange={(e) => handleScopeChange(e, key)}
                           >
                             <FormControlLabel
-                              value={`read`}
+                              value={`Read`}
                               control={
                                 <Radio
                                   icon={
@@ -201,14 +201,14 @@ function Selectaccessandscope(props) {
                                 />
                               }
                               label="Read"
-                              checked={isSelected(key, "read")}
+                              checked={isSelected(key, "Read")}
                               onClick={(e) => {
                                 handleRemoveChecked(key, e.target.value);
                               }}
                               labelPlacement="end"
                             />
                             <FormControlLabel
-                              value={`write`}
+                              value={`Write`}
                               control={
                                 <Radio
                                   icon={
@@ -220,7 +220,7 @@ function Selectaccessandscope(props) {
                                 />
                               }
                               label="Write"
-                              checked={isSelected(key, "write")}
+                              checked={isSelected(key, "Write")}
                               onClick={(e) => {
                                 handleRemoveChecked(key, e.target.value);
                               }}
