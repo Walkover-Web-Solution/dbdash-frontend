@@ -75,13 +75,13 @@ export default function Headermenu(props) {
   }, [props?.menu?.col])
 
   const dataType = props?.fields[props?.menu?.col]?.dataType;
-
   const handleDelete=()=>{dispatch(
     deleteColumns({
       label: props?.fields[props?.menu?.col]?.title,
       columnId: props?.fields[props?.menu?.col]?.id,
       fieldName: props?.fields[props?.menu?.col]?.id,
       fieldDataType: props?.fields[props?.menu?.col].dataType || "",
+      metaData: props?.fields[props?.menu?.col].metadata,
       tableId: params?.tableName,
       dbId: params?.dbId,
       filterId:params?.filterName
