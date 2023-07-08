@@ -24,9 +24,9 @@ const [openTemplate,setOpenTemplate]=useState(false);
       .sort(([orgIdA, dbsA], [orgIdB, dbsB]) => {
         if (addedelement) {
           if (orgIdA === addedelement) {
-            return 1;
-          } else if (orgIdB === addedelement) {
             return -1;
+          } else if (orgIdB === addedelement) {
+            return 1;
           }
         }
   

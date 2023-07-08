@@ -355,7 +355,7 @@ useEffect(() => {
           onClose={() => handleClose()}
         >
         
-        
+        <MenuItem>Rename</MenuItem>
           <MenuItem
             onClick={() => {
               deleteFilterInDb(currentTable);
@@ -373,6 +373,7 @@ useEffect(() => {
             >
             Export CSV
             </MenuItem>
+           
         
 
         </Menu>
