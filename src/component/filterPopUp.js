@@ -75,15 +75,25 @@ const style = {
   };
 
   const handleCreateFilter = async () => {
-    // const data = await updateFilter();
+    const firstChar = filterName[0];
+let filterName1;
+  if (/[a-zA-Z]/.test(firstChar)) {
+filterName1=firstChar.toUpperCase() + filterName.slice(1);
+  }
+  else 
+  {
+    filterName1=firstChar.toLowerCase() + filterName.slice(1);
+  }
+  setFilterName(filterName1);
+
     const dataa = {
-      filterName: filterName,
+      filterName: filterName1,
       query: "SELECT * FROM " + props?.tableName,
       htmlToShow : ""
     };
     const filter = await createFilter(props?.dbId, props?.tableName, dataa);
     const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
-    const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName);
+    const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName1);
     await dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
@@ -135,6 +145,14 @@ const style = {
           label="Filter Name"
           variant="outlined"
           value={filterName}
+          autoFocus={true}
+          onKeyDown={(e)=>{
+            if(e.key!='Enter') return;
+            if(!filterName) return;
+            handleCreateFilter();
+            handleClose();
+
+          }}
           onChange={(e) => setFilterName(e.target.value)}
         />
       </Box>

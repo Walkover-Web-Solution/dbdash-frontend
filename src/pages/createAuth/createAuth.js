@@ -139,7 +139,7 @@ export default function CreateAuthKey(props) {
             <Typography className="create-auth-key-label">Name</Typography>
             <TextField
               id="standard-basic"
-              label="Standard"
+              label="Name"
               variant="standard"
               value={name}
               onChange={(e) => {

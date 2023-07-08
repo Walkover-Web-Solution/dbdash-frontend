@@ -1,6 +1,6 @@
 @import '../../../../src/assets/styling.scss';
 .tableslist{
-  margin-top: 6.5vh !important;
+  margin-top: 7vh !important;
   position:fixed !important;
   top:0 !important;
   z-index:100;
@@ -22,14 +22,20 @@
   
     .tabs-container {
       display: flex !important;
-      overflow: hidden !important;
-      width: 90% !important;
+      overflow-x:scroll !important;
+      overflow-y: hidden !important;
+      width: 99vw !important;
+      overflow-x: auto !important;
       padding-left: 24px !important;
       padding-right: 20px !important;
       height: 5vh !important;
 
 
-
+.tabs{
+  width:99vw !important;
+  overflow-x: auto !important;
+  overflow-y:  hidden !important;
+}
 
 
 
@@ -46,37 +52,37 @@
   }
   .custom-box {
   margin-right: 10px !important;
-    .filter-box {
-      background-color: transparent ;
-      min-width: 100px !important;
-      width: auto !important;
-      display: flex !important;
-      height:15px !important;
-      overflow-y: hidden !important;
-      align-items: center !important;
-  font-size: $tablepagefontsize !important;
-
-      justify-content: center !important;
+  .filter-box {
+    background-color: transparent;
+    min-width: 100px !important;
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: $tablepagefontsize !important;
+    justify-content: center !important;
+    color: $filterColorValue !important;
+    border-radius: 0 !important;
+    padding: 8px !important;
+    margin-top: 12px !important;
+    margin-bottom: 6px !important;
+    margin-right: 2px !important;
+    border: 1px solid $filterColorValue !important;
+    height: 15.1px !important;
+    line-height: 1; /* Add this line to ensure the height doesn't expand */
+    white-space: nowrap; /* Add this line to prevent wrapping */
+    overflow: hidden; /* Add this line to hide overflowing content */
+    text-overflow: ellipsis; /* Add this line to show ellipsis when content is truncated */
+  
+    &:hover {
+      text-decoration: underline !important;
+      cursor: pointer !important;
+    }
+  
+    .MuiIconButton-root {
       color: $filterColorValue !important;
-      border-radius: 0 !important;
-      padding: 7% !important;
-      margin-top: 12px !important;
-      margin-bottom: 6px !important;
-      margin-right: 10px !important;
-      border: 1px solid $filterColorValue!important;
-      height: 15px !important;
-      
-
-  
-      &:hover {
-        text-decoration: underline !important;
-      }
-  
-      .MuiIconButton-root {
-        color: $filterColorValue !important;
-      }
     }
   }
+    }
   
   
   
@@ -84,7 +90,8 @@
     width: 110px!important;
     margin-top: 2px !important;
     height: 15px !important;
-    padding: 1% !important;
+    padding: 8px !important;
+    
 
 
 

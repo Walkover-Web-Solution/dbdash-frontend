@@ -164,7 +164,7 @@ export default function AddFilterPopup(props) {
     setHtml(html);
     setText(text);
   };
-  
+  console.log("text,html",AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]);
   return (
     <Box >
 

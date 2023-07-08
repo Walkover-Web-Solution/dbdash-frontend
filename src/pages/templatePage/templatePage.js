@@ -139,16 +139,16 @@ export default function TemplatePage() {
 
 
   return (
-    <>
+    <div style={{width:'100%',display:'flex',justifyContent:'center'}}>
     <div className="main-box">
-      {/* <div style={{ fontSize: '25px' }}>{categoryName}</div> */}
-      <div style={{ fontSize: '25px', display: 'flex' ,justifyContent:"center" }}>
-  <div style={{ marginRight: 'auto' }}>{templateName}</div>
-  <Button variant="contained" sx={{ marginRight: '20px' }} className={'mui-button'} onClick={()=>{ setOpenUseTemplate(true);}}>Use Template</Button>
+      <div style={{ fontSize: '25px', display: 'flex' ,justifyContent:"space-between" }}>
+  <div >{templateName}</div>
+  <Button variant="contained" sx={{marginRight:'-1.4vw'}} className={'mui-button'} onClick={()=>{ setOpenUseTemplate(true);}}>Use Template</Button>
 </div>
   <UseTemplatePopup open={openUseTemplate} categoryName={categoryName} setOpen={setOpenUseTemplate}/>
 
-<div style={{display:'flex',padding:"10px", flexDirection:"column", justifyContent:"center",width:"100%"}}>
+<div style={{display:'flex',padding:"10px", flexDirection:"row", justifyContent:"center",width:"100%"}}>
+  <div style={{width:'85vw',padding:'10px',border:'1px solid black'}}>
       <div  className="tableslist1">
           <Box className="tabs-container1">
             <Tabs
@@ -178,13 +178,13 @@ export default function TemplatePage() {
             </Tabs>
            
           </Box>
-        <Box sx={{ }}   >
+        <Box sx={{ display:"flex",flexDirection:'row',width:'100%',overflowX:'auto'}}   >
               {templateData?.dbId?.tables[tableIdForFilter]?.filters &&
                 Object.entries(templateData?.dbId?.tables[tableIdForFilter]?.filters).map(
                   (filter, index) => (
-                    <Box key={index} className="custom-box1">
+                    <Box key={index} className="custom-box">
                       <Box
-                        className="filter-box1"
+                        className="filter-box"
                         style={{
                           backgroundColor:
                             underLine === filter[0] ? variables.highlightedfilterboxcolor : "transparent",
@@ -224,10 +224,10 @@ export default function TemplatePage() {
 
         )}
 
-        <div style={{  }}>
-          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,}} onClick={handleClickOpenManageField}>Manage Fields</Button>
+        <div >
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}}  onClick={handleClickOpenManageField}>Manage Fields</Button>
 
-          <Button onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon fontSize="2px" />}</Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}}  onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon fontSize="2px" />}</Button>
           {params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={handleEdit}>Edit filter</Button>
             <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={(e) => {
               handleClick(e, "share");
@@ -246,19 +246,21 @@ export default function TemplatePage() {
           onClose={() => handleClose()}
         >
 
-          <MenuItem
-            onClick={() => {
-              handleClose();
-            }}
-          >
-            Delete
-          </MenuItem>
+        
           <MenuItem
             onClick={() => {
               handleClose();
             }}
           >
             Export CSV
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+            }}
+            sx={{color:`#a51226`}}
+          >
+            Delete
           </MenuItem>
 
 
@@ -270,14 +272,19 @@ export default function TemplatePage() {
           <CircularProgress className="table-loading" />
         ) : (
           <div style={{width:"100%",display:"flex", alignItems:"center", justifyContent:"center"}}>
-            <MainTable  setPage={setPage} width={'60%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{padding:'0 auto'}}/>
+            <MainTable  setPage={setPage} width={'100%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{padding:'0 auto'}}/>
           </div>
         )}
       </div>
-        <div style={{ marginTop: "25px" }}>{description}</div>
       </div>
+        
+      </div>
+      <div style={{ marginTop: "25px",fontSize: '25px' }}>Description</div>
+      <div style={{display:'flex',justifyContent:'center'}}>
+  <div style={{width:'85vw',padding:'10px',marginTop:'10px'}}>{description}</div>
+  </div>
       </div>
 
-    </>
+    </div>
   );
 }

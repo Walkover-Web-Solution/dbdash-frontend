@@ -1,6 +1,7 @@
-import { Button } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from 'prop-types';
+
 import { useParams } from "react-router-dom";
 import ShareOrgModal from "../../workspaceDatabase/shareOrgModal";
 import {
@@ -8,15 +9,16 @@ import {
   removeDbInUserThunk,
   updateAccessOfUserInDbThunk,
 } from "../../../store/allTable/allTableThunk";
+import { toast } from "react-toastify";
 
-function Sharedb() {
+function Sharedb(props) {
+  const {setOpenShareDb,openShareDb}=props;
   const params = useParams();
   const adminId = localStorage.getItem("userid");
   const dispatch = useDispatch();
   const userAcess = useSelector((state) =>state.tables?.userAcess);
   const userDetail = useSelector((state) =>state.tables?.userDetail);
-  const [openShareDb, setOpenShareDb] = useState(false);
-  const [dbUsers, setDbUsers] = useState();
+    const [dbUsers, setDbUsers] = useState();
   const [userType, setUserType] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
@@ -36,6 +38,7 @@ function Sharedb() {
       {
         if(userObj.user_type==1) setIsOwner(true);
         else if(userObj.user_type==11) setIsAdmin(true);
+        else toast.warning('Only admin or owner can share.')
         return;
       }
     
@@ -49,36 +52,43 @@ function Sharedb() {
       email: email,
       userAccess: user_type,
     };
+    
 
     dispatch(addDbInUserThunk({ dbId: params.dbId, adminId, data }));
   };
   const updateUserinsharedb = (email, user_type) => {
+    let obj = { ...dbUsers };
+    let originalObj={...dbUsers};
+    obj.users = obj.users.map((user) => {
+      if (user.user_id.email === email) {
+        return { ...user, user_type: user_type };
+      }
+      return user;
+    });
+  setDbUsers(obj);
     const data = {
       email: email,
       userAccess: { access: user_type },
     };
-    dispatch(updateAccessOfUserInDbThunk({ dbId: params.dbId, adminId, data }));
+    dispatch(updateAccessOfUserInDbThunk({ dbId: params.dbId, adminId, data })).then(e=>{
+      if(e.type.includes('rejected'))
+      {
+setDbUsers(originalObj);
+      }
+    });
   };
   const removeUserFromDb = (email, userId) => {
     const data = {
       email: email,
     };
+  
     dispatch(removeDbInUserThunk({ dbId: params.dbId, adminId, data, userId }));
   };
   return (
     <div>
-    { (isAdmin || isOwner) &&  <Button
-        variant="contained"
-        className="mui-button "
-        sx={{ position: "absolute", top: "0%", right: "1%" }}
-        onClick={() => {
-          setOpenShareDb(true);
-        }}
-      >
-        Share DB
-      </Button>}
+   
 
-     {openShareDb &&  <ShareOrgModal
+     {openShareDb && (isAdmin || isOwner) && <ShareOrgModal
         title={"Share Database"}
         useCase={"sharedb"}
         shareOrg={openShareDb}
@@ -95,4 +105,8 @@ function Sharedb() {
   );
 }
 
+Sharedb.propTypes = {
+  openShareDb: PropTypes.any,
+  setOpenShareDb:PropTypes.any,
+};
 export default Sharedb;

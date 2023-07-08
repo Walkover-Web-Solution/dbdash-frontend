@@ -132,8 +132,23 @@ export const OrgList = (props) => {
   }
   const updateUserTypeInOrg = async (email, user_type) => {
     const adminId = localStorage.getItem("userid")
+    let obj = { ...orgUsers };
+    let originalObj={...orgUsers};
+    obj.users = obj.users.map((user) => {
+      if (user.user_id.email === email) {
+        return { ...user, user_type: user_type };
+      }
+      return user;
+    });
+  setOrgUsers(obj);
+  
 
-    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email,user_type }))
+    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email,user_type })).then(e=>{
+      if(e.type.includes('rejected'))
+      {
+setOrgUsers(originalObj);
+      }
+    });
   }
 
 
@@ -206,11 +221,11 @@ export const OrgList = (props) => {
                     <Box>
                       <Box sx={{ right: "10px", display: "flex" }}>
                         <Button
-                          variant="contained"
-                          className="mui-button"
+                          variant="outlined"
+                          className="mui-button-outlined"
                           size="small"
                           color="success"
-                          sx={{ display: "flex" }}
+                          sx={{ display: "flex",textTransform:'none' }}
                           onClick={handleOpenShareOrg}
                         >
                           Share
@@ -258,7 +273,7 @@ export const OrgList = (props) => {
             <PopupModal
               open={open}
               setOpen={setOpen}
-              title="Create Database"
+              title="create database"
               label="Database Name"
               submitData={saveDb}
               setVariable={setDb}

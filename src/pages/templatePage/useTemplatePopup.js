@@ -12,15 +12,17 @@ import {
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useTemplate } from '../../api/templateApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { allOrg } from '../../store/database/databaseSelector';
 import { useNavigate, useParams } from 'react-router-dom';
+import { createDbThunk } from '../../store/database/databaseThunk';
 
 const UseTemplatePopup = (props) => {
     const allorgss = useSelector((state) => allOrg(state));
     const params = useParams();
+    const dispatch=useDispatch();
     const navigate = useNavigate();
-    const [selectedOrg, setSelectedOrg] = React.useState('');
+    const [selectedOrg, setSelectedOrg] = React.useState('none');
 
     const handleClose = () => {
         props?.setOpen(false);
@@ -30,9 +32,12 @@ const UseTemplatePopup = (props) => {
         const data = {
             org_id: selectedOrg
         }
-        await useTemplate(props?.categoryName, params?.templateId, data);
+       const response= await useTemplate(props?.categoryName, params?.templateId, data);
         toast.success('Database created successfully!');
-        navigate('/dashboard');
+        navigate(`/db/${response.data.data._id}`);
+        dispatch(createDbThunk({
+            data: response?.data?.data
+          }));
         handleClose();
     };
 
@@ -52,6 +57,7 @@ const UseTemplatePopup = (props) => {
                         To which organization would you like to install this new base?
                     </DialogContentText>
                     <Select value={selectedOrg} onChange={handleOrgChange} >
+                        <MenuItem value={'none'}>--Select a Workspace--</MenuItem>
                         {allorgss.map((org) => (
                             <MenuItem key={org._id} value={org._id}>
                                 {org.name}
@@ -61,7 +67,7 @@ const UseTemplatePopup = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleUseTemplate} variant="contained" color="primary">
+                    <Button disabled={selectedOrg=='none'} onClick={handleUseTemplate} variant="contained" color="primary">
                         Create
                     </Button>
                 </DialogActions>

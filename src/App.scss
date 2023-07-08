@@ -3,10 +3,15 @@ body{
   background-color: $bgColorValue;
   color:$fontColorVAlue;
   font-family: 'Inter' !important;
- 
 }
 Button{
   border-radius:0 !important;
+ text-transform: none !important;
+
+
+}
+Tab{
+ text-transform: none !important;
 
 }
 .fontsize{
@@ -19,8 +24,27 @@ Button{
 .mui-button-outlined{
   color:$fontColorVAlue !important;
   border-color:$fontColorVAlue !important;
+  text-transform: none !important;
 }
+ .deletecolor{
+   color:$errorcolor !important;
+ }
 .Mui-selected  {
   background-color: $fontColorVAlue !important;
   color: $bgColorValue !important;
+  text-transform: none !important;
+
+}
+.deleterows{
+  margin-top: 5px !important;
+color:$errorcolor !important;
+}
+.popupheader{
+  height: 4vh !important;
+  background-color: #F0F0F0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: '2' !important;
+  align-items: center !important;
+
 }
