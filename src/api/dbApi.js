@@ -28,7 +28,7 @@ const getDbByOrgId = async (orgId) =>
 
 const renameDb = async (orgId,id,data) =>
 {
-     return await axios.patch(URL +`/dbs/${orgId}/dbs/${id}`,data)
+     return await axios.patch(URL +`/dbs/${id}?operation=rename`,data)
 }
 
 const deleteDb = async (orgId,id) =>
@@ -44,12 +44,12 @@ return await axios.patch(URL+`/dbs/${org_id}/dbs/${dbId}/movedb`,data);
 
 const restoreDbForUser = async(orgId,id)=>
 {
-    return await axios.patch(URL+`/dbs/${orgId}/${id}/restore/db`);  
+    return await axios.patch(URL+`/dbs/${id}?operation=restore`);  
 }
 
 const deleteDbForUser = async(orgId,id)=>
 {
-    return await axios.patch(URL+`/dbs/${orgId}/dbs/${id}/delete`);  
+    return await axios.patch(URL+`/dbs/${id}?operation=delete`);  
 }
 
 
