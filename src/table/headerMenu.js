@@ -8,6 +8,7 @@ import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
+import styling from '../assets/styling.scss'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DuplicateFieldPopup from './duplicateFieldPopup';
 import { useDispatch } from 'react-redux';
@@ -266,7 +267,7 @@ export default function Headermenu(props) {
                 )}
                 <div onClick={() => { handleOpenDuplicate(); } } className={classes.menuItem}>
                 <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
-                <div onClick={() => {handleDelete();props.setMenu(false);}} className={classes.menuItem}>
+                <div style={{color:styling.deletecolor}} onClick={() => {handleDelete();props.setMenu(false);}} className={classes.menuItem}>
                 <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
             </>
             )}

@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import MenuIcon from '@mui/icons-material/Menu';
+
 import { selectActiveUser } from '../../store/user/userSelector.js';
 import { UserAuth } from '../../context/authContext.js';
 import variables from '../../assets/styling.scss';
@@ -19,10 +21,14 @@ import {
 } from '@mui/material';
 import './mainNavbar.scss';
 import { selectOrgandDb } from '../../store/database/databaseSelector.js';
+import Sharedb from '../table/tablesList/Sharedb.js';
+import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup.js';
 
 
 function MainNavbar(props) {
   let { dbId  ,id,tableName} = useParams();
+  const [openTemplate,setOpenTemplate]=useState(false);
+  const [openShareDb, setOpenShareDb] = useState(false);
 
   const alldb = useSelector((state) => selectOrgandDb(state));
 let dbname = '';
@@ -34,7 +40,9 @@ let dbname = '';
   });
 
   
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElMenu, setAnchorElMenu] = useState(null);
+
   const navigate = useNavigate();
   const location = useLocation();
   const user = UserAuth();
@@ -57,6 +65,12 @@ let dbname = '';
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+  const handleOpenMenu=(event)=>{
+    setAnchorElMenu(event.currentTarget);
+  }
+  const handleCloseMenu=()=>{
+    setAnchorElMenu(null);
+  }
 
   const handleLogOut = async () => {
     try {
@@ -71,6 +85,8 @@ let dbname = '';
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  
 
   return (
     <Container className="main-navbar-container" maxWidth="false">
@@ -95,13 +111,20 @@ let dbname = '';
       )}
 
       <Box>
+       
+  {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db.name || dbname} open={openTemplate} setOpen={setOpenTemplate}/>}
+
+      {dbId && <Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb}/>}
+    { dbId &&  <IconButton  size="small"  onClick={handleOpenMenu}  className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
+            <MenuIcon/>
+          </IconButton>}
         {(shouldShowTypography || shouldShowTableButton) && (
           <Tooltip title="APIs">
             <Button
               variant="outlined"
               className="main-navbar-button"
               component={Link}
-              style={shouldShowTableButton ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none' } : {}}
+              style={shouldShowTableButton ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none' ,textTransform:'none'} : {textTransform:'none'}}
               to={{ pathname: `/apiDoc/db/${dbId}` }}
               state={tableName}
             >
@@ -116,7 +139,7 @@ let dbname = '';
   variant="outlined"
   component={Link}
   className="main-navbar-button"
-  style={shouldShowTypography ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none' } : {}}
+  style={shouldShowTypography ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none',textTransform:'none' } : {textTransform:'none'}}
   to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
     : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
     : { pathname: `/db/${dbId || id}` }
@@ -128,9 +151,8 @@ let dbname = '';
             </Button>
           </Tooltip>
         )}
-
         <Tooltip title="Open settings">
-          <IconButton  size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button">
+          <IconButton  size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
             <Avatar sx={{height:variables.profileiconheight,width:variables.profileiconwidth}} alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
           </IconButton>
         </Tooltip>
@@ -161,6 +183,37 @@ let dbname = '';
           <MenuItem onClick={handleLogOut}>
             <Typography textAlign="center">Logout</Typography>
           </MenuItem>
+        </Menu>
+
+
+
+        <Menu
+          className="main-navbar-menu"
+          id="menu-appbar"
+          anchorEl={anchorElMenu}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorElMenu)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={()=>{
+            setOpenTemplate(true);
+            handleCloseMenu();}}>
+            <Typography textAlign="center">Create Template</Typography>
+          </MenuItem>
+          <MenuItem onClick={()=>{
+            setOpenShareDb(true);
+            handleCloseMenu();}}>
+            <Typography textAlign="center">Share DB</Typography>
+          </MenuItem>
+          
         </Menu>
       </Box>
     </Container>

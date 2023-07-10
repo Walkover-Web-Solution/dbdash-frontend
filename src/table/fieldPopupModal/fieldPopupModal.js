@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, Typography, Switch, FormGroup, FormControlLabel } from "@mui/material";
+import { Button, Dialog, DialogContent, TextField, Select, MenuItem, Typography, Switch, FormGroup, FormControlLabel, Box } from "@mui/material";
 // import { useSelector } from "react-redux";
 // import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 import CheckIcon from "@mui/icons-material/Check";
@@ -7,6 +7,8 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
 import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
 import TextFormatIcon from "@mui/icons-material/TextFormat";
+import CloseIcon from '@mui/icons-material/Close';
+
 import NotesIcon from "@mui/icons-material/Notes";
 import { withStyles } from '@mui/styles';
 import LinkIcon from '@mui/icons-material/Link';
@@ -194,7 +196,7 @@ export default function FieldPopupModal(props) {
   };
 
   return (
-    <div>
+    <div style={{borderRadius:0}}>
       <Dialog
         open={props?.open}
         onClose={handleClose}
@@ -203,10 +205,12 @@ export default function FieldPopupModal(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          borderRadius:0,
         }}
       >
-        <DialogTitle id="form-dialog-title">Create Column</DialogTitle>
+         <div className="popupheader" style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+            create column
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+
         <TextField
           autoFocus
           margin="dense"
@@ -238,7 +242,8 @@ export default function FieldPopupModal(props) {
         <DialogContent
           sx={{
             width: 400,
-            padding: 2,
+            p:2,
+            pt:0
           }}
         >
           <Select
@@ -249,7 +254,8 @@ export default function FieldPopupModal(props) {
             defaultValue="longtext"
             displayEmpty
             sx={{
-              margin: 1,
+              margin: 2,
+              ml:0,
               minWidth: 120,
             }}
           >
@@ -282,7 +288,7 @@ export default function FieldPopupModal(props) {
           {showLookupField && <LoookupDataType linkedValueName={props?.linkedValueName} setLinkedValueName={props?.setLinkedValueName} selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} key={props.selectedTable} tableId={props?.tableId} />}
 
           {showSwitch && (
-          <FormGroup >
+          <FormGroup sx={{ml:2}}>
           <FormControlLabel
             control={
               <CustomSwitch
@@ -299,12 +305,13 @@ export default function FieldPopupModal(props) {
         
           )}
         </DialogContent>
+        <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+            <Box >
         {props?.selectValue !== "formula" || props?.queryByAi ? (
           <Button
             sx={{ textTransform: "none" }}
-            // className="mui-button"
+            className="mui-button"
           
-            // color="primary"
             disabled={
               errors.fieldName ||
               props?.textValue?.length < 1 ||
@@ -320,6 +327,8 @@ export default function FieldPopupModal(props) {
             Create Column
           </Button>
         ) : null}
+        </Box>
+        </Box>
       </Dialog>
     </div>
   );

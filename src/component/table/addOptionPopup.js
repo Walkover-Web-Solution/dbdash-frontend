@@ -90,11 +90,11 @@ export default function AddOptionPopup(props) {
     textField.focus();
   };
 
-  const handleInputChange = (event, index) => {
-    const newInputValues = [...inputValues];
-    newInputValues[index] = event.target.value;
-    setInputValues(newInputValues);
-  };
+  // const handleInputChange = (event, index) => {
+  //   const newInputValues = [...inputValues];
+  //   newInputValues[index] = event.target.value;
+  //   setInputValues(newInputValues);
+  // };
 
   useEffect(() => {
     fields1.forEach((field) => {
@@ -120,8 +120,9 @@ export default function AddOptionPopup(props) {
   const handleInputKeyPress = (event) => {
 
     if (event.key === "Enter") {
-     event.target.value="";
      handleAddClick();
+
+     event.target.value="";
     }
   };
 
@@ -166,15 +167,16 @@ export default function AddOptionPopup(props) {
             Add options
           </Typography>
           <Box sx={{ my: 2,maxHeight:'300px',overflowY:'auto' }}>
-            {inputValues.map((value, index) => (
+            {inputValues.map((val, index) => (
               <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
                 <TextField
                   id={`input-${index}`}
-                  label="Standard"
                   variant="standard"
-                  value={value}
-                  onChange={(event) => handleInputChange(event, index)}
-                  onKeyPress={handleInputKeyPress}
+                  label="saved option"
+                  value={val}
+
+                  // onChange={(event) => handleInputChange(event, index)}
+                  // onKeyPress={handleInputKeyPress}
                 />
                 <Cancel
                   onClick={() => handleCancelClick(index, inputValues)}
@@ -186,11 +188,11 @@ export default function AddOptionPopup(props) {
               <TextField
                 autoFocus
                 id="myTextField"
-                label="Standard"
+                label="Enter"
                 variant="standard"
                 value={value}
                 onChange={(event) => setValue(event.target.value.trim())}
-                onKeyPress={handleInputKeyPress}
+                onKeyDown={handleInputKeyPress}
               />
             </Box>
           </Box>

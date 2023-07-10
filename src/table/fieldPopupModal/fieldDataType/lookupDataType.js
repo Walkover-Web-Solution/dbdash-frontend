@@ -25,7 +25,7 @@ export default function LoookupDataType(props) {
 
   }
   return (
-    <>
+    <div>
       {foreignKey?.length == 0 && <span style={{ color: 'red' }}>Create Foreign key first.</span>}
 
       {
@@ -36,6 +36,7 @@ export default function LoookupDataType(props) {
           value={props?.linkedValueName ? Object.keys(props?.linkedValueName)[0] : foreignKey[0][0]}
           sx={{
             margin: 1,
+            marginLeft:0,
             minWidth: 120,
           }}
 
@@ -73,6 +74,7 @@ export default function LoookupDataType(props) {
         value={props?.selectedFieldName}
         sx={{
           margin: 1,
+          marginLeft:0,
           minWidth: 120,
         }}
         onChange={(e) => props?.setSelectedFieldName(e.target.value)}
@@ -87,7 +89,7 @@ export default function LoookupDataType(props) {
       </Select>
 
       )}
-    </>
+    </div>
   )
 }
 

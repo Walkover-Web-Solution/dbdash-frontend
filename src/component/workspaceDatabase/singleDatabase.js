@@ -248,7 +248,6 @@ export default function SingleDatabase(props) {
     second={"Delete"}
     third={"Move"}
     fourth={"Duplicate"}
-    fifth={"Make template of this db"}
     setOpenmove={setOpenmove}
     orgid={props?.db?.org_id?._id}
     dbid={props?.db?._id}
@@ -264,7 +263,6 @@ export default function SingleDatabase(props) {
     tabIndex={props?.index}
     first={"Rename"}
     fourth={"Duplicate"}
-    fifth={"Make template of this db"}
     orgid={props?.db?.org_id._id } 
     dbid={props?.db?._id}
     dbname={props?.db?.name}
