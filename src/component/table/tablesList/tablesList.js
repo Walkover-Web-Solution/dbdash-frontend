@@ -212,6 +212,7 @@ useEffect(() => {
       query: query,
       userName: userDetails?.fullName,
       email: userDetails?.email,
+      filterId : filterId,
     };
     await exportCSV(dbData?.db?._id, params?.tableName, data);
     toast.success("Your CSV file has been mailed successfully");
