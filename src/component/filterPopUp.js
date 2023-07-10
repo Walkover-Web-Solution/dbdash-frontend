@@ -52,7 +52,6 @@ const style = {
   width: "250px",
 };
 
-
   const handleClose = () => {
     props.setOpen(false);
   };
@@ -85,7 +84,6 @@ filterName1=firstChar.toUpperCase() + filterName.slice(1);
     filterName1=firstChar.toLowerCase() + filterName.slice(1);
   }
   setFilterName(filterName1);
-
     const dataa = {
       filterName: filterName1,
       query: "SELECT * FROM " + props?.tableName,

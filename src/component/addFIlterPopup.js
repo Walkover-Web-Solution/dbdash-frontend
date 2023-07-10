@@ -109,7 +109,7 @@ export default function AddFilterPopup(props) {
   const updateFilter =async()=>{
     var queryToSend = " ";
     if (props?.dbData?.db?.tables[props?.tableName]?.view &&
-      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1) {
+      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.tables).length >= 1) {
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id
       queryToSend = "select * from " + viewId + " where "+ text.trim();
     } else {
@@ -164,7 +164,6 @@ export default function AddFilterPopup(props) {
     setHtml(html);
     setText(text);
   };
-  console.log("text,html",AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]);
   return (
     <Box >
 
