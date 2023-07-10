@@ -147,7 +147,7 @@ const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, sugges
     }, [])
     return (
         <div ref={parentDivRef} className="suggestionMainContainer" style={{ position: "relative" }}>
-            <div id={id ? id : ''} contentEditable={true} ref={editableDivRef} onKeyDown={handleKeyDown} onInput={(e) => { handleInputChange(e); }} style={width?{width:width}:{}}className={editableDivClass || 'editable-div'} suppressContentEditableWarning={true} />
+            <div id={id ? id : ''} contentEditable={true} ref={editableDivRef} onKeyDown={handleKeyDown} onInput={(e) => { handleInputChange(e); }} style={width?{width:width,height:'fit-content',maxHeight:'60vh',minHeight:'150px'}:{height:'fit-content',maxHeight:'60vh',minHeight:'150px'}}className={editableDivClass || 'editable-div'} suppressContentEditableWarning={true} />
             <div className={suggestionBoxClass || 'suggestionBox'}
                 style={{ position: 'absolute', left: suggestionPosition.left, top: suggestionPosition.top, zIndex: 100, opacity: filteredSuggestions.length > 0 ? 1 : 0 }}
             >

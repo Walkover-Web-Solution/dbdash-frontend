@@ -1,20 +1,14 @@
+@import '../../assets/styling.scss';
 .tableslist1{
     display: flex;
     flex-direction: column;
     gap: 10px;
     .tabs-container1{
-        width: 60%;
+        width: 100%;
     }
 }
-.filter-box1{
-    display: flex;
-    align-items: center;
-    border:1px solid black;
-    width: fit-content;
-    padding: 3px;
-}
 .main-box{
-    width: 96vw;
+    width: 85vw;
     margin: 40px;
 
 }

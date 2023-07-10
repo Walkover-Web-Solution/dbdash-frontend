@@ -5,7 +5,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteAuthKeyPopup from './authKeyTablePopup/deleteAuthkeyPopup';
 import DisplayAuthKeyPopup from './authKeyTablePopup/displayAuthkeyPopup';
 import CreateAuthKey from '../../pages/createAuth/createAuth';
-
+import styling from '../../assets/styling.scss';
 export default function AuthDropdown(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setOpen] = useState(false);
@@ -57,16 +57,7 @@ const[open1,setOpen1]=useState(false);
           }}>
           <Typography textAlign="center">{props?.first}</Typography>
         </MenuItem>
-        <MenuItem
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            handleCloseUserMenu(event);
-            setOpen(true);
-          }}
-        >
-          <Typography textAlign="center">{props?.second}</Typography>
-        </MenuItem>
+        
         <MenuItem onClick={(event)=>{handleCloseUserMenu(event);setDisplay(true)}}>
           <Typography textAlign="center">{props?.third}</Typography>
         </MenuItem>
@@ -77,6 +68,17 @@ const[open1,setOpen1]=useState(false);
           title={props?.title}
           deleteFunction={props?.deleteFunction}
         />
+        <MenuItem
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            handleCloseUserMenu(event);
+            setOpen(true);
+          }}
+          sx={{color:styling.deletecolor}}
+        >
+          <Typography textAlign="center">{props?.second}</Typography>
+        </MenuItem>
         <DisplayAuthKeyPopup display={display} setDisplay={setDisplay} title={props?.title}/>
       </Menu>
                        

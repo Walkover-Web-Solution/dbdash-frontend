@@ -30,14 +30,14 @@ export default function LinkDataType(props) {
 
 
   return (
-    <>
+    <div>
       {
         AllTableInfo?.tables   &&
         <Select
           labelId="select-label"
           id="select"
           value={props?.selectedTable}
-          sx={{ margin: 1, minWidth: 120 }}
+          sx={{ margin: 1,marginLeft:0, minWidth: 120 }}
           onChange={(event) => {
             props.setSelectedTable(event.target.value);
             setShowUniqueFieldsDropdown(true);
@@ -57,6 +57,7 @@ export default function LinkDataType(props) {
       sx={{
         margin: 1,
         minWidth: 120,
+        marginLeft:0
       }}
       onChange={(e) => 
        {
@@ -75,7 +76,7 @@ export default function LinkDataType(props) {
   )
 }
 
-    </>
+    </div>
   )
 }
 

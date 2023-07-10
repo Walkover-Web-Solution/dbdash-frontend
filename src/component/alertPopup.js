@@ -26,7 +26,7 @@ export default function AlertPopup(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={(e) => { e.preventDefault(); e.stopPropagation(); props?.deleteFunction(props?.tableId); handleClose(e); }}>Delete</Button>
-          <Button onClick={(e)=>{handleClose(e);e.preventDefault(); e.stopPropagation()}} autoFocus>Cancel </Button>
+          <Button autoFocus onClick={(e)=>{handleClose(e);e.preventDefault(); e.stopPropagation()}} >Cancel </Button>
         </DialogActions>
       </Dialog>
     </>
