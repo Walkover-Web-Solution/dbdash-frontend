@@ -442,15 +442,24 @@ export default function MainTable(props) {
           dataType === "updatedby" ||
           dataType === "updatedat"
         ) {
+          
+          let updatedtime=d;
+          if(d!==null && dataType === "updatedat")
+          updatedtime=new Date(d*1000)
+          
+          console.log("updatedtime",updatedtime)
+        
           return {
             kind: GridCellKind.Text,
             allowOverlay: true,
             readonly: true,
 
-            displayData: d || "",
-            data: d || "",
+            displayData: (d && updatedtime.toString()) || "",
+            data: (d && updatedtime.toString()) || "",
           };
-        } else if (dataType === "datetime") {
+        } 
+        
+        else if (dataType === "datetime") {
           const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
           if (currentDate instanceof Date && !isNaN(currentDate)) {
             const day = currentDate.getDate().toString().padStart(2, "0");
