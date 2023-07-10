@@ -4,12 +4,13 @@ import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from './alertPopup';
 import DuplicateDbPopup from './workspaceDatabase/duplicateDbPopup';
-import CreateTemplatePopup from './workspaceDatabase/createTemplatePopup';
+import variables from '../assets/styling.scss';
+import { useParams } from 'react-router-dom';
 export default function Dropdown(props) {
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const params=useParams();
     const [open, setOpen] = useState(false);
     const [openDuplicate,setOpenDuplicate]=useState(false);
-    const [openTemplate,setOpenTemplate]=useState(false);
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
@@ -21,7 +22,17 @@ export default function Dropdown(props) {
       setOpen(true);
     };
   
-    
+    const menuclick=(e)=>{
+      e.preventDefault();
+              e.stopPropagation();handleCloseUserMenu(e);
+e.preventDefault();
+              e.stopPropagation();handleCloseUserMenu(e);
+e.preventDefault();
+              e.stopPropagation();handleCloseUserMenu(e);
+e.preventDefault();
+              e.stopPropagation();handleCloseUserMenu(e);
+
+    }
 
   return (
     <>
@@ -35,6 +46,7 @@ export default function Dropdown(props) {
         </Tooltip>
 
           <Menu
+          
             sx={{ mt: '45px' }}
             id="menu-appbar"
             anchorEl={anchorElUser}
@@ -50,8 +62,9 @@ export default function Dropdown(props) {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem onClick={handleCloseUserMenu}>
+            <MenuItem  onClick={handleCloseUserMenu}>
               <Typography textAlign="center" onClick={(e) =>{e.preventDefault();
+              if(params?.templateId) return;
                            
               e.stopPropagation(); props?.setName (true);
               if (typeof props?.setTabIndex === 'function') 
@@ -60,12 +73,12 @@ export default function Dropdown(props) {
               }
               }}>{props?.first}</Typography>
             </MenuItem>
-            {props?.second!=="" && props?.second && <MenuItem onClick={(e)=>{e.preventDefault();
-              e.stopPropagation();handleCloseUserMenu(e);setOpen(true);}}>
-              <Typography  onClick={handleClickOpen} textAlign="center" >{props?.second}</Typography>
-            </MenuItem>}
-           {props?.third==="Move" && <MenuItem onClick={(e)=>{e.preventDefault(); e.stopPropagation();
-           handleCloseUserMenu;
+           
+           {props?.third==="Move" && <MenuItem  onClick={(e)=>{
+              if(params?.templateId) return;
+            
+            menuclick(e);
+
               props?.setName(false);
               props?.setOpenmove(true);
               if (typeof props?.setTabIndex === 'function') 
@@ -75,21 +88,23 @@ export default function Dropdown(props) {
               <Typography   textAlign="center" >{props?.third}</Typography>
             </MenuItem> }
 
-          { props?.fourth && <MenuItem onClick={(e)=>{e.preventDefault();
-              e.stopPropagation();handleCloseUserMenu(e); setOpenDuplicate(true);}}>
+          { props?.fourth && <MenuItem onClick={(e)=>{ if(params?.templateId) return;
+            menuclick(e); setOpenDuplicate(true);}}>
            <Typography>{props?.fourth}</Typography>
            </MenuItem>}
-           {props?.fifth && <MenuItem onClick={(e)=>{e.preventDefault();
-              e.stopPropagation();handleCloseUserMenu(e); setOpenTemplate(true); }}>
-           <Typography>{props?.fifth}</Typography>
-           </MenuItem>}
+          
 
-            {props?.exportCSV==="Export CSV" && <MenuItem onClick={(e)=>{e.preventDefault();
-              e.stopPropagation();handleCloseUserMenu(e); props?.exportCSVTable(props?.tableId)}}>
+            {props?.exportCSV==="Export CSV" && <MenuItem onClick={(e)=>{ 
+              if(params?.templateId) return;
+              menuclick(e); props?.exportCSVTable(props?.tableId)}}>
               <Typography  textAlign="center" >{props?.exportCSV}</Typography>
             </MenuItem>}
+            {props?.second!=="" && props?.second && <MenuItem onClick={(e)=>{ 
+              if(params?.templateId) return;
+              menuclick(e); setOpen(true);}}>
+              <Typography  onClick={handleClickOpen} color={variables.deletecolor} textAlign="center" >{props?.second}</Typography>
+            </MenuItem>}
 <DuplicateDbPopup dbId={props?.dbid} db={props?.dbname} open={openDuplicate} setOpen={setOpenDuplicate}/>
-{openTemplate && <CreateTemplatePopup dbId={props?.dbid} db={props?.dbname} open={openTemplate} setOpen={setOpenTemplate}/>}
 
           <AlertPopup open={open} setOpen ={setOpen} tables={props?.tables} tableId ={props?.tableId} title={props?.title } deleteFunction={props?.deleteFunction}  />
           </Menu>
@@ -102,7 +117,6 @@ Dropdown.propTypes = {
   second: PropTypes.string,
   third: PropTypes.string,
   fourth: PropTypes.string,
-  fifth: PropTypes.string,
   setName: PropTypes.func,
   title: PropTypes.string,
   tableId : PropTypes.string,

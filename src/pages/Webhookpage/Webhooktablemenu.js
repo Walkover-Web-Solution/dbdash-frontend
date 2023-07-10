@@ -4,6 +4,7 @@ import { Popover, MenuItem, Box, Switch } from '@mui/material';
 import { withStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
+import styling from '../../assets/styling.scss';
 function Webhooktablemenu(props) {
   const { anchorEl, closeDropdown, handleUpdateActive, handleDeleteWebhook, isActive } = props;
   const [active, setActive] = useState(isActive);
@@ -77,14 +78,15 @@ function Webhooktablemenu(props) {
           </div>
         </MenuItem>
 
-        <MenuItem onClick={() => handleDeleteWebhook()}>
+       
+        <MenuItem onClick={handleAddWebhook} >
+          <Box >Edit</Box>
+        </MenuItem>
+        <MenuItem sx={{color:styling.deletecolor}} onClick={() => handleDeleteWebhook()}>
           <Box sx={{ mr: 2 }}>Delete</Box>
           <Box sx={{ ml: 2 }}>
             <DeleteOutlineIcon />
           </Box>
-        </MenuItem>
-        <MenuItem onClick={handleAddWebhook} >
-          <Box >Edit</Box>
         </MenuItem>
       </Popover>
       <Createwebhook

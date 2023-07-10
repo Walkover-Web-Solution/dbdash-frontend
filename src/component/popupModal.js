@@ -4,17 +4,15 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import useValidator from "react-joi";
 import Joi from "joi";
-
+import CloseIcon from '@mui/icons-material/Close';
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 300,
+  width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
 };
 
 export default function PopupModal(props) {
@@ -56,6 +54,7 @@ export default function PopupModal(props) {
 
   return (
     <Box>
+
       <Modal
         disableRestoreFocus
         open={props.open}
@@ -63,11 +62,14 @@ export default function PopupModal(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+
         <Box sx={style}>
-          <Typography id="title" variant="h6" component="h2">
+        <div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
             {props.title}
-          </Typography>
-          <Box sx={{ my: 2 }}>
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+
+       
+          <Box sx={{ m: 2 }}>
             <TextField
               error={
                 state?.$errors?.[props?.id].length === 0 || textFieldValue.includes(" ")
@@ -103,9 +105,9 @@ export default function PopupModal(props) {
               {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
             </div>
           </Box>
-         {props?.templateoption && <div style={{height:'40px'}}><Typography>To create a base using template <a target="_blank" rel="noreferrer" href='https://dbdash-backend-h7duexlbuq-el.a.run.app/64a3fb1f135d26837027e15e'> click here</a></Typography></div>
-         } <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Box>
+         {props?.templateoption && <Box sx={{m:2}}><Typography>To create a base using template <a  rel="noreferrer" href='http://localhost:5000/64a806e049f009459a84201b'> click here</a></Typography></Box>
+         } <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+            <Box >
               <Button
               className="mui-button"
                 variant="contained"
@@ -122,11 +124,7 @@ export default function PopupModal(props) {
                 Create
               </Button>
             </Box>
-            <Box>
-              <Button variant="outlined" className="mui-button-outlined"  onClick={handleClose}>
-                Cancel
-              </Button>
-            </Box>
+           
           </Box>
         </Box>
       </Modal>

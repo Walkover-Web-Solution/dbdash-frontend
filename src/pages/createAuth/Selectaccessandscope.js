@@ -96,7 +96,7 @@ function Selectaccessandscope(props) {
               </div>
             </Box>
           </Box>
-          {(!scope["schema"] || scope["schema"] == "") && (
+         
             <Box>
               <Box
                 sx={{
@@ -127,6 +127,7 @@ function Selectaccessandscope(props) {
                         <Radio
                           icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                           checkedIcon={<CheckBoxIcon fontSize="small" />}
+                         disabled= {(scope['schema'] && scope['schema']!='')}
                         />
                       }
                       label="Read"
@@ -142,6 +143,8 @@ function Selectaccessandscope(props) {
                         <Radio
                           icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                           checkedIcon={<CheckBoxIcon fontSize="small" />}
+                      disabled= {(scope['schema'] && scope['schema']!='')}
+
                         />
                       }
                       label="Write"
@@ -155,12 +158,11 @@ function Selectaccessandscope(props) {
                 </div>
               </Box>
             </Box>
-          )}
-          {(!scope["schema"] || scope["schema"] == "") &&
-            (!scope["alltables"] || scope["alltables"] == "") && (
+          
+        
               <Box
                 sx={{
-                  maxHeight: "350px",
+                  maxHeight: (window.screen.height*70)/100,
                   overflowY: "auto",
                   borderTop: "1px solid #ccc",
                   borderBottom: "1px solid black",
@@ -178,13 +180,17 @@ function Selectaccessandscope(props) {
                         }}
                       >
                         <div>
-                          <Typography className="create-auth-key-label">
-                            {value.tableName}
-                          </Typography>
+                        <Typography className="create-auth-key-label">
+  {value.tableName.length > 10
+    ? value.tableName.slice(0, 10) + "..."
+    : value.tableName}
+</Typography>
+
                         </div>
                         <div>
                           <RadioGroup
                             row
+                            
                             value={scope[key]}
                             onChange={(e) => handleScopeChange(e, key)}
                           >
@@ -195,6 +201,7 @@ function Selectaccessandscope(props) {
                                   icon={
                                     <CheckBoxOutlineBlankIcon fontSize="small" />
                                   }
+                                  disabled={(scope['schema'] && scope['schema']!='') || (scope['alltables'] && scope['alltables']!='')}
                                   checkedIcon={
                                     <CheckBoxIcon fontSize="small" />
                                   }
@@ -211,6 +218,8 @@ function Selectaccessandscope(props) {
                               value={`Write`}
                               control={
                                 <Radio
+                                disabled={(scope['schema'] && scope['schema']!='') || (scope['alltables'] && scope['alltables']!='')}
+
                                   icon={
                                     <CheckBoxOutlineBlankIcon fontSize="small" />
                                   }
@@ -232,7 +241,7 @@ function Selectaccessandscope(props) {
                     </React.Fragment>
                   ))}
               </Box>
-            )}
+           
         </Box>
       </Box>
     </div>

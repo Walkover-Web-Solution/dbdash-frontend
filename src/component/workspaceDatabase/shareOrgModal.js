@@ -36,7 +36,7 @@ export default function ShareOrgModal(props) {
       return;
     }
   
-    const { org, setOrg, shareWorkspace } = props;
+    const { org, shareWorkspace } = props;
     const { users } = org;
   
     const existingUser = users.find((user) => user.user_id?.email === email);
@@ -49,10 +49,7 @@ export default function ShareOrgModal(props) {
       return;
     }
   
-    const newUser = { user_type: userType, user_id: { email } };
-    const updatedOrg = { ...org, users: [...users, newUser] };
-  
-    setOrg(updatedOrg);
+    
     shareWorkspace(email, userType);
     setEmail("");
     setUserType(111);
@@ -66,14 +63,7 @@ export default function ShareOrgModal(props) {
   };
 
   const handleUpdateUserType = (email, user_type) => {
-    let obj = { ...props?.org };
-    obj.users = obj.users.map((user) => {
-      if (user.user_id.email === email) {
-        return { ...user, user_type: user_type };
-      }
-      return user;
-    });
-    props?.setOrg(obj);
+    
     props.updateUserTypeInOrg(email, user_type);
   };
 
@@ -96,11 +86,7 @@ export default function ShareOrgModal(props) {
   };
 
   const handleRemoveUserindb = (email, userId) => {
-    let updatedOrg = {
-      ...props?.org,
-      users: props?.org.users.filter((user) => user.user_id.email !== email),
-    };
-    props.setOrg(updatedOrg);
+   
     props.removeUserFromWorkspace(email, userId);
     toast.success("User removed successfully");
   };

@@ -165,7 +165,7 @@ export default function SingleTable({
   const location = useLocation();
 
   return (
-    <>
+    <div style={{width:'fit-content'}}>
       <Box
         className={`single-table ${location.pathname.includes(`table/${table[0]}`) ? "active" : ""
           }`}
@@ -174,43 +174,18 @@ export default function SingleTable({
         }}
       >
         {name && tabIndex === index ? (
-          <>
+          <div style={{width:'fit-content',overflow:'visible'}}>
             <ClickAwayListener
               onClickAway={() => {
                 setName(false);
               }}
             >
-              <Box>
-                {/* <TextField
-                  // defaultValue={table[1]?.tableName || table[0]}
-
-                  autoFocus
-                  sx={{
-                    width: 75,
-                    fontWeight: "bold",
-                    backgroundColor: "white",
-                  }}
-                  value={tableNa}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      renameTableName(dbData?.db?._id, table[0]);
-                      setName(false);
-                    }
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onChange={(e) => {
-                    setTableNa(e.target.value);
-                  }}
-                  size="small"
-                /> */}
+              <Box >
                 <TextField
                   defaultValue={table[1]?.tableName || table[0] || " "}
                   autoFocus
                   sx={{
-                    width: 75,
+                    width: 'fit-content',
                     fontWeight: "bold",
                     backgroundColor: "white",
                   }}
@@ -234,7 +209,6 @@ export default function SingleTable({
                   sx={{
                     width: 2,
                     fontSize: `${variables.tablepagefontsize}`,
-                    mt: 1,
                   }}
                   type="submit"
                   onClick={(e) => {
@@ -251,7 +225,7 @@ export default function SingleTable({
                 </Button>
               </Box>
             </ClickAwayListener>
-          </>
+          </div>
         ) : (
           <>
             {tableLength >= 2 ? (
@@ -304,7 +278,7 @@ export default function SingleTable({
           </>
         )}
       </Box>
-    </>
+    </div>
   );
 }
 

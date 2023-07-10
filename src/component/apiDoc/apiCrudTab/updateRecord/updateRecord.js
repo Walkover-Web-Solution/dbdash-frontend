@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import OptionalParameter from '../optionalParameter/optionalParameter';
-import { Typography } from "@mui/material";
+import {Typography,Link} from '@mui/material';
 import CodeBlock from '../Codeblock/Codeblock';
 import Records from '../records/records';
 import ResponseBox from '../responseBox';
 import './updateRecord.scss'; // Import the CSS file
 import variables from '../../../../assets/styling.scss';
+import FilterConditionTable from '../filterConditionTable';
+import AiFilter from '../aiFilter';
 
 function UpdateRecord(props) {
   const response=`
@@ -35,11 +37,59 @@ function UpdateRecord(props) {
       </div>
 
       <div className="response-container"  style={{width:'700px',overflowX:"hidden"}}>
-        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >To Update records in the</Typography>
+        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Update records</Typography>
         <Typography  fontSize={variables.textsize} >
-        Please provide the fields for which you would like to update the data, and you can replace the existing values with their desired information.</Typography>
+        To update a new record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using Filter parameter.
+</Typography>
         <br />
-        <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
+        <Typography   style={{ fontWeight: "bold" ,fontSize:20}}>
+        Where Condition :
+ </Typography>
+        
+        <Typography  fontSize={variables.textsize} >
+        Filter conditions in the APIs enable you to retrieve specific records that meet specific criteria. By applying Filter conditions, you can refine the results based on specific field values or patterns.
+ </Typography>
+ <br />
+ {/* <Typography fontSize={variables.textsize}>
+  To implement a filter condition in the APIs, you can include the Filter parameter in your API request. The Filter parameter accepts formula expressions that can include various operators and functions, allowing you to create complex filter conditions. You can utilize logical operators such as AND, OR, and NOT to combine multiple conditions. Additionally, comparison operators like =, >, <, and functions like FIND(), LEN(), and IS_BEFORE() can be used to specify precise criteria for filtering.
+</Typography> */}
+<Typography  fontSize={variables.textsize}  style={{ fontWeight: "bold" }}>
+Note: In the given example, it will search for all occurrences of JOHN in FieldID1 If multiple records are found with this filter, it will update all of them. Therefore we suggest using Filter for only unique fields.
+</Typography>
+ <br />
+
+ <Typography  sx={{backgroundColor:"#E6E6E6"}} >
+ PATCH <span style={{textDecoration: "underline"}}>https://dbdash-backend-h7duexlbuq-el.a.run.app/Your_DataBase_ID/Your_Table_ID ?filter=FieldID1!=John</span>
+ </Typography>
+ <br />
+ <br/>
+ <Typography style={{fontSize:15 ,p:5}}>
+  Select Column name and click on the CheckBox to generate API on the right side
+ </Typography>
+
+ <FilterConditionTable/>
+ <Link href="#" style={{ fontSize: `${variables.linksizeoptionalparameter}px` }}>
+          More....
+        </Link>
+ <br />
+ <br />
+ <br />
+        <Typography   style={{ fontWeight: "bold" ,fontSize:20}}>
+        Still need help?Ask AI to generate your Filter condition
+ </Typography>
+ <br />
+ <AiFilter/>
+ <br />
+ <br />
+ <Typography   style={{ fontWeight: "bold" ,fontSize:20}}>
+ Fields to be updated:
+ </Typography>
+ <Typography  fontSize={variables.textsize} >
+ Please select the fields/columns that need to be updated.
+
+Note: If you provide NULL (FleldID1: NULL) or leave It blank (FieldID1: ), the API will update the field with null or blank values. Therefore, please ensure that you only use the field names that you want to update.</Typography>
+        <br />
+    <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
         />
         <br />
         <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />

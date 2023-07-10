@@ -19,6 +19,7 @@ function Records(props) {
   useEffect(() => {
     tableData();
   }, [props.db, props.table]);
+  console.log("props",props)
 
   return (
     <div>

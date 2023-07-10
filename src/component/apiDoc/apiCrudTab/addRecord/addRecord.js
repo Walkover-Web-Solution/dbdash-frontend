@@ -40,9 +40,9 @@ const response=`
       <div style={{width:'700px',overflowX:"hidden"}}>
       
       <div className="records-container">
-        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
+        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add / Create Records -</Typography>
         <Typography  fontSize={variables.textsize} >
-        Please provide the fields you would like to fill with data, and you can replace the dummy values with your desired information.
+        To create a new record, you need to make a POST request to the given endpoint. Select/Deselect the checkboxes to make the request and add values in your table.
 </Typography>
 <br/>
 

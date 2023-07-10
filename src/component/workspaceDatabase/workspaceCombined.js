@@ -62,7 +62,8 @@ const [openTemplate,setOpenTemplate]=useState(false);
     setOpen(false);
   };
   const handleTemplate = () => {
-    window.location.href = 'https://dbdash-backend-h7duexlbuq-el.a.run.app/64a3fb1f135d26837027e15e'
+    window.open('http://localhost:5000/64a806e049f009459a84201b')
+
   };
   
 
@@ -75,10 +76,10 @@ const [openTemplate,setOpenTemplate]=useState(false);
     Create Organisation
   </Button>
   <Button  sx={{marginRight:'30px'}} onClick={handleTemplate} className="mui-button" variant="contained" >
-    Template
+   Explore Templates
   </Button>
 </Box>
-          {(open || openTemplate) && (open ? (
+            {(open || openTemplate) && (open ? (
   <PopupModal
     title="create organisation"
     label="Organization Name"

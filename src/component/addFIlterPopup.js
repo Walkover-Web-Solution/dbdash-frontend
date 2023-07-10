@@ -159,7 +159,7 @@ export default function AddFilterPopup(props) {
       }
     }
   };
-
+  
   return (
     <Box>
       <Modal
