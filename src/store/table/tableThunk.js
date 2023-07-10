@@ -191,7 +191,6 @@ export const filterData = createAsyncThunk(
 export const deleteColumns = createAsyncThunk(
     "table/deleteColumns",
     async (payload, { dispatch, getState }) => {
-        console.log("payload",payload)
         if (payload?.metaData?.isLookup == true) {
             const data = {
                 viewFieldId: payload?.fieldName
