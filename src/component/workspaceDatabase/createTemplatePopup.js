@@ -74,7 +74,7 @@ const CreateTemplatePopup = (props) => {
         setCategoryName(value);
       }}
       sx={{width:'68%',m:2,mb:0}}
-      options={allCategory}
+      options={allCategory || []}
       freeSolo={true} 
       getOptionLabel={(option) => option}
       renderOption={(props, option) => (
