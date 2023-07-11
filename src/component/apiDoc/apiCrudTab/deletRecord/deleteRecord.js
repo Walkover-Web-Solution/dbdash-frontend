@@ -31,7 +31,7 @@ const response=`
         <ResponseBox response={response} />
       </div>
 
-      <div style={{width:'700px',overflowX:"hidden"}}>
+      <div style={{width:'55vw',overflowX:"hidden"}}>
         <Box className="records-container">
           <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Table Records</Typography>
         <Typography fontSize={variables.textsize}>

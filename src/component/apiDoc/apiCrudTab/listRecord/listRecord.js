@@ -38,7 +38,7 @@ function ListRecord(props) {
      <CodeBlock method="GET"  code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`auth-key: AUTH_TOKEN `}/>
      <ResponseBox response={response} />
      </div>
-     <div style={{width:'700px',overflowX:"hidden"}}>
+     <div style={{width:'55vw',overflowX:"hidden"}}>
 
      <div className='records-container'>
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >List records</Typography>

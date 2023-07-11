@@ -3,7 +3,7 @@
     flex-direction: column !important ;
     position: fixed !important ;
     right: 0 !important ;
-    width: 50vw !important;
+    width: 40vw !important;
 
     padding: 10px !important ;
   padding-right: 13px !important;
@@ -16,11 +16,12 @@
   }
   
   .response-container {
-    width: 700px !important ;
+    width: 55vw !important ;
    
     white-space: pre-wrap !important ;
     padding: 2px !important ;
 padding-right: 200px  !important;
+overflow-x: hidden !important;
 
   }
   

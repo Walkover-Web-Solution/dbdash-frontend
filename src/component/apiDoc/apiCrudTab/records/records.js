@@ -58,14 +58,25 @@ function Records(props) {
 })}
 
         </Grid>
-      { (!props?.parent || props?.parent!='basicstuff') && (
-        <>      <Grid item xs={3}>
-          <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Type</Typography>
-          {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
-            <Typography className="center-aligned field-type"  key={index}>{fields[1].fieldType === "checkbox" ? "boolean" : fields[1].fieldType}</Typography>
-          ))}
-        </Grid>
-        <Grid item xs={3} >
+        <Grid item  xs={props?.CopyButton?2:3}>
+  <Typography className="center-aligned" fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Type</Typography>
+  {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
+    props?.CopyButton ? (
+      <div className="field-name-container" key={index}>
+        <Typography className="center-aligned field-name" key={index}>
+          {fields[1].fieldType === "checkbox" ? "boolean" : fields[1].fieldType}
+        </Typography>
+      </div>
+    ) : (
+      <Typography className="center-aligned field-name" key={index}>
+        {fields[1].fieldType === "checkbox" ? "boolean" : fields[1].fieldType}
+      </Typography>
+    )
+  ))}
+</Grid>
+
+        { (!props?.parent || props?.parent!='basicstuff') && (
+        <>  <Grid item xs={3} >
           <Typography  className="center-aligned  add-remove "  fontSize={Number(variables.titlesize)} fontWeight={variables.titleweight} variant={variables.titlevariant}>Add/Remove</Typography>
           {rowfieldData && Object.entries(rowfieldData).map((fields, index) => (
             <Typography className="center-aligned" key={index}>

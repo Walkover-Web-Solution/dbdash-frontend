@@ -37,7 +37,7 @@ const response=`
           response={response}
         />
       </div>
-      <div style={{width:'700px',overflowX:"hidden"}}>
+      <div style={{width:'55vw',overflowX:"hidden"}}>
       
       <div className="records-container">
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>

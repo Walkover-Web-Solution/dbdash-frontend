@@ -28,13 +28,14 @@ function UpdateRecord(props) {
   const [age, setAge] = useState('');
 
   return (
-    <>
-      <div className="container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll",paddingRight:""}}>
+    <div style={{display:'flex',justifyContent:'space-between'}}>
+      <div className="container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
         <CodeBlock  method={'PATCH'} parent='updaterecord' code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} where={value} header={`auth-key: AUTH_TOKEN,Content-Type: application/json `} body={arr} />
         <ResponseBox response={response} />
       </div>
 
-      <div className="response-container"  style={{width:'700px',overflowX:"hidden"}}>
+<div style={{width:'55vw',overflowX:'hidden'}}>
+      <div className="response-container"  >
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >To Update records in the</Typography>
         <Typography  fontSize={variables.textsize} >
         Please provide the fields for which you would like to update the data, and you can replace the existing values with their desired information.</Typography>
@@ -44,7 +45,8 @@ function UpdateRecord(props) {
         <br />
         <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
       </div>
-    </>
+      </div>
+    </div>
   )
 }
 
