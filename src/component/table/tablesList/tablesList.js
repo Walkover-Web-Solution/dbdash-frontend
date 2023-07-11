@@ -20,6 +20,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
+import { CSVBoxButton } from '@csvbox/react'
 import { createTable, exportCSV } from "../../../api/tableApi";
 import "./tablesList.scss";
 import variables from "../../../assets/styling.scss";
@@ -32,11 +33,14 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
 // import Sharedb from "./Sharedb";
 export default function TablesList({ dbData }) {
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL
+  const fields1 = useSelector((state) => state.table.columns);
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
   const AllTableInfo = useSelector((state) => state.tables.tables);
   const [value, setValue] = useState(0);
+  const [dynamicColumns,setDynamicColumns]=useState([]);
+
   const navigate = useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -61,6 +65,8 @@ export default function TablesList({ dbData }) {
   const AllTable = useSelector((state) => getAllTableInfo(state));
   const [openManageField, setOpenManageField] = useState(false);
   const userDetails = useSelector((state) => selectActiveUser(state));
+  
+  const fileRef = useRef(null);
   const handleClick = (event, id) => {
     if (id === "share") {
       setShareLinkOpen(true);
@@ -78,11 +84,30 @@ export default function TablesList({ dbData }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  useEffect(() => {
+    if(!fields1 || fields1==[]) return;
+    let newarr=[];
+    
+   fields1.map((field)=>{
+    let columnobj={};
+    columnobj[`column_name`]=field.id;
+    columnobj[`display_label`]=field.title;
+    newarr.push(columnobj);
+  
+   });
+   if(newarr.length==0) return;
+   setDynamicColumns(newarr);
+  }, [fields1])
+  
+  
 const saveTable = async () => {
+  
   const data = {
     tableName: table,
   };
 
+ 
+  
   setOpen(false);
   const apiCreate = await createTable(dbData?.db?._id, data);
   await dispatch(createTable1({ tables: apiCreate.data.data.tables }));
@@ -152,7 +177,7 @@ const saveTable = async () => {
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
 useEffect(() => {
-  
+  setDynamicColumns([]);
     const tableNames = Object.keys(dbData.db.tables);
     dispatch(setTableLoading(true));
     if(params?.tableName && !params?.filterName){
@@ -323,6 +348,37 @@ useEffect(() => {
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
           <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}} onClick={handleClickOpenManageField}>Manage Fields</Button>
                   
+        { dynamicColumns.length>0 && <CSVBoxButton
+  licenseKey="0wK5H5Udd8Aswpb3hedRtTE5Xgg29h"
+  user={{
+    user_id: "default123"
+  }}
+  onSubmit={(e)=>{
+    console.log("onchange",e);
+  }}
+    dynamicColumns={dynamicColumns}
+  onImport={async (result, data) => {
+    if(result){
+      console.log("success");
+      console.log(data,result, " rows uploaded");
+      try {
+        const response = await fetch(data.raw_file);
+        const csvData = await response.text();
+        console.log("csvdata",csvData); // Or perform further processing with the CSV data
+      } catch (error) {
+        console.error('Error fetching CSV file:', error);
+      }
+    }else{
+      console.log("fail");
+    }
+   
+  }}
+  ref={fileRef}
+>
+  Import
+</CSVBoxButton>}
+
+
           <Button  sx={{textTransform:'none',fontSize: `${variables.tablepagefontsize}`,color:variables.basictextcolor }} onClick={()=>setMinimap(!minimap)}>Minimap {!minimap?<CheckBoxOutlineBlankIcon fontSize="4px" />:<CheckBoxIcon fontSize="2px" />}</Button>
           {  params?.filterName &&  <Button sx={{ fontSize: `${variables.tablepagefontsize}` ,textTransform:'none',color:variables.basictextcolor}} onClick={handleEdit}>Edit filter</Button>}
           {  params?.filterName && <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}}  onClick={(e) => {
