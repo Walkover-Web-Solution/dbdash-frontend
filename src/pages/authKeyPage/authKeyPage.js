@@ -6,16 +6,18 @@ import "./authKeyPage.scss";
 import PropTypes from "prop-types";
 import CreateAuthKey from "../createAuth/createAuth";
 
+
 export default function AuthKeyPage(props) {
   const [open, setOpen] = useState(false);
+ 
 
   const handleClose = () => {
     setOpen(false);
   };
   const [authKeys, setAuthKeys] = useState(null);
   const [createdBy, setCreatedBy] = useState(null);
-
-
+ 
+  
   return (
     <>
       <Box className="auth-key-page-container">
@@ -30,13 +32,19 @@ export default function AuthKeyPage(props) {
           Create Authkey
         </Button>
       </Box>
-      {open && (
-        <CreateAuthKey 
-        createdBy={createdBy}
-        setCreatedBy={setCreatedBy}
-        alltabledata={props?.alltabledata}
-        setAuthKeys={setAuthKeys}  open={open} handleClose={handleClose} id={props.dbtoredirect} />
-      )}
+      {open && 
+  <CreateAuthKey 
+    createdBy={createdBy}
+    setCreatedBy={setCreatedBy}
+    heading={'create authkey'}
+    alltabledata={props?.alltabledata}
+    setAuthKeys={setAuthKeys}  
+    open={open}
+    handleClose={handleClose}
+    id={props.dbtoredirect}
+  />
+}
+
       <Box className="auth-key-page-content">
         <AuthKey authKeys={authKeys} 
         createdBy={createdBy}

@@ -9,7 +9,6 @@ import {
   removeDbInUserThunk,
   updateAccessOfUserInDbThunk,
 } from "../../../store/allTable/allTableThunk";
-import { toast } from "react-toastify";
 
 function Sharedb(props) {
   const {setOpenShareDb,openShareDb}=props;
@@ -22,6 +21,8 @@ function Sharedb(props) {
   const [userType, setUserType] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  // const [isUser, setIsUser] = useState(false);
+
   useEffect(() => {
     let arr = [];
     Object.entries(userDetail).map(([key, value]) => {
@@ -38,16 +39,17 @@ function Sharedb(props) {
       {
         if(userObj.user_type==1) setIsOwner(true);
         else if(userObj.user_type==11) setIsAdmin(true);
-        else toast.warning('Only admin or owner can share.')
+       
         return;
       }
     
     })
+    
     setDbUsers(userObj);
   }, [userDetail]);
   
 
-  const sharedatabase = async (email, user_type) => {
+  const sharedatabase = async (email, user_type) => { 
     const data = {
       email: email,
       userAccess: user_type,

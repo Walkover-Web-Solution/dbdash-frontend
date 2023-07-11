@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { PropTypes } from "prop-types";
 import { createWebhook, updateWebhook } from "../../api/webhookApi";
+import CloseIcon from '@mui/icons-material/Close';
 
 function Createwebhook(props) {
   const [name, setName] = useState(null);
@@ -77,9 +78,14 @@ function Createwebhook(props) {
             e.stopPropagation();
             e.preventDefault();
           }}
+          sx={{p:0}}
         >
-          <Box className="create-auth-key-content-container">
-            <Box className="create-auth-key-row">
+          <Box className="create-auth-key-content-container" >
+          <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+            {props?.heading}
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={props?.handleClose}/></div>
+
+            <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
               <Typography className="create-auth-key-label">Name</Typography>
               <TextField
                 id="standard-basic"
@@ -91,7 +97,7 @@ function Createwebhook(props) {
                 }}
               />
             </Box>
-            <Box className="create-auth-key-row">
+            <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
               <Typography className="create-webhook-label">Action</Typography>
               <FormControl
                 variant="standard"
@@ -111,7 +117,7 @@ function Createwebhook(props) {
                 </TextField>
               </FormControl>
             </Box>
-            { props?.tables && <Box className="create-auth-key-row">
+            { props?.tables && <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
               <Typography className="create-webhook-label">Tables</Typography>
               <FormControl
                 variant="standard"
@@ -140,7 +146,7 @@ function Createwebhook(props) {
             </Box>}
 
             {action !== "deleteRow" ? (
-              <Box className="create-auth-key-row">
+              <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
                 <Typography className="create-webhook-label">
                   Filters
                 </Typography>
@@ -173,7 +179,7 @@ function Createwebhook(props) {
               <></>
             )}
 
-            <Box className="create-auth-key-row">
+            <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
               <Typography className="create-auth-key-label">URL</Typography>
               <TextField
                 id="standard-basic"
@@ -186,7 +192,8 @@ function Createwebhook(props) {
               />
             </Box>
           </Box>
-          <Box className="create-auth-key-actions">
+          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+
             <Button
               variant="contained"
               className="create-auth-key-button mui-button"
@@ -197,13 +204,7 @@ function Createwebhook(props) {
             >
               {props.webhookid ? "Update" : "Create"}
             </Button>
-            <Button
-              onClick={handleClose}
-              variant="outlined"
-              className="create-auth-key-button mui-button-outlined"
-            >
-              Cancel
-            </Button>
+          
           </Box>
         </Box>
       </Modal>
@@ -223,6 +224,7 @@ Createwebhook.propTypes = {
   tableId: PropTypes.any,
   setNewcreated: PropTypes.any,
   newcreated: PropTypes.any,
+  heading:PropTypes.any,
   webhookid: PropTypes.any,
   webhookname: PropTypes.any,
   weburl: PropTypes.any,

@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
 import { display } from "@mui/system";
+import MainNavbar from "../../component/mainNavbar/mainNavbar";
 
 
 
@@ -139,7 +140,11 @@ export default function TemplatePage() {
 
 
   return (
-    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <>   <Box>
+    <MainNavbar />
+ </Box>
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center',marginTop:'2vh' }}>
+      
       <div className="main-box">
         <div style={{ fontSize: '25px', display: 'flex', justifyContent: "space-between" }}>
           <div >{templateName}</div>
@@ -286,5 +291,7 @@ export default function TemplatePage() {
       </div>
 
     </div>
+    </>
+ 
   );
 }

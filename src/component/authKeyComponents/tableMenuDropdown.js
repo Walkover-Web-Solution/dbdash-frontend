@@ -85,6 +85,8 @@ const[open1,setOpen1]=useState(false);
                         
       {open1 && <CreateAuthKey 
         alltabledata={props?.alltabledata}
+        heading={'edit authkey'}
+
         setAuthKeys={props?.setAuthKeys}    open={open1} id={props.dbId} authData={props.authData} title={props.title} handleClose={handleClose}/>}
     </>
   );

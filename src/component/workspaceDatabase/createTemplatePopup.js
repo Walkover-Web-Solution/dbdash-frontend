@@ -27,8 +27,8 @@ const CreateTemplatePopup = (props) => {
 
   useEffect(async()=>{
    const allcategory = await getAllCategoryName();
-  const allCategory = allcategory.data.data
-  const values = allCategory.map(obj => obj.fld1yhgjz9fg).filter(obj=>obj!=null && obj!='');
+  const allCategory = allcategory?.data?.data
+  const values = allCategory?.map(obj => obj?.fld1yhgjz9fg)?.filter(obj=>obj!=null && obj!='');
    setAllCategory(values);
   },[])
 

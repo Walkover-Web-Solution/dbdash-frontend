@@ -224,7 +224,6 @@ export default function MainTable(props) {
     var newcolumn = [];
     fields1.forEach((column) => {
       if (column?.metadata?.hide !== true) {
-        console.log("column", column);
         newcolumn.push(column);
       }
     });
@@ -447,8 +446,6 @@ export default function MainTable(props) {
           if(d!==null && dataType === "updatedat")
           updatedtime=new Date(d*1000)
           
-          console.log("updatedtime",updatedtime)
-        
           return {
             kind: GridCellKind.Text,
             allowOverlay: true,

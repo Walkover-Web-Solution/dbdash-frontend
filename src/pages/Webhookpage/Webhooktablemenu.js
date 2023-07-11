@@ -50,7 +50,7 @@ function Webhooktablemenu(props) {
   const handleAddWebhook = () => {
     setAddWebhook(!addWebhook);
   };
-
+  
   return (
     <div>
       <Popover
@@ -92,6 +92,7 @@ function Webhooktablemenu(props) {
       <Createwebhook
         filters={props.filters}
         newcreated={props.newcreated}
+        heading={'edit webhook'}
         setNewcreated={props.setNewcreated}
         condition={props.condition}
         webhookname={props.webhookname}

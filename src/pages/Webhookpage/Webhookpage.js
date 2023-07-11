@@ -27,6 +27,7 @@ export default function Webhookpage(props) {
           dbId={props.dbId}
           tableId={props.table} 
           dataforwebhook={props?.dataforwebhook}
+          heading={'create webhook'}
           open={addWebhook}
           setOpen={setAddWebhook}
           handleClose={handleAddWebhook}
