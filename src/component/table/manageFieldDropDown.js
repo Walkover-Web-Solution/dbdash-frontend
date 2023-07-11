@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 // import ListItemText from '@mui/material/ListItemText';
 // import ListItem from '@mui/material/ListItem';
+import CloseIcon from '@mui/icons-material/Close';
+
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 // import List from '@mui/material/List';
 // import Divider from '@mui/material/Divider';
@@ -15,7 +17,7 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import Slide from '@mui/material/Slide';
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import { useSelector,useDispatch } from 'react-redux';
 import AddOptionPopup from './addOptionPopup';
 import variables from '../../assets/styling.scss';
@@ -101,6 +103,10 @@ export default function ManageFieldDropDown(props) {
           </Toolbar>
         </AppBar> */}
 <TableContainer   component={Paper}>
+<div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+       manage fields
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+
 
       <Table   aria-label="My Table">
         <TableHead  >

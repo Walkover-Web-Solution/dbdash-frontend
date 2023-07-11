@@ -255,7 +255,7 @@ export default function SingleDatabase(props) {
     setName={setName}
     idToDelete={props?.db?._id}
     deleteFunction={deletDatabases}
-    title={"Database"}
+    title={"database"}
   />
 ) :  !props?.db?.deleted ? (
   <Dropdown
@@ -267,7 +267,7 @@ export default function SingleDatabase(props) {
     dbid={props?.db?._id}
     dbname={props?.db?.name}
     setName={setName}
-    title={"Database"}
+    title={"database"}
   />
 ) : (
   <Button    onClick={(e) => {

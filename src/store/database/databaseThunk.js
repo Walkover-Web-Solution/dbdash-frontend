@@ -10,7 +10,6 @@ export const bulkAdd = createAsyncThunk(
         var result = {};
         try {
             data?.data?.data?.dbs.map((item) => {
-                console.log("hii",item)
                 result[item.org_id._id] = result[item.org_id._id] ? [...result[item.org_id._id], item] : [item]
             })
         } catch (error) {

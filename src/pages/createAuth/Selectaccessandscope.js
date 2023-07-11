@@ -35,7 +35,7 @@ function Selectaccessandscope(props) {
   };
   return (
     <div>
-      <Box className="create-auth-key-row">
+      <Box sx={{ml:2,pr:1}} className="create-auth-key-row">
         <Typography className="create-auth-key-label">Scope</Typography>
         <Box sx={{ display: "flex", flexDirection: "column", width: "300px" }}>
           <Box>

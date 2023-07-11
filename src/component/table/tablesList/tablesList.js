@@ -318,7 +318,8 @@ useEffect(() => {
          />
       
        )}
-   <div style={{display:'flex',justifyContent:'flex-start'}}>        <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'space-between',width: params.filterName ? '27vw' : '14vw'}}>
+   <div style={{display:'flex',justifyContent:'flex-start'}}>      
+     <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'space-between',width: params.filterName ? `${(window.screen.width*32)/100}px`: `${(window.screen.width*14)/100}px`}}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
           <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}} onClick={handleClickOpenManageField}>Manage Fields</Button>
                   
