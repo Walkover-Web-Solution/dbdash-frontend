@@ -4,7 +4,6 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import Joi from "joi";
 import { useValidator } from "react-joi";
-import { TextField } from "@mui/material";
 import { updateQuery } from "../api/filterApi";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,7 +32,7 @@ export default function AddFilterPopup(props) {
   const [html, setHtml] = useState("");
   const [text, setText] = useState("");
   const [fields, setFields] = useState([]);
-  const [aiQuery, setAiQuery] = useState("");
+  // const [aiQuery, setAiQuery] = useState("");
   const [defaultValue, setDefaultValue] = useState(
     AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow || ""
   );
@@ -47,7 +46,7 @@ export default function AddFilterPopup(props) {
     props.setOpen(false);
   };
 
-  console.log(aiQuery);
+  // console.log(aiQuery);
 
   const tableData = async () => {
     const myObj = AllTableInfo?.tables[props?.tableName]?.fields;
@@ -182,12 +181,13 @@ export default function AddFilterPopup(props) {
           <Box style={{ display: "flex", flexDirection: "column" }}>
   <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
     <Box style={{ flex: 1 }}>
-      <TextField
-        ref={textFieldRef}
-        placeholder="Example : Column 1 contain USA"
-        style={{ width: "599px" }}
-        multiline
-        onChange={(e) => setAiQuery(e.target.value)}
+    <CustomAutoSuggest
+        getInputValueWithContext={handleTextChange}
+        // width="593px"
+        suggestion={fields}
+        setHtml={setHtml}
+        setText={setText}
+        defaultValue={defaultValue}
       />
     </Box>
    
