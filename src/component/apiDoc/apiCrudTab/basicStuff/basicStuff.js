@@ -47,7 +47,7 @@ function BasicStuff(props) {
       className="list-record-container"
       style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}
       >
-         <CodeBlock method="GET"  code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}`} header={`auth-key: AUTH_TOKEN `}/>
+         <CodeBlock method="GET"  db={props?.db} table={props?.table} header={`auth-key: AUTH_TOKEN `}/>
     
       </div>
 
@@ -60,7 +60,7 @@ function BasicStuff(props) {
 DB-Dash supports basic authentication at the database level.
  Each database has one authentication key that can be used to
   authenticate multiple tables within that database. Multiple
-   [authentication keys] can be generated, each with its own 
+    <span style={{color:'#016FA4',cursor:'pointer'}} onClick={()=>{props?.setShowComponent('authkey')}}> authentication keys</span> can be generated, each with its own 
    set of read/write permissions for different tables.
 </Typography>
     <Typography variant={variables.megatitlevariant} sx={{pt:2}} fontSize={Number(variables.megatitlesize)}   >
@@ -77,7 +77,7 @@ DB-Dash supports basic authentication at the database level.
       <div style={{ width: '50vw', height: '15vh', backgroundColor: '#F0F0F0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <Typography sx={{ justifyContent:'center',width:'100%',pl:2}}>
     curl -X GET &apos;https://dbdash-backend-h7duexlbuq-el.a.run.app/<br/><span style={{color: "#028a0f"}}>YOUR_DATABASE_ID</span>/<span style={{color: "#028a0f"}}>YOUR_TABLE_ID</span>&apos;<br/>
-    <span  style={{color: variables.deletecolor}}>-H </span>&apos; <span  style={{color: variables.deletecolor}}>auth-key: AUTH_TOKEN</span>&apos;
+    -H &apos; <span  style={{color: variables.deletecolor}}>auth-key: AUTH_TOKEN</span>&apos;
   </Typography>
 </div>
  <Typography variant={variables.megatitlevariant} sx={{pt:2}} fontSize={Number(variables.megatitlesize)}   >
@@ -108,7 +108,7 @@ BasicStuff.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
   alltabledata:PropTypes.any,
-
+  setShowComponent:PropTypes.any
 };
 
 export default BasicStuff;

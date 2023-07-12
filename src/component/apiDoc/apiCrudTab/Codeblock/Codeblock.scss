@@ -15,12 +15,12 @@
 .codeblock-header{
   height: 30px !important;
   padding-left: 15px !important;
-  background-color: $responseboxbgcolor !important;
+  background-color: $codeblockbgcolor !important;
 }
 
 .code-block {
-  background-color: $fontColorVAlue !important;
-  color: $bgColorValue !important;
+  background-color: $codeblockbgcolor !important;
+  color: $fontColorVAlue !important;
   padding-bottom: 4vh !important;
   overflow-y:visible !important;
    
@@ -31,7 +31,9 @@
   font-size:$codeblockfontsize !important;
 }
 
-  
+  .valuescolor{
+    color:#028A0F !important;
+  }
   .code-block pre {
     margin: 1 !important;
     margin-left: 10px !important;
@@ -42,7 +44,7 @@
 
 
     background-color: transparent !important;
-    color: $copybuttoncolorlight !important;
+    color: black !important;
     border: none !important;
     border-radius: 0 !important;
     margin-left: -20px !important;

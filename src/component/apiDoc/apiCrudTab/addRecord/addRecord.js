@@ -29,9 +29,10 @@ const response=`
         <CodeBlock
         parent='addrecord'
         method="POST"
-          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
           header={`auth-key: AUTH_TOKEN,Content-Type: application/json`}
           body={arr}
+          db={props?.db}  
+          table={props?.table}
         />
         <ResponseBox
           response={response}
@@ -42,8 +43,8 @@ const response=`
       <div className="records-container">
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
         <Typography  fontSize={variables.textsize} >
-        Please provide the fields you would like to fill with data, and you can replace the dummy values with your desired information.
-</Typography>
+        To create a new record, you need to make a POST request to the given endpoint.
+Generate array of fields according to your use case. to make a single entry,  you have to use single array . </Typography>
 <br/>
 
         <Typography>

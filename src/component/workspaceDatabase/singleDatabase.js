@@ -275,9 +275,9 @@ export default function SingleDatabase(props) {
     e.stopPropagation();
     restoreDb(orgIdForRestore,props.db._id);
   }}
-  className="mui-button"
-    variant="contained"
+  className="mui-button-outlined"
     size="small"
+    variant="outlined"
     sx={{ display: "flex" }}
   >restore</Button>
 )}

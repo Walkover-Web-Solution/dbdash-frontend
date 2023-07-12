@@ -14,7 +14,6 @@ import {
 // import "@glideapps/glide-data-grid/dist/index.css";
 import PropTypes from "prop-types";
 
-
 import "./Glidedatagrid.css";
 import "../../src/App.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -33,7 +32,6 @@ import { getTableInfo } from "../store/table/tableSelector";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 // import  debounce  from 'lodash.debounce';
-
 export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
@@ -57,7 +55,6 @@ export default function MainTable(props) {
   const [showSearch, setShowSearch] = useState(false);
   const [hoveredRow,setHoveredRow]=useState(false);
   const [targetColumn,setTargetColumn]=useState(0);
-
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -67,11 +64,9 @@ export default function MainTable(props) {
   const [fields, setFields] = useState(fields1 || []);
   const tableInfo = useSelector((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId;
-
   useEffect(() => {
     setData(dataa);
   }, [dataa]);
-
   const isSingleCellSelected=(selection)=>{
     return selection.current && (selection.current.range.height*selection.current.range.width==1);
   }
@@ -98,10 +93,8 @@ export default function MainTable(props) {
       }
     }, [])
   );
-
   const onChangeUrl = (e, type) => {
     if(params?.templateId) return;
-
     const row = openAttachment[1];
     const col = openAttachment[0];
     if (imageLink !== null) {
@@ -122,10 +115,8 @@ export default function MainTable(props) {
     }
     e.target.value = null;
   };
-
   const onChangeFile = (e, type) => {
     if(params?.templateId) return;
-
     const row = openAttachment[1];
     const col = openAttachment[0];
     if (e.target.files[0] != null) {
@@ -160,10 +151,8 @@ export default function MainTable(props) {
     }
     e.target.value = null;
   };
-
   const createLeftorRightColumn = () => {
     if(params?.templateId) return;
-
     if (
       directionAndId.direction == "left" ||
       directionAndId.direction == "right"
@@ -218,9 +207,7 @@ export default function MainTable(props) {
       setSelectValue("longtext");
     }
   };
-
   useEffect(() => {
-
     var newcolumn = [];
     fields1.forEach((column) => {
       if (column?.metadata?.hide !== true) {
@@ -247,17 +234,13 @@ export default function MainTable(props) {
     setFields(newcolumn);
   }, [fields1]);
   
-
   const addRows = () => {
     if(params?.templateId) return;
-
     addRow(dispatch);
   };
-
   const reorder = useCallback(
     (item, newIndex) => {
       if(params?.templateId) return;
-
       reorderFuncton(
         dispatch,
         item,
@@ -270,16 +253,13 @@ export default function MainTable(props) {
     },
     [fields, fields1]
   );
-
   const handleRowMoved = useCallback(
     (from, to) => {
       if(params?.templateId) return;
-
       reorderRows(from, to, data, setData);
     },
     [data, setData]
   );
-
   const onCellEdited = useCallback(
     (cell, newValue) => {
       if(params?.templateId) return;
@@ -303,13 +283,11 @@ export default function MainTable(props) {
         dataa[cell?.[1] ?? []],
         fields[cell[0]].dataType,
    isSingleCellSelected(selection)
-
       );
     },
     [dataa,fields,selection]
   );
  const handleColumnResizeWithoutAPI=useCallback((_,newSize,colIndex)=>{
-
   let newarrr = [...(fields || fields1)];
   let obj = Object.assign({}, newarrr[colIndex]);
   obj.width = newSize;
@@ -318,7 +296,6 @@ export default function MainTable(props) {
  });
   const handleColumnResize = (field, newSize) => {
       if(params?.templateId) return;
-
     dispatch(
       updateColumnHeaders({
         filterId: params?.filterName,
@@ -331,7 +308,6 @@ export default function MainTable(props) {
   };
   const editmultipleselect = (newValue, oldValuetags, cell) => {
     if(params?.templateId) return;
-
     if (!fields[cell[0]]?.id) return;
     const newValuetags = newValue.data.tags;
     const addedTags = newValuetags.filter((tag) => !oldValuetags.includes(tag));
@@ -339,7 +315,6 @@ export default function MainTable(props) {
     const joinedString = addedTags.map((element) => `'${element}'`).join(",");
     let updateArray = [];
     const rowIndex = dataa[cell[1]][`fld${tableId.substring(3)}autonumber`];
-
     addedTags?.length > 0 &&
       updateArray.push({
         where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
@@ -361,12 +336,9 @@ export default function MainTable(props) {
       })
     );
   };
-
   const validateCell = useCallback(
-
     (cell, newValue) => {
       if(params?.templateId) return;
-
       if (newValue.kind === "number") {
         if (newValue?.data?.toString().length < 13 || !newValue?.data) {
           return newValue;
@@ -375,15 +347,12 @@ export default function MainTable(props) {
     },
     [dataa, fields]
   );
-
   const handleDeleteRow = (selection) => {
     if(params?.templateId) return;
-
     if (selection.current) {
       return;
     }
     const deletedRowIndices = [];
-
     for (const element of selection.rows.items) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
@@ -392,39 +361,30 @@ export default function MainTable(props) {
         );
       }
     }
-
     if (deletedRowIndices.length > 0) {
       dispatch(deleteRows({ deletedRowIndices, dataa }));
     }
     setSelection(emptyselection);
   };
-
   const onHeaderMenuClick = useCallback((col, bounds) => {
     if(params?.templateId) return;
     
     setMenu({ col, bounds });
   }, []);
-
  
-
   const getData = useCallback(
     (cell) => {
       const [col, row] = cell;
       const dataRow = dataa[row] || [];
-
       if (dataRow) {
         const d = dataRow[fields[col]?.id];
-
         let { dataType } = fields[col] || "";
         // let linkdatatype=false;
-
         // if(dataType=='link')
         // {
         //   linkdatatype=true;
         //   dataType=fields[col]?.metadata?.foreignKey?.fieldType;
-
         // }
-
         if (dataType === "autonumber") {
           return {
             allowOverlay: true,
@@ -450,7 +410,6 @@ export default function MainTable(props) {
             kind: GridCellKind.Text,
             allowOverlay: true,
             readonly: true,
-
             displayData: (d && updatedtime.toString()) || "",
             data: (d && updatedtime.toString()) || "",
           };
@@ -465,7 +424,6 @@ export default function MainTable(props) {
               .padStart(2, "0");
             const year = currentDate.getFullYear().toString().padStart(4, "0");
             const formattedDate = `${day}-${month}-${year}`;
-
             return {
               kind: GridCellKind.Custom,
               allowOverlay: true,
@@ -501,9 +459,7 @@ export default function MainTable(props) {
             displayData: d || "",
             data: d || "",
           };
-
         }
-
         else if (dataType === "url") {
           return {
             kind: GridCellKind.Uri,
@@ -519,7 +475,6 @@ export default function MainTable(props) {
             allowOverlay: true,
             readonly: false,
             displayData: d || "",
-
             data: d || "",
             wrapText: false,
             multiline: false,
@@ -544,7 +499,6 @@ export default function MainTable(props) {
           let newarr = [];
           possibleTags &&
             possibleTags?.map((x) => {
-
               let newx = {
                 tag: x.value,
                 color: x.color,
@@ -561,7 +515,6 @@ export default function MainTable(props) {
               readonly: false,
               tags: d || [],
             },
-
           };
         } else if (dataType == "attachment" && d != null) {
           return {
@@ -582,7 +535,6 @@ export default function MainTable(props) {
             },
           };
         } 
-
         else if (dataType === "checkbox" ) {
                let show=false;
                if(d)
@@ -615,7 +567,6 @@ export default function MainTable(props) {
     },
     [dataa, fields]
   );
-
   const realCols = useMemo(() => {
     return fields?.map((c) => ({
       ...c,
@@ -624,11 +575,8 @@ export default function MainTable(props) {
     }));
   }, [fields, fields1]);
   const headerIcons = (() => {
-
     return {
-
       rowid: p => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="${p.bgColor}" class="bi bi-key-fill" viewBox="0 0 16 16"> <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/> </svg>`
-
       ,
       updatedby: p => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="${p.bgColor}" class="bi bi-person-fill" viewBox="0 0 16 16"> <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/> </svg>
     `,
@@ -637,13 +585,11 @@ export default function MainTable(props) {
     <path d="M6.52 12.78H5.51V8.74l-1.33.47v-.87l2.29-.83h.05v5.27zm5.2 0H8.15v-.69l1.7-1.83a6.38 6.38 0 0 0 .34-.4c.09-.11.16-.22.22-.32s.1-.19.12-.27a.9.9 0 0 0 0-.56.63.63 0 0 0-.15-.23.58.58 0 0 0-.22-.15.75.75 0 0 0-.29-.05c-.27 0-.48.08-.62.23a.95.95 0 0 0-.2.65H8.03c0-.24.04-.46.13-.67a1.67 1.67 0 0 1 .97-.91c.23-.1.49-.14.77-.14.26 0 .5.04.7.11.21.08.38.18.52.32.14.13.25.3.32.48a1.74 1.74 0 0 1 .03 1.13 2.05 2.05 0 0 1-.24.47 4.16 4.16 0 0 1-.35.47l-.47.5-1 1.05h2.32v.8zm1.8-3.08h.55c.28 0 .48-.06.61-.2a.76.76 0 0 0 .2-.55.8.8 0 0 0-.05-.28.56.56 0 0 0-.13-.22.6.6 0 0 0-.23-.15.93.93 0 0 0-.32-.05.92.92 0 0 0-.29.05.72.72 0 0 0-.23.12.57.57 0 0 0-.21.46H12.4a1.3 1.3 0 0 1 .5-1.04c.15-.13.33-.23.54-.3a2.48 2.48 0 0 1 1.4 0c.2.06.4.15.55.28.15.13.27.28.36.47.08.19.13.4.13.65a1.15 1.15 0 0 1-.2.65 1.36 1.36 0 0 1-.58.49c.15.05.28.12.38.2a1.14 1.14 0 0 1 .43.62c.03.13.05.26.05.4 0 .25-.05.47-.14.66a1.42 1.42 0 0 1-.4.49c-.16.13-.35.23-.58.3a2.51 2.51 0 0 1-.73.1c-.22 0-.44-.03-.65-.09a1.8 1.8 0 0 1-.57-.28 1.43 1.43 0 0 1-.4-.47 1.41 1.41 0 0 1-.15-.66h1a.66.66 0 0 0 .22.5.87.87 0 0 0 .58.2c.25 0 .45-.07.6-.2a.71.71 0 0 0 .21-.56.97.97 0 0 0-.06-.36.61.61 0 0 0-.18-.25.74.74 0 0 0-.28-.15 1.33 1.33 0 0 0-.37-.04h-.55V9.7z" fill="${p.fgColor}"/> </svg>`
       ,
 
-
       url: p => `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M16.222 2H3.778C2.8 2 2 2.8 2 3.778v12.444C2 17.2 2.8 18 3.778 18h12.444c.978 0 1.77-.8 1.77-1.778L18 3.778C18 2.8 17.2 2 16.222 2z" fill="${p.bgColor}"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M10.29 4.947a3.368 3.368 0 014.723.04 3.375 3.375 0 01.041 4.729l-.009.009-1.596 1.597a3.367 3.367 0 01-5.081-.364.71.71 0 011.136-.85 1.95 1.95 0 002.942.21l1.591-1.593a1.954 1.954 0 00-.027-2.733 1.95 1.95 0 00-2.732-.027l-.91.907a.709.709 0 11-1.001-1.007l.915-.911.007-.007z" fill="${p.fgColor}"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M6.55 8.678a3.368 3.368 0 015.082.364.71.71 0 01-1.136.85 1.95 1.95 0 00-2.942-.21l-1.591 1.593a1.954 1.954 0 00.027 2.733 1.95 1.95 0 002.73.028l.906-.906a.709.709 0 111.003 1.004l-.91.91-.008.01a3.368 3.368 0 01-4.724-.042 3.375 3.375 0 01-.041-4.728l.009-.009L6.55 8.678z" fill="${p.fgColor}"/>
 </svg>`,
-
       attachment: p => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="${p.bgColor}" class="bi bi-file-earmark-fill" viewBox="0 0 16 16"> <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3z"/> </svg>`,
       longtext: p => `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="2" y="2" width="16" height="16" rx="4" fill="${p.bgColor}"/>
@@ -655,7 +601,6 @@ export default function MainTable(props) {
     <rect x="2" y="2" width="16" height="16" rx="4" fill="${p.bgColor}"/>
     <text x="10" y="14" fill="${p.fgColor}" font-family="Arial" font-size="12"  text-anchor="middle">A</text>
   </svg>`,
-
       numeric: p => `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="2" y="2" width="16" height="16" rx="4" fill="${p.bgColor}" stroke="${p.fgColor}" stroke-width="2"/>
 <text x="10" y="14" fill="${p.fgColor}" font-family="Arial" font-size="12" text-anchor="middle">#</text>
@@ -697,20 +642,15 @@ export default function MainTable(props) {
 `,
       createdby: p => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="${p.bgColor}" class="bi bi-person" viewBox="0 0 16 16"> <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/> </svg>`
 
-
-
     };
   })();
-
   const handlegridselection = (event) => {
     setSelection(event);
   };
 
-
  
 const handleRightClickOnHeader=useCallback((col,event)=>{
   if(params?.templateId) return;
-
   event.preventDefault();
   setMenu({col,bounds:event.bounds});
 })
@@ -783,7 +723,6 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           // onGridSelectionChange={(ele)=>{}}
           headerIcons={headerIcons}
           showMinimap={props?.minimap}
-
           onColumnMoved={reorder}
           onPaste={true}
           rightElement={
@@ -833,7 +772,6 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
         setDirectionAndId={setDirectionAndId}
         fields={fields}
       />
-
       {openAttachment && (
         <SelectFilepopup
           title="uplaodfile"

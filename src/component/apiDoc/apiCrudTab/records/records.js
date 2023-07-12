@@ -83,6 +83,7 @@ function Records(props) {
               {props.arr && !props.arr.find(x => x[0] === fields[0]) ? (
                 <button
                   className="add-remove-button"
+                  disabled={ fields[1].fieldType=='rowid' || fields[1].fieldType=='autonumber' || fields[1].fieldType=='createdat' || fields[1].fieldType=='createdby' || fields[1].fieldType=='updatedat'  || fields[1].fieldType=='updatedby' }
                   onClick={() => { props.setArr([...props.arr, [fields[0], fields[1].fieldType]]) }}
                 >
                   <CheckBoxOutlineBlankIcon fontSize="4px" />

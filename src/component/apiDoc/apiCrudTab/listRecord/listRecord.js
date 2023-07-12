@@ -35,16 +35,19 @@ function ListRecord(props) {
       className="list-record-container"
       style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}
       >
-     <CodeBlock method="GET"  code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}${value!="" ? `?${value}`:``}`} header={`auth-key: AUTH_TOKEN `}/>
+     <CodeBlock method="GET"  db={props?.db} table={props?.table} code={`${value!="" ? `?${value}`:``}`} header={`auth-key: AUTH_TOKEN `}/>
      <ResponseBox response={response} />
      </div>
      <div style={{width:'55vw',overflowX:"hidden"}}>
 
      <div className='records-container'>
-        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >List records</Typography>
-        <Typography fontSize={variables.textsize}>
+   
+        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >List/Get Records -</Typography>
+        <Typography fontSize={variables.textsize}>  
   {`To retrieve a list of records from the "${props?.alltabledata[props.table].tableName}" table, you can initiate a GET request to the "${props.table}" endpoint using the "${props.table}" IDs. Furthermore, you have the option to filter, sort, and format the results by utilizing the provided query parameters.`}
+
   <br />
+  {`Additionally, you have the flexibility to filter, sort, and format the results by using the available query parameters.`}
   <br />
   <OptionalParameter alltabledata={props?.alltabledata} parent="listrecord" db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
 </Typography>

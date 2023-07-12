@@ -30,20 +30,28 @@ function UpdateRecord(props) {
   return (
     <div style={{display:'flex',justifyContent:'space-between'}}>
       <div className="container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
-        <CodeBlock  method={'PATCH'} parent='updaterecord' code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} where={value} header={`auth-key: AUTH_TOKEN,Content-Type: application/json `} body={arr} />
+        <CodeBlock  method={'PATCH'} parent='updaterecord' db={props?.db} table={props?.table} where={value} header={`auth-key: AUTH_TOKEN,Content-Type: application/json `} body={arr} />
         <ResponseBox response={response} />
       </div>
 
 <div style={{width:'55vw',overflowX:'hidden'}}>
       <div className="response-container"  >
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >To Update records in the</Typography>
-        <Typography  fontSize={variables.textsize} >
-        Please provide the fields for which you would like to update the data, and you can replace the existing values with their desired information.</Typography>
-        <br />
-        <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
-        />
+        <Typography   >
+     {`To update a new record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using "filter" parameter.`}   </Typography>
+       
         <br />
         <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
+        <br />
+      <Typography variant={'h3'} fontSize={Number(variables.titlesize)} >
+
+      {`Fileds to be updated: `}
+        </Typography>
+        <Typography>
+     {`Please select the fields/columns that need to be updated.
+Note: If you provide "NULL" ("FieldID1": "NULL") or leave it blank ("FieldID1": ""), the API will update the field with null or blank values. Therefore, please ensure that you only use the field names that you want to update.`}   </Typography>
+        <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
+        />
       </div>
       </div>
     </div>
