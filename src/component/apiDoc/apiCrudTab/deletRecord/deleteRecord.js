@@ -33,9 +33,9 @@ const response=`
 
       <div style={{width:'55vw',overflowX:"hidden"}}>
         <Box className="records-container">
-          <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Table Records</Typography>
+          <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Records</Typography>
         <Typography fontSize={variables.textsize}>
-          In order to expunge records from the table, kindly furnish the conditions pertaining to the respective rows.
+        To delete a record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using &quot;filter&quot; parameter.
           </Typography>
           <Typography>
             <Box>
@@ -71,7 +71,28 @@ const response=`
               /> */}
             </FormControl>
               
+            <Typography   style={{ fontWeight: "bold" ,fontSize:20}}>
+        Where Condition :
+ </Typography>
+ <Typography fontSize={variables.textsize}>
+  {"'filter' conditions in the APIs enable you to retrieve specific records that meet specific criteria. By applying 'filter' conditions, you can refine the results based on specific field values or patterns. "}
+  {"To implement a filter condition in the APIs, you can include the 'filter' parameter in your API request. The 'filter' parameter accepts formula expressions that can include various operators and functions, allowing you to create complex filter conditions. You can utilize logical operators such as 'AND,' 'OR,' and 'NOT' to combine multiple conditions. Additionally, comparison operators like '=', '>', '<,' and functions like 'FIND()', 'LEN()', and 'IS_BEFORE()' can be used to specify precise criteria for filtering."}
+</Typography>
 
+ <br />
+ <Typography fontSize={variables.textsize}>
+  {'To implement a filter condition in the APIs, you can include the Filter parameter in your API request. The Filter parameter accepts formula expressions that can include various operators and functions, allowing you to create complex filter conditions. You can utilize logical operators such as AND, OR, and NOT to combine multiple conditions. Additionally, comparison operators like =, >, <, and functions like FIND(), LEN(), and IS_BEFORE() can be used to specify precise criteria for filtering.'}
+</Typography>
+<br/>
+ <Typography  fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2}}>
+ Note: In the given example, it will search for all occurrences of &quot;John&quot; in FieldID1. If multiple records are found with this filter, it will delete all rows. Therefore we suggest using &quot;filter&quot; for only unique fields.
+</Typography>
+        <br />
+        <div style={{ width: '50vw', height: '15vh', backgroundColor: '#F0F0F0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <Typography sx={{ justifyContent:'center',width:'100%',pl:2}}>
+    curl -X PATCH &apos;https://dbdash-backend-h7duexlbuq-el.a.run.app/<br/><span style={{color: "#028a0f"}}>YOUR_DATABASE_ID</span>/<span style={{color: "#028a0f"}}>YOUR_TABLE_ID<br/>filter=FieldID1 != `John`</span>&apos;<br/>
+  </Typography>
+</div>
 
               <OptionalParameter  parent={'delete'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
             </Box>
