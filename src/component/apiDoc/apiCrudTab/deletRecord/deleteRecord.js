@@ -8,9 +8,12 @@ import OptionalParameter from '../optionalParameter/optionalParameter';
 import ResponseBox from '../responseBox';
 import './deleteRecord.scss'; // Import the CSS file
 import variables from '../../../../assets/styling.scss';
+import AiFilter from '../aiFilter';
+
 function DeleteRecord(props) {
   const [age, setAge] = useState('');
   const [value, setValue] = useState('');
+// console.log(props,"props?.table")
   
 const response=`
 {
@@ -37,6 +40,9 @@ const response=`
         <Typography fontSize={variables.textsize}>
           In order to expunge records from the table, kindly furnish the conditions pertaining to the respective rows.
           </Typography>
+          <AiFilter
+            tableName={props.table}
+          />
           <Typography>
             <Box>
               {/* <br />

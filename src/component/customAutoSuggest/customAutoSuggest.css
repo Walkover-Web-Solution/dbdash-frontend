@@ -17,7 +17,7 @@
 .editable-div {
     border: 1px solid #ccc;
     width: 300px;
-    height: 100px;
+    /* height: 100px; */
     font-family: Arial, sans-serif;
     font-size: 16px;
     border-radius: 0px;

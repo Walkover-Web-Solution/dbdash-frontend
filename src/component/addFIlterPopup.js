@@ -23,14 +23,17 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  p:4  
+  p:2
 };
+
 
 export default function AddFilterPopup(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [filterName, setFilterName] = useState("");
   const [html, setHtml] = useState("");
   const [text, setText] = useState("");
+  const [text2, setText2] = useState("");
+
   const [fields, setFields] = useState([]);
   // const [aiQuery, setAiQuery] = useState("");
   const [defaultValue, setDefaultValue] = useState(
@@ -99,15 +102,19 @@ export default function AddFilterPopup(props) {
       Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1
     ) {
       const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
-      queryToSend = "select * from " + viewId + " where " + text.trim();
+      queryToSend = "select * from " + viewId + " where " + text2.trim();
     } else {
-      queryToSend = "select * from " + props?.tableName + " where " + text.trim();
+      queryToSend = "select * from " + props?.tableName + " where " + text2.trim();
     }
     return queryToSend;
   };
+  const handleQuery=async () => {
+    
+  }
 
   const editQueryData = async () => {
     const data = await updateFilter();
+    console.log(data,"datadta")
     const dataa = {
       filterId: props?.filterId,
       filterName: filterName,
@@ -129,6 +136,12 @@ export default function AddFilterPopup(props) {
     adjustTextFieldHeight();
   };
 
+  const handleTextChange2 = (text, html) => {
+    setText2(text.trim());
+    setHtml(html);
+    adjustTextFieldHeight();
+  };
+
   const adjustTextFieldHeight = () => {
     const textField = textFieldRef.current;
     if (textField) {
@@ -138,10 +151,10 @@ export default function AddFilterPopup(props) {
     }
   };
 
+
   useEffect(() => {
     updateButtonContainerPosition();
   }, [textFieldHeight]);
-
   const updateButtonContainerPosition = () => {
     const textField = textFieldRef.current;
     const buttonContainer = buttonContainerRef.current;
@@ -158,11 +171,13 @@ export default function AddFilterPopup(props) {
       }
     }
   };
+  console.log(text2,'text2text2')
+  console.log(text,"textext")
 
   return (
     <Box>
       <Modal
-        disableRestoreFocus
+        disableRestorecFocus
         open={props.open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -177,73 +192,80 @@ export default function AddFilterPopup(props) {
               <CloseIcon />
             </IconButton>
           </Box>
+          <Box style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+            <Box sx={{ display: "flex", width: "100%" , justifyContent : "space-between" , alignItems : "center" }}>
+              <Box className="edit-div" sx={{display: "flex" , flexDirection: text.length*16 <= 1056 ? "row" : "column", mb: 2, width: "100%" , justifyContent : "space-between" , alignItems : "center" }}>
+                <div style={{ paddingRight: "1%", width: "100%", margintop: "90px" }}>
+                  <CustomAutoSuggest
+                    getInputValueWithContext={handleTextChange}
+                    width= {text.length*16 <= 1056 ? "470px" : "580px"}
+                    height = "2.5rem"
+                    suggestion={fields}
+                    setHtml={setHtml}
+                    setText={setText}
+                    defaultValue={defaultValue}
+                    ref={textFieldRef} // Add this line
+                  />
 
-          <Box style={{ display: "flex", flexDirection: "column" }}>
-  <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
-    <Box style={{ flex: 1 }}>
-    <CustomAutoSuggest
-        getInputValueWithContext={handleTextChange}
-        // width="593px"
-        suggestion={fields}
-        setHtml={setHtml}
-        setText={setText}
-        defaultValue={defaultValue}
-      />
-    </Box>
-   
-  </Box>
-  <Button
-      className="mui-button"
-      style={{ width: "180px", height: "40px", fontSize: "12px", marginLeft: "420px" }}
-      ref={buttonContainerRef}
-    >
-      Generate Query by AI
-    </Button>
-<br/>
-  <div style={{ color: "red", fontSize: "12px", paddingLeft: "172px" }}>
-    {state.$errors?.filterName?.map((data) => data.$message).join(",")}
-  </div>
+                </div>
+              <Button
+                className="mui-button"
+                style={{ height: "42px", width: "35%", fontSize: "12px" }}
+                ref={buttonContainerRef}
+                onClick={handleQuery}
+              >
+                Generate Query by AI
+              </Button>
+              </Box>
+            </Box>
+            <br />
+            <div style={{ color: "red", fontSize: "12px", paddingLeft: "172px" }}>
+              {state.$errors?.filterName?.map((data) => data.$message).join(",")}
+            </div>
 
-  <Box sx={{  flexDirection: "row", mb: 2 }}>
-    <div style={{ paddingRight: "1%", width: "100%",margintop:"90px" }}>
-      <CustomAutoSuggest
-        getInputValueWithContext={handleTextChange}
-        width="593px"
-        suggestion={fields}
-        setHtml={setHtml}
-        setText={setText}
-        defaultValue={defaultValue}
-      />
-    </div>
-  </Box>
-</Box>
+            {/* <TextField value={query} onChange={(e)=>{setQuery(e.target.value)}} placeholder="Enter the conditions"></TextField> */}
+            <div style={{ paddingRight: '1%' }}>
+              <CustomAutoSuggest
+                getInputValueWithContext={handleTextChange2}
+                width="592px"
+                height="10rem"
+                suggestion={fields}
+                setHtml={setHtml}
+                setText={setText2}
+                defaultValue={defaultValue}
+                ref={textFieldRef} // Add this line
+              />
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            className="mui-button"
-            onClick={() => {
-              editQueryData();
-              handleClose();
-            }}
-            variant="contained"
-          >
-            Save
-          </Button>
+            </div>
+          </Box>
+
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              className="mui-button"
+              onClick={() => {
+                editQueryData();
+                handleClose();
+              }}
+              variant="contained"
+            >
+              Save
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
-  </Box>
-);
+      </Modal>
+    </Box>
+    
+  );
 }
 
 AddFilterPopup.propTypes = {
-open: PropTypes.bool,
-setOpen: PropTypes.func,
-dbId: PropTypes.any,
-tableName: PropTypes.any,
-edit: PropTypes.any,
-filterId: PropTypes.any,
-dbData: PropTypes.any,
-setEdit: PropTypes.func,
-setUnderLine: PropTypes.any,
+  open: PropTypes.bool,
+  setOpen: PropTypes.func,
+  dbId: PropTypes.any,
+  tableName: PropTypes.any,
+  edit: PropTypes.any,
+  filterId: PropTypes.any,
+  dbData: PropTypes.any,
+  setEdit: PropTypes.func,
+  setUnderLine: PropTypes.any,
 };

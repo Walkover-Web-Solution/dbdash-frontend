@@ -5,7 +5,6 @@ import PopupModal from "../../popupModal";
 // import { toast } from 'react-toastify';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-
 import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
