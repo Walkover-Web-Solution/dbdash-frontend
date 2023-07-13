@@ -19,29 +19,40 @@ function CodeBlock(props) {
       }, 2000);
     }
   };
-
+const records=()=>{
+  return(
+    <>
+    {"       {\n"}
+    {props.body.map((x, index) => (
+      <span key={index}>
+        &quot;<span contentEditable={true} className="blue" >{x[0]}</span>&quot;
+        <span >: </span>
+        {x[1] === "number" || x[1] === "autonumber" ? (
+          <span contentEditable={true} >{`${dummy(x[1])}`}</span>
+        ) : (
+          <span contentEditable={true} >{`"${dummy(x[1])}"`}</span>
+        )}
+        <span >,</span>
+        <br />
+      </span>
+    ))}
+    {"       }\n"}
+    </>
+  )
+}
   const renderBody = () => {
     if (props.parent === "addrecord") {
       return (
         <pre className="pre-wrapper">
           <span>{"    \"records\""}</span>
-          <span className="yellow">: </span>
+          <span >: </span>
           {" [\n"}
-          {"       {\n"}
-          {props.body.map((x, index) => (
-            <span key={index}>
-              <span contentEditable={true} className="cyan">{`"${x[0]}"`}</span>
-              <span className="yellow">: </span>
-              {x[1] === "number" || x[1] === "autonumber" ? (
-                <span contentEditable={true} className="green">{`${dummy(x[1])}`}</span>
-              ) : (
-                <span contentEditable={true} className="magenta">{`"${dummy(x[1])}"`}</span>
-              )}
-              <span className="yellow">,</span>
-              <br />
-            </span>
-          ))}
-          {"       }\n"}
+          {/* {"       {\n"} */}
+          {records()}
+          {`\n,\n`}
+          {records()}
+
+          {/* {"       }\n"} */}
           {"    ]\n"}
         </pre>
       );
@@ -49,35 +60,35 @@ function CodeBlock(props) {
 
     if (props.parent === "updaterecord") {
       return (
-        <>
+        <div >
           <span>{"    \"records\""}</span>
-          <span className="yellow">: </span>
+          <span >: </span>
           {" [\n       {\n"}
           <span>{`                   "where"`}</span>
-          <span className="yellow">: </span>
+          <span >: </span>
           <span>{`"${props?.where}"`}</span>
-          <span className="yellow">,</span>
+          <span >,</span>
           {"\n"}
           <span>{`                   "fields"`}</span>
-          <span className="yellow">: </span>
+          <span >: </span>
           {"{\n"}
           {props.body.map((x, index) => (
             <span key={index}>
-              <span contentEditable={true} className="cyan">{`"${x[0]}"`}</span>
-              <span className="yellow">: </span>
+              <span contentEditable={true} >{`"${x[0]}"`}</span>
+              <span >: </span>
               {x[1] === "number" || x[1] === "autonumber" ? (
-                <span contentEditable={true} className="green">{`${dummy(x[1])}`}</span>
+                <span contentEditable={true} >{`${dummy(x[1])}`}</span>
               ) : (
-                <span contentEditable={true} className="magenta">{`"${dummy(x[1])}"`}</span>
+                <span contentEditable={true} >{`"${dummy(x[1])}"`}</span>
               )}
-              <span className="yellow">,</span>
+              <span >,</span>
               <br />
             </span>
           ))}
           {"         }\n"}
           {"       }\n"}
           {"     ]\n"}
-        </>
+        </div>
       );
     }
 
@@ -85,14 +96,14 @@ function CodeBlock(props) {
       <>
         {props.body.map((x, index) => (
           <span key={index}>
-            <span contentEditable={true} className="cyan">{`" ${x[0]} "`}</span>
-            <span className="yellow">: </span>
+            <span contentEditable={true} >{`" ${x[0]} "`}</span>
+            <span >: </span>
             {x[1] === "number" || x[1] === "autonumber" ? (
-              <span contentEditable={true} className="green">{` ${dummy(x[1])} `}</span>
+              <span contentEditable={true} >{` ${dummy(x[1])} `}</span>
             ) : (
-              <span contentEditable={true} className="magenta">{`" ${dummy(x[1])} "`}</span>
+              <span contentEditable={true} >{`" ${dummy(x[1])} "`}</span>
             )}
-            <span className="yellow">,</span>
+            <span >,</span>
             <br />
           </span>
         ))}
@@ -164,39 +175,61 @@ function CodeBlock(props) {
 
       {showAPI ? (
         <pre className="pre-wrapper">
-          <br />
-          <code className="code">{props.code}</code>
-          <br />
-          <code className="yellow">{props.header?.split(",")?.map((head) => `-H ${head.trim()} \n`)}</code>
+          <code className="code">https://dbdash-backend-h7duexlbuq-el.a.run.app/<span className={"valuescolor"}>{props?.db}</span>/<span className={"valuescolor"}>{props?.table}</span>{props?.code?props?.code:''}</code>
           <br />
           <br />
+
+          <code>
+  {props.header?.split(",")?.map((head) => (
+    <React.Fragment key={head}>
+      -H <span style={{ color: variables.deletecolor }}> {`${head.trim()}`}</span>
+      
+      <br />
+    </React.Fragment>
+  ))}
+</code>
           <br />
 
           {props.body &&
             typeof props.body === "object" &&
             props.body.length > 0 && (
-              <code className="white">
-                {"-data{\n"}
+              <code >
+            {"-data{\n"}
                 {renderBody()}
                 {"   }"}
+           
               </code>
             )}
         </pre>
       ) : (
         <pre className="pre-wrapper">
           <code className="code">
-            {`curl -X ${props.method} '${props.code}' \\`}
+            {`curl -X ${props.method} 'https://dbdash-backend-h7duexlbuq-el.a.run.app/`}
+            <span className={"valuescolor"}>{props?.db}</span>/
+            {<span className={"valuescolor"}>{`${props?.table}'`}</span>}
+            {props?.code?props?.code:''} \
             <br />
             <br />
           </code>
-          <code className="yellow">{props.header?.split(",")?.map((head) => `-H '${head.trim()}' \\\n`)}</code>{" "}
+          <code>
+  {props.header?.split(",")?.map((head) => (
+    <React.Fragment key={head}>
+      -H <span style={{ color: variables.deletecolor }}> {`'${head.trim()}'`}</span> \
+      
+      <br />
+    </React.Fragment>
+  ))}
+</code>
+
+          
+          {" "}
           <br />
 
           {props.body &&
             typeof props.body === "object" &&
             props.body.length > 0 && (
-              <code className="white">
-                {" -d '{\n"}
+              <code >
+              {" -d '{\n"}
                 {renderBody()}
                 {"   }' "}
               </code>
@@ -214,6 +247,8 @@ CodeBlock.propTypes = {
   body: PropTypes.any,
   parent: PropTypes.any,
   where: PropTypes.any,
+  db:PropTypes.any,
+  table:PropTypes.any
 };
 
 export default CodeBlock;

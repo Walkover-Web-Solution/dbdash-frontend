@@ -5,7 +5,6 @@ import PopupModal from "../../popupModal";
 // import { toast } from 'react-toastify';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-
 import FilterModal from "../../filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
@@ -71,7 +70,6 @@ export default function TablesList({ dbData }) {
     }
   };
  
-
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
   };
@@ -82,14 +80,12 @@ const saveTable = async () => {
   const data = {
     tableName: table,
   };
-
   setOpen(false);
   const apiCreate = await createTable(dbData?.db?._id, data);
   await dispatch(createTable1({ tables: apiCreate.data.data.tables }));
   const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(key => {
     return apiCreate?.data?.data?.tables[key].tableName === table;
   });
-
   if (matchedKey) {
     navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
   }
@@ -184,7 +180,6 @@ useEffect(() => {
       setUnderLine(null);
     }
   }, [params?.filterName]);
-
   const shareLink = async () => {
   const isViewExits  = AllTable?.tables?.[params?.tableName]?.filters?.[params?.filterName]?.viewId;
   if(isViewExits)
@@ -205,7 +200,6 @@ useEffect(() => {
       }))
     setLink(shareViewUrl+`/${dataa1.data.data.viewId}`);
   };
-
   const exportCSVTable = async () => {
     const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query;
     const data = {
@@ -288,7 +282,6 @@ useEffect(() => {
                     </IconButton>
                   </Box>
                 </Box>
-
               ) 
             )}
             </div>
@@ -329,13 +322,10 @@ useEffect(() => {
               handleClick(e, "share");
               shareLink();
             }
-
             
             }>Share View</Button>}
-
         </div>
         </div>
-
         {openManageField && (
           <ManageFieldDropDown
             openManageField={openManageField}
@@ -381,7 +371,6 @@ useEffect(() => {
             Delete
           </MenuItem>
         
-
         </Menu>
       </div>
       {openn&& edit && (<AddFilterPopup

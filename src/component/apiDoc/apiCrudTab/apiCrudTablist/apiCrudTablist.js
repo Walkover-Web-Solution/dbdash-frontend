@@ -79,7 +79,7 @@ function ApiCrudTablist(props) {
       <div className="marginTop">
       <TabPanel value={value} index={0}>
       <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`}}>
-  <BasicStuff alltabledata={props?.alltabledata} db={props.db} table={props.table} />
+  <BasicStuff alltabledata={props?.alltabledata} setShowComponent={props?.setShowComponent} db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
@@ -118,6 +118,7 @@ function ApiCrudTablist(props) {
 ApiCrudTablist.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
+  setShowComponent:PropTypes.any,
   alltabledata:PropTypes.any,
 };
 

@@ -17,7 +17,6 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
 }
 let valuesArray = [];
 let indexIdMapping = {}
-
 const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   const batchSize = 1000; // Set the batch size to 1000
   const totalRows = valuesArray.length;
@@ -33,7 +32,6 @@ const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   valuesArray = []
   indexIdMapping = {}
 }, 300);
-
 export const editCell = (cell, newValue, dispatch, fields, params, currentrow, dataType,isSingleCellSelected) => {
   if (newValue?.data && newValue.data.kind == 'tags-cell') return;
   const col = cell[0];
@@ -47,7 +45,6 @@ export const editCell = (cell, newValue, dispatch, fields, params, currentrow, d
         return;
       }
       newdata = newValue?.data?.date;
-
     } else {
       newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
     }
@@ -73,21 +70,17 @@ export const editCell = (cell, newValue, dispatch, fields, params, currentrow, d
         indexIdMapping: { [currentrow[`fld${tableId}autonumber`]]: cell[1]},
         oldData : currentrow[key]
       }))
-
     }
     else updateCellsAfterSomeDelay(dispatch);
     return;
   }
 }
-
 export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1, filterId, setFields) => {
   const newOrder = Array.from(fields);
   const key = fields[currentIndex].id;
-
   let newIndex1 = fields1.indexOf(newOrder[newIndex]);
   const [removedColumn] = newOrder.splice(currentIndex, 1);
   newOrder.splice(newIndex, 0, removedColumn);
-
   dispatch(
     updateColumnOrder({
       filterId: filterId,
@@ -99,5 +92,4 @@ export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1
   );
   setFields(newOrder)
   return;
-
 }

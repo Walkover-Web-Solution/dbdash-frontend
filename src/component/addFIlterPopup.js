@@ -138,7 +138,6 @@ export default function AddFilterPopup(props) {
   //       "tables": filter.data.data.data.tables
   //     }
   //   ))
-  //   props?.setUnderLine(filterKey)
   //   navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
   //   return dataa;
   // }
@@ -245,6 +244,5 @@ AddFilterPopup.propTypes = {
   filterId: PropTypes.any,
   dbData: PropTypes.any,
   setEdit: PropTypes.func,
-  setUnderLine:PropTypes.any
 };
 

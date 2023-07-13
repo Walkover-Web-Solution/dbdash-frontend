@@ -276,7 +276,7 @@ const classes = useStyles();
         ) }
         {showWebhookPage=="apidoc" &&(
           <Box>
-            {loading && <ApiCrudTablist  alltabledata={dataforwebhook} dbId={dbId} db={selectedOption} table={selectTable} />}
+            {loading && <ApiCrudTablist setShowComponent={setShowWebhookPage}  alltabledata={dataforwebhook} dbId={dbId} db={selectedOption} table={selectTable}/>}
           </Box>
         )}
         { showWebhookPage=="authkey" && 

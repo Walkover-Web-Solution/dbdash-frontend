@@ -24,7 +24,9 @@ const response=`
         <CodeBlock
         method="PATCH"
         
-          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props?.db}/${props?.table}/delete${value!="" ? `?${value}`:``}`}
+          code={`/delete${value!="" ? `?${value}`:``}`}
+          db={props?.db}
+          table={props?.table}
           header="auth-key: AUTH_TOKEN"
           
         />
@@ -35,13 +37,13 @@ const response=`
         <Box className="records-container">
           <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Records</Typography>
         <Typography fontSize={variables.textsize}>
-        To delete a record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using &quot;filter&quot; parameter.
-          </Typography>
-          <Typography>
+        {`To delete a record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using "filter" parameter.
+        `} 
+        </Typography>
+         <Typography>
             <Box>
               {/* <br />
               <Records db={props?.db} table={props?.table} setArr={setArr} arr={arr} /> */}
-              <br />
              
             <FormControl sx={{ m: 1, minWidth: 200 }}>
               {/* <input
@@ -94,7 +96,7 @@ const response=`
   </Typography>
 </div>
 
-              <OptionalParameter  parent={'delete'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
+              <OptionalParameter   alltabledata={props?.alltabledata}  parent={'delete'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
             </Box>
           </Typography>
         </Box>
@@ -106,6 +108,7 @@ const response=`
 DeleteRecord.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
+  alltabledata:PropTypes.any
 };
 
 export default DeleteRecord;

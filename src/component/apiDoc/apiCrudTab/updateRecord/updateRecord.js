@@ -30,7 +30,7 @@ function UpdateRecord(props) {
   return (
     <div style={{display:'flex',justifyContent:'space-between'}}>
       <div className="container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
-        <CodeBlock  method={'PATCH'} parent='updaterecord' code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`} where={value} header={`auth-key: AUTH_TOKEN,Content-Type: application/json `} body={arr} />
+        <CodeBlock  method={'PATCH'} parent='updaterecord' db={props?.db} table={props?.table} where={value} header={`auth-key: AUTH_TOKEN,Content-Type: application/json `} body={arr} />
         <ResponseBox response={response} />
       </div>
 
@@ -67,6 +67,16 @@ Note: In the given example, it will search for all occurrences of JOHN in FieldI
         />
         <br />
         <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
+        <br />
+      <Typography variant={'h3'} fontSize={Number(variables.titlesize)} >
+
+      {`Fileds to be updated: `}
+        </Typography>
+        <Typography>
+     {`Please select the fields/columns that need to be updated.
+Note: If you provide "NULL" ("FieldID1": "NULL") or leave it blank ("FieldID1": ""), the API will update the field with null or blank values. Therefore, please ensure that you only use the field names that you want to update.`}   </Typography>
+        <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
+        />
       </div>
       </div>
     </div>

@@ -88,11 +88,11 @@ export default function SingleDatabase(props) {
   const orgIdForRestore = props.db?.org_id._id || props.db?.org_id;
 
   return (
-    <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2, cursor: 'pointer' }} onClick={() => {
+    <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2, cursor: 'pointer'}} onClick={() => {
 
       navigate("/db/" + props.db._id, { state: { db: props.db } });
     }}>
-      <CardContent sx={{ display: "flex" }}>
+      <CardContent sx={{ display: "flex",justifyContent:'space-between'}}>
         {openmove && props?.tabIndex == props?.index ? (<ClickAwayListener onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -220,6 +220,7 @@ export default function SingleDatabase(props) {
                     backgroundColor: "#1C2833",
                     fontSize: "12px",
                     mx: 3,
+                    
                     zIndex: "555",
                     ":hover": {
                       bgcolor: "#273746",
@@ -227,6 +228,7 @@ export default function SingleDatabase(props) {
                       border: 0,
                       borderColor: "#1C2833",
                     },
+
                   }}
                 >
                   Rename
@@ -275,9 +277,9 @@ export default function SingleDatabase(props) {
     e.stopPropagation();
     restoreDb(orgIdForRestore,props.db._id);
   }}
-  className="mui-button"
-    variant="contained"
+  className="mui-button-outlined"
     size="small"
+    variant="outlined"
     sx={{ display: "flex" }}
   >restore</Button>
 )}

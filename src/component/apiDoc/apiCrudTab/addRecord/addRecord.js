@@ -29,9 +29,10 @@ const response=`
         <CodeBlock
         parent='addrecord'
         method="POST"
-          code={`https://dbdash-backend-h7duexlbuq-el.a.run.app/${props.db}/${props.table}`}
           header={`auth-key: AUTH_TOKEN,Content-Type: application/json`}
           body={arr}
+          db={props?.db}  
+          table={props?.table}
         />
         <ResponseBox
           response={response}
