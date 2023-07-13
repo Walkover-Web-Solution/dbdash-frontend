@@ -147,7 +147,6 @@ const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, sugges
         editableDivRef.current.innerHTML = defaultValue || "";
     }, [])
 
-    console.log("width   :- " , width)
     return (
         <div ref={parentDivRef} className="suggestionMainContainer" style={{ position: "relative" }}>
             <div id={id ? id : ''} contentEditable={true} ref={editableDivRef} onKeyDown={handleKeyDown} onInput={(e) => { handleInputChange(e); }} style={{width: width , minHeight : height}}className={editableDivClass || 'editable-div'} suppressContentEditableWarning={true} />

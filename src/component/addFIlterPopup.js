@@ -11,6 +11,7 @@ import { setAllTablesData } from "../store/allTable/allTableSlice";
 import CustomAutoSuggest from "./customAutoSuggest/customAutoSuggest";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { filterQueryByAi } from "../api/filterApi";
 
 const style = {
   position: "absolute",
@@ -31,6 +32,7 @@ export default function AddFilterPopup(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [filterName, setFilterName] = useState("");
   const [html, setHtml] = useState("");
+  const [html2, setHtml2] = useState("");
   const [text, setText] = useState("");
   const [text2, setText2] = useState("");
 
@@ -49,7 +51,7 @@ export default function AddFilterPopup(props) {
     props.setOpen(false);
   };
 
-  // console.log(aiQuery);
+
 
   const tableData = async () => {
     const myObj = AllTableInfo?.tables[props?.tableName]?.fields;
@@ -78,7 +80,6 @@ export default function AddFilterPopup(props) {
       abortEarly: true,
     },
   });
-
   useEffect(() => {
     if (props?.edit === true) {
       const editDataValues = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.query;
@@ -108,19 +109,38 @@ export default function AddFilterPopup(props) {
     }
     return queryToSend;
   };
-  const handleQuery=async () => {
-    
+// console.log("text",text)
+  const handleQuery=async () => { 
+    let textquery="select * from " + props?.tableName + " where " + text.trim();
+
+    const data ={
+      query: textquery
+    }
+
+    const applyFilter=await filterQueryByAi(props.dbId,data);
+    console.log(applyFilter,'applyFilter');
+
+    setText2(applyFilter?.data?.data);
+    // setHtml2(applyFilter?.data?.data);
+
   }
+
+  console.log(text2,'text2text2')
+  console.log(text,"textext")
+  console.log(html,'hetml')
+  console.log(html2,'hetml2222')
+
+  
 
   const editQueryData = async () => {
     const data = await updateFilter();
-    console.log(data,"datadta")
     const dataa = {
       filterId: props?.filterId,
       filterName: filterName,
       query: data,
-      htmlToShow: html,
+      htmlToShow: html2,
     };
+
     const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa);
     dispatch(
       setAllTablesData({
@@ -136,9 +156,9 @@ export default function AddFilterPopup(props) {
     adjustTextFieldHeight();
   };
 
-  const handleTextChange2 = (text, html) => {
-    setText2(text.trim());
-    setHtml(html);
+  const handleTextChange2 = (text2, html2) => {
+    setText2(text2.trim());
+    setHtml2(html2);
     adjustTextFieldHeight();
   };
 
@@ -171,9 +191,7 @@ export default function AddFilterPopup(props) {
       }
     }
   };
-  console.log(text2,'text2text2')
-  console.log(text,"textext")
-
+  
   return (
     <Box>
       <Modal
@@ -203,7 +221,7 @@ export default function AddFilterPopup(props) {
                     suggestion={fields}
                     setHtml={setHtml}
                     setText={setText}
-                    defaultValue={defaultValue}
+                    // defaultValue={}
                     ref={textFieldRef} // Add this line
                   />
 
@@ -230,7 +248,7 @@ export default function AddFilterPopup(props) {
                 width="592px"
                 height="10rem"
                 suggestion={fields}
-                setHtml={setHtml}
+                setHtml={setHtml2}
                 setText={setText2}
                 defaultValue={defaultValue}
                 ref={textFieldRef} // Add this line
