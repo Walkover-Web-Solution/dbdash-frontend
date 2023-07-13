@@ -52,7 +52,7 @@ export default function Navbar(props) {
   formControl: {
     margin: 1,
     marginLeft:0,
-    marginTop:0.9,
+    marginTop:7,
     marginRight:3,
 
     minWidth: 120,
@@ -174,6 +174,7 @@ const classes = useStyles();
                         : 0
                     )
                     .map(([orgId, dbs]) => {
+
                       const sortedDbs = [...dbs]?.sort((db1, db2) =>
                         db1?.name?.localeCompare(db2.name)
                       );

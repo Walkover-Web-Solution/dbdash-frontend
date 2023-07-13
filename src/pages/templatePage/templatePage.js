@@ -6,7 +6,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import FilterModal from "../../component/filterPopUp";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import SingleTable from "../../component/table/singleTable/singleTable";
-import {useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { bulkAddColumns, filterData } from "../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../table/mainTable";
@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
 import { display } from "@mui/system";
+import MainNavbar from "../../component/mainNavbar/mainNavbar";
 
 
 
@@ -38,7 +39,7 @@ export default function TemplatePage() {
   const [categoryName, setcategoryName] = useState("")
   const [templateName, setTemplateName] = useState("")
   const [description, setDescription] = useState("")
-  const [tableName,setTableName] = useState("");
+  const [tableName, setTableName] = useState("");
   const [edit, setEdit] = useState(false);
   const [tableIdForFilter, setTableIdForFilter] = useState("");
   const buttonRef = useRef(null);
@@ -47,7 +48,7 @@ export default function TemplatePage() {
   const [underLine, setUnderLine] = useState(params?.filterName)
   const [minimap, setMinimap] = useState(false);
   const [openManageField, setOpenManageField] = useState(false);
-  const [openUseTemplate,setOpenUseTemplate] = useState(false);
+  const [openUseTemplate, setOpenUseTemplate] = useState(false);
   const handleClick = (event, id) => {
     if (id === "share") {
       // setShareLinkOpen(true);
@@ -63,7 +64,7 @@ export default function TemplatePage() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleEdit = async () => {
     if (params?.filterName) {
 
@@ -96,7 +97,7 @@ export default function TemplatePage() {
     const tableNames = Object.keys(data?.data?.data?.dbId?.tables);
     setTableName(tableNames[0])
     setTableIdForFilter(tableNames[0])
-    dispatch( setAllTablesData({
+    dispatch(setAllTablesData({
       dbId: data?.data?.data?.dbId?._id,
       tables: data?.data?.data?.dbId?.tables,
       orgId: data?.data?.data?.dbId?.org_id
@@ -139,145 +140,158 @@ export default function TemplatePage() {
 
 
   return (
-    <>
-    <div className="main-box">
-      {/* <div style={{ fontSize: '25px' }}>{categoryName}</div> */}
-      <div style={{ fontSize: '25px', display: 'flex' ,justifyContent:"center" }}>
-  <div style={{ marginRight: 'auto' }}>{templateName}</div>
-  <Button variant="contained" sx={{ marginRight: '20px' }} className={'mui-button'} onClick={()=>{ setOpenUseTemplate(true);}}>Use Template</Button>
-</div>
-  <UseTemplatePopup open={openUseTemplate} categoryName={categoryName} setOpen={setOpenUseTemplate}/>
-
-<div style={{display:'flex',padding:"10px", flexDirection:"column", justifyContent:"center",width:"100%"}}>
-      <div  className="tableslist1">
-          <Box className="tabs-container1">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              TabIndicatorProps={{
-                style: { display: "none" },
-              }}
-              className={`tabs`}
-              variant="scrollable"
-              scrollButtons={false}
-              aria-label="scrollable auto tabs example"
-            >
-              {table &&
-                Object.entries(table).map((table, index) => (
-                  <SingleTable
-                    table={table}
-                    setTableIdForFilter={setTableIdForFilter}
-                    tabIndex={tabIndex}
-                    setTabIndex={setTabIndex}
-                    index={index}
-                    dbData={templateData?.dbId}
-                    setPage={setPage}
-                    key={index}
-                  />
-                ))}
-            </Tabs>
-           
-          </Box>
-        <Box sx={{ }}   >
-              {templateData?.dbId?.tables[tableIdForFilter]?.filters &&
-                Object.entries(templateData?.dbId?.tables[tableIdForFilter]?.filters).map(
-                  (filter, index) => (
-                    <Box key={index} className="custom-box1">
-                      <Box
-                        className="filter-box1"
-                        style={{
-                          backgroundColor:
-                            underLine === filter[0] ? variables.highlightedfilterboxcolor : "transparent",
-                        }}
-                        variant="outlined"
-                      >
-                        <div
-                        style={{}}
-                          onClick={() => {
-                            onFilterClicked(filter[1].query, filter[0], filter[1]);
-                          }}
-                        >
-                          {filter[1]?.filterName}
-                        </div>
-                        <IconButton onClick={(e) => handleClick(e, filter[0])}>
-                          <MoreVertIcon className="moreverticon" />
-                        </IconButton>
-                      </Box>
-                    </Box>
-
-                  )
-                )}
-        </Box>
-        {openn && !edit && (
-          <FilterModal
-            dbData={dbData}
-            buttonRef={buttonRef}
-            open={openn}
-            edit={edit}
-            setEdit={setEdit}
-            setOpen={setOpenn}
-            filterId={filterId}
-            dbId={dbData?.db?._id}
-            tableName={params?.tableName}
-            setUnderLine={setUnderLine}
-          />
-
-        )}
-
-        <div style={{  }}>
-          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,}} onClick={handleClickOpenManageField}>Manage Fields</Button>
-
-          <Button onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon fontSize="2px" />}</Button>
-          {params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={handleEdit}>Edit filter</Button>
-            <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={(e) => {
-              handleClick(e, "share");
-            }
-            }>share view</Button></>}
-        </div>
-        {openManageField && (
-          <ManageFieldDropDown
-            openManageField={openManageField}
-            setOpenManageField={setOpenManageField}
-          />
-        )}
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={() => handleClose()}
-        >
-
-          <MenuItem
-            onClick={() => {
-              handleClose();
-            }}
-          >
-            Delete
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleClose();
-            }}
-          >
-            Export CSV
-          </MenuItem>
-
-
-        </Menu>
-      </div>
+    <>   <Box>
+    <MainNavbar />
+ </Box>
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center',marginTop:'2vh' }}>
       
-      <div >
-        {isTableLoading ? (
-          <CircularProgress className="table-loading" />
-        ) : (
-          <div style={{width:"100%",display:"flex", alignItems:"center", justifyContent:"center"}}>
-            <MainTable  setPage={setPage} width={'60%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{padding:'0 auto'}}/>
+      <div className="main-box">
+        <div style={{ fontSize: '25px', display: 'flex', justifyContent: "space-between" }}>
+          <div >{templateName}</div>
+          <Button variant="contained" sx={{ marginRight: '-1.4vw' }} className={'mui-button'} onClick={() => { setOpenUseTemplate(true); }}>Use Template</Button>
+        </div>
+        <UseTemplatePopup open={openUseTemplate} categoryName={categoryName} setOpen={setOpenUseTemplate} />
+
+        <div style={{ display: 'flex', padding: "10px", flexDirection: "row", justifyContent: "center", width: "100%" }}>
+          <div style={{ width: '85vw', padding: '10px', border: '1px solid black' }}>
+            <div className="tableslist1">
+              <Box className="tabs-container1">
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  TabIndicatorProps={{
+                    style: { display: "none" },
+                  }}
+                  className={`tabs`}
+                  variant="scrollable"
+                  scrollButtons={false}
+                  aria-label="scrollable auto tabs example"
+                >
+                  {table &&
+                    Object.entries(table).map((table, index) => (
+                      <SingleTable
+                        table={table}
+                        setTableIdForFilter={setTableIdForFilter}
+                        tabIndex={tabIndex}
+                        setTabIndex={setTabIndex}
+                        index={index}
+                        dbData={templateData?.dbId}
+                        setPage={setPage}
+                        key={index}
+                      />
+                    ))}
+                </Tabs>
+
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: 'row', width: '100%', overflowX: 'auto' }}   >
+                {templateData?.dbId?.tables[tableIdForFilter]?.filters &&
+                  Object.entries(templateData?.dbId?.tables[tableIdForFilter]?.filters).map(
+                    (filter, index) => (
+                      <Box key={index} className="custom-box">
+                        <Box
+                          className="filter-box"
+                          style={{
+                            backgroundColor:
+                              underLine === filter[0] ? variables.highlightedfilterboxcolor : "transparent",
+                          }}
+                          variant="outlined"
+                        >
+                          <div
+                            style={{}}
+                            onClick={() => {
+                              onFilterClicked(filter[1].query, filter[0], filter[1]);
+                            }}
+                          >
+                            {filter[1]?.filterName}
+                          </div>
+                          <IconButton onClick={(e) => handleClick(e, filter[0])}>
+                            <MoreVertIcon className="moreverticon" />
+                          </IconButton>
+                        </Box>
+                      </Box>
+
+                    )
+                  )}
+              </Box>
+              {openn && !edit && (
+                <FilterModal
+                  dbData={dbData}
+                  buttonRef={buttonRef}
+                  open={openn}
+                  edit={edit}
+                  setEdit={setEdit}
+                  setOpen={setOpenn}
+                  filterId={filterId}
+                  dbId={dbData?.db?._id}
+                  tableName={params?.tableName}
+                  setUnderLine={setUnderLine}
+                />
+
+              )}
+
+              <div >
+                <Button sx={{ fontSize: `${variables.tablepagefontsize}`, textTransform: 'none', color: variables.basictextcolor }} onClick={handleClickOpenManageField}>Manage Fields</Button>
+
+                <Button sx={{ fontSize: `${variables.tablepagefontsize}`, textTransform: 'none', color: variables.basictextcolor }} onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon fontSize="2px" />}</Button>
+                {params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={handleEdit}>Edit filter</Button>
+                  <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={(e) => {
+                    handleClick(e, "share");
+                  }
+                  }>share view</Button></>}
+              </div>
+              {openManageField && (
+                <ManageFieldDropDown
+                  openManageField={openManageField}
+                  setOpenManageField={setOpenManageField}
+                />
+              )}
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => handleClose()}
+              >
+
+
+                <MenuItem
+                  onClick={() => {
+                    handleClose();
+                  }}
+                >
+                  Export CSV
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleClose();
+                  }}
+                  sx={{ color: `#a51226` }}
+                >
+                  Delete
+                </MenuItem>
+
+
+              </Menu>
+            </div>
+
+            <div >
+              {isTableLoading ? (
+                <CircularProgress className="table-loading" />
+              ) : (
+                <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <MainTable setPage={setPage} width={'100%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{ padding: '0 auto' }} />
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-        <div style={{ marginTop: "25px" }}>{description}</div>
-      </div>
+
+        </div>
+        <div style={{ marginTop: "25px", fontSize: '25px' }}>Description</div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ width: '85vw', padding: '10px', marginTop: '10px' }}>{description}</div>
+        </div>
       </div>
 
+    </div>
     </>
+ 
   );
 }

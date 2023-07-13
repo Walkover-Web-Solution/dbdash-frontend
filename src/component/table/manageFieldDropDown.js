@@ -3,17 +3,21 @@ import React, {useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 // import ListItemText from '@mui/material/ListItemText';
 // import ListItem from '@mui/material/ListItem';
+import CloseIcon from '@mui/icons-material/Close';
+
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 // import List from '@mui/material/List';
 // import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
+// import AppBar from '@mui/material/AppBar';
+
+// import Toolbar from '@mui/material/Toolbar';
+// import IconButton from '@mui/material/IconButton';
 // import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
+// import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import { useSelector,useDispatch } from 'react-redux';
 import AddOptionPopup from './addOptionPopup';
 import variables from '../../assets/styling.scss';
@@ -27,9 +31,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const useStyles = makeStyles({
-    table: {
-
-      minWidth: 650,
+    dialogContainer: {
+      maxWidth:'none',
+      width:'60vw'
     },
   });
 
@@ -50,12 +54,16 @@ export default function ManageFieldDropDown(props) {
     setFieldId(fieldid)
     setFieldType(fieldType)
   }
-  const handleOpen = () => setOpenAddFields(true);
+  const handleOpen = () =>{
+    if(params.templateId) return;
+    
+    setOpenAddFields(true)};
   var defaultArr = fields1.map((column) => {
     return !column?.metadata?.hide;
   })
   
   const hideColumn = async (columnId, isChecked) => {
+    if(params.templateId) return;
     const metaData = { hide: isChecked };
     dispatch(
       updateColumnHeaders({
@@ -76,12 +84,13 @@ export default function ManageFieldDropDown(props) {
   return (
     <div>
       <Dialog
-        fullScreen
         open={props.setOpenManageField}
-        onClose={handleClose}
+        classes={{
+          paper: classes.dialogContainer,
+        }}        onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative' ,backgroundColor:`${variables.basictextcolor}`}}>
+        {/* <AppBar sx={{ position: 'relative' ,backgroundColor:`${variables.basictextcolor}`}}>
           <Toolbar >
             <IconButton
               edge="start"
@@ -92,49 +101,69 @@ export default function ManageFieldDropDown(props) {
               <CloseIcon />
             </IconButton>
           </Toolbar>
-        </AppBar>
+        </AppBar> */}
+<TableContainer   component={Paper}>
+<div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+       manage fields
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
 
-        <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="My Table">
-        <TableHead >
-          <TableRow>
-            <TableCell sx={{fontSize:`${variables.titlefontsize}`}}>Field Name</TableCell>
-            <TableCell sx={{fontSize:`${variables.titlefontsize}`}}>Field Type</TableCell>
-            <TableCell></TableCell>
-            <TableCell sx={{fontSize:`${variables.titlefontsize}`}}>Hide Fields</TableCell>
+
+      <Table   aria-label="My Table">
+        <TableHead  >
+          <TableRow >
+            <TableCell  sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Field Name</TableCell>
+            <TableCell sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Visible</TableCell>
+
+            <TableCell sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Field Type</TableCell>
+            <TableCell sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Options</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
   {fields1.map((field, index) => {
     return (
       <TableRow key={index}>
-        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`}}>{field.title}</TableCell>
-        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`}}>{field.dataType}</TableCell>
+        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`,textAlign:'center'}}>{field.title}</TableCell>
+        <TableCell sx={{textAlign:'center'}}>
+        <input
+  style={{
+    width: "15px",
+    height: "15px",
+  
+  }}
+  type="checkbox"
+  checked={defaultArr[index]}
+  onChange={() => toggleColumn(field?.id, index)}
+/>
+
+
+        </TableCell>
+        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`,textAlign:'center'}}>{field.dataType}</TableCell>
+       
+
         {field.dataType === "singleselect" || field.dataType === "multipleselect" ? (
-          <TableCell sx={{fontSize:`${variables.tablepagefontsize}`}}>
-            <Button onClick={() => { handleOpen(); columnId(field.id, field.dataType) }} className="mui-button" variant="contained">Add option</Button>
-          </TableCell>
+         <TableCell sx={{ fontSize: `${variables.tablepagefontsize}` ,textAlign:'center',display:'flex',justifyContent:'center'}}>
+            <div style={{width:'200px'}}>
+    {field?.metadata?.option?.map((value,index)=>{
+      return index < 3 ? value.value : null;
+    }).filter(Boolean).join(', ')}
+    {field?.metadata?.option?.length > 3 && field?.metadata?.option?.length <= 20 ? '...' : ''}
+  </div>
+
+
+         <div >
+         <ModeEditOutlineOutlinedIcon
+           onClick={() => {
+             handleOpen();
+             columnId(field.id, field.dataType);
+           }}
+         />
+         </div>
+       </TableCell>
+       
         ) : (
           <TableCell></TableCell>
         )}
-        <TableCell>
-          <MenuItem
-            key={index}
-            sx={{
-              fontSize:`${variables.tablepagefontsize}` ,
-              minHeight: 'auto',
-              padding: '2px 8px',
-            }}
-          >
-            <input
-              style={{ width: "15px", height: "15px" }}
-              type="checkbox"
-              checked={defaultArr[index]}
-              onChange={() => toggleColumn(field?.id, index)}
-            />
-            {field?.title}
-          </MenuItem>
-        </TableCell>
       </TableRow>
     );
   })}

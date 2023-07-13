@@ -31,9 +31,9 @@ const getHeaders = async (dbId, tableName, payloadfields, { getState },fieldArra
     let fields =payloadfields|| await  getAllTableInfo(getState())?.tables?.[tableName]?.fields;
     const fieldIds = fieldArrayInFilter || await getAllTableInfo(getState())?.tables?.[tableName]?.fieldIds
     let columns = [];
-    const viewFields  = getAllTableInfo(getState())?.tables?.[tableName]?.view?.fields;
+    // const viewFields  = getAllTableInfo(getState())?.tables?.[tableName]?.view?.fields;
     if(!fieldArrayInFilter){
-        fields={...fields ,...viewFields }
+        fields={...fields }
     }
     fieldIds.forEach((fieldId, index) => {
         const field = fields[fieldId];
@@ -156,13 +156,13 @@ export const filterData = createAsyncThunk(
                 page = page + 1;
             }
             let columns = {};
-            const viewFields =table.view?.fields || {}//views fields
+            // const viewFields =table.view?.fields || {}//views fields
             fieldArrayInFilter?.forEach((id) => {
                 columns[id] = table?.fields?.[id];
             });
             // if(!fieldArrayInFilter)
             // {
-                columns = { ...table?.fields,...viewFields}
+                columns = { ...table?.fields}
             // }
 
             filterFields && Object.entries(filterFields).map((entry) => {
@@ -173,7 +173,7 @@ export const filterData = createAsyncThunk(
             });
 
             columns = await getHeaders(payload?.dbId,payload?.tableId,columns,{getState},fieldArrayInFilter);
-
+            console.log("columns",columns)
             const dataa = {
                 "columns": columns,
                 "row": rows,
@@ -191,7 +191,7 @@ export const filterData = createAsyncThunk(
 export const deleteColumns = createAsyncThunk(
     "table/deleteColumns",
     async (payload, { dispatch, getState }) => {
-        if (payload?.fieldDataType == "lookup") {
+        if (payload?.metaData?.isLookup == true) {
             const data = {
                 viewFieldId: payload?.fieldName
             }

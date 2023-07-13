@@ -1,14 +1,24 @@
 import React, { useState } from "react";
-import { Box, Button, ClickAwayListener, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField,Typography,
+import { Box, Button, ClickAwayListener, Dialog, DialogContent, FormControl, IconButton, InputLabel, MenuItem, Select, TextField,Typography,
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+
 import PropTypes from "prop-types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { makeStyles } from "@mui/styles";
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState(111);
   const userId = localStorage.getItem("userid");
+  const useStyles = makeStyles({
+    dialogPaper: {
+      borderRadius: 0,
+      width:'30vw'
+    },
+  });
+  const classes = useStyles();
   const [editable, setEditable] = useState(null);
   const handleClose = () => {
     props.setShareOrg(false);
@@ -36,7 +46,7 @@ export default function ShareOrgModal(props) {
       return;
     }
   
-    const { org, setOrg, shareWorkspace } = props;
+    const { org, shareWorkspace } = props;
     const { users } = org;
   
     const existingUser = users.find((user) => user.user_id?.email === email);
@@ -49,10 +59,7 @@ export default function ShareOrgModal(props) {
       return;
     }
   
-    const newUser = { user_type: userType, user_id: { email } };
-    const updatedOrg = { ...org, users: [...users, newUser] };
-  
-    setOrg(updatedOrg);
+    
     shareWorkspace(email, userType);
     setEmail("");
     setUserType(111);
@@ -66,14 +73,7 @@ export default function ShareOrgModal(props) {
   };
 
   const handleUpdateUserType = (email, user_type) => {
-    let obj = { ...props?.org };
-    obj.users = obj.users.map((user) => {
-      if (user.user_id.email === email) {
-        return { ...user, user_type: user_type };
-      }
-      return user;
-    });
-    props?.setOrg(obj);
+    
     props.updateUserTypeInOrg(email, user_type);
   };
 
@@ -96,67 +96,70 @@ export default function ShareOrgModal(props) {
   };
 
   const handleRemoveUserindb = (email, userId) => {
-    let updatedOrg = {
-      ...props?.org,
-      users: props?.org.users.filter((user) => user.user_id.email !== email),
-    };
-    props.setOrg(updatedOrg);
+   
     props.removeUserFromWorkspace(email, userId);
     toast.success("User removed successfully");
   };
 
   return (
-    <Dialog open={props.shareOrg} onClose={handleClose}>
+    <Dialog
+    classes={{
+      paper: classes.dialogPaper, // Apply custom styles to the dialog paper
+    }}
+    
+    open={props.shareOrg}  onClose={handleClose}>
       <ClickAwayListener
-      
         onClickAway={handleClose}
       >
         <div
-         
         >
           {" "}
-          <DialogTitle sx={{ width: 500 }}>{props?.title}</DialogTitle>
-          <DialogContent
-            sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <TextField
-              autoFocus
-              margin="dense"
-              placeholder="Email Address"
-              type="email"
-              fullWidth
-              value={email}
-              onChange={handleEmailChange}
-              onKeyDown={handleKeyDown}
-              sx={{ flex: "3", marginRight: "1rem" }}
-            />
-            <FormControl sx={{ flex: "1.2", marginLeft: "1" }}>
-              <InputLabel>User Type</InputLabel>
-              <Select
-                value={userType}
-                MenuProps={{
-                  disablePortal: true,
-                  onClick: (e) => {
-                    e.stopPropagation(); // Stop the event from propagating to the dialog
-                  },
-                }}
-                label="selectusertype"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation(); // Stop the event from propagating to the dialog
-                }}
-             
-                onChange={handleUserTypeChange}
-              >
-                <MenuItem value={111}>User</MenuItem>
-                <MenuItem value={11}>Admin</MenuItem>
-                {props?.useCase === "sharedb" && (
-                  <MenuItem value={1}>Owner</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
+          <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+            {props?.title}
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+          <DialogContent>
+  <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+    <TextField
+      autoFocus
+      margin="dense"
+      placeholder="Email Address"
+      type="email"
+      fullWidth
+      value={email}
+      onChange={handleEmailChange}
+      onKeyDown={handleKeyDown}
+      sx={{ flex: "3", marginRight: "1rem", marginLeft: -1 }}
+    />
+    <FormControl sx={{ flex: "1.2" }}>
+      <InputLabel>User Type</InputLabel>
+      <Select
+        value={userType}
+        MenuProps={{
+          disablePortal: true,
+          onClick: (e) => {
+            e.stopPropagation(); // Stop the event from propagating to the dialog
+          },
+        }}
+        label="selectusertype"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation(); // Stop the event from propagating to the dialog
+        }}
+        onChange={handleUserTypeChange}
+      >
+        <MenuItem value={111}>User</MenuItem>
+        <MenuItem value={11}>Admin</MenuItem>
+        {props?.useCase === "sharedb" && (
+          <MenuItem value={1}>Owner</MenuItem>
+        )}
+      </Select>
+    </FormControl>
+  </div>
+</DialogContent>
+
+
+          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+
             <Button
               variant="contained"
               className="mui-button"
@@ -165,9 +168,9 @@ export default function ShareOrgModal(props) {
             >
               Send Invite
             </Button>
-          </DialogActions>
+          </Box>
           {props?.org?.users?.length > 1 && (
-            <Box sx={{ m: 1 }}>
+            <Box sx={{ m: 1,ml:2 }}>
               <Typography variant="h6">
                 <strong>Shared with:</strong>
               </Typography>
@@ -178,6 +181,7 @@ export default function ShareOrgModal(props) {
               e.preventDefault();
               e.stopPropagation();
             }}
+            sx={{ml:2,width:'92%'}}
           >
             {props?.org?.users?.map((user,index) => {
                 if ( user?.user_id?._id !== userId ) {
@@ -192,10 +196,10 @@ export default function ShareOrgModal(props) {
                       }}
                       
                     >
-                      <Box sx={{ m: 1 }}>
+                      <Box sx={{ m: 1,ml:0 }}>
                         <Typography>{user?.user_id?.email}</Typography>
                       </Box>
-                      <Box sx={{ m: 1 }}>
+                      <Box sx={{ m: 1,ml:0 }}>
                         {props?.useCase === "sharedb" ? (
                           editable === user ? (
                             <Select
@@ -257,17 +261,24 @@ export default function ShareOrgModal(props) {
                           </Typography>
                         )}
                       </Box>
-                      <Box sx={{ m: 1 }}>
-                        <ModeEditIcon
+                    
+                      <Box sx={{ display:'flex',alignItems: "center" }}>
+                      <IconButton
+                        sx={{p:0}}
+                          aria-label="delete"
                           onClick={() => {
                             if (editable != user) {
                               setEditable(user);
                             } else setEditable(null);
                           }}
+                        >
+                        <ModeEditIcon
+                         
                         />
-                      </Box>
-                      <Box sx={{ alignItems: "center" }}>
+                        </IconButton>
+
                         <IconButton
+                        sx={{p:0}}
                           aria-label="delete"
                           onClick={() => {
                             if (props?.useCase === "sharedb") {
@@ -280,6 +291,7 @@ export default function ShareOrgModal(props) {
                         >
                           <DeleteIcon />
                         </IconButton>
+                      
                       </Box>
                     </Box>
                   );

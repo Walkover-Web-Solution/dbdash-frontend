@@ -2,6 +2,8 @@ import React, {  useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Typography, TextField, Button,ClickAwayListener } from "@mui/material"; 
 import { useNavigate } from "react-router-dom";
+import CloseIcon from '@mui/icons-material/Close';
+
 import { createFilter } from "../api/filterApi";
 import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../store/allTable/allTableSlice";
@@ -48,10 +50,8 @@ const style = {
   borderRadius: "0px",
   // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
   border:`1px solid ${variables.basictextcolor}`,
-  padding: "20px",
-  width: "250px",
+  width: "300px",
 };
-
 
   const handleClose = () => {
     props.setOpen(false);
@@ -75,15 +75,24 @@ const style = {
   };
 
   const handleCreateFilter = async () => {
-    // const data = await updateFilter();
+    const firstChar = filterName[0];
+let filterName1;
+  if (/[a-zA-Z]/.test(firstChar)) {
+filterName1=firstChar.toUpperCase() + filterName.slice(1);
+  }
+  else 
+  {
+    filterName1=firstChar.toLowerCase() + filterName.slice(1);
+  }
+  setFilterName(filterName1);
     const dataa = {
-      filterName: filterName,
+      filterName: filterName1,
       query: "SELECT * FROM " + props?.tableName,
       htmlToShow : ""
     };
     const filter = await createFilter(props?.dbId, props?.tableName, dataa);
     const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
-    const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName);
+    const filterKey = Object.keys(filters).find(key => filters[key].filterName === filterName1);
     await dispatch(setAllTablesData(
       {
         "dbId": props?.dbId,
@@ -127,18 +136,29 @@ const style = {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
     <Box sx={style}>
-      <Typography sx={{mt:-1,mb:1}}variant="h5">
-        Create Filter
-      </Typography>
-      <Box>
+    <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+            create filter
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+
+      <Box 
+          sx={{ml:2,display:'flex',justifyContent:'left'}}
+      >
         <TextField
           label="Filter Name"
           variant="outlined"
           value={filterName}
+          autoFocus={true}
+          onKeyDown={(e)=>{
+            if(e.key!='Enter') return;
+            if(!filterName) return;
+            handleCreateFilter();
+            handleClose();
+
+          }}
           onChange={(e) => setFilterName(e.target.value)}
         />
       </Box>
-      <Box sx={{mt:2}} display="flex" justifyContent="center">
+      <Box sx={{m:2}} display="flex" justifyContent="space-between">
         <Button
           variant="contained"
           className="mui-button"
@@ -152,14 +172,7 @@ const style = {
         >
           Create Filter
         </Button>
-        <Button
-          variant="outlined"
-          onClick={handleClose}
-          className='mui-button-outlined'
-          sx={{fontSize:`${variables.editfilterbutttonsfontsize}`}}
-        >
-          Cancel
-        </Button>
+       
       </Box>
     </Box>
     </ClickAwayListener>

@@ -28,7 +28,7 @@ import ManageFieldDropDown from "../manageFieldDropDown";
 import { toast } from "react-toastify";
 import { selectActiveUser } from "../../../store/user/userSelector";
 import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
-import Sharedb from "./Sharedb";
+// import Sharedb from "./Sharedb";
 export default function TablesList({ dbData }) {
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
@@ -211,6 +211,7 @@ useEffect(() => {
       query: query,
       userName: userDetails?.fullName,
       email: userDetails?.email,
+      filterId : filterId,
     };
     await exportCSV(dbData?.db?._id, params?.tableName, data);
     toast.success("Your CSV file has been mailed successfully");
@@ -254,12 +255,11 @@ useEffect(() => {
             </Button>
            
           </Box>
-          <Sharedb/>
          
         </Box>
         <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap'}}   >
-        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden'}}>
-        <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*88)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
+        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden',marginRight:'5px'}}>
+        <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*89)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
           {AllTableInfo[params?.tableName]?.filters &&
             Object.entries(AllTableInfo[params?.tableName]?.filters).map(
               (filter, index) => (
@@ -268,16 +268,19 @@ useEffect(() => {
                     className="filter-box"
                     style={{
                       backgroundColor:
-                        underLine === filter[0] ? variables.highlightedfilterboxcolor : "transparent",
+                        underLine === filter[0] ? variables.highlightedfilterboxcolor : variables.filterboxcolor,
+                       
                     }}
                     variant="outlined"
                   >
-                    <div
+                    <div style={{display:'flex',whiteSpace:'nowrap',textOverflow:'ellipsis'}}
                       onClick={() => {
                         onFilterClicked(filter[1].query, filter[0], filter[1]);
                       }}
                     >
-                      {filter[1]?.filterName}
+                      {filter[1]?.filterName.length > 10
+    ? `${filter[1]?.filterName.slice(0, 6)}...`
+    : filter[1]?.filterName}
                     </div>
                     <IconButton onClick={(e) => handleClick(e, filter[0])}>
                       <MoreVertIcon className="moreverticon" />
@@ -291,9 +294,9 @@ useEffect(() => {
             </div>
           <Button
             onClick={() => handleOpenn()}
-            variant="contained"
+            variant="outlined"
             ref={buttonRef}
-            className="mui-button filter-button custom-button-add-view"
+            className="mui-button-outlined filter-button custom-button-add-view"
           >
             Add View
           </Button>
@@ -314,22 +317,24 @@ useEffect(() => {
          />
       
        )}
-   
-        <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'flex-start' }}>
+   <div style={{display:'flex',justifyContent:'flex-start'}}>   
+   <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'space-between',width: params.filterName ? `${(window.screen.width*32)/100}px`: `${(window.screen.width*18)/100}px`}}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
-          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}} onClick={handleClickOpenManageField}>Manage Fields</Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}} onClick={handleClickOpenManageField}>Manage Fields</Button>
                   
-          <Button onClick={()=>setMinimap(!minimap)}>Minimap {!minimap?<CheckBoxOutlineBlankIcon fontSize="4px" />:<CheckBoxIcon fontSize="2px" />}</Button>
-          {  params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0,mr:2 }} onClick={handleEdit}>Edit filter</Button>
-          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,paddingLeft:0,paddingRight:0 ,mr:2}}  onClick={(e) => {
+          <Button  sx={{textTransform:'none',fontSize: `${variables.tablepagefontsize}`,color:variables.basictextcolor }} onClick={()=>setMinimap(!minimap)}>Minimap {!minimap?<CheckBoxOutlineBlankIcon fontSize="4px" />:<CheckBoxIcon fontSize="2px" />}</Button>
+          {  params?.filterName &&  <Button sx={{ fontSize: `${variables.tablepagefontsize}` ,textTransform:'none',color:variables.basictextcolor}} onClick={handleEdit}>Edit filter</Button>}
+          {  params?.filterName && <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}}  onClick={(e) => {
               handleClick(e, "share");
               shareLink();
             }
 
             
-            }>share view</Button></>}
+            }>Share View</Button>}
 
         </div>
+        </div>
+
         {openManageField && (
           <ManageFieldDropDown
             openManageField={openManageField}
@@ -354,15 +359,8 @@ useEffect(() => {
           onClose={() => handleClose()}
         >
         
-        <MenuItem>Rename</MenuItem>
-          <MenuItem
-            onClick={() => {
-              deleteFilterInDb(currentTable);
-              handleClose();
-            }}
-          >
-            Delete
-          </MenuItem>
+        
+         
           <MenuItem
             onClick={() => {
             // deleteFilterInDb(currentTable);
@@ -372,7 +370,15 @@ useEffect(() => {
             >
             Export CSV
             </MenuItem>
-           
+            <MenuItem
+            onClick={() => {
+              deleteFilterInDb(currentTable);
+              handleClose();
+            }}
+            sx={{color:variables.deletecolor}}
+          >
+            Delete
+          </MenuItem>
         
 
         </Menu>

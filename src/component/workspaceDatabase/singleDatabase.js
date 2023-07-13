@@ -248,7 +248,6 @@ export default function SingleDatabase(props) {
     second={"Delete"}
     third={"Move"}
     fourth={"Duplicate"}
-    fifth={"Make template of this db"}
     setOpenmove={setOpenmove}
     orgid={props?.db?.org_id?._id}
     dbid={props?.db?._id}
@@ -256,7 +255,7 @@ export default function SingleDatabase(props) {
     setName={setName}
     idToDelete={props?.db?._id}
     deleteFunction={deletDatabases}
-    title={"Database"}
+    title={"database"}
   />
 ) :  !props?.db?.deleted ? (
   <Dropdown
@@ -264,12 +263,11 @@ export default function SingleDatabase(props) {
     tabIndex={props?.index}
     first={"Rename"}
     fourth={"Duplicate"}
-    fifth={"Make template of this db"}
     orgid={props?.db?.org_id._id } 
     dbid={props?.db?._id}
     dbname={props?.db?.name}
     setName={setName}
-    title={"Database"}
+    title={"database"}
   />
 ) : (
   <Button    onClick={(e) => {

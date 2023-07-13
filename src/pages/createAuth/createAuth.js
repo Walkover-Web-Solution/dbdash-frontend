@@ -5,6 +5,7 @@ import {
   Typography,
   Button,
   Modal,
+  
  
 } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -14,11 +15,13 @@ import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup";
 import { createAuthkey, updateAuthkey } from "../../api/authkeyApi";
 import { selectActiveUser } from "../../store/user/userSelector.js";
 // import { toast } from 'react-toastify';
+import CloseIcon from '@mui/icons-material/Close';
+
+
 import "./createAuth.scss";
 import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
 import { toast } from "react-toastify";
-// import { toast } from "react-toastify";
 
 export default function CreateAuthKey(props) {
   const id = props.id;
@@ -28,7 +31,7 @@ export default function CreateAuthKey(props) {
   const [authKey, setAuthKey] = useState("");
   const [open, setOpen] = useState(false);
   const EditAuthKeyData =  props?.authData && props?.title  ? {     authData: props?.authData,   title: props?.title, } : undefined;
-  
+ 
 
   const user = useSelector((state) => allOrg(state));
   function getCreatedByName(data) {
@@ -134,14 +137,20 @@ export default function CreateAuthKey(props) {
       <Modal open={props.open} onClose={props.handleClose}>
         <Box
           className="create-auth-key-main-container"
+          sx={{p:0,width:'35vw'}}
         >
-          <Box className="create-auth-key-row">
+            <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+            {props?.heading}
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={props?.handleClose}/></div>
+
+          <Box className="create-auth-key-row" sx={{ml:2,pr:1}}>
             <Typography className="create-auth-key-label">Name</Typography>
             <TextField
               id="standard-basic"
-              label="Standard"
+              label="Name"
               variant="standard"
               value={name}
+              sx={{width:'300px'}}
               onChange={(e) => {
                 setName(e.target.value);
               }}
@@ -149,8 +158,7 @@ export default function CreateAuthKey(props) {
             />
           </Box>
           <Selectaccessandscope scope={scope} setScope={setScope} alltabledata={props?.alltabledata}/>
-         
-          <Box className="create-auth-key-actions">
+          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
             <Box>
               <Button
                 variant="contained"
@@ -170,15 +178,10 @@ export default function CreateAuthKey(props) {
               />
             </Box>
             <Box>
-              <Button
-                variant="outlined"
-                onClick={props.handleClose}
-                className="mui-button-outlined create-auth-key-button"
-              >
-                Cancel
-              </Button>
+              
             </Box>
-          </Box>
+            </Box>
+
         </Box>
       </Modal>
     </>
@@ -189,7 +192,7 @@ CreateAuthKey.propTypes = {
   EditAuthKeyData: PropTypes.string,
   open: PropTypes.bool,
   authData: PropTypes.any,
-  
+  heading:PropTypes.any,
   title: PropTypes.any,
   id: PropTypes.any,
   alltabledata: PropTypes.any,

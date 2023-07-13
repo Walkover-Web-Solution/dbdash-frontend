@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect} from "react";
 import {
   CompactSelection,
   DataEditor,
@@ -13,6 +13,7 @@ import {
 } from "../store/table/tableThunk";
 // import "@glideapps/glide-data-grid/dist/index.css";
 import PropTypes from "prop-types";
+
 
 import "./Glidedatagrid.css";
 import "../../src/App.scss";
@@ -55,6 +56,8 @@ export default function MainTable(props) {
   const [queryByAi, setQueryByAi] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [hoveredRow,setHoveredRow]=useState(false);
+  const [targetColumn,setTargetColumn]=useState(0);
+
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -97,6 +100,8 @@ export default function MainTable(props) {
   );
 
   const onChangeUrl = (e, type) => {
+    if(params?.templateId) return;
+
     const row = openAttachment[1];
     const col = openAttachment[0];
     if (imageLink !== null) {
@@ -119,9 +124,25 @@ export default function MainTable(props) {
   };
 
   const onChangeFile = (e, type) => {
+    if(params?.templateId) return;
+
     const row = openAttachment[1];
     const col = openAttachment[0];
     if (e.target.files[0] != null) {
+      dispatch(
+        updateCells({
+          columnId: fields[col]?.id,
+          rowIndex: dataa[row][`fld${tableId.substring(3)}autonumber`],
+          value: e.target?.files[0],
+          imageLink: imageLink,
+          dataTypes: type,
+          indexIdMapping: {
+            [dataa[row][`fld${tableId.substring(3)}autonumber`]]: row,
+          },
+        })
+      ).then(() => {
+        toast.success("Image uploaded successfully!");
+      });
       dispatch(
         updateCells({
           columnId: fields[col]?.id,
@@ -141,6 +162,8 @@ export default function MainTable(props) {
   };
 
   const createLeftorRightColumn = () => {
+    if(params?.templateId) return;
+
     if (
       directionAndId.direction == "left" ||
       directionAndId.direction == "right"
@@ -197,21 +220,44 @@ export default function MainTable(props) {
   };
 
   useEffect(() => {
+
     var newcolumn = [];
     fields1.forEach((column) => {
-      if (column?.metadata?.hide != true) {
+      if (column?.metadata?.hide !== true) {
         newcolumn.push(column);
       }
     });
+  
+    const targetIndex = newcolumn.findIndex((field) => {
+      const dataType = field.dataType;
+      return (
+        dataType !== "autonumber" &&
+        dataType !== "createdat" &&
+        dataType !== "createdby" &&
+        dataType !== "rowid" &&
+        dataType !== "updatedby" &&
+        dataType !== "updatedat"
+      );
+    });
+  
+    if (targetIndex !== -1) {
+      setTargetColumn(targetIndex);
+    }
+  
     setFields(newcolumn);
   }, [fields1]);
+  
 
   const addRows = () => {
+    if(params?.templateId) return;
+
     addRow(dispatch);
   };
 
   const reorder = useCallback(
     (item, newIndex) => {
+      if(params?.templateId) return;
+
       reorderFuncton(
         dispatch,
         item,
@@ -227,6 +273,8 @@ export default function MainTable(props) {
 
   const handleRowMoved = useCallback(
     (from, to) => {
+      if(params?.templateId) return;
+
       reorderRows(from, to, data, setData);
     },
     [data, setData]
@@ -234,6 +282,7 @@ export default function MainTable(props) {
 
   const onCellEdited = useCallback(
     (cell, newValue) => {
+      if(params?.templateId) return;
       if(fields[cell[0]]?.dataType == "attachment") return;
       if (fields[cell[0]]?.dataType == "multipleselect") {
         editmultipleselect(newValue, dataa[cell[1]][fields[cell[0]]?.id] || [], cell);
@@ -260,6 +309,7 @@ export default function MainTable(props) {
     [dataa,fields,selection]
   );
  const handleColumnResizeWithoutAPI=useCallback((_,newSize,colIndex)=>{
+
   let newarrr = [...(fields || fields1)];
   let obj = Object.assign({}, newarrr[colIndex]);
   obj.width = newSize;
@@ -267,7 +317,8 @@ export default function MainTable(props) {
   setFields(newarrr);
  });
   const handleColumnResize = (field, newSize) => {
-    
+      if(params?.templateId) return;
+
     dispatch(
       updateColumnHeaders({
         filterId: params?.filterName,
@@ -279,6 +330,8 @@ export default function MainTable(props) {
     );
   };
   const editmultipleselect = (newValue, oldValuetags, cell) => {
+    if(params?.templateId) return;
+
     if (!fields[cell[0]]?.id) return;
     const newValuetags = newValue.data.tags;
     const addedTags = newValuetags.filter((tag) => !oldValuetags.includes(tag));
@@ -310,7 +363,9 @@ export default function MainTable(props) {
   };
 
   const validateCell = useCallback(
+
     (cell, newValue) => {
+      if(params?.templateId) return;
 
       if (newValue.kind === "number") {
         if (newValue?.data?.toString().length < 13 || !newValue?.data) {
@@ -322,6 +377,8 @@ export default function MainTable(props) {
   );
 
   const handleDeleteRow = (selection) => {
+    if(params?.templateId) return;
+
     if (selection.current) {
       return;
     }
@@ -343,6 +400,7 @@ export default function MainTable(props) {
   };
 
   const onHeaderMenuClick = useCallback((col, bounds) => {
+    if(params?.templateId) return;
     
     setMenu({ col, bounds });
   }, []);
@@ -388,8 +446,6 @@ export default function MainTable(props) {
           if(d!==null && dataType === "updatedat")
           updatedtime=new Date(d*1000)
           
-          console.log("updatedtime",updatedtime)
-        
           return {
             kind: GridCellKind.Text,
             allowOverlay: true,
@@ -653,12 +709,14 @@ export default function MainTable(props) {
 
  
 const handleRightClickOnHeader=useCallback((col,event)=>{
+  if(params?.templateId) return;
+
   event.preventDefault();
   setMenu({col,bounds:event.bounds});
 })
   
   const getRowThemeOverride=(row)=>{
-    if(row!=hoveredRow) return;
+   if(row!=hoveredRow || open==true || menu!=null) return;
     return { bgCell: "rgba(62, 116, 253, 0.1)",bgCellMedium: "#DCEFFB"};
   }
   
@@ -685,9 +743,9 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
             }}
             onClick={() => handleDeleteRow(selection)}
           >
-            <div style={{ marginTop: "5px" }}>Delete Rows</div>
+            <div className="deleterows">Delete Rows</div>
             <div>
-              <DeleteOutlineIcon />
+              <DeleteOutlineIcon className="deletecolor"/>
             </div>
           </button>
         )}
@@ -737,14 +795,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
             sticky: true,
             tint: true,
             hint: "New row...",
-            targetColumn: realCols.length - 1,
-            render: () => (
-              <select className="dropdown">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                {/* Add more options as needed */}
-              </select>
-            ),
+            targetColumn: targetColumn,
             // targetColumn: 4
           }}
         />
