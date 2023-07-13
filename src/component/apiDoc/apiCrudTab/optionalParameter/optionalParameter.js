@@ -194,7 +194,8 @@ const classes = useStyles();
         <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant} style={{ paddingTop: '20px' }}>
           Where
         </Typography>
-        <Typography style={{ paddingBottom: '4px' }}>{`"filter" conditions in the APIs enable you to retrieve specific records that meet specific criteria. By applying "filter" conditions, you can refine the results based on specific field values or patterns.
+<Typography sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+       {`"filter" conditions in the APIs enable you to retrieve specific records that meet specific criteria. By applying "filter" conditions, you can refine the results based on specific field values or patterns.
 To implement a filter condition in the APIs, you can include the "filter" parameter in your API request. The "filter" parameter accepts formula expressions that can include various operators and functions, allowing you to create complex filter conditions. You can utilize logical operators such as "AND," "OR," and "NOT" to combine multiple conditions. Additionally, comparison operators like "=", ">", "<," and functions like "FIND()," "LEN()," and "IS_BEFORE()" can be used to specify precise criteria for filtering.`}</Typography>
       
       <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant} style={{ paddingTop: '20px' }}>
@@ -239,7 +240,8 @@ Still need help? Ask AI to generate your Filter condition
             <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} style={{ paddingTop: '8px' }}>
               Fields to show
             </Typography>
-            <Typography>
+            <Typography sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+
            {` The "Fields to show" parameter in the List Record API enables you to precisely define which fields you wish to receive in the response.
 To utilize the "Fields to show" parameter, simply include it as a query parameter in your API request. Specify the desired field names or field IDs as a comma-separated list. The API response will only contain the specified fields, excluding all others.
 Here's an example of utilizing the "Fields to show" parameter in the API.`}
@@ -289,7 +291,8 @@ Here's an example of utilizing the "Fields to show" parameter in the API.`}
             <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} style={{ paddingTop: '8px' }}>
               Sort by, Limit and Offset
             </Typography>
-            <Typography>{`The API provides a list of sort objects to define the order in which records will be arranged. Each sort object should include a field key that indicates the field name for sorting. Additionally, you can optionally include a direction key with a value of either "asc" (ascending) or "desc" (descending) to specify the sorting direction. By default, the sorting direction is set to "asc".
+            <Typography sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+{`The API provides a list of sort objects to define the order in which records will be arranged. Each sort object should include a field key that indicates the field name for sorting. Additionally, you can optionally include a direction key with a value of either "asc" (ascending) or "desc" (descending) to specify the sorting direction. By default, the sorting direction is set to "asc".
 
 By default, the limit of records is set to 100. If there are additional records beyond this limit, the response will include an OFFSET value. To retrieve the next page of records, include the offset value as a parameter in your subsequent request. The pagination process will continue until you have reached the end of your table.`}</Typography>
 

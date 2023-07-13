@@ -38,11 +38,12 @@ const response=`
           response={response}
         />
       </div>
-      <div style={{width:'55vw',overflowX:"hidden"}}>
+      <div style={{width:'53vw',overflowX:"hidden"}}>
       
       <div className="records-container">
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
-        <Typography  fontSize={variables.textsize} >
+        <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+
         To create a new record, you need to make a POST request to the given endpoint.
 Generate array of fields according to your use case. to make a single entry,  you have to use single array . </Typography>
 <br/>
