@@ -49,8 +49,9 @@ function ListRecord(props) {
   <br />
   {`Additionally, you have the flexibility to filter, sort, and format the results by using the available query parameters.`}
   <br />
-  <OptionalParameter alltabledata={props?.alltabledata} parent="listrecord" db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
 </Typography>
+<OptionalParameter alltabledata={props?.alltabledata} parent="listrecord" db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
+
 
         <br/>
    </div>

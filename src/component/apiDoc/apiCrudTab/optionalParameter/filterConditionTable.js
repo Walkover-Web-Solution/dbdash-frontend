@@ -171,6 +171,7 @@ Example
                 </Typography>
                 <a href="#querytextarea">
                 <Button className="mui-button-outlined  add-button"
+                
                 onClick={() =>{  
                   const string=filter[row.filterCondition]+row.example;
                   handleRowCheckboxClick(string)}}

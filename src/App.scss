@@ -41,7 +41,7 @@ color:$errorcolor !important;
 }
 .popupheader{
   height: 4vh !important;
-  background-color: #F0F0F0 !important;
+  background-color: $codeblockbgcolor !important;
   display: flex !important;
   justify-content: space-between !important;
   padding: '2' !important;

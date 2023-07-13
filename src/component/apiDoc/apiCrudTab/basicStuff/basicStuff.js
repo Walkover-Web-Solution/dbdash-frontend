@@ -2,12 +2,12 @@ import React, {  useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+// import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import './basicStuff.scss'; // Import the CSS file
 import variables from '../../../../assets/styling.scss';
 import Records from '../records/records';
 import CodeBlock from '../Codeblock/Codeblock';
-
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 function BasicStuff(props) {
   const [copiedIndex, setCopiedIndex] = useState(null);
 
@@ -35,7 +35,7 @@ function BasicStuff(props) {
         onMouseUp={handleMouseUp}
         onClick={handleClick}
       >
-        <ContentPasteIcon className="color-black"/>
+        <ContentCopyOutlinedIcon className="color-black"/>
         {copiedIndex === index && <span className="copied-text">Copied!</span>}
       </span>
     );
@@ -74,7 +74,7 @@ DB-Dash supports basic authentication at the database level.
       <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}> <span>Table Id - {props.table}</span> <span>{CopyButton(props.table, -2)}</span></div>   
       </Typography>
       <br />
-      <div style={{ width: '50vw', height: '15vh', backgroundColor: '#F0F0F0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ width: '50vw', height: '15vh', backgroundColor: variables.codeblockbgcolor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <Typography sx={{ justifyContent:'center',width:'100%',pl:2}}>
     curl -X GET &apos;https://dbdash-backend-h7duexlbuq-el.a.run.app/<br/><span style={{color: "#028a0f"}}>YOUR_DATABASE_ID</span>/<span style={{color: "#028a0f"}}>YOUR_TABLE_ID</span>&apos;<br/>
     -H &apos; <span  style={{color: variables.deletecolor}}>auth-key: AUTH_TOKEN</span>&apos;

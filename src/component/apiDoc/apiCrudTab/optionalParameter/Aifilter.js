@@ -25,7 +25,7 @@ export default function AiFilter(props)  {
   };
 
   const headerStyle = {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: variables.codeblockbgcolor,
     padding: '10px',
   };
 
@@ -86,8 +86,9 @@ export default function AiFilter(props)  {
             className='mui-button-outlined'
             sx={{
               fontSize: variables.editfilterbutttonsfontsize,
-              backgroundColor:'#f0f0f0',
-              marginLeft: text === ''?'5px':'0px' // Adjust the margin left as needed
+              backgroundColor:variables.codeblockbgcolor,
+              marginLeft: text === ''?'5px':'0px',
+              height:'5vh' // Adjust the margin left as needed
             }}
             style={{ width: '200px', padding: '14.2px' }}
           >

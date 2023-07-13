@@ -25,7 +25,7 @@ const records=()=>{
     {"       {\n"}
     {props.body.map((x, index) => (
       <span key={index}>
-        <span contentEditable={true} >{`"${x[0]}"`}</span>
+        &quot;<span contentEditable={true} className="blue" >{x[0]}</span>&quot;
         <span >: </span>
         {x[1] === "number" || x[1] === "autonumber" ? (
           <span contentEditable={true} >{`${dummy(x[1])}`}</span>
@@ -194,9 +194,10 @@ const records=()=>{
             typeof props.body === "object" &&
             props.body.length > 0 && (
               <code >
-                {"-data{\n"}
+            {"-data{\n"}
                 {renderBody()}
                 {"   }"}
+           
               </code>
             )}
         </pre>
@@ -228,7 +229,7 @@ const records=()=>{
             typeof props.body === "object" &&
             props.body.length > 0 && (
               <code >
-                {" -d '{\n"}
+              {" -d '{\n"}
                 {renderBody()}
                 {"   }' "}
               </code>

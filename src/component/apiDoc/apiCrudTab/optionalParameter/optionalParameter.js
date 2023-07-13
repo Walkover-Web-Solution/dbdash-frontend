@@ -97,7 +97,7 @@ const classes = useStyles();
   }, [props.db, props.table]);
 
   useEffect(() => {
-    let queryParams = '';
+    let queryParams = querymade;
 
     if (text && props?.parent=='updaterecord') {
       queryParams += `${text.trim()}`;
@@ -121,12 +121,22 @@ const classes = useStyles();
     }
     if (fieldtosort) {
       queryParams += `${queryParams ? '&' : ''}sort=${fieldtosort}='${descending}'`;
+
     }
 
-    if (props?.age) {
+   if (props?.age) {
+    if (queryParams.includes('limit=')) {
+      queryParams = queryParams.replace(/limit=\d+/, `limit=${props.age}`);
+    } else {
       queryParams += `${queryParams ? '&' : ''}limit=${props.age}`;
     }
+}
+
     if (offset) {
+      if (queryParams.includes('offset=')) {
+        queryParams = queryParams.replace(/offset=\d+/, `offset=${offset}`);
+      }
+      else
       queryParams += `${queryParams ? '&' : ''}offset=${offset}`;
     }
 
@@ -146,22 +156,17 @@ const classes = useStyles();
     setFieldtosort(e.target.value);
   };
 
-  // const handleTextChange = (text, html) => {
-  //   setText(text.trim());
-  //   setHtml(html);
-  //   setText(text);
-  // };
-
+  
   const handleChange = (e) => {
     const selectedAge = e.target.value;
-    if (e.target.value <= 2000) {
+    if (e.target.value>=0 && e.target.value <= 2000) {
       props?.setAge(selectedAge.trim());
     }
   };
 
   const handleChangeOffset = (e) => {
     const off = e.target.value;
-    if (e.target.value <= 2000) {
+    if (e.target.value>=0 && e.target.value <= 2000) {
       setOffset(off.trim());
     }
   };
@@ -197,7 +202,7 @@ To implement a filter condition in the APIs, you can include the "filter" parame
         </Typography>
 <div style={{display:'flex',justifyContent:'center'}}>
 
-        <div style={{ width: '50vw', height: '15vh', backgroundColor: '#F0F0F0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ width: '50vw', height: '15vh', backgroundColor: variables.codeblockbgcolor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <Typography sx={{ justifyContent:'center',width:'100%',pl:2}}>
   GET `https://dbdash-backend-h7duexlbuq-el.a.run.app/<span style={{color: "#028a0f"}}>Your_DataBase_ID</span>/<span style={{color: "#028a0f"}}>Your_Table_ID</span>? <span style={{color: "#028a0f"}}>filter=FieldID1 != `John`</span>`</Typography>
 </div>
@@ -242,7 +247,7 @@ Here's an example of utilizing the "Fields to show" parameter in the API.`}
             </Typography>
 <div style={{display:'flex',justifyContent:'center'}}>
 
-            <div style={{ width: '50vw', height: '15vh', backgroundColor: '#F0F0F0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ width: '50vw', height: '15vh', backgroundColor:variables.codeblockbgcolor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <Typography sx={{ justifyContent:'center',width:'100%',pl:2}}>
   GET `https://dbdash-backend-h7duexlbuq-el.a.run.app/<span style={{color: "#028a0f"}}>Your_DataBase_ID</span>/<span style={{color: "#028a0f"}}>Your_Table_ID</span>? <span style={{color: "#028a0f"}}>fields=field1,field2,field3</span>`
   <br/>
