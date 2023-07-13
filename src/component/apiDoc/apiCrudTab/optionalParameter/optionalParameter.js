@@ -319,7 +319,7 @@ By default, the limit of records is set to 100. If there are additional records 
               </FormControl>
 
               {fieldtosort !== '' && (
-                <FormControl sx={{ m: 1,mt:2 }} className={` ${classes.formControl}`} >
+                <FormControl sx={{ m: 1}} className={` ${classes.formControl}`} >
                   <Select
                     value={descending}
                     onChange={(e) => setDescending(e.target.value)}
