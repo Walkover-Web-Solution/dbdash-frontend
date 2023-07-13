@@ -104,7 +104,7 @@ let dbname = '';
           fontFamily={variables.fontFamily}
           sx={{paddingBottom:0.85}} 
           fontSize={Number(variables.titlesize)}
-          color={variables.mainnavbartextcolor}
+          color={variables.mainnavbartextcolor} 
         >
           {props?.dbData?.db.name || dbname}
         </Typography>

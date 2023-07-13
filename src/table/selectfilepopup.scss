@@ -1,0 +1,46 @@
+.carousel-container {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: scroll !important;
+    scroll-snap-type: x mandatory !important;
+  }
+  
+  .carousel-image {
+    flex: 0 0 100% !important;
+    scroll-snap-align: start !important;
+    transition: transform 0.3s ease !important;
+  }
+  
+  .carousel-image.active {
+    transform: translateX(0%) !important;
+  }
+  
+  .modal-button-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  .modal-button-container button {
+    margin: 0 5px !important;
+  }
+  
+  .mui-button-outlined {
+    margin-left: 10px !important;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .carousel-container {
+      flex-wrap: nowrap !important;
+      scroll-snap-type: x mandatory !important;
+    }
+  
+    .carousel-container::-webkit-scrollbar {
+      display: none !important;
+    }
+  
+    .carousel-image {
+      flex: 0 0 100% !important;
+    }
+  }
+  
