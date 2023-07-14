@@ -253,7 +253,7 @@ useEffect(() => {
          
         </Box>
         <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap'}}   >
-        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden',marginRight:'5px'}}>
+        <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden'}}>
         <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*89)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
           {AllTableInfo[params?.tableName]?.filters &&
             Object.entries(AllTableInfo[params?.tableName]?.filters).map(
@@ -312,7 +312,7 @@ useEffect(() => {
       
        )}
    <div style={{display:'flex',justifyContent:'flex-start'}}>   
-   <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'space-between',width: params.filterName ? `${(window.screen.width*32)/100}px`: `${(window.screen.width*18)/100}px`}}>
+   <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'space-between',width: params.filterName ? `${(window.screen.width*30)/100}px`: `${(window.screen.width*15)/100}px`}}>
           {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
           <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}} onClick={handleClickOpenManageField}>Manage Fields</Button>
                   

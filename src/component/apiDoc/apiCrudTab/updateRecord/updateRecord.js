@@ -34,7 +34,7 @@ function UpdateRecord(props) {
         <ResponseBox response={response} />
       </div>
 
-<div style={{width:'55vw',overflowX:'hidden'}}>
+<div style={{width:'53vw',overflowX:'hidden'}}>
       <div className="response-container"  >
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Update Records</Typography>
         <Typography  fontSize={variables.textsize} sx={{pl:2}}>
@@ -72,7 +72,8 @@ Note: In the given example, it will search for all occurrences of JOHN in FieldI
 
       {`Fileds to be updated: `}
         </Typography>
-        <Typography>
+        <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+
      {`Please select the fields/columns that need to be updated.
 Note: If you provide "NULL" ("FieldID1": "NULL") or leave it blank ("FieldID1": ""), the API will update the field with null or blank values. Therefore, please ensure that you only use the field names that you want to update.`}   </Typography>
         <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}

@@ -126,10 +126,10 @@ props?.setQuerymade("filter="+textAfterWhere1);
           </Button>
           </div>
     </Box>
-         
+         {console.log(props.querymade,"")}
         </div>
         <br/>
-       <textarea value={textAfterWhere||props?.querymade} id={'querytextarea'} onChange={props?.changeQueryMade} style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>
+       <textarea value={props?.querymade||textAfterWhere} id={'querytextarea'} onChange={props?.changeQueryMade} style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button className="mui-button" onClick={props?.handleUse} variant="contained">
             Use

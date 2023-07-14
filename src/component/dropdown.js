@@ -47,8 +47,8 @@ e.preventDefault();
 
           <Menu
           
-            sx={{ mt: '45px' }}
             id="menu-appbar"
+            sx={{mt:'17px'}}
             anchorEl={anchorElUser}
             anchorOrigin={{
               vertical: 'top',

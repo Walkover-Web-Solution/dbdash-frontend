@@ -27,10 +27,10 @@ const records=()=>{
       <span key={index}>
         &quot;<span contentEditable={true} className="blue" >{x[0]}</span>&quot;
         <span >: </span>
-        {x[1] === "number" || x[1] === "autonumber" ? (
-          <span contentEditable={true} >{`${dummy(x[1])}`}</span>
+        {x[1] === "numeric" || x[1] === "autonumber" ? (
+          <span contentEditable={true} style={{color:'#013220 '}}>{`${dummy(x[1])}`}</span>
         ) : (
-          <span contentEditable={true} >{`"${dummy(x[1])}"`}</span>
+          <span contentEditable={true} style={{color:'#7a2048'}} >{`"${dummy(x[1])}"`}</span>
         )}
         <span >,</span>
         <br />
@@ -66,20 +66,20 @@ const records=()=>{
           {" [\n       {\n"}
           <span>{`                   "where"`}</span>
           <span >: </span>
-          <span>{`"${props?.where}"`}</span>
+         &quot; <span style={{color:'#ab4b52'}}>{`${props?.where}`}</span>&quot;
           <span >,</span>
           {"\n"}
           <span>{`                   "fields"`}</span>
           <span >: </span>
           {"{\n"}
-          {props.body.map((x, index) => (
+          {props?.body?.map((x, index) => (
             <span key={index}>
-              <span contentEditable={true} >{`"${x[0]}"`}</span>
+              <span contentEditable={true} className="blue" >{`"${x[0]}"`}</span>
               <span >: </span>
-              {x[1] === "number" || x[1] === "autonumber" ? (
-                <span contentEditable={true} >{`${dummy(x[1])}`}</span>
+              {x[1] === "numeric" || x[1] === "autonumber" ? (
+                <span contentEditable={true} style={{color:'#013220 '}} >{`${dummy(x[1])}`}</span>
               ) : (
-                <span contentEditable={true} >{`"${dummy(x[1])}"`}</span>
+                <span contentEditable={true}  style={{color:'#7a2048'}} >{`"${dummy(x[1])}"`}</span>
               )}
               <span >,</span>
               <br />
@@ -96,12 +96,12 @@ const records=()=>{
       <>
         {props.body.map((x, index) => (
           <span key={index}>
-            <span contentEditable={true} >{`" ${x[0]} "`}</span>
+            <span contentEditable={true} className="blue"  >{`" ${x[0]} "`}</span>
             <span >: </span>
-            {x[1] === "number" || x[1] === "autonumber" ? (
-              <span contentEditable={true} >{` ${dummy(x[1])} `}</span>
+            {x[1] === "numeric" || x[1] === "autonumber" ? (
+              <span contentEditable={true} style={{color:'#013220 '}} >{` ${dummy(x[1])} `}</span>
             ) : (
-              <span contentEditable={true} >{`" ${dummy(x[1])} "`}</span>
+              <span contentEditable={true}  style={{color:'#7a2048'}}>{`" ${dummy(x[1])} "`}</span>
             )}
             <span >,</span>
             <br />
@@ -113,7 +113,7 @@ const records=()=>{
 
   const dummy = (type) => {
     switch (type) {
-      case "number":
+      case "numeric":
         return 124553;
       case "rowid":
         return "row34";
@@ -190,9 +190,9 @@ const records=()=>{
 </code>
           <br />
 
-          {props.body &&
-            typeof props.body === "object" &&
-            props.body.length > 0 && (
+          {((props.body &&
+            typeof props.body === "object") || (props.where))  && 
+           ( props.where || props.body.length > 0) && (
               <code >
             {"-data{\n"}
                 {renderBody()}
