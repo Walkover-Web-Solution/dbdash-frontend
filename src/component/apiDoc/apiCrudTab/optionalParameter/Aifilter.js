@@ -15,6 +15,8 @@ export default function AiFilter(props)  {
     const [textAfterWhere, setTextAfterWhere] = useState();
   const [fields, setFields] = useState([]);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+
+
   console.log(html,text)
 
 //   const [defaultValue, setDefaultValue] = useState(
@@ -129,7 +131,17 @@ props?.setQuerymade("filter="+textAfterWhere1);
          {console.log(props.querymade,"")}
         </div>
         <br/>
-       <textarea value={props?.querymade||textAfterWhere} id={'querytextarea'} onChange={props?.changeQueryMade} style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>
+        
+       <textarea ref={props?.textfieldref} value={props?.querymade||textAfterWhere} id={'querytextarea'} onChange={(e)=>{
+        props?.changeQueryMade(e);
+        setTextAfterWhere(e.target.value)
+       }} 
+       onKeyUp={(e) => {
+    if (e.key === 'Enter') {
+      props?.handleUse();
+    }
+  }}
+       style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button className="mui-button" onClick={props?.handleUse} variant="contained">
             Use
@@ -145,6 +157,7 @@ AiFilter.propTypes = {
     handleUse:PropTypes.any,
     querymade:PropTypes.any,
     setQuerymade:PropTypes.any,
+    textfieldref:PropTypes.any,
     changeQueryMade:PropTypes.any,
     dbId:PropTypes.any
   };

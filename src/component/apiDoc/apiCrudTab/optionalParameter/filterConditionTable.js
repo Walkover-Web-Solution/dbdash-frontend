@@ -126,13 +126,13 @@ props?.setSelectedRows(event.target.value+text);
   return (
     <Table style={{ width: "80%", borderCollapse: "collapse" }}>
       <TableHead>
-      <TableCell style={{ padding: "8px", border: "1px solid #000" }}>
+      <TableCell style={{ padding: "8px", border: "1px solid #000" ,backgroundColor:'#F0F0F0'}}>
 Filter Conditions            
 </TableCell>
-<TableCell style={{ padding: "8px", border: "1px solid #000" }}>
+<TableCell style={{ padding: "8px", border: "1px solid #000" ,backgroundColor:'#F0F0F0'}}>
 Purpose            
 </TableCell>
-<TableCell style={{ padding: "8px", border: "1px solid #000" }}>
+<TableCell style={{ padding: "8px", border: "1px solid #000",backgroundColor:'#F0F0F0' }}>
 Example            
 </TableCell>
 
@@ -169,14 +169,15 @@ Example
                 <Typography style={{ marginLeft: "8px" }}>
                   {row.example}
                 </Typography>
-                <a href="#querytextarea">
                 <Button className="mui-button-outlined  add-button"
                 
                 onClick={() =>{  
                   const string=filter[row.filterCondition]+row.example;
-                  handleRowCheckboxClick(string)}}
+                  handleRowCheckboxClick(string)
+                  props?.textfieldref.current?.scrollIntoView({behavior:'smooth'});
+                  }}
+             
                 >Add</Button>
-                </a>
               </div>
               
             </TableCell>
@@ -192,6 +193,7 @@ FilterConditionTable.propTypes = {
   alltabledata: PropTypes.any,
   table: PropTypes.string,
   selectedRows:PropTypes.any,
+  textfieldref:PropTypes.any,
   setSelectedRows:PropTypes.any,
   db: PropTypes.string,
 };

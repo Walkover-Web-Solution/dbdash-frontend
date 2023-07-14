@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PropTypes } from 'prop-types';
 import {
   Typography,
@@ -56,6 +56,7 @@ function OptionalParameter(props) {
   ] = useState('');
   const [fieldtosort, setFieldtosort] = useState('');
   const [offset, setOffset] = useState('');
+  const textfieldref=useRef();
   const [descending, setDescending] = useState('asc');
   const [selectedFields, setSelectedFields] = useState(['all']);
   const [selectedRows, setSelectedRows] = useState("");
@@ -213,14 +214,14 @@ To implement a filter condition in the APIs, you can include the "filter" parame
 Select the column name and click on the CheckBox to generate API on the right side.
 </Typography>
 <div style={{display:'flex',justifyContent:'center'}}>
-<FilterConditionTable selectedRows={selectedRows} setSelectedRows={setSelectedRows} alltabledata={props?.alltabledata} table={props?.table} db={props?.db}/>
+<FilterConditionTable textfieldref={textfieldref} selectedRows={selectedRows} setSelectedRows={setSelectedRows} alltabledata={props?.alltabledata} table={props?.table} db={props?.db}/>
 </div>
 <Typography sx={{pt:'20px'}} >
 Still need help? Ask AI to generate your Filter condition
             </Typography>
 <div style={{display:'flex',justifyContent:'center'}}>
 
-            <AiFilter handleUse={handleUse} changeQueryMade={changeQueryMade} querymade={querymade} setQuerymade={setQuerymade} tableName={props?.table} dbId={props?.db}/>
+            <AiFilter  textfieldref={textfieldref} handleUse={handleUse} changeQueryMade={changeQueryMade} querymade={querymade} setQuerymade={setQuerymade} tableName={props?.table} dbId={props?.db}/>
      </div>
         {/* <div style={{marginLeft:'1%'}}>
         <CustomAutoSuggest

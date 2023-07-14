@@ -28,25 +28,34 @@ export default function AuthKey(props) {
 
   function getCreatedByName(data) {
     var array = [];
-    Object.entries(Object.values(data)).map((key) => {
-      user.map((user) => {
-        user?.users?.map((id) => {
-          if (id?.user_id?._id === key[1].user) {
-            array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
-          }
-        });
+    if (data && data.data) {
+      Object.entries(data.data)?.map((key) => {
+        if (key[1]?.user && Array.isArray(user)) {
+          user?.map((user) => {
+            if (user.users && Array.isArray(user.users)) {
+              user.users?.map((id) => {
+                if (id?.user_id?._id == key[1]?.user) {
+                  array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
+                }
+              });
+            }
+          });
+        }
       });
-    });
+    }
     props?.setCreatedBy(array);
   }
+  
   async function getAuthkeyFun() {
-    const data = await getAuthkey(props.dbId, adminId);
-    props.setAuthKeys(data?.data?.data);
-    getCreatedByName(data?.data?.data);
+    const data = await getAuthkey(props?.dbId, adminId);
+    if (data?.data?.data) {
+      props?.setAuthKeys(data.data.data);
+      getCreatedByName(data.data.data);
+    }
   }
-
+  
   async function deleteAuthkeyFun(authKey) {
-    const data = await deleteAuthkey(props.dbId, adminId, authKey);
+    const data = await deleteAuthkey(props?.dbId, adminId, authKey);
     props?.setAuthKeys(data?.data?.data?.auth_keys);
     return data?.data?.data?.auth_keys;
   }
@@ -135,7 +144,7 @@ export default function AuthKey(props) {
             </TableHead>
             <TableBody>
               {props.authKeys &&
-                Object.keys(props?.authKeys).map((keys, index) => (
+                Object.keys(props?.authKeys)?.map((keys, index) => (
                   <TableRow
                     key={keys}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -166,17 +175,17 @@ export default function AuthKey(props) {
                       props.authKeys[keys].access === "11" ? (
                         <div>all</div>
                       ) : (
-                        Object.keys(props?.authKeys[keys]?.access).map((key) => (
+                        Object.keys(props?.authKeys[keys]?.access)?.map((key) => (
                           <div key={key}>{key}</div>
                         ))
                       )}
                     </TableCell>
                     <TableCell>
   {props.authKeys[keys].access === "1" || props.authKeys[keys].access === "11" ? (
-    <div>{props.authKeys[keys].scope}</div>
+    <div>{props?.authKeys[keys]?.scope}</div>
   ) : (
     Object.entries(props.authKeys[keys].access).map(([key,value]) => (
-      <div key={key}>{value.scope}</div>
+      <div key={key}>{value?.scope}</div>
     ))
     
   )}
@@ -184,7 +193,7 @@ export default function AuthKey(props) {
 
                     <TableCell>
                       <TableMenuDropdown
-                        authData={props.authKeys[keys]}
+                        authData={props?.authKeys?.[keys]}
                         getCreatedByName={getCreatedByName}
                         first={"Edit"}
                         second={"Delete"}
