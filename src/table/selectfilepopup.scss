@@ -1,8 +1,27 @@
-.carousel-container {
+ @import '../assets/styling.scss';
+ .carousel-container {
     display: flex !important;
     flex-direction: row !important;
     overflow-x: scroll !important;
     scroll-snap-type: x mandatory !important;
+  }
+  .transparent-blur-background {
+    color:$errorcolor  !important;
+    position: absolute !important;
+    top:8% !important;
+    right: 9% !important;
+    z-index: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: $tablepagefontsize !important;
+    background-color: $bgColorValue !important;
+    
+    padding: 1px 5px !important;
+    border-radius: 2.5px !important;
+
+  }
+  .transparent-blur-background:hover{
+background-color:blanchedalmond !important;
   }
   
   .carousel-image {
@@ -43,4 +62,4 @@
       flex: 0 0 100% !important;
     }
   }
-  
+ 

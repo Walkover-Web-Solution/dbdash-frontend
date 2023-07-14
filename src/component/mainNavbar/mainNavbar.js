@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import image from '../../assets/images/db-dash.svg';
 import { selectActiveUser } from '../../store/user/userSelector.js';
 import { UserAuth } from '../../context/authContext.js';
 import variables from '../../assets/styling.scss';
@@ -92,9 +92,11 @@ let dbname = '';
     <Container className="main-navbar-container" maxWidth="false">
       <Box>
         <Link to="/dashboard" className="main-navbar-link">
-          <Typography variant={variables.homebuttonvariant} component="span" className="main-navbar-title">
+          {/* <Typography variant={variables.homebuttonvariant} component="span" className="main-navbar-title">
             dbDash
-          </Typography>
+          </Typography> */}
+
+          <img src={image} height='20px' className='main-navbar-title'/>
         </Link>
       </Box>
 

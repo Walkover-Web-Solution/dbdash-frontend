@@ -9,8 +9,11 @@ import {
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import './selectfilepopup.scss';
+// import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { makeStyles } from "@mui/styles";
 import { Select, MenuItem } from "@mui/material";
+// import { updateCells } from "../store/table/tableThunk";
+// import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles({
   input: {
@@ -38,6 +41,8 @@ const style = {
 
 export default function SelectFilePopup(props) {
   const classes = useStyles();
+  // const dispatch=useDispatch();
+  console.log("propsss",props);
   const [uploadOption, setUploadOption] = useState("file");
   const handleClose = () => {
     
@@ -47,6 +52,17 @@ export default function SelectFilePopup(props) {
     props.onChangeFile(e, "file");
     handleClose();
   };
+
+//    const deleteImage = async(imageUrl)=>{
+//     dispatch(
+//       updateCells({
+//          columnId: props?.attachment?.fieldId,
+// rowIndex: props?.attachment?.rowAutonumber,
+//         value: {delete:imageUrl},
+//        dataTypes: null
+//          })
+//      )
+//  }
 
   const handleSelectChange = (event) => {
     props?.setImageLink('');
@@ -80,32 +96,43 @@ export default function SelectFilePopup(props) {
               flexDirection: "column",
             }}
           >
-           { props?.attachment?.d?.length>0 && <div style={{height:'32vh',overflowY:'hidden',margin:'0.6rem'}}>
-            <div
-              className="carousel-container"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                overflowX: "scroll",
-                scrollBehavior: "smooth",
-                paddingBottom:'50px'
-              }}
-            >
-              {props?.attachment?.d?.map((link, index) => (
-               <Box key={index} sx={{ p: 2, height: "30vh", width: "40vw" }}>
-               <a href={link} target="_blank" rel="noopener noreferrer">
-                 <img
-                   height={"100%"}
-                   className={`carousel-image `}
-                   src={link}
-                   alt={`Image ${index + 1}`}
-                 />
-               </a>
-             </Box>
-             
-              ))}
-            </div>
-            </div>}
+
+{props?.attachment?.d?.length > 0 && (
+  <div style={{ height: '32vh', overflowY: 'hidden', margin: '0.6rem' }}>
+    <div
+      className="carousel-container"
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        overflowX: 'scroll',
+        scrollBehavior: 'smooth',
+        paddingBottom: '50px'
+      }}
+    >
+      {props?.attachment?.d?.map((link, index) => (
+        <Box key={index} sx={{ p: 2, height: '30vh', width: 'fit-content', position: 'relative' }}>
+          <a href={link} target="_blank" rel="noopener noreferrer">
+            <img
+              height={'100%'}
+              className={`carousel-image `}
+              src={link}
+              alt={`Image ${index + 1}`}
+            />
+            {/* <div className="transparent-blur-background " onClick={(e)=>{
+              e.stopPropagation();
+              e.preventDefault();
+              deleteImage(link)}} >
+              Delete
+            <DeleteOutlinedIcon  sx={{fontSize:'15px'}} />
+          </div> */}
+          </a>
+          
+        </Box>
+      ))}
+    </div>
+  </div>
+)}
+
 <Typography sx={{m:2}} variant="h6" component="h2" textAlign={'center'}>Upload a file</Typography>
             <div
               style={{

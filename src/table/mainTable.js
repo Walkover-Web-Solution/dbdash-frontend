@@ -84,10 +84,10 @@ export default function MainTable(props) {
     if (
       fields?.[index]?.dataType === "attachment"
     ) {
-      setOpenAttachment({cell,d});
+      setOpenAttachment({cell,d,fieldId:fields?.[col]?.id,rowAutonumber: dataa[row][`fld${tableId.substring(3)}autonumber`]});
 
     }
-  });
+  },[fields]);
   document.addEventListener(
     "keydown",
     React.useCallback((event) => {
