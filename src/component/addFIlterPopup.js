@@ -122,7 +122,7 @@ export default function AddFilterPopup(props) {
     setDefaultValue(applyFilter?.data?.data);
 
     setText2(applyFilter?.data?.data);
-    // setHtml2(applyFilter?.data?.data);
+    setHtml2(applyFilter?.data?.data);
 
   //   const query = applyFilter?.data?.data;
   //   const searchString = "WHERE";
