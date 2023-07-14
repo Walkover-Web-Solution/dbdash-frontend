@@ -74,7 +74,6 @@ export default function Headermenu(props) {
   useEffect(() => {
   setHeader(props?.fields[props?.menu?.col]?.title);
   }, [props?.menu?.col])
-  console.log("clkhflj",props?.fields);
 
   const dataType = props?.fields[props?.menu?.col]?.dataType;
   const handleDelete=()=>{dispatch(

@@ -17,7 +17,6 @@ const Msg91bi_id_page = () => {
       notify()
     } else {
       // Show an error message or handle the case when the value is not valid
-      console.log('Textarea value must be more than three characters.');
       const notify = () => toast.error('Textarea value must be more than three characters.');
       notify()
     }
