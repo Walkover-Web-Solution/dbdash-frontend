@@ -1,0 +1,62 @@
+@import '../assets/styling.scss';
+.carousel-container {
+   display: flex !important;
+   flex-direction: row !important;
+   overflow-x: scroll !important;
+   scroll-snap-type: x mandatory !important;
+ }
+ .transparent-blur-background {
+   color:$errorcolor  !important;
+   position: absolute !important;
+   top:8% !important;
+   right: 9% !important;
+   z-index: 1 !important;
+   display: flex !important;
+   align-items: center !important;
+   font-size: $tablepagefontsize !important;
+   background-color: $bgColorValue !important;
+   
+   padding: 1px 5px !important;
+   border-radius: 2.5px !important;
+
+ }
+ .transparent-blur-background:hover{
+background-color:blanchedalmond !important;
+ }
+ 
+ .carousel-image {
+   flex: 0 0 100% !important;
+   scroll-snap-align: start !important;
+   transition: transform 0.3s ease !important;
+ }
+ 
+ .carousel-image.active {
+   transform: translateX(0%) !important;
+ }
+ 
+ .modal-button-container {
+   display: flex !important;
+   justify-content: center !important;
+   align-items: center !important;
+ }
+ 
+ .modal-button-container button {
+   margin: 0 5px !important;
+ }
+ 
+
+ 
+ @media screen and (max-width: 600px) {
+   .carousel-container {
+     flex-wrap: nowrap !important;
+     scroll-snap-type: x mandatory !important;
+   }
+ 
+   .carousel-container::-webkit-scrollbar {
+     display: none !important;
+   }
+ 
+   .carousel-image {
+     flex: 0 0 100% !important;
+   }
+ }
