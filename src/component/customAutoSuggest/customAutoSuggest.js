@@ -145,7 +145,7 @@ const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, sugges
     useEffect(() => {
         if (!editableDivRef.current) return;
         editableDivRef.current.innerHTML = defaultValue || "";
-    }, [])
+    }, [defaultValue])
 
     return (
         <div ref={parentDivRef} className="suggestionMainContainer" style={{ position: "relative" }}>

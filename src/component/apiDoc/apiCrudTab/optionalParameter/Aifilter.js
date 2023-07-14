@@ -17,7 +17,6 @@ export default function AiFilter(props)  {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
 
 
-  console.log(html,text)
 
 //   const [defaultValue, setDefaultValue] = useState(
 //     AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow || ""
@@ -128,7 +127,6 @@ props?.setQuerymade("filter="+textAfterWhere1);
           </Button>
           </div>
     </Box>
-         {console.log(props.querymade,"")}
         </div>
         <br/>
         
