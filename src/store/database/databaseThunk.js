@@ -13,7 +13,7 @@ export const bulkAdd = createAsyncThunk(
                 result[item.org_id._id] = result[item.org_id._id] ? [...result[item.org_id._id], item] : [item]
             })
         } catch (error) {
-            console.log(error)
+                        console.log(error)
         }
        
         const orgIds = Object.keys(result);

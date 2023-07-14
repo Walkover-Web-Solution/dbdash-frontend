@@ -182,7 +182,6 @@ export function extraReducers(builder) {
       let arr = state.orgId[action?.payload?.org_id] || [];
       const newArr = [...arr, action.payload];
       state.orgId = { ...state.orgId, [action?.payload?.org_id]: newArr };
-
     })
     .addCase(createDbThunk.rejected, (state) => {
 

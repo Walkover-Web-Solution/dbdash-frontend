@@ -29,9 +29,11 @@ const style = {
 
 
 export default function AddFilterPopup(props) {
+  // const navigate = useNavigate();
+  const editableDivRef  = useRef()
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [filterName, setFilterName] = useState("");
-  const [html, setHtml] = useState("");
+  // const [html, setHtml] = useState("");
   const [html2, setHtml2] = useState("");
   const [text, setText] = useState("");
   const [text2, setText2] = useState("");
@@ -109,7 +111,6 @@ export default function AddFilterPopup(props) {
     }
     return queryToSend;
   };
-// console.log("text",text)
   const handleQuery=async () => { 
     let textquery=text.trim();
 
@@ -118,30 +119,17 @@ export default function AddFilterPopup(props) {
     }
 
     const applyFilter=await filterQueryByAi(props.dbId,data);
-    console.log(applyFilter?.data?.data,'applyFilter');
     setDefaultValue(applyFilter?.data?.data);
 
     setText2(applyFilter?.data?.data);
     setHtml2(applyFilter?.data?.data);
 
-  //   const query = applyFilter?.data?.data;
-  //   const searchString = "WHERE";
-  //   const index = query.indexOf(searchString);
-  //   let textAfterWhere1 ;
-  //   if (index !== -1) {
-  //     textAfterWhere1 = query.substring(index + searchString.length).trim();
-  //   }
-  //  console.log(textAfterWhere1,"textAfterWhere1")
+  
     
    
 
   }
-  console.log(defaultValue,"siudffjdfjkjdfjkldfkjefrjrfgjskrgfjksrgnjsrjkgfkrjn")
-
-  console.log(text2,'text2text2')
-  console.log(text,"textext")
-  console.log(html,'hetml')
-  console.log(html2,'hetml2222')
+  
 
       
   //   }
@@ -176,9 +164,8 @@ export default function AddFilterPopup(props) {
     );
   };
 
-  const handleTextChange = (text, html) => {
+  const handleTextChange = (text) => {
     setText(text.trim());
-    setHtml(html);
     adjustTextFieldHeight();
   };
 
@@ -245,7 +232,7 @@ export default function AddFilterPopup(props) {
                     width= {text.length*16 <= 1056 ? "470px" : "580px"}
                     height = "2.5rem"
                     suggestion={fields}
-                    setHtml={setHtml}
+                    // setHtml={setHtml}
                     setText={setText}
                     // defaultValue={}
                     ref={textFieldRef} // Add this line
@@ -270,14 +257,15 @@ export default function AddFilterPopup(props) {
             {/* <TextField value={query} onChange={(e)=>{setQuery(e.target.value)}} placeholder="Enter the conditions"></TextField> */}
             <div style={{ paddingRight: '1%' }}>
               <CustomAutoSuggest
-                getInputValueWithContext={handleTextChange2}
-                width="592px"
-                height="10rem"
-                suggestion={fields}
-                setHtml={setHtml2}
-                setText={setText2}
-                defaultValue={defaultValue}
-                ref={textFieldRef} // Add this line
+                editableDivRef={editableDivRef}
+                groupByGroupName={false}
+                symbolForSearching={' '}
+                 getInputValueWithContext={handleTextChange2}
+                 width="400px"
+                 suggestion={fields}
+                //  setHtml={setHtml}
+                 setText={setText}
+                 defaultValue={defaultValue}
               />
 
             </div>

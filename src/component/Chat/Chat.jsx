@@ -65,7 +65,6 @@ const Chat = () => {
     try {
       const response = await adminPanelByAI(message, id);
       const data = response.data;
-      console.log("data   :-", data);
 
       let myVariable;
 
@@ -82,15 +81,12 @@ const Chat = () => {
         }
       }
       let code;
-      console.log("myvariable   :-", myVariable);
       if (typeof myVariable === 'string') {
         // myVariable is already a string
         code = myVariable;
       } else {
         // myVariable is not a string, stringify it
         code = JSON.stringify(myVariable);
-        console.log("myvariable  : -" , myVariable)
-        console.log("cide   :-" , code)
       }
 
       // const code = JSON.stringify(myVariable) ;

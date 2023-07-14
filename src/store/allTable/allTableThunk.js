@@ -34,7 +34,6 @@ const responsetosend={
 export const updateAccessOfUserInDbThunk=createAsyncThunk(
     "tables/updateAccessOfUserInDbThunk",async(payload)=>{
        const response= await updateAccessOfUserInDb(payload.dbId,payload.adminId,payload.data);
-       console.log("response",response);
        return response;
     }
 )

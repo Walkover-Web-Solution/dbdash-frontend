@@ -1,7 +1,11 @@
-/* eslint-disable */
-import React, { useState, useRef, useEffect } from 'react';
+/*eslint-disable*/
+import React from 'react';
+import SimpleAutoSuggest from './SimpleAutoSuggest/SimpleAutoSuggest';
+import GroupedSuggestion from './groupedSuggestion/GroupedSuggestion';
 import './customAutoSuggest.css';
 import { height } from '@mui/system';
+import { useRef } from 'react';
+import { useState,useEffect } from 'react';
 const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, suggestionBoxClass, onEnterBtnEvent, getInputValueWithContext, setHtml, setText, defaultValue,width , height }) => {
     let suggestions = suggestion || [];
     const editableDivRef = useRef();
@@ -164,4 +168,5 @@ const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, sugges
         </div>
     );
 };
+
 export default CustomAutoSuggest;

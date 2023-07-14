@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 // import Autosuggest from 'react-autosuggest';
 import { Box, Button, CircularProgress, TextField } from '@mui/material';
 // import Paper from '@mui/material/Paper';
@@ -19,7 +19,7 @@ export default function FormulaDataType(props) {
   const [html,setHtml] = useState(false)
   const [text,setText] = useState(false)
   const [queryResult,setQueryResult] = useState();
- 
+  const editableDivRef  = useRef()
   const data = AllTableInfo.tables[params?.tableName]?.fields;
   useEffect(() => {
     var arr =[]
@@ -71,6 +71,8 @@ export default function FormulaDataType(props) {
         Write a query in a human-friendly way to manipulate the column, and the resultant query will be given to you!
       </Box>
       <CustomAutoSuggest
+       editableDivRef={editableDivRef}
+       symbolForSearching={' '}
         id={'editableDivid'}
         suggestion={suggestions}
         chipClass="chip"

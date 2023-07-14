@@ -16,7 +16,7 @@ import {
 import './optionalParameter.scss'; // Import the CSS file
 import { makeStyles } from '@mui/styles';
 
-// import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
+  // import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
 import variables from '../../../../assets/styling.scss';
 import FilterConditionTable from './filterConditionTable';
 import AiFilter from './Aifilter';
@@ -65,6 +65,8 @@ const[querymade,setQuerymade]=useState('');
     console.log("ro",querymade);
     props?.setValue(querymade);
   }
+  // const editableDivRef  = useRef()
+  
 const useStyles = makeStyles(() => ({
   formControl: {
   
@@ -225,6 +227,9 @@ Still need help? Ask AI to generate your Filter condition
      </div>
         {/* <div style={{marginLeft:'1%'}}>
         <CustomAutoSuggest
+         editableDivRef={editableDivRef}
+         groupByGroupName={false}
+         symbolForSearching={' '}
           getInputValueWithContext={handleTextChange}
           width="70%"
           suggestion={fields}

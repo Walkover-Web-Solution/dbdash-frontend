@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,7 @@ export default function UpdateQueryPopup(props) {
   const [html, setHtml] = useState();
   const [text, setText] = useState();
   const [queryResult, setQueryResult] = useState();
+  const editableDivRef  = useRef()
   // const userQuery = AllTableInfo.tables[params?.tableName]?.fields;
   useEffect(() => {
     const data = AllTableInfo.tables[params?.tableName]?.fields;
@@ -77,6 +78,8 @@ export default function UpdateQueryPopup(props) {
         Write a query in a human-friendly way to manipulate the column, and the resultant query will be given to you!
       </div>
       <CustomAutoSuggest
+        editableDivRef={editableDivRef}
+
         id={'editableDivid'}
         suggestion={suggestions}
         chipClass="chip"

@@ -10,7 +10,7 @@ import { filterQueryByAi } from '../../../../api/filterApi';
 
 
 export default function AiFilter(props)  {
-    const [html, setHtml] = useState("");
+    // const [html, setHtml] = useState("");
     const [text, setText] = useState("");
     const [textAfterWhere, setTextAfterWhere] = useState();
   const [fields, setFields] = useState([]);
@@ -51,9 +51,9 @@ export default function AiFilter(props)  {
     justifyContent: 'flex-start' // Adjust alignment as needed
   };
 
-  const handleTextChange = (text, html) => {
+  const handleTextChange = (text) => {
     setText(text.trim());
-    setHtml(html);
+    // setHtml(html);
     // adjustTextFieldHeight();
   };
 
@@ -105,7 +105,7 @@ props?.setQuerymade("filter="+textAfterWhere1);
         height="1.8rem"
         width="99%"
         suggestion={fields}
-        setHtml={setHtml}
+        // setHtml={setHtml}
         setText={setText}
         defaultValue=''
       />
