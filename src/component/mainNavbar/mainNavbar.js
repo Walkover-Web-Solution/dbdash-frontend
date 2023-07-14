@@ -23,15 +23,19 @@ import './mainNavbar.scss';
 import { selectOrgandDb } from '../../store/database/databaseSelector.js';
 import Sharedb from '../table/tablesList/Sharedb.js';
 import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup.js';
+import DbSnapshotsMenu from './dbSnapshotsMenu.js';
+import { useRef } from 'react';
 
 
 function MainNavbar(props) {
-  let { dbId  ,id,tableName} = useParams();
-  const [openTemplate,setOpenTemplate]=useState(false);
+  let { dbId, id, tableName } = useParams();
+  const [openTemplate, setOpenTemplate] = useState(false);
   const [openShareDb, setOpenShareDb] = useState(false);
+  const [openDbSnapshot, setOpenDbSnapshot] = useState(false);
+  const revisionbuttonref = useRef(null);
 
   const alldb = useSelector((state) => selectOrgandDb(state));
-let dbname = '';
+  let dbname = '';
   Object.entries(alldb).forEach(([, dbs]) => {
     const matchingDb = dbs.find(db => db?._id === props.dbtoredirect);
     if (matchingDb) {
@@ -39,14 +43,14 @@ let dbname = '';
     }
   });
 
-  
+
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElMenu, setAnchorElMenu] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
   const user = UserAuth();
-  
+
 
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
@@ -65,10 +69,10 @@ let dbname = '';
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-  const handleOpenMenu=(event)=>{
+  const handleOpenMenu = (event) => {
     setAnchorElMenu(event.currentTarget);
   }
-  const handleCloseMenu=()=>{
+  const handleCloseMenu = () => {
     setAnchorElMenu(null);
   }
 
@@ -86,7 +90,7 @@ let dbname = '';
     setAnchorElUser(null);
   };
 
-  
+
 
   return (
     <Container className="main-navbar-container" maxWidth="false">
@@ -98,11 +102,11 @@ let dbname = '';
         </Link>
       </Box>
 
-      {(props?.dbData || props.dbtoredirect)  && (
+      {(props?.dbData || props.dbtoredirect) && (
         <Typography
           fontWeight={Number(variables.mainnavbarfontweight)}
           fontFamily={variables.fontFamily}
-          sx={{paddingBottom:0.85}} 
+          sx={{ paddingBottom: 0.85 }}
           fontSize={Number(variables.titlesize)}
           color={variables.mainnavbartextcolor}
         >
@@ -111,20 +115,20 @@ let dbname = '';
       )}
 
       <Box>
-       
-  {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db.name || dbname} open={openTemplate} setOpen={setOpenTemplate}/>}
 
-      {dbId && <Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb}/>}
-    { dbId &&  <IconButton  size="small"  onClick={handleOpenMenu}  className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
-            <MenuIcon/>
-          </IconButton>}
-        {(shouldShowTypography || shouldShowTableButton) && (
+        {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db.name || dbname} open={openTemplate} setOpen={setOpenTemplate} />}
+        {openDbSnapshot && <DbSnapshotsMenu revision_history={props?.dbData?.db?.revision_history} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
+        {<Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />}
+        {dbId && <IconButton size="small" onClick={handleOpenMenu} className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
+          <MenuIcon />
+        </IconButton>}
+        {dbId && (
           <Tooltip title="APIs">
             <Button
               variant="outlined"
               className="main-navbar-button"
               component={Link}
-              style={shouldShowTableButton ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none' ,textTransform:'none'} : {textTransform:'none'}}
+              style={shouldShowTableButton ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none', textTransform: 'none' } : { textTransform: 'none' }}
               to={{ pathname: `/apiDoc/db/${dbId}` }}
               state={tableName}
             >
@@ -135,16 +139,16 @@ let dbname = '';
 
         {(shouldShowTypography || shouldShowTableButton) && (
           <Tooltip title="Tables">
-           <Button
-  variant="outlined"
-  component={Link}
-  className="main-navbar-button"
-  style={shouldShowTypography ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none',textTransform:'none' } : {textTransform:'none'}}
-  to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
-    : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
-    : { pathname: `/db/${dbId || id}` }
-  }
->
+            <Button
+              variant="outlined"
+              component={Link}
+              className="main-navbar-button"
+              style={shouldShowTypography ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none', textTransform: 'none' } : { textTransform: 'none' }}
+              to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
+                : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
+                  : { pathname: `/db/${dbId || id}` }
+              }
+            >
 
 
               Tables
@@ -152,8 +156,8 @@ let dbname = '';
           </Tooltip>
         )}
         <Tooltip title="Open settings">
-          <IconButton  size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
-            <Avatar sx={{height:variables.profileiconheight,width:variables.profileiconwidth}} alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
+          <IconButton size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
+            <Avatar sx={{ height: variables.profileiconheight, width: variables.profileiconwidth }} alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
           </IconButton>
         </Tooltip>
 
@@ -172,6 +176,11 @@ let dbname = '';
           }}
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
+          PaperProps={{
+            style: {
+              marginTop: '-15px', // Adjust the margin as needed
+            },
+          }}
         >
           <MenuItem onClick={handleCloseUserMenu}>
             <Typography textAlign="center">{userDetails?.fullName}</Typography>
@@ -195,6 +204,11 @@ let dbname = '';
             vertical: 'top',
             horizontal: 'right',
           }}
+          PaperProps={{
+            style: {
+              marginTop: '-15px', // Adjust the margin as needed
+            },
+          }}
           keepMounted
           transformOrigin={{
             vertical: 'top',
@@ -203,17 +217,25 @@ let dbname = '';
           open={Boolean(anchorElMenu)}
           onClose={handleCloseMenu}
         >
-          <MenuItem onClick={()=>{
+          <MenuItem onClick={() => {
             setOpenTemplate(true);
-            handleCloseMenu();}}>
+            handleCloseMenu();
+          }}>
             <Typography textAlign="center">Create Template</Typography>
           </MenuItem>
-          <MenuItem onClick={()=>{
+          <MenuItem onClick={() => {
             setOpenShareDb(true);
-            handleCloseMenu();}}>
+            handleCloseMenu();
+          }}>
             <Typography textAlign="center">Share DB</Typography>
           </MenuItem>
-          
+          <MenuItem ref={revisionbuttonref} onClick={() => {
+            setOpenDbSnapshot(true);
+            handleCloseMenu();
+          }}>
+            <Typography textAlign="center">Revision History</Typography>
+          </MenuItem>
+
         </Menu>
       </Box>
     </Container>
@@ -222,8 +244,8 @@ let dbname = '';
 
 MainNavbar.propTypes = {
   dbData: PropTypes.any,
-  dbtoredirect:PropTypes.any,
-  tabletoredirect:PropTypes.any,
+  dbtoredirect: PropTypes.any,
+  tabletoredirect: PropTypes.any,
 };
 
 export default MainNavbar;

@@ -12,6 +12,8 @@ function MainNavbar(props) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const revisionbuttonref = useRef(null);
+
   const user = UserAuth();
   var {dbId} = useParams();
   const logOut = user?.logOut;

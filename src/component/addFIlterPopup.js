@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
@@ -28,6 +28,7 @@ const style = {
 
 export default function AddFilterPopup(props) {
   // const navigate = useNavigate();
+  const editableDivRef  = useRef()
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const handleClose = () => {
     props?.setEdit(false)
@@ -202,6 +203,10 @@ export default function AddFilterPopup(props) {
         {/* <TextField value={query} onChange={(e)=>{setQuery(e.target.value)}} placeholder="Enter the conditions"></TextField> */}
         <div style={{marginLeft:'7.5%',paddingRight:'1%'}}>
         <CustomAutoSuggest
+          editableDivRef={editableDivRef}
+
+         groupByGroupName={false}
+         symbolForSearching={' '}
           getInputValueWithContext={handleTextChange}
           width="400px"
           suggestion={fields}

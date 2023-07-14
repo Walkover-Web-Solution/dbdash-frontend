@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PropTypes } from 'prop-types';
 import {
   Typography,
@@ -16,7 +16,7 @@ import {
 import './optionalParameter.scss'; // Import the CSS file
 import { makeStyles } from '@mui/styles';
 
-import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
+  import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
 import variables from '../../../../assets/styling.scss';
 
 
@@ -51,7 +51,7 @@ function OptionalParameter(props) {
   const [offset, setOffset] = useState('');
   const [descending, setDescending] = useState('asc');
   const [selectedFields, setSelectedFields] = useState(['all']);
-
+  const editableDivRef  = useRef()
   
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -167,6 +167,9 @@ const classes = useStyles();
         <Typography style={{ paddingBottom: '4px' }}>Write condition to filter records.</Typography>
         <div style={{marginLeft:'1%'}}>
         <CustomAutoSuggest
+         editableDivRef={editableDivRef}
+         groupByGroupName={false}
+         symbolForSearching={' '}
           getInputValueWithContext={handleTextChange}
           width="70%"
           suggestion={fields}
