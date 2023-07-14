@@ -74,6 +74,7 @@ export default function Headermenu(props) {
   useEffect(() => {
   setHeader(props?.fields[props?.menu?.col]?.title);
   }, [props?.menu?.col])
+  console.log("clkhflj",props?.fields);
 
   const dataType = props?.fields[props?.menu?.col]?.dataType;
   const handleDelete=()=>{dispatch(
@@ -258,7 +259,7 @@ export default function Headermenu(props) {
               className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
             <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
             <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
-            {(dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") && (
+            {((dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") || (props?.fields[props?.menu?.col]?.metadata?.isLookup && props?.fields[props?.menu?.col]?.metadata?.isLookup==true)) && (
             <>
               {dataType === "formula" && (
                   <div onClick={handleOpenPopup} className={classes.menuItem}>
