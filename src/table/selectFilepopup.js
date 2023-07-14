@@ -43,7 +43,6 @@ const style = {
 export default function SelectFilePopup(props) {
   const classes = useStyles();
   // const dispatch=useDispatch();
-  console.log("propsss",props);
   const [uploadOption, setUploadOption] = useState("file");
   const handleClose = () => {
     

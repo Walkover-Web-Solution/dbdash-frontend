@@ -32,9 +32,9 @@ export const OrgList = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
 
-  const Dbs = [];
-  Object.entries(props?.dbs).forEach(([, value]) => {
-    if (!("deleted" in value)) {
+  let Dbs = [];
+  Object.entries(props?.dbs)?.forEach(([, value]) => {
+    if (!value?.[`deleted`]) {
       Dbs.push(value);
     }
   });
@@ -42,7 +42,7 @@ export const OrgList = (props) => {
     setShareOrg(true);
   };
   useEffect(() => {
-    const obj = allorgss.find(org => org._id === props?.orgId);
+    const obj = allorgss.find(org => org?._id === props?.orgId);
     setOrgUsers(obj)
     const userId = localStorage.getItem("userid")
     if (obj?.users) {
@@ -65,7 +65,7 @@ export const OrgList = (props) => {
     setOpen(false);
     const createDb1 = await createDb(orgId, data);
     toast.success('Database created successfully!');
-    naviagate(`/db/${createDb1?.data?.data._id}`)
+    naviagate(`/db/${createDb1?.data?.data?._id}`)
     dispatch(createDbThunk({
       data: createDb1?.data?.data
     })).then(() => {
@@ -134,8 +134,8 @@ export const OrgList = (props) => {
     const adminId = localStorage.getItem("userid")
     let obj = { ...orgUsers };
     let originalObj={...orgUsers};
-    obj.users = obj.users.map((user) => {
-      if (user.user_id.email === email) {
+    obj.users = obj.users?.map((user) => {
+      if (user?.user_id.email === email) {
         return { ...user, user_type: user_type };
       }
       return user;
@@ -254,7 +254,7 @@ setOrgUsers(originalObj);
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
               {Dbs.map((db, index) => (
-                <Box key={db._id} sx={{ m: 4, mt: 0, ml: 2, display: "flex" }}>
+                <Box key={db?._id} sx={{ m: 4, mt: 0, ml: 2, display: "flex" }}>
                   <SingleDatabase db={db} dblength={Dbs.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
               ))}

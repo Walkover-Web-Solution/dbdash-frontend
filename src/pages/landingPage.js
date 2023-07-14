@@ -13,13 +13,15 @@ export default function LandingPage() {
    const dispatch = useDispatch();
    const emailId = useSelector((state) => selectActiveUser(state));
    const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
-   const dbs = [];
-   Object.entries(alldbs).forEach(([, value]) => {
-      if (value !== null) {
-        const filteredElements = value.filter(element => "deleted" in element);
-        dbs.push(...filteredElements);
-      }
-    });
+   let dbs = [];
+   if (alldbs && typeof alldbs === 'object') {
+     Object.entries(alldbs).forEach(([, value]) => {
+       if (value !== null && Array.isArray(value)) {
+         const filteredElements = value.filter(element => element && !element.deleted);
+         dbs.push(...filteredElements);
+       }
+     });
+   }
    
    useEffect(() => {
       if (emailId?.email)

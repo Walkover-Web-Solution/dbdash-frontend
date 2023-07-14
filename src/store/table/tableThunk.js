@@ -173,7 +173,6 @@ export const filterData = createAsyncThunk(
             });
 
             columns = await getHeaders(payload?.dbId,payload?.tableId,columns,{getState},fieldArrayInFilter);
-            console.log("columns",columns)
             const dataa = {
                 "columns": columns,
                 "row": rows,

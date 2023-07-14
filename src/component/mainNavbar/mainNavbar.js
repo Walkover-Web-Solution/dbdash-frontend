@@ -91,7 +91,6 @@ function MainNavbar(props) {
   };
 
 
-
   return (
     <Container className="main-navbar-container" maxWidth="false">
       <Box>
@@ -117,7 +116,7 @@ function MainNavbar(props) {
       <Box>
 
         {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db.name || dbname} open={openTemplate} setOpen={setOpenTemplate} />}
-        {openDbSnapshot && <DbSnapshotsMenu revision_history={props?.dbData?.db?.revision_history} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
+        {openDbSnapshot && <DbSnapshotsMenu dbSnapshots={props?.dbData?.db?.dbSnapshots} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
         {<Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />}
         {dbId && <IconButton size="small" onClick={handleOpenMenu} className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
           <MenuIcon />

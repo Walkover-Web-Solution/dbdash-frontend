@@ -185,7 +185,7 @@ export default function SingleDatabase(props) {
                       renameDatabase(
                         props.db.org_id?._id,
                         props.db._id,
-                        props.db.name
+                        props.db?.name
 
                       );
                       setName(false);
@@ -209,7 +209,7 @@ export default function SingleDatabase(props) {
                     renameDatabase(
                       props.db.org_id?._id,
                       props.db._id,
-                      props.db.name
+                      props.db?.name
                     );
 
                   }}
@@ -237,7 +237,7 @@ export default function SingleDatabase(props) {
         ) : (
           <>
             <Typography sx={{ fontWeight: "bold" }}>
-              {props.db.name}{" "}
+              {props.db?.name}{" "}
             </Typography>
             <Box >
             {arr1.length > 1 && !props?.db?.deleted ? (
