@@ -82,10 +82,10 @@ export default function MainTable(props) {
     const d = dataRow?.[fields?.[col]?.id];
     const index = cell?.[0];
     if (
-      fields?.[index]?.dataType === "attachment" &&
-      (d == undefined || d?.length === 0)
+      fields?.[index]?.dataType === "attachment" 
     ) {
-      setOpenAttachment(cell);
+      setOpenAttachment({cell,d,fieldId:fields?.[col]?.id,rowAutonumber: dataa[row][`fld${tableId.substring(3)}autonumber`]});
+
     }
   });
   document.addEventListener(
@@ -102,8 +102,9 @@ export default function MainTable(props) {
   const onChangeUrl = (e, type) => {
     if(params?.templateId) return;
 
-    const row = openAttachment[1];
-    const col = openAttachment[0];
+    const row = openAttachment?.cell[1];
+    const col = openAttachment?.cell[0];
+
     if (imageLink !== null) {
       dispatch(
         updateCells({
@@ -126,8 +127,9 @@ export default function MainTable(props) {
   const onChangeFile = (e, type) => {
     if(params?.templateId) return;
 
-    const row = openAttachment[1];
-    const col = openAttachment[0];
+    const row = openAttachment?.cell[1];
+    const col = openAttachment?.cell[0];
+
     if (e.target.files[0] != null) {
       dispatch(
         updateCells({
@@ -143,22 +145,8 @@ export default function MainTable(props) {
       ).then(() => {
         toast.success("Image uploaded successfully!");
       });
-      dispatch(
-        updateCells({
-          columnId: fields[col]?.id,
-          rowIndex: dataa[row][`fld${tableId.substring(3)}autonumber`],
-          value: e.target?.files[0],
-          imageLink: imageLink,
-          dataTypes: type,
-          indexIdMapping: {
-            [dataa[row][`fld${tableId.substring(3)}autonumber`]]: row,
-          },
-        })
-      ).then(() => {
-        toast.success("Image uploaded successfully!");
-      });
+      
     }
-    e.target.value = null;
   };
 
   const createLeftorRightColumn = () => {
@@ -567,7 +555,6 @@ export default function MainTable(props) {
           return {
             kind: GridCellKind.Image,
             data: d,
-            allowOverlay: true,
             allowAdd: true,
           };
         } else if (dataType === "singleselect") {
@@ -838,6 +825,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
         <SelectFilepopup
           title="uplaodfile"
           label="UploadFileIcon"
+          attachment={openAttachment}
           open={openAttachment ? true : false}
           setImageLink={setImageLink}
           onChangeUrl={onChangeUrl}
