@@ -5,11 +5,14 @@ import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
 import PropTypes from "prop-types";
 import {  useSelector } from "react-redux";
 import { getAllTableInfo } from "../../../../store/allTable/allTableSelector";
+import { filterQueryByAi } from '../../../../api/filterApi';
+
 
 
 export default function AiFilter(props)  {
     const [html, setHtml] = useState("");
     const [text, setText] = useState("");
+    const [textAfterWhere, setTextAfterWhere] = useState();
   const [fields, setFields] = useState([]);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   console.log(html,text)
@@ -40,6 +43,7 @@ export default function AiFilter(props)  {
 //     marginBottom: '10px'
 //   };
 
+
   const buttonContainerStyle = {
     display: 'flex',
     alignItems: 'flex-start', // Adjust alignment as needed
@@ -65,6 +69,29 @@ export default function AiFilter(props)  {
     tableData();
   }, [props.tableName]);
 
+  const handleQuery=async () => { 
+    let textquery="select * from " + props?.tableName + " where " + text.trim();
+
+    const data ={
+      query: textquery
+    }
+
+    const applyFilter=await filterQueryByAi(props.dbId,data);
+
+    const query = applyFilter?.data?.data;
+const searchString = "WHERE";
+const index = query.indexOf(searchString);
+
+let textAfterWhere1 ;
+if (index !== -1) {
+  textAfterWhere1 = query.substring(index + searchString.length).trim();
+}
+setTextAfterWhere("filter="+textAfterWhere1)
+props?.setQuerymade("filter="+textAfterWhere1);
+
+
+    
+  }
   return (
     <div style={aiFilterStyle}>
       <div style={headerStyle}>Filter</div>
@@ -74,6 +101,7 @@ export default function AiFilter(props)  {
 
     <CustomAutoSuggest
         getInputValueWithContext={handleTextChange}
+        height="1.8rem"
         width="99%"
         suggestion={fields}
         setHtml={setHtml}
@@ -91,6 +119,8 @@ export default function AiFilter(props)  {
               height:'5vh' // Adjust the margin left as needed
             }}
             style={{ width: '200px', padding: '14.2px' }}
+            onClick={handleQuery}
+
           >
             Generate Query by AI
           </Button>
@@ -99,7 +129,7 @@ export default function AiFilter(props)  {
          
         </div>
         <br/>
-       <textarea value={props?.querymade} id={'querytextarea'} onChange={props?.changeQueryMade} style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>
+       <textarea value={textAfterWhere||props?.querymade} id={'querytextarea'} onChange={props?.changeQueryMade} style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button className="mui-button" onClick={props?.handleUse} variant="contained">
             Use
@@ -116,6 +146,6 @@ AiFilter.propTypes = {
     querymade:PropTypes.any,
     setQuerymade:PropTypes.any,
     changeQueryMade:PropTypes.any,
-   
+    dbId:PropTypes.any
   };
   

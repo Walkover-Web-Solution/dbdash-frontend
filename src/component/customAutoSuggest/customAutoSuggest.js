@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React, { useState, useRef, useEffect } from 'react';
 import './customAutoSuggest.css';
-const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, suggestionBoxClass, onEnterBtnEvent, getInputValueWithContext, setHtml, setText, defaultValue,width }) => {
+import { height } from '@mui/system';
+const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, suggestionBoxClass, onEnterBtnEvent, getInputValueWithContext, setHtml, setText, defaultValue,width , height }) => {
     let suggestions = suggestion || [];
     const editableDivRef = useRef();
     const parentDivRef = useRef();
@@ -145,9 +146,10 @@ const CustomAutoSuggest = ({ id, suggestion, chipClass, editableDivClass, sugges
         if (!editableDivRef.current) return;
         editableDivRef.current.innerHTML = defaultValue || "";
     }, [])
+
     return (
         <div ref={parentDivRef} className="suggestionMainContainer" style={{ position: "relative" }}>
-            <div id={id ? id : ''} contentEditable={true} ref={editableDivRef} onKeyDown={handleKeyDown} onInput={(e) => { handleInputChange(e); }} style={width?{width:width,height:'fit-content',maxHeight:'60vh',minHeight:'150px'}:{height:'fit-content',maxHeight:'60vh',minHeight:'150px'}}className={editableDivClass || 'editable-div'} suppressContentEditableWarning={true} />
+            <div id={id ? id : ''} contentEditable={true} ref={editableDivRef} onKeyDown={handleKeyDown} onInput={(e) => { handleInputChange(e); }} style={{width: width , minHeight : height}}className={editableDivClass || 'editable-div'} suppressContentEditableWarning={true} />
             <div className={suggestionBoxClass || 'suggestionBox'}
                 style={{ position: 'absolute', left: suggestionPosition.left, top: suggestionPosition.top, zIndex: 100, opacity: filteredSuggestions.length > 0 ? 1 : 0 }}
             >

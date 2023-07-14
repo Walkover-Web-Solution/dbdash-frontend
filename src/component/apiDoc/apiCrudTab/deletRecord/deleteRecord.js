@@ -8,9 +8,11 @@ import OptionalParameter from '../optionalParameter/optionalParameter';
 import ResponseBox from '../responseBox';
 import './deleteRecord.scss'; // Import the CSS file
 import variables from '../../../../assets/styling.scss';
+
 function DeleteRecord(props) {
   const [age, setAge] = useState('');
   const [value, setValue] = useState('');
+// console.log(props,"props?.table")
   
 const response=`
 {

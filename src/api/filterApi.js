@@ -19,11 +19,18 @@ const updateQuery = async (db_id,tableName,data) =>
 const runQueryonTable = async(dbId,data,pageNo,limit)=>{
     return await axios.post(URL +`/dbs/${dbId}/runQuery`,{query:data,pageNo:pageNo||1,limit:limit||100})
 }
+const filterQueryByAi = async (dbId,data) =>
+{
+   
+    return await axios.post(URL +`/dbs/${dbId}/filterquery`,data)
+    
+}
 
 
 export{
     createFilter,
     deleteFilter,
     updateQuery,
-    runQueryonTable
+    runQueryonTable,
+    filterQueryByAi
  }

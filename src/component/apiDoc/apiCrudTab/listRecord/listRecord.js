@@ -9,6 +9,7 @@ import variables from '../../../../assets/styling.scss';
 
 
 function ListRecord(props) {
+  console.log(props.db,'wkjfjrfjkrfkjrfjfkjfkkd')
   const[value,setValue]=useState('');
   const[age,setAge]=useState('')
  const response=`

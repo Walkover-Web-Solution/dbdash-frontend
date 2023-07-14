@@ -61,6 +61,7 @@ function OptionalParameter(props) {
   const [selectedRows, setSelectedRows] = useState("");
 const[querymade,setQuerymade]=useState('');
   const handleUse=()=>{
+    console.log("ro",querymade);
     props?.setValue(querymade);
   }
 const useStyles = makeStyles(() => ({
@@ -218,7 +219,7 @@ Still need help? Ask AI to generate your Filter condition
             </Typography>
 <div style={{display:'flex',justifyContent:'center'}}>
 
-            <AiFilter handleUse={handleUse} changeQueryMade={changeQueryMade} querymade={querymade} setQuerymade={setQuerymade} tableName={props?.table}/>
+            <AiFilter handleUse={handleUse} changeQueryMade={changeQueryMade} querymade={querymade} setQuerymade={setQuerymade} tableName={props?.table} dbId={props?.db}/>
      </div>
         {/* <div style={{marginLeft:'1%'}}>
         <CustomAutoSuggest
