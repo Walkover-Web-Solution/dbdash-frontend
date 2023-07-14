@@ -146,7 +146,7 @@ export const filterData = createAsyncThunk(
             var rows = [];
             var page = 1
             while (offset) {
-                const querydata = await runQueryonTable(payload.dbId, filterQuery, page)
+                const querydata = await runQueryonTable(payload.dbId,payload?.tableId,payload?.filterId, filterQuery, page)
                 querydata?.data?.data?.rows && querydata?.data?.data?.rows?.map((row) => {
                     row[createdby] = userJson?.[row[createdby]] ? (userJson?.[row[createdby]]?.first_name + " " + userJson?.[row[createdby]]?.last_name) : row[createdby];
                 })

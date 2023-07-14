@@ -102,28 +102,41 @@ export default function AddFilterPopup(props) {
       props?.dbData?.db?.tables[props?.tableName]?.view &&
       Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1
     ) {
-      const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
-      queryToSend = "select * from " + viewId + " where " + text2.trim();
+      // const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
+      queryToSend = text2.trim();
     } else {
-      queryToSend = "select * from " + props?.tableName + " where " + text2.trim();
+      queryToSend =  text2.trim();
     }
     return queryToSend;
   };
 // console.log("text",text)
   const handleQuery=async () => { 
-    let textquery="select * from " + props?.tableName + " where " + text.trim();
+    let textquery=text.trim();
 
     const data ={
       query: textquery
     }
 
     const applyFilter=await filterQueryByAi(props.dbId,data);
-    console.log(applyFilter,'applyFilter');
+    console.log(applyFilter?.data?.data,'applyFilter');
+    setDefaultValue(applyFilter?.data?.data);
 
     setText2(applyFilter?.data?.data);
     // setHtml2(applyFilter?.data?.data);
 
+  //   const query = applyFilter?.data?.data;
+  //   const searchString = "WHERE";
+  //   const index = query.indexOf(searchString);
+  //   let textAfterWhere1 ;
+  //   if (index !== -1) {
+  //     textAfterWhere1 = query.substring(index + searchString.length).trim();
+  //   }
+  //  console.log(textAfterWhere1,"textAfterWhere1")
+    
+   
+
   }
+  console.log(defaultValue,"siudffjdfjkjdfjkldfkjefrjrfgjskrgfjksrgnjsrjkgfkrjn")
 
   console.log(text2,'text2text2')
   console.log(text,"textext")
