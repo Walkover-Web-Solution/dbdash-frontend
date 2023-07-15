@@ -71,7 +71,7 @@ export default function AiFilter(props)  {
   }, [props.tableName]);
 
   const handleQuery=async () => { 
-    let textquery="select * from " + props?.tableName + " where " + text.trim();
+    let textquery = text.trim();
 
     const data ={
       query: textquery
@@ -79,16 +79,16 @@ export default function AiFilter(props)  {
 
     const applyFilter=await filterQueryByAi(props.dbId,data);
 
-    const query = applyFilter?.data?.data;
-const searchString = "WHERE";
-const index = query.indexOf(searchString);
+//     const query = applyFilter?.data?.data;
+// const searchString = "WHERE";
+// const index = query.indexOf(searchString);
 
-let textAfterWhere1 ;
-if (index !== -1) {
-  textAfterWhere1 = query.substring(index + searchString.length).trim();
-}
-setTextAfterWhere("filter="+textAfterWhere1)
-props?.setQuerymade("filter="+textAfterWhere1);
+// let textAfterWhere1 ;
+// if (index !== -1) {
+//   textAfterWhere1 = query.substring(index + searchString.length).trim();
+// }
+setTextAfterWhere("filter="+applyFilter?.data?.data)
+props?.setQuerymade("filter="+applyFilter?.data?.data);
 
 
     
