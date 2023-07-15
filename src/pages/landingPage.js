@@ -17,7 +17,7 @@ export default function LandingPage() {
    if (alldbs && typeof alldbs === 'object') {
      Object.entries(alldbs).forEach(([, value]) => {
        if (value !== null && Array.isArray(value)) {
-         const filteredElements = value.filter(element => element && !element.deleted);
+         const filteredElements = value.filter(element => element && element.deleted);
          dbs.push(...filteredElements);
        }
      });

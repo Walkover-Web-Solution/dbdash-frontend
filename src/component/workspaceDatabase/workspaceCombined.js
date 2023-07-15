@@ -62,7 +62,7 @@ const [openTemplate,setOpenTemplate]=useState(false);
     setOpen(false);
   };
   const handleTemplate = () => {
-    window.open('http://localhost:5000/64a806e049f009459a84201b')
+    window.open("https://dbdash-backend-h7duexlbuq-el.a.run.app/64a3fb1f135d26837027e15e");
 
   };
   
