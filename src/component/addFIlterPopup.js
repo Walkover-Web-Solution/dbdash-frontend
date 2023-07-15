@@ -100,15 +100,13 @@ export default function AddFilterPopup(props) {
 
   const updateFilter = async () => {
     let queryToSend = " ";
-    if (
-      props?.dbData?.db?.tables[props?.tableName]?.view &&
-      Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1
-    ) {
-      // const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
-      queryToSend = text2.trim();
-    } else {
+    // if (
+    //   props?.dbData?.db?.tables[props?.tableName]?.view && Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1 ) {
+    //   // const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
+    //   queryToSend = text2.trim();
+    // } else {
       queryToSend =  text2.trim();
-    }
+    // }
     return queryToSend;
   };
   const handleQuery=async () => { 
@@ -147,21 +145,21 @@ export default function AddFilterPopup(props) {
   // }
 
   const editQueryData = async () => {
-    const data = await updateFilter();
-    const dataa = {
-      filterId: props?.filterId,
-      filterName: filterName,
-      query: data,
-      htmlToShow: html2,
-    };
-
-    const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa);
-    dispatch(
-      setAllTablesData({
-        dbId: props?.dbId,
-        tables: updatedFilter.data.data.tables,
-      })
-    );
+      const data = await updateFilter();
+      const dataa = {
+        filterId: props?.filterId,
+        filterName: filterName,
+        query: data,
+        htmlToShow: html2,
+      };
+  
+      const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa);
+      dispatch(
+        setAllTablesData({
+          dbId: props?.dbId,
+          tables: updatedFilter.data.data.tables,
+        })
+      );
   };
 
   const handleTextChange = (text) => {
