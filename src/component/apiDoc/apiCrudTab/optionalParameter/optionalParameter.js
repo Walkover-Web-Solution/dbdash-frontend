@@ -62,7 +62,6 @@ function OptionalParameter(props) {
   const [selectedRows, setSelectedRows] = useState("");
 const[querymade,setQuerymade]=useState('');
   const handleUse=()=>{
-    console.log("ro",querymade);
     props?.setValue(querymade);
   }
   // const editableDivRef  = useRef()
