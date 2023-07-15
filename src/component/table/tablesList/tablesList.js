@@ -252,7 +252,7 @@ useEffect(() => {
           </Box>
          
         </Box>
-        <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap'}}   >
+        <Box sx={{paddingLeft:'24px',paddingRight:'20px',display:"flex",justifyContent:'left',flexWrap:'nowrap',maxWidth:'100vw'}}   >
         <div style={{display:'flex',flexDirection:'row',height:'8vh',overflowY:'hidden'}}>
         <div style={{paddingBottom:'100vh',maxWidth:`${(window.screen.width*89)/100}px`,overflowX:'scroll',overflowY:'hidden',display:'flex',flexDirection:'row'}}>
           {AllTableInfo[params?.tableName]?.filters &&

@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect, useRef} from 'react';
 import { Box, Button} from '@mui/material';
 import variables from '../../../../assets/styling.scss';
 import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
@@ -12,10 +12,13 @@ import { filterQueryByAi } from '../../../../api/filterApi';
 export default function AiFilter(props)  {
     // const [html, setHtml] = useState("");
     const [text, setText] = useState("");
+  const editableDivRef  = useRef()
+  const textFieldRef = useRef(null);
+
     const [textAfterWhere, setTextAfterWhere] = useState();
   const [fields, setFields] = useState([]);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-
+console.log("sudufuf",AllTableInfo);
 
 
 //   const [defaultValue, setDefaultValue] = useState(
@@ -53,16 +56,23 @@ export default function AiFilter(props)  {
 
   const handleTextChange = (text) => {
     setText(text.trim());
-    // setHtml(html);
-    // adjustTextFieldHeight();
+    
   };
 
   const tableData = async () => {
-    const myObj = AllTableInfo?.tables[props?.tableName]?.fields;
-    const arr = Object.keys(myObj).map((key) => ({
-      name: myObj[key].fieldName,
-      content: key,
-    }));
+    console.log(";fnglngklg",props);
+    const myObj = AllTableInfo?.tables[props?.tableName].fields;
+    console.log("jgf",myObj)
+    let arr=[];
+    Object.entries(myObj).map(([key, value]) => {
+      let obj={
+        name: value.fieldName,
+        content: key
+      }
+      arr.push(obj);
+    });
+    
+console.log(":fklg",arr);
     setFields(arr);
   };
 
@@ -70,6 +80,21 @@ export default function AiFilter(props)  {
     tableData();
   }, [props.tableName]);
 
+  const customAutosuggestfunction=(fields)=>{
+    return <CustomAutoSuggest
+    getInputValueWithContext={handleTextChange}
+    editableDivRef={editableDivRef}
+    suggestion={fields}
+    setText={setText}
+    defaultValue=''
+    symbolForSearching={' '}
+    groupByGroupName={false}
+    ref={textFieldRef} // Add this line
+
+
+  />
+
+  }
   const handleQuery=async () => { 
     let textquery = text.trim();
 
@@ -87,9 +112,14 @@ export default function AiFilter(props)  {
 // if (index !== -1) {
 //   textAfterWhere1 = query.substring(index + searchString.length).trim();
 // }
-setTextAfterWhere("filter="+applyFilter?.data?.data)
-props?.setQuerymade("filter="+applyFilter?.data?.data);
+if(props?.parent!='updaterecord')
+{setTextAfterWhere("filter="+applyFilter?.data?.data)
+props?.setQuerymade("filter="+applyFilter?.data?.data);}
+else {
 
+  setTextAfterWhere(applyFilter?.data?.data)
+props?.setQuerymade(applyFilter?.data?.data);
+}
 
     
   }
@@ -98,17 +128,21 @@ props?.setQuerymade("filter="+applyFilter?.data?.data);
       <div style={headerStyle}>Filter</div>
       <div style={contentStyle}>
         <div style={buttonContainerStyle}>
-        <Box style={{ display: 'flex', flexDirection: text === '' ? 'row' : 'column', width: '100%' }}>
+        <Box style={{ display: 'flex', flexDirection: text === '' ? 'row' : 'column', width: '98%' }}>
+  
 
-    <CustomAutoSuggest
-        getInputValueWithContext={handleTextChange}
-        height="1.8rem"
-        width="99%"
-        suggestion={fields}
-        // setHtml={setHtml}
-        setText={setText}
-        defaultValue=''
-      />
+       { customAutosuggestfunction(fields)}
+{/* <CustomAutoSuggest
+                    getInputValueWithContext={handleTextChange}
+                    symbolForSearching={' '}
+                    suggestion={fields}
+                    editableDivRef={editableDivRef2}
+                    // setHtml={setHtml}
+                    setText={setText}
+                    // defaultValue={}
+                    groupByGroupName={false}
+                    ref={textFieldRef} // Add this line
+                  /> */}
       <div style={{display:'flex',justifyContent:'right'}}>
        <Button
             variant="outlined"
@@ -116,7 +150,7 @@ props?.setQuerymade("filter="+applyFilter?.data?.data);
             sx={{
               fontSize: variables.editfilterbutttonsfontsize,
               backgroundColor:variables.codeblockbgcolor,
-              marginLeft: text === ''?'5px':'0px',
+              marginLeft: '20px',
               height:'5vh' // Adjust the margin left as needed
             }}
             style={{ width: '200px', padding: '14.2px' }}
@@ -157,6 +191,7 @@ AiFilter.propTypes = {
     setQuerymade:PropTypes.any,
     textfieldref:PropTypes.any,
     changeQueryMade:PropTypes.any,
+    parent:PropTypes.any,
     dbId:PropTypes.any
   };
   

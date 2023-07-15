@@ -3,6 +3,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   position: "absolute",
@@ -11,9 +12,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 300,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
 };
 
 export default function ShareLinkPopUp(props) {
@@ -43,10 +42,12 @@ export default function ShareLinkPopUp(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="title" variant="h6" component="h2">
+        <div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
             {props.title}
-          </Typography>
-          <Box sx={{ my: 2 }}>
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+
+       
+          <Box sx={{ m: 2 }}>
             <TextField
               autoFocus
               id={props?.id}
@@ -57,20 +58,16 @@ export default function ShareLinkPopUp(props) {
               // onChange={handleChange}
             />
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
             
             <Box>
               <CopyToClipboard text={props.textvalue}>
-                <Button variant="contained" onClick={handleCopy}>
+                <Button variant="contained" className="mui-button" onClick={handleCopy}>
                   Copy
                 </Button>
               </CopyToClipboard>
             </Box>
-            <Box>
-              <Button variant="outlined" onClick={handleClose}>
-                Cancel
-              </Button>
-            </Box>
+           
           </Box>
         </Box>
       </Modal>

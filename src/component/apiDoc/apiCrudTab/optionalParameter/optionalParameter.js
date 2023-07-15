@@ -47,6 +47,7 @@ const MenuProps = {
 
 function OptionalParameter(props) {
   const [fields, setFields] = useState([]);
+
   // const [
   //   // html
   //   , setHtml] = useState('');
@@ -222,7 +223,7 @@ Still need help? Ask AI to generate your Filter condition
             </Typography>
 <div style={{display:'flex',justifyContent:'center'}}>
 
-            <AiFilter  textfieldref={textfieldref} handleUse={handleUse} changeQueryMade={changeQueryMade} querymade={querymade} setQuerymade={setQuerymade} tableName={props?.table} dbId={props?.db}/>
+            <AiFilter  parent={props?.parent} textfieldref={textfieldref} handleUse={handleUse} changeQueryMade={changeQueryMade} querymade={querymade} setQuerymade={setQuerymade} tableName={props?.table} dbId={props?.db}/>
      </div>
         {/* <div style={{marginLeft:'1%'}}>
         <CustomAutoSuggest

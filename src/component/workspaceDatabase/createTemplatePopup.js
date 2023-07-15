@@ -27,18 +27,21 @@ const CreateTemplatePopup = (props) => {
 
   useEffect(async()=>{
    const allcategory = await getAllCategoryName();
-  const allCategory = allcategory?.data?.data
+  const allCategory = allcategory?.data?.data || [];
   const values = allCategory?.map(obj => obj?.fld1yhgjz9fg)?.filter(obj=>obj!=null && obj!='');
    setAllCategory(values);
   },[])
 
   const handleCreateTemplate = async () => {
-    const data = {
+    let data = {
       name: name,
       categoryName: categoryName,
       description: description,
-      newCategory: !allCategory.includes(categoryName),
     };
+    
+    if (Array.isArray(allCategory)) {
+      data.newCategory = !allCategory.includes(categoryName) ;
+    }
     await createTemplate(props?.dbId, data);
     toast.success('Template created successfully!');
     handleClose();

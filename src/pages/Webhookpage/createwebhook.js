@@ -17,18 +17,12 @@ function Createwebhook(props) {
   const [name, setName] = useState(null);
   const [action, setAction] = useState("");
   const [url, setUrl] = useState(null);
-  const [filterid, setFilterid] = useState(props?.filterId || "all");
   const [selectedtable,setSelectedTable]=useState(props?.tableId || null);
-  const [filtersbytable, setFiltersbytable] = useState(
-    
-    props?.dataforwebhook[props?.tableId]?.filters
-  );
-
+ 
   const createWebHook = async () => {
     const data = {
       name: name,
       url: url,
-      filterId: filterid,
       isActive: true,
       condition: action,
     };
@@ -65,7 +59,6 @@ function Createwebhook(props) {
       setAction(props.condition);
       setSelectedTable(props?.tableId)
       setUrl(props.weburl);
-      setFilterid(props.filterId);
     }
   }, [props.webhookid]);
 
@@ -78,7 +71,7 @@ function Createwebhook(props) {
             e.stopPropagation();
             e.preventDefault();
           }}
-          sx={{p:0}}
+          sx={{p:0,outline:'none'}}
         >
           <Box className="create-auth-key-content-container" >
           <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
@@ -130,7 +123,6 @@ function Createwebhook(props) {
                   value={selectedtable}
                   style={{ minWidth: "210px" }}
                   onChange={(e) => {
-                    setFiltersbytable(props?.dataforwebhook[e.target.value]?.filters);
                     setSelectedTable(e.target.value)}}
                 >
                   {props?.tables && 
@@ -145,39 +137,7 @@ function Createwebhook(props) {
               </FormControl>
             </Box>}
 
-            {action !== "deleteRow" ? (
-              <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
-                <Typography className="create-webhook-label">
-                  Filters
-                </Typography>
-                <FormControl
-                  variant="standard"
-                  className="create-auth-key-dropdown"
-                >
-                  <TextField
-                    id="filterColumn"
-                    select
-                    label="Filters"
-                    value={filterid}
-                    style={{ minWidth: "210px" }}
-                    onChange={(e) => setFilterid(e.target.value)}
-                    defaultValue={props.filterId}
-                  >
-                    {filtersbytable &&
-                      Object.entries(filtersbytable).map(([key, value]) => (
-                        <MenuItem key={key} value={key}>
-                          {value.filterName}
-                        </MenuItem>
-                      ))}
-                    <MenuItem key={0} value={"all"}>
-                      Anywhere in the table
-                    </MenuItem>
-                  </TextField>
-                </FormControl>
-              </Box>
-            ) : (
-              <></>
-            )}
+           
 
             <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
               <Typography className="create-auth-key-label">URL</Typography>

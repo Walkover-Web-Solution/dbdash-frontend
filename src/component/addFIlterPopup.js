@@ -8,10 +8,12 @@ import { updateQuery } from "../api/filterApi";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllTablesData } from "../store/allTable/allTableSlice";
+
+import CircularProgress from '@mui/material/CircularProgress';
 import CustomAutoSuggest from "./customAutoSuggest/customAutoSuggest";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { filterQueryByAi } from "../api/filterApi";
+
 
 const style = {
   position: "absolute",
@@ -22,21 +24,21 @@ const style = {
   maxHeight: "calc(100vh - 100px)", // Set the maximum height of the popup
   overflowY: "auto", // Add scroll when content overflows
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p:2
 };
 
 
 export default function AddFilterPopup(props) {
   // const navigate = useNavigate();
   const editableDivRef  = useRef()
+  const editableDivRef2  = useRef()
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [filterName, setFilterName] = useState("");
   // const [html, setHtml] = useState("");
   const [html2, setHtml2] = useState("");
   const [text, setText] = useState("");
   const [text2, setText2] = useState("");
+const [showsecondfield,setShowsecondfield]=useState(true);
+const [showsavebutton,setShowsavebutton]=useState(true);
 
   const [fields, setFields] = useState([]);
   // const [aiQuery, setAiQuery] = useState("");
@@ -118,7 +120,7 @@ export default function AddFilterPopup(props) {
 
     const applyFilter=await filterQueryByAi(props.dbId,data);
     setDefaultValue(applyFilter?.data?.data);
-
+setShowsecondfield(true);
     setText2(applyFilter?.data?.data);
     setHtml2(applyFilter?.data?.data);
 
@@ -145,21 +147,23 @@ export default function AddFilterPopup(props) {
   // }
 
   const editQueryData = async () => {
-      const data = await updateFilter();
-      const dataa = {
-        filterId: props?.filterId,
-        filterName: filterName,
-        query: data,
-        htmlToShow: html2,
-      };
-  
-      const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa);
-      dispatch(
-        setAllTablesData({
-          dbId: props?.dbId,
-          tables: updatedFilter.data.data.tables,
-        })
-      );
+    const data = await updateFilter();
+    const dataa = {
+      filterId: props?.filterId,
+      filterName: filterName,
+      query: data,
+      htmlToShow: html2,
+    };
+
+    const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa);
+    dispatch(
+      setAllTablesData({
+        dbId: props?.dbId,
+        tables: updatedFilter.data.data.tables,
+      })
+    );
+    setShowsavebutton(true);
+    handleClose();
   };
 
   const handleTextChange = (text) => {
@@ -213,73 +217,86 @@ export default function AddFilterPopup(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} >
-          <Box sx={{ display: "flex", mb: 2, backgroundColor: "#E6E6E6", height: 50 }}>
-            <Typography id="modal-modal-title" variant="h6" component="h2" fontWeight="bold" fontSize={26} padding={1}>
-              Filter
-            </Typography>
-            <IconButton style={{ marginLeft: "auto" }} onClick={handleClose} aria-label="Close">
-              <CloseIcon />
-            </IconButton>
-          </Box>
+        <div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+        filter
+          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+
+         
           <Box style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-            <Box sx={{ display: "flex", width: "100%" , justifyContent : "space-between" , alignItems : "center" }}>
-              <Box className="edit-div" sx={{display: "flex" , flexDirection: text.length*16 <= 1056 ? "row" : "column", mb: 2, width: "100%" , justifyContent : "space-between" , alignItems : "center" }}>
-                <div style={{ paddingRight: "1%", width: "100%", margintop: "90px" }}>
+            <Box sx={{ display: "flex", width: "100%" , justifyContent : "space-between" , alignItems : "center"  }}>
+              <Box className="edit-div" sx={{display: "flex" , width: "100%" , justifyContent : "center" , alignItems : "center" }}>
+                <div style={{ padding: "1%", width: "90%"}}>
+            
                   <CustomAutoSuggest
                     getInputValueWithContext={handleTextChange}
-                    width= {text.length*16 <= 1056 ? "470px" : "580px"}
-                    height = "2.5rem"
+                    symbolForSearching={' '}
                     suggestion={fields}
+                    editableDivRef={editableDivRef2}
                     // setHtml={setHtml}
                     setText={setText}
                     // defaultValue={}
+                    groupByGroupName={false}
                     ref={textFieldRef} // Add this line
                   />
 
                 </div>
-              <Button
-                className="mui-button"
+             
+              </Box>
+            </Box>
+          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+
+            <Button
+                className="mui-button-outlined"
+                variant="outlined"
                 style={{ height: "42px", width: "35%", fontSize: "12px" }}
                 ref={buttonContainerRef}
-                onClick={handleQuery}
+                onClick={()=>{handleQuery();
+                setShowsecondfield(false);}
+                }
               >
                 Generate Query by AI
               </Button>
               </Box>
-            </Box>
             <br />
             <div style={{ color: "red", fontSize: "12px", paddingLeft: "172px" }}>
               {state.$errors?.filterName?.map((data) => data.$message).join(",")}
             </div>
 
-            {/* <TextField value={query} onChange={(e)=>{setQuery(e.target.value)}} placeholder="Enter the conditions"></TextField> */}
-            <div style={{ paddingRight: '1%' }}>
-              <CustomAutoSuggest
+           <Box className="edit-div" sx={{display: "flex" ,  width: "100%" , justifyContent : "center" , alignItems : "center" }}>
+                <div style={{ padding: "1%", width: "90%" }}>
+                {showsecondfield ?    <CustomAutoSuggest
                 editableDivRef={editableDivRef}
                 groupByGroupName={false}
                 symbolForSearching={' '}
                  getInputValueWithContext={handleTextChange2}
-                 width="400px"
+                 width="100%"
                  suggestion={fields}
-                //  setHtml={setHtml}
                  setText={setText}
-                 defaultValue={defaultValue}
-              />
+                 defaultValue={defaultValue}  
+              />:   <div style={{display:'flex',justifyContent:'center'}}><CircularProgress /></div>}
 
             </div>
+            </Box>
+
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              className="mui-button"
-              onClick={() => {
-                editQueryData();
-                handleClose();
-              }}
-              variant="contained"
-            >
-              Save
-            </Button>
+          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+
+          {showsecondfield && showsavebutton ? (
+  <Button
+    className="mui-button"
+    onClick={() => {
+      setShowsavebutton(false);
+      editQueryData();
+    }}
+    variant="contained"
+  >
+    Save
+  </Button>
+) : (
+  showsecondfield && <CircularProgress />
+)}
+
           </Box>
         </Box>
       </Modal>

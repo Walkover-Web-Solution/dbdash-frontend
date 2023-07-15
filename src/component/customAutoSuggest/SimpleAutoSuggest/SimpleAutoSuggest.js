@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React, { useState, useRef, useEffect } from 'react';
 
-export default function SimpleAutoSuggest({ id, editableDivRef, suggestion, chipClass, editableDivClass, suggestionBoxClass, onEnterBtnEvent, getInputValueWithContext, setHtml, setText, defaultValue, disable, symbolForSearching ,placeholder}) {
+export default function SimpleAutoSuggest({ id, editableDivRef, suggestion, chipClass, editableDivClass, suggestionBoxClass, onEnterBtnEvent, getInputValueWithContext, setHtml, setText, defaultValue, disable, symbolForSearching ,placeholder,height,width}) {
 
     let suggestions = suggestion || [];
     const parentDivRef = useRef();
@@ -263,7 +263,8 @@ export default function SimpleAutoSuggest({ id, editableDivRef, suggestion, chip
     }
 
     const styleForParentDiv = {
-        position: "relative"
+        position: "relative",
+        
     }
 
     const returnStyleForSuggestionList = (index) => {

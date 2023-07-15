@@ -680,7 +680,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
         )}
       <div
         className="table-container"
-        style={{ height:props?.height ||  `${(window?.screen?.height * 50) / 100}px` }}
+        style={{ height:props?.height ||  `64vh` }}
       >
         <DataEditor
           {...cellProps}

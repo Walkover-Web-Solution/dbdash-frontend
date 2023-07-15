@@ -17,7 +17,7 @@ export default function WorkspaceCombined() {
   const [org, setOrg] = useState();
   const [open, setOpen] = useState(false);
 const [openTemplate,setOpenTemplate]=useState(false);
-  
+
   const handleOpen = () => setOpen(true);
   const sortAndRenderOrgList = () => {
     return Object.entries(alldbs)
