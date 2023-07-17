@@ -101,7 +101,7 @@ function MainNavbar(props) {
         </Link>
       </Box>
 
-      {(props?.dbData || props.dbtoredirect) && (
+      {(props?.dbData || props?.dbtoredirect) && (
         <Typography
           fontWeight={Number(variables.mainnavbarfontweight)}
           fontFamily={variables.fontFamily}
@@ -117,24 +117,39 @@ function MainNavbar(props) {
 
         {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db.name || dbname} open={openTemplate} setOpen={setOpenTemplate} />}
         {openDbSnapshot && <DbSnapshotsMenu dbSnapshots={props?.dbData?.db?.dbSnapshots} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
-        {<Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />}
-        {dbId && <IconButton size="small" onClick={handleOpenMenu} className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
-          <MenuIcon />
-        </IconButton>}
+        <Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />
         {dbId && (
-          <Tooltip title="APIs">
-            <Button
-              variant="outlined"
-              className="main-navbar-button"
-              component={Link}
-              style={shouldShowTableButton ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none', textTransform: 'none' } : { textTransform: 'none' }}
-              to={{ pathname: `/apiDoc/db/${dbId}` }}
-              state={tableName}
-            >
-              APIs
-            </Button>
-          </Tooltip>
-        )}
+  <>
+    <IconButton
+      size="small"
+      onClick={handleOpenMenu}
+      className="main-navbar-avatar-button"
+      style={{ marginLeft: '30px' }}
+    >
+      <MenuIcon />
+    </IconButton>
+
+    <Tooltip title="APIs">
+      <Button
+        variant="outlined"
+        className="main-navbar-button"
+        component={Link}
+        style={
+          shouldShowTableButton
+            ? {
+                backgroundColor: variables.highlightedtabbgcolor,
+                pointerEvents: 'none',
+                textTransform: 'none'
+              }
+            : { textTransform: 'none' }
+        }
+        to={{ pathname: `/apiDoc/db/${dbId}`, state: tableName }}
+      >
+        APIs
+      </Button>
+    </Tooltip>
+  </>
+)}
 
         {(shouldShowTypography || shouldShowTableButton) && (
           <Tooltip title="Tables">

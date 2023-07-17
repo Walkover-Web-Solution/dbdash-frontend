@@ -232,7 +232,7 @@ export default function TemplatePage() {
               <div >
                 <Button sx={{ fontSize: `${variables.tablepagefontsize}`, textTransform: 'none', color: variables.basictextcolor }} onClick={handleClickOpenManageField}>Manage Fields</Button>
 
-                <Button sx={{ fontSize: `${variables.tablepagefontsize}`, textTransform: 'none', color: variables.basictextcolor }} onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon fontSize="2px" />}</Button>
+                <Button sx={{ fontSize: `${variables.tablepagefontsize}`, textTransform: 'none', color: variables.basictextcolor }} onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon  fontSize={variables.iconfontsize1}  />}</Button>
                 {params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={handleEdit}>Edit filter</Button>
                   <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={(e) => {
                     handleClick(e, "share");

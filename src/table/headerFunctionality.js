@@ -7,6 +7,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import FunctionsIcon from '@mui/icons-material/Functions';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import NotesIcon from '@mui/icons-material/Notes';
+import variables from '../assets/styling.scss';
 import TextFormatIcon from '@mui/icons-material/TextFormat';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
@@ -32,64 +33,64 @@ export function getPropertyIcon(data_type) {
 
   switch (data_type) {
     case "singlelinetext":
-      propertyIcon = <TextFormatIcon fontSize="2px" />;
+      propertyIcon = <TextFormatIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "formula":
-      propertyIcon = <FunctionsIcon fontSize="2px" />;
+      propertyIcon = <FunctionsIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "datetime":
-      propertyIcon = <DateRangeIcon fontSize="2px" />;
+      propertyIcon = <DateRangeIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "checkbox":
-      propertyIcon = <CheckIcon fontSize="2px" />;
+      propertyIcon = <CheckIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "numeric":
-      propertyIcon = <TagIcon fontSize="2px" />
+      propertyIcon = <TagIcon  fontSize={variables.iconfontsize1}  />
       break;
     case "longtext":
-      propertyIcon = <NotesIcon fontSize="2px" />
+      propertyIcon = <NotesIcon  fontSize={variables.iconfontsize1}  />
       break;
     case "singleselect":
-      propertyIcon = <ArrowDropDownCircleIcon fontSize="2px" />;
+      propertyIcon = <ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1}  />;
       break;
     // case "multiselect":
-    //   propertyIcon = <DoneAllIcon fontSize="2px" />;
+    //   propertyIcon = <DoneAllIcon  fontSize={variables.iconfontsize1}  />;
     //   break;
     case "createdby":
-      propertyIcon = <PersonPinIcon fontSize="2px" />;
+      propertyIcon = <PersonPinIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "createdat":
-      propertyIcon = <MoreTimeIcon fontSize="2px" />;
+      propertyIcon = <MoreTimeIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "attachment":
-      propertyIcon = <InsertDriveFileIcon fontSize="2px" />;
+      propertyIcon = <InsertDriveFileIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "link":
-      propertyIcon = <ArrowForwardIcon  fontSize="2px"/>
+      propertyIcon = <ArrowForwardIcon   fontSize={variables.iconfontsize1} />
       break;
     case "lookup":
-      propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
+      propertyIcon = <ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "rowid":
-      propertyIcon = <KeyIcon fontSize="2px" />;
+      propertyIcon = <KeyIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "email":
-      propertyIcon = <EmailIcon fontSize="2px" />;
+      propertyIcon = <EmailIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "phone":
-      propertyIcon = <LocalPhoneIcon fontSize="2px" />;
+      propertyIcon = <LocalPhoneIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "multipleselect":
-      propertyIcon = <DoneAllIcon fontSize="2px" />;
+      propertyIcon = <DoneAllIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "autonumber":
-      propertyIcon = <PinIcon fontSize="2px" />;
+      propertyIcon = <PinIcon  fontSize={variables.iconfontsize1}  />;
       break;
       case "updatedby":
-        propertyIcon = <PersonIcon fontSize="2px" />;
+        propertyIcon = <PersonIcon  fontSize={variables.iconfontsize1}  />;
         break;
     default:
-      propertyIcon = <MultiIcon fontSize="2px"/>;
+      propertyIcon = <MultiIcon  fontSize={variables.iconfontsize1} />;
       break;
   }
 

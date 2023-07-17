@@ -2,13 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
-import Joi from "joi";
-import { useValidator } from "react-joi";
 import { updateQuery } from "../api/filterApi";
 import { getAllTableInfo } from "../store/allTable/allTableSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllTablesData } from "../store/allTable/allTableSlice";
-
+import variables from '../assets/styling.scss';
 import CircularProgress from '@mui/material/CircularProgress';
 import CustomAutoSuggest from "./customAutoSuggest/customAutoSuggest";
 import CloseIcon from "@mui/icons-material/Close";
@@ -70,20 +68,6 @@ const [showsavebutton,setShowsavebutton]=useState(true);
     tableData();
   }, [props.tableName]);
 
-  const { state } = useValidator({
-    initialData: {
-      filterName: null,
-    },
-    schema: Joi.object({
-      filterName: Joi.string().min(1).required(),
-    }),
-    explicitCheck: {
-      filterName: false,
-    },
-    validationOptions: {
-      abortEarly: true,
-    },
-  });
   useEffect(() => {
     if (props?.edit === true) {
       const editDataValues = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.query;
@@ -248,7 +232,7 @@ setShowsecondfield(true);
             <Button
                 className="mui-button-outlined"
                 variant="outlined"
-                style={{ height: "42px", width: "35%", fontSize: "12px" }}
+                style={{ height: "42px", width: "35%", fontSize: variables.editfilterbutttonsfontsize }}
                 ref={buttonContainerRef}
                 onClick={()=>{handleQuery();
                 setShowsecondfield(false);}
@@ -258,9 +242,7 @@ setShowsecondfield(true);
               </Button>
               </Box>
             <br />
-            <div style={{ color: "red", fontSize: "12px", paddingLeft: "172px" }}>
-              {state.$errors?.filterName?.map((data) => data.$message).join(",")}
-            </div>
+            
 
            <Box className="edit-div" sx={{display: "flex" ,  width: "100%" , justifyContent : "center" , alignItems : "center" }}>
                 <div style={{ padding: "1%", width: "90%" }}>

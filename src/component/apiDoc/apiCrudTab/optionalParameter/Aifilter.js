@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import {  useSelector } from "react-redux";
 import { getAllTableInfo } from "../../../../store/allTable/allTableSelector";
 import { filterQueryByAi } from '../../../../api/filterApi';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 
@@ -14,7 +16,7 @@ export default function AiFilter(props)  {
     const [text, setText] = useState("");
   const editableDivRef  = useRef()
   const textFieldRef = useRef(null);
-
+const[showAnsfield,setShowAnsfield]=useState(true);
     const [textAfterWhere, setTextAfterWhere] = useState();
   const [fields, setFields] = useState([]);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -60,9 +62,7 @@ console.log("sudufuf",AllTableInfo);
   };
 
   const tableData = async () => {
-    console.log(";fnglngklg",props);
     const myObj = AllTableInfo?.tables[props?.tableName].fields;
-    console.log("jgf",myObj)
     let arr=[];
     Object.entries(myObj).map(([key, value]) => {
       let obj={
@@ -72,7 +72,6 @@ console.log("sudufuf",AllTableInfo);
       arr.push(obj);
     });
     
-console.log(":fklg",arr);
     setFields(arr);
   };
 
@@ -95,7 +94,9 @@ console.log(":fklg",arr);
   />
 
   }
-  const handleQuery=async () => { 
+  const handleQuery=async () => {
+    setShowAnsfield(false);
+
     let textquery = text.trim();
 
     const data ={
@@ -104,14 +105,6 @@ console.log(":fklg",arr);
 
     const applyFilter=await filterQueryByAi(props.dbId,data);
 
-//     const query = applyFilter?.data?.data;
-// const searchString = "WHERE";
-// const index = query.indexOf(searchString);
-
-// let textAfterWhere1 ;
-// if (index !== -1) {
-//   textAfterWhere1 = query.substring(index + searchString.length).trim();
-// }
 if(props?.parent!='updaterecord')
 {setTextAfterWhere("filter="+applyFilter?.data?.data)
 props?.setQuerymade("filter="+applyFilter?.data?.data);}
@@ -120,7 +113,7 @@ else {
   setTextAfterWhere(applyFilter?.data?.data)
 props?.setQuerymade(applyFilter?.data?.data);
 }
-
+setShowAnsfield(true);
     
   }
   return (
@@ -128,32 +121,20 @@ props?.setQuerymade(applyFilter?.data?.data);
       <div style={headerStyle}>Filter</div>
       <div style={contentStyle}>
         <div style={buttonContainerStyle}>
-        <Box style={{ display: 'flex', flexDirection: text === '' ? 'row' : 'column', width: '98%' }}>
+        <Box style={{ display: 'flex', flexDirection: text === '' ? 'row' : 'column', width: '100%' }}>
   
-
+<div style={{width:text==''?'76%':'98%'}}>
        { customAutosuggestfunction(fields)}
-{/* <CustomAutoSuggest
-                    getInputValueWithContext={handleTextChange}
-                    symbolForSearching={' '}
-                    suggestion={fields}
-                    editableDivRef={editableDivRef2}
-                    // setHtml={setHtml}
-                    setText={setText}
-                    // defaultValue={}
-                    groupByGroupName={false}
-                    ref={textFieldRef} // Add this line
-                  /> */}
-      <div style={{display:'flex',justifyContent:'right'}}>
+       </div>
+      <div style={{display:'flex',justifyContent:'right',width:text===''?'24%':'100%'}}>
        <Button
             variant="outlined"
             className='mui-button-outlined'
             sx={{
               fontSize: variables.editfilterbutttonsfontsize,
               backgroundColor:variables.codeblockbgcolor,
-              marginLeft: '20px',
               height:'5vh' // Adjust the margin left as needed
             }}
-            style={{ width: '200px', padding: '14.2px' }}
             onClick={handleQuery}
 
           >
@@ -164,7 +145,7 @@ props?.setQuerymade(applyFilter?.data?.data);
         </div>
         <br/>
         
-       <textarea ref={props?.textfieldref} value={props?.querymade||textAfterWhere} id={'querytextarea'} onChange={(e)=>{
+    {showAnsfield?   <textarea ref={props?.textfieldref} value={props?.querymade||textAfterWhere} id={'querytextarea'} onChange={(e)=>{
         props?.changeQueryMade(e);
         setTextAfterWhere(e.target.value)
        }} 
@@ -173,11 +154,11 @@ props?.setQuerymade(applyFilter?.data?.data);
       props?.handleUse();
     }
   }}
-       style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>
+       style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>:  <div style={{display:'flex',justifyContent:'center'}}><CircularProgress /></div>}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button className="mui-button" onClick={props?.handleUse} variant="contained">
+      {showAnsfield &&    <Button className="mui-button" onClick={props?.handleUse} variant="contained">
             Use
-          </Button>
+          </Button>}
         </Box>
       </div>
     </div>

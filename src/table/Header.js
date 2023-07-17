@@ -157,7 +157,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <AttachFileIcon fontSize="2px" />,
+      icon: <AttachFileIcon  fontSize={variables.iconfontsize1}  />,
       label: "attachment"
     },
     {
@@ -169,7 +169,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <CheckIcon fontSize="2px" />,
+      icon: <CheckIcon  fontSize={variables.iconfontsize1}  />,
       label: "checkbox"
     },
     {
@@ -181,7 +181,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <DateRangeIcon fontSize="2px" />,
+      icon: <DateRangeIcon  fontSize={variables.iconfontsize1}  />,
       label: "date and time"
     },
 
@@ -194,7 +194,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <EmailIcon fontSize="2px" />,
+      icon: <EmailIcon  fontSize={variables.iconfontsize1}  />,
       label: "email"
     },
 
@@ -207,7 +207,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <ReadMoreOutlinedIcon fontSize="2px" />,
+      icon: <ReadMoreOutlinedIcon  fontSize={variables.iconfontsize1}  />,
       label: "link"
     },
     {
@@ -219,7 +219,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <ManageSearchOutlinedIcon fontSize="2px" />,
+      icon: <ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  />,
       label: "lookup"
     },
     {
@@ -255,7 +255,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <LocalPhoneIcon fontSize="2px" />,
+      icon: <LocalPhoneIcon  fontSize={variables.iconfontsize1}  />,
       label: "Phone number"
     },
     {
@@ -267,7 +267,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <ManageSearchOutlinedIcon fontSize="2px" />,
+      icon: <ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  />,
       label: "rowid"
     },
     {
@@ -280,7 +280,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <ExpandCircleDownOutlinedIcon fontSize="2px" />,
+      icon: <ExpandCircleDownOutlinedIcon  fontSize={variables.iconfontsize1}  />,
       label: "single select"
     },
     {
@@ -293,7 +293,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <QueueOutlinedIcon fontSize="2px" />,
+      icon: <QueueOutlinedIcon  fontSize={variables.iconfontsize1}  />,
       label: "Multiselect"
     },
     {
@@ -305,7 +305,7 @@ export default function Header({allColumns,
         setShowType(false);
         setExpanded(false);
       },
-      icon: <TextFormatIcon fontSize="2px" />,
+      icon: <TextFormatIcon  fontSize={variables.iconfontsize1}  />,
       label: "singlelinetext"
     }
 ];
@@ -415,58 +415,58 @@ buttons.sort((headerA, headerB) => headerA.label.localeCompare(headerB.label));
   let propertyIcon;
   switch (dataType) {
     case "singlelinetext":
-      propertyIcon = (metadata?.unique ? <><TextFormatIcon fontSize="2px" /> <KeyOutlinedIcon fontSize="2px" /></> : <TextFormatIcon fontSize="2px" />);
+      propertyIcon = (metadata?.unique ? <><TextFormatIcon  fontSize={variables.iconfontsize1}  /> <KeyOutlinedIcon  fontSize={variables.iconfontsize1}  /></> : <TextFormatIcon  fontSize={variables.iconfontsize1}  />);
       break;
     case "formula":
-      propertyIcon = <FunctionsIcon fontSize="2px" />;
+      propertyIcon = <FunctionsIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "datetime":
-      propertyIcon = <DateRangeIcon fontSize="2px" />;
+      propertyIcon = <DateRangeIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "checkbox":
-      propertyIcon = <CheckIcon fontSize="2px" />;
+      propertyIcon = <CheckIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "numeric":
-      propertyIcon = (metadata?.unique ? <><HashIcon fontSize="2px" /> <KeyOutlinedIcon fontSize="2px" /></> : <HashIcon />);
+      propertyIcon = (metadata?.unique ? <><HashIcon  fontSize={variables.iconfontsize1}  /> <KeyOutlinedIcon  fontSize={variables.iconfontsize1}  /></> : <HashIcon />);
       break;
     case "longtext":
-      propertyIcon = (metadata?.unique ? <><TextIcon /> <KeyOutlinedIcon fontSize="2px" /></> : <TextIcon />);
+      propertyIcon = (metadata?.unique ? <><TextIcon /> <KeyOutlinedIcon  fontSize={variables.iconfontsize1}  /></> : <TextIcon />);
       break;
     case "singleselect":
-      propertyIcon = <ExpandCircleDownOutlinedIcon fontSize="2px" />;
+      propertyIcon = <ExpandCircleDownOutlinedIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "multiselect":
-      propertyIcon = <MultiIcon fontSize="2px" />;
+      propertyIcon = <MultiIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "createdby":
-      propertyIcon = <PersonPinIcon fontSize="2px" />;
+      propertyIcon = <PersonPinIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "createdat":
-      propertyIcon = <MoreTimeIcon fontSize="2px" />;
+      propertyIcon = <MoreTimeIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "attachment":
-      propertyIcon = <AttachFileIcon fontSize="2px" />;
+      propertyIcon = <AttachFileIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "link":
-      propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon /> <ReadMoreOutlinedIcon fontSize="2px" /></> : <TextIcon />);
+      propertyIcon = (metadata?.foreignKey.fieldId && metadata?.foreignKey.tableId ? <><TextIcon /> <ReadMoreOutlinedIcon  fontSize={variables.iconfontsize1}  /></> : <TextIcon />);
       break;
     case "lookup":
-      propertyIcon = <ManageSearchOutlinedIcon fontSize="2px" />;
+      propertyIcon = <ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "rowid":
-      propertyIcon = <FormatListNumberedIcon fontSize="2px" />;
+      propertyIcon = <FormatListNumberedIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "email":
-      propertyIcon = <EmailIcon fontSize="2px" />;
+      propertyIcon = <EmailIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "phone":
-      propertyIcon = <LocalPhoneIcon fontSize="2px" />;
+      propertyIcon = <LocalPhoneIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "multipleselect":
-      propertyIcon = <QueueOutlinedIcon fontSize="2px" />;
+      propertyIcon = <QueueOutlinedIcon  fontSize={variables.iconfontsize1}  />;
       break;
     case "autonumber":
-      propertyIcon = <PlusOneIcon fontSize="2px" />;
+      propertyIcon = <PlusOneIcon  fontSize={variables.iconfontsize1}  />;
       break;
 
     default:

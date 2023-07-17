@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { createDb } from "../../api/dbApi";
 import { useNavigate } from "react-router-dom";
 
+import variables from '../../assets/styling.scss';
 export const OrgList = (props) => {
   const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
@@ -186,7 +187,7 @@ setOrgUsers(originalObj);
                   sx={{
                     width: "8rem",
                     backgroundColor: "#1C2833",
-                    fontSize: "12px",
+                    fontSize:variables.editfilterbutttonsfontsize,
                     mx: 3,
                     ":hover": {
                       bgcolor: "#273746",

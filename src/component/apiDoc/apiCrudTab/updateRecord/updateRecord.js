@@ -37,45 +37,24 @@ function UpdateRecord(props) {
 <div style={{width:'53vw',overflowX:'hidden'}}>
       <div className="response-container"  >
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Update Records</Typography>
-        <Typography  fontSize={variables.textsize} sx={{pl:2}}>
+        <Typography  fontSize={variables.textsize} sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',pl:2,pb:'4px'}}>
         To update a new record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using &ldquo;filter&ldquo; parameter.
         </Typography>
         <br/>
-        <Typography   style={{ fontWeight: "bold" ,fontSize:20}}  sx={{pl:2}}>
-        Where Condition :
- </Typography>
-        
-        <Typography  fontSize={variables.textsize}  sx={{pl:2}}>
-        Filter conditions in the APIs enable you to retrieve specific records that meet specific criteria. By applying Filter conditions, you can refine the results based on specific field values or patterns.
- </Typography>
- <br />
- <Typography fontSize={variables.textsize}  sx={{pl:2}}>
-  {'To implement a filter condition in the APIs, you can include the Filter parameter in your API request. The Filter parameter accepts formula expressions that can include various operators and functions, allowing you to create complex filter conditions. You can utilize logical operators such as AND, OR, and NOT to combine multiple conditions. Additionally, comparison operators like =, >, <, and functions like FIND(), LEN(), and IS_BEFORE() can be used to specify precise criteria for filtering.'}
-</Typography>
-<br/>
- <Typography  fontSize={variables.textsize}  style={{ fontWeight: "bold" }}  sx={{pl:2}}>
-Note: In the given example, it will search for all occurrences of JOHN in FieldID1 If multiple records are found with this filter, it will update all of them. Therefore we suggest using Filter for only unique fields.
-</Typography>
-        <br />
-        <div style={{ width: '50vw', height: '15vh', backgroundColor: '#F0F0F0', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-  <Typography sx={{ justifyContent:'center',width:'100%',pl:2}}>
-    curl -X PATCH &apos;https://dbdash-backend-h7duexlbuq-el.a.run.app/<br/><span style={{color: "#028a0f"}}>YOUR_DATABASE_ID</span>/<span style={{color: "#028a0f"}}>YOUR_TABLE_ID<br/>filter=FieldID1 != `John`</span>&apos;<br/>
-  </Typography>
-</div>
-<br/>
-        <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
-        />
+       
         <br />
         <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
         <br />
-      <Typography variant={'h3'} fontSize={Number(variables.titlesize)} >
+        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant} style={{ paddingTop: '20px' }}>
 
-      {`Fileds to be updated: `}
+
+      Fields to update
         </Typography>
-        <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+        <Typography fontSize={variables.textsize}  sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',pl:2}}>
 
      {`Please select the fields/columns that need to be updated.
 Note: If you provide "NULL" ("FieldID1": "NULL") or leave it blank ("FieldID1": ""), the API will update the field with null or blank values. Therefore, please ensure that you only use the field names that you want to update.`}   </Typography>
+<br/>
         <Records db={props?.db} setArr={setArr} arr={arr} table={props?.table} alltabledata={props?.alltabledata}
         />
       </div>
