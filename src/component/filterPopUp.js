@@ -45,7 +45,7 @@ const style = {
   position: "absolute",
   ...calculatePosition(),
   transform: "translate(-0%, -20%)",
-  backgroundColor: "#fff",
+  backgroundColor: variables.bgcolorvalue,
   zIndex:'10000',
   borderRadius: "0px",
   // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
@@ -168,7 +168,7 @@ filterName1=firstChar.toUpperCase() + filterName.slice(1);
           }}
           disabled={!filterName}
           style={{ marginRight: "10px" }}
-          sx={{fontSize:`${variables.editfilterbutttonsfontsize}`}}
+          sx={{fontSize:variables.editfilterbutttonsfontsize}}
         >
           Create Filter
         </Button>

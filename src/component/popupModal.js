@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import useValidator from "react-joi";
 import Joi from "joi";
 import CloseIcon from '@mui/icons-material/Close';
+import variables from '../assets/styling.scss';
 const style = {
   position: "absolute",
   top: "50%",
@@ -101,7 +102,7 @@ export default function PopupModal(props) {
                 }
               }}
             />
-            <div style={{ color: "red", fontSize: "12px" }}>
+            <div  className="errorcolor" style={{ fontSize: variables.editfilterbutttonsfontsize }}>
               {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
             </div>
           </Box>

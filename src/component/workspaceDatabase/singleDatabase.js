@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { renameDBThunk, moveDbThunk, restoreDbThunk, deleteDbThunk } from "../../store/database/databaseThunk";
 import { allOrg } from "../../store/database/databaseSelector";
 import { toast } from 'react-toastify';
+import variables from '../../assets/styling.scss'
 
 export default function SingleDatabase(props) {
 
@@ -155,7 +156,8 @@ export default function SingleDatabase(props) {
               sx={{
                 width: "8rem",
                 backgroundColor: "#1C2833",
-                fontSize: "12px",
+                fontSize:variables.editfilterbutttonsfontsize,
+
                 mx: 3,
                 zIndex: "555",
                 ":hover": {
@@ -218,7 +220,8 @@ export default function SingleDatabase(props) {
                   sx={{
                     width: "8rem",
                     backgroundColor: "#1C2833",
-                    fontSize: "12px",
+                    fontSize:variables.editfilterbutttonsfontsize,
+
                     mx: 3,
                     
                     zIndex: "555",

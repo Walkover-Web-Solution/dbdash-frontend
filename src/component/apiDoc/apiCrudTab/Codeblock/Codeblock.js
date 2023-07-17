@@ -19,69 +19,67 @@ function CodeBlock(props) {
       }, 2000);
     }
   };
-const records=()=>{
-  return(
-    <>
-    {"       {\n"}
-    {props.body.map((x, index) => (
-      <span key={index}>
-        &quot;<span contentEditable={true} className="blue" >{x[0]}</span>&quot;
-        <span >: </span>
-        {x[1] === "numeric" || x[1] === "autonumber" ? (
-          <span contentEditable={true} style={{color:'#013220 '}}>{`${dummy(x[1])}`}</span>
-        ) : (
-          <span contentEditable={true} style={{color:'#7a2048'}} >{`"${dummy(x[1])}"`}</span>
-        )}
-        <span >,</span>
-        <br />
-      </span>
-    ))}
-    {"       }\n"}
-    </>
-  )
-}
+  const records = () => {
+    return (
+      <>
+        {"{\n"}
+        {props.body.map((x, index) => (
+          <span key={index}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&quot;
+            <span contentEditable={true} className="blue">{x[0]}</span>&quot;: 
+            {x[1] === "numeric" || x[1] === "autonumber" ? (
+              <span contentEditable={true} className="numbercolor">{`${dummy(x[1])}`}</span>
+            ) : (
+              <span contentEditable={true} className="stringcolor">{`"${dummy(x[1])}"`}</span>
+            )}
+            ,<br />
+          </span>
+        ))}
+        {"}\n"}
+      </>
+    );
+  };
+  
   const renderBody = () => {
     if (props.parent === "addrecord") {
       return (
         <pre className="pre-wrapper">
           <span>{"    \"records\""}</span>
-          <span >: </span>
+          <span>: </span>
           {" [\n"}
-          {/* {"       {\n"} */}
           {records()}
-          {`\n,\n`}
+          {`,\n`}
           {records()}
-
-          {/* {"       }\n"} */}
+          {'          ...\n'}
           {"    ]\n"}
         </pre>
       );
     }
-
+  
     if (props.parent === "updaterecord") {
       return (
-        <div >
+        <div>
           <span>{"    \"records\""}</span>
-          <span >: </span>
+          <span>: </span>
           {" [\n       {\n"}
           <span>{`                   "where"`}</span>
-          <span >: </span>
-         &quot; <span style={{color:'#ab4b52'}}>{`${props?.where}`}</span>&quot;
-          <span >,</span>
+          <span>: </span>
+          <span style={{ color: '#ab4b52' }}>&quot;{`${props?.where}`}&quot;</span>
+          <span>,</span>
           {"\n"}
           <span>{`                   "fields"`}</span>
-          <span >: </span>
+          <span>: </span>
           {"{\n"}
           {props?.body?.map((x, index) => (
             <span key={index}>
-              <span contentEditable={true} className="blue" >{`"${x[0]}"`}</span>
-              <span >: </span>
+              <span contentEditable={true} className="blue">{"\"" + x[0] + "\""}</span>
+              <span>: </span>
               {x[1] === "numeric" || x[1] === "autonumber" ? (
-                <span contentEditable={true} style={{color:'#013220 '}} >{`${dummy(x[1])}`}</span>
+                <span contentEditable={true} className="numbercolor">{`${dummy(x[1])}`}</span>
               ) : (
-                <span contentEditable={true}  style={{color:'#7a2048'}} >{`"${dummy(x[1])}"`}</span>
+                <span contentEditable={true} className="stringcolor">{"\"" + dummy(x[1]) + "\""}</span>
               )}
-              <span >,</span>
+              <span>,</span>
               <br />
             </span>
           ))}
@@ -91,25 +89,26 @@ const records=()=>{
         </div>
       );
     }
-
+  
     return (
       <>
         {props.body.map((x, index) => (
           <span key={index}>
-            <span contentEditable={true} className="blue"  >{`" ${x[0]} "`}</span>
-            <span >: </span>
+            <span contentEditable={true} className="blue">{"\"" + x[0] + "\""}</span>
+            <span>: </span>
             {x[1] === "numeric" || x[1] === "autonumber" ? (
-              <span contentEditable={true} style={{color:'#013220 '}} >{` ${dummy(x[1])} `}</span>
+              <span contentEditable={true} className="numbercolor">{`${dummy(x[1])}`}</span>
             ) : (
-              <span contentEditable={true}  style={{color:'#7a2048'}}>{`" ${dummy(x[1])} "`}</span>
+              <span contentEditable={true} className="stringcolor">{"\"" + dummy(x[1]) + "\""}</span>
             )}
-            <span >,</span>
+            <span>,</span>
             <br />
           </span>
         ))}
       </>
     );
   };
+  
 
   const dummy = (type) => {
     switch (type) {
@@ -182,7 +181,7 @@ const records=()=>{
           <code>
   {props.header?.split(",")?.map((head) => (
     <React.Fragment key={head}>
-      -H <span style={{ color: variables.deletecolor }}> {`${head.trim()}`}</span>
+      -H <span className="errorcolor"> {`${head.trim()}`}</span>
       
       <br />
     </React.Fragment>
@@ -214,7 +213,7 @@ const records=()=>{
           <code>
   {props.header?.split(",")?.map((head) => (
     <React.Fragment key={head}>
-      -H <span style={{ color: variables.deletecolor }}> {`'${head.trim()}'`}</span> \
+      -H <span className="errorcolor"> {`'${head.trim()}'`}</span> \
       
       <br />
     </React.Fragment>
@@ -225,9 +224,9 @@ const records=()=>{
           {" "}
           <br />
 
-          {props.body &&
-            typeof props.body === "object" &&
-            props.body.length > 0 && (
+          {((props.body &&
+            typeof props.body === "object") || (props.where))  && 
+           ( props.where || props.body.length > 0) && (
               <code >
               {" -d '{\n"}
                 {renderBody()}

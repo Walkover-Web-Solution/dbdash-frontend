@@ -93,7 +93,7 @@ function Records(props) {
                   className="add-remove-button"
                   onClick={() => { const arr1 = props.arr.filter(x => x[0] !== fields[0]); props.setArr(arr1) }}
                 >
-                  <CheckBoxIcon fontSize="2px"/>
+                  <CheckBoxIcon  fontSize={variables.iconfontsize1} />
                 </button>
               )}
             </Typography>

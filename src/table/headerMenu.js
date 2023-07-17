@@ -17,6 +17,7 @@ import { deleteColumns, updateColumnHeaders } from '../store/table/tableThunk';
 import { createDuplicateColumn, getPropertyIcon,handleRenameColumn, hideColumns } from './headerFunctionality';
 import { toast } from 'react-toastify';
 import UpdateQueryPopup from './updateQueryPopup';
+import variables from '../assets/styling.scss';
 
 
 
@@ -29,7 +30,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'white',
-    fontSize: '13px',
+    fontSize: variables.headermenufontsize,
     fontWeight: 600,
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
   },
@@ -243,30 +244,30 @@ export default function Headermenu(props) {
             <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
                   <span style={{ textTransform: "capitalize" }}>{data_type}</span>
             </div>
-            <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize='2px' />Hide Field</div>
+            <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize={variables.iconfontsize1} />Hide Field</div>
             <div onClick={() => {
               props?.setOpen(true),
               props?.setDirectionAndId({
               direction: "left",
               position: props?.fields[props?.menu?.col].id})}} 
-              className={classes.menuItem}><WestIcon fontSize='2px' />Insert Left</div>
+              className={classes.menuItem}><WestIcon fontSize={variables.iconfontsize1} />Insert Left</div>
             <div onClick={() => {
               props?.setOpen(true),
               props?.setDirectionAndId({
               direction: "right",
               position: props?.fields[props?.menu?.col].id})}} 
-              className={classes.menuItem}><EastIcon fontSize='2px' />Insert Right</div>
-            <div className={classes.menuItem}><NorthIcon fontSize='2px' />Sort ascending</div>
-            <div className={classes.menuItem}><SouthIcon fontSize='2px' />Sort descending</div>
+              className={classes.menuItem}><EastIcon fontSize={variables.iconfontsize1} />Insert Right</div>
+            <div className={classes.menuItem}><NorthIcon fontSize={variables.iconfontsize1} />Sort ascending</div>
+            <div className={classes.menuItem}><SouthIcon fontSize={variables.iconfontsize1} />Sort descending</div>
             {((dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") || (props?.fields[props?.menu?.col]?.metadata?.isLookup && props?.fields[props?.menu?.col]?.metadata?.isLookup==true)) && (
             <>
               {dataType === "formula" && (
                   <div onClick={handleOpenPopup} className={classes.menuItem}>
-                    <QueueOutlinedIcon fontSize='2px' />Query Update
+                    <QueueOutlinedIcon fontSize={variables.iconfontsize1} />Query Update
                   </div>
                 )}
                 <div onClick={() => { handleOpenDuplicate(); } } className={classes.menuItem}>
-                <QueueOutlinedIcon fontSize='2px' />Duplicate cell</div>
+                <QueueOutlinedIcon fontSize={variables.iconfontsize1} />Duplicate cell</div>
                 <div style={{color:styling.deletecolor}} onClick={() => {handleDelete();props.setMenu(false);}} className={classes.menuItem}>
                 <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
             </>

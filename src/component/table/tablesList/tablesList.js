@@ -313,12 +313,11 @@ useEffect(() => {
        )}
    <div style={{display:'flex',justifyContent:'flex-start'}}>   
    <div style={{ paddingLeft:'24px',display: 'flex', justifyContent: 'space-between',width: params.filterName ? `${(window.screen.width*30)/100}px`: `${(window.screen.width*15)/100}px`}}>
-          {/* <Button sx={{ fontSize: "11px" }} onClick={handleMenuOpen}>Hide Fields</Button> */}
-          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}} onClick={handleClickOpenManageField}>Manage Fields</Button>
+          <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor,pl:0}} onClick={handleClickOpenManageField}>Manage Fields</Button>
                   
-          <Button  sx={{textTransform:'none',fontSize: `${variables.tablepagefontsize}`,color:variables.basictextcolor }} onClick={()=>setMinimap(!minimap)}>Minimap {!minimap?<CheckBoxOutlineBlankIcon fontSize="4px" />:<CheckBoxIcon fontSize="2px" />}</Button>
-          {  params?.filterName &&  <Button sx={{ fontSize: `${variables.tablepagefontsize}` ,textTransform:'none',color:variables.basictextcolor}} onClick={handleEdit}>Edit filter</Button>}
-          {  params?.filterName && <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor}}  onClick={(e) => {
+          <Button  sx={{textTransform:'none',fontSize: `${variables.tablepagefontsize}`,color:variables.basictextcolor,pl:0 }} onClick={()=>setMinimap(!minimap)}>Minimap {!minimap?<CheckBoxOutlineBlankIcon fontSize="4px" />:<CheckBoxIcon  fontSize={variables.iconfontsize1}  />}</Button>
+          {  params?.filterName &&  <Button sx={{ fontSize: `${variables.tablepagefontsize}` ,textTransform:'none',color:variables.basictextcolor,pl:0}} onClick={handleEdit}>Edit filter</Button>}
+          {  params?.filterName && <Button sx={{ fontSize: `${variables.tablepagefontsize}`,textTransform:'none',color:variables.basictextcolor,pl:0}}  onClick={(e) => {
               handleClick(e, "share");
               shareLink();
             }

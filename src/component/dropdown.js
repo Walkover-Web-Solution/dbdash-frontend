@@ -4,7 +4,6 @@ import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from './alertPopup';
 import DuplicateDbPopup from './workspaceDatabase/duplicateDbPopup';
-import variables from '../assets/styling.scss';
 import { useParams } from 'react-router-dom';
 export default function Dropdown(props) {
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -102,7 +101,7 @@ e.preventDefault();
             {props?.second!=="" && props?.second && <MenuItem onClick={(e)=>{ 
               if(params?.templateId) return;
               menuclick(e); setOpen(true);}}>
-              <Typography  onClick={handleClickOpen} color={variables.deletecolor} textAlign="center" >{props?.second}</Typography>
+              <Typography  onClick={handleClickOpen} className="errorcolor" textAlign="center" >{props?.second}</Typography>
             </MenuItem>}
 <DuplicateDbPopup dbId={props?.dbid} db={props?.dbname} open={openDuplicate} setOpen={setOpenDuplicate}/>
 

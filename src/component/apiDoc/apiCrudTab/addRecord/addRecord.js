@@ -42,16 +42,17 @@ const response=`
       
       <div className="records-container">
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
-        <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+        <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:variables.optionalparametercontentwidth,pl:2,pb:'4px'}}>
 
         To create a new record, you need to make a POST request to the given endpoint.
 Generate array of fields according to your use case. to make a single entry,  you have to use single array . 
 </Typography>
 <br/>
+<Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:variables.optionalparametercontentwidth,pl:2,pb:'4px'}}>
 
-        <Typography>
         Select/Deselect the checkboxes to make the request and add values in your table.
         <br/><br/>
+        </Typography>
 
           <Box>
             
@@ -65,7 +66,6 @@ Generate array of fields according to your use case. to make a single entry,  yo
 
             />
           </Box>
-        </Typography>
       </div>
       </div>
     </>
