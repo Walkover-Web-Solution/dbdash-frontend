@@ -206,8 +206,8 @@ const records=()=>{
           <code className="code">
             {`curl -X ${props.method} 'https://dbdash-backend-h7duexlbuq-el.a.run.app/`}
             <span className={"valuescolor"}>{props?.db}</span>/
-            {<span className={"valuescolor"}>{`${props?.table}'`}</span>}
-            {props?.code?props?.code:''} \
+            {<span className={"valuescolor"}>{`${props?.table}`}</span>}
+            {props?.code?props?.code+"'":"'"} \
             <br />
             <br />
           </code>
