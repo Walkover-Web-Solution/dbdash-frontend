@@ -1,0 +1,71 @@
+@import '../../../assets/styling.scss';
+.orglistbox1{
+    margin:24px !important;
+}
+.orglistbox2{
+    margin-top: 56px !important ;
+    margin-bottom: 56px !important;
+    display: flex !important;
+
+}
+.orglistbox3{
+    display: flex !important;
+    flex-direction: column !important;
+}
+.orglisttextfield1{
+    width:30vw !important;
+    font-weight: $bold !important;
+
+}
+.orgrenamebutton{
+    width :8rem !important;
+    background-color:#1C2833 !important ;
+    font-size: $editfilterbutttonsfontsize;
+   
+    margin: 0px 24px !important;
+    
+
+   
+}
+.orgrenamebutton:hover{
+    background-color:#273746 !important ;
+    color: $bgColorValue !important;
+    border: 0 !important;
+    
+}
+.titleweight{
+    font-weight: $bold !important;
+}
+.orglistsharebuttonbox{
+    display: flex !important;
+    right: 10px !important;
+
+}
+.orglistsharebutton{
+    display: flex !important;
+    text-transform: none !important;
+
+}
+.displayflex{
+    display: flex !important;
+}
+.singledatabasebox{
+    margin: 32px !important;
+    margin-top: 0px !important;
+    margin-left: 16px !important;
+  
+}
+.cardinorglist{
+   
+    min-width:16vw !important;
+    min-height: 200px !important;
+
+align-items: center !important;
+justify-content: center !important;
+box-shadow: 1% !important;
+}
+.icononcard{
+    color: $fontColorVAlue !important;  
+    font-size: 50px !important;
+
+}

@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Dropdown from "../dropdown";
-import PopupModal from "../popupModal";
-import SingleDatabase from "./singleDatabase";
+import Dropdown from "../../dropdown";
+import PopupModal from "../../popupModal";
+import SingleDatabase from "../singledatabase/singleDatabase";
 import Grid from "@mui/material/Grid";
 import { Box, Card, Typography, TextField, Button, IconButton, ClickAwayListener } from "@mui/material";
 import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
-import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../store/database/databaseThunk";
+import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../../store/database/databaseThunk";
 import { useDispatch, useSelector } from "react-redux";
-import ShareOrgModal from "./shareOrgModal";
-import { allOrg } from "../../store/database/databaseSelector";
+import ShareOrgModal from "../shareOrgModal";
+import { allOrg } from "../../../store/database/databaseSelector";
 import { toast } from "react-toastify";
-import { createDb } from "../../api/dbApi";
+import { createDb } from "../../../api/dbApi";
 import { useNavigate } from "react-router-dom";
+import './orgList.scss';
 
-import variables from '../../assets/styling.scss';
 export const OrgList = (props) => {
   const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
@@ -155,18 +155,18 @@ setOrgUsers(originalObj);
 
   return (
     <>
-      <Box key={props?.orgId} sx={{ m: 3 }}>
+      <Box key={props?.orgId}  className="orglistbox1" >
         <ClickAwayListener onClickAway={() => { setName(false) }} >
-          <Box sx={{ my: 7, display: "flex" }}>
+          <Box className="orglistbox2">
             {name && props?.tabIndex === props?.index ? (
               <>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Box  className="orglistbox3">
                   <Box>
                     <TextField
                       id="orgName"
                       name="orgName"
                       autoFocus
-                      sx={{ width: 120, fontWeight: "bold" }}
+                      className="orglisttextfield1"
                       defaultValue={props.dbs[0]?.org_id?.name}
                       value={orgName}
                       onKeyDown={(e) => {
@@ -183,26 +183,15 @@ setOrgUsers(originalObj);
                 <Button
                   onClick={() => { renameWorkspace(props?.orgId, orgName); setName(false); }}
                   variant="contained"
-                  className="mui-button"
-                  sx={{
-                    width: "8rem",
-                    backgroundColor: "#1C2833",
-                    fontSize:variables.editfilterbutttonsfontsize,
-                    mx: 3,
-                    ":hover": {
-                      bgcolor: "#273746",
-                      color: "white",
-                      border: 0,
-                      borderColor: "#1C2833",
-                    },
-                  }}
+                  className="mui-button orgrenamebutton"
+                 
                 >
                   Rename
                 </Button>
               </>
             ) : (
               <>
-                <Typography sx={{ fontWeight: "bold" }}>
+                <Typography className="titleweight" >
                   {props.dbs[0]?.org_id?.name}{" "}
                 </Typography>
                 {isOwner || isAdmin ? (
@@ -220,13 +209,12 @@ setOrgUsers(originalObj);
                       />
                     </Box>
                     <Box>
-                      <Box sx={{ right: "10px", display: "flex" }}>
+                      <Box  className="orglistsharebuttonbox" >
                         <Button
                           variant="outlined"
-                          className="mui-button-outlined"
+                          className="mui-button-outlined orglistsharebutton"
                           size="small"
                           color="success"
-                          sx={{ display: "flex",textTransform:'none' }}
                           onClick={handleOpenShareOrg}
                         >
                           Share
@@ -251,23 +239,24 @@ setOrgUsers(originalObj);
             )}
           </Box>
         </ClickAwayListener>
-        <Box sx={{ display: "flex" }}>
-          <Box sx={{ display: "flex" }}>
+        <Box className="displayflex">
+          <Box  className="displayflex">
             <Grid container spacing={2}>
               {Dbs.map((db, index) => (
-                <Box key={db?._id} sx={{ m: 4, mt: 0, ml: 2, display: "flex" }}>
+                <Box key={db?._id} className="singledatabasebox displayflex" >
                   <SingleDatabase db={db} dblength={Dbs.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
               ))}
-              <Card sx={{ m: 4, mt: 0, ml: 2, minWidth: 250, minHeight: 200, boxShadow: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Card className="cardinorglist singledatabasebox displayflex" >
 
-                <IconButton sx={{ color: "black" }}
+                <IconButton 
                   onClick={(e) => {
                     handleOpen(e);
                     setOrg(props?.orgId);
                   }}
+                  
                 >
-                  < ControlPointSharpIcon cursor="pointer" sx={{ fontSize: "50px" }} />
+                  < ControlPointSharpIcon className="icononcard" cursor="pointer"  />
                 </IconButton>
               </Card>
             </Grid>

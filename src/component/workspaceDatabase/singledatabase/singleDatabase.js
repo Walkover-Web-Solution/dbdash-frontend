@@ -3,12 +3,13 @@ import { Card, CardContent, Typography, Box, Select, MenuItem, TextField, Button
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import Dropdown from "../dropdown";
+import Dropdown from "../../dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { renameDBThunk, moveDbThunk, restoreDbThunk, deleteDbThunk } from "../../store/database/databaseThunk";
-import { allOrg } from "../../store/database/databaseSelector";
+import { renameDBThunk, moveDbThunk, restoreDbThunk, deleteDbThunk } from "../../../store/database/databaseThunk";
+import { allOrg } from "../../../store/database/databaseSelector";
 import { toast } from 'react-toastify';
-import variables from '../../assets/styling.scss'
+import variables from '../../../assets/styling.scss'
+import './singleDatabase.scss';
 
 export default function SingleDatabase(props) {
 
@@ -89,7 +90,7 @@ export default function SingleDatabase(props) {
   const orgIdForRestore = props.db?.org_id._id || props.db?.org_id;
 
   return (
-    <Card sx={{ minWidth: 250, minHeight: 200, boxShadow: 2, cursor: 'pointer'}} onClick={() => {
+    <Card className="singledatabasecard" onClick={() => {
 
       navigate("/db/" + props.db._id, { state: { db: props.db } });
     }}>

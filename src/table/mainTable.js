@@ -703,13 +703,10 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           showSearch={showSearch}
           getRowThemeOverride={getRowThemeOverride}
           onSearchClose={() => setShowSearch(false)}
-          // gridSelection={handlegridselection}
           onCellClicked={handleUploadFileClick}
           onColumnResize={handleColumnResizeWithoutAPI}
           onColumnResizeEnd={handleColumnResize}
-          onHeaderMenuClick={onHeaderMenuClick} //iske niche ki 2 line mat hatana
-          // gridSelection={{row:item.length === 0?CompactSelection.empty() : CompactSelection.fromSingleSelection(item)}}
-          // onGridSelectionChange={(ele)=>{}}
+          onHeaderMenuClick={onHeaderMenuClick} 
           headerIcons={headerIcons}
           showMinimap={props?.minimap}
           onColumnMoved={reorder}

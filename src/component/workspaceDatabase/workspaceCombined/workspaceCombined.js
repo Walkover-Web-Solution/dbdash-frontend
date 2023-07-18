@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import PopupModal from '../popupModal';
+import PopupModal from '../../popupModal';
 import Button from '@mui/material/Button';
-import { OrgList } from './orgList';
+import { OrgList } from '../orgList/orgList';
 import { PropTypes } from 'prop-types';
-import { selectOrgandDb } from "../../store/database/databaseSelector.js";
+import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
 import { useSelector, useDispatch } from 'react-redux';
-import { createOrgThunk } from '../../store/database/databaseThunk';
+import { createOrgThunk } from '../../../store/database/databaseThunk';
 import { toast } from 'react-toastify';
-
+import './workspaceCombined.scss';
 export default function WorkspaceCombined() {
   const [tabIndex, setTabIndex] = useState(0);
   const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
@@ -56,8 +56,11 @@ const [openTemplate,setOpenTemplate]=useState(false);
   const saveOrgToDB = async () => {
     const userid = localStorage.getItem("userid");
     dispatch(createOrgThunk({ name: org, user_id: userid })).then((e) => {
+      if(e.type.includes('fulfilled'))
+      {
       toast.success('Organisation created successfully!');
       setAddedelement(e.payload.data.org_id._id);
+    }
     });
     setOpen(false);
   };
@@ -70,12 +73,11 @@ const [openTemplate,setOpenTemplate]=useState(false);
   return (
     <>
       <Box >
-      <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '8.5vh', width: '100%' }}>
-  <Button sx={{marginLeft:'24px'}}onClick={handleOpen} className="mui-button" variant="contained" >
+      <Box  className="workspacecombinedbox1" >
+  <Button  onClick={handleOpen} className="mui-button createorgbutton" variant="contained" >
     Create Organisation
   </Button>
-  <Button  sx={{marginRight:'30px'}} onClick={handleTemplate} className="mui-button" variant="contained" >
+  <Button   onClick={handleTemplate} className="mui-button exploretemplatebutton" variant="contained" >
    Explore Templates
   </Button>
 </Box>
@@ -106,7 +108,6 @@ const [openTemplate,setOpenTemplate]=useState(false);
         <Box>
           {sortAndRenderOrgList()}
         </Box>
-      </Box>
     </>
   );
 }
