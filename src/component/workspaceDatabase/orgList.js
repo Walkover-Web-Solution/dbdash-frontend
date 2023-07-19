@@ -65,6 +65,7 @@ export const OrgList = (props) => {
     };
     setOpen(false);
     const createDb1 = await createDb(orgId, data);
+    console.log(createDb1,"createdb1")
     toast.success('Database created successfully!');
     naviagate(`/db/${createDb1?.data?.data?._id}`)
     dispatch(createDbThunk({

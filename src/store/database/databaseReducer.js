@@ -155,7 +155,8 @@ export function extraReducers(builder) {
     .addCase(createOrgThunk.fulfilled, (state, action) => {
      
       state.status = "succeeded";
-      let arr = state.orgId[action.payload.allorgs[0]._id] || [];
+      console.log(action.payload.allorgs[0]._id,"reducer")
+      let arr = state.orgId[action.payload.allorgs[0]._id] ||  [];
       const newArr = [...arr, action.payload.data];
       state.orgId = { ...state.orgId, [action.payload.allorgs[0]._id]: newArr };
    
@@ -179,9 +180,10 @@ export function extraReducers(builder) {
     })
     .addCase(createDbThunk.fulfilled, (state, action) => {
       state.status = "succeeded";
-      let arr = state.orgId[action?.payload?.org_id] || [];
+      console.log(action?.payload?.org_id,"fgdfs")
+      let arr = state.orgId[action?.payload?.org_id._id] || [];
       const newArr = [...arr, action.payload];
-      state.orgId = { ...state.orgId, [action?.payload?.org_id]: newArr };
+      state.orgId = { ...state.orgId, [action?.payload?.org_id._id]: newArr };
     })
     .addCase(createDbThunk.rejected, (state) => {
 
