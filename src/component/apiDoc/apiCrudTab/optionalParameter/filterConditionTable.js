@@ -12,6 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { PropTypes } from "prop-types";
+import './optionalParameter.scss'
 
 const data = [
     {
@@ -124,15 +125,15 @@ setFilter(obj);
 props?.setSelectedRows(event.target.value+text);
   };
   return (
-    <Table style={{ width: "80%", borderCollapse: "collapse" }}>
+    <Table className="filter-condition-main-table">
       <TableHead>
-      <TableCell style={{ padding: "8px", border: "1px solid #000" ,backgroundColor:'#F0F0F0'}}>
+      <TableCell className="filter-condition-table-head-table-cell" >
 Filter Conditions            
 </TableCell>
-<TableCell style={{ padding: "8px", border: "1px solid #000" ,backgroundColor:'#F0F0F0'}}>
+<TableCell className="filter-condition-table-head-table-cell" >
 Purpose            
 </TableCell>
-<TableCell style={{ padding: "8px", border: "1px solid #000",backgroundColor:'#F0F0F0' }}>
+<TableCell className="filter-condition-table-head-table-cell" >
 Example            
 </TableCell>
 
@@ -143,18 +144,17 @@ Example
             return null; // Skip rendering the remaining rows
           }
           return(
-          <TableRow key={row.filterCondition} style={{ border: "1px solid #000" }}>
-            <TableCell style={{ padding: "8px", border: "1px solid #000" }}>
+          <TableRow className="filter-condition-table-body-table-row" key={row.filterCondition} >
+            <TableCell className="filter-condition-table-body-table-row-cell" >
               {row.filterCondition}
             </TableCell>
-            <TableCell style={{ padding: "8px", border: "1px solid #000" }}>
+            <TableCell className="filter-condition-table-body-table-row-cell">
               {row.purpose}
             </TableCell>
             <TableCell
-  className="hoverable-cell"
-  style={{ padding: "8px", border: "1px solid #000" }}
+  className="hoverable-cell filter-condition-table-body-table-row-cell"
 >
-              <div  style={{ display: "flex", alignItems: "center" }}>
+              <div className="ilter-condition-div">
               {rowfieldData &&   <Select
                   defaultValue={Object.entries(rowfieldData)?.[0][0]} 
                   onChange={(e)=>{handleSelectChange(row.filterCondition,e,row.example)}}
@@ -166,7 +166,7 @@ Example
                       </MenuItem>
                     ))}
                 </Select>}
-                <Typography style={{ marginLeft: "8px" }}>
+                <Typography className="row-example">
                   {row.example}
                 </Typography>
                 <Button className="mui-button-outlined  add-button"
@@ -185,7 +185,7 @@ Example
           </TableRow>
         )})}
       </TableBody>
-      {!showMore ?<Link href="#" sx={{color:'#016FA4'}} onClick={()=>setShowMore(true)}>More....</Link>:<Link href="#" sx={{color:'#016FA4'}} onClick={()=>setShowMore(false)}>Less....</Link>}
+      {!showMore ?<Link href="#"className="table-body-show-more" onClick={()=>setShowMore(true)}>More....</Link>:<Link href="#" className="table-body-show-more"  onClick={()=>setShowMore(false)}>Less....</Link>}
     </Table>
   );
 };
