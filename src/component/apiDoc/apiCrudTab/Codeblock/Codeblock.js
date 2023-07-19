@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./Codeblock.scss";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
+
 import variables from "../../../../assets/styling.scss";
 
 function CodeBlock(props) {
@@ -152,7 +153,7 @@ function CodeBlock(props) {
               Copied!
             </span>
           ) : (
-            <ContentPasteIcon />
+            <ContentCopyOutlinedIcon />
           )}
         </button>
       </div>
@@ -173,8 +174,8 @@ function CodeBlock(props) {
       </div>
 
       {showAPI ? (
-        <pre className="pre-wrapper">
-          <code className="code">https://dbdash-backend-h7duexlbuq-el.a.run.app/<span className={"valuescolor"}>{props?.db}</span>/<span className={"valuescolor"}>{props?.table}</span>{props?.code?props?.code:''}</code>
+        <div  className="pre-wrapper">
+          <code className="code">{`https://dbdash-backend-h7duexlbuq-el.a.run.app/`}<span className={"valuescolor"}>{props?.db}</span>/<span className={"valuescolor"}>{props?.table}</span>{props?.code?props?.code:''}</code>
           <br />
           <br />
 
@@ -199,7 +200,7 @@ function CodeBlock(props) {
            
               </code>
             )}
-        </pre>
+        </div>
       ) : (
         <pre className="pre-wrapper">
           <code className="code">

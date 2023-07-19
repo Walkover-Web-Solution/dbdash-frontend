@@ -48,10 +48,10 @@ span {
   transition: background-color 0.3s ease !important;
   background-color: transparent !important;
   color: $fontColorVAlue !important;
-  margin: 0 !important;
+  margin: 0px 5px !important;
   border: none !important;
   opacity: 0.5;
-  font-size: 16px !important; /* Increase font size for better visibility */
+  font-size: 3px  !important; /* Increase font size for better visibility */
   padding: 0 !important;
   display: flex; /* Add display flex for aligning icon and copied text */
   align-items: center; /* Align icon and copied text vertically */
@@ -60,6 +60,7 @@ span {
 
 .color-black {
   color: $fontColorVAlue;
+  font-size: 15px !important;
 }
 
 .copied-text {

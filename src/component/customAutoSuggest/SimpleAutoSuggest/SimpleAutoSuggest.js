@@ -276,7 +276,7 @@ export default function SimpleAutoSuggest({ id, editableDivRef, suggestion, chip
 
     return (
         <div {...parentDivProps} style={styleForParentDiv}>
-            <div {...editableDivProps} />
+            <div {...editableDivProps} style={height?{minHeight:height}:{minHeight:'50px'}} />
             <div className={suggestionBoxClass || 'suggestionBox'} style={styleForSuggestionBox}>
                 {filteredSuggestions?.map((suggestion, index) => (renderSuggestions(suggestion, index)))}
             </div>

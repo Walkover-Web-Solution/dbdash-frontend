@@ -34,10 +34,10 @@ function UpdateRecord(props) {
         <ResponseBox response={response} />
       </div>
 
-<div style={{width:'53vw',overflowX:'hidden'}}>
+<div style={{width:'65vw',overflowX:'hidden'}}>
       <div className="response-container"  >
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Update Records</Typography>
-        <Typography  fontSize={variables.textsize} sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',pl:2,pb:'4px'}}>
+        <Typography  fontSize={variables.textsize} sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',p:2}}>
         To update a new record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using &ldquo;filter&ldquo; parameter.
         </Typography>
         <br/>
@@ -45,12 +45,12 @@ function UpdateRecord(props) {
         <br />
         <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
         <br />
-        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant} style={{ paddingTop: '20px' }}>
+        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant} style={{ pt:3}}>
 
 
       Fields to update
         </Typography>
-        <Typography fontSize={variables.textsize}  sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',pl:2}}>
+        <Typography fontSize={variables.textsize}  sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',p:2}}>
 
      {`Please select the fields/columns that need to be updated.
 Note: If you provide "NULL" ("FieldID1": "NULL") or leave it blank ("FieldID1": ""), the API will update the field with null or blank values. Therefore, please ensure that you only use the field names that you want to update.`}   </Typography>

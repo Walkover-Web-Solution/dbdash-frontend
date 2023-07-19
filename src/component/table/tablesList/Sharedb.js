@@ -17,7 +17,7 @@ function Sharedb(props) {
   const dispatch = useDispatch();
   const userAcess = useSelector((state) =>state.tables?.userAcess);
   const userDetail = useSelector((state) =>state.tables?.userDetail);
-    const [dbUsers, setDbUsers] = useState();
+  const [dbUsers, setDbUsers] = useState();
   const [userType, setUserType] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOwner, setIsOwner] = useState(false);

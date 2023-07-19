@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 // import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 // import ListItemText from '@mui/material/ListItemText';
@@ -18,7 +18,7 @@ import Slide from '@mui/material/Slide';
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import AddOptionPopup from './addOptionPopup';
 import variables from '../../assets/styling.scss';
 
@@ -31,39 +31,40 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const useStyles = makeStyles({
-    dialogContainer: {
-      maxWidth:'none',
-      width:'60vw'
-    },
-  });
+  dialogContainer: {
+    maxWidth: 'none',
+    width: '60vw'
+  },
+});
 
 export default function ManageFieldDropDown(props) {
   const dispatch = useDispatch();
-   
- const classes = useStyles();
- const fields1 = useSelector((state) => state.table.columns);
- const [openAddFields, setOpenAddFields] = React.useState(false);
- const [fieldId,setFieldId] = useState("");
- const [fieldType,setFieldType] = useState("");
- const params = useParams();
+
+  const classes = useStyles();
+  const fields1 = useSelector((state) => state.table.columns);
+  const [openAddFields, setOpenAddFields] = React.useState(false);
+  const [fieldId, setFieldId] = useState("");
+  const [fieldType, setFieldType] = useState("");
+  const params = useParams();
 
   const handleClose = () => {
     props.setOpenManageField(false);
   };
-  const columnId = (fieldid,fieldType)=>{
+  const columnId = (fieldid, fieldType) => {
     setFieldId(fieldid)
     setFieldType(fieldType)
   }
-  const handleOpen = () =>{
-    if(params.templateId) return;
-    
-    setOpenAddFields(true)};
+  const handleOpen = () => {
+    if (params.templateId) return;
+
+    setOpenAddFields(true)
+  };
   var defaultArr = fields1.map((column) => {
     return !column?.metadata?.hide;
   })
-  
+
   const hideColumn = async (columnId, isChecked) => {
-    if(params.templateId) return;
+    if (params.templateId) return;
     const metaData = { hide: isChecked };
     dispatch(
       updateColumnHeaders({
@@ -71,7 +72,7 @@ export default function ManageFieldDropDown(props) {
         tableName: params?.tableName,
         columnId: columnId,
         metaData: metaData,
-        filterId : params?.filterName
+        filterId: params?.filterName
       })
     );
   };
@@ -87,7 +88,7 @@ export default function ManageFieldDropDown(props) {
         open={props.setOpenManageField}
         classes={{
           paper: classes.dialogContainer,
-        }}        onClose={handleClose}
+        }} onClose={handleClose}
         TransitionComponent={Transition}
       >
         {/* <AppBar sx={{ position: 'relative' ,backgroundColor:`${variables.basictextcolor}`}}>
@@ -102,81 +103,81 @@ export default function ManageFieldDropDown(props) {
             </IconButton>
           </Toolbar>
         </AppBar> */}
-<TableContainer   component={Paper}>
-<div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
-       manage fields
-          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+        <TableContainer component={Paper}>
+          <div className="popupheader">    <Typography sx={{ ml: 2 }} id="title" variant="h6" component="h2">
+            manage fields
+          </Typography><CloseIcon sx={{ '&:hover': { cursor: 'pointer' } }} onClick={handleClose} /></div>
 
 
-      <Table   aria-label="My Table">
-        <TableHead  >
-          <TableRow >
-            <TableCell  sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Field Name</TableCell>
-            <TableCell sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Visible</TableCell>
+          <Table aria-label="My Table">
+            <TableHead  >
+              <TableRow >
+                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Field Name</TableCell>
+                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Visible</TableCell>
 
-            <TableCell sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Field Type</TableCell>
-            <TableCell sx={{fontSize:`${variables.titlefontsize}`,textAlign:'center'}}>Options</TableCell>
+                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Field Type</TableCell>
+                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Options</TableCell>
 
-          </TableRow>
-        </TableHead>
-        <TableBody>
-  {fields1.map((field, index) => {
-    return (
-      <TableRow key={index}>
-        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`,textAlign:'center'}}>{field.title}</TableCell>
-        <TableCell sx={{textAlign:'center'}}>
-        <input
-  style={{
-    width: "15px",
-    height: "15px",
-  
-  }}
-  type="checkbox"
-  checked={defaultArr[index]}
-  onChange={() => toggleColumn(field?.id, index)}
-/>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {fields1.map((field, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell sx={{ fontSize: `${variables.tablepagefontsize}`, textAlign: 'center' }}>{field.title}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      <input
+                        style={{
+                          width: "15px",
+                          height: "15px",
 
-
-        </TableCell>
-        <TableCell sx={{fontSize:`${variables.tablepagefontsize}`,textAlign:'center'}}>{field.dataType}</TableCell>
-       
-
-        {field.dataType === "singleselect" || field.dataType === "multipleselect" ? (
-         <TableCell sx={{ fontSize: `${variables.tablepagefontsize}` ,textAlign:'center',display:'flex',justifyContent:'center'}}>
-            <div style={{width:'200px'}}>
-    {field?.metadata?.option?.map((value,index)=>{
-      return index < 3 ? value.value : null;
-    }).filter(Boolean).join(', ')}
-    {field?.metadata?.option?.length > 3 && field?.metadata?.option?.length <= 20 ? '...' : ''}
-  </div>
+                        }}
+                        type="checkbox"
+                        checked={defaultArr[index]}
+                        onChange={() => toggleColumn(field?.id, index)}
+                      />
 
 
-         <div >
-         <ModeEditOutlineOutlinedIcon
-           onClick={() => {
-             handleOpen();
-             columnId(field.id, field.dataType);
-           }}
-         />
-         </div>
-       </TableCell>
-       
-        ) : (
-          <TableCell></TableCell>
-        )}
-      </TableRow>
-    );
-  })}
-</TableBody>
+                    </TableCell>
+                    <TableCell sx={{ fontSize: `${variables.tablepagefontsize}`, textAlign: 'center' }}>{field.dataType}</TableCell>
 
-      </Table>
-    </TableContainer>
+
+                    {field.dataType === "singleselect" || field.dataType === "multipleselect" ? (
+                      <TableCell sx={{ fontSize: `${variables.tablepagefontsize}`, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ width: '200px' }}>
+                          {field?.metadata?.option?.map((value, index) => {
+                            return index < 3 ? (value.value || value) : null;
+                          }).filter(Boolean).join(', ')}
+                          {field?.metadata?.option?.length > 3 && field?.metadata?.option?.length <= 20 ? '...' : ''}
+                        </div>
+
+
+                        <div >
+                          <ModeEditOutlineOutlinedIcon
+                            onClick={() => {
+                              handleOpen();
+                              columnId(field.id, field.dataType);
+                            }}
+                          />
+                        </div>
+                      </TableCell>
+
+                    ) : (
+                      <TableCell></TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+
+          </Table>
+        </TableContainer>
       </Dialog>
-      <AddOptionPopup openAddFields={openAddFields} fieldType={fieldType} columnId={fieldId}  setOpenAddFields={setOpenAddFields}/>
+      <AddOptionPopup openAddFields={openAddFields} fieldType={fieldType} columnId={fieldId} setOpenAddFields={setOpenAddFields} />
     </div>
   );
 }
 
 ManageFieldDropDown.propTypes = {
-    setOpenManageField: PropTypes.any,
+  setOpenManageField: PropTypes.any,
 }

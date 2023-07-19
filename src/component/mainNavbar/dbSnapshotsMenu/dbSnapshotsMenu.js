@@ -63,7 +63,7 @@ function DbSnapshotsMenu(props) {
       <Box sx={style} className="dbsnapshot-style">
         <div className="popupheader dbsnapshot-header" >    
         <Typography  className= "dbsnapshots-revision"  id="title" variant="h6" component="h2">
-          revision history
+        db snapshots
         </Typography>
           <div>
             {inside && <KeyboardBackspaceIcon className="dbsnapshot-spaceIcon"  onClick={() => setInside(null)} />}
