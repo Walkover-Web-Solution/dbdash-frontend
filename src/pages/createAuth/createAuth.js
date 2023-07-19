@@ -20,7 +20,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import "./createAuth.scss";
 import { allOrg } from "../../store/database/databaseSelector";
-import Selectaccessandscope from "./Selectaccessandscope";
+import Selectaccessandscope from "./selectaccessandscope/Selectaccessandscope.js";
 import { toast } from "react-toastify";
 
 export default function CreateAuthKey(props) {

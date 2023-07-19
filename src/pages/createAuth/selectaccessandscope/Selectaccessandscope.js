@@ -9,6 +9,7 @@ import React from "react";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { PropTypes } from "prop-types";
+import "./Selectaccessandscope.scss"
 
 function Selectaccessandscope(props) {
   const { scope, setScope } = props;
@@ -37,14 +38,10 @@ function Selectaccessandscope(props) {
     <div>
       <Box sx={{ml:2,pr:1}} className="create-auth-key-row">
         <Typography className="create-auth-key-label">Scope</Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", width: "300px" }}>
+        <Box  className="create-auth-key-b2">
           <Box>
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingRight: "5px",
-              }}
+              className="create-auth-key-b3"
             >
               <div>
                 <Typography className="create-auth-key-label">
