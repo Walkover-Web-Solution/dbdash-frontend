@@ -1,0 +1,96 @@
+@import '../../../../../assets/styling.scss';
+.aiFilterStyle{
+    border: 1px solid #ccc;
+    width: 85%;
+    margin-top: 1vh;
+}
+.contentStyle{
+    margin-top: 10px;
+    padding: 16px;
+}
+.buttonContainerStyle{
+    display: flex;
+        align-items: flex-start;
+        justify-items: flex-start;
+}
+
+// @mixin setFlexDirection($direction) {
+//     flex-direction: $direction;
+//   }
+  
+//   .box {
+//     display: flex;
+//     width: 100%;
+//     align-items: center;
+  
+//     @if text == '' {
+//       flex-direction: row;
+//     } @else {
+//       flex-direction: column;
+//     }
+//   }
+.ai-divv{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+.row{
+    flex-direction: row !important;
+}
+.column{
+    flex-direction: column !important;
+}
+.div76 {
+    width: 76% !important;
+  }
+  .div98{
+    width: 98% !important;
+  }
+  .div24{
+    width: 24% !important;
+  }
+  .div100{
+    width:100% !important;
+  }
+
+
+  .ai-div{
+    display: flex;
+    justify-content: center;
+  }
+.ai-box{
+    display: flex;
+    justify-content: flex-end;
+    margin: 16px;
+    margin-right: 0px;
+}
+.ai-Autosugg-Function{
+    display: flex;
+    justify-content: right;
+}
+.generatebutton{
+    font-size: $editfilterbutttonsfontsize !important;
+    background-color: $codeblockbgcolor !important;
+    height:50px !important;
+
+}
+.ansfield{
+        height: 20vh !important;
+        font-size: $textsize !important;
+        width:99% !important;
+
+}
+.box {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  
+    $flex-direction: row;
+    @if not (text == '') {
+      $flex-direction: column;
+    }
+    flex-direction: $flex-direction;
+  }
+  
+  
+  

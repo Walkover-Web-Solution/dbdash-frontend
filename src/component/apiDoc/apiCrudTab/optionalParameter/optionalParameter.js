@@ -19,7 +19,7 @@ import { makeStyles } from '@mui/styles';
   // import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
 import variables from '../../../../assets/styling.scss';
 import FilterConditionTable from './filterConditionTable';
-import AiFilter from './Aifilter';
+import AiFilter from './AiFilter/Aifilter';
 
 
 

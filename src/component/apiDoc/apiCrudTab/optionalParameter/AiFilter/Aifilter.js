@@ -1,13 +1,13 @@
 import React,{useState,useEffect, useRef} from 'react';
 import { Box, Button} from '@mui/material';
-import variables from '../../../../assets/styling.scss';
-import CustomAutoSuggest from '../../../customAutoSuggest/customAutoSuggest';
+import variables from '../../../../../assets/styling.scss';
+import CustomAutoSuggest from '../../../../customAutoSuggest/customAutoSuggest';
 import PropTypes from "prop-types";
 import {  useSelector } from "react-redux";
-import { getAllTableInfo } from "../../../../store/allTable/allTableSelector";
-import { filterQueryByAi } from '../../../../api/filterApi';
+import { getAllTableInfo } from "../../../../../store/allTable/allTableSelector";
+import { filterQueryByAi } from '../../../../../api/filterApi';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import "./Aifilter.scss"
 
 
 
@@ -21,21 +21,21 @@ const[showAnsfield,setShowAnsfield]=useState(true);
   const [fields, setFields] = useState([]);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
 
-  const aiFilterStyle = {
-    border: '1px solid #ccc',
-    width: '85%' ,// Adjust the width as desired
-    marginTop:'1vh'
-  };
+  // const aiFilterStyle = {
+  //   border: '1px solid #ccc',
+  //   width: '85%' ,// Adjust the width as desired
+  //   marginTop:'1vh'
+  // };
 
   const headerStyle = {
     backgroundColor: variables.codeblockbgcolor,
     padding: '10px',
   };
 
-  const contentStyle = {
-    marginTop: '10px',
-    padding:2
-  };
+  // const contentStyle = {
+  //   marginTop: '10px',
+  //   padding:2
+  // };
 
 //   const inputStyle = {   
 //     width: '99.3%',
@@ -44,11 +44,11 @@ const[showAnsfield,setShowAnsfield]=useState(true);
 //   };
 
 
-  const buttonContainerStyle = {
-    display: 'flex',
-    alignItems: 'flex-start', // Adjust alignment as needed
-    justifyContent: 'flex-start' // Adjust alignment as needed
-  };
+  // const buttonContainerStyle = {
+  //   display: 'flex',
+  //   alignItems: 'flex-start', // Adjust alignment as needed
+  //   justifyContent: 'flex-start' // Adjust alignment as needed
+  // };
 
   const handleTextChange = (text) => {
     setText(text.trim());
@@ -112,24 +112,23 @@ setShowAnsfield(true);
     
   }
   return (
-    <div style={aiFilterStyle}>
+    <div className='aiFilterStyle'>
       <div style={headerStyle}>Filter</div>
-      <div style={contentStyle}>
-        <div style={buttonContainerStyle}>
-        <Box style={{ display: 'flex', flexDirection: text === '' ? 'row' : 'column', width: '100%' ,alignItems:'center'}}>
+      <div className='contentStyle'>
+        <div className='buttonContainerStyle'>
+        <Box className={`ai-divv ${text === '' ? 'row' : 'column'}`}>
+
   
-<div style={{width:text==''?'76%':'98%'}}>
+<div className={text==''?'div76':'div98'}>
        { customAutosuggestfunction(fields)}
        </div>
-      <div style={{display:'flex',justifyContent:'right',width:text===''?'24%':'100%'}}>
+       <div className={`ai-Autosugg-Function ${text === '' ? 'div24' : 'div100'}`}>
+
        <Button
             variant="outlined"
-            className='mui-button-outlined'
+            className='mui-button-outlined generatebutton'
             sx={{
-              fontSize: variables.editfilterbutttonsfontsize,
-              backgroundColor:variables.codeblockbgcolor,
-              height:'50px' ,
-              width:'90%',
+              width: text==''?'90%':'30%',
             }}
             onClick={handleQuery}
 
@@ -150,8 +149,8 @@ setShowAnsfield(true);
       props?.handleUse();
     }
   }}
-       style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>:  <div style={{display:'flex',justifyContent:'center'}}><CircularProgress /></div>}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end',m:2,mr:0 }}>
+       className="ansfield" />:  <div className='ai-div'><CircularProgress /></div>}
+        <Box className='ai-box'>
       {showAnsfield &&    <Button className="mui-button" onClick={props?.handleUse} variant="contained">
             Use
           </Button>}
