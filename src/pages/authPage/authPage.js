@@ -1,11 +1,12 @@
 import React,{useState} from 'react'
 import Box from '@mui/material/Box';
-import { UserAuth } from '../context/authContext.js'
+import { UserAuth } from '../../context/authContext.js'
 // import GoogleAuth from '../component/auth/googleAuth';
-import SignupInput from '../component/auth/signupInput/signupInput.js';
-import LoginInput from '../component/auth/loginInput/loginInput.js';
+import SignupInput from '../../component/auth/signupInput/signupInput.js';
+import LoginInput from '../../component/auth/loginInput/loginInput.js';
 import {Container} from '@mui/material';
-import GoogleAuth from '../component/auth/googleAuth/googleAuth.js';
+import GoogleAuth from '../../component/auth/googleAuth/googleAuth.js';
+import './authPage.scss'
 
 export default function Authpage() {
 
@@ -29,16 +30,16 @@ export default function Authpage() {
 
   }
   return (
-    <Container sx={{display: 'flex',  justifyContent: 'center', backgroundColor: "rgb(211, 211, 211,0.3)", padding:0, height:625 ,maxWidth:1360}} >
+    <Container className="authpage-container" >
     
-      <Box sx={{backgroundColor: "white", width: '35%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 3, borderRadius: 4, mt:2, mb:2,height:600 }}>
+      <Box className="authpage-main-box" >
 
-        <Box sx={{m:2}}>
+        <Box className="authpage-box-2" >
 
           <h3>DB DASH</h3>
         </Box>
 
-        <h2 style={{marginBottom:'15px'}}>
+        <h2 className="authpage-h2" >
           {isLogin === false ? "Create Your Account!" : "Welcome Back!"}
         </h2>
 
@@ -46,15 +47,15 @@ export default function Authpage() {
           <GoogleAuth />
         </Box>
 
-        <p  style={{marginTop:'15px'}}>or</p>
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <p className="authpage-p" >or</p>
+        <Box className="authpage-box-4" >
           {/* condition to show login page or signup page */}
           {isLogin === true ? <LoginInput loginHandleSubmit={loginHandleSubmit} /> : <SignupInput signupHandleSubmit={signupHandleSubmit} />}
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <Box className="authpage-box-4" >
 
-        {isLogin === true ? <h4>No account? <span onClick={() => { setIsLogin(false) }} style={{ color: "blueviolet", cursor: 'pointer', textDecoration: 'underline' }}>Create an account!</span> </h4> : <h4>Already a User? <span onClick={() => { setIsLogin(true) }} style={{ color: "blueviolet", cursor: 'pointer', textDecoration: 'underline' }} >Login</span> </h4>}
+        {isLogin === true ? <h4>No account? <span onClick={() => { setIsLogin(false) }} className='blueviolet' >Create an account!</span> </h4> : <h4>Already a User? <span onClick={() => { setIsLogin(true) }} className='blueviolet' >Login</span> </h4>}
 
         </Box>
 

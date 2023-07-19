@@ -34,7 +34,7 @@ function UpdateRecord(props) {
         <ResponseBox response={response} />
       </div>
 
-<div style={{width:'65vw',overflowX:'hidden'}}>
+<div style={{width:'64vw',overflowX:'hidden'}}>
       <div className="response-container"  >
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Update Records</Typography>
         <Typography  fontSize={variables.textsize} sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',p:2}}>
