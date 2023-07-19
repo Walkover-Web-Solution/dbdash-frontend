@@ -1,0 +1,45 @@
+@import '../../assets/styling.scss';
+.filter-modal {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background-color: $bgColorValue !important;
+    border-radius: 5px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    padding: 20px !important;
+    width: 400px !important;
+  }
+  
+
+  .popup-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 5% !important;
+    background-color: '#F0F0F0' !important;
+  }
+  
+  .title {
+    margin-left: 4px !important;
+  }
+  
+  .close-icon {
+    &:hover {
+      cursor: pointer !important;
+    }
+  }
+  
+  .filter-content {
+    margin-left: 16px !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .filter-actions {
+    margin: 16px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }

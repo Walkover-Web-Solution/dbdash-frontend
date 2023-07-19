@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import FilterModal from "../../component/filterPopUp";
+import FilterModal from "../../component/filterPopup/filterPopUp";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import SingleTable from "../../component/table/singleTable/singleTable";
 import { useParams } from "react-router-dom";

@@ -5,9 +5,10 @@ import PropTypes from "prop-types";
 import { Add, Cancel } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { updateColumnHeaders, updateMultiSelectOptions } from "../../store/table/tableThunk";
-import { getTableInfo } from "../../store/table/tableSelector";
+import { updateColumnHeaders, updateMultiSelectOptions } from "../../../store/table/tableThunk";
+import { getTableInfo } from "../../../store/table/tableSelector";
 import { toast } from 'react-toastify';
+import './addOptionPopup.scss'
 
 const style = {
   position: "absolute",
@@ -162,13 +163,14 @@ export default function AddOptionPopup(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={style} >
+        <div >
           <Typography variant="h6" component="h2">
             Add options
-          </Typography>
-          <Box sx={{ my: 2,maxHeight:'300px',overflowY:'auto' }}>
+          </Typography></div>
+          <Box className='addoption-container'>
             {inputValues.map((val, index) => (
-              <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
+              <Box key={index} className='addOption-textfield'>
                 <TextField
                   id={`input-${index}`}
                   variant="standard"
@@ -180,11 +182,11 @@ export default function AddOptionPopup(props) {
                 />
                 <Cancel
                   onClick={() => handleCancelClick(index, inputValues)}
-                  sx={{ cursor: "pointer", marginLeft: "8px" }}
+                  className="addOption-cancel"
                 />
               </Box>
             ))}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box className='addOption-textfield'>
               <TextField
                 autoFocus
                 id="myTextField"
@@ -196,7 +198,7 @@ export default function AddOptionPopup(props) {
               />
             </Box>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Box className='addOption-addbox'>
             <Button className="mui-button" variant="contained" startIcon={<Add />} onClick={handleAddClick}>
               Add
             </Button>

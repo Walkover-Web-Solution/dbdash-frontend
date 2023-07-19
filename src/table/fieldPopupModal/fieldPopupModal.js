@@ -9,7 +9,7 @@ import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
 import TextFormatIcon from "@mui/icons-material/TextFormat";
 import variables from '../../assets/styling.scss';
 import CloseIcon from '@mui/icons-material/Close';
-
+import './fieldPopupModal.scss'
 import NotesIcon from "@mui/icons-material/Notes";
 import { withStyles } from '@mui/styles';
 import LinkIcon from '@mui/icons-material/Link';
@@ -197,20 +197,16 @@ export default function FieldPopupModal(props) {
   };
 
   return (
-    <div style={{borderRadius:0}}>
+    <div className="fieldPop-main-container">
       <Dialog
         open={props?.open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+       className="fieldPop-Dialog"
       >
-         <div className="popupheader" style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+         <div className="popupheader field-header">    <Typography className="field-textfield" id="title" variant="h6" component="h2">
             create column
-          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+          </Typography><CloseIcon className="field-close-icon" onClick={handleClose}/></div>
 
         <TextField
           autoFocus
@@ -231,7 +227,7 @@ export default function FieldPopupModal(props) {
               }
             }
           }}
-          sx={{ width: "92%", mr: 2, ml: 2 }}
+          className="field-textfield2"
         />
 
         {errors.fieldName && (
@@ -241,11 +237,7 @@ export default function FieldPopupModal(props) {
         )}
 
         <DialogContent
-          sx={{
-            width: 400,
-            p:2,
-            pt:0
-          }}
+          className="fieldDialogcontent"
         >
           <Select
             labelId="select-label"
@@ -254,28 +246,24 @@ export default function FieldPopupModal(props) {
             onChange={handleSelectChange}
             defaultValue="longtext"
             displayEmpty
-            sx={{
-              margin: 2,
-              ml:0,
-              minWidth: 120,
-            }}
+           className="field-select"
           >
-            <MenuItem value="attachment"><InsertDriveFileIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} /> Attachment</MenuItem>
-            <MenuItem value="checkbox"> <CheckIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Checkbox</MenuItem>
-            {/* <MenuItem value="createdat"> <MoreTimeIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Created at</MenuItem>
-            <MenuItem value="createdby"><PersonPinIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Created by </MenuItem> */}
-            <MenuItem value="datetime"><DateRangeIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} /> Datetime </MenuItem>
-            <MenuItem value="email"><EmailIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Email</MenuItem>
-            <MenuItem value="formula"><FunctionsIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Formula  </MenuItem>
-            <MenuItem value="link"><ArrowForwardIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} /> Link </MenuItem>
-            <MenuItem value="longtext" defaultValue="longtext"><NotesIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} /> Long text </MenuItem>
-            <MenuItem value="lookup"><ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Lookup</MenuItem>
-            <MenuItem value="multipleselect"><DoneAllIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Multiple select</MenuItem>
-            <MenuItem value="numeric"><NumbersIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} /> Number</MenuItem>
-            <MenuItem value="phone"><LocalPhoneIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Phone number</MenuItem>
-            <MenuItem value="singlelinetext"><TextFormatIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Single line text</MenuItem>
-            <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} />Single select</MenuItem>
-            <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  sx={{ mr: 1 }} /> URL</MenuItem> 
+            <MenuItem value="attachment"><InsertDriveFileIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> Attachment</MenuItem>
+            <MenuItem value="checkbox"> <CheckIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Checkbox</MenuItem>
+            {/* <MenuItem value="createdat"> <MoreTimeIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Created at</MenuItem>
+            <MenuItem value="createdby"><PersonPinIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Created by </MenuItem> */}
+            <MenuItem value="datetime"><DateRangeIcon  fontSize={variables.iconfontsize1}   className="field-select-option" /> Datetime </MenuItem>
+            <MenuItem value="email"><EmailIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Email</MenuItem>
+            <MenuItem value="formula"><FunctionsIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Formula  </MenuItem>
+            <MenuItem value="link"><ArrowForwardIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> Link </MenuItem>
+            <MenuItem value="longtext" defaultValue="longtext"><NotesIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> Long text </MenuItem>
+            <MenuItem value="lookup"><ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  className="field-select-option" />Lookup</MenuItem>
+            <MenuItem value="multipleselect"><DoneAllIcon  fontSize={variables.iconfontsize1}  className="field-select-option" />Multiple select</MenuItem>
+            <MenuItem value="numeric"><NumbersIcon  fontSize={variables.iconfontsize1} className="field-select-option" /> Number</MenuItem>
+            <MenuItem value="phone"><LocalPhoneIcon  fontSize={variables.iconfontsize1}  className="field-select-option" />Phone number</MenuItem>
+            <MenuItem value="singlelinetext"><TextFormatIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single line text</MenuItem>
+            <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single select</MenuItem>
+            <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> URL</MenuItem> 
 
           </Select>
 
@@ -289,7 +277,7 @@ export default function FieldPopupModal(props) {
           {showLookupField && <LoookupDataType linkedValueName={props?.linkedValueName} setLinkedValueName={props?.setLinkedValueName} selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} key={props.selectedTable} tableId={props?.tableId} />}
 
           {showSwitch && (
-          <FormGroup sx={{ml:2}}>
+          <FormGroup className="field-textfield">
           <FormControlLabel
             control={
               <CustomSwitch
@@ -306,7 +294,7 @@ export default function FieldPopupModal(props) {
         
           )}
         </DialogContent>
-        <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+        <Box className='fieldPop-Dialog '>
             <Box >
         {props?.selectValue !== "formula" || props?.queryByAi ? (
           <Button

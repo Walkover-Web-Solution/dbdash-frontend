@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 // import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CloseIcon from '@mui/icons-material/Close';
-
+import './duplicateDbPopup.scss'
 import {
   
   Box,
@@ -14,10 +14,10 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { duplicateDb } from '../../api/dbApi';
+import { duplicateDb } from '../../../api/dbApi';
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
-import {createDbThunk} from "../../store/database/databaseThunk";
+import {createDbThunk} from "../../../store/database/databaseThunk";
 import { makeStyles } from '@mui/styles';
 const DuplicateDbPopup = (props) => {
   const [databaseName, setDatabaseName] = useState(props?.db+"_copy");
@@ -61,11 +61,11 @@ const DuplicateDbPopup = (props) => {
         paper: classes.dialogPaper, // Apply custom styles to the dialog paper
       }}
       open={props?.open} onClose={handleClose}>
-      <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+      <div className="popupheader dbduplicate-container">    <Typography className="dbduplicate-typography" id="title" variant="h6" component="h2">
       duplicate <strong>{props?.db}</strong>
-          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+          </Typography><CloseIcon className='dbduplicate-close-icon' onClick={handleClose}/></div>
 
-        <DialogContent sx={{display:'flex',flexDirection:'column',justifyContent:'left',p:0,pl:2,pr:1,py:1}} >
+        <DialogContent className='dbduplicate-dailog-text' >
           <DialogContentText> 
             Enter the name for the duplicated database:
           </DialogContentText>
@@ -83,7 +83,7 @@ const DuplicateDbPopup = (props) => {
               Duplicate records {duplicateRecords ? <CheckBoxIcon fontSize='small'/> : <CheckBoxOutlineBlankIcon fontSize='small'/>}
             </Typography> */}
         </DialogContent>
-        <Box sx={{ display: "flex", m:2,mt:0,justifyContent: "space-between" }}>
+        <Box className='duplicat-button'>
 
           <Button onClick={handleDuplicate} variant="contained" className="mui-button">
             Duplicate

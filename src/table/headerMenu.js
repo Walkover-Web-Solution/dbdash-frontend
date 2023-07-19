@@ -10,7 +10,7 @@ import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import styling from '../assets/styling.scss'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import DuplicateFieldPopup from './duplicateFieldPopup';
+import DuplicateFieldPopup from './duplicateFieldPopup/duplicateFieldPopup';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { deleteColumns, updateColumnHeaders } from '../store/table/tableThunk';

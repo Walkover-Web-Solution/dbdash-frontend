@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import ShareLinkPopUp from "../ShareLinkPopUp"
+import ShareLinkPopUp from "../ShareLinkPopUp/ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
-import PopupModal from "../../popupModal";
+import PopupModal from "../../popupModal/popupModal";
 // import { toast } from 'react-toastify';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import FilterModal from "../../filterPopUp";
+import FilterModal from "../../filterPopup/filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch, useSelector } from "react-redux";
 import MainTable from "../../../table/mainTable";
 import { createTable1 } from "../../../store/allTable/allTableThunk";
-import AddFilterPopup from "../../addFIlterPopup";
+import AddFilterPopup from "../../addFilterPopup/addFIlterPopup";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";

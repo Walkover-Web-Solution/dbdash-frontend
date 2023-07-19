@@ -2,6 +2,7 @@ import React from 'react';
 import {Box, Button,Dialog,DialogContent, Typography} from '@mui/material';
 import { PropTypes } from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
+import "./alerPopup.scss"
 
 export default function AlertPopup(props) {
 
@@ -18,19 +19,19 @@ export default function AlertPopup(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <div className="popupheader" style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+        <div className="popupheader alert-popup-head" >    <Typography className="alerttext" id="title" variant="h6" component="h2">
         {props.title}
           </Typography><CloseIcon
           autoFocus onClick={(e)=>{handleClose(e);e.preventDefault(); e.stopPropagation()}}
-          sx={{'&:hover': { cursor: 'pointer' }}} /></div>
-        <DialogContent sx={{pl:2}}>
+          className="aler-close-icon" /></div>
+        <DialogContent className='dialogContent'>
           { 
           <div >
             Are you sure you want to delete the {props.title}?
           </div>
 }
         </DialogContent>
-        <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+        <Box className='alert-filter-actions'>
           <Button className="mui-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); props?.deleteFunction(props?.tableId); handleClose(e); }}>Delete</Button>
           
         </Box>
