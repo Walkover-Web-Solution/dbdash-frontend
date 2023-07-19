@@ -3,34 +3,35 @@
   
   color: $responseboxfontColor !important;
   background-color: $responseboxbgcolor!important;
-  // padding: 10px !important;
-  width: 40vw !important;
+  width: 35vw !important;
   height: 100% !important;
   margin-bottom: 12px !important;
   font-size:$codeblockfontsize !important;
 
   margin-top: 10px !important;
-  padding-bottom: 4vh !important;
+  padding-bottom: 1vh !important;
 }
 .numbercolor{
   color:#013220 !important;
 }
 .stringcolor{
-  color:#7a2048 !important;
+  color:#7a2048 !important; 
 }
 .codeblock-header{
+  display: flex !important;
+  flex-direction: row-reverse !important;
   height: 30px !important;
-  padding-left: 15px !important;
+  padding-right: 15px !important;
   background-color: $codeblockbgcolor !important;
 }
 
 .code-block {
   background-color: $codeblockbgcolor !important;
   color: $fontColorVAlue !important;
-  padding-bottom: 4vh !important;
+  padding-bottom: 1vh !important;
   overflow-y:visible !important;
    
-    width:40vw  !important;
+    width:35vw  !important;
    
    height: fit-content !important;
   margin-top: 30px !important;
@@ -40,10 +41,7 @@
   .valuescolor{
     color:#028A0F !important;
   }
-  .code-block pre {
-    margin: 1 !important;
-    margin-left: 10px !important;
-  }
+ 
   
   .copy-button {
 
@@ -53,7 +51,7 @@
     color: black !important;
     border: none !important;
     border-radius: 0 !important;
-    margin-left: -20px !important;
+    margin-right: -14px !important;
      padding: 4px 10px !important; 
     cursor: pointer !important;
   }
@@ -67,18 +65,18 @@
   
   .button {
     position: relative !important;
-    bottom: 65px  !important;
+    bottom: 59px  !important;
     font-size: 15px  !important;
   }
   
   .button-api {
     background-color: $fontColorVAlue;
     color: $bgColorValue;
-    font-size: 24px !important;
+    font-size: 18px !important;
   }
   .button-curl {
    
-    font-size: 24px !important;
+    font-size: 18px !important;
     background-color: $bgColorValue  !important;
     color: $fontColorVAlue  !important;
 
@@ -90,18 +88,20 @@
   }
   .response-body{
     padding: 10px !important;
+    padding-left: 2.5vw !important;
   }
   .pre-wrapper {
     position: relative !important;
-    width: 500px !important;
+    width: 32vw !important;
     height:auto !important;
+    padding-left: 1.6vw !important;
     
     white-space: pre-wrap !important;
   }
   
   .code {
     white-space: pre-wrap !important;
-    max-width: 400px !important;
+    max-width: 32vw !important;
     word-wrap: break-word !important;
   }
   

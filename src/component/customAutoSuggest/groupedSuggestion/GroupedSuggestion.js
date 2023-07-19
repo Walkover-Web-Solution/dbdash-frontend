@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React, { useState, useEffect, useRef } from 'react'
 
-export default function GroupedSuggestion({ id, editableDivRef, suggestion, chipClass, editableDivClass, suggestionBoxClass, onEnterBtnEvent, getInputValueWithContext, setHtml, setText, defaultValue, disable, symbolForSearching,placeholder }) {
+export default function GroupedSuggestion({ id, editableDivRef, suggestion, chipClass, editableDivClass, suggestionBoxClass, onEnterBtnEvent, getInputValueWithContext, setHtml, setText, defaultValue, disable, symbolForSearching,placeholder,height }) {
 
     let suggestions = suggestion || [];
 
@@ -331,7 +331,7 @@ export default function GroupedSuggestion({ id, editableDivRef, suggestion, chip
 
     return (
         <div {...parentDivProps} style={styleForParentDiv}>
-            <div {...editableDivProps} />
+            <div {...editableDivProps}  style={height?{minHeight:height}:{minHeight:'50px'}}  />
             <div className={suggestionBoxClass || 'suggestionBox'} style={styleForSuggestionBox}>
                 {Object.entries(filteredSuggestions).map(([key, groupSugesstionArray]) => renderGroups(key, groupSugesstionArray))}
             </div>

@@ -69,11 +69,11 @@ function ApiCrudTablist(props) {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <StyledTab className="custom-tab-label" label="Basic stuff" {...a11yProps(0)} />
-          <StyledTab className="custom-tab-label" label="List/Search" {...a11yProps(1)} />
-          <StyledTab className="custom-tab-label" label="Add" {...a11yProps(2)} />
-          <StyledTab className="custom-tab-label" label="Update" {...a11yProps(3)} />
-          <StyledTab className="custom-tab-label" label="Delete" {...a11yProps(4)} />
+          <StyledTab className="custom-tab-label" label="BASIC STUFF" {...a11yProps(0)} />
+          <StyledTab className="custom-tab-label" label="LIST/SEARCH" {...a11yProps(1)} />
+          <StyledTab className="custom-tab-label" label="ADD" {...a11yProps(2)} />
+          <StyledTab className="custom-tab-label" label="UPDATE" {...a11yProps(3)} />
+          <StyledTab className="custom-tab-label" label="DELETE" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <div className="marginTop">

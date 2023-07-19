@@ -21,14 +21,9 @@ const[showAnsfield,setShowAnsfield]=useState(true);
   const [fields, setFields] = useState([]);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
 
-
-//   const [defaultValue, setDefaultValue] = useState(
-//     AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow || ""
-//   );
-
   const aiFilterStyle = {
     border: '1px solid #ccc',
-    width: '80%' ,// Adjust the width as desired
+    width: '85%' ,// Adjust the width as desired
     marginTop:'1vh'
   };
 
@@ -80,6 +75,7 @@ const[showAnsfield,setShowAnsfield]=useState(true);
 
   const customAutosuggestfunction=(fields)=>{
     return <CustomAutoSuggest
+    id="customautosuggest"
     getInputValueWithContext={handleTextChange}
     editableDivRef={editableDivRef}
     suggestion={fields}
@@ -120,7 +116,7 @@ setShowAnsfield(true);
       <div style={headerStyle}>Filter</div>
       <div style={contentStyle}>
         <div style={buttonContainerStyle}>
-        <Box style={{ display: 'flex', flexDirection: text === '' ? 'row' : 'column', width: '100%' }}>
+        <Box style={{ display: 'flex', flexDirection: text === '' ? 'row' : 'column', width: '100%' ,alignItems:'center'}}>
   
 <div style={{width:text==''?'76%':'98%'}}>
        { customAutosuggestfunction(fields)}
@@ -132,7 +128,8 @@ setShowAnsfield(true);
             sx={{
               fontSize: variables.editfilterbutttonsfontsize,
               backgroundColor:variables.codeblockbgcolor,
-              height:'5vh' // Adjust the margin left as needed
+              height:'50px' ,
+              width:'90%',
             }}
             onClick={handleQuery}
 
@@ -154,7 +151,7 @@ setShowAnsfield(true);
     }
   }}
        style={{height:'20vh',fontSize:`${variables.textsize}px`,width:'99%'}}/>:  <div style={{display:'flex',justifyContent:'center'}}><CircularProgress /></div>}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end',m:2,mr:0 }}>
       {showAnsfield &&    <Button className="mui-button" onClick={props?.handleUse} variant="contained">
             Use
           </Button>}

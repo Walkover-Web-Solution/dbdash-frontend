@@ -219,6 +219,7 @@ setShowsecondfield(true);
                     // setHtml={setHtml}
                     setText={setText}
                     // defaultValue={}
+                    height="100px"
                     groupByGroupName={false}
                     ref={textFieldRef} // Add this line
                   />
@@ -252,6 +253,8 @@ setShowsecondfield(true);
                 symbolForSearching={' '}
                  getInputValueWithContext={handleTextChange2}
                  width="100%"
+                 height="100px"
+                 
                  suggestion={fields}
                  setText={setText}
                  defaultValue={defaultValue}  
