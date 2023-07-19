@@ -102,9 +102,9 @@ export default function Webhooktable(props) {
 
   return (
     <>
-      <Box sx={{  my: 1,paddingLeft:'24px',paddingRight:'31px' }}>
-        <TableContainer component={Paper} sx={{border: 1,borderRadius:0, width: "100%", maxHeight: 533 }}>
-          <Table sx={{ minWidth: 650}} stickyHeader aria-label="sticky table">
+      <Box className="webhook-table-main-container">
+        <TableContainer className="webhook-table-container" component={Paper} >
+          <Table  className="webhook-table"  stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -112,7 +112,6 @@ export default function Webhooktable(props) {
                 <TableCell>Condition</TableCell>
                 <TableCell>Table</TableCell>
 
-                {/* <TableCell>Filters</TableCell> */}
                 <TableCell>Created On</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
@@ -121,7 +120,7 @@ export default function Webhooktable(props) {
               {tabledata && Object.entries(tabledata).map(([condition, webhooks]) => (
                 Object.entries(webhooks).map(([webhookid, webhook]) => (
 
-                  <TableRow key={webhookid} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow className="webhook-table-body-table-row" key={webhookid} >
 
                     <TableCell component="th" scope="row">
                       {webhook.name}
@@ -137,9 +136,6 @@ export default function Webhooktable(props) {
                     
                     <TableCell>{ props?.dataforwebhook[webhook.tableId]?.tableName}</TableCell>
 
-                    {/* <TableCell>
-  {webhook.filterId && props.filters[webhook.filterId]?.filterName}
-</TableCell> */}
 
 
                     <TableCell>

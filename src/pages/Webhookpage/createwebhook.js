@@ -66,20 +66,19 @@ function Createwebhook(props) {
     <>
       <Modal open={props.open} onClose={handleClose}>
         <Box
-          className="create-auth-key-main-container"
+          className="create-webhook-key-main-container"
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
           }}
-          sx={{p:0,outline:'none'}}
         >
-          <Box className="create-auth-key-content-container" >
-          <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+          <Box className="create-webhook-key-content-container" >
+          <div className="create-webhook-popupheader popupheader" >    <Typography className="create-webhook-popupheader-heading"  id="title" variant="h6" component="h2">
             {props?.heading}
-          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={props?.handleClose}/></div>
+          </Typography><CloseIcon className="create_webhook-close-icon"  onClick={props?.handleClose}/></div>
 
-            <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
-              <Typography className="create-auth-key-label">Name</Typography>
+            <Box className="create-webhook-key-row" >
+              <Typography className="create-webhook-key-label">Name</Typography>
               <TextField
                 id="standard-basic"
                 label="Name"
@@ -90,18 +89,19 @@ function Createwebhook(props) {
                 }}
               />
             </Box>
-            <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
+            <Box className="create-webhook-key-row" >
               <Typography className="create-webhook-label">Action</Typography>
               <FormControl
                 variant="standard"
-                className="create-auth-key-dropdown"
+                className="create-webhook-key-dropdown"
               >
                 <TextField
                   id="action"
                   select
                   label="Action"
+                  className="create-webhook-action-text-field"
                   value={action}
-                  style={{ minWidth: "210px" }}
+                  // style={{ minWidth: "210px" }}
                   onChange={(e) => setAction(e.target.value)}
                 >
                   <MenuItem value="createRow">Create Row</MenuItem>
@@ -110,18 +110,19 @@ function Createwebhook(props) {
                 </TextField>
               </FormControl>
             </Box>
-            { props?.tables && <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
+            { props?.tables && <Box className="create-webhook-key-row" >
               <Typography className="create-webhook-label">Tables</Typography>
               <FormControl
                 variant="standard"
-                className="create-auth-key-dropdown"
+                className="create-webhook-key-dropdown"
               >
                 <TextField
                   id="tables"
                   select
                   label="Action"
+                  className="create-webhook-table-text-field"
                   value={selectedtable}
-                  style={{ minWidth: "210px" }}
+                  // style={{ minWidth: "210px" }}
                   onChange={(e) => {
                     setSelectedTable(e.target.value)}}
                 >
@@ -139,8 +140,8 @@ function Createwebhook(props) {
 
            
 
-            <Box className="create-auth-key-row" sx={{pl:2,pr:1}}>
-              <Typography className="create-auth-key-label">URL</Typography>
+            <Box className="create-webhook-key-row" >
+              <Typography className="create-webhook-key-label">URL</Typography>
               <TextField
                 id="standard-basic"
                 label="Url"
@@ -152,11 +153,10 @@ function Createwebhook(props) {
               />
             </Box>
           </Box>
-          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
-
+          <Box className="create-webhook-button-box">
             <Button
               variant="contained"
-              className="create-auth-key-button mui-button"
+              className="create-webhook-key-button mui-button"
               onClick={() => {
                 createWebHook();
                 handleClose();
@@ -193,3 +193,5 @@ Createwebhook.propTypes = {
 };
 
 export default Createwebhook;
+
+// sx={{'&:hover': { cursor: 'pointer' }}}

@@ -5,7 +5,7 @@ import Authpage from './pages/authPage';
 import LandingPage from './pages/landingPage';
 import { AuthContextProvider } from './context/authContext';
 import "./pages/css.scss"
-import DbDetail from './pages/dbDetail';
+import DbDetail from './pages/dbDetail/dbDetail';
 import ApiDocPage from './pages/apidocPage';
 import Protected from './component/protected';
 import WithAuth from './component/withAuth';

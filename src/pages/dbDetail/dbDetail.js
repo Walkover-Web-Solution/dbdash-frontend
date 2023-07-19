@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Box} from "@mui/material";
 import { useParams} from "react-router-dom";
-import TablesList from "../component/table/tablesList/tablesList";
-import MainNavbar from "../component/mainNavbar/mainNavbar";
-import { getDbById } from "../api/dbApi";
+import TablesList from "../../component/table/tablesList/tablesList";
+import MainNavbar from "../../component/mainNavbar/mainNavbar";
+import { getDbById } from "../../api/dbApi";
 import { useDispatch } from "react-redux";
-import { setAllTablesData } from "../store/allTable/allTableSlice";
-import { resetData } from "../store/table/tableSlice";
+import { setAllTablesData } from "../../store/allTable/allTableSlice";
+import { resetData } from "../../store/table/tableSlice";
+import "./dbDetail.scss"; 
 
 function DbDetails() {
     var {dbId} = useParams();
@@ -41,11 +42,11 @@ function DbDetails() {
     return (
         <>
 
-        <Box sx ={{ overflowX: 'hidden'}}>
+        <Box className="db-detail-navbar-box">
       <MainNavbar dbData={dbData}/>
     </Box>
            
-            <Box align="center" style={{height: "95%"}} >
+            <Box className="db-detail-table-list-box" >
             { dbData && <TablesList  dbData={dbData} tables={tables} setTables={setTables} />}
             </Box> 
         </>
