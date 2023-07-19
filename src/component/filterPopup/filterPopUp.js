@@ -4,10 +4,11 @@ import { Box, Typography, TextField, Button,ClickAwayListener } from "@mui/mater
 import { useNavigate } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
 
-import { createFilter } from "../api/filterApi";
+import { createFilter } from "../../api/filterApi";
 import { useDispatch } from "react-redux";
-import { setAllTablesData } from "../store/allTable/allTableSlice";
-import variables from '../assets/styling.scss';
+import { setAllTablesData } from "../../store/allTable/allTableSlice";
+import variables from '../../assets/styling.scss';
+import "./filterPopup.scss"
 
 
 const FilterModal = (props) => {
@@ -136,47 +137,47 @@ filterName1=firstChar.toUpperCase() + filterName.slice(1);
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
     <Box sx={style}>
-    <div className="popupheader"  style={{marginBottom:'5%'}}>    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
-            create filter
-          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+      <div className="popupheader popup-header">
+        <Typography className="title" variant="h6" component="h2">
+          create filter
+        </Typography>
+        <CloseIcon
+          className="close-icon"
+          onClick={handleClose}
+        />  
+      </div>
 
-      <Box 
-          sx={{ml:2,display:'flex',justifyContent:'left'}}
-      >
+      <Box className="filter-content">
         <TextField
           label="Filter Name"
           variant="outlined"
           value={filterName}
           autoFocus={true}
-          onKeyDown={(e)=>{
-            if(e.key!='Enter') return;
-            if(!filterName) return;
+          onKeyDown={(e) => {
+            if (e.key !== "Enter") return;
+            if (!filterName) return;
             handleCreateFilter();
             handleClose();
-
           }}
           onChange={(e) => setFilterName(e.target.value)}
         />
       </Box>
-      <Box sx={{m:2}} display="flex" justifyContent="space-between">
+      <Box className="filter-actions" display="flex" justifyContent="space-between">
         <Button
           variant="contained"
-          className="mui-button"
+          className="mui-button "
           onClick={() => {
             handleCreateFilter();
             handleClose();
           }}
           disabled={!filterName}
-          style={{ marginRight: "10px" }}
-          sx={{fontSize:variables.editfilterbutttonsfontsize}}
+          sx={{ fontSize: variables.editfilterbutttonsfontsize }}
         >
           Create Filter
         </Button>
-       
       </Box>
     </Box>
-    </ClickAwayListener>
-
+  </ClickAwayListener>
   );
 };
 
@@ -192,4 +193,3 @@ FilterModal.propTypes = {
 };
 
 export default FilterModal;
-

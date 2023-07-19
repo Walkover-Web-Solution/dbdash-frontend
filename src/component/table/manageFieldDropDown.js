@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import AddOptionPopup from './addOptionPopup';
+import AddOptionPopup from './addOptionPopup/addOptionPopup';
 import variables from '../../assets/styling.scss';
 
 import { useParams } from 'react-router-dom';

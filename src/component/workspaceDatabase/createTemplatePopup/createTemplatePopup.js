@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import "../../pages/Webhookpage/Webhookpage.scss";
+import "../../../pages/Webhookpage/Webhookpage";
 import CloseIcon from '@mui/icons-material/Close';
+import './createTemplatePopup.scss'
 
 import {
   Box,
@@ -12,7 +13,7 @@ import {
   Autocomplete,
 } from '@mui/material';
 import { toast } from "react-toastify";
-import { createTemplate, getAllCategoryName } from '../../api/templateApi';
+import { createTemplate, getAllCategoryName } from '../../../api/templateApi';
 import { useEffect } from 'react';
 
 const CreateTemplatePopup = (props) => {
@@ -55,20 +56,20 @@ const CreateTemplatePopup = (props) => {
       <>
         <Modal open={props?.open} onClose={handleClose}>
           <Box
-            className="create-auth-key-main-container"
+            className="create-auth-key-main-container createTemp-box"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
             }}  
-            sx={{p:0,border:'none',width:'50vw'}}
+            
           >
-               <div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+               <div className="popupheader">    <Typography className='createTemp-typography' id="title" variant="h6" component="h2">
             create template
-          </Typography><CloseIcon sx={{  '&:hover': { cursor: 'pointer' } }} onClick={handleClose}/></div>
+          </Typography><CloseIcon className='createTemp-close-icon' onClick={handleClose}/></div>
             <Box className="create-auth-key-content-container">
-              <Box className="create-auth-key-row" sx={{display:'flex',flexDirection:'column'}}>
-                <div style={{display:'flex',justifyContent:'space-between ',width:'100%',alignItems:'center'}}>
-              <Typography className="create-auth-key-label" sx={{width:'fit-content',paddingLeft:2,paddingBottom:0}}>Category Name</Typography>
+              <Box className="create-auth-key-row createTemp-box2" >
+                <div className='createTemp-div  '>
+              <Typography className="create-auth-key-label createTemp-catagory" >Category Name</Typography>
 
               <Autocomplete
       id="country-select-demo"
@@ -76,7 +77,9 @@ const CreateTemplatePopup = (props) => {
       onChange={(e, value) => {
         setCategoryName(value);
       }}
-      sx={{width:'68%',m:2,mb:0}}
+
+      className='createTemp-autocomplete'
+
       options={allCategory || []}
       freeSolo={true} 
       getOptionLabel={(option) => option}
@@ -101,20 +104,20 @@ const CreateTemplatePopup = (props) => {
     />
                </div>
               </Box>
-              <Box className="create-auth-key-row" sx={{m:2}} >
-                <Typography className="create-auth-key-label" sx={{width:'fit-content',paddingRight:'10px'}}>Template Name</Typography>
+              <Box className="create-auth-key-row createTemp-container" >
+                <Typography className="create-auth-key-label createTemp-typo" >Template Name</Typography>
                 <TextField
                   id="standard-basic"
                   label="Template Name"
                   variant="standard"
-                  sx={{width:'70%'}}
+                  className='createTemp-textField'
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
                 />
               </Box>
-              <Box className="create-auth-key-row" sx={{m:2}}>
+              <Box className="create-auth-key-row createTemp-container" >
                 <Typography className="create-auth-key-label">Description</Typography>
                 <textarea
   id="standard-basic"
@@ -122,7 +125,7 @@ const CreateTemplatePopup = (props) => {
   placeholder="Give a brief description..."
   value={description}
   rows={10}
-  style={{width:'70%'}}
+  className='createTemp-textField'
 
   onChange={(e) => {
     setDescription(e.target.value);
@@ -131,7 +134,7 @@ const CreateTemplatePopup = (props) => {
 
               </Box>
             </Box>
-            <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+            <Box className="createTemp-boxx3">
               <Button
                 variant="contained"
                 className="create-auth-key-button mui-button"

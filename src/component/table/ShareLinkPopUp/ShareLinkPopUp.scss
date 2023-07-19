@@ -1,0 +1,16 @@
+.sharedViewTitle {
+    margin-left: 16px !important;
+  }
+.shareView-close-icon {
+    &:hover {
+      cursor: pointer !important;
+    }
+  }
+.Linkfield{
+    margin: 16px!important;
+}
+.shareView-actions {
+    margin: 16px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }

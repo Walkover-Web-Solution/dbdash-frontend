@@ -1,0 +1,21 @@
+.alert-popup-head{
+    margin-bottom: 5%!important;
+}
+.alerttext{
+    margin-left: 16px!important;
+}
+.aler-close-icon:hover {
+    &:hover {
+      cursor: pointer!important;
+    }
+  }
+
+.dialogContent{
+    padding-left: 16px!important;
+}
+
+.alert-filter-actions {
+    margin: 16px!important;
+    display: flex!important;
+    justify-content: space-between!important;
+  }

@@ -1,0 +1,59 @@
+// @import '../../../../src/assets/styling.scss' !important;
+.addfilter-header{
+  margin: 16px!important;
+}
+.popup-container {
+    width: 100% !important;
+  }
+  
+  .popup-header {
+    display: flex !important;
+    align-items: center !important;
+    padding-left: 2% !important;
+  }
+  
+  .close-icon {
+    cursor: pointer !important;
+  }
+  
+  .popup-content {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  
+  .edit-div {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  .edit-div-inner {
+    padding: 1% !important;
+    width: 90% !important;
+  }
+  
+  .button-container {
+    display: flex !important;
+    margin: 2% !important;
+    justify-content: space-between !important;
+  }
+  
+  
+  .loader-container {
+    display: flex !important;
+    justify-content: center !important;
+  }
+  .fieldDialogcontent{
+    width: 400px;
+    padding: 16px;
+    padding-top: 0px;
+  }
+  .field-select{
+    margin: 16px;
+    margin-left: 0px;
+    min-width: 120px;
+  }
+
+  

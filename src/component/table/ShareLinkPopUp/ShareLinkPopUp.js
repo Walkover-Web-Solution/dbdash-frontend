@@ -4,6 +4,7 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import CloseIcon from '@mui/icons-material/Close';
+import './ShareLinkPopUp.scss'
 
 const style = {
   position: "absolute",
@@ -42,12 +43,12 @@ export default function ShareLinkPopUp(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+        <div className="popupheader">    <Typography className="sharedViewTitle" id="title" variant="h6" component="h2">
             {props.title}
-          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+          </Typography><CloseIcon className="shareView-close-icon" onClick={handleClose}/></div>
 
        
-          <Box sx={{ m: 2 }}>
+          <Box className='Linkfield'>
             <TextField
               autoFocus
               id={props?.id}
@@ -58,7 +59,7 @@ export default function ShareLinkPopUp(props) {
               // onChange={handleChange}
             />
           </Box>
-          <Box sx={{ display: "flex", m:2,justifyContent: "space-between" }}>
+          <Box className='shareView-actions'>
             
             <Box>
               <CopyToClipboard text={props.textvalue}>

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import "./duplicateFieldPopup.scss"
 
 export default function DuplicateFieldPopup(props) {
   const handleDuplicateField = () => {
@@ -9,12 +10,8 @@ export default function DuplicateFieldPopup(props) {
 
   return (
     <div
+    className="duplicatefield-container"
       style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
         display: props.open ? "flex" : "none",
         justifyContent: "center",
         alignItems: "center",
@@ -23,16 +20,7 @@ export default function DuplicateFieldPopup(props) {
       }}
     >
       <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "20px",
-          // borderRadius: "8px ", // Add border-radius for rounded corners
-          width: "400px",
-          position: "sticky", // Make the popup sticky
-          top: "50%",
-          transform: "translateY(-50%)",
-          border: "2px solid black", // Add border
-        }}
+        className="duplicatefield-div2"
       >
         <h3>Duplicate Field</h3>
         <div>
@@ -44,7 +32,7 @@ export default function DuplicateFieldPopup(props) {
             onChange={props?.handleUniqueChange}
           />
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+        <div className="duplicatefield-button-box">
           <button onClick={props?.handleClose}>Cancel</button>
           <button onClick={handleDuplicateField}>Duplicate Field</button>
         </div>
