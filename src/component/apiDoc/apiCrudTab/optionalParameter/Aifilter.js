@@ -20,7 +20,6 @@ const[showAnsfield,setShowAnsfield]=useState(true);
     const [textAfterWhere, setTextAfterWhere] = useState();
   const [fields, setFields] = useState([]);
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
-console.log("sudufuf",AllTableInfo);
 
 
 //   const [defaultValue, setDefaultValue] = useState(

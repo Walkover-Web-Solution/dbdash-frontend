@@ -247,7 +247,7 @@ function MainNavbar(props) {
             setOpenDbSnapshot(true);
             handleCloseMenu();
           }}>
-            <Typography textAlign="center">Revision History</Typography>
+            <Typography textAlign="center">Db Snapshots</Typography>
           </MenuItem>
 
         </Menu>

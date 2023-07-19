@@ -62,6 +62,9 @@ export function getPropertyIcon(data_type) {
     case "createdat":
       propertyIcon = <MoreTimeIcon  fontSize={variables.iconfontsize1}  />;
       break;
+      case "updatedat":
+        propertyIcon = <MoreTimeIcon  fontSize={variables.iconfontsize1}  />;
+        break;
     case "attachment":
       propertyIcon = <InsertDriveFileIcon  fontSize={variables.iconfontsize1}  />;
       break;

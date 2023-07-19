@@ -68,7 +68,7 @@ function DbSnapshotsMenu(props) {
     <ClickAwayListener onClickAway={handleClose}>
       <Box sx={style}>
         <div className="popupheader" style={{ marginBottom: '5%' }}>    <Typography sx={{ ml: 2 }} id="title" variant="h6" component="h2">
-          revision history
+          db snapshots
         </Typography>
           <div>
             {inside && <KeyboardBackspaceIcon sx={{ '&:hover': { cursor: 'pointer' } }} onClick={() => setInside(null)} />}<CloseIcon sx={{ '&:hover': { cursor: 'pointer' } }} onClick={handleClose} />
