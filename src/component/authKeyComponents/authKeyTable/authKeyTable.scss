@@ -1,6 +1,6 @@
 .authKey-container {
-  margin: 8px 0 0 0;
-  padding: 0 31px 0 34px;
+  margin: 8px 0px !important;
+  padding: 0 31px 0 24px !important;
 }
 .authkey-table-container {
   width: 100% !important;
@@ -9,6 +9,6 @@
   border-radius: 0 !important;
 }
 .auth-key-table {
-  min-width: 650px;
-  overflow-y: "scroll";
+  min-width: 650px !important;
+  overflow-y: scroll !important;
 }
