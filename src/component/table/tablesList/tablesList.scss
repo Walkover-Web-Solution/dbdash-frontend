@@ -1,9 +1,10 @@
 @import '../../../../src/assets/styling.scss';
-.tableslist{
+
+.tableslist {
   margin-top: 7vh !important;
-  position:fixed !important;
-  top:0 !important;
-  z-index:100;
+  position: fixed !important;
+  top: 0 !important;
+  z-index: 100;
   color: $fontColorVAlue !important;
   background-color: $bgColorValue !important;
   font-size: $tablepagefontsize !important;
@@ -11,48 +12,41 @@
 }
 
 .tables-list-container {
-    width: 100vw !important;
-
-    display: flex !important;
-    
-    height: 5vh !important;
+  width: 100vw !important;
+  display: flex !important;
+  height: 5vh !important;
   font-size: $tablepagefontsize !important;
+  overflow: hidden !important;
 
-    overflow: hidden !important;
-    
-  
-    .tabs-container {
-      display: flex !important;
-      overflow-x:scroll !important;
-      overflow-y: hidden !important;
-      width: 100vw !important;
+
+  .tabs-container {
+    display: flex !important;
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+    width: 100vw !important;
+    overflow-x: auto !important;
+    padding-left: 24px !important;
+    padding-right: 29px !important;
+    height: 5vh !important;
+
+
+    .tabs {
+      width: 99vw !important;
       overflow-x: auto !important;
-      padding-left: 24px !important;
-      padding-right: 29px !important;
-      height: 5vh !important;
-
-
-.tabs{
-  width:99vw !important;
-  overflow-x: auto !important;
-  overflow-y:  hidden !important;
-}
-
-
-
-
-
-
-      .add-button {
-        margin-left: 0.5rem !important;
-        margin-top: 4px !important;
-        width: fit-content !important;
-        height: 4vh !important;
-      }
+      overflow-y: hidden !important;
+    }
+    .add-button {
+      margin-left: 0.5rem !important;
+      margin-top: 4px !important;
+      width: fit-content !important;
+      height: 4vh !important;
     }
   }
-  .custom-box {
+}
+
+.custom-box {
   margin-right: 10px !important;
+
   .filter-box {
     background-color: transparent;
     min-width: 100px !important;
@@ -69,60 +63,59 @@
     margin-right: 2px !important;
     border: 1px solid $filterColorValue !important;
     height: 15.1px !important;
-    line-height: 1; /* Add this line to ensure the height doesn't expand */
-    white-space: nowrap; /* Add this line to prevent wrapping */
-    overflow: hidden; /* Add this line to hide overflowing content */
-    text-overflow: ellipsis; /* Add this line to show ellipsis when content is truncated */
-  
+    line-height: 1;
+    /* Add this line to ensure the height doesn't expand */
+    white-space: nowrap;
+    /* Add this line to prevent wrapping */
+    overflow: hidden;
+    /* Add this line to hide overflowing content */
+    text-overflow: ellipsis;
+    /* Add this line to show ellipsis when content is truncated */
+
     &:hover {
       text-decoration: underline !important;
       cursor: pointer !important;
     }
-  
+
     .MuiIconButton-root {
       color: $filterColorValue !important;
     }
   }
-    }
-  
-  
-  
-  .filter-button {
-    width: 110px!important;
-    margin-top: 2px !important;
-    height: 15px !important;
-    padding: 8px !important;
-    
-
-
-
-    margin-bottom: 6px !important;
-    text-transform: none !important;
-  font-size: $tablepagefontsize !important;
-
-   
-&.hover{
-  background-color: $responseboxbgcolor;
 }
-  }
 
-  
- 
-  .moreverticon{
-    color:$filterColorValue !important;
+
+
+.filter-button {
+  width: 110px !important;
+  margin-top: 2px !important;
+  height: 15px !important;
+  padding: 8px !important;
+  margin-bottom: 6px !important;
+  text-transform: none !important;
+  font-size: $tablepagefontsize !important;
+  &.hover {
+    background-color: $responseboxbgcolor;
   }
-  
-  .table-loading {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-  }
-  
- 
- .tablesmargin{
+}
+
+
+
+.moreverticon {
+  color: $filterColorValue !important;
+}
+
+.table-loading {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+
+.tablesmargin {
   margin-top: 170px !important;
- }
- .custom-button-add-view {
+}
+
+.custom-button-add-view {
   margin-top: 12px !important;
   font-size: 16px !important;
   height: 32.6px !important;

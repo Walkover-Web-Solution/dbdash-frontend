@@ -23,7 +23,7 @@ import './mainNavbar.scss';
 import { selectOrgandDb } from '../../store/database/databaseSelector.js';
 import Sharedb from '../table/tablesList/Sharedb.js';
 import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup.js';
-import DbSnapshotsMenu from './dbSnapshotsMenu.js';
+import DbSnapshotsMenu from './dbSnapshotsMenu/dbSnapshotsMenu.js';
 import { useRef } from 'react';
 
 
@@ -116,7 +116,7 @@ function MainNavbar(props) {
       <Box>
 
         {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db.name || dbname} open={openTemplate} setOpen={setOpenTemplate} />}
-        {openDbSnapshot && <DbSnapshotsMenu dbSnapshots={props?.dbData?.db?.dbSnapshots} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
+        {openDbSnapshot && <DbSnapshotsMenu dbSnapshots={props?.dbData?.db?.dbSnapshots?props?.dbData?.db?.dbSnapshots:{}} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
         <Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />
         {dbId && (
   <>
@@ -247,7 +247,7 @@ function MainNavbar(props) {
             setOpenDbSnapshot(true);
             handleCloseMenu();
           }}>
-            <Typography textAlign="center">Revision History</Typography>
+            <Typography textAlign="center">Db Snapshots</Typography>
           </MenuItem>
 
         </Menu>

@@ -127,7 +127,7 @@ export default function SingleTable({
 
   const exportCSVTable = async (tableid) => {
     const data = {
-      query: `select * from ${tableid}`,
+      query: "",
       userName: userDetails?.fullName,
       email: userDetails?.email,
     };

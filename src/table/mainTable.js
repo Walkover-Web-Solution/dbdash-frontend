@@ -646,7 +646,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
   
   const getRowThemeOverride=(row)=>{
    if(row!=hoveredRow || open==true || menu!=null) return;
-    return { bgCell: "rgba(62, 116, 253, 0.1)",bgCellMedium: "#DCEFFB"};
+    return { bgCell: "#f7f7f7",bgCellMedium: "#f0f0f0"};
   }
   
   const getHoveredItemsInfo=(event)=>{

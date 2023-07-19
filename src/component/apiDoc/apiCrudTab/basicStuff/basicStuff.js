@@ -29,7 +29,6 @@ function BasicStuff(props) {
     };
     return (
       <span
-      
       className="copy-button1"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -56,34 +55,37 @@ function BasicStuff(props) {
     <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)}   >
     Basic Authentication
 </Typography>
-<Typography sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2}}>
+<Typography sx={{wordWrap:'pre-wrap',width:'60vw ',p:2}}>
 DB-Dash supports basic authentication at the database level.
  Each database has one authentication key that can be used to
   authenticate multiple tables within that database. Multiple
     <span style={{color:'#016FA4',cursor:'pointer'}} onClick={()=>{props?.setShowComponent('authkey')}}> authentication keys</span> can be generated, each with its own 
    set of read/write permissions for different tables.
 </Typography>
-    <Typography variant={variables.megatitlevariant} sx={{pt:2}} fontSize={Number(variables.megatitlesize)}   >
+<div style={{borderTop:'0.2px solid #ccc',width:'60vw'}}></div>
+    <Typography variant={variables.megatitlevariant} sx={{pt:3}} fontSize={Number(variables.megatitlesize)}   >
     Table Details
 </Typography>
-
-      <Typography variant={variables.megatitlevariant}  fontSize={Number(variables.titlesize)}   >
-       <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}><span> Database Id - {props.db}</span> <span >{CopyButton(props.db, -1)}</span></div>
+<br/>
+      <Typography variant={variables.megatitlevariant}  fontSize={Number(variables.titlesize)}  >
+       <div style={{display:"flex",flexDirection:"row",alignItems:"center",paddingLeft:'32px'}}><span style={{fontSize:'18px'}}> Database Id - </span><span style={{fontSize:'18px',color:'#016FA4'}}> {props.db}</span> <span  >{CopyButton(props.db, -1)}</span></div>
       </Typography>
       <Typography variant={'h3'} fontSize={Number(variables.titlesize)} >
-      <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}> <span>Table Id - {props.table}</span> <span>{CopyButton(props.table, -2)}</span></div>   
+      <div style={{display:"flex",flexDirection:"row",alignItems:"center",paddingLeft:'32px'}}> <span style={{fontSize:'18px'}}>Table Id - </span><span style={{fontSize:'18px',color:'#016FA4'}}>{props.table}</span> <span>{CopyButton(props.table, -2)}</span></div>   
       </Typography>
       <br />
-      <div style={{ width: '50vw', height: '15vh', backgroundColor: variables.codeblockbgcolor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center',padding:'16px',paddingTop:0 ,paddingLeft:0,width:'60vw'}}>
+      <div style={{ width: '60vw', height: '15vh', backgroundColor: variables.codeblockbgcolor, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
   <Typography sx={{ justifyContent:'center',width:'100%',pl:2}}>
     curl -X GET &apos;https://dbdash-backend-h7duexlbuq-el.a.run.app/<br/><span style={{color: "#028a0f"}}>YOUR_DATABASE_ID</span>/<span style={{color: "#028a0f"}}>YOUR_TABLE_ID</span>&apos;<br/>
     -H &apos; <span  style={{color: variables.deletecolor}}>auth-key: AUTH_TOKEN</span>&apos;
   </Typography>
 </div>
- <Typography variant={variables.megatitlevariant} sx={{pt:2}} fontSize={Number(variables.megatitlesize)}   >
+</div>
+ <Typography variant={variables.megatitlevariant} sx={{pt:3}} fontSize={Number(variables.megatitlesize)}   >
     Field/Column Details
 </Typography>
-<Typography sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:2}}>
+<Typography sx={{wordWrap:'pre-wrap',width:'60vw ',p:2}}>
 
 Every field/column has a *unique Field ID* that will be used in the APIs.
 
