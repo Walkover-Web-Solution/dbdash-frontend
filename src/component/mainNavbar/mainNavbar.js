@@ -124,7 +124,7 @@ function MainNavbar(props) {
       size="small"
       onClick={handleOpenMenu}
       className="main-navbar-avatar-button"
-      style={{ marginLeft: '30px' }}
+      // style={{ marginLeft: '30px' }}
     >
       <MenuIcon />
     </IconButton>
@@ -132,17 +132,12 @@ function MainNavbar(props) {
     <Tooltip title="APIs">
       <Button
         variant="outlined"
-        className="main-navbar-button"
-        component={Link}
-        style={
+        className={
           shouldShowTableButton
-            ? {
-                backgroundColor: variables.highlightedtabbgcolor,
-                pointerEvents: 'none',
-                textTransform: 'none'
-              }
-            : { textTransform: 'none' }
+            ? 'main-navbar-button show-table'
+            : 'main-navbar-button'
         }
+        component={Link}
         to={{ pathname: `/apiDoc/db/${dbId}`, state: tableName }}
       >
         APIs
@@ -156,8 +151,11 @@ function MainNavbar(props) {
             <Button
               variant="outlined"
               component={Link}
-              className="main-navbar-button"
-              style={shouldShowTypography ? { backgroundColor: variables.highlightedtabbgcolor, pointerEvents: 'none', textTransform: 'none' } : { textTransform: 'none' }}
+              className={
+                shouldShowTypography
+                  ? 'main-navbar-button show-table'
+                  : 'main-navbar-button'
+              }
               to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
                 : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
                   : { pathname: `/db/${dbId || id}` }
@@ -170,7 +168,7 @@ function MainNavbar(props) {
           </Tooltip>
         )}
         <Tooltip title="Open settings">
-          <IconButton size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button" style={{ marginLeft: '30px' }}>
+          <IconButton size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button">
             <Avatar sx={{ height: variables.profileiconheight, width: variables.profileiconwidth }} alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
           </IconButton>
         </Tooltip>
@@ -197,14 +195,14 @@ function MainNavbar(props) {
           }}
         >
           <MenuItem onClick={handleCloseUserMenu}>
-            <Typography textAlign="center">{userDetails?.fullName}</Typography>
+            <Typography className="text-align-center">{userDetails?.fullName}</Typography>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>
-            <Typography textAlign="center">{userDetails?.email}</Typography>
+            <Typography className="text-align-center">{userDetails?.email}</Typography>
           </MenuItem>
           <Divider />
           <MenuItem onClick={handleLogOut}>
-            <Typography textAlign="center">Logout</Typography>
+            <Typography className="text-align-center">Logout</Typography>
           </MenuItem>
         </Menu>
 
@@ -235,19 +233,19 @@ function MainNavbar(props) {
             setOpenTemplate(true);
             handleCloseMenu();
           }}>
-            <Typography textAlign="center">Create Template</Typography>
+            <Typography className="text-align-center">Create Template</Typography>
           </MenuItem>
           <MenuItem onClick={() => {
             setOpenShareDb(true);
             handleCloseMenu();
           }}>
-            <Typography textAlign="center">Share DB</Typography>
+            <Typography className="text-align-center">Share DB</Typography>
           </MenuItem>
           <MenuItem ref={revisionbuttonref} onClick={() => {
             setOpenDbSnapshot(true);
             handleCloseMenu();
           }}>
-            <Typography textAlign="center">Db Snapshots</Typography>
+            <Typography className="text-align-center">Db Snapshots</Typography>
           </MenuItem>
 
         </Menu>
