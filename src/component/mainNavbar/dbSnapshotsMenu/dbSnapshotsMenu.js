@@ -1,16 +1,16 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { restoreDb } from '../../api/dbSnapshotsApi'
+import { restoreDb } from '../../../api/dbSnapshotsApi'
 import PropTypes from "prop-types";
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import { createDbThunk } from '../../store/database/databaseThunk';
-
+import { createDbThunk } from '../../../store/database/databaseThunk';
 import { Box, Button, ClickAwayListener, TextField, Typography } from '@mui/material';
-import variables from '../../assets/styling.scss';
+import variables from '../../../assets/styling.scss';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import './dbSnapshotsMenu.scss'
 
 function DbSnapshotsMenu(props) {
   const params = useParams();
@@ -37,13 +37,7 @@ function DbSnapshotsMenu(props) {
     return { top, left };
   };
   const style = {
-    position: "absolute",
     ...calculatePosition(),
-    transform: "translate(-2vw, -9.5vh)", backgroundColor: variables.bgcolorvalue,
-    zIndex: 110,
-    borderRadius: "0px",
-    border: `1px solid ${variables.basictextcolor}`,
-    width: "300px",
   };
   const handleClose = () => {
     props.setOpen(false);
@@ -66,31 +60,34 @@ function DbSnapshotsMenu(props) {
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
-      <Box sx={style}>
-        <div className="popupheader" style={{ marginBottom: '5%' }}>    <Typography sx={{ ml: 2 }} id="title" variant="h6" component="h2">
+      <Box sx={style} className="dbsnapshot-style">
+        <div className="popupheader dbsnapshot-header" >    
+        <Typography  className= "dbsnapshots-revision"  id="title" variant="h6" component="h2">
           revision history
         </Typography>
           <div>
-            {inside && <KeyboardBackspaceIcon sx={{ '&:hover': { cursor: 'pointer' } }} onClick={() => setInside(null)} />}<CloseIcon sx={{ '&:hover': { cursor: 'pointer' } }} onClick={handleClose} />
+            {inside && <KeyboardBackspaceIcon className="dbsnapshot-spaceIcon"  onClick={() => setInside(null)} />}
+            <CloseIcon className="dbsnapshot-spaceIcon" onClick={handleClose} />
           </div></div>
         {!inside ?
-          <Box sx={{ display: 'flex', flexDirection: 'column', height: '27vh' }}>
+          <Box  className="snapshot-setInside">
             {props?.dbSnapshots && items?.length > 0 ? items?.map((item) => {
               return (
-                <Button sx={{ height: '10%', width: '100%', my: '3%', textAlign: "center" }}
+                <Button 
                   onClick={() => {
                     setInside(item);
                   }}
-                  key={item[0]} className="mui-button-outlined">
+                  key={item[0]} className="mui-button-outlined snapshot-button" >
                   {new Date(item[1]?.snapshotTime * 1000)?.toLocaleString()}
                 </Button>
               );
-            }) : <Typography textAlign={'center'} sx={{ pt: "8vh" }}>Snapshot not created yet.</Typography>}
-          </Box> : <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: 2, height: '27vh' }}>
+            }) : <Typography className='snapshot-notcreated'>Snapshot not created yet.</Typography>}
+          </Box> : <Box className='snapshot-box'>
             <Typography fontWeight={variables.mainnavbarfontweight}>{new Date(inside?.[1]?.snapshotTime * 1000).toLocaleString()}
             </Typography>
             <TextField value={value || `${props?.dbname}(${new Date(inside?.[1]?.snapshotTime * 1000).toLocaleDateString()})`} onChange={(e)=>{setValue(e.target.value)}} />
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><Button variant='contained' sx={{ m: 2 }} className="mui-button" onClick={() => { restoredb(inside?.[0],value || `${props?.dbname}(${new Date(inside?.[1]?.snapshotTime * 1000).toLocaleDateString()})`) }}>Restore</Button></div>
+            <div className='snapshot-div'>
+              <Button variant='contained'  className="mui-button snapshot-button2" onClick={() => { restoredb(inside?.[0],value || `${props?.dbname}(${new Date(inside?.[1]?.snapshotTime * 1000).toLocaleDateString()})`) }}>Restore</Button></div>
           </Box>}
 
 

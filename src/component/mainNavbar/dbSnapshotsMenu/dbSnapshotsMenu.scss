@@ -1,0 +1,61 @@
+
+@import "../../../assets/styling.scss";
+
+.dbsnapshot-style{
+    position: absolute !important;
+    transform: translate(-2vw, -9.5vh) !important;
+    width: 300px !important;
+    background-color: $bgColorValue !important;
+    z-index: 110 !important;
+    border: 1px solid $fontColorVAlue !important;
+
+}
+.dbsnapshot-header{
+    margin-bottom: 5px !important ;
+}
+
+.dbsnapshots-revision{
+    margin-left: 16px !important ;
+}
+
+.dbsnapshot-spaceIcon:hover{
+    cursor: pointer !important;
+}
+
+.snapshot-setInside{
+    display: flex !important;
+     flex-direction: column !important; 
+     height: 27vh !important;
+}
+
+.snapShot-Button{
+    height: 10% !important;
+    width: 100% !important;
+    margin: 3% 0% !important;
+    text-align: center !important;
+    position: fixed !important;
+}
+
+.snapshot-notcreated{
+    text-align: center !important;
+    padding-top: 8vh !important;
+}
+
+.snapshot-box{
+    display: flex !important; 
+    flex-direction: 'column' !important; 
+    align-items: 'center' !important;
+    justify-content: space-between !important; 
+    gap: 2 !important; 
+    height: 27vh !important; 
+}
+
+.snapshot-div{
+    display: flex!important; 
+    justify-content: space-between!important;
+     width: 100%!important;
+}
+
+.snapshot-button2{
+    margin: 16px !important;
+}
