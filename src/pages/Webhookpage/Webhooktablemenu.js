@@ -4,6 +4,7 @@ import { Popover, MenuItem, Box, Switch } from '@mui/material';
 import { withStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
+import './Webhookpage.scss'
 function Webhooktablemenu(props) {
   const { anchorEl, closeDropdown, handleUpdateActive, handleDeleteWebhook, isActive } = props;
   const [active, setActive] = useState(isActive);

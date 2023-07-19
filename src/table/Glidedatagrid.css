@@ -1,4 +1,17 @@
 /* linaria:data-grid-overlay-editor-style_115vs9w.linaria.css */
+.deleterowbutton{
+  position: absolute !important;
+  display: flex !important;
+  flex-direction: row !important;
+  right: 1% !important;
+  top: 19.9% !important;
+  z-index: 10000 !important;
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+ 
+}
 .d1t1th9s {
   position: absolute;
   display: -webkit-box;

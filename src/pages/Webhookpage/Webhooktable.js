@@ -4,6 +4,8 @@ import { PropTypes } from 'prop-types';
 import { deleteWebhook, getWebhook, updateWebhook } from "../../api/webhookApi";
 import MenuIcon from '@mui/icons-material/MoreHoriz';
 import Webhooktablemenu from "./Webhooktablemenu";
+import './Webhookpage.scss';
+
 export default function Webhooktable(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [wbhookid, setWbhookid] = useState('');
@@ -13,7 +15,6 @@ export default function Webhooktable(props) {
   const [url, setUrl] = useState('');
   const [filters, setFilters] = useState('')
   const [tabledata, setTabledata] = useState(null);
-
   useEffect(async () => {
     const data = await getWebhook(props.dbId);
     setTabledata(data?.data?.data);

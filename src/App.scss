@@ -10,6 +10,10 @@ Button{
 
 
 }
+.leftsidepartofapidoctabs{
+  width: 60vw !important;
+  overflow-x: hidden !important;
+}
 Tab{
  text-transform: none !important;
 
@@ -50,4 +54,20 @@ color:$errorcolor !important;
 }
 .errorcolor{
   color:$errorcolor !important;
+}
+.paddingtopoftitle{
+  padding-top: 24px !important;
+}
+.divofapidoccodetypeforurl{
+  width:$optionalparametercontentwidth !important;
+  height: 15vh !important;
+  background-color: $codeblockbgcolor !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.typographyinsidecodestyle{
+  justify-content: center !important;
+  width: 100% !important;
+  padding-left: 16px !important;
 }

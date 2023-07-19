@@ -21,14 +21,8 @@ function Records(props) {
   }, [props.db, props.table]);
 
   return (
-    <div style={{
-      paddingTop: '16px',
-      paddingBottom: '16px',
-
-      borderTop: props?.parent !== 'basicstuff'?'0.2px solid #ccc':'none',
-      borderBottom: props?.parent !== 'basicstuff'?'0.2px solid #ccc':'none',
-      width: props?.parent !== 'basicstuff' ? '60vw' : 'auto'
-    }}>
+    <div className={`recordcontainer ${props?.parent=='basicstuff' ? 'border-others' : 'border-basicstuff'}`}>
+    
       <Grid  container spacing={2}>
         <Grid item xs={props?.CopyButton?2:3}>
           <Typography  className="center-aligned"  fontSize={Number(variables.titlesize)}  fontWeight={variables.titleweight} variant={variables.titlevariant}>Field Name</Typography>

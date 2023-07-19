@@ -29,12 +29,12 @@ function UpdateRecord(props) {
 
   return (
     <div style={{display:'flex',justifyContent:'space-between'}}>
-      <div className="container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
+      <div className="container" >
         <CodeBlock  method={'PATCH'} parent='updaterecord' db={props?.db} table={props?.table} where={value} header={`auth-key: AUTH_TOKEN,Content-Type: application/json `} body={arr} />
         <ResponseBox response={response} />
       </div>
 
-<div style={{width:'64vw',overflowX:'hidden'}}>
+<div className="leftsidepartofapidoctabs">
       <div className="response-container"  >
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Update Records</Typography>
         <Typography  fontSize={variables.textsize} sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',p:2}}>
@@ -45,12 +45,12 @@ function UpdateRecord(props) {
         <br />
         <OptionalParameter alltabledata={props?.alltabledata} parent={'updaterecord'} db={props?.db} table={props?.table} setValue={setValue} age={age} value={value} setAge={setAge} />
         <br />
-        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant} style={{ pt:3}}>
+        <Typography fontWeight={variables.titleweight} fontSize={Number(variables.textsize)} variant={variables.titlevariant} className="paddingtopoftitle">
 
 
       Fields to update
         </Typography>
-        <Typography fontSize={variables.textsize}  sx={{width:variables.optionalparametercontentwidth,wordWrap:'pre-wrap',p:2}}>
+        <Typography fontSize={variables.textsize} className="updaterecordfirstpara" >
 
      {`Please select the fields/columns that need to be updated.
 Note: If you provide "NULL" ("FieldID1": "NULL") or leave it blank ("FieldID1": ""), the API will update the field with null or blank values. Therefore, please ensure that you only use the field names that you want to update.`}   </Typography>

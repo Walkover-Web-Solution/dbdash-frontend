@@ -4,15 +4,15 @@
   position: fixed !important ;
   right: 0 !important ;
   width: 36vw !important;
-
+// height:inherit !important;
   padding: 10px !important ;
   padding-right: 13px !important;
- 
+ overflow-y: scroll !important;
   white-space: pre-wrap !important ;
   }
   
   .records-container {
-    width: 64vw !important ;
+    width: 62vw !important ;
     overflow-y: scroll !important ;
     padding-right: 160vw !important;
     white-space: pre-wrap !important ;
@@ -22,5 +22,10 @@
   .bold-heading {
     font-weight: bold !important ;
     font-size: 24px !important ;
+  }
+  .listrecordfirstpara{
+    word-wrap: pre-wrap !important;
+    width: 60vw !important;
+    padding: 16px !important;
   }
   

@@ -657,19 +657,8 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
       {JSON.stringify(selection) !== JSON.stringify(emptyselection) &&
         selection.rows.items.length > 0 && (
           <button
-            className="fontsize"
-            style={{
-              position: "absolute",
-              display: "flex",
-              flexDirection: "row",
-              right: "1%",
-              top: "19.9%",
-              zIndex: "10000",
-              background: "none",
-              border: "none",
-              outline: "none",
-              cursor: "pointer",
-            }}
+            className="fontsize deleterowbutton"
+           
             onClick={() => handleDeleteRow(selection)}
           >
             <div className="deleterows">Delete Rows</div>
