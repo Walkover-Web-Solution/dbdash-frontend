@@ -11,10 +11,11 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PropTypes } from "prop-types";
-import { getAuthkey, deleteAuthkey } from "../../api/authkeyApi";
-import TableMenuDropdown from "./tableMenuDropdown";
+import { getAuthkey, deleteAuthkey } from "../../../api/authkeyApi";
+import TableMenuDropdown from "../tableMenuDropdown/tableMenuDropdown.js";
 import { useSelector } from "react-redux";
-import { allOrg } from "../../store/database/databaseSelector";
+import { allOrg } from "../../../store/database/databaseSelector";
+import "./authKeyTable.scss";
 
 export default function AuthKey(props) {
   const adminId = localStorage.getItem("userid");
@@ -22,7 +23,6 @@ export default function AuthKey(props) {
   const user = useSelector((state) => allOrg(state));
 
   useEffect(() => {
-
     getAuthkeyFun();
   }, [props.dbId]);
 
@@ -35,7 +35,9 @@ export default function AuthKey(props) {
             if (user.users && Array.isArray(user.users)) {
               user.users?.map((id) => {
                 if (id?.user_id?._id == key[1]?.user) {
-                  array.push(id?.user_id?.first_name + " " + id?.user_id?.last_name);
+                  array.push(
+                    id?.user_id?.first_name + " " + id?.user_id?.last_name
+                  );
                 }
               });
             }
@@ -45,7 +47,7 @@ export default function AuthKey(props) {
     }
     props?.setCreatedBy(array);
   }
-  
+
   async function getAuthkeyFun() {
     const data = await getAuthkey(props?.dbId, adminId);
     if (data?.data?.data) {
@@ -53,7 +55,7 @@ export default function AuthKey(props) {
       getCreatedByName(data.data.data);
     }
   }
-  
+
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props?.dbId, adminId, authKey);
     props?.setAuthKeys(data?.data?.data?.auth_keys);
@@ -121,15 +123,12 @@ export default function AuthKey(props) {
   };
   return (
     <>
-      <Box sx={{ my: 1, paddingLeft: "24px", paddingRight: "31px" }}>
-        <TableContainer
-          component={Paper}
-          sx={{ width: "100%", maxHeight: "60vh", border: 1, borderRadius: 0 }}
-        >
+      <Box className="authKey-container">
+        <TableContainer component={Paper} className="authkey-table-container">
           <Table
-            sx={{ minWidth: 650, overflowY: "scroll" }}
             stickyHeader
             aria-label="sticky table"
+            className="auth-key-table"
           >
             <TableHead>
               <TableRow>
@@ -175,21 +174,21 @@ export default function AuthKey(props) {
                       props.authKeys[keys].access === "11" ? (
                         <div>all</div>
                       ) : (
-                        Object.keys(props?.authKeys[keys]?.access)?.map((key) => (
-                          <div key={key}>{key}</div>
-                        ))
+                        Object.keys(props?.authKeys[keys]?.access)?.map(
+                          (key) => <div key={key}>{key}</div>
+                        )
                       )}
                     </TableCell>
                     <TableCell>
-  {props.authKeys[keys].access === "1" || props.authKeys[keys].access === "11" ? (
-    <div>{props?.authKeys[keys]?.scope}</div>
-  ) : (
-    Object.entries(props.authKeys[keys].access).map(([key,value]) => (
-      <div key={key}>{value?.scope}</div>
-    ))
-    
-  )}
-</TableCell>
+                      {props.authKeys[keys].access === "1" ||
+                      props.authKeys[keys].access === "11" ? (
+                        <div>{props?.authKeys[keys]?.scope}</div>
+                      ) : (
+                        Object.entries(props.authKeys[keys].access).map(
+                          ([key, value]) => <div key={key}>{value?.scope}</div>
+                        )
+                      )}
+                    </TableCell>
 
                     <TableCell>
                       <TableMenuDropdown
@@ -199,11 +198,9 @@ export default function AuthKey(props) {
                         second={"Delete"}
                         third={"Show AuthKey"}
                         title={keys}
-        alltabledata={props?.alltabledata}
-
+                        alltabledata={props?.alltabledata}
                         dbId={props.dbId}
                         setAuthKeys={props?.setAuthKeys}
-                       
                         deleteFunction={deleteAuthkeyFun}
                       />
                     </TableCell>
@@ -225,6 +222,5 @@ AuthKey.propTypes = {
   selected: PropTypes.any,
   setCreatedBy: PropTypes.any,
   createdBy: PropTypes.any,
-  alltabledata:PropTypes.any
-
+  alltabledata: PropTypes.any,
 };
