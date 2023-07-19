@@ -67,4 +67,40 @@ padding-left: 0px !important;
   .hoverable-cell:hover .add-button {
     display: inline-block;
   }
+
+
+  //filter condition talbe css
+
+.filter-condition-main-table {
+  width: 80% !important;
+  border-collapse:collapse !important;
+}
+
+.filter-condition-table-head-table-cell {
+  padding: 8px !important;
+  border: 1px solid #000 !important;
+  background-color: #F0F0F0 !important;
+}
+
+.filter-condition-table-body-table-row {
+  border: 1px solid #000 !important;
+}
+
+.filter-condition-table-body-table-row-cell {
+  padding: 8px !important;
+  border: 1px solid #000 !important;
+}
+
+.ilter-condition-div {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.row-example {
+  margin-left: 8px !important;
+}
+
+.table-body-show-more {
+  color: #016FA4 !important;
+}
   
