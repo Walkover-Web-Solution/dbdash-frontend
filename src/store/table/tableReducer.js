@@ -1,7 +1,20 @@
 
 import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions, deleteRows } from './tableThunk.js';
-import { randomColor, shortId } from "../../table/utils.js";
+import { randomColor, shortId } from "../../table/utils";
 // import { current } from '@reduxjs/toolkit';
+
+export const initialState = {
+  columns: [],
+  data: [],
+  tableId: null,
+  dbId: null,
+  status: "idle",
+  pageNo: 0,
+  isTableLoading: true,
+  isMoreData: true,
+  filterId: null
+
+};
 
 export const reducers = {
   addOptionToColumn(state, payload) {
