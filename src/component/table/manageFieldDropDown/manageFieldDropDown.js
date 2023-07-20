@@ -19,11 +19,11 @@ import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import AddOptionPopup from './addOptionPopup/addOptionPopup';
-import variables from '../../assets/styling.scss';
-
+import AddOptionPopup from '../addOptionPopup/addOptionPopup';
+// import variables from '../../../assets/styling.scss';
+import './manageFieldDropDown.scss'
 import { useParams } from 'react-router-dom';
-import { updateColumnHeaders } from '../../store/table/tableThunk';
+import { updateColumnHeaders } from '../../../store/table/tableThunk';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -104,19 +104,21 @@ export default function ManageFieldDropDown(props) {
           </Toolbar>
         </AppBar> */}
         <TableContainer component={Paper}>
-          <div className="popupheader">    <Typography sx={{ ml: 2 }} id="title" variant="h6" component="h2">
+          <div className="popupheader">    
+          <Typography className="manageFiledDropDown-typograhy" id="title" variant="h6" component="h2">
             manage fields
-          </Typography><CloseIcon sx={{ '&:hover': { cursor: 'pointer' } }} onClick={handleClose} /></div>
+          </Typography>
+          <CloseIcon className="manageFiledDropDown-closeIcon"   onClick={handleClose} /></div>
 
 
           <Table aria-label="My Table">
             <TableHead  >
               <TableRow >
-                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Field Name</TableCell>
-                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Visible</TableCell>
+                <TableCell  className="manageFiledDropDown-TableCell">Field Name</TableCell>
+                <TableCell  className="manageFiledDropDown-TableCell">Visible</TableCell>
 
-                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Field Type</TableCell>
-                <TableCell sx={{ fontSize: `${variables.titlefontsize}`, textAlign: 'center' }}>Options</TableCell>
+                <TableCell  className="manageFiledDropDown-TableCell">Field Type</TableCell>
+                <TableCell  className="manageFiledDropDown-TableCell">Options</TableCell>
 
               </TableRow>
             </TableHead>
@@ -124,8 +126,8 @@ export default function ManageFieldDropDown(props) {
               {fields1.map((field, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell sx={{ fontSize: `${variables.tablepagefontsize}`, textAlign: 'center' }}>{field.title}</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>
+                    <TableCell  className="manageFiledDropDown-TableCell">{field.title}</TableCell>
+                    <TableCell  className="manageFiledDropDown-TableCell-2" >
                       <input
                         style={{
                           width: "15px",
@@ -139,11 +141,11 @@ export default function ManageFieldDropDown(props) {
 
 
                     </TableCell>
-                    <TableCell sx={{ fontSize: `${variables.tablepagefontsize}`, textAlign: 'center' }}>{field.dataType}</TableCell>
+                    <TableCell  className="manageFiledDropDown-TableCell" >{field.dataType}</TableCell>
 
 
                     {field.dataType === "singleselect" || field.dataType === "multipleselect" ? (
-                      <TableCell sx={{ fontSize: `${variables.tablepagefontsize}`, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+                      <TableCell className="manageFiledDropDown-TableCell-3" >
                         <div style={{ width: '200px' }}>
                           {field?.metadata?.option?.map((value, index) => {
                             return index < 3 ? (value.value || value) : null;

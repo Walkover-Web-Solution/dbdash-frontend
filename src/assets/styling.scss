@@ -23,6 +23,7 @@ $mainnavbartabsfont:1rem;
 $codeblockfontsize:20px;
 $bold:bold;
 $highlightedtabbgcolor:lightgrey;
+$titlefontsize:20px;
 :export {
   bgcolorvalue:$bgColorValue;
   titlevariant:h2;
@@ -31,7 +32,7 @@ titleweight:bold;
   megatitlevariant:h3;
     megatitlesize: $megatitlesize;
     titlesize:24;
-    titlefontsize:24px;
+    titlefontsize:$titlefontsize;
     textsize:18;
     tablepagefontsize:$tablepagefontsize;
     basictextcolor:$fontColorVAlue;

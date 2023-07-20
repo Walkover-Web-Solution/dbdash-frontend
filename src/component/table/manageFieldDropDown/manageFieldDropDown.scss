@@ -1,0 +1,28 @@
+
+@import '../../../assets/styling.scss';
+
+
+
+.manageFiledDropDown-typograhy{
+    margin-left: 16px !important; 
+}
+
+.manageFiledDropDown-closeIcon:hover{
+    cursor: pointer !important; 
+}
+
+.manageFiledDropDown-TableCell{
+    font-size: $titlefontsize !important;
+    text-align: center !important;
+}
+
+.manageFiledDropDown-TableCell-3{
+    font-size: $titlefontsize !important;
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important; 
+}
+
+.manageFiledDropDown-TableCell-2{
+    text-align: center !important;
+}

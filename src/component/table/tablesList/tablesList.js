@@ -24,7 +24,7 @@ import "./tablesList.scss";
 import variables from "../../../assets/styling.scss";
 import { createViewTable } from "../../../api/viewTableApi";
 // import HideFieldDropdown from "../hidefieldDropdown";
-import ManageFieldDropDown from "../manageFieldDropDown";
+import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import { selectActiveUser } from "../../../store/user/userSelector";
 import { getAllTableInfo } from "../../../store/allTable/allTableSelector";

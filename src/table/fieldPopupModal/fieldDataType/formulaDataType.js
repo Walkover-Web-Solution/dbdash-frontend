@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
 import CustomAutoSuggest from "../../../component/customAutoSuggest/customAutoSuggest"
 import { getQueryByAi } from '../../../api/fieldApi';
-
+import './formulaDataType.scss'
 
 export default function FormulaDataType(props) {
   const AllTableInfo = useSelector((state) => getAllTableInfo(state));
@@ -88,11 +88,7 @@ export default function FormulaDataType(props) {
         Ask AI
       </Button>
 }
-      {isLoading && <Box sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
+      {isLoading &&  <Box className="formulaDataType-loading" >
         <CircularProgress />
       </Box>}
 

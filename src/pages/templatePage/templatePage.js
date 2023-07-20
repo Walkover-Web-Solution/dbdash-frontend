@@ -14,7 +14,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { setTableLoading } from "../../store/table/tableSlice";
 import './templatePage.scss'
 import variables from "../../assets/styling.scss";
-import ManageFieldDropDown from "../../component/table/manageFieldDropDown";
+import ManageFieldDropDown from "../../component/table/manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
