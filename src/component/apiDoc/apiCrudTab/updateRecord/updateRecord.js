@@ -29,7 +29,7 @@ function UpdateRecord(props) {
 
   return (
     <div style={{display:'flex',justifyContent:'space-between'}}>
-      <div className="container" >
+      <div className="updatecontainer" style={{height: `${(window?.screen?.height * 61) / 100}px`}} >
         <CodeBlock  method={'PATCH'} parent='updaterecord' db={props?.db} table={props?.table} where={value} header={`auth-key: AUTH_TOKEN,Content-Type: application/json `} body={arr} />
         <ResponseBox response={response} />
       </div>

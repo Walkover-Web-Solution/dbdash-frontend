@@ -32,7 +32,7 @@ function ListRecord(props) {
   return (
     <>
     <div
-      className="list-record-container"
+      className="list-record-container verticalscroll"
       style={{ height: `${(window?.screen?.height * 61) / 100}px`}}
       >
      <CodeBlock method="GET"  db={props?.db} table={props?.table} code={`${value!="" ? `?${value}`:``}`} header={`auth-key: AUTH_TOKEN `}/>

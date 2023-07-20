@@ -21,7 +21,7 @@ const response=`
 }`;
   return (
     <>
-      <div className="delete-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
+      <div className="delete-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`}}>
         <CodeBlock
         method="PATCH"
         
