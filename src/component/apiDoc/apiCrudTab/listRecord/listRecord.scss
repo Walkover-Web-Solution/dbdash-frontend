@@ -4,11 +4,15 @@
   position: fixed !important ;
   right: 0 !important ;
   width: 36vw !important;
-// height:inherit !important;
   padding: 10px !important ;
   padding-right: 13px !important;
- overflow-y: scroll !important;
+ overflow-y: hidden ;
+ overflow-x: hidden !important;
   white-space: pre-wrap !important ;
+  }
+  .verticalscroll{
+    overflow-y: scroll !important;
+
   }
   
   .records-container {

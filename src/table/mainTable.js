@@ -369,12 +369,7 @@ export default function MainTable(props) {
       if (dataRow) {
         const d = dataRow[fields[col]?.id];
         let { dataType } = fields[col] || "";
-        // let linkdatatype=false;
-        // if(dataType=='link')
-        // {
-        //   linkdatatype=true;
-        //   dataType=fields[col]?.metadata?.foreignKey?.fieldType;
-        // }
+       
         if (dataType === "autonumber") {
           return {
             allowOverlay: true,
@@ -383,7 +378,7 @@ export default function MainTable(props) {
             data: d || "",
             displayData: d?.toString() || "",
           };
-        } 
+        }
         else if (
           dataType === "createdat" ||
           dataType === "createdby" ||

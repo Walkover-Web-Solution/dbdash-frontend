@@ -1,11 +1,11 @@
-.container {
+.updatecontainer {
     display: flex !important ;
     flex-direction: column !important ;
     position: fixed !important ;
     right: 0 !important ;
     width: 36vw !important;
-
-    overflow-y: scroll ;
+overflow-x: hidden !important;
+    overflow-y: scroll !important;
     padding: 10px !important ;
   padding-right: 13px !important;
    
