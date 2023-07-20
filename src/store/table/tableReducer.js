@@ -12,9 +12,6 @@ import {
   updateMultiSelectOptions,
   deleteRows,
 } from "./tableThunk.js";
-
-
-
 import { randomColor, shortId } from "../../table/utils";
 // import { current } from '@reduxjs/toolkit';
 
