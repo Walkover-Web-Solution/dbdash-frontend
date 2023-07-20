@@ -15,6 +15,10 @@ const StyledTab = styled(Tab)(() => ({
   // ...styles
 }));
 
+const style={
+  height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`
+
+}
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -78,34 +82,34 @@ function ApiCrudTablist(props) {
       </Box>
       <div className="marginTop">
       <TabPanel value={value} index={0}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`}}>
+      <div className="componentscontainer" style={style}>
   <BasicStuff alltabledata={props?.alltabledata} setShowComponent={props?.setShowComponent} db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`}}>
+      <div className="componentscontainer" style={style}>
 
         <ListRecord alltabledata={props?.alltabledata} db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
+      <div className="componentscontainer" style={style}>
 
         <AddRecord  alltabledata={props?.alltabledata} db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel value={value} index={3}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
+      <div className="componentscontainer" style={style}>
  
         <UpdateRecord  alltabledata={props?.alltabledata} db={props.db} table={props.table} />
 </div>
 
       </TabPanel>
       <TabPanel  value={value} index={4}>
-      <div className="componentscontainer" style={{ height: `${(window?.screen?.height * 61) / 100}px`,width: `${(window?.screen?.width*98.5)/100}px`}}>
+      <div className="componentscontainer" style={style}>
       <DeleteRecord alltabledata={props?.alltabledata} db={props.db} table={props.table} />
 </div>
 

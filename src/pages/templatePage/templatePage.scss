@@ -4,11 +4,91 @@
     flex-direction: column;
     gap: 10px;
     .tabs-container1{
-        width: 100%;
+        width: 100% !important;
     }
 }
 .main-box{
-    width: 85vw;
-    margin: 40px;
+    width: 85vw !important;
+    margin: 40px !important;
 
+}
+
+.temaplatePage-name{
+    font-size: 25px !important; 
+    display: flex !important;
+    justify-content: space-between !important; 
+    align-items: center !important;
+}
+
+.templatePage-button{
+    margin-right: -1.4vw !important;
+}
+
+.templatePage-div1{
+    display: flex  !important;
+    padding: 10px  !important; 
+    flex-direction: row  !important;
+    justify-content: center !important;
+    width: 100%  !important;
+}
+
+.templatePage-div2{
+    width: 85vw !important;
+    padding: 10px !important;
+    border: 1px solid black !important;
+}
+
+.templatePage-button1{
+    font-size: $tablepagefontsize !important; 
+    text-transform: 'none' !important; 
+    color: $fontColorVAlue !important;
+}
+
+.templatePage-button2{
+    font-size: $tablepagefontsize !important; 
+    padding-left: 0 !important; 
+    padding-right: 0 !important; 
+    margin-right: 16px !important;
+}
+
+.templatePage-div3{
+    width: 100% !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important;
+}
+
+.templatePage-maintable{
+    padding: 0 auto !important ;
+    width:100% !important;
+}
+
+.templatePage-div4{
+    margin-top: 25px !important;
+    font-size: 25px !important; 
+}
+
+.templatePage-div5{
+    display: flex !important; 
+    justify-content: 'center' !important;
+}
+
+.templatePage-div6{
+    width: 85vw !important;
+    padding: 10px !important;
+    margin-top: 10px !important;
+}
+
+.templatePage-box{
+    display: flex !important; 
+    flex-direction: row !important;
+    width: 100% !important; 
+    overflow-x: auto !important;
+}
+
+.templatePage-div{
+    width: 100% !important;
+     display: flex !important;
+     justify-content: center !important ;
+     margin-top: 2vh !important;
 }

@@ -12,6 +12,7 @@ import Webhookpage from '../../../pages/Webhookpage/Webhookpage';
 import variables from '../../../assets/styling.scss';
 
 import AuthKeyPage from '../../../pages/authKeyPage/authKeyPage';
+import  './navbarApi.scss';
 
 
 const ITEM_HEIGHT = 48;
@@ -143,11 +144,11 @@ const classes = useStyles();
     }
   };
   return (
-    <div style={{ backgroundColor: "white" }}>
-      <div style={{ position: "fixed", top: "8vh", zIndex: 100, width: "100%", backgroundColor: "white", paddingBottom: "2vh" }}>
-        <Box align="center" ></Box>
-        <Box sx={{ display: "flex",alignItems:"center", flexDirection: "row" }}>
-          <Box sx={{ display: "flex", flexDirection: "row" ,paddingLeft:'24px'}}>
+    <div className="navbar-api-main-container">
+      <div className="navbar-api-container">
+        <Box className="navbar-api-box-1" align="center" ></Box>
+        <Box className="navbar-api-box-2">
+          <Box className="navbar-api-box-3">
             {alldb && selectedDb && (
       <FormControl className={`singletypemuiselect ${classes.formControl}`} >
 
@@ -220,34 +221,23 @@ const classes = useStyles();
             )}
           {Object.keys(tables).length >= 1 && (
             <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                marginRight: '10px',
-                position: 'fixed',
-                right: 0,
-                top: '9vh'
-              }}
+            className="navbar-api-box-4"
             >
-              <ButtonGroup color="primary" style={{ borderRadius: 0,paddingRight:'20px' }}>
+              <ButtonGroup className="button-group" color="primary">
                 <Button
-                  className={showWebhookPage=="apidoc"?"mui-button":"mui-button-outlined"}
+                  className={showWebhookPage=="apidoc"?"mui-button notpointed":"mui-button-outlined"}
                   variant="outlined"
                   onClick={()=>{
                     setShowWebhookPage("apidoc")
                   }}
-                  sx={{
-                     pointerEvents: showWebhookPage=="apidoc"?'none':'',
-                  }}
+                  
                 >
                   {'API Documentation'}
                 </Button>
                
                   <Button 
-                  className={showWebhookPage=="authkey"?"mui-button":"mui-button-outlined"}
-                  sx={{
-                    pointerEvents: showWebhookPage=="authkey"?'none':'',
-                 }}
+                  className={showWebhookPage=="authkey"?"mui-button notpointed":"mui-button-outlined"}
+                  
                  onClick={()=>{
                   setShowWebhookPage("authkey")
                 }}
@@ -255,14 +245,12 @@ const classes = useStyles();
                     {'Auth Key'}
                   </Button>
                 <Button
-                  className={showWebhookPage=="webhook"?"mui-button":"mui-button-outlined"}
+                  className={showWebhookPage=="webhook"?"mui-button notpointed":"mui-button-outlined"}
                   variant="outlined"
                   onClick={()=>{
                     setShowWebhookPage("webhook")
                   }}
-                  sx={{
-                    pointerEvents: showWebhookPage=="webhook"?'none':'',
-                 }}
+                 
                 >
                   {'Webhook'}
                 </Button>

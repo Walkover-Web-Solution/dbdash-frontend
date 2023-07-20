@@ -37,11 +37,7 @@ const[showAnsfield,setShowAnsfield]=useState(true);
   //   padding:2
   // };
 
-//   const inputStyle = {   
-//     width: '99.3%',
-//     padding: '5px',
-//     marginBottom: '10px'
-//   };
+
 
 
   // const buttonContainerStyle = {

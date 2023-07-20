@@ -557,12 +557,8 @@ export default function MainTable(props) {
     [dataa, fields]
   );
   const realCols = useMemo(() => {
-    return fields?.map((c) => ({
-      ...c,
-      hasMenu: true,
-      icon: c.dataType
-    }));
-  }, [fields, fields1]);
+   return   [...fields];
+  }, [fields]);
   const headerIcons = (() => {
     return {
       rowid: p => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="${p.bgColor}" class="bi bi-key-fill" viewBox="0 0 16 16"> <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/> </svg>`
@@ -657,19 +653,8 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
       {JSON.stringify(selection) !== JSON.stringify(emptyselection) &&
         selection.rows.items.length > 0 && (
           <button
-            className="fontsize"
-            style={{
-              position: "absolute",
-              display: "flex",
-              flexDirection: "row",
-              right: "1%",
-              top: "19.9%",
-              zIndex: "10000",
-              background: "none",
-              border: "none",
-              outline: "none",
-              cursor: "pointer",
-            }}
+            className="fontsize deleterowbutton"
+           
             onClick={() => handleDeleteRow(selection)}
           >
             <div className="deleterows">Delete Rows</div>

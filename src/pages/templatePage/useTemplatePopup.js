@@ -13,7 +13,7 @@ import {
     import {makeStyles} from '@mui/styles';
 import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
-
+import './useTemplatePopup.scss';
 import { useTemplate } from '../../api/templateApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { allOrg } from '../../store/database/databaseSelector';
@@ -64,17 +64,19 @@ const UseTemplatePopup = (props) => {
                 paper: classes.dialogPaper, // Apply custom styles to the dialog paper
               }}
             open={props?.open} onClose={handleClose}>
-            <div className="popupheader">    <Typography sx={{ml:2}}id="title" variant="h6" component="h2">
+            <div className="popupheader">    
+            <Typography  className='useTemplatePopup-text' id="title" variant="h6" component="h2">
             use this template
-          </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
+          </Typography>
+          <CloseIcon className='usetemplatepopup-closeIcon' onClick={handleClose}/></div>
 
        
-                <DialogContent sx={{p:0,pl:2,pr:1}}>
+                <DialogContent  className='useTemplatepopup-dialogContent'>
                     <DialogContentText>
                         To which organization would you like to install this new base?
                     </DialogContentText>
                     <Select 
-                       sx={{borderRadius:0}}
+                        className='useTemplatepopup-select'
                     value={selectedOrg} onChange={handleOrgChange} >
                         <MenuItem value={'none'}>--Select a Workspace--</MenuItem>
                         {allorgss.map((org) => (

@@ -18,6 +18,9 @@ padding-left: 0px !important;
     font-weight: bold !important;
     font-size: 17px !important;
   }
+  .titlepaddingtop{
+    padding-top: 24px !important;
+  }
   
   .parameter-heading {
     font-weight: bold !important;
@@ -25,15 +28,35 @@ padding-left: 0px !important;
     padding-top: 10px !important;
   }
   
+  .code-in-text {
+    width: $optionalparametercontentwidth !important;
+    height: 15vh !important;
+    background-color:$codeblockbgcolor !important; /* Use the variable for background color */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 32px !important;
+  }
   .parameter-description {
     padding-bottom: 15px !important;
   }
   
+  .selectbox{
+    height: 50px !important;
+    width: 200px !important;
+    border-radius: 0 !important;
+  }
   .text-field {
     height: 40px !important;
     width: 100% !important; /* Use 100% width to occupy the full available space */
   }
-  
+  .blackcolor{
+    color:$fontColorVAlue !important;
+  }
+  .flexandcenter{
+    display: flex !important;
+    align-items: center !important;
+  }
   .link {
     font-size: 15px !important;
   }
@@ -55,6 +78,36 @@ padding-left: 0px !important;
   .hoverable-cell {
     position: relative;
   }
+  .colorblack{
+    color:$fontColorVAlue !important;
+  }
+  .margin1{
+    margin: 8px !important;
+  }
+  .ascanddesc{
+    height: 50px !important;
+    width: 100px !important;
+    border-radius: 0px !important;
+    color:$fontColorVAlue !important;
+  }
+  .optionalparameterpara{
+    word-wrap: pre-wrap !important;
+    width: 60vw !important;
+    padding: 16px !important;
+  }
+  .mt0{
+    margin-top: 0 !important;
+
+  }
+  .aifilterbox{
+    display: flex !important;
+    justify-content: center !important;
+    padding: 8px !important;
+  }
+  .marginandminwidth{
+    margin: 8px !important;
+    min-width: 200px !important;
+    }
   
   .hoverable-cell .add-button {
     display: none;
@@ -67,4 +120,40 @@ padding-left: 0px !important;
   .hoverable-cell:hover .add-button {
     display: inline-block;
   }
+
+
+  //filter condition talbe css
+
+.filter-condition-main-table {
+  width: 80% !important;
+  border-collapse:collapse !important;
+}
+
+.filter-condition-table-head-table-cell {
+  padding: 8px !important;
+  border: 1px solid #000 !important;
+  background-color: #F0F0F0 !important;
+}
+
+.filter-condition-table-body-table-row {
+  border: 1px solid #000 !important;
+}
+
+.filter-condition-table-body-table-row-cell {
+  padding: 8px !important;
+  border: 1px solid #000 !important;
+}
+
+.ilter-condition-div {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.row-example {
+  margin-left: 8px !important;
+}
+
+.table-body-show-more {
+  color: #016FA4 !important;
+}
   

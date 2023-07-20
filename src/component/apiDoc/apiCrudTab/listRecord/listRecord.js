@@ -33,17 +33,17 @@ function ListRecord(props) {
     <>
     <div
       className="list-record-container"
-      style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}
+      style={{ height: `${(window?.screen?.height * 61) / 100}px`}}
       >
      <CodeBlock method="GET"  db={props?.db} table={props?.table} code={`${value!="" ? `?${value}`:``}`} header={`auth-key: AUTH_TOKEN `}/>
      <ResponseBox response={response} />
      </div>
-     <div style={{width:'63vw',overflowX:"hidden"}}>
+     <div className="leftsidepartofapidoctabs">
 
      <div className='records-container'>
    
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >List/Get Records -</Typography>
-        <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:'60vw ',p:2}}>
+        <Typography fontSize={variables.textsize}  className="listrecordfirstpara">
 
   {`To retrieve a list of records from the "${props?.alltabledata[props.table].tableName}" table, you can initiate a GET request to the "${props.table}" endpoint using the "${props.table}" IDs. Furthermore, you have the option to filter, sort, and format the results by utilizing the provided query parameters.`}
 
