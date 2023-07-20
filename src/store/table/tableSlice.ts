@@ -18,13 +18,13 @@ interface InitialState{
 export const initialState:InitialState = {
   columns: [],
   data: [],
-  tableId: "",
-  dbId: "",
+  tableId: null,
+  dbId: null,
   status: "idle",
   pageNo: 0,
   isTableLoading: true,
   isMoreData: true,
-  filterId: "",
+  filterId: null,
 };
 
 const tableSlice = createSlice({
