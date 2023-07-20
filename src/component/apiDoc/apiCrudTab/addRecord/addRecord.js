@@ -25,7 +25,7 @@ const response=`
 }`
   return (
     <>
-      <div className="add-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
+      <div className="add-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`}} >
         <CodeBlock
         parent='addrecord'
         method="POST"
@@ -38,17 +38,17 @@ const response=`
           response={response}
         />
       </div>
-      <div style={{width:'53vw',overflowX:"hidden"}}>
+      <div className="leftsidepartofapidoctabs">
       
       <div className="records-container">
         <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
-        <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:variables.optionalparametercontentwidth,pl:2,pb:'4px'}}>
+        <Typography fontSize={variables.textsize}  className="addrecordfirstpara">
 
         To create a new record, you need to make a POST request to the given endpoint.
 Generate array of fields according to your use case. to make a single entry,  you have to use single array . 
 </Typography>
 <br/>
-<Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:variables.optionalparametercontentwidth,pl:2,pb:'4px'}}>
+<Typography fontSize={variables.textsize} className="addrecordfirstpara paddingtopoftitle" >
 
         Select/Deselect the checkboxes to make the request and add values in your table.
         <br/><br/>

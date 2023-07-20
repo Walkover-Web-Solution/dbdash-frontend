@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.scss';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import Authpage from './pages/authPage';
+import Authpage from './pages/authPage/authPage';
 import LandingPage from './pages/landingPage';
 import { AuthContextProvider } from './context/authContext';
-import "./pages/css.css"
-import DbDetail from './pages/dbDetail';
+import "./pages/css.scss"
+import DbDetail from './pages/dbDetail/dbDetail';
 import ApiDocPage from './pages/apidocPage';
 import Protected from './component/protected';
 import WithAuth from './component/withAuth';

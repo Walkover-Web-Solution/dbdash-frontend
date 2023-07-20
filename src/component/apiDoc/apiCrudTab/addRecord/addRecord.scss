@@ -3,18 +3,19 @@
   flex-direction: column !important ;
   position: fixed !important ;
   right: 0 !important ;
-  width: 42vw !important;
+  width: 36vw !important;
 
   padding: 10px !important ;
   padding-right: 13px !important;
- 
+//  height:inherit !important;
+ overflow-y: scroll !important;
   white-space: pre-wrap !important ;
 
   }
   
   .records-container {
-    width: 55vw !important;
-    padding-right: 200px !important;
+    width: 62vw !important;
+    padding-right: 160vw !important;
     white-space: pre-wrap !important;
     padding: 2px !important;
   }
@@ -24,3 +25,12 @@
     font-size: 24px !important;
 
   }  
+  .paddingtopoftitle{
+    padding-top: 24px !important;
+  }
+  .addrecordfirstpara{
+    word-wrap: pre-wrap !important;
+    width: 60vw !important;
+    padding: 16px !important;
+  }
+  

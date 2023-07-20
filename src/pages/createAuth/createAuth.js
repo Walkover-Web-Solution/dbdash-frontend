@@ -11,7 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import { PropTypes } from "prop-types";
 
-import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup";
+import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup/authKeyPopup.js"
 import { createAuthkey, updateAuthkey } from "../../api/authkeyApi";
 import { selectActiveUser } from "../../store/user/userSelector.js";
 // import { toast } from 'react-toastify';

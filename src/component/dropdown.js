@@ -2,8 +2,8 @@ import React,{ useState} from 'react'
 import PropTypes from 'prop-types';
 import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import AlertPopup from './alertPopup';
-import DuplicateDbPopup from './workspaceDatabase/duplicateDbPopup';
+import AlertPopup from './alertPopup/alertPopup';
+import DuplicateDbPopup from './workspaceDatabase/duplicateDbPopup/duplicateDbPopup';
 import { useParams } from 'react-router-dom';
 export default function Dropdown(props) {
     const [anchorElUser, setAnchorElUser] = useState(null);

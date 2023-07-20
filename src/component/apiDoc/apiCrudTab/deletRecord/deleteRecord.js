@@ -21,7 +21,7 @@ const response=`
 }`;
   return (
     <>
-      <div className="delete-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`,overflowY:"scroll"}}>
+      <div className="delete-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`}}>
         <CodeBlock
         method="PATCH"
         
@@ -34,10 +34,10 @@ const response=`
         <ResponseBox response={response} />
       </div>
 
-      <div style={{width:'53vw',overflowX:"hidden"}}>
+      <div className="leftsidepartofapidoctabs">
         <Box className="records-container">
           <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Delete Table Records</Typography>
-          <Typography fontSize={variables.textsize}  sx={{wordWrap:'pre-wrap',width:'50vw ',pl:2,pb:'4px'}}>
+          <Typography fontSize={variables.textsize} className="updaterecordfirstpara">
 
         {`To delete a record, you need to send a PATCH request to the provided endpoint. However, before doing that, you must determine the specific row you wish to update. You can retrieve the desired row using a WHERE condition which can be called using "filter" parameter.
         `} 

@@ -1,23 +1,81 @@
 @import '../../../assets/styling.scss';
-.navbar-container {
-    display: flex;
-    flex-direction: row;
-    color:$fontColorVAlue !important;
+.navbar-api-main-container {
+  background-color:$bgColorValue ;
   }
+
+  .navbar-api-container {
+    position: fixed !important;
+    top: 8vh !important;
+    z-index: 100 !important;
+    width: 100% !important;
+    background-color:$bgColorValue !important;
+    padding-bottom: 2vh !important;
+    }
   
   .org-db-select {
     display: flex;
     flex-direction: row;
   }
  
-  
-  .form-control {
-    margin: 1rem;
-    min-width: 120px;
+  // .navbar-api-box-1 {
+
+  // }
+
+  .navbar-api-box-2 {
+   display: flex !important;
+   align-items: center !important;
+   flex-direction: row !important;
+  }
+
+  .navbar-api-box-3 {
+    display: flex !important;
+    flex-direction: row !important;
+    padding-left: 24px !important;
+  }
+ 
+  .Organization-db-input-select {
+    border-radius: 0px !important;
+    height: 36px !important;
+    color: $fontColorVAlue !important;
+  }
+
+  .list-sub-header{
+    display: flex !important;
+    flex-direction: row !important;
   }
   
+  .list-sub-header-menu-item {
+    color : $fontColorVAlue !important;
+  }
+
+  .table-name-select {
+    border-radius: 0px !important;
+    height: 36px !important;
+    color : $fontColorVAlue !important;
+  }
+
+  .navbar-api-box-4 {
+      display: flex !important;
+      align-items: center !important;
+      margin-right: 10px !important;
+      position: fixed !important;
+      right: 0px !important;
+      top: 9vh !important;
+  }
+
+  .button-group {
+    border-radius: 0px !important;
+    padding-right: 20px !important;
+  }
+  .form-control {
+    margin: 1rem !important;
+    min-width: 120px !important;
+  }
+  .notpointed{
+    pointer-events: none !important;
+  }
   .table-select {
-    margin: 1rem;
+    margin: 1rem !important;
   }
   
   .auth-key-button {

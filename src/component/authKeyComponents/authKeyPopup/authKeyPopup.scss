@@ -1,0 +1,19 @@
+@import "../../../assets/styling.scss";
+.authKeyPopUp-b2 {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 300px !important;
+  height: 175px !important;
+  background-color: white !important;
+  box-shadow: 24px !important;
+  padding: 16px !important;
+}
+.create-auth-key {
+  display: flex !important;
+  margin-top: 40px !important;
+}
+.copy-auto-key {
+  margin-right: 32px;
+}

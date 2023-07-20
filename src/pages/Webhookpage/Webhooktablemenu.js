@@ -4,7 +4,7 @@ import { Popover, MenuItem, Box, Switch } from '@mui/material';
 import { withStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
-import styling from '../../assets/styling.scss';
+import './Webhookpage.scss'
 function Webhooktablemenu(props) {
   const { anchorEl, closeDropdown, handleUpdateActive, handleDeleteWebhook, isActive } = props;
   const [active, setActive] = useState(isActive);
@@ -67,9 +67,9 @@ function Webhooktablemenu(props) {
         }}
       >
         <MenuItem>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box sx={{ mr: 2 }}>Active</Box>
-            <Box sx={{ ml: 2 }}>
+          <div className="webhook-table-menu-active ">
+            <Box className="webhook-table-menu-active-box-1" >Active</Box>
+            <Box className="webhook-table-menu-active-box-2">
               <CustomSwitch
                 checked={active}
                 onChange={() => { setActive(!active); handleUpdateActive() }}
@@ -82,9 +82,9 @@ function Webhooktablemenu(props) {
         <MenuItem onClick={handleAddWebhook} >
           <Box >Edit</Box>
         </MenuItem>
-        <MenuItem sx={{color:styling.deletecolor}} onClick={() => handleDeleteWebhook()}>
-          <Box sx={{ mr: 2 }}>Delete</Box>
-          <Box sx={{ ml: 2 }}>
+        <MenuItem className="webhook-table-menu-delete webhook-table-menu-active " onClick={() => handleDeleteWebhook()}>
+          <Box className="webhook-table-menu-delete-box-1" >Delete</Box>
+          <Box className="webhook-table-menu-delete-box-2" >
             <DeleteOutlineIcon />
           </Box>
         </MenuItem>

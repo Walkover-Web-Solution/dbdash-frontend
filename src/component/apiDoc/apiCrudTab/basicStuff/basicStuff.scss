@@ -3,6 +3,7 @@
 .basic-stuff-container {
   display: flex !important;
   flex-direction: column !important;
+  
   justify-content: center !important;
 }
 .bold-text {
@@ -43,15 +44,51 @@ span {
   padding: 0 !important;
   margin: 0 !important;
 }
+.horizontalscroll{
+  overflow-x: scroll !important;
+}
+.basicstuffpara1{
+  word-wrap: pre-wrap !important;
+  width: 60vw !important;
+  padding: 16px !important;
+}
 
+.basicstufftitle2{
+  border-top: 0.2px solid $linecolor;
+  width:60vw !important;
+}
+
+.basicstuffIdsOnTop{
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  font-size: 18px !important;
+  padding-left: 32px !important;
+  .ids{
+    color:#016FA4 !important
+  }
+}
+.basicstuffdiv1{
+  display: flex !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  width: 60vw !important;
+}
+.basicstuffrecordstypography{
+  word-wrap: pre-wrap !important;
+  width: $optionalparametercontentwidth !important;
+  padding: 16px !important;
+}
 .copy-button1 {
   transition: background-color 0.3s ease !important;
   background-color: transparent !important;
   color: $fontColorVAlue !important;
-  margin: 0 !important;
+  margin: 0px 5px !important;
   border: none !important;
   opacity: 0.5;
-  font-size: 16px !important; /* Increase font size for better visibility */
+  font-size: 3px  !important; /* Increase font size for better visibility */
   padding: 0 !important;
   display: flex; /* Add display flex for aligning icon and copied text */
   align-items: center; /* Align icon and copied text vertically */
@@ -60,6 +97,7 @@ span {
 
 .color-black {
   color: $fontColorVAlue;
+  font-size: 15px !important;
 }
 
 .copied-text {

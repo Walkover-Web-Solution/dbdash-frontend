@@ -1,72 +1,147 @@
+@import '../../assets/styling.scss';
+
 .auth-key-page-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem;
+    display: flex !important;
+    justify-content: space-between !important;
+    margin: 1rem !important;
     margin-left: 0 !important;
     padding-left: 24px !important;
   }
   
   .auth-key-page-button {
-    text-decoration: none;
-    margin-right: 5px;
+    text-decoration: none !important;
+    margin-right: 5px !important;
   }
   
   .auth-key-page-navbar {
-    margin-bottom: 1rem;
+    margin-bottom: 1rem !important;
   }
   
   .auth-key-page-content {
-    margin-top: 2rem;
+    margin-top: 2rem !important;
   }
   
-  .create-auth-key-main-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    width: 400px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  .create-webhook-key-main-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background-color: #fff !important;
+    width: 400px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    padding: 0px !important;
+    outline: none !important;
   }
   
-  .create-auth-key-content-container {
-    margin-bottom: 20px;
+  .create-webhook-key-content-container {
+    margin-bottom: 20px !important;
   }
   
-  .create-auth-key-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+  .create-webhook-key-row {
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 10px !important;
+    padding-left: 16px !important;
+    padding-right: 8px !important;
+    justify-content: space-between !important;
   }
   
-  .create-auth-key-label {
-    width: 100px;
-    font-weight: bold;
+  .create-webhook-key-label {
+    width: 100px !important;
   }
   
   .create-webhook-label {
-    width: 160px;
-    font-weight: bold;
+    width: 160px !important;
   }
   
-  .create-auth-key-dropdown {
-    width: 100%;
-    margin-left: 8px;
+  .create-webhook-key-dropdown {
+    width: 100% !important;
+    margin-left: 8px !important;
   }
   
   .create-auth-key-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
   }
   
-  .create-auth-key-button {
-    padding: 8px 16px;
+  .create-webhook-key-button {
+    padding: 8px 16px !important;
   }
   
   .create-auth-key-link {
-    text-decoration: none;
+    text-decoration: none !important;
   }
   
+  .create-webhook-button-box {
+     display: flex !important;
+     margin: 16px !important;
+     justify-content: space-between !important;
+  }
+
+  .create-webhook-table-text-field {
+    min-width: 210px !important; 
+  }
+
+  .create-webhook-action-text-field {
+    min-width: 210px !important;
+  }
+
+  .create-webhook-popupheader {
+    margin-bottom: 5% !important;
+  }
+
+  .create-webhook-popupheader-heading {
+    margin-left: 16px !important;
+  }
+
+  .create_webhook-close-icon:hover {
+    cursor: pointer !important; 
+  }
+
+
+  //webhook table css 
+  .webhook-table-main-container {
+    margin : 8px 0px !important;
+    padding-left: 24px !important;
+    padding-right : 31px !important;
+  }
+
+  .webhook-table-container {
+    border:1px solid black !important;
+    border-radius: 0px !important;
+    width: 100% !important;
+    max-height: 533px !important;
+  }
+
+  .webhook-table {
+    min-width: 650px !important;
+  }
+
+.webhook-table-body-table-row td:last-child,
+.webhook-table-body-table-row th:last-child {
+  border: 0 !important;
+}
+
+
+//webhook table menu css
+.webhook-table-menu-active {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.webhook-table-menu-active-box-1 {
+  margin-right: 16px !important;
+}
+
+.webhook-table-menu-active-box-2 {
+  margin-left: 16px !important;
+}
+
+.webhook-table-menu-delete {
+  color: $errorcolor !important;
+  justify-content: space-between !important;
+}
+

@@ -47,13 +47,16 @@ const getHeaders = async (dbId, tableName, payloadfields, { getState },fieldArra
                 // minWidth: 100,
                 // options: [],
                 metadata: {},
-                width: field.metaData?.width ? field.metaData.width : 150
+                width: field.metaData?.width ? field.metaData.width : 150 , 
+                icon: ""
             }
+            
             json.id = fieldId;
             json.title = field.fieldName?.toLowerCase() || fieldId.toLowerCase();
             // json.accessor = fieldId.toLowerCase();
             json.metadata = field.metaData;
             json.dataType = field.fieldType?.toLowerCase();
+            json.icon = field.fieldType?.toLowerCase();
             columns[index] = json; // Replace the existing object at the corresponding index
         }
     });

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import FilterModal from "../../component/filterPopUp";
+import FilterModal from "../../component/filterPopup/filterPopUp";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import SingleTable from "../../component/table/singleTable/singleTable";
 import { useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { setTableLoading } from "../../store/table/tableSlice";
 import './templatePage.scss'
 import variables from "../../assets/styling.scss";
-import ManageFieldDropDown from "../../component/table/manageFieldDropDown";
+import ManageFieldDropDown from "../../component/table/manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
@@ -143,17 +143,17 @@ export default function TemplatePage() {
     <>   <Box>
     <MainNavbar />
  </Box>
-    <div style={{ width: '100%', display: 'flex', justifyContent: 'center',marginTop:'2vh' }}>
+    <div className="templatePage-div">
       
       <div className="main-box">
-        <div style={{ fontSize: '25px', display: 'flex', justifyContent: "space-between" }}>
+        <div  className="temaplatePage-name">
           <div >{templateName}</div>
-          <Button variant="contained" sx={{ marginRight: '-1.4vw' }} className={'mui-button'} onClick={() => { setOpenUseTemplate(true); }}>Use Template</Button>
+          <Button variant="contained"  className='mui-button templatePage-button' onClick={() => { setOpenUseTemplate(true); }}>Use Template</Button>
         </div>
         <UseTemplatePopup open={openUseTemplate} categoryName={categoryName} setOpen={setOpenUseTemplate} />
 
-        <div style={{ display: 'flex', padding: "10px", flexDirection: "row", justifyContent: "center", width: "100%" }}>
-          <div style={{ width: '85vw', padding: '10px', border: '1px solid black' }}>
+        <div  className="templatePage-div1">
+          <div className="templatePage-div2">
             <div className="tableslist1">
               <Box className="tabs-container1">
                 <Tabs
@@ -183,7 +183,7 @@ export default function TemplatePage() {
                 </Tabs>
 
               </Box>
-              <Box sx={{ display: "flex", flexDirection: 'row', width: '100%', overflowX: 'auto' }}   >
+              <Box  className="templatePage-box"  >
                 {templateData?.dbId?.tables[tableIdForFilter]?.filters &&
                   Object.entries(templateData?.dbId?.tables[tableIdForFilter]?.filters).map(
                     (filter, index) => (
@@ -230,11 +230,11 @@ export default function TemplatePage() {
               )}
 
               <div >
-                <Button sx={{ fontSize: `${variables.tablepagefontsize}`, textTransform: 'none', color: variables.basictextcolor }} onClick={handleClickOpenManageField}>Manage Fields</Button>
+                <Button className="templatePage-button1" onClick={handleClickOpenManageField}>Manage Fields</Button>
 
-                <Button sx={{ fontSize: `${variables.tablepagefontsize}`, textTransform: 'none', color: variables.basictextcolor }} onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon  fontSize={variables.iconfontsize1}  />}</Button>
-                {params?.filterName && <> <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={handleEdit}>Edit filter</Button>
-                  <Button sx={{ fontSize: `${variables.tablepagefontsize}`, paddingLeft: 0, paddingRight: 0, mr: 2 }} onClick={(e) => {
+                <Button className="templatePage-button1"  onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon  fontSize={variables.iconfontsize1}  />}</Button>
+                {params?.filterName && <> <Button className="templatePage-button2"   onClick={handleEdit}>Edit filter</Button>
+                  <Button className="templatePage-button2"  onClick={(e) => {
                     handleClick(e, "share");
                   }
                   }>share view</Button></>}
@@ -276,17 +276,17 @@ export default function TemplatePage() {
               {isTableLoading ? (
                 <CircularProgress className="table-loading" />
               ) : (
-                <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <MainTable setPage={setPage} width={'100%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{ padding: '0 auto' }} />
+                <div className="templatePage-div3" >
+                  <MainTable setPage={setPage} width={'100%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{ padding: '0 auto' }} className="templatePage-maintable" />
                 </div>
               )}
             </div>
           </div>
 
         </div>
-        <div style={{ marginTop: "25px", fontSize: '25px' }}>Description</div>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div style={{ width: '85vw', padding: '10px', marginTop: '10px' }}>{description}</div>
+        <div  className="templatePage-div4" >Description</div>
+        <div  className="templatePage-div5" >
+          <div  className="templatePage-div6" >{description}</div>
         </div>
       </div>
 

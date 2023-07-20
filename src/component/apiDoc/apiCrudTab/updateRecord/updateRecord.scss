@@ -1,10 +1,11 @@
-.container {
+.updatecontainer {
     display: flex !important ;
     flex-direction: column !important ;
     position: fixed !important ;
     right: 0 !important ;
-    width: 42vw !important;
-
+    width: 36vw !important;
+overflow-x: hidden !important;
+    overflow-y: scroll !important;
     padding: 10px !important ;
   padding-right: 13px !important;
    
@@ -14,15 +15,24 @@
 
 
   }
+  .updaterecordfirstpara{
+    word-wrap: pre-wrap !important;
+    width: 60vw !important;
+    padding: 16px !important;
+  }
+  
   
   .response-container {
-    width: 55vw !important ;
+    width: 62vw !important ;
    
     white-space: pre-wrap !important ;
     padding: 2px !important ;
-padding-right: 200px  !important;
+padding-right: 160vw  !important;
 overflow-x: hidden !important;
 
+  }
+  .paddingtopoftitle{
+    padding-top: 24px !important;
   }
   
   .bold-heading {

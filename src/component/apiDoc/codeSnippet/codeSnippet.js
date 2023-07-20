@@ -14,16 +14,11 @@ const CodeSnippet = ({ codeString }) => {
   };
 
   return (
-    <div style={{display:'flex'}}>
-      <SyntaxHighlighter language="jsx" style={{textDecoration:'none',height:'200px', width: '1000px'}} >
+    <div  className="codesnippet-div">
+      <SyntaxHighlighter language="jsx" className="codesnippet-syntaxhighliter"  >
         {codeString}
       </SyntaxHighlighter>
-      <Button
-        style={{
-          marginRight: 'auto',
-          padding: "0.5rem",
-          cursor: "pointer"
-        }}
+      <Button className="codesnippet-button"
         onClick={copyToClipboard}
       >
         {isCopied ? "Copied!" : "copy"}

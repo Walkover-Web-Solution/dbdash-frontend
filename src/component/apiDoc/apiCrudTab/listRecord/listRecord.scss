@@ -3,18 +3,22 @@
   flex-direction: column !important ;
   position: fixed !important ;
   right: 0 !important ;
-  width: 42vw !important;
-
+  width: 36vw !important;
   padding: 10px !important ;
   padding-right: 13px !important;
- 
+ overflow-y: hidden ;
+ overflow-x: hidden !important;
   white-space: pre-wrap !important ;
+  }
+  .verticalscroll{
+    overflow-y: scroll !important;
+
   }
   
   .records-container {
-    width: 55vw !important ;
+    width: 62vw !important ;
     overflow-y: scroll !important ;
-    padding-right: 200px !important;
+    padding-right: 160vw !important;
     white-space: pre-wrap !important ;
     padding: 2px !important ;
   }
@@ -22,5 +26,10 @@
   .bold-heading {
     font-weight: bold !important ;
     font-size: 24px !important ;
+  }
+  .listrecordfirstpara{
+    word-wrap: pre-wrap !important;
+    width: 60vw !important;
+    padding: 16px !important;
   }
   
