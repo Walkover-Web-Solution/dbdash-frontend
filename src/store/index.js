@@ -5,7 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
 // reducer imports
-import rootReducer from "./combineReducer.js";
+import rootReducer from "./combineReducer.ts";
 const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25});
 const persistConfig = {
   blacklist: ["table"],
