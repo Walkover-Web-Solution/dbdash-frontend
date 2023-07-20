@@ -6,9 +6,9 @@ import { Box, Button, CircularProgress, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
-import CustomAutoSuggest from "../../../component/customAutoSuggest/customAutoSuggest"
-import { getQueryByAi } from '../../../api/fieldApi';
+import { getAllTableInfo } from '../../../../store/allTable/allTableSelector';
+import CustomAutoSuggest from "../../../../component/customAutoSuggest/customAutoSuggest"
+import { getQueryByAi } from '../../../../api/fieldApi';
 import './formulaDataType.scss'
 
 export default function FormulaDataType(props) {

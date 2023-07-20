@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { MenuItem, Select, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
+import { getAllTableInfo } from '../../../../store/allTable/allTableSelector';
 import PropTypes from 'prop-types';
 import { cloneDeep } from "lodash";
 import { useEffect } from 'react';
+import './linkDataType.scss'
 
 
 export default function LinkDataType(props) {
@@ -37,7 +38,7 @@ export default function LinkDataType(props) {
           labelId="select-label"
           id="select"
           value={props?.selectedTable}
-          sx={{ margin: 1,marginLeft:0, minWidth: 120 }}
+          className="linkDataType-div"
           onChange={(event) => {
             props.setSelectedTable(event.target.value);
             setShowUniqueFieldsDropdown(true);

@@ -1,6 +1,7 @@
 import { MenuItem, Select } from '@mui/material';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import './numberDataType.scss'
 
 export default function NumberDataType(props) {
 
@@ -22,7 +23,7 @@ export default function NumberDataType(props) {
                 onChange={(e)=>props?.handleSelectChange(e)}
                 defaultValue="numeric"
                 displayEmpty
-                sx={{ margin: 1, minWidth: 120 }}
+                className='numberDataType-div'
               >
                 <MenuItem value="numeric">Integer</MenuItem>
                 <MenuItem value="decimal">Decimal</MenuItem>
@@ -36,7 +37,8 @@ export default function NumberDataType(props) {
           onChange={(e)=>{selectDecimalValue(e)}}
           defaultValue="1"
           displayEmpty
-          sx={{ margin: 1, minWidth: 120 }}
+          className='numberDataType-div'
+
         >
           <MenuItem value="Select">Select decimal value </MenuItem>
 

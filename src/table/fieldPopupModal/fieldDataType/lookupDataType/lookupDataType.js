@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
-import { getAllTableInfo } from '../../../store/allTable/allTableSelector';
+import { getAllTableInfo } from '../../../../store/allTable/allTableSelector';
 import { MenuItem, Select } from '@mui/material';
 import PropTypes from 'prop-types';
+import './lookupDataType.scss'
 
 export default function LoookupDataType(props) {
 
@@ -34,11 +35,8 @@ export default function LoookupDataType(props) {
           labelId="select-label"
           id="select"
           value={props?.linkedValueName ? Object.keys(props?.linkedValueName)[0] : foreignKey[0][0]}
-          sx={{
-            margin: 1,
-            marginLeft:0,
-            minWidth: 120,
-          }}
+          className='lookupDataType-div'
+       
 
           onChange={(e) => {
             const selectedField = AllTableInfo?.tables[props.tableId]?.fields[e.target.value];
@@ -72,11 +70,7 @@ export default function LoookupDataType(props) {
         labelId="select-label"
         id="select"
         value={props?.selectedFieldName}
-        sx={{
-          margin: 1,
-          marginLeft:0,
-          minWidth: 120,
-        }}
+        className='lookupDataType-div'
         onChange={(e) => props?.setSelectedFieldName(e.target.value)}
       >
         {AllTableInfo.tables[props?.linkedValueName[Object.keys(props?.linkedValueName)[0]]?.metaData?.foreignKey?.tableId ?? props?.selectedTable]?.fields && Object.entries(AllTableInfo.tables[props?.linkedValueName[Object.keys(props?.linkedValueName)[0]]?.metaData?.foreignKey?.tableId ?? props?.selectedTable]?.fields)?.map((fields) =>
