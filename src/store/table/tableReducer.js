@@ -1,5 +1,20 @@
+import {
+  addColumns,
+  addColumnrightandleft,
+  bulkAddColumns,
+  updateColumnsType,
+  updateCells,
+  addRows,
+  deleteColumns,
+  updateColumnHeaders,
+  addColumsToLeft,
+  updateColumnOrder,
+  updateMultiSelectOptions,
+  deleteRows,
+} from "./tableThunk.js";
 
-import { addColumns, addColumnrightandleft, bulkAddColumns, updateColumnsType, updateCells, addRows, deleteColumns, updateColumnHeaders, addColumsToLeft, updateColumnOrder, updateMultiSelectOptions, deleteRows } from './tableThunk.js';
+
+
 import { randomColor, shortId } from "../../table/utils";
 // import { current } from '@reduxjs/toolkit';
 
@@ -12,8 +27,7 @@ export const initialState = {
   pageNo: 0,
   isTableLoading: true,
   isMoreData: true,
-  filterId: null
-
+  filterId: null,
 };
 
 export const reducers = {
