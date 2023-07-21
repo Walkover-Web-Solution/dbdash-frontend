@@ -67,9 +67,9 @@ export default function MainTable(props) {
   useEffect(() => {
     setData(dataa);
   }, [dataa]);
-  const isSingleCellSelected=(selection)=>{
-    return selection.current && (selection.current.range.height*selection.current.range.width==1);
-  }
+  const isSingleCellSelected = useMemo(() => {
+    return selection.current && (selection.current.range.height * selection.current.range.width === 1);
+  }, [selection]);
   const handleUploadFileClick = useCallback((cell) => {
     if (!data) return;
     const [col, row] = cell;
@@ -272,10 +272,10 @@ export default function MainTable(props) {
         params,
         dataa[cell?.[1] ?? []],
         fields[cell[0]].dataType,
-   isSingleCellSelected(selection)
+        isSingleCellSelected
       );
     },
-    [dataa,fields,selection]
+    [dataa,fields]
   );
  const handleColumnResizeWithoutAPI=useCallback((_,newSize,colIndex)=>{
   let newarrr = [...(fields || fields1)];

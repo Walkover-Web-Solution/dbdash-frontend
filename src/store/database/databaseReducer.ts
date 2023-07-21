@@ -1,173 +1,146 @@
-import { removeDbThunk, renameDBThunk, createDbThunk, moveDbThunk,bulkAdd, renameOrgThunk,  createOrgThunk, shareUserInOrgThunk, removeUserInOrgThunk, deleteDbThunk,restoreDbThunk, updateUserInOrgThunk} from './databaseThunk';
-export const initialState = {
-  status: 'idle',
-  orgId: {
-
-  },
-  allOrg:[]
+import { DbState } from "../../types/databaseDataType";
+import {
+  removeDbThunk,
+  renameDBThunk,
+  createDbThunk,
+  moveDbThunk,
+  bulkAdd,
+  renameOrgThunk,
+  createOrgThunk,
+  shareUserInOrgThunk,
+  removeUserInOrgThunk,
+  deleteDbThunk,
+  restoreDbThunk,
+  updateUserInOrgThunk,
+} from "./databaseThunk";
+export const initialState: DbState = {
+  status: "idle",
+  orgId: {},
+  allOrg: [],
 };
 
 export const reducers = {
   createDb(state, payload) {
-
     if (payload.payload) {
       const { database_name } = payload.payload;
       state.dbName = database_name;
     }
   },
 
- 
-moveDb(state)
-{
-
-  state.orgId='';
-  state.dbId='';
-  state.data='';
-},
-  renameDb(state) {
-    state.dbId = '';
-    state.orgId = '';
-    state.data = '';
-
-
+  moveDb(state) {
+    state.orgId = "";
+    state.dbId = "";
+    state.data = "";
   },
- 
+  renameDb(state) {
+    state.dbId = "";
+    state.orgId = "";
+    state.data = "";
+  },
 
   removeDb(state) {
-    state.dbId = '';
-    state.orgId = '';
-
-  }
-
+    state.dbId = "";
+    state.orgId = "";
+  },
 };
 
 export function extraReducers(builder) {
   builder
     //    //   rename Db
-    .addCase(moveDbThunk.pending,(state)=>{
-      state.status="loading"
+    .addCase(moveDbThunk.pending, (state) => {
+      state.status = "loading";
     })
-    .addCase(moveDbThunk.fulfilled,(state,action)=>{
-   
+    .addCase(moveDbThunk.fulfilled, (state, action) => {
       state.status = "succeeded";
-    let oldArr = state.orgId[action.payload.orgId] || [];
-    let newArr = state.orgId[action.payload.data1.org_id] || [];
-   
-    let object = oldArr.find((obj) => obj._id === action.payload.data1._id);
-    if (object) {
-    oldArr = oldArr.filter((obj) => obj._id !== action.payload.data1._id);
-   
-    object.org_id._id = action.payload.data1.org_id;
-   
-    newArr.push(object);
-   
-     state.orgId = {
-    ...state.orgId,
-    [action.payload.orgId]: oldArr,
-    [action.payload.data1.org_id]: newArr,
-    };
-     }
+      let oldArr = state.orgId[action.payload.orgId] || [];
+      let newArr = state.orgId[action.payload.data1.org_id] || [];
+
+      let object = oldArr.find((obj) => obj._id === action.payload.data1._id);
+      if (object) {
+        oldArr = oldArr.filter((obj) => obj._id !== action.payload.data1._id);
+
+        object.org_id._id = action.payload.data1.org_id;
+
+        newArr.push(object);
+
+        state.orgId = {
+          ...state.orgId,
+          [action.payload.orgId]: oldArr,
+          [action.payload.data1.org_id]: newArr,
+        };
+      }
     })
     .addCase(moveDbThunk.rejected, (state) => {
-   
       state.status = "failed";
-     
     })
-   
 
     .addCase(renameDBThunk.pending, (state) => {
-
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(renameDBThunk.fulfilled, (state, action) => {
-
       state.status = "succeeded";
       let arr = state.orgId[action.payload.org_id] || [];
       let object = arr.map((obj) => {
         if (obj._id == action.payload._id) {
-          obj.name = action.payload.name
+          obj.name = action.payload.name;
           return obj;
         }
-        return obj
-      })
+        return obj;
+      });
       state.orgId = { ...state.orgId, [action.payload.org_id]: object };
-
-
-
     })
     .addCase(renameDBThunk.rejected, (state) => {
-
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
-
-
 
     // bulkAdd
     .addCase(bulkAdd.pending, (state) => {
-
-      state.status = "loading"
-
+      state.status = "loading";
     })
     .addCase(bulkAdd.fulfilled, (state, action) => {
-      state.orgId = action.payload.result
-      state.allOrg = action.payload.allorgs
+      state.orgId = action.payload.result;
+      state.allOrg = action.payload.allorgs;
       state.status = "succeeded";
     })
     .addCase(bulkAdd.rejected, (state) => {
-
-
       state.status = "failed";
-
     })
-
-
-
-
 
     .addCase(renameOrgThunk.pending, (state) => {
-
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(renameOrgThunk.fulfilled, (state, action) => {
-
       state.status = "succeeded";
       let arr = state.orgId[action.payload._id] || [];
       arr.map((obj) => {
-        obj.org_id.name = action.payload.name
-      })
+        obj.org_id.name = action.payload.name;
+      });
       state.orgId = { ...state.orgId, [action.payload._id]: arr };
-
     })
     .addCase(renameOrgThunk.rejected, (state) => {
-
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
-
 
     //   create Org
 
     .addCase(createOrgThunk.pending, (state) => {
-
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(createOrgThunk.fulfilled, (state, action) => {
-     
       state.status = "succeeded";
-      console.log(action.payload.allorgs[0]._id,"reducer")
-      let arr = state.orgId[action.payload.allorgs[0]._id] ||  [];
+      console.log(action.payload.allorgs[0]._id, "reducer");
+      let arr = state.orgId[action.payload.allorgs[0]._id] || [];
       const newArr = [...arr, action.payload.data];
       state.orgId = { ...state.orgId, [action.payload.allorgs[0]._id]: newArr };
-   
-      if (state.allOrg)
-      state.allOrg = [...state.allOrg , action.payload.allorgs[0]]
-      else
-      state.allOrg = [action.payload.allorgs[0]]
-    })
-   
-    .addCase(createOrgThunk.rejected, (state) => {
 
+      if (state.allOrg)
+        state.allOrg = [...state.allOrg, action.payload.allorgs[0]];
+      else state.allOrg = [action.payload.allorgs[0]];
+    })
+
+    .addCase(createOrgThunk.rejected, (state) => {
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
@@ -175,18 +148,16 @@ export function extraReducers(builder) {
     // //   create Db
 
     .addCase(createDbThunk.pending, (state) => {
-
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(createDbThunk.fulfilled, (state, action) => {
       state.status = "succeeded";
-      console.log(action?.payload?.org_id,"fgdfs")
+      console.log(action?.payload?.org_id, "fgdfs");
       let arr = state.orgId[action?.payload?.org_id._id] || [];
       const newArr = [...arr, action.payload];
       state.orgId = { ...state.orgId, [action?.payload?.org_id._id]: newArr };
     })
     .addCase(createDbThunk.rejected, (state) => {
-
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
@@ -205,7 +176,7 @@ export function extraReducers(builder) {
     //   delete orgIdArr[deletedOrgId];
     //   state.orgId = { ...orgIdArr };
     //   state.allOrg = state.allOrg.filter(org => org._id !== deletedOrgId);
-     
+
     // })
     // .addCase(deleteOrgThunk.rejected, (state) => {
 
@@ -216,12 +187,12 @@ export function extraReducers(builder) {
     //   Delete Db
 
     .addCase(removeDbThunk.pending, (state) => {
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(removeDbThunk.fulfilled, (state, actions) => {
       state.status = "succeeded";
       const arr = state.orgId[actions.payload.orgId];
-      const newArr = arr.filter(ele => {
+      const newArr = arr.filter((ele) => {
         return ele._id !== actions.payload.dbId;
       });
       state.orgId[actions.payload.orgId] = newArr;
@@ -231,19 +202,18 @@ export function extraReducers(builder) {
       // MDBToast.error("Unable to fetch jamaats.");
     })
 
+    //  add deleted db time for restoring again
 
-     //  add deleted db time for restoring again
-
-     .addCase(deleteDbThunk.pending, (state) => {
-      state.status = "loading"
+    .addCase(deleteDbThunk.pending, (state) => {
+      state.status = "loading";
     })
     .addCase(deleteDbThunk.fulfilled, (state, actions) => {
       state.status = "succeeded";
       const arr = state.orgId[actions.payload.org_id._id];
-      let newArr = arr.filter(ele => {
+      let newArr = arr.filter((ele) => {
         return ele._id !== actions.payload._id;
       });
-      newArr.push(actions?.payload)
+      newArr.push(actions?.payload);
       state.orgId[actions.payload.org_id._id] = newArr;
     })
     .addCase(deleteDbThunk.rejected, (state) => {
@@ -251,92 +221,75 @@ export function extraReducers(builder) {
       // MDBToast.error("Unable to fetch jamaats.");
     })
     .addCase(restoreDbThunk.pending, (state) => {
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(restoreDbThunk.fulfilled, (state, actions) => {
       state.status = "succeeded";
       const arr = state.orgId[actions.payload.org_id._id];
-      let newArr = arr.filter(ele => {
+      let newArr = arr.filter((ele) => {
         return ele._id !== actions.payload._id;
       });
-      newArr.push(actions?.payload)
+      newArr.push(actions?.payload);
       state.orgId[actions.payload.org_id._id] = newArr;
     })
     .addCase(restoreDbThunk.rejected, (state) => {
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
-   
-
 
     //   Add user in Org
 
     .addCase(shareUserInOrgThunk.pending, (state) => {
-
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(shareUserInOrgThunk.fulfilled, (state, action) => {
-
       var arr = state.allOrg;
-      arr.find((temp,index)=>{
-        if(temp._id==action.payload.allorgs[0]._id)
-        {
-          arr[index]= action.payload.allorgs[0];
+      arr.find((temp, index) => {
+        if (temp._id == action.payload.allorgs[0]._id) {
+          arr[index] = action.payload.allorgs[0];
         }
-      })
-      state.allOrg = arr
+      });
+      state.allOrg = arr;
       state.status = "succeeded";
     })
     .addCase(shareUserInOrgThunk.rejected, (state) => {
-
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
 
     //   Remove user from Org
     .addCase(updateUserInOrgThunk.pending, (state) => {
-
-      state.status = "loading"
+      state.status = "loading";
     })
     .addCase(updateUserInOrgThunk.fulfilled, (state, action) => {
-
       var arr = state.allOrg;
-      arr.find((temp,index)=>{
-        if(temp._id==action.payload.allorgs[0]._id)
-        {
-          arr[index]= action.payload.allorgs[0];
+      arr.find((temp, index) => {
+        if (temp._id == action.payload.allorgs[0]._id) {
+          arr[index] = action.payload.allorgs[0];
         }
-      })
-      state.allOrg = arr
+      });
+      state.allOrg = arr;
       state.status = "succeeded";
     })
     .addCase(updateUserInOrgThunk.rejected, (state) => {
-
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
-    .addCase(removeUserInOrgThunk.pending, (state) => { 
-
-      state.status = "loading"
+    .addCase(removeUserInOrgThunk.pending, (state) => {
+      state.status = "loading";
     })
     .addCase(removeUserInOrgThunk.fulfilled, (state, action) => {
-
       var arr = state.allOrg;
-      arr.find((temp,index)=>{
-        if(temp._id==action.payload.allorgs[0]._id)
-        {
-          arr[index]= action.payload.allorgs[0];
+      arr.find((temp, index) => {
+        if (temp._id == action.payload.allorgs[0]._id) {
+          arr[index] = action.payload.allorgs[0];
         }
-      })
-      state.allOrg = arr
+      });
+      state.allOrg = arr;
       state.status = "succeeded";
     })
     .addCase(removeUserInOrgThunk.rejected, (state) => {
-
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
-    })
-
-
-
+    });
 }
