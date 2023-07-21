@@ -68,6 +68,7 @@ export default function MainTable(props) {
     setData(dataa);
   }, [dataa]);
   const isSingleCellSelected = useMemo(() => {
+    console.log("hello");
     return selection.current && (selection.current.range.height * selection.current.range.width === 1);
   }, [selection]);
   const handleUploadFileClick = useCallback((cell) => {
@@ -625,6 +626,7 @@ export default function MainTable(props) {
     };
   })();
   const handlegridselection = (event) => {
+
     setSelection(event);
   };
 

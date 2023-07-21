@@ -1,4 +1,4 @@
-import { DbState } from "../../types/databaseDataType";
+import { DbStateType } from "../../types/databaseDataType";
 import {
   removeDbThunk,
   renameDBThunk,
@@ -13,7 +13,7 @@ import {
   restoreDbThunk,
   updateUserInOrgThunk,
 } from "./databaseThunk";
-export const initialState: DbState = {
+export const initialState: DbStateType = {
   status: "idle",
   orgId: {},
   allOrg: [],

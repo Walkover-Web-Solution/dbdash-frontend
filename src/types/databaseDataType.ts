@@ -1,4 +1,4 @@
-export interface DbState {
+export interface DbStateType {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     orgId: OrgIdObj;
     allOrg: OrgObj[];
