@@ -139,3 +139,31 @@ export interface createAndUpdateOrgThunkData{
   data?:CreateRestoreAndDeleteDBDetails|{}
 } 
 
+export interface DatainThunkPayload{
+  created_by?:string;
+  name?:string;
+  org_id?:OrgId;
+  tables?:AllTableDataType;
+  users?:UserAccessDataType;
+  usersMapping?:UsersMapping;
+  version?:Number;
+  _v?:number;
+  
+  _id?:string;
+}
+export interface UserAccessDataType{
+  [userId:string]:{
+    access:number;
+  }
+}
+export interface PayloadinThunkDataType{
+  orgId?:string;
+  id?:string;
+  data:DatainThunkPayload;
+  dbId?:string;
+  name?:string;
+  user_id?:string;
+  email?:string;
+  user_type?:number;
+  adminId?:string|null;
+}
