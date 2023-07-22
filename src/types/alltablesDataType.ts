@@ -70,3 +70,28 @@ export interface removeDbInUserPayloadDataType{
     response:any;
     userId:string;
 }
+
+export interface RemoveTableThunkPayload{  // use the data for name change
+    tableData:TableDataType;
+}
+
+
+export interface UpdateTableThunkPayload{
+    dbId:string;
+    tableName:string;
+    data1:NewTableNameType;
+}
+
+export interface NewTableNameType{
+    newTableName:string;
+}
+
+export interface AddDbInUserThunkType{
+    adminId:string;
+    data:DataInUserSharePayload;
+    dbId:string;
+}
+export interface DataInUserSharePayload{
+    email:string;
+    userAccess:number
+}

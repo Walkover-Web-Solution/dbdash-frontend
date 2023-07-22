@@ -1,40 +1,45 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { addDbInUser, getDbById, removeDbInUser, updateAccessOfUserInDb } from "../../api/dbApi"
 import { updateTable } from "../../api/tableApi";
+import { AddDbInUserThunkType, AllTableDataType, RemoveTableThunkPayload, UpdateTableThunkPayload } from '../../types/alltablesDataType';
+
+
 
 export const createTable1 = createAsyncThunk (
-    "tables/createTable1", async (payload) =>{
+    "tables/createTable1", async (payload:AllTableDataType) =>{
         return payload?.tables
     }
 );
 export const getTable1 = createAsyncThunk (
     "tables/getTable1",
-     async (payload) =>{
+     async (payload:any) =>{
         const data = await getDbById(payload?.dbId);
         return data.data.data
     }
 );
 export const removeTable1 = createAsyncThunk (
-    "tables/removeTable1", async (payload) =>{
-
+    "tables/removeTable1", async (payload:RemoveTableThunkPayload) =>{
         return payload?.tableData;
     }
 );
 export const updateTable1= createAsyncThunk (
-    "tables/updateTable1", async (payload) =>{
+    "tables/updateTable1", async (payload:UpdateTableThunkPayload) =>{
+
         const data = await updateTable(payload?.dbId,payload.tableName,payload.data1);
         return data.data.data.tables
     }
 );
 export const addDbInUserThunk=createAsyncThunk(
-    "tables/addDbInUserThunk",async(payload)=>{
+    "tables/addDbInUserThunk",async(payload:AddDbInUserThunkType)=>{
+        console.log("RemovePayload", payload)
+        
        const response= await addDbInUser(payload.dbId,payload.adminId,payload.data);
 
        return response?.data?.data;
     }
 )
 export const removeDbInUserThunk=createAsyncThunk(
-    "tables/removeDbInUserThunk",async(payload)=>{
+    "tables/removeDbInUserThunk",async(payload:any)=>{
        const response= await removeDbInUser(payload.dbId,payload.adminId,payload.data);
 const responsetosend={
     response:response,
@@ -45,7 +50,7 @@ const responsetosend={
     }
 )
 export const updateAccessOfUserInDbThunk=createAsyncThunk(
-    "tables/updateAccessOfUserInDbThunk",async(payload)=>{
+    "tables/updateAccessOfUserInDbThunk",async(payload:any)=>{
        const response= await updateAccessOfUserInDb(payload.dbId,payload.adminId,payload.data);
        return response.data?.data;
     }
