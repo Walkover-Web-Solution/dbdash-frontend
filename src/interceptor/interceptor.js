@@ -1,8 +1,12 @@
 import axios from "axios";
 import { toast } from 'react-toastify'
 
+
+const axiosInstance = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+  });
 //request interceptor
-axios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -16,7 +20,7 @@ axios.interceptors.request.use(
 );
 
 //response interceptor
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -40,4 +44,4 @@ axios.interceptors.response.use(
   }
 );
 
-export default axios;
+export default axiosInstance;

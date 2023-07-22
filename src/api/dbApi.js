@@ -1,71 +1,70 @@
-import axios from "../interceptor/interceptor.js";
-const URL = process.env.REACT_APP_API_BASE_URL;
+import axiosInstance from '../interceptor/interceptor';
 
 const createDb = async (orgId , data) =>
 {
-    return await axios.post(URL + `/dbs/${orgId}/dbs`,data) 
+    return await axiosInstance.post( `/dbs/${orgId}/dbs`,data) 
 }
 
 const duplicateDb = async (dbId, data) =>
 {
-     return await axios.post(URL +`/dbs/${dbId}/duplicate`,data);
+     return await axiosInstance.post(`/dbs/${dbId}/duplicate`,data);
 }
 
 const getAllDb = async () =>
 {
-    return await axios.get(URL + "/dbs")
+    return await axiosInstance.get( "/dbs")
 }
 
 const getDbById = async (dbId) =>
 {
-     return await axios.get(URL +`/dbs/dbs/${dbId}`);
+     return await axiosInstance.get(`/dbs/dbs/${dbId}`);
 }
 
 const getDbByOrgId = async (orgId) =>
 {
-    return await axios.get(URL + `/dbs/${orgId}/alldbs`)
+    return await axiosInstance.get( `/dbs/${orgId}/alldbs`)
 }
 
 const renameDb = async (orgId,id,data) =>
 {
-return await axios.patch(URL +`/dbs/${id}?operation=rename`,data)
+return await axiosInstance.patch(`/dbs/${id}?operation=rename`,data)
 }
 
 const deleteDb = async (orgId,id) =>
 {
-     return await axios.delete(URL +`/dbs/${orgId}/dbs/${id}`)
+     return await axiosInstance.delete(`/dbs/${orgId}/dbs/${id}`)
 }
 
 const moveDb=async(org_id,dbId,data)=>
 {
 
-return await axios.patch(URL+`/dbs/${org_id}/dbs/${dbId}/movedb`,data);
+return await axiosInstance.patch(`/dbs/${org_id}/dbs/${dbId}/movedb`,data);
 }
 
 const restoreDbForUser = async(orgId,id)=>
 {
-return await axios.patch(URL+`/dbs/${id}?operation=restore`);
+return await axiosInstance.patch(`/dbs/${id}?operation=restore`);
 }
 
 const deleteDbForUser = async(orgId,id)=>
 {
-return await axios.patch(URL+`/dbs/${id}?operation=delete`);
+return await axiosInstance.patch(`/dbs/${id}?operation=delete`);
 }
 
 
 const adminPanelByAI = async (query , id) =>
 {
-    return await axios.post(URL +`/adminpanel/query/${id}` , {userQuery : query});
+    return await axiosInstance.post(`/adminpanel/query/${id}` , {userQuery : query});
 }
 
 const addDbInUser=async(dbId,adminId,data)=>{
-    return await axios.patch(URL+`/dbs/${dbId}/sharedb?operation=add`,data);
+    return await axiosInstance.patch(`/dbs/${dbId}/sharedb?operation=add`,data);
 }
 const removeDbInUser=async(dbId,adminId,data)=>{
-    return await axios.patch(URL+`/dbs/${dbId}/sharedb?operation=delete`,data);
+    return await axiosInstance.patch(`/dbs/${dbId}/sharedb?operation=delete`,data);
 }
 const updateAccessOfUserInDb=async(dbId,adminId,data)=>{
-    return await axios.patch(URL+`/dbs/${dbId}/sharedb?operation=update`,data);
+    return await axiosInstance.patch(`/dbs/${dbId}/sharedb?operation=update`,data);
 }
 
 export {

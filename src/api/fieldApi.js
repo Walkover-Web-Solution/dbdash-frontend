@@ -1,33 +1,33 @@
-import axios from "../interceptor/interceptor.js";
-const URL = process.env.REACT_APP_API_BASE_URL;
+import axiosInstance from '../interceptor/interceptor';
+
 const createField = async (db_id,tableName,data) =>
 {
-    return await axios.post(URL +`/dbs/${db_id}/${tableName}/field`,data)
+    return await axiosInstance.post(`/dbs/${db_id}/${tableName}/field`,data)
 }
 const getAllfields = async (db_id, tableName) =>{
-    return  await axios.get(URL+`/dbs/${db_id}/${tableName}/field`)
+    return  await axiosInstance.get(`/dbs/${db_id}/${tableName}/field`)
 }
 
 // get field of particular table //added by hariomm22
 const updateField = async (db_id,tableName,fieldId,data) =>
 {
-    return await axios.patch(URL +`/dbs/${db_id}/${tableName}/${fieldId}/updatefield`,data)
+    return await axiosInstance.patch(`/dbs/${db_id}/${tableName}/${fieldId}/updatefield`,data)
 }
 
 const hideAllField = async (db_id,tableName,data) =>
 {
-    return await axios.patch(URL +`/dbs/${db_id}/${tableName}/hideallfield`,data)
+    return await axiosInstance.patch(`/dbs/${db_id}/${tableName}/hideallfield`,data)
 }
 
 const getQueryByAi = async (db_id,tableName,data) =>
 {
-    return await axios.post(URL +`/dbs/${db_id}/${tableName}/querybyai`,data)
+    return await axiosInstance.post(`/dbs/${db_id}/${tableName}/querybyai`,data)
 }
 
 const deleteField = async (db_id,tableName,fieldName) =>
 {
 
-    return await axios.delete(URL +`/dbs/${db_id}/${tableName}/${fieldName}/deletefield`)
+    return await axiosInstance.delete(`/dbs/${db_id}/${tableName}/${fieldName}/deletefield`)
 }
 
 
