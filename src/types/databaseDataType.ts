@@ -1,3 +1,4 @@
+import {AllTableDataType} from './alltablesDataType'
 export interface DbStateType {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     orgId: OrgIdObj|{};
@@ -19,11 +20,15 @@ export interface DbStateType {
     name: string;
   }
   
-  export interface OrgObj {
-    version: number;
+  export interface OrgObj extends VersionData{
+   
     _id: string;
     name: string;
     users: User[];
+   
+  }
+  export interface VersionData{
+    version: number;
     _v: number;
   }
   
@@ -40,32 +45,11 @@ export interface DbStateType {
     email: string;
   }
 
-  // export interface DBActionType{
-  //   payload:PayloadRemaneforbulkAdd ;
-  // }
+ 
 
-  // export interface PayloadRemaneforbulkAdd{
-  //   allorgs:Array<AllOrgArrType>;
-  //   result:OrgIdObj;
-  //   type:string;
-  // }
-
-  // export interface AllOrgArrType{
-  //   name:string;
-  //   users:Array<UsersDetailType>;
-  //   version:number;
-  //   _v:number;
-  //   _id:string;
-  // }
-
-  // export interface UsersDetailType{
-  //   user_id:UsersMapping;
-  //   user_type:number;
-  //   _id:string;
-  // }
-
-export interface ActionMoveDB{
-  payload:MovePayloadType;
+export interface ActionDataType<T>{
+  payload:T;
+  
 }
 
 
@@ -80,10 +64,8 @@ org_id:string;
 _id:string;
 }
 
-export interface ActionRenameDB{
-  payload:RenameDBData;
-}
-export interface RenameDBData{
+
+export interface RenamePayloadType{
   name: string;
   _id: string;
   org_id: string;
@@ -94,9 +76,66 @@ export interface ActionBulkAdd{
 }
 
 export interface BulkAddData{
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  orgId: OrgIdObj|{};
-  allorgs: OrgObj[];
-  result:OrgIdObj;
+  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  orgId?: OrgIdObj|{};
+  allorgs: OrgObj[]|[];
+  result:OrgIdObj|{};
 }
+
+
+// export interface ActionOnCreateDB{
+//   payload:CreateDBDetails;
+// }
+
+export interface CreateRestoreAndDeleteDBDetails extends DbObject,VersionData{
+created_by:string;
+users:UsersAccess;
+tables:AllTableDataType ;
+userMapping:UsersMapping|{};
+deleted?:string;
+lastActivedbTime?:number;
+auth_keys?:Auth_keys;
+webhook?:Webhooks;
+
+}
+export interface UsersAccess{
+  [users:string]:{access:number}
+}
+
+interface Auth_keys{
+  [authkey:string]:Authkeyobj;
+  }
+  interface Authkeyobj{
+  access:AccessObj;
+  name:string;
+  user:string;
+  createDate:string;
+  }
+  interface AccessObj{
+  [tableId:string]:ScopeObj;
+  }
+  interface ScopeObj{
+  scope:string;
+  }
+
+interface Webhooks{
+condition:WebhookObj;
+}
+interface WebhookObj{
+[webhookId:string]:Webhook;
+}
+interface Webhook{
+name:string;
+url:string;
+tableId:string;
+filterId:string;
+isActive:boolean;
+createdAt:number;
+createdBy:string;
+}
+
+export interface createAndUpdateOrgThunkData{
+  allorgs: OrgObj[]|[];
+  data?:CreateRestoreAndDeleteDBDetails|{}
+} 
 

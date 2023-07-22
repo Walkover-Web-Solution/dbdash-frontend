@@ -1,4 +1,4 @@
-import { DbStateType ,ActionMoveDB,ActionRenameDB} from "../../types/databaseDataType";
+import { DbStateType,OrgObj,BulkAddData,CreateRestoreAndDeleteDBDetails,createAndUpdateOrgThunkData , ActionDataType, MovePayloadType, RenamePayloadType} from "../../types/databaseDataType";
 import { ActionReducerMapBuilder, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit';
 import { NoInfer } from 'react-redux';
 
@@ -30,7 +30,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(moveDbThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(moveDbThunk.fulfilled, (state, action:ActionMoveDB) => {
+    .addCase(moveDbThunk.fulfilled, (state, action:ActionDataType<MovePayloadType>) => {
       state.status = "succeeded";
       let oldArr = state.orgId[action.payload.orgId] || [];
       let newArr = state.orgId[action.payload.data1.org_id] || [];
@@ -57,7 +57,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(renameDBThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(renameDBThunk.fulfilled, (state, action:ActionRenameDB) => {
+    .addCase(renameDBThunk.fulfilled, (state, action:ActionDataType<RenamePayloadType>) => {
       state.status = "succeeded";
       let arr = state.orgId[action.payload.org_id] || [];
       let object = arr.map((obj) => {
@@ -78,7 +78,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(bulkAdd.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(bulkAdd.fulfilled, (state, action) => {
+    .addCase(bulkAdd.fulfilled, (state, action:ActionDataType<BulkAddData>) => {
       console.log(action,'action12345') 
       state.orgId = action.payload.result;
       state.allOrg = action.payload.allorgs;
@@ -91,8 +91,8 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(renameOrgThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(renameOrgThunk.fulfilled, (state, action) => {
-      console.log(action,'action098')
+    .addCase(renameOrgThunk.fulfilled, (state, action:ActionDataType<OrgObj>) => {
+      console.log(action,'renameOrgThunk')
       state.status = "succeeded";
       let arr = state.orgId[action.payload._id] || [];
       arr.map((obj) => {
@@ -110,9 +110,8 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(createOrgThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(createOrgThunk.fulfilled, (state, action) => {
-      console.log(action,'action createDbThunk')
-
+    .addCase(createOrgThunk.fulfilled, (state, action:ActionDataType<createAndUpdateOrgThunkData>) => {
+        console.log(action,"createOrgThunk")
       state.status = "succeeded";
       console.log(action.payload.allorgs[0]._id, "reducer");
       let arr = state.orgId[action.payload.allorgs[0]._id] || [];
@@ -134,8 +133,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(createDbThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(createDbThunk.fulfilled, (state, action) => {
-      console.log(action,'action createDbThunk')
+    .addCase(createDbThunk.fulfilled, (state, action:ActionDataType<CreateRestoreAndDeleteDBDetails>) => {
 
       state.status = "succeeded";
       console.log(action?.payload?.org_id, "fgdfs");
@@ -178,7 +176,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(deleteDbThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(deleteDbThunk.fulfilled, (state, actions) => {
+    .addCase(deleteDbThunk.fulfilled, (state, actions:ActionDataType<CreateRestoreAndDeleteDBDetails>) => {
       state.status = "succeeded";
       const arr = state.orgId[actions.payload.org_id._id];
       let newArr = arr.filter((ele) => {
@@ -194,7 +192,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(restoreDbThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(restoreDbThunk.fulfilled, (state, actions) => {
+    .addCase(restoreDbThunk.fulfilled, (state, actions:ActionDataType<CreateRestoreAndDeleteDBDetails>) => {      
       state.status = "succeeded";
       const arr = state.orgId[actions.payload.org_id._id];
       let newArr = arr.filter((ele) => {
@@ -213,7 +211,8 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(shareUserInOrgThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(shareUserInOrgThunk.fulfilled, (state, action) => {
+    .addCase(shareUserInOrgThunk.fulfilled, (state, action:ActionDataType<createAndUpdateOrgThunkData>) => {
+      console.log(action,"shareUserInOrgThunk")
       var arr = state.allOrg;
       arr.find((temp, index) => {
         if (temp._id == action.payload.allorgs[0]._id) {
@@ -232,7 +231,8 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(updateUserInOrgThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(updateUserInOrgThunk.fulfilled, (state, action) => {
+    .addCase(updateUserInOrgThunk.fulfilled, (state, action:ActionDataType<createAndUpdateOrgThunkData>) => {
+      console.log(action,"updateUserInOrgThunk")
       var arr = state.allOrg;
       arr.find((temp, index) => {
         if (temp._id == action.payload.allorgs[0]._id) {
@@ -249,7 +249,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(removeUserInOrgThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(removeUserInOrgThunk.fulfilled, (state, action) => {
+    .addCase(removeUserInOrgThunk.fulfilled, (state, action:ActionDataType<createAndUpdateOrgThunkData>) => {
       var arr = state.allOrg;
       arr.find((temp, index) => {
         if (temp._id == action.payload.allorgs[0]._id) {
