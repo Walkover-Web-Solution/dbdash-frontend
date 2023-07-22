@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { renameDb,moveDb,deleteDbForUser, restoreDbForUser} from "../../api/dbApi";
 import { addUserInOrg, createOrg, getAllOrgs, removeUserInOrg, updateOrg, updateUserType } from "../../api/orgApi";
 import { findUserByEmail } from "../../api/userApi";
-import { CreateRestoreAndDeleteDBDetails, createDbThunkPayloadType, RenameDbThunkPayloadType, DeleteAndRestoreDbThunkPayloadType, RenameOrgThunkPayloadType, CreateOrgThunkPayloadType, ShareOrgThunkPayloadType } from "../../types/databaseDataType";
+import {  createDbThunkPayloadType, RenameDbThunkPayloadType, DeleteAndRestoreDbThunkPayloadType, RenameOrgThunkPayloadType, CreateOrgThunkPayloadType, ShareOrgThunkPayloadType } from "../../types/databaseDataType";
 // import {  any } from "../../types/databaseDataType";
 
 export const bulkAdd = createAsyncThunk(

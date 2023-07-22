@@ -33,7 +33,7 @@ export interface TableFieldsType {
 // Interface representing the metadata for a field in a table.
 export interface TableFieldsMappingType {
   fieldName: string;
-  fieldType: string | number;
+  fieldType: string;
   metaData?: MetaDataType;
 }
 // Interface representing the metadata for a field in a table.
@@ -51,7 +51,7 @@ export interface TableFiltersType {
 // Interface representing the structure of a single filter for a table.
 export interface TableFilterMappingType {
   filterName: string;
-  query?: string;
+  query?: string; 
   htmlToShow?: string;
   fieldIds: string[];
   viewId?: string;
@@ -79,6 +79,7 @@ export interface RemoveDbReducerPayloadType {
 export interface RemoveTableThunkPayloadType {
   tableData: TableDataType; // Data related to the table to be removed.
 }
+
 
 // Interface for the payload of updating a table's name.
 export interface UpdateTableThunkPayloadType {
