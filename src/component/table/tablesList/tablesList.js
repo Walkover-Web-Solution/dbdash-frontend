@@ -82,7 +82,7 @@ export default function TablesList({ dbData }) {
     };
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
-    await dispatch(createTable1({ tables: apiCreate.data.data.tables }));
+     await dispatch(createTable1({ tables: apiCreate.data.tables }));
     const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(
       (key) => {
         return apiCreate?.data?.data?.tables[key].tableName === table;
