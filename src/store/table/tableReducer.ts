@@ -11,18 +11,33 @@ import {
   updateColumnOrder,
   updateMultiSelectOptions,
   deleteRows,
-} from "./tableThunk.js";
+} from "./tableThunk";
 
 import { randomColor, shortId } from "../../table/utils.js";
-import { UpdatecellbeforeapiPayload } from "../../types/tableDataTypes.js";
+import {
+  TableDataFieldMapping,
+  UpdatecellbeforeapiPayload,
+} from "../../types/tableDataTypes";
 // import { dbDataType } from "../../types/dbDataType.js";
-import { TableDataType } from "../../types/tableDataTypes.js";
+import { TableDataType } from "../../types/tableDataTypes";
 import {
   ActionReducerMapBuilder,
   SliceCaseReducers,
   ValidateSliceCaseReducers,
 } from "@reduxjs/toolkit";
 import { NoInfer } from "react-redux";
+export const initialState: TableDataType = {
+  columns: [],
+  data: [],
+  tableId: "",
+  dbId: null,
+  status: "idle",
+  pageNo: 0,
+  isTableLoading: true,
+  isMoreData: true,
+  filterId: null,
+  rows: null,
+};
 
 export const reducers: ValidateSliceCaseReducers<
   TableDataType,
@@ -171,7 +186,7 @@ export const reducers: ValidateSliceCaseReducers<
           dataType: "text",
           created: action.focus && true,
           options: [],
-          metadata: { unique: false, hide: false }
+          metadata: { unique: false, hide: false },
         },
         ...state.columns.slice(leftIndex, state.columns.length),
       ];
@@ -205,7 +220,7 @@ export const reducers: ValidateSliceCaseReducers<
     const action = payload.payload;
 
     state.skipReset = true;
-    let arr: Array<any> = [];
+    let arr: Array<TableDataFieldMapping> = [];
 
     state.data.forEach((ele) => {
       if (ele.id !== action.rowIndex) {
@@ -335,7 +350,7 @@ export const reducers: ValidateSliceCaseReducers<
             ],
           };
         } else {
-          let options: Array<any> = [];
+          let options: Array<TableDataFieldMapping> = [];
           state.data.forEach((row) => {
             if (row[action.columnId]) {
               options.push({
@@ -568,7 +583,6 @@ export function extraReducers(
         row[action?.columnId] = imageArray;
         arr[indexIdMapping[action?.rowIndex]] = row;
       }
-
       state.data = arr;
       state.status = "succeeded";
     })

@@ -3,17 +3,7 @@ import { TableDataType } from "../../types/tableDataTypes";
 // // reducer imports
 import { reducers, extraReducers } from "./tableReducer";
 
-const initialState: TableDataType = {
-  columns: [],
-  data: [],
-  tableId: "",
-  dbId: null,
-  status: "idle",
-  pageNo: 0,
-  isTableLoading: true,
-  isMoreData: true,
-  filterId: null,
-};
+import { initialState } from "./tableReducer";
 
 const tableSlice = createSlice<
   TableDataType,
