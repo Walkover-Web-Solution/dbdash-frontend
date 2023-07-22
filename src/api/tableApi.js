@@ -3,7 +3,7 @@ const URL = process.env.REACT_APP_API_BASE_URL;
 
 const createTable = async (db_id,data) =>
 {
-    return await axios.post(URL +`/dbs/${db_id}/table`,data)
+    return (await axios.post(URL +`/dbs/${db_id}/table`,data)).data
 }
 
 const getTable = async (db_id , tableName,page) =>

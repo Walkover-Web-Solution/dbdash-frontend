@@ -1,8 +1,7 @@
-import { AllTableDataType } from "./alltablesDataType";
-
+import {AllTableDataType} from './alltablesDataType';
 export interface DbStateType {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
-    orgId: OrgIdObj;
+    orgId: OrgIdObj|{};
     allOrg: OrgObj[];
   }
   
@@ -21,11 +20,15 @@ export interface DbStateType {
     name?: string;
   }
   
-  export interface OrgObj {
-    version: number;
+  export interface OrgObj extends VersionData{
+   
     _id: string;
     name: string;
     users: User[];
+   
+  }
+  export interface VersionData{
+    version: number;
     _v: number;
   }
   
@@ -41,7 +44,101 @@ export interface DbStateType {
     last_name: string;
     email: string;
   }
+
  
+
+export interface ActionDataType<T>{
+  payload:T;
+  
+}
+
+
+export interface MovePayloadType{
+  orgId:string;
+  data1:MovePayloadData1Info;
+  
+}
+
+export interface MovePayloadData1Info{
+org_id:string;
+_id:string;
+}
+
+
+export interface RenamePayloadType{
+  name: string;
+  _id: string;
+  org_id: string;
+}
+
+export interface ActionBulkAdd{
+  payload:BulkAddData
+}
+
+export interface BulkAddData{
+  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  orgId?: OrgIdObj|{};
+  allorgs: OrgObj[]|[];
+  result:OrgIdObj|{};
+}
+
+
+// export interface ActionOnCreateDB{
+//   payload:CreateDBDetails;
+// }
+
+export interface CreateRestoreAndDeleteDBDetails extends DbObject,VersionData{
+created_by:string;
+users:UsersAccess;
+tables:AllTableDataType ;
+userMapping:UsersMapping|{};
+deleted?:string;
+lastActivedbTime?:number;
+auth_keys?:Auth_keys;
+webhook?:Webhooks;
+
+}
+export interface UsersAccess{
+  [users:string]:{access:number}
+}
+
+interface Auth_keys{
+  [authkey:string]:Authkeyobj;
+  }
+  interface Authkeyobj{
+  access:AccessObj;
+  name:string;
+  user:string;
+  createDate:string;
+  }
+  interface AccessObj{
+  [tableId:string]:ScopeObj;
+  }
+  interface ScopeObj{
+  scope:string;
+  }
+
+interface Webhooks{
+condition:WebhookObj;
+}
+interface WebhookObj{
+[webhookId:string]:Webhook;
+}
+interface Webhook{
+name:string;
+url:string;
+tableId:string;
+filterId:string;
+isActive:boolean;
+createdAt:number;
+createdBy:string;
+}
+
+export interface createAndUpdateOrgThunkData{
+  allorgs: OrgObj[]|[];
+  data?:CreateRestoreAndDeleteDBDetails|{}
+} 
+
 export interface DatainThunkPayload{
   created_by?:string;
   name?:string;
@@ -53,7 +150,6 @@ export interface DatainThunkPayload{
   _v?:number;
   
   _id?:string;
-
 }
 export interface UserAccessDataType{
   [userId:string]:{
