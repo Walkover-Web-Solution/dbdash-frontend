@@ -86,10 +86,11 @@ export interface NewTableNameType{
     newTableName:string;
 }
 
-export interface AddDbInUserThunkType{
+export interface ShareDbPayloadThunkType{
     adminId:string;
     data:DataInUserSharePayload;
     dbId:string;
+    userId?:string;
 }
 export interface DataInUserSharePayload{
     email:string;

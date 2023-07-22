@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { addDbInUser, getDbById, removeDbInUser, updateAccessOfUserInDb } from "../../api/dbApi"
 import { updateTable } from "../../api/tableApi";
-import { AddDbInUserThunkType, AllTableDataType, RemoveTableThunkPayload, UpdateTableThunkPayload } from '../../types/alltablesDataType';
+import { ShareDbPayloadThunkType, AllTableDataType, RemoveTableThunkPayload, UpdateTableThunkPayload } from '../../types/alltablesDataType';
 
 
 
@@ -30,8 +30,7 @@ export const updateTable1= createAsyncThunk (
     }
 );
 export const addDbInUserThunk=createAsyncThunk(
-    "tables/addDbInUserThunk",async(payload:AddDbInUserThunkType)=>{
-        console.log("RemovePayload", payload)
+    "tables/addDbInUserThunk",async(payload:ShareDbPayloadThunkType)=>{
         
        const response= await addDbInUser(payload.dbId,payload.adminId,payload.data);
 
@@ -40,6 +39,8 @@ export const addDbInUserThunk=createAsyncThunk(
 )
 export const removeDbInUserThunk=createAsyncThunk(
     "tables/removeDbInUserThunk",async(payload:any)=>{
+        console.log("RemovePayload", payload)
+
        const response= await removeDbInUser(payload.dbId,payload.adminId,payload.data);
 const responsetosend={
     response:response,
@@ -50,7 +51,8 @@ const responsetosend={
     }
 )
 export const updateAccessOfUserInDbThunk=createAsyncThunk(
-    "tables/updateAccessOfUserInDbThunk",async(payload:any)=>{
+    "tables/updateAccessOfUserInDbThunk",async(payload:ShareDbPayloadThunkType)=>{
+
        const response= await updateAccessOfUserInDb(payload.dbId,payload.adminId,payload.data);
        return response.data?.data;
     }
