@@ -1,8 +1,9 @@
-import { DbStateType } from "../../types/databaseDataType";
+import { DbStateType ,ActionMoveDB,ActionRenameDB} from "../../types/databaseDataType";
+import { ActionReducerMapBuilder, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit';
+import { NoInfer } from 'react-redux';
+
 import {
-  removeDbThunk,
-  renameDBThunk,
-  createDbThunk,
+  renameDBThunk,createDbThunk,
   moveDbThunk,
   bulkAdd,
   renameOrgThunk,
@@ -14,43 +15,22 @@ import {
   updateUserInOrgThunk,
 } from "./databaseThunk";
 export const initialState: DbStateType = {
-  status: "idle",
+status: "idle",
   orgId: {},
   allOrg: [],
 };
 
-export const reducers = {
-  createDb(state, payload) {
-    if (payload.payload) {
-      const { database_name } = payload.payload;
-      state.dbName = database_name;
-    }
-  },
-
-  moveDb(state) {
-    state.orgId = "";
-    state.dbId = "";
-    state.data = "";
-  },
-  renameDb(state) {
-    state.dbId = "";
-    state.orgId = "";
-    state.data = "";
-  },
-
-  removeDb(state) {
-    state.dbId = "";
-    state.orgId = "";
-  },
+export const reducers: ValidateSliceCaseReducers<DbStateType, SliceCaseReducers<DbStateType>> = {
+ 
 };
 
-export function extraReducers(builder) {
+export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateType>>): void {
   builder
     //    //   rename Db
     .addCase(moveDbThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(moveDbThunk.fulfilled, (state, action) => {
+    .addCase(moveDbThunk.fulfilled, (state, action:ActionMoveDB) => {
       state.status = "succeeded";
       let oldArr = state.orgId[action.payload.orgId] || [];
       let newArr = state.orgId[action.payload.data1.org_id] || [];
@@ -77,7 +57,7 @@ export function extraReducers(builder) {
     .addCase(renameDBThunk.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(renameDBThunk.fulfilled, (state, action) => {
+    .addCase(renameDBThunk.fulfilled, (state, action:ActionRenameDB) => {
       state.status = "succeeded";
       let arr = state.orgId[action.payload.org_id] || [];
       let object = arr.map((obj) => {
@@ -99,6 +79,7 @@ export function extraReducers(builder) {
       state.status = "loading";
     })
     .addCase(bulkAdd.fulfilled, (state, action) => {
+      console.log(action,'action12345') 
       state.orgId = action.payload.result;
       state.allOrg = action.payload.allorgs;
       state.status = "succeeded";
@@ -111,6 +92,7 @@ export function extraReducers(builder) {
       state.status = "loading";
     })
     .addCase(renameOrgThunk.fulfilled, (state, action) => {
+      console.log(action,'action098')
       state.status = "succeeded";
       let arr = state.orgId[action.payload._id] || [];
       arr.map((obj) => {
@@ -129,6 +111,8 @@ export function extraReducers(builder) {
       state.status = "loading";
     })
     .addCase(createOrgThunk.fulfilled, (state, action) => {
+      console.log(action,'action createDbThunk')
+
       state.status = "succeeded";
       console.log(action.payload.allorgs[0]._id, "reducer");
       let arr = state.orgId[action.payload.allorgs[0]._id] || [];
@@ -151,6 +135,8 @@ export function extraReducers(builder) {
       state.status = "loading";
     })
     .addCase(createDbThunk.fulfilled, (state, action) => {
+      console.log(action,'action createDbThunk')
+
       state.status = "succeeded";
       console.log(action?.payload?.org_id, "fgdfs");
       let arr = state.orgId[action?.payload?.org_id._id] || [];
@@ -186,22 +172,7 @@ export function extraReducers(builder) {
 
     //   Delete Db
 
-    .addCase(removeDbThunk.pending, (state) => {
-      state.status = "loading";
-    })
-    .addCase(removeDbThunk.fulfilled, (state, actions) => {
-      state.status = "succeeded";
-      const arr = state.orgId[actions.payload.orgId];
-      const newArr = arr.filter((ele) => {
-        return ele._id !== actions.payload.dbId;
-      });
-      state.orgId[actions.payload.orgId] = newArr;
-    })
-    .addCase(removeDbThunk.rejected, (state) => {
-      state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
-    })
-
+    
     //  add deleted db time for restoring again
 
     .addCase(deleteDbThunk.pending, (state) => {

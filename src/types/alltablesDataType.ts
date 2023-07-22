@@ -1,4 +1,4 @@
-export interface AllTableDataType{
+    export interface AllTableDataType{
     [tableid:string]:AllTableTypeMapping;
 }
  export interface AllTableTypeMapping{
