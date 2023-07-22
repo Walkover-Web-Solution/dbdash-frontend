@@ -1,5 +1,5 @@
 import { ActionReducerMapBuilder, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit';
-import { ActionDataType, AllTableDataType , TableDataType, removeDbInUserPayloadDataType} from '../../types/alltablesDataType';
+import { ActionDataType, AllTableDataType , TableDataType, RemoveDbReducerPayloadType} from '../../types/alltablesDataType';
 import { createTable1,updateTable1,getTable1, removeTable1, addDbInUserThunk, updateAccessOfUserInDbThunk, removeDbInUserThunk } from './allTableThunk';
 import { NoInfer } from 'react-redux';
 export const initialState :AllTableDataType= {
@@ -112,7 +112,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<AllTableD
 
       state.status = "loading"
     })
-    .addCase(removeDbInUserThunk.fulfilled, (state, action:ActionDataType<removeDbInUserPayloadDataType>) => {
+    .addCase(removeDbInUserThunk.fulfilled, (state, action:ActionDataType<RemoveDbReducerPayloadType>) => {
       delete state.userAcess[action.payload.userId];
       delete state.userDetail[action.payload.userId];
       state.status = "succeeded";
