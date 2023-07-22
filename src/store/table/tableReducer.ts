@@ -12,24 +12,30 @@ import {
   updateMultiSelectOptions,
   deleteRows,
 } from "./tableThunk.js";
-import { randomColor, shortId } from "../../table/utils";
-// import { current } from '@reduxjs/toolkit';
 
-export const initialState = {
-  columns: [],
-  data: [],
-  tableId: null,
-  dbId: null,
-  status: "idle",
-  pageNo: 0,
-  isTableLoading: true,
-  isMoreData: true,
-  filterId: null,
-};
+import { randomColor, shortId } from "../../table/utils.js";
+import { UpdatecellbeforeapiPayload } from "../../types/tableDataTypes.js";
+// import { dbDataType } from "../../types/dbDataType.js";
+import { TableDataType } from "../../types/tableDataTypes.js";
+import {
+  ActionReducerMapBuilder,
+  SliceCaseReducers,
+  ValidateSliceCaseReducers,
+} from "@reduxjs/toolkit";
+import { NoInfer } from "react-redux";
 
-export const reducers = {
-  addOptionToColumn(state, payload) {
+export const reducers: ValidateSliceCaseReducers<
+  TableDataType,
+  SliceCaseReducers<TableDataType>
+> = {
+  addOptionToColumn(
+    state,
+    payload: {
+      payload: { backgroundColor: string; columnId: string; option: any };
+    }
+  ): void {
     const action = payload.payload;
+
     if (action) {
       var optionIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
@@ -40,7 +46,7 @@ export const reducers = {
         {
           ...state.columns[optionIndex],
           options: [
-            ...state.columns[optionIndex].options,
+            ...(state.columns[optionIndex].options as []),
             { label: action.option, backgroundColor: action.backgroundColor },
           ],
         },
@@ -50,20 +56,20 @@ export const reducers = {
       state.skipReset = true;
     }
   },
-  updatecellbeforeapi(state, payload) {
+  updatecellbeforeapi(state, payload: UpdatecellbeforeapiPayload): void {
     const action = payload.payload;
     let rows = [...state.data];
     let rowtoupdatecell = { ...action?.row };
     const [key, value] = Object.entries(action?.updatedvalue?.fields)[0];
-    rowtoupdatecell[key] = typeof value == "number" ? value.toString() : value;
+    rowtoupdatecell[key] = value == "number" ? value.toString() : value;
     rows[action?.rowIndex] = rowtoupdatecell;
     state.data = rows;
   },
-  resetData() {
+  resetData(): TableDataType {
     return {
       columns: [],
       data: [],
-      tableId: null,
+      tableId: "",
       dbId: null,
       status: "idle",
       pageNo: 0,
@@ -72,11 +78,15 @@ export const reducers = {
       filterId: null,
     };
   },
-  deleteColumn(state, payload) {
+  deleteColumn(
+    state,
+    payload: { payload: { fieldName: string; columnId: string } }
+  ) {
     const action = payload.payload;
     if (!action?.fieldName) return;
+    let deleteIndex;
     if (action) {
-      var deleteIndex = state.columns.findIndex(
+      deleteIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
     }
@@ -89,10 +99,14 @@ export const reducers = {
       ],
     };
   },
-  updateColumnHeader(state, payload) {
+  updateColumnHeader(
+    state,
+    payload: { payload: { columnId: string; label: string } }
+  ) {
     const action = payload.payload;
+    let index;
     if (action) {
-      var index = state.columns.findIndex(
+      index = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
     }
@@ -107,10 +121,14 @@ export const reducers = {
       ],
     };
   },
-  addColumnrightandleft(state, payload) {
+  addColumnrightandleft(
+    state,
+    payload: { payload: { columnId: string; focus: any } }
+  ) {
     const action = payload.payload;
+    let rightIndex;
     if (action) {
-      var rightIndex = state.columns.findIndex(
+      rightIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
     }
@@ -127,12 +145,16 @@ export const reducers = {
           dataType: "text",
           created: action.focus && true,
           options: [],
+          metadata: { unique: false, hide: false },
         },
         ...state.columns.slice(rightIndex + 1, state.columns.length),
       ],
     };
   },
-  addColumnToLeft(state, payload) {
+  addColumnToLeft(
+    state,
+    payload: { payload: { columnId: string; fieldName: string; focus: any } }
+  ) {
     const action = payload.payload;
     if (action) {
       var leftIndex = state.columns.findIndex(
@@ -149,6 +171,7 @@ export const reducers = {
           dataType: "text",
           created: action.focus && true,
           options: [],
+          metadata: { unique: false, hide: false }
         },
         ...state.columns.slice(leftIndex, state.columns.length),
       ];
@@ -168,19 +191,29 @@ export const reducers = {
     };
   },
 
-  updateCell(state, payload) {
+  updateCell(
+    state,
+    payload: {
+      payload: {
+        rowIndex: number;
+        dataTypes: string;
+        columnId: string;
+        value: string;
+      };
+    }
+  ) {
     const action = payload.payload;
 
     state.skipReset = true;
-    let arr = [];
+    let arr: Array<any> = [];
 
     state.data.forEach((ele) => {
       if (ele.id !== action.rowIndex) {
         arr = [...arr, { ...ele }];
       } else {
         if (action?.dataTypes == "file") {
-          var arrr =
-            ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId];
+          let arrr;
+          arrr = ele?.[action?.columnId] == null ? [] : ele?.[action?.columnId];
           arrr.push(action.value);
           arr = [...arr, { ...ele, [action.columnId.toLowerCase()]: arrr }];
         } else {
@@ -194,10 +227,14 @@ export const reducers = {
     state.data = arr;
   },
 
-  updateColumnType(state, payload) {
+  updateColumnType(
+    state,
+    payload: { payload: { columnId: string; dataType: string } }
+  ) {
     const action = payload.payload;
+    let typeIndex;
     if (action) {
-      var typeIndex = state.columns.findIndex(
+      typeIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
     }
@@ -216,9 +253,9 @@ export const reducers = {
             ],
             data: state.data.map((row) => ({
               ...row,
-              [action.columnId]: isNaN(row[action.columnId])
+              [action.columnId]: isNaN(row[action.columnId] as number)
                 ? ""
-                : Number.parseFloat(row[action.columnId]),
+                : Number.parseFloat(row[action.columnId] as string),
             })),
           };
         }
@@ -233,7 +270,7 @@ export const reducers = {
             ],
           };
         } else {
-          let options = [];
+          let options: Array<any> = [];
           state.data.forEach((row) => {
             if (row[action.columnId]) {
               options.push({
@@ -249,7 +286,10 @@ export const reducers = {
               {
                 ...state.columns[typeIndex],
                 dataType: action.dataType,
-                options: [...state.columns[typeIndex].options, ...options],
+                options: [
+                  ...(state.columns[typeIndex].options as []),
+                  ...options,
+                ],
               },
               ...state.columns.slice(typeIndex + 1, state.columns.length),
             ],
@@ -295,7 +335,7 @@ export const reducers = {
             ],
           };
         } else {
-          let options = [];
+          let options: Array<any> = [];
           state.data.forEach((row) => {
             if (row[action.columnId]) {
               options.push({
@@ -311,7 +351,10 @@ export const reducers = {
               {
                 ...state.columns[typeIndex],
                 dataType: action.dataType,
-                options: [...state.columns[typeIndex].options, ...options],
+                options: [
+                  ...(state.columns[typeIndex].options as []),
+                  ...options,
+                ],
               },
               ...state.columns.slice(typeIndex + 1, state.columns.length),
             ],
@@ -328,7 +371,7 @@ export const reducers = {
             ],
           };
         } else {
-          let options = [];
+          let options: Array<any> = [];
           state.data.forEach((row) => {
             if (row[action.columnId]) {
               options.push({
@@ -344,7 +387,10 @@ export const reducers = {
               {
                 ...state.columns[typeIndex],
                 dataType: action.dataType,
-                options: [...state.columns[typeIndex].options, ...options],
+                options: [
+                  ...(state.columns[typeIndex].options as []),
+                  ...options,
+                ],
               },
               ...state.columns.slice(typeIndex + 1, state.columns.length),
             ],
@@ -385,7 +431,9 @@ export const reducers = {
   },
 };
 
-export function extraReducers(builder) {
+export function extraReducers(
+  builder: ActionReducerMapBuilder<NoInfer<TableDataType>>
+) {
   builder
     //   add columns
     .addCase(addColumns.pending, (state) => {
@@ -448,7 +496,7 @@ export function extraReducers(builder) {
       state.status = "loading";
     })
     .addCase(updateColumnHeaders.fulfilled, (state, { payload }) => {
-      let allColumns = [];
+      let allColumns: Array<any> = [];
       state.columns.forEach((column) => {
         if (column.id == payload?.id) {
           allColumns = [...allColumns, { ...payload }];
@@ -467,10 +515,11 @@ export function extraReducers(builder) {
     .addCase(updateMultiSelectOptions.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(updateMultiSelectOptions.fulfilled, (state, { payload }) => {
+    .addCase(updateMultiSelectOptions.fulfilled, (state, { payload }: any) => {
       state.columns.forEach((column, index) => {
         if (column.id == payload.columnId) {
           state.columns[index].metadata.option = payload.metaData;
+          // state.columns[index].metadata = {...state?.columns[index]?.metadata,option:payload.metaData}
         }
       });
       state.status = "succeeded";
@@ -503,7 +552,7 @@ export function extraReducers(builder) {
     .addCase(updateCells.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(updateCells.fulfilled, (state, { payload }) => {
+    .addCase(updateCells.fulfilled, (state, { payload }: any) => {
       const action = payload;
       state.skipReset = true;
       let arr = [...state.data];
@@ -514,7 +563,7 @@ export function extraReducers(builder) {
       });
       if (action?.dataTypes == "file") {
         var row = arr[indexIdMapping[action?.rowIndex]];
-        var imageArray = row[action?.columnId] || [];
+        var imageArray: any = row[action?.columnId] || [];
         imageArray = [...imageArray, action.value];
         row[action?.columnId] = imageArray;
         arr[indexIdMapping[action?.rowIndex]] = row;
@@ -523,16 +572,16 @@ export function extraReducers(builder) {
       state.data = arr;
       state.status = "succeeded";
     })
-    .addCase(updateCells.rejected, (state, payload) => {
+    .addCase(updateCells.rejected, (state, payload: any) => {
       const action = payload.meta.arg;
       let arr = [...state.data];
       const indexIdMapping = action?.indexIdMapping;
       const updatedArray = action?.updatedArray;
-      const fieldsObject = Object.values(updatedArray)[0].fields;
+      const fieldsObject = (Object.values(updatedArray)[0] as any).fields;
       const fieldsKey = Object.keys(fieldsObject)[0];
-      let row = arr[Object.values(indexIdMapping)[0]];
+      let row = arr[Object.values(indexIdMapping)[0] as any];
       row[fieldsKey] = action?.oldData;
-      arr[Object.values(indexIdMapping)[0]] = row;
+      arr[Object.values(indexIdMapping)[0] as any] = row;
       state.data = arr;
       state.status = "failed";
     })
@@ -562,7 +611,7 @@ export function extraReducers(builder) {
     .addCase(updateColumnOrder.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(updateColumnOrder.fulfilled, (state, { payload }) => {
+    .addCase(updateColumnOrder.fulfilled, (state, { payload }: any) => {
       state.columns = payload.columns;
       state.status = "succeeded";
     })

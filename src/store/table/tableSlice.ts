@@ -1,24 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { SliceCaseReducers, createSlice } from "@reduxjs/toolkit";
+import { TableDataType } from "../../types/tableDataTypes";
 // // reducer imports
 import { reducers, extraReducers } from "./tableReducer";
 
-interface InitialState{
-  columns:Array<any>,
-  data:Array<any>,
-  tableId: String | null,
-  dbId: String | null,
-  status: String,
-  pageNo: Number,
-  isTableLoading: boolean,
-  isMoreData: boolean,
-  filterId: String | null,
-}
-
-export const initialState:InitialState = {
+const initialState: TableDataType = {
   columns: [],
   data: [],
-  tableId: null,
+  tableId: "",
   dbId: null,
   status: "idle",
   pageNo: 0,
@@ -27,7 +15,11 @@ export const initialState:InitialState = {
   filterId: null,
 };
 
-const tableSlice = createSlice({
+const tableSlice = createSlice<
+  TableDataType,
+  SliceCaseReducers<TableDataType>,
+  "table"
+>({
   name: "table",
   initialState,
   reducers,
