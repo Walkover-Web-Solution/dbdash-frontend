@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { add , remove} from "./userSlice";
 import { getCurrentUser } from "../../api/userApi";
-import { AddPayloadType } from "../../types/userDataType";
+import { AddPayloadType } from "../../types/userType";
 
 
 export const saveUser = createAsyncThunk (

@@ -28,11 +28,11 @@ export default function SingleDatabase(props) {
     dispatch(restoreDbThunk({ orgId, dbId }))
   };
 
-  const handlemove = async (orgid, dbid) => {
+  const handlemove = async (orgId, dbId) => {
     const data = {
       newOrgId: selectedorg._id
     }
-    dispatch(moveDbThunk({ orgid, dbid, data }))
+    dispatch(moveDbThunk({ orgId, dbId, data }))
   };
 
   // const renameDatabase = async (orgId, id, name) => {

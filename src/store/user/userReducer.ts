@@ -4,7 +4,7 @@
 // import { current } from '@reduxjs/toolkit';
 import { removeUser, saveUser } from './userThunk';
 import { UserType } from '../../types/userType'
-import {  UserActionType } from '../../types/userDataType';
+import {  UserActionType } from '../../types/userType';
 import { ActionReducerMapBuilder, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit';
 import { NoInfer } from 'react-redux';
 
