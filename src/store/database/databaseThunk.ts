@@ -2,10 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { renameDb,moveDb,deleteDbForUser, restoreDbForUser} from "../../api/dbApi";
 import { addUserInOrg, createOrg, getAllOrgs, removeUserInOrg, updateOrg, updateUserType } from "../../api/orgApi";
 import { findUserByEmail } from "../../api/userApi";
+import { CreateRestoreAndDeleteDBDetails, createDbThunkPayloadType, RenameDbThunkPayloadType, DeleteAndRestoreDbThunkPayloadType, RenameOrgThunkPayloadType, CreateOrgThunkPayloadType, ShareOrgThunkPayloadType } from "../../types/databaseDataType";
 // import {  any } from "../../types/databaseDataType";
 
 export const bulkAdd = createAsyncThunk(
-    "organdDb/bulkAdd", async (payload:any) => {
+    "organdDb/bulkAdd", async (payload:{email:string}) => {
         
         const data = await findUserByEmail(payload?.email);
         localStorage.setItem("userid", data?.data?.data?._id);
@@ -30,7 +31,7 @@ export const bulkAdd = createAsyncThunk(
 );
 
 export const createDbThunk = createAsyncThunk(
-    "organdDb/createDbThunk", async (payload:any) => {
+    "organdDb/createDbThunk", async (payload:createDbThunkPayloadType) => {
         return payload?.data;
     }
 );
@@ -47,7 +48,7 @@ export const moveDbThunk=createAsyncThunk(
 );
 
 export const renameDBThunk = createAsyncThunk(
-    "organdDb/renameDBThunk", async (payload:any) => {
+    "organdDb/renameDBThunk", async (payload:RenameDbThunkPayloadType) => {
         await renameDb(payload.orgId, payload.id, payload.data);
 
         const data = {
@@ -63,20 +64,20 @@ export const renameDBThunk = createAsyncThunk(
 
 
 export const deleteDbThunk = createAsyncThunk(
-    "organdDb/deleteDbThunk", async (payload:any) => {
+    "organdDb/deleteDbThunk", async (payload:DeleteAndRestoreDbThunkPayloadType) => {
         const data =   await deleteDbForUser(payload.orgId, payload.dbId);
         return data?.data?.data;
     }
 );
 
 export const restoreDbThunk = createAsyncThunk(
-    "organdDb/restoreDbThunk", async (payload:any) => {
+    "organdDb/restoreDbThunk", async (payload:DeleteAndRestoreDbThunkPayloadType) => {
         const data = await restoreDbForUser(payload.orgId, payload.dbId);
         return data?.data?.data;
     }
 );
 export const renameOrgThunk = createAsyncThunk(
-    "organdDb/renameOrgThunk", async (payload:any) => {
+    "organdDb/renameOrgThunk", async (payload:RenameOrgThunkPayloadType) => {
         const data = await updateOrg(payload.orgId, payload.data, payload.user_id);
         return data.data.data;
     }
@@ -84,9 +85,8 @@ export const renameOrgThunk = createAsyncThunk(
 
 
 export const createOrgThunk = createAsyncThunk(
-    "organdDb/createOrgThunk", async (payload:any) => {
+    "organdDb/createOrgThunk", async (payload:CreateOrgThunkPayloadType) => {
         const data = await createOrg({ name: payload.name, user_id: payload.user_id });
-        console.log(data.data.data,"thunk")
         const allorgs = await getAllOrgs(data.data.data.org_id)
      
         const allData= {
@@ -98,7 +98,7 @@ export const createOrgThunk = createAsyncThunk(
 );
 
     export const shareUserInOrgThunk = createAsyncThunk(
-        "organdDb/shareUserInOrgThunk", async (payload:any) => {
+        "organdDb/shareUserInOrgThunk", async (payload:ShareOrgThunkPayloadType) => {
             await addUserInOrg(payload.orgId, payload.adminId,payload.data);
             const allorgs = await getAllOrgs(payload.orgId)
             const allData= {
@@ -108,8 +108,8 @@ export const createOrgThunk = createAsyncThunk(
         }
 );  
 export const updateUserInOrgThunk=createAsyncThunk(
-    "organdDb/updateUserInOrgThunk", async (payload:any) => {
-        await updateUserType(payload.orgId, payload.adminId,{email:payload.email,user_type:payload.user_type});
+    "organdDb/updateUserInOrgThunk", async (payload:ShareOrgThunkPayloadType) => {
+        await updateUserType(payload.orgId, payload.adminId,payload.data);
         const allorgs = await getAllOrgs(payload.orgId)
         const allData= {
             allorgs:allorgs?.data?.data
@@ -118,9 +118,9 @@ export const updateUserInOrgThunk=createAsyncThunk(
     }
 )
 export const removeUserInOrgThunk = createAsyncThunk(
-    "organdDb/removeUserInOrgThunk", async (payload:any) => {
+    "organdDb/removeUserInOrgThunk", async (payload:ShareOrgThunkPayloadType) => {
         
-         await removeUserInOrg(payload.orgId, payload.adminId,{email:payload.email});
+         await removeUserInOrg(payload.orgId, payload.adminId,payload.data);
         const allorgs = await getAllOrgs(payload.orgId)
         const allData= {
             allorgs:allorgs?.data?.data

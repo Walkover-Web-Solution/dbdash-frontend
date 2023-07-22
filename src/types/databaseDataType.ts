@@ -1,11 +1,11 @@
-import {AllTableDataType} from './alltablesDataType';
+import {AllTableDataType, UserAcessType} from './alltablesDataType';
 export interface DbStateType {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
-    orgId: OrgIdObj|{};
+    orgId: OrgIdObjType|{};
     allOrg: OrgObj[];
   }
   
-  export interface OrgIdObj {
+  export interface OrgIdObjType {
     [orgId: string]: DbObject[];
   }
   
@@ -77,51 +77,45 @@ export interface ActionBulkAdd{
 
 export interface BulkAddData{
   status?: 'idle' | 'loading' | 'succeeded' | 'failed';
-  orgId?: OrgIdObj|{};
-  allorgs: OrgObj[]|[];
-  result:OrgIdObj|{};
+  orgId?: OrgIdObjType|{};
+  allorgs: OrgObj[];
+  result:OrgIdObjType|{};
 }
 
 
-// export interface ActionOnCreateDB{
-//   payload:CreateDBDetails;
-// }
 
 export interface CreateRestoreAndDeleteDBDetails extends DbObject,VersionData{
 created_by:string;
-users:UsersAccess;
+users:UserAcessType;
 tables:AllTableDataType ;
 userMapping:UsersMapping|{};
 deleted?:string;
 lastActivedbTime?:number;
-auth_keys?:Auth_keys;
+auth_keys?:Auth_keysMappingType;
 webhook?:Webhooks;
 
 }
-export interface UsersAccess{
-  [users:string]:{access:number}
-}
 
-interface Auth_keys{
-  [authkey:string]:Authkeyobj;
+interface Auth_keysMappingType{
+  [authkey:string]:AuthkeyobjType;
   }
-  interface Authkeyobj{
-  access:AccessObj;
+  interface AuthkeyobjType{
+  access:TableToScopeMappingType;
   name:string;
   user:string;
   createDate:string;
   }
-  interface AccessObj{
-  [tableId:string]:ScopeObj;
+  interface TableToScopeMappingType{
+  [tableId:string]:ScopeObjType;
   }
-  interface ScopeObj{
+  interface ScopeObjType{
   scope:string;
   }
 
 interface Webhooks{
-condition:WebhookObj;
+condition:WebhookMapType;
 }
-interface WebhookObj{
+interface WebhookMapType{
 [webhookId:string]:Webhook;
 }
 interface Webhook{
@@ -135,35 +129,42 @@ createdBy:string;
 }
 
 export interface createAndUpdateOrgThunkData{
-  allorgs: OrgObj[]|[];
+  allorgs: OrgObj[];
   data?:CreateRestoreAndDeleteDBDetails|{}
 } 
 
-export interface DatainThunkPayload{
-  created_by?:string;
-  name?:string;
-  org_id?:OrgId;
-  tables?:AllTableDataType;
-  users?:UserAccessDataType;
-  usersMapping?:UsersMapping;
-  version?:Number;
-  _v?:number;
-  
-  _id?:string;
+export interface createDbThunkPayloadType{
+ data:CreateRestoreAndDeleteDBDetails;
 }
-export interface UserAccessDataType{
-  [userId:string]:{
-    access:number;
+export interface RenameDbThunkPayloadType{
+  orgId:string;
+  id:string;
+  data:{
+    name:string;
   }
-}
-export interface PayloadinThunkDataType{
-  orgId?:string;
-  id?:string;
-  data:DatainThunkPayload;
-  dbId?:string;
-  name?:string;
-  user_id?:string;
-  email?:string;
+ }
+ export interface DeleteAndRestoreDbThunkPayloadType{
+  orgId:string;
+  dbId:string;
+ }
+ 
+ export interface RenameOrgThunkPayloadType{
+  orgId:string;
+  user_id:string;
+  data:{
+    name:string;
+  }
+ }
+ export interface CreateOrgThunkPayloadType{
+  name:string;
+  user_id:string;
+ }
+ export interface ShareOrgThunkPayloadType{
+  orgId:string;
+  adminId:string;
+  data:DatainShareOrgType;
+ }
+ export interface DatainShareOrgType{
+  email:string;
   user_type?:number;
-  adminId?:string|null;
-}
+ }

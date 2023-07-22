@@ -129,7 +129,10 @@ export const OrgList = (props) => {
   }
   const removeUserFromWorkspace = async (email) => {
     const adminId = localStorage.getItem("userid")
-    dispatch(removeUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email }))
+    const data={
+      email:email
+    }
+    dispatch(removeUserInOrgThunk({ orgId: props?.orgId, adminId: adminId,data}))
   }
   const updateUserTypeInOrg = async (email, user_type) => {
     const adminId = localStorage.getItem("userid")
@@ -142,9 +145,12 @@ export const OrgList = (props) => {
       return user;
     });
   setOrgUsers(obj);
-  
+  const data = {
+    email: email,
+    user_type: user_type
+  }
 
-    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, email: email,user_type })).then(e=>{
+    dispatch(updateUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, data })).then(e=>{
       if(e.type.includes('rejected'))
       {
 setOrgUsers(originalObj);
