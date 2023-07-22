@@ -79,7 +79,6 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
       state.status = "loading";
     })
     .addCase(bulkAdd.fulfilled, (state, action:ActionDataType<BulkAddData>) => {
-      console.log(action,'action12345') 
       state.orgId = action.payload.result;
       state.allOrg = action.payload.allorgs;
       state.status = "succeeded";
@@ -92,7 +91,6 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
       state.status = "loading";
     })
     .addCase(renameOrgThunk.fulfilled, (state, action:ActionDataType<OrgObj>) => {
-      console.log(action,'renameOrgThunk')
       state.status = "succeeded";
       let arr = state.orgId[action.payload._id] || [];
       arr.map((obj) => {
@@ -111,9 +109,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
       state.status = "loading";
     })
     .addCase(createOrgThunk.fulfilled, (state, action:ActionDataType<createAndUpdateOrgThunkData>) => {
-        console.log(action,"createOrgThunk")
       state.status = "succeeded";
-      console.log(action.payload.allorgs[0]._id, "reducer");
       let arr = state.orgId[action.payload.allorgs[0]._id] || [];
       const newArr = [...arr, action.payload.data];
       state.orgId = { ...state.orgId, [action.payload.allorgs[0]._id]: newArr };
@@ -136,14 +132,12 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     .addCase(createDbThunk.fulfilled, (state, action:ActionDataType<CreateRestoreAndDeleteDBDetails>) => {
 
       state.status = "succeeded";
-      console.log(action?.payload?.org_id, "fgdfs");
       let arr = state.orgId[action?.payload?.org_id._id] || [];
       const newArr = [...arr, action.payload];
       state.orgId = { ...state.orgId, [action?.payload?.org_id._id]: newArr };
     })
     .addCase(createDbThunk.rejected, (state) => {
       state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
     })
 
     //   Delete Org
@@ -203,16 +197,12 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     })
     .addCase(restoreDbThunk.rejected, (state) => {
       state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
     })
-
-    //   Add user in Org
 
     .addCase(shareUserInOrgThunk.pending, (state) => {
       state.status = "loading";
     })
     .addCase(shareUserInOrgThunk.fulfilled, (state, action:ActionDataType<createAndUpdateOrgThunkData>) => {
-      console.log(action,"shareUserInOrgThunk")
       var arr = state.allOrg;
       arr.find((temp, index) => {
         if (temp._id == action.payload.allorgs[0]._id) {
@@ -232,7 +222,6 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
       state.status = "loading";
     })
     .addCase(updateUserInOrgThunk.fulfilled, (state, action:ActionDataType<createAndUpdateOrgThunkData>) => {
-      console.log(action,"updateUserInOrgThunk")
       var arr = state.allOrg;
       arr.find((temp, index) => {
         if (temp._id == action.payload.allorgs[0]._id) {
@@ -261,6 +250,5 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<DbStateTy
     })
     .addCase(removeUserInOrgThunk.rejected, (state) => {
       state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
     });
 }
