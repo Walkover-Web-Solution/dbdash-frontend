@@ -1,14 +1,21 @@
+import { ActionReducerMapBuilder, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit';
+import { ActionDataType, AllTableDataType , TableDataType, removeDbInUserPayloadDataType} from '../../types/alltablesDataType';
 import { createTable1,updateTable1,getTable1, removeTable1, addDbInUserThunk, updateAccessOfUserInDbThunk, removeDbInUserThunk } from './allTableThunk';
-export const initialState = {
+import { NoInfer } from 'react-redux';
+export const initialState :AllTableDataType= {
   dbId  : "",
   tables : {},
   orgId :  "", 
   userAcess: {},
   userDetail :{},
-  status : "idel"
+  status : "idle"
 };
-export const reducers = {
+// import { TableDataType } from '../../types/alltablesDataType';
+
+
+export const reducers : ValidateSliceCaseReducers<AllTableDataType, SliceCaseReducers<AllTableDataType>>= {
   setAllTablesData (state,{payload}){
+    
     return { ...state , 
       tables : payload.tables,
       dbId : payload.dbId ,
@@ -18,68 +25,64 @@ export const reducers = {
     }
   }
 };
-export function extraReducers(builder) {
+export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<AllTableDataType>>) {
      builder
      .addCase(createTable1.pending, (state) => {
       state.status = "loading"
     })
-    .addCase(createTable1.fulfilled, (state,action) => {
+    .addCase(createTable1.fulfilled, (state,action:ActionDataType<TableDataType>) => {
       if (action.payload) {
       state.tables = action.payload;
+    
       }
       state.status = "succeeded";
     })
     .addCase(createTable1.rejected, (state) => {
       state.status = "failed";
     })
-
     .addCase(getTable1.pending, (state) => {
         state.status = "loading"
-      })
+    })
       .addCase(getTable1.fulfilled, (state, action) => {
         if (action.payload) {
           state.tables = action.payload.tables;
           state.dbId = action.payload._id
         }
         state.status = "succeeded";
-      })
+    })
       .addCase(getTable1.rejected, (state) => {
         state.status = "failed";
-      })
-
-
+    })
       .addCase(updateTable1.pending, (state) => {
         state.status = "loading"
-      })
-      .addCase(updateTable1.fulfilled, (state,action) => {
+    })
+      .addCase(updateTable1.fulfilled, (state,action:ActionDataType<TableDataType>) => {
         if (action.payload) {
           state.tables = action.payload;
           }
         state.status = "succeeded";
-      })
+    })
       .addCase(updateTable1.rejected, (state) => {
         state.status = "failed";
-      })
-
+    })
       .addCase(removeTable1.pending, (state) => {
         state.status = "loading"
-      })
-      .addCase(removeTable1.fulfilled, (state,action) => {
+    })
+      .addCase(removeTable1.fulfilled, (state,action:ActionDataType<TableDataType>) => {
         if (action.payload) {
           state.tables = action.payload;
           }
         state.status = "succeeded";
-      })
+    })
       .addCase(removeTable1.rejected, (state) => {
         state.status = "failed";
-      })
-      
+    })  
     .addCase(addDbInUserThunk.pending, (state) => {
 
       state.status = "loading"
     })
-    .addCase(addDbInUserThunk.fulfilled, (state, action) => {
-      const payloadData=action.payload?.data?.data;
+    .addCase(addDbInUserThunk.fulfilled, (state, action:ActionDataType<AllTableDataType>) => {
+      const payloadData=action.payload;
       
             state.status = "succeeded";
             state.userAcess=payloadData?.[`users`];
@@ -94,8 +97,8 @@ export function extraReducers(builder) {
 
       state.status = "loading"
     })
-    .addCase(updateAccessOfUserInDbThunk.fulfilled, (state, action) => {
-      const payloadData=action.payload?.data?.data;
+    .addCase(updateAccessOfUserInDbThunk.fulfilled, (state, action:ActionDataType<AllTableDataType>) => {
+      const payloadData=action.payload;
       state.status = "succeeded";
       state.userAcess=payloadData?.[`users`];
       state.userDetail=payloadData?.[`usersMapping`];
@@ -104,16 +107,12 @@ export function extraReducers(builder) {
     .addCase(updateAccessOfUserInDbThunk.rejected, (state) => {
 
       state.status = "failed";
-      // MDBToast.error("Unable to fetch jamaats.");
-    })
-    
+    }) 
     .addCase(removeDbInUserThunk.pending, (state) => {
 
       state.status = "loading"
     })
-    .addCase(removeDbInUserThunk.fulfilled, (state, action) => {
-
-
+    .addCase(removeDbInUserThunk.fulfilled, (state, action:ActionDataType<removeDbInUserPayloadDataType>) => {
       delete state.userAcess[action.payload.userId];
       delete state.userDetail[action.payload.userId];
       state.status = "succeeded";
@@ -124,6 +123,5 @@ export function extraReducers(builder) {
       state.status = "failed";
       // MDBToast.error("Unable to fetch jamaats.");
     })
-
 
   }

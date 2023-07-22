@@ -98,7 +98,7 @@ export const renameOrgThunk = createAsyncThunk(
 export const createOrgThunk = createAsyncThunk(
     "organdDb/createOrgThunk", async (payload) => {
         const data = await createOrg({ name: payload.name, user_id: payload.user_id });
-        console.log(data.data.data,"thunk")
+        // console.log(data.data.data,"thunk")
         const allorgs = await getAllOrgs(data.data.data.org_id)
      
         const allData= {

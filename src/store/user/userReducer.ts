@@ -52,12 +52,12 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<UserType>
       state.status = "loading"
 
     })
-    .addCase(saveUser.fulfilled, (state: UserType) => {
+    .addCase(saveUser.fulfilled, (state) => {
 
       state.status = "succeeded";
 
     })
-    .addCase(saveUser.rejected, (state: UserType) => {
+    .addCase(saveUser.rejected, (state) => {
 
 
       state.status = "failed";

@@ -1,34 +1,72 @@
+
+import { UsersMapping } from "./databaseDataType";
+
+
 export interface AllTableDataType{
-    [tableid:string]:AllTableTypeMapping;
+  created_by?:string
+  dbId  : string;
+  tables:TableDataType;
+  orgId : string;
+  userAcess: UserAcessType;
+  userDetail: UsersMapping|{};  
+  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
- export interface AllTableTypeMapping{
+
+export interface TableDataType{
+    [tableid:string]:TableTypeMapping;
+}
+
+ export interface TableTypeMapping{
     fieldIds:string[];
-    fields:AllTableFieldsTypeMapping;
-    filter?:AllTableFiltersObjTypes;
+    fields:TableFieldsType;
+    filter?:TableFiltersType;
     tableName:string;
     update_at:string
 }
- export interface AllTableFieldsTypeMapping{
-    [fieldId:string]:{
-        fieldName:string,
-        fieldType:string | number,
-        metaData?:AllTableMetaDataObjType,
-    }
+
+ export interface TableFieldsType{
+    [fieldId:string]:TableFieldsMappingType
 }
- export interface AllTableMetaDataObjType{
+
+ export interface TableFieldsMappingType{
+    fieldName:string,
+    fieldType:string | number,
+    metaData?:MetaDataType,
+ }
+ export interface MetaDataType{
     unique?:boolean;
     hide?:boolean;
     isLookup?:boolean;
     width?:number;
 }
 
- export interface AllTableFiltersObjTypes{
-   [filterId:string]:AllTableFilterObjTypes
+ export interface TableFiltersType{
+   [filterId:string]:TableFilterMappingType
+
 }
- export interface AllTableFilterObjTypes{
+ export interface TableFilterMappingType{
     filterName:string;
     query?:string;
     htmlToShow?:string;
     fieldIds:string[];
     viewId?:string;
+}
+
+export interface UserAcessType{
+    [UserAcessId:string]:{
+        access:number;
+    }
+
+}
+
+// export interface ActionDataType{
+//     payload:
+// }
+export interface ActionDataType<T>{
+    payload:T 
+}
+
+export interface removeDbInUserPayloadDataType{
+    response:any;
+    userId:string;
 }
