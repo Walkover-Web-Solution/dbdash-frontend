@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { addDbInUser, getDbById, removeDbInUser, updateAccessOfUserInDb } from "../../api/dbApi"
 import { updateTable } from "../../api/tableApi";
-import { ShareDbPayloadThunkType, AllTableDataType, RemoveTableThunkPayloadType, UpdateTableThunkPayloadType, TableDataType } from '../../types/alltablesDataType';
+import { ShareDbPayloadThunkType, RemoveTableThunkPayloadType, UpdateTableThunkPayloadType, TableDataType } from '../../types/alltablesDataType';
 
 
 
