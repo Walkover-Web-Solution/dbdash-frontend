@@ -4,8 +4,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import "./alerPopup.scss";
 
 interface AlertPopupProps {
+  open: boolean;
   setOpen: (open: boolean) => void;
-  // open: boolean;
   title: string;
   tableId: string;
   deleteFunction: (tableId: string) => void;
