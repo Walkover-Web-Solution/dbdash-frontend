@@ -5,7 +5,7 @@ import "./alerPopup.scss";
 
 interface AlertPopupProps {
   setOpen: (open: boolean) => void;
-  open: boolean;
+  // open: boolean;
   title: string;
   tableId: string;
   deleteFunction: (tableId: string) => void;
@@ -22,7 +22,7 @@ export default function AlertPopup(props: AlertPopupProps) {
   return (
     <>
       <Dialog
-        open={props.open}
+        open
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
