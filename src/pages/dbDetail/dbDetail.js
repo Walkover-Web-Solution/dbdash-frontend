@@ -13,7 +13,6 @@ import "./dbDetail.scss";
 function DbDetails() {
     var {dbId} = useParams();
     const dispatch = useDispatch()
-    const [tables, setTables] = useState(0);
     const [dbData, setDbData] = useState(null);
     useEffect(() => {
         if(dbId)
@@ -47,7 +46,7 @@ function DbDetails() {
     </Box>
            
             <Box className="db-detail-table-list-box" >
-            { dbData && <TablesList  dbData={dbData} tables={tables} setTables={setTables} />}
+            { dbData && <TablesList  dbData={dbData} />}
             </Box> 
         </>
     );  

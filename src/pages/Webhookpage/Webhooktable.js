@@ -41,9 +41,7 @@ export default function Webhooktable(props) {
       isActive: wbhookactive === true ? false : true,
     };
     const data1 = await updateWebhook(props.dbId, props.tableId, wbhookid, data);
-    setWbhookactive('');
-    setWbhookcondition('');
-    setWbhookid('');
+    
     setTabledata(data1.data.data.webhook);
   };
 

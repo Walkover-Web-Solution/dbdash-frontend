@@ -38,3 +38,12 @@
     }
   }
 }
+.SingleTableTab{
+  min-width: auto !important;
+  overflow-x: auto !important;
+  flex-direction: row !important;
+  text-transform: none !important;
+  height: 10px !important;
+  font-size: $tablepagefontsize !important;
+  
+}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -28,6 +28,7 @@ import { useRef } from 'react';
 
 
 function MainNavbar(props) {
+  console.log("lkldhlgMainNavbar");
   let { dbId, id, tableName } = useParams();
   const [openTemplate, setOpenTemplate] = useState(false);
   const [openShareDb, setOpenShareDb] = useState(false);
@@ -109,13 +110,13 @@ function MainNavbar(props) {
           fontSize={Number(variables.titlesize)}
           color={variables.mainnavbartextcolor}
         >
-          {props?.dbData?.db.name || dbname}
+          {props?.dbData?.db?.name || dbname}
         </Typography>
       )}
 
       <Box>
 
-        {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db.name || dbname} open={openTemplate} setOpen={setOpenTemplate} />}
+        {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db?.name || dbname} open={openTemplate} setOpen={setOpenTemplate} />}
         {openDbSnapshot && <DbSnapshotsMenu dbSnapshots={props?.dbData?.db?.dbSnapshots?props?.dbData?.db?.dbSnapshots:{}} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
         <Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />
         {dbId && (
@@ -260,4 +261,4 @@ MainNavbar.propTypes = {
   tabletoredirect: PropTypes.any,
 };
 
-export default MainNavbar;
+export default memo(MainNavbar);

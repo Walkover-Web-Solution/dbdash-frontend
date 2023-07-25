@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, {  useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Typography, TextField, Button,ClickAwayListener } from "@mui/material"; 
 import { useNavigate } from "react-router-dom";
@@ -15,27 +15,21 @@ const FilterModal = (props) => {
   const navigate = useNavigate();
   const [filterName, setFilterName] = useState("");
   const dispatch = useDispatch();
+  const disabled=useMemo(()=>{
+    return !filterName;
+  },[filterName])
   const calculatePosition = () => {
     const buttonRect = props?.buttonRef.current.getBoundingClientRect();
     const { scrollX, scrollY } = window;
     const { innerWidth, innerHeight } = window;
-  
-    // Calculate the initial position below the button
     let top = buttonRect.top + buttonRect.height + scrollY;
     let left = buttonRect.left + scrollX;
-  
-    // Check if there is enough space below the button
-    const popupHeight = 300; // Assuming the popup height is 300px
-    const popupWidth = 300; // Assuming the popup width is 300px
-  
+    const popupHeight = 300;
+    const popupWidth = 300; 
     if (top + popupHeight > innerHeight) {
-      // Not enough space below, position above the button instead
       top = buttonRect.top - popupHeight + scrollY;
     }
-  
-    // Check if there is enough space on the right
     if (left + popupWidth > innerWidth) {
-      // Not enough space on the right, align with the right edge of the button
       left = buttonRect.right - popupWidth + scrollX;
     }
   
@@ -49,7 +43,6 @@ const style = {
   backgroundColor: variables.bgcolorvalue,
   zIndex:'10000',
   borderRadius: "0px",
-  // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
   border:`1px solid ${variables.basictextcolor}`,
   width: "300px",
 };
@@ -58,19 +51,6 @@ const style = {
     props.setOpen(false);
   };
 
-  // const updateFilter = async () => {
-  //   let queryToSend = " ";
-  //   if (
-  //     props?.dbData?.db?.tables[props?.tableName]?.view &&
-  //     Object.values(props?.dbData?.db?.tables[props?.tableName]?.view?.fields).length >= 1
-  //   ) {
-  //     const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
-  //     queryToSend = "select * from " + viewId;
-  //   } else {
-  //     queryToSend = "select * from " + props?.tableName;
-  //   }
-  //   return queryToSend;
-  // };
   const handleClickAway = () => {
     handleClose();
   };
@@ -101,39 +81,10 @@ filterName1=firstChar.toUpperCase() + filterName.slice(1);
         "orgId" : filter.data.data.data.org_id
       }
     ))
-    // dispatch(bulkAddColumns(
-    //   {
-    //     "dbId": props?.dbId,
-    //     "filter":data,
-    //     "pageNo":1,
-    //     "tableName": props?.tableName,
-    //     "tables": props?.dbData?.db?.tables
-        
-    //   }
-    // ))
-    props?.setUnderLine(filterKey)
+   
     navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
     return dataa;
   };
-
-  // const editQueryData = async () => {
-  //  const data = await updateFilter();
-  //   const dataa = {
-  //     filterId: props?.filterId,
-  //     filterName: filterName,
-  //     query: data
-  //   }
-  //   const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa)
-  //   dispatch(setAllTablesData(
-  //     {
-  //       "dbId": props?.dbId,
-  //       "tables": updatedFilter.data.data.tables , 
-  //       "orgId" :  updatedFilter.data.data.org_id
-  //     }
-  //   ))
-  // }
-
-  
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
     <Box sx={style}>
@@ -165,7 +116,7 @@ filterName1=firstChar.toUpperCase() + filterName.slice(1);
       <Box className="filter-actions" display="flex" justifyContent="space-between">
         <Button
           variant="contained"
-          className="mui-button "
+          className={disabled?`mui-button-disabled`:`mui-button`} 
           onClick={() => {
             handleCreateFilter();
             handleClose();
@@ -188,7 +139,6 @@ FilterModal.propTypes = {
   tableName: PropTypes.any,
   filterId: PropTypes.any,
   dbData: PropTypes.any,
-  setUnderLine: PropTypes.any,
   buttonRef:PropTypes.any
 };
 

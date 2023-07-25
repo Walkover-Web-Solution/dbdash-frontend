@@ -122,11 +122,11 @@ Webhooktablemenu.propTypes = {
   setNewcreated: PropTypes.any,
   dataforwebhook:PropTypes.any,
   newcreated: PropTypes.any,
-  isActive: PropTypes.bool.isRequired,
+  isActive: PropTypes.any,
   condition: PropTypes.string.isRequired,
   dbId: PropTypes.string.isRequired,
   tableId: PropTypes.string.isRequired,
-  setTabledata: PropTypes.func.isRequired,
+  setTabledata: PropTypes.any,
   handleUpdateActive: PropTypes.any, handleDeleteWebhook: PropTypes.any,
   tabledata: PropTypes.any
 };

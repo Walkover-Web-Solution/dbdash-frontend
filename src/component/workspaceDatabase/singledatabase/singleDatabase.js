@@ -35,13 +35,6 @@ export default function SingleDatabase(props) {
     dispatch(moveDbThunk({ orgId, dbId, data }))
   };
 
-  // const renameDatabase = async (orgId, id, name) => {
-  //   const data = {
-  //     name: dbname || name,
-  //   };
-  //   dispatch(renameDBThunk({ orgId, id, data }))
-  //   setDbname();
-  // };
   const renameDatabase = async (orgId, id ,name) => {
   
     if ( !dbname || dbname.trim() === "") {
@@ -91,7 +84,6 @@ export default function SingleDatabase(props) {
 
   return (
     <Card className="singledatabasecard" onClick={() => {
-
       navigate("/db/" + props.db._id, { state: { db: props.db } });
     }}>
       <CardContent sx={{ display: "flex",justifyContent:'space-between'}}>

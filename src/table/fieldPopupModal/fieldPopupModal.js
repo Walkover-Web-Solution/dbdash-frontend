@@ -129,8 +129,7 @@ export default function FieldPopupModal(props) {
     else if (event.target.value == "link") {
       setShowLinkField(true)
       props?.setSelectValue(event.target.value);
-      // const firstTable = Object.keys(AllTableInfo.tables)[0];
-      // props?.setSelectedTable(firstTable);
+      
     }
     else if (event.target.value == "lookup") {
       setShowLookupField(true)
