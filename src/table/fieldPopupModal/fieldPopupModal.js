@@ -227,6 +227,7 @@ export default function FieldPopupModal(props) {
             }
           }}
           className="field-textfield2"
+          
         />
 
         {errors.fieldName && (
