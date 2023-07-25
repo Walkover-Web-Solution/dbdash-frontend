@@ -113,19 +113,22 @@ export default function PopupModal(props) {
          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a  rel="noreferrer" href='http://localhost:5000/64a806e049f009459a84201b'> click here</a></Typography></Box>
          } <Box className="buttonContainer">
             <Box >
-              <Button
-              className="mui-button"
-                variant="contained"
-                disabled={
-                  textFieldValue.length < 3 ||
-                  textFieldValue.length > 30 ||
-                  textFieldValue.includes(" ")
-                }
-                onClick={() => {
-                  validate();
-                  props?.submitData();
-                }}
-              >
+            <Button
+  className={textFieldValue.length < 3 || textFieldValue.length > 30 || textFieldValue.includes(" ")
+    ? "mui-button mui-button-disabled"
+    : "mui-button"
+  }
+  variant="contained"
+  disabled={
+    textFieldValue.length < 3 ||
+    textFieldValue.length > 30 ||
+    textFieldValue.includes(" ")
+  }
+  onClick={() => {
+    validate();
+    props?.submitData();
+  }}
+>
                 Create
               </Button>
             </Box>

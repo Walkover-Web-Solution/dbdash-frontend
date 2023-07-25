@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from "@mui/material";
 import Dropdown from "../../dropdown";
@@ -17,7 +17,7 @@ import "./singleTable.scss";
 import { useParams } from "react-router-dom";
 import { bulkAddColumns } from "../../../store/table/tableThunk";
 
-export default function SingleTable({
+ function SingleTable({
   dbData,
   table,
   setTabIndex,
@@ -37,7 +37,7 @@ export default function SingleTable({
   const dispatch = useDispatch();
 
   const TabWithDropdown = ({ label, dropdown }) => (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Box className="flex-center" >
       <Tab
         textColor={`${variables.bgcolorvalue}`}
         label={
@@ -53,24 +53,15 @@ export default function SingleTable({
             </>
           )
         }
-        sx={{
-          minWidth: "auto",
-          overflowX: "auto",
-          flexDirection: "row",
-          textTransform: "none",
-          height: "10px",
-          fontSize: `${variables.tablepagefontsize}`,
-        }}
+        className="SingleTableTab"
+       
         title={label}
       />
     </Box>
   );
 
   const renameTableName = async (db_id, tableName) => {
-    // if (!tableNa) {
-    //   toast.error("Table name is same");
-    //   return;
-    // }
+    
     if (!tableNa || tableNa.trim() === "") {
       toast.error("Table name cannot be empty");
       return;
@@ -101,7 +92,7 @@ export default function SingleTable({
 
     dispatch(
       updateTable1({
-        dbId: dbData?.db?._id,
+        dbId: db_id,
         tableName: tableName,
         data1: data1,
       })
@@ -111,61 +102,59 @@ export default function SingleTable({
 
   const deleteTableName = async (tableid) => {
     const keys = Object.keys(AllTableInfo);
-    let i = 0;
-    for (; i < keys.length; i++) {
-      if (keys[i] === tableid) {
-        break;
-      }
+    const currentIndex = keys.indexOf(tableid);
+    
+    if (currentIndex === -1) {
+      return;
     }
-    i = i === keys.length - 1 ? 0 : i + 1;
-    let last = keys[i];
-
+  
+    const nextIndex = (currentIndex + 1) % keys.length;
+    const last = keys[nextIndex];
+  
     const deleteTableData = await deleteTable(dbData?.db?._id, tableid);
     dispatch(removeTable1({ tableData: deleteTableData?.data?.data?.tables }));
     navigate(`/db/${dbData.db._id}/table/${last}`);
   };
+  
 
-  const exportCSVTable = async (tableid) => {
+  const exportCSVTable =  (tableid) => {
     const data = {
       query: "",
       userName: userDetails?.fullName,
       email: userDetails?.email,
     };
-    await exportCSV(dbData?.db?._id, tableid, data);
+     exportCSV(dbData?.db?._id, tableid, data);
     toast.success("Your CSV file has been mailed successfully");
   };
 
   function onTableClicked() {
-    if(params?.templateId){
-      setTableIdForFilter(table[0])
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?._id,
-          tableName: table[0],
-          pageNo: 1,
-        })
-      );
-    }else
-    {
-      navigate(`/db/${dbData?.db?._id}/table/${table[0]}`);
+    const dbId = dbData?.db?._id;
+    const templateId = params?.templateId;
+    const currentTableName = table[0];
+  
+    if (templateId) {
+      setTableIdForFilter(currentTableName);
+    } else {
+      navigate(`/db/${dbId}/table/${currentTableName}`);
       setPage(1);
       dispatch(resetData());
-      if (table[0] == params?.tableName) {
+      if (currentTableName === params?.tableName) {
         dispatch(
           bulkAddColumns({
-            dbId: dbData?.db?._id,
-            tableName: table[0],
+            dbId,
+            tableName: currentTableName,
             pageNo: 1,
           })
         );
       }
     }
   }
+  
 
   const location = useLocation();
 
   return (
-    <div style={{width:'fit-content'}}>
+    <div  style={{width:'fit-content'}}>
       <Box
         className={`single-table ${location.pathname.includes(`table/${table[0]}`) ? "active" : ""
           }`}
@@ -184,6 +173,7 @@ export default function SingleTable({
                 <TextField
                   defaultValue={table[1]?.tableName || table[0] || " "}
                   autoFocus
+                  
                   sx={{
                     width: 'fit-content',
                     fontWeight: "bold",
@@ -219,7 +209,6 @@ export default function SingleTable({
                   }}
                   variant="contained"
                   className="mui-button"
-                // style={{color:'white'}}
                 >
                   Rename
                 </Button>
@@ -282,6 +271,7 @@ export default function SingleTable({
   );
 }
 
+export default memo(SingleTable);
 SingleTable.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.array,

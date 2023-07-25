@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { Box, Button, Select, MenuItem, FormControl, InputLabel, ListSubheader, ButtonGroup } from "@mui/material";
@@ -35,9 +35,9 @@ const MenuProps = {
     horizontal: 'center',
   },
   variant: 'menu',
-};
-export default function Navbar(props) {
-  let dbchanged = 0;
+  }
+   function Navbar(props) {
+    let dbchanged = 0;
   const [tables, setTables] = useState({});
   const [dbId, setDbId] = useState("");
   const navigate = useNavigate();
@@ -274,7 +274,7 @@ const classes = useStyles();
     </div>
   );
 }
-
+export default memo(Navbar);
 Navbar.propTypes = {
   dbData: PropTypes.any,
   dbId: PropTypes.string,

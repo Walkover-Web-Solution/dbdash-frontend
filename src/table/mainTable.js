@@ -11,7 +11,6 @@ import {
   updateCells,
   updateColumnHeaders,
 } from "../store/table/tableThunk";
-// import "@glideapps/glide-data-grid/dist/index.css";
 import PropTypes from "prop-types";
 
 import "./Glidedatagrid.css";
@@ -25,19 +24,15 @@ import { addColumn, addRow, editCell, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
-// import "@glideapps/glide-data-grid/dist/index.css";
-// import { cloneDeep } from 'lodash';
 import { getTableInfo } from "../store/table/tableSelector";
-// import "react-responsive-carousel/lib/styles/carousel.min.css";
 import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
-// import  debounce  from 'lodash.debounce';
 export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
-  const fields1 = useSelector((state) => state.table.columns);
-  const dataa = useSelector((state) => state.table.data) || [];
+  const allFieldsofTable = useSelector((state) => state.table.columns);
+  const allRowsData = useSelector((state) => state.table.data) || [];
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState("longtext");
@@ -46,7 +41,7 @@ export default function MainTable(props) {
   const [showFieldsDropdown, setShowFieldsDropdown] = useState(false);
   const [linkedValueName, setLinkedValueName] = useState("");
   const [textValue, setTextValue] = useState("");
-  const [data, setData] = useState(dataa);
+  const [data, setData] = useState(allRowsData);
   const [metaData, setMetaData] = useState({});
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({});
@@ -61,12 +56,12 @@ export default function MainTable(props) {
     current: undefined,
   };
   const [selection, setSelection] = useState(emptyselection);
-  const [fields, setFields] = useState(fields1 || []);
+  const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
   const tableInfo = useSelector((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId;
   useEffect(() => {
-    setData(dataa);
-  }, [dataa]);
+    setData(allRowsData);
+  }, [allRowsData]);
   const isSingleCellSelected = useMemo(() => {
     return selection.current && (selection.current.range.height * selection.current.range.width === 1);
   }, [selection]);
@@ -74,12 +69,12 @@ export default function MainTable(props) {
     if (!data) return;
     const [col, row] = cell;
     const dataRow = data?.[row] || data?.[row - 1];
-    const d = dataRow?.[fields?.[col]?.id];
+    const d = dataRow?.[fieldsToShow?.[col]?.id];
     const index = cell?.[0];
     if (
-      fields?.[index]?.dataType === "attachment" 
+      fieldsToShow?.[index]?.dataType === "attachment" 
     ) {
-      setOpenAttachment({cell,d,fieldId:fields?.[col]?.id,rowAutonumber: dataa[row][`fld${tableId.substring(3)}autonumber`]});
+      setOpenAttachment({cell,d,fieldId:fieldsToShow?.[col]?.id,rowAutonumber: allRowsData[row][`fld${tableId.substring(3)}autonumber`]});
 
     }
   });
@@ -102,13 +97,13 @@ export default function MainTable(props) {
     if (imageLink !== null) {
       dispatch(
         updateCells({
-          columnId: fields[col]?.id,
-          rowIndex: dataa[row][`fld${tableId.substring(3)}autonumber`],
+          columnId: fieldsToShow[col]?.id,
+          rowIndex: allRowsData[row][`fld${tableId.substring(3)}autonumber`],
           value: null,
           imageLink: imageLink,
           dataTypes: type,
           indexIdMapping: {
-            [dataa[row][`fld${tableId.substring(3)}autonumber`]]: row,
+            [allRowsData[row][`fld${tableId.substring(3)}autonumber`]]: row,
           },
         })
       ).then(() => {
@@ -126,13 +121,13 @@ export default function MainTable(props) {
     if (e.target.files[0] != null) {
       dispatch(
         updateCells({
-          columnId: fields[col]?.id,
-          rowIndex: dataa[row][`fld${tableId.substring(3)}autonumber`],
+          columnId: fieldsToShow[col]?.id,
+          rowIndex: allRowsData[row][`fld${tableId.substring(3)}autonumber`],
           value: e.target?.files[0],
           imageLink: imageLink,
           dataTypes: type,
           indexIdMapping: {
-            [dataa[row][`fld${tableId.substring(3)}autonumber`]]: row,
+            [allRowsData[row][`fld${tableId.substring(3)}autonumber`]]: row,
           },
         })
       ).then(() => {
@@ -199,7 +194,7 @@ export default function MainTable(props) {
   };
   useEffect(() => {
     var newcolumn = [];
-    fields1.forEach((column) => {
+    allFieldsofTable.forEach((column) => {
       if (column?.metadata?.hide !== true) {
         newcolumn.push(column);
       }
@@ -221,8 +216,8 @@ export default function MainTable(props) {
       setTargetColumn(targetIndex);
     }
   
-    setFields(newcolumn);
-  }, [fields1]);
+    setFieldsToShow(newcolumn);
+  }, [allFieldsofTable]);
   
   const addRows = () => {
     if(params?.templateId) return;
@@ -235,13 +230,13 @@ export default function MainTable(props) {
         dispatch,
         item,
         newIndex,
-        fields,
-        fields1,
+        fieldsToShow,
+        allFieldsofTable,
         params?.filterName,
-        setFields
+        setFieldsToShow
       );
     },
-    [fields, fields1]
+    [fieldsToShow, allFieldsofTable]
   );
   const handleRowMoved = useCallback(
     (from, to) => {
@@ -253,14 +248,14 @@ export default function MainTable(props) {
   const onCellEdited = useCallback(
     (cell, newValue) => {
       if(params?.templateId) return;
-      if(fields[cell[0]]?.dataType == "attachment") return;
-      if (fields[cell[0]]?.dataType == "multipleselect") {
-        editmultipleselect(newValue, dataa[cell[1]][fields[cell[0]]?.id] || [], cell);
+      if(fieldsToShow[cell[0]]?.dataType == "attachment") return;
+      if (fieldsToShow[cell[0]]?.dataType == "multipleselect") {
+        editmultipleselect(newValue, allRowsData[cell[1]][fieldsToShow[cell[0]]?.id] || [], cell);
         return;
       }
-      if (newValue?.readonly == true || newValue?.data == dataa[cell[1]][fields[cell[0]]?.id] ||
-        (newValue?.data == "" && !dataa[cell[1]][fields[cell[0]]?.id])) return;
-      if (fields[cell[0]].dataType == "singleselect") {
+      if (newValue?.readonly == true || newValue?.data == allRowsData[cell[1]][fieldsToShow[cell[0]]?.id] ||
+        (newValue?.data == "" && !allRowsData[cell[1]][fieldsToShow[cell[0]]?.id])) return;
+      if (fieldsToShow[cell[0]].dataType == "singleselect") {
         newValue = newValue.data.value;
       }
      
@@ -268,21 +263,21 @@ export default function MainTable(props) {
         cell,
         newValue,
         dispatch,
-        fields,
+        fieldsToShow,
         params,
-        dataa[cell?.[1] ?? []],
-        fields[cell[0]].dataType,
+        allRowsData[cell?.[1] ?? []],
+        fieldsToShow[cell[0]].dataType,
         isSingleCellSelected
       );
     },
-    [dataa,fields]
+    [allRowsData,fieldsToShow]
   );
  const handleColumnResizeWithoutAPI=useCallback((_,newSize,colIndex)=>{
-  let newarrr = [...(fields || fields1)];
+  let newarrr = [...(fieldsToShow || allFieldsofTable)];
   let obj = Object.assign({}, newarrr[colIndex]);
   obj.width = newSize;
   newarrr[colIndex] = obj;
-  setFields(newarrr);
+  setFieldsToShow(newarrr);
  });
   const handleColumnResize = (field, newSize) => {
       if(params?.templateId) return;
@@ -298,25 +293,25 @@ export default function MainTable(props) {
   };
   const editmultipleselect = (newValue, oldValuetags, cell) => {
     if(params?.templateId) return;
-    if (!fields[cell[0]]?.id) return;
+    if (!fieldsToShow[cell[0]]?.id) return;
     const newValuetags = newValue.data.tags;
     const addedTags = newValuetags.filter((tag) => !oldValuetags.includes(tag));
     const removedTags = oldValuetags.filter((tag) => !newValuetags.includes(tag));
     const joinedString = addedTags.map((element) => `'${element}'`).join(",");
     let updateArray = [];
-    const rowIndex = dataa[cell[1]][`fld${tableId.substring(3)}autonumber`];
+    const rowIndex = allRowsData[cell[1]][`fld${tableId.substring(3)}autonumber`];
     addedTags?.length > 0 &&
       updateArray.push({
         where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
-        fields: {
-          [fields[cell[0]]?.id]: joinedString.slice(1, -1),
+        fieldsToShow: {
+          [fieldsToShow[cell[0]]?.id]: joinedString.slice(1, -1),
         },
       });
     removedTags?.length > 0 &&
       updateArray.push({
         where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
-        fields: {
-          [fields[cell[0]]?.id]: { delete: removedTags },
+        fieldsToShow: {
+          [fieldsToShow[cell[0]]?.id]: { delete: removedTags },
         },
       });
     dispatch(
@@ -335,7 +330,7 @@ export default function MainTable(props) {
         } else return false;
       }
     },
-    [dataa, fields]
+    [allRowsData, fieldsToShow]
   );
   const handleDeleteRow = (selection) => {
     if(params?.templateId) return;
@@ -347,12 +342,12 @@ export default function MainTable(props) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
         deletedRowIndices.push(
-          dataa[i][`fld${tableId.substring(3)}autonumber`]
+          allRowsData[i][`fld${tableId.substring(3)}autonumber`]
         );
       }
     }
     if (deletedRowIndices.length > 0) {
-      dispatch(deleteRows({ deletedRowIndices, dataa }));
+      dispatch(deleteRows({ deletedRowIndices, allRowsData }));
     }
     setSelection(emptyselection);
   };
@@ -365,10 +360,10 @@ export default function MainTable(props) {
   const getData = useCallback(
     (cell) => {
       const [col, row] = cell;
-      const dataRow = dataa[row] || [];
+      const dataRow = allRowsData[row] || [];
       if (dataRow) {
-        const d = dataRow[fields[col]?.id];
-        let { dataType } = fields[col] || "";
+        const d = dataRow[fieldsToShow[col]?.id];
+        let { dataType } = fieldsToShow[col] || "";
        
         if (dataType === "autonumber") {
           return {
@@ -421,9 +416,7 @@ export default function MainTable(props) {
               },
             };
           } else {
-            // Handle invalid time value
-            // For example, you can return a default value or show an error message
-            return {
+        return {
               kind: GridCellKind.Custom,
               allowOverlay: true,
               copyData: "4",
@@ -479,8 +472,7 @@ export default function MainTable(props) {
             displayData: d || "",
           };
         } else if (dataType === "multipleselect") {
-          const possibleTags = fields[col]?.metadata?.option;
-          // const row = 0; // Replace 0 with the appropriate row index
+          const possibleTags = fieldsToShow[col]?.metadata?.option;
           let newarr = [];
           possibleTags &&
             possibleTags?.map((x) => {
@@ -514,7 +506,7 @@ export default function MainTable(props) {
             copyData: d,
             data: {
               kind: "dropdown-cell",
-              allowedValues: fields[col]?.metadata?.option || [],
+              allowedValues: fieldsToShow[col]?.metadata?.option || [],
               value: d || "",
             },
           };
@@ -549,11 +541,11 @@ export default function MainTable(props) {
         return {};
       }
     },
-    [dataa, fields]
+    [allRowsData, fieldsToShow]
   );
   const realCols = useMemo(() => {
-   return   [...fields];
-  }, [fields]);
+   return   [...fieldsToShow];
+  }, [fieldsToShow]);
   const headerIcons = (() => {
     return {
       rowid: p => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="${p.bgColor}" class="bi bi-key-fill" viewBox="0 0 16 16"> <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/> </svg>`
@@ -670,7 +662,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           getCellContent={getData}
           onRowAppended={addRows}
           columns={realCols}
-          rows={dataa.length}
+          rows={allRowsData.length}
           gridSelection={selection}
           rowMarkers="both"
           rowSelectionMode="multi"
@@ -737,7 +729,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
         setMenu={setMenu}
         setOpen={setOpen}
         setDirectionAndId={setDirectionAndId}
-        fields={fields}
+        fields={fieldsToShow}
       />
       {openAttachment && (
         <SelectFilepopup

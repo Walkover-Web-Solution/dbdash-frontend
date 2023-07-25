@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { SyntheticEvent } from 'react';
 import { Box, Button, Dialog, DialogContent, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -5,7 +6,6 @@ import "./alerPopup.scss";
 
 interface AlertPopupProps {
   setOpen: (open: boolean) => void;
-  // open: boolean;
   title: string;
   tableId: string;
   deleteFunction: (tableId: string) => void;
@@ -13,7 +13,6 @@ interface AlertPopupProps {
 }
 
 export default function AlertPopup(props: AlertPopupProps) {
-  console.log("propsss",props);
   const handleClose = (e: SyntheticEvent) => {
     e.stopPropagation();
     props.setOpen(false);

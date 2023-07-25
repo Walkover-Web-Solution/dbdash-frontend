@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import "../../../pages/Webhookpage/Webhookpage";
 import CloseIcon from '@mui/icons-material/Close';
@@ -22,6 +22,7 @@ const CreateTemplatePopup = (props) => {
   const [description, setDescription] = useState("");
   const [allCategory, setAllCategory] = useState(false);
 
+  const disabled=useMemo(()=>{return !name || !categoryName},[name,categoryName]);
   const handleClose = () => {
     props?.setOpen(false);
   };
@@ -137,11 +138,12 @@ const CreateTemplatePopup = (props) => {
             <Box className="createTemp-boxx3">
               <Button
                 variant="contained"
-                className="create-auth-key-button mui-button"
+                className={`create-auth-key-button ${disabled?'mui-button-disabled':'mui-button'}`}
                 onClick={() => {
                   handleCreateTemplate();
                   handleClose();
                 }}
+                disabled={disabled}
               >
                 Create Template
               </Button>
