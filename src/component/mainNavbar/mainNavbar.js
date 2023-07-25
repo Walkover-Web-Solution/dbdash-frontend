@@ -28,7 +28,6 @@ import { useRef } from 'react';
 
 
 function MainNavbar(props) {
-  console.log("lkldhlgMainNavbar");
   let { dbId, id, tableName } = useParams();
   const [openTemplate, setOpenTemplate] = useState(false);
   const [openShareDb, setOpenShareDb] = useState(false);

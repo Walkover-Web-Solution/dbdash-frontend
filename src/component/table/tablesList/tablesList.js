@@ -433,8 +433,9 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
         />
       )}
       <div style={{ marginTop: "250px" }}>
+     
         {isTableLoading ? (
-          <CircularProgress className="table-loading" />
+          <div className="table-loading"> <CircularProgress className="table-loading" /></div>
         ) : (
           <div>
             <MainTable setPage={setPage} page={page} minimap={minimap} />

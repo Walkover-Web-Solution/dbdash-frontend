@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 import "./authKeyPopup.scss";
+
+
 export default function AuthKeyPopup(props) {
   const [, setCopyText] = useState("");
   const [isCopied, setIsCopied] = useState(false);
@@ -14,7 +16,6 @@ export default function AuthKeyPopup(props) {
   };
   const handleCopyClick = () => {
     navigator.clipboard.writeText(props?.title);
-    // setCopySuccess(true);
     setIsCopied(true);
   };
 
@@ -41,6 +42,7 @@ export default function AuthKeyPopup(props) {
                 variant="standard"
                 value={props?.title}
                 onChange={handleCopyText}
+                
               />
             </Box>
             <Box>

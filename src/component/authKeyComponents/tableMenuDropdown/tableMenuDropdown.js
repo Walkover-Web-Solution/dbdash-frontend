@@ -6,21 +6,27 @@ import DeleteAuthKeyPopup from "../authKeyTablePopup/deleteAuthkeyPopup";
 import DisplayAuthKeyPopup from "../authKeyTablePopup/displayAuthkeyPopup";
 import CreateAuthKey from "../../../pages/createAuth/createAuth";
 import styling from "../../../assets/styling.scss";
+
 export default function AuthDropdown(props) {
-  const [anchorElUser, setAnchorElUser] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [display, setDisplay] = useState(false);
-  const [open1, setOpen1] = useState(false);
+  const [state, setState] = useState({
+    anchorElUser: null,
+    open: false,
+    display: false,
+    open1: false,
+  });
+
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
+    setState({ ...state, anchorElUser: event.currentTarget });
   };
+
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+    setState({ ...state, anchorElUser: null });
   };
 
   const handleClose = () => {
-    setOpen1(false);
+    setState({ ...state, open1: false });
   };
+
   return (
     <>
       <Tooltip>
@@ -36,7 +42,7 @@ export default function AuthDropdown(props) {
       </Tooltip>
       <Menu
         id="menu-appbar"
-        anchorEl={anchorElUser}
+        anchorEl={state.anchorElUser}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",
@@ -46,14 +52,14 @@ export default function AuthDropdown(props) {
           vertical: "top",
           horizontal: "left",
         }}
-        open={Boolean(anchorElUser)}
-        display={Boolean(anchorElUser)}
+        open={Boolean(state.anchorElUser)}
+        display={Boolean(state.anchorElUser)}
         onClose={handleCloseUserMenu}
       >
         <MenuItem
           onClick={() => {
             handleCloseUserMenu();
-            setOpen1(true);
+            setState({ ...state, open1: true });
           }}
         >
           <Typography className="menu-item-typography">{props?.first}</Typography>
@@ -62,14 +68,14 @@ export default function AuthDropdown(props) {
         <MenuItem
           onClick={(event) => {
             handleCloseUserMenu(event);
-            setDisplay(true);
+            setState({ ...state, display: true });
           }}
         >
           <Typography className="menu-item-typography">{props?.third}</Typography>
         </MenuItem>
         <DeleteAuthKeyPopup
-          open={open}
-          setOpen={setOpen}
+          open={state.open}
+          setOpen={(open) => setState({ ...state, open })}
           title={props?.title}
           deleteFunction={props?.deleteFunction}
         />
@@ -78,25 +84,25 @@ export default function AuthDropdown(props) {
             event.preventDefault();
             event.stopPropagation();
             handleCloseUserMenu(event);
-            setOpen(true);
+            setState({ ...state, open: true });
           }}
           sx={{ color: styling.deletecolor }}
         >
           <Typography className="menu-item-typography">{props?.second}</Typography>
         </MenuItem>
         <DisplayAuthKeyPopup
-          display={display}
-          setDisplay={setDisplay}
+          display={state.display}
+          setDisplay={(display) => setState({ ...state, display })}
           title={props?.title}
         />
       </Menu>
 
-      {open1 && (
+      {state.open1 && (
         <CreateAuthKey
           alltabledata={props?.alltabledata}
           heading={"edit authkey"}
           setAuthKeys={props?.setAuthKeys}
-          open={open1}
+          open={state.open1}
           id={props.dbId}
           authData={props.authData}
           title={props.title}
@@ -106,6 +112,7 @@ export default function AuthDropdown(props) {
     </>
   );
 }
+
 AuthDropdown.propTypes = {
   first: PropTypes.string,
   second: PropTypes.string,

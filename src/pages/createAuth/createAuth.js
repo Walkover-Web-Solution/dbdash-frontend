@@ -23,6 +23,8 @@ import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
 import { toast } from "react-toastify";
 
+const MemoizedAuthKeyPopup = React.memo(AuthKeyPopup);
+
 export default function CreateAuthKey(props) {
   const id = props.id;
   const [scope, setScope] = useState({});
@@ -134,6 +136,19 @@ export default function CreateAuthKey(props) {
 
   }
 
+  const memoizedAuthKeyPopup = useMemo(
+    () => (
+      <MemoizedAuthKeyPopup
+        handleClose={props?.handleClose}
+        open={open}
+        setOpen={setOpen}
+        title={authKey}
+        EditAuthKeyData={props.id}
+      />
+    ),
+    [open, authKey, props?.handleClose, props.id]
+  );
+
   return (
     <>
       <Modal open={props.open} onClose={props.handleClose}>
@@ -172,13 +187,7 @@ export default function CreateAuthKey(props) {
               >
                 {props?.authData ? "Update" : "Create"}
               </Button>
-              <AuthKeyPopup
-                handleClose={props?.handleClose}
-                open={open}
-                setOpen={setOpen}
-                title={authKey}
-                EditAuthKeyData={props.id}
-              />
+              {memoizedAuthKeyPopup}
             </Box>
             <Box>
               

@@ -15,6 +15,7 @@ function Selectaccessandscope(props) {
   const isSelected = (key, value) => {
     return scope[key] && scope[key] == value;
   };
+  const initialRadioValue = "";
   const handleRemoveChecked = (key, value) => {
     if (scope[key] == value) {
       let obj = { ...scope };
@@ -54,7 +55,7 @@ function Selectaccessandscope(props) {
               <div>
                 <RadioGroup
                   row
-                  value={scope["schema"]}
+                  value={scope["schema"] || initialRadioValue}
                   onChange={(e) => {
                     let obj = { ...scope };
                     obj["schema"] = e.target.value;
@@ -113,7 +114,7 @@ function Selectaccessandscope(props) {
                 <div>
                   <RadioGroup
                     row
-                    value={scope["alltables"]}
+                    value={scope["alltables"]|| initialRadioValue}
                     onChange={(e) => {
                       let obj = { ...scope };
                       obj["alltables"] = e.target.value;
@@ -191,7 +192,7 @@ function Selectaccessandscope(props) {
                           <RadioGroup
                             row
                             
-                            value={scope[key]}
+                            value={scope[key]|| initialRadioValue}
                             onChange={(e) => handleScopeChange(e, key)}
                           >
                             <FormControlLabel
