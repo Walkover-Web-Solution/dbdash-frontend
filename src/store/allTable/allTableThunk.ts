@@ -7,7 +7,6 @@ import { ShareDbPayloadThunkType, RemoveTableThunkPayloadType, UpdateTableThunkP
 
 export const createTable1 = createAsyncThunk (
     "tables/createTable1", async ({tables}:{tables:TableDataType}) =>{
-        console.log("flkgjglhjlkghjglgj")
         return tables;
     }
 );
@@ -40,7 +39,6 @@ export const addDbInUserThunk=createAsyncThunk(
 )
 export const removeDbInUserThunk=createAsyncThunk(
     "tables/removeDbInUserThunk",async(payload:any)=>{
-        console.log("RemovePayload", payload)
 
        const response= await removeDbInUser(payload.dbId,payload.adminId,payload.data);
 const responsetosend={
