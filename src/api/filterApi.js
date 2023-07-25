@@ -1,5 +1,6 @@
 import axiosInstance from '../interceptor/interceptor';
 
+
 const createFilter = async (db_id,tableName,data) =>
 {
     return await axiosInstance.post(`/dbs/${db_id}/${tableName}/filter`,data)
@@ -20,9 +21,7 @@ const runQueryonTable = async(dbId,tableName,filterId,data,pageNo,limit)=>{
 }
 const filterQueryByAi = async (dbId,data) =>
 {
-   
-    return await axiosInstance.post(`/dbs/${dbId}/filterquery`,data)
-    
+    return await axiosInstance.post(`/dbs/${dbId}/filterquery`,data)   
 }
 
 

@@ -291,6 +291,5 @@ AddFilterPopup.propTypes = {
   filterId: PropTypes.any,
   dbData: PropTypes.any,
   setEdit: PropTypes.func,
-  setUnderLine: PropTypes.any,
 };
 

@@ -25,6 +25,11 @@ Tab{
   background-color: $fontColorVAlue !important;
   color:white !important;
 }
+.mui-button-disabled{
+  background-color: $fontColorVAlue !important;
+  color:white !important;
+  opacity: 0.4 !important;
+}
 .mui-button-outlined{
   color:$fontColorVAlue !important;
   border-color:$fontColorVAlue !important;
@@ -70,4 +75,8 @@ color:$errorcolor !important;
   justify-content: center !important;
   width: 100% !important;
   padding-left: 16px !important;
+}
+.flex-center{
+  display: flex !important;
+  align-items: center !important;
 }

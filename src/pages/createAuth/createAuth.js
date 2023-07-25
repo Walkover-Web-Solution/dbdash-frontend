@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Box,
   TextField,
@@ -23,6 +23,8 @@ import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
 import { toast } from "react-toastify";
 
+const MemoizedAuthKeyPopup = React.memo(AuthKeyPopup);
+
 export default function CreateAuthKey(props) {
   const id = props.id;
   const [scope, setScope] = useState({});
@@ -31,7 +33,9 @@ export default function CreateAuthKey(props) {
   const [authKey, setAuthKey] = useState("");
   const [open, setOpen] = useState(false);
   const EditAuthKeyData =  props?.authData && props?.title  ? {     authData: props?.authData,   title: props?.title, } : undefined;
- 
+ const disabled=useMemo(()=>{
+  return !name ;
+ },[name])
 
   const user = useSelector((state) => allOrg(state));
   function getCreatedByName(data) {
@@ -132,6 +136,19 @@ export default function CreateAuthKey(props) {
 
   }
 
+  const memoizedAuthKeyPopup = useMemo(
+    () => (
+      <MemoizedAuthKeyPopup
+        handleClose={props?.handleClose}
+        open={open}
+        setOpen={setOpen}
+        title={authKey}
+        EditAuthKeyData={props.id}
+      />
+    ),
+    [open, authKey, props?.handleClose, props.id]
+  );
+
   return (
     <>
       <Modal open={props.open} onClose={props.handleClose}>
@@ -165,17 +182,12 @@ export default function CreateAuthKey(props) {
                 onClick={() => {
                   createAuth();
                 }}
-                className="create-auth-key-button mui-button"
+                disabled={disabled}
+                className={`create-auth-key-button ${disabled?'mui-button-disabled':'mui-button'}`}
               >
                 {props?.authData ? "Update" : "Create"}
               </Button>
-              <AuthKeyPopup
-                handleClose={props?.handleClose}
-                open={open}
-                setOpen={setOpen}
-                title={authKey}
-                EditAuthKeyData={props.id}
-              />
+              {memoizedAuthKeyPopup}
             </Box>
             <Box>
               

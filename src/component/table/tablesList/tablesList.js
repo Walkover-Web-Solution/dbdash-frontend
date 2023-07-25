@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo, useMemo } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp/ShareLinkPopUp"
 import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
 import PopupModal from "../../popupModal/popupModal";
-// import { toast } from 'react-toastify';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import FilterModal from "../../filterPopup/filterPopUp";
@@ -28,8 +27,7 @@ import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import { selectActiveUser } from "../../../store/user/userSelector";
 import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
-// import Sharedb from "./Sharedb";
-export default function TablesList({ dbData }) {
+ function TablesList({ dbData }) {
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
   const isTableLoading = useSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
@@ -53,7 +51,6 @@ export default function TablesList({ dbData }) {
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const tableLength = Object.keys(AllTableInfo)?.length;
-  const [underLine, setUnderLine] = useState(params?.filterName);
   const [currentTable, setcurrentTable] = useState(null);
   const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
@@ -69,6 +66,24 @@ export default function TablesList({ dbData }) {
       setAnchorEl(event.currentTarget);
     }
   };
+  const underLine=useMemo(()=>{
+
+    if (params?.filterName) {
+      dispatch(
+        filterData({
+          filterId: params?.filterName,
+          tableId: params?.tableName,
+          filter:
+            AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+          dbId: dbData?.db?._id,
+        })
+      );
+      return params?.filterName;
+
+    } else {
+      return null;
+    }
+  },[params?.filterName])
 
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
@@ -99,15 +114,14 @@ export default function TablesList({ dbData }) {
     if (params?.filterName) {
       setOpenn(true);
       setEdit(true);
-      // setOpenFilter(true);
     } else {
       setEdit(false);
       setOpenn(false);
-      toast.error("choose the filter First");
+      toast.warning("choose the filter First");
     }
   };
   function onFilterClicked(filter, id) {
-    setUnderLine(id);
+   
     setFilterId(params?.filterName || id);
     if (params?.filterName == id) {
       dispatch(
@@ -143,14 +157,13 @@ export default function TablesList({ dbData }) {
         dbId: dbData?.db?._id,
         tableName: params?.tableName,
         org_id: dbData?.db?.org_id,
-        pageNo: 1,
-        // fields: dbData?.db?.tables[params?.tableName]?.fields
+        pageNo: 1
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
-    const tableNames = Object.keys(dbData.db.tables);
+    const tableNames = Object.keys(dbData?.db?.tables)||[];
     dispatch(setTableLoading(true));
     if (params?.tableName && !params?.filterName) {
       dispatch(
@@ -170,22 +183,8 @@ export default function TablesList({ dbData }) {
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
     }
   }, [params?.tableName]);
-  useEffect(() => {
-    if (params?.filterName) {
-      setUnderLine(params?.filterName);
-      dispatch(
-        filterData({
-          filterId: params?.filterName,
-          tableId: params?.tableName,
-          filter:
-            AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
-          dbId: dbData?.db?._id,
-        })
-      );
-    } else {
-      setUnderLine(null);
-    }
-  }, [params?.filterName]);
+ 
+  
   const shareLink = async () => {
     const isViewExits =
       AllTable?.tables?.[params?.tableName]?.filters?.[params?.filterName]
@@ -194,12 +193,12 @@ export default function TablesList({ dbData }) {
       setLink(shareViewUrl + `/${isViewExits}`);
       return;
     }
-    const db_Id = AllTable.dbId;
+    
     const data = {
       tableId: params?.tableName,
       filterId: params?.filterName,
     };
-    const dataa1 = await createViewTable(db_Id, data);
+    const dataa1 = await createViewTable(AllTable.dbId, data);
     dispatch(
       setAllTablesData({
         dbId: dataa1.data.data.dbData._id,
@@ -263,9 +262,7 @@ export default function TablesList({ dbData }) {
           <div className="tableList-div-1">
             <div
               className="tableList-div-2"
-              style={{
-                maxWidth: `89.5vw`,
-              }}
+             
             >
               {AllTableInfo[params?.tableName]?.filters &&
                 Object.entries(AllTableInfo[params?.tableName]?.filters).map(
@@ -324,7 +321,6 @@ export default function TablesList({ dbData }) {
             filterId={filterId}
             dbId={dbData?.db?._id}
             tableName={params?.tableName}
-            setUnderLine={setUnderLine}
           />
         )}
         <div className="tableList-div-4">
@@ -349,7 +345,7 @@ export default function TablesList({ dbData }) {
             >
               Minimap{" "}
               {!minimap ? (
-                <CheckBoxOutlineBlankIcon fontSize="4px" />
+                <CheckBoxOutlineBlankIcon fontSize={variables.iconfontsize2}/>
               ) : (
                 <CheckBoxIcon fontSize={variables.iconfontsize1} />
               )}
@@ -397,7 +393,6 @@ export default function TablesList({ dbData }) {
         >
           <MenuItem
             onClick={() => {
-              // deleteFilterInDb(currentTable);
               exportCSVTable();
               handleClose();
             }}
@@ -410,7 +405,7 @@ export default function TablesList({ dbData }) {
               handleClose();
             }}
             className="delete-color"
-            sx={{ color: variables.deletecolor }}
+           
           >
             Delete
           </MenuItem>
@@ -426,7 +421,6 @@ export default function TablesList({ dbData }) {
           filterId={params?.filterName}
           dbId={dbData?.db?._id}
           tableName={params?.tableName}
-          setUnderLine={setUnderLine}
         />
       )}
       {shareLinkOpen && (
@@ -439,8 +433,9 @@ export default function TablesList({ dbData }) {
         />
       )}
       <div style={{ marginTop: "250px" }}>
+     
         {isTableLoading ? (
-          <CircularProgress className="table-loading" />
+          <div className="table-loading"> <CircularProgress className="table-loading" /></div>
         ) : (
           <div>
             <MainTable setPage={setPage} page={page} minimap={minimap} />
@@ -450,6 +445,7 @@ export default function TablesList({ dbData }) {
     </>
   );
 }
+export default memo(TablesList);
 TablesList.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.string,

@@ -29,7 +29,6 @@ export const OrgList = (props) => {
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
   const [orgId, setOrg] = useState();
   const [tabIndex, setTabIndex] = useState(0);
-  //shared model whaha hoga
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
 

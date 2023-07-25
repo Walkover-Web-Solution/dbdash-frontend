@@ -21,10 +21,12 @@ export default function AuthKey(props) {
   const adminId = localStorage.getItem("userid");
   // const [createdBy, setCreatedBy] = useState(null);
   const user = useSelector((state) => allOrg(state));
-
+ 
   useEffect(() => {
     getAuthkeyFun();
   }, [props.dbId]);
+
+  
 
   function getCreatedByName(data) {
     var array = [];
@@ -65,62 +67,55 @@ export default function AuthKey(props) {
   const formatDateTime = (dateTime) => {
     const currentDate = new Date();
     const createdDate = new Date(dateTime);
-    const diff = currentDate - createdDate;
-
-    if (diff < 1000) {
+    const timeDifference = currentDate - createdDate;
+  
+    if (timeDifference < 1000) {
       return "Just now";
     }
-
-    if (diff < 60 * 1000) {
-      const seconds = Math.floor(diff / 1000);
+  
+    if (timeDifference < 60 * 1000) {
+      const seconds = Math.floor(timeDifference / 1000);
       return `${seconds} second${seconds !== 1 ? "s" : ""} ago`;
     }
-
-    if (diff < 60 * 60 * 1000) {
-      const minutes = Math.floor(diff / (60 * 1000));
-      const seconds = Math.floor((diff % (60 * 1000)) / 1000);
-      return `${minutes} minute${
-        minutes !== 1 ? "s" : ""
-      } and ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
+  
+    if (timeDifference < 60 * 60 * 1000) {
+      const minutes = Math.floor(timeDifference / (60 * 1000));
+      const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000);
+      return `${minutes} minute${minutes !== 1 ? "s" : ""} and ${seconds} second${seconds !== 1 ? "s" : ""} ago`;
     }
-
-    if (diff < 24 * 60 * 60 * 1000) {
-      const hours = Math.floor(diff / (60 * 60 * 1000));
+  
+    if (timeDifference < 24 * 60 * 60 * 1000) {
+      const hours = Math.floor(timeDifference / (60 * 60 * 1000));
       return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
     }
-
-    if (diff < 7 * 24 * 60 * 60 * 1000) {
-      const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+  
+    if (timeDifference < 7 * 24 * 60 * 60 * 1000) {
+      const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
       if (days === 1) {
         return "Yesterday";
       } else {
-        const sameYear =
-          currentDate.getFullYear() === createdDate.getFullYear();
+        const sameYear = currentDate.getFullYear() === createdDate.getFullYear();
+        const monthName = createdDate.toLocaleString("default", { month: "long" });
         if (sameYear) {
-          const monthName = createdDate.toLocaleString("default", {
-            month: "long",
-          });
           const date = createdDate.getDate();
           return `${date} ${monthName}`;
         } else {
           const year = createdDate.getFullYear();
-          const monthName = createdDate.toLocaleString("default", {
-            month: "long",
-          });
           return `${monthName} ${year}`;
         }
       }
     }
-
-    if (diff < 12 * 30 * 24 * 60 * 60 * 1000) {
-      const weeks = Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
+  
+    if (timeDifference < 12 * 30 * 24 * 60 * 60 * 1000) {
+      const weeks = Math.floor(timeDifference / (7 * 24 * 60 * 60 * 1000));
       return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
     }
-
+  
     const year = createdDate.getFullYear();
     const monthName = createdDate.toLocaleString("default", { month: "long" });
     return `${monthName} ${year}`;
   };
+  
   return (
     <>
       <Box className="authKey-container">

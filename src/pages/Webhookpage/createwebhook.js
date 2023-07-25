@@ -14,12 +14,13 @@ import { createWebhook, updateWebhook } from "../../api/webhookApi";
 import CloseIcon from '@mui/icons-material/Close';
 
 function Createwebhook(props) {
-  const [name, setName] = useState(null);
+  const [name, setName] = useState("");
   const [action, setAction] = useState("");
-  const [url, setUrl] = useState(null);
-  const [selectedtable,setSelectedTable]=useState(props?.tableId || null);
+  const [url, setUrl] = useState("");
+  const [selectedtable,setSelectedTable]=useState(props?.tableId || "");
  
   const createWebHook = async () => {
+    
     const data = {
       name: name,
       url: url,
@@ -101,7 +102,6 @@ function Createwebhook(props) {
                   label="Action"
                   className="create-webhook-action-text-field"
                   value={action}
-                  // style={{ minWidth: "210px" }}
                   onChange={(e) => setAction(e.target.value)}
                 >
                   <MenuItem value="createRow">Create Row</MenuItem>
@@ -122,7 +122,6 @@ function Createwebhook(props) {
                   label="Action"
                   className="create-webhook-table-text-field"
                   value={selectedtable}
-                  // style={{ minWidth: "210px" }}
                   onChange={(e) => {
                     setSelectedTable(e.target.value)}}
                 >
@@ -193,5 +192,3 @@ Createwebhook.propTypes = {
 };
 
 export default Createwebhook;
-
-// sx={{'&:hover': { cursor: 'pointer' }}}

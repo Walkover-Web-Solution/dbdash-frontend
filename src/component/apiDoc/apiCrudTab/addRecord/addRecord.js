@@ -6,11 +6,12 @@ import CodeBlock from "../Codeblock/Codeblock";
 import Records from "../records/records";
 import ResponseBox from "../responseBox";
 import "./addRecord.scss"; // Import the CSS file
-import variables from '../../../../assets/styling.scss';
+import variables from "../../../../assets/styling.scss";
 
 function AddRecord(props) {
   const [arr, setArr] = useState([]);
-const response=`
+  const { db, table, alltabledata } = props.tablePannelListData;
+  const response = `
 {
   "success": true,
   "message": "'tblzpf863'row created successfully",
@@ -22,61 +23,67 @@ const response=`
     "fldzpf863updatedby": "chirag devlani",
     "fldzpf863sow": "it is a long long text"
   }
-}`
+}`;
   return (
     <>
-      <div className="add-record-container" style={{ height: `${(window?.screen?.height * 61) / 100}px`}} >
+      <div
+        className="add-record-container"
+        style={{ height: `${(window?.screen?.height * 61) / 100}px` }}
+      >
         <CodeBlock
-        parent='addrecord'
-        method="POST"
+          parent="addrecord"
+          method="POST"
           header={`auth-key: AUTH_TOKEN,Content-Type: application/json`}
           body={arr}
-          db={props?.db}  
-          table={props?.table}
+          db={db}
+          table={table}
         />
-        <ResponseBox
-          response={response}
-        />
+        <ResponseBox response={response} />
       </div>
       <div className="leftsidepartofapidoctabs">
-      
-      <div className="records-container">
-        <Typography variant={variables.megatitlevariant} fontSize={Number(variables.megatitlesize)} >Add Table Records</Typography>
-        <Typography fontSize={variables.textsize}  className="addrecordfirstpara">
-
-        To create a new record, you need to make a POST request to the given endpoint.
-Generate array of fields according to your use case. to make a single entry,  you have to use single array . 
-</Typography>
-<br/>
-<Typography fontSize={variables.textsize} className="addrecordfirstpara paddingtopoftitle" >
-
-        Select/Deselect the checkboxes to make the request and add values in your table.
-        <br/><br/>
-        </Typography>
+        <div className="records-container">
+          <Typography
+            variant={variables.megatitlevariant}
+            fontSize={Number(variables.megatitlesize)}
+          >
+            Add Table Records
+          </Typography>
+          <Typography
+            fontSize={variables.textsize}
+            className="addrecordfirstpara"
+          >
+            To create a new record, you need to make a POST request to the given
+            endpoint. Generate array of fields according to your use case. to
+            make a single entry, you have to use single array .
+          </Typography>
+          <br />
+          <Typography
+            fontSize={variables.textsize}
+            className="addrecordfirstpara paddingtopoftitle"
+          >
+            Select/Deselect the checkboxes to make the request and add values in
+            your table.
+            <br />
+            <br />
+          </Typography>
 
           <Box>
-            
-
             <Records
-              db={props?.db}
+              db={db}
               setArr={setArr}
               arr={arr}
-              table={props?.table}
-        alltabledata={props?.alltabledata}
-
+              table={table}
+              alltabledata={alltabledata}
             />
           </Box>
-      </div>
+        </div>
       </div>
     </>
   );
 }
 
 AddRecord.propTypes = {
-  db: PropTypes.string,
-  alltabledata:PropTypes.any,
-
-  table: PropTypes.string,
+  tablePannelListData: PropTypes.any,
 };
 
 export default AddRecord;

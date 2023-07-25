@@ -1,24 +1,32 @@
-import React, { useState } from 'react';
-import { Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import BasicStuff from '../basicStuff/basicStuff';
-import ListRecord from '../listRecord/listRecord';
-import AddRecord from '../addRecord/addRecord';
-import UpdateRecord from '../updateRecord/updateRecord';
-import DeleteRecord from '../deletRecord/deleteRecord';
-import './apiCrudTablist.scss'; // Import the CSS file
+import React, { useState } from "react";
+import { Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import BasicStuff from "../basicStuff/basicStuff";
+import ListRecord from "../listRecord/listRecord";
+import AddRecord from "../addRecord/addRecord";
+import UpdateRecord from "../updateRecord/updateRecord";
+import DeleteRecord from "../deletRecord/deleteRecord";
+import "./apiCrudTablist.scss"; 
 
 const StyledTab = styled(Tab)(() => ({
   // ...styles
 }));
 
-const style={
-  height: `${(window?.screen?.height * 61) / 100}px`, width: `${(window?.screen?.width*98.5)/100}px`
+const styledTabLabelList = [
+  "BASIC STUFF",
+  "LIST/SEARCH",
+  "ADD",
+  "UPDATE",
+  "DELETE",
+];
 
-}
+const style = {
+  height: `${(window?.screen?.height * 61) / 100}px`,
+  width: `${(window?.screen?.width * 98.5) / 100}px`,
+};
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -30,9 +38,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>{children}</Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </Box>
   );
 }
@@ -46,12 +52,30 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 function ApiCrudTablist(props) {
   const [value, setValue] = useState(0);
+
+  const tablePannelListData = {
+    db: props.db,
+    table: props.table,
+    alltabledata: props.alltabledata,
+  };
+
+  const tablePannelList = [
+    <BasicStuff
+      setShowComponent={props?.setShowComponent}
+      key={0}
+      tablePannelListData={tablePannelListData}
+    />,
+    <ListRecord key={1} tablePannelListData={tablePannelListData} />,
+    <AddRecord key={2} tablePannelListData={tablePannelListData} />,
+    <UpdateRecord key={3} tablePannelListData={tablePannelListData} />,
+    <DeleteRecord key={4} tablePannelListData={tablePannelListData} />,
+  ];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -63,57 +87,40 @@ function ApiCrudTablist(props) {
         <Tabs
           TabIndicatorProps={{
             style: {
-              display: 'none',
-
+              display: "none",
             },
-            className: 'custom-tab-indicator',
-
+            className: "custom-tab-indicator",
           }}
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <StyledTab className="custom-tab-label" label="BASIC STUFF" {...a11yProps(0)} />
-          <StyledTab className="custom-tab-label" label="LIST/SEARCH" {...a11yProps(1)} />
-          <StyledTab className="custom-tab-label" label="ADD" {...a11yProps(2)} />
-          <StyledTab className="custom-tab-label" label="UPDATE" {...a11yProps(3)} />
-          <StyledTab className="custom-tab-label" label="DELETE" {...a11yProps(4)} />
+          {styledTabLabelList.map((listLabel, labelIndex) => {
+            return (
+              <StyledTab
+                key={labelIndex}
+                className="custom-tab-label"
+                label={listLabel}
+                {...a11yProps(labelIndex)}
+              />
+            );
+          })}
         </Tabs>
       </Box>
       <div className="marginTop">
-      <TabPanel value={value} index={0}>
-      <div className="componentscontainer" style={style}>
-  <BasicStuff alltabledata={props?.alltabledata} setShowComponent={props?.setShowComponent} db={props.db} table={props.table} />
-</div>
-
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-      <div className="componentscontainer" style={style}>
-
-        <ListRecord alltabledata={props?.alltabledata} db={props.db} table={props.table} />
-</div>
-
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-      <div className="componentscontainer" style={style}>
-
-        <AddRecord  alltabledata={props?.alltabledata} db={props.db} table={props.table} />
-</div>
-
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-      <div className="componentscontainer" style={style}>
- 
-        <UpdateRecord  alltabledata={props?.alltabledata} db={props.db} table={props.table} />
-</div>
-
-      </TabPanel>
-      <TabPanel  value={value} index={4}>
-      <div className="componentscontainer" style={style}>
-      <DeleteRecord alltabledata={props?.alltabledata} db={props.db} table={props.table} />
-</div>
-
-      </TabPanel>
+        {tablePannelList.map((pannel, pannelIndex) => {
+          return (
+            <TabPanel value={value} index={pannelIndex} key={pannelIndex}>
+              <div
+                key={pannelIndex}
+                className="componentscontainer"
+                style={style}
+              >
+                {pannel}
+              </div>
+            </TabPanel>
+          );
+        })}
       </div>
     </Box>
   );
@@ -122,8 +129,8 @@ function ApiCrudTablist(props) {
 ApiCrudTablist.propTypes = {
   db: PropTypes.string,
   table: PropTypes.string,
-  setShowComponent:PropTypes.any,
-  alltabledata:PropTypes.any,
+  setShowComponent: PropTypes.any,
+  alltabledata: PropTypes.any,
 };
 
 export default ApiCrudTablist;

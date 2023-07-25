@@ -1,4 +1,4 @@
-  import React, { useState } from 'react';
+  import React, { memo, useState } from 'react';
   import { Box } from '@mui/material';
   import PopupModal from '../../popupModal/popupModal';
   import Button from '@mui/material/Button';
@@ -9,7 +9,7 @@
   import { createOrgThunk } from '../../../store/database/databaseThunk';
   import { toast } from 'react-toastify';
   import './workspaceCombined.scss';
-  export default function WorkspaceCombined() {
+   function WorkspaceCombined() {
     const [tabIndex, setTabIndex] = useState(0);
     const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
     const [addedelement, setAddedelement] = useState(null);
@@ -115,3 +115,5 @@ const [openTemplate,setOpenTemplate]=useState(false);
   WorkspaceCombined.propTypes = {
     dbs: PropTypes.string
   };
+
+  export default memo(WorkspaceCombined)

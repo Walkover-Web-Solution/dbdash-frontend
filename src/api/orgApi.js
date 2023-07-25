@@ -20,7 +20,6 @@ const getOrgById = async (id) =>
 const addUserInOrg = async (id, adminId, data) =>
 {
     const okk=  await axiosInstance.patch( `/orgs/${id}/${adminId}/handleUser?operation=add`,data);
-    console.log("okk",okk)
     return okk;
 }
 

@@ -8,7 +8,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { makeStyles } from "@mui/styles";
+import './shareOrgModal.scss';
  function ShareOrgModal(props) {
+
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState(111);
   const userId = localStorage.getItem("userid");
@@ -162,15 +164,16 @@ import { makeStyles } from "@mui/styles";
 
             <Button
               variant="contained"
-              className="mui-button"
+              className={email==''?'mui-button-disabled':'mui-button'}
               color="primary"
+              disabled={email==''}
               onClick={handleSendInvite}
             >
               Send Invite
             </Button>
           </Box>
           {props?.org?.users?.length > 1 && (
-            <Box sx={{ m: 1,ml:2 }}>
+            <Box className="margin-around" >
               <Typography variant="h6">
                 <strong>Shared with:</strong>
               </Typography>
@@ -188,6 +191,7 @@ import { makeStyles } from "@mui/styles";
                   return (
                     <Box
                       key={user?.user_id?.email}
+
                       sx={{
                         display: "flex",
                         flexDirection: "row",
@@ -262,7 +266,7 @@ import { makeStyles } from "@mui/styles";
                         )}
                       </Box>
                     
-                      <Box sx={{ display:'flex',alignItems: "center" }}>
+                      <Box className="flex-center">
                       <IconButton
                         sx={{p:0}}
                           aria-label="delete"
@@ -296,7 +300,7 @@ import { makeStyles } from "@mui/styles";
                     </Box>
                   );
                 } else {
-                  return null; // don't render the user if they are an admin or the current user
+                  return null;
                 }
               })}
           </Box>

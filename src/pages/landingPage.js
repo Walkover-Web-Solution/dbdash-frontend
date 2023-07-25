@@ -10,35 +10,28 @@ import SingleDatabase from "../component/workspaceDatabase/singledatabase/single
 import variables from "../assets/styling.scss";
 
 export default function LandingPage() {
-  console.log("landing")
   const dispatch = useDispatch();
   const emailId = useSelector((state) => state.user.userEmail);
   const alldbs = useSelector((state) => state.dataBase.orgId || []);
-  console.log(alldbs)
- 
+
+
+
   let dbs = [];
   if (alldbs && typeof alldbs === "object") {
-    for (const value of Object.values(alldbs)) {
-      if (Array.isArray(value)) {
-        const filteredElements = value.filter(
-          (element) => element && element.deleted
-        );
-        dbs.push(...filteredElements);
-      }
-    }
+    dbs = Object.values(alldbs)
+      .flatMap(value => Array.isArray(value) ? value : [])
+      .filter(element => element && element.deleted);
   }
 
   useEffect(() => {
-    if(localStorage.getItem('userid')) return;
     if (emailId)
-     dispatch(bulkAdd({ email: emailId }));
-  }, [emailId]);
-  if(!localStorage.getItem('userid')) return <></>;
+    dispatch(bulkAdd({ email: emailId }));
+  }, []);
+
   return (
     <Container maxWidth="true" className="landingpagemaincontainer">
       <Box>
-        
-        <MainNavbar />
+        <MainNavbar/>
       </Box>
       <Box>
         <WorkspaceCombined />

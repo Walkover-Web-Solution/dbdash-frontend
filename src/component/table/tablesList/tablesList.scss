@@ -101,6 +101,7 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  
 }
 
 .tablesmargin {
@@ -130,6 +131,8 @@
   padding: 0 0 100vh 0 !important;
   overflow-x: scroll !important;
   overflow-y: hidden !important;
+  max-width: 89.5vw !important;
+ 
   display: flex !important;
   flex-direction: row !important;
 }
