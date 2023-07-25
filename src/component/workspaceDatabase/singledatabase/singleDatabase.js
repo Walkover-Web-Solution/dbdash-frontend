@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Card, CardContent, Typography, Box, Select, MenuItem, TextField, Button } from "@mui/material";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import PropTypes from "prop-types";
@@ -11,8 +11,7 @@ import { toast } from 'react-toastify';
 import variables from '../../../assets/styling.scss'
 import './singleDatabase.scss';
 
-export default function SingleDatabase(props) {
-
+ function SingleDatabase(props) {
   const [name, setName] = useState(false);
   const [dbname, setDbname] = useState();
   const [openmove, setOpenmove] = useState(false);
@@ -309,3 +308,5 @@ SingleDatabase.propTypes = {
   orgId: PropTypes.any
 
 };
+
+export default memo(SingleDatabase)

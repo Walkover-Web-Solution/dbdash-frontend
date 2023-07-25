@@ -1,11 +1,12 @@
-import React,{ useState} from 'react'
+import React,{ memo, useState} from 'react'
 import PropTypes from 'prop-types';
 import { Typography, Menu, MenuItem, Tooltip} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AlertPopup from './alertPopup/alertPopup';
 import DuplicateDbPopup from './workspaceDatabase/duplicateDbPopup/duplicateDbPopup';
 import { useParams } from 'react-router-dom';
-export default function Dropdown(props) {
+ function Dropdown(props) {
+  
     const [anchorElUser, setAnchorElUser] = useState(null);
     const params=useParams();
     const [open, setOpen] = useState(false);
@@ -130,3 +131,5 @@ Dropdown.propTypes = {
   dbname:PropTypes.any
   
 };
+
+export default memo(Dropdown)

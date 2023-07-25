@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,memo} from "react";
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from "@mui/material";
 import Dropdown from "../../dropdown";
@@ -16,8 +16,7 @@ import variables from "../../../assets/styling.scss";
 import "./singleTable.scss";
 import { useParams } from "react-router-dom";
 import { bulkAddColumns } from "../../../store/table/tableThunk";
-
-export default function SingleTable({
+function SingleTable({
   dbData,
   table,
   setTabIndex,
@@ -294,3 +293,4 @@ SingleTable.propTypes = {
   dropdown: PropTypes.node,
   setTableIdForFilter:PropTypes.any
 };
+export default memo(SingleTable);
