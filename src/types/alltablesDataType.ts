@@ -1,4 +1,5 @@
 import { UsersMapping } from "./databaseDataType";
+import { MetaDataMapping } from "./tableDataTypes";
 
 // Interface representing the structure of the AllTable.
 export interface AllTableDataType {
@@ -34,15 +35,15 @@ export interface TableFieldsType {
 export interface TableFieldsMappingType {
   fieldName: string;
   fieldType: string;
-  metaData?: MetaDataType;
+  metaData?: MetaDataMapping;
 }
 // Interface representing the metadata for a field in a table.
-export interface MetaDataType {
-  unique?: boolean;
-  hide?: boolean;
-  isLookup?: boolean;
-  width?: number;
-}
+// export interface MetaDataType {
+//   unique?: boolean;
+//   hide?: boolean;
+//   isLookup?: boolean;
+//   width?: number;
+// }
 // Interface representing the filters for a table.
 export interface TableFiltersType {
   [filterId: string]: TableFilterMappingType;

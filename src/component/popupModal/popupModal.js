@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
@@ -17,7 +17,7 @@ const style = {
 };
 import "./popupModal.scss"
 
-export default function PopupModal(props) {
+ function PopupModal(props) {
   const handleClose = () => props.setOpen(false);
   const [textFieldValue, setTextFieldValue] = useState("");
 
@@ -151,3 +151,5 @@ PopupModal.propTypes = {
   id: PropTypes.string,
   joiMessage: PropTypes.string,
 };
+
+export default memo(PopupModal)

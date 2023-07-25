@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Box, Button, ClickAwayListener, Dialog, DialogContent, FormControl, IconButton, InputLabel, MenuItem, Select, TextField,Typography,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { makeStyles } from "@mui/styles";
 import './shareOrgModal.scss';
-export default function ShareOrgModal(props) {
+ function ShareOrgModal(props) {
+
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState(111);
   const userId = localStorage.getItem("userid");
@@ -320,3 +321,5 @@ ShareOrgModal.propTypes = {
   removeUserFromWorkspace: PropTypes.func,
   updateUserTypeInOrg: PropTypes.func,
 };
+
+export default memo(ShareOrgModal)

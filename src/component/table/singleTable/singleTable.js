@@ -271,7 +271,6 @@ import { bulkAddColumns } from "../../../store/table/tableThunk";
   );
 }
 
-export default memo(SingleTable);
 SingleTable.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.array,
@@ -284,3 +283,5 @@ SingleTable.propTypes = {
   dropdown: PropTypes.node,
   setTableIdForFilter:PropTypes.any
 };
+
+export default memo(SingleTable);

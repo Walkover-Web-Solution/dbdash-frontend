@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import { Card, CardContent, Typography, Box, Select, MenuItem, TextField, Button } from "@mui/material";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import PropTypes from "prop-types";
@@ -11,16 +11,16 @@ import { toast } from 'react-toastify';
 import variables from '../../../assets/styling.scss'
 import './singleDatabase.scss';
 
-export default function SingleDatabase(props) {
-
+function SingleDatabase(props) {
   const [name, setName] = useState(false);
-  const [dbname, setDbname] = useState();
+  const dbname = useRef(null); // Create a ref for dbname
   const [openmove, setOpenmove] = useState(false);
   const [selectedorg, setSelectedorg] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const allorgss = useSelector((state) => allOrg(state))
   let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
+
   const handlingmove = () => {
     setOpenmove(false);
   }
@@ -35,37 +35,39 @@ export default function SingleDatabase(props) {
     dispatch(moveDbThunk({ orgId, dbId, data }))
   };
 
-  const renameDatabase = async (orgId, id ,name) => {
-  
-    if ( !dbname || dbname.trim() === "") {
+  const renameDatabase = async (orgId, id, name) => {
+    
+
+    if (!dbname?.current || dbname?.current?.trim() === "") {
       toast.error("Database name cannot be empty");
-      setDbname(props?.db?.name)
+      // setDbname(props?.db?.name)
+      dbname.current=(props?.db?.name);
       return;
     }
-    
-    if (dbname.length < 3) {
+
+    if (dbname?.current.length < 3) {
       toast.error("Database name must be at least 3 characters long");
       return;
     }
-  
-    if (dbname.length > 30) {
+
+    if (dbname?.current.length > 30) {
       toast.error("Database name cannot exceed 30 characters");
       return;
     }
-  
-    if (dbname.includes(" ")) {
+
+    if (dbname?.current.includes(" ")) {
       toast.error("Database name cannot contain spaces");
       return;
     }
-  
+
     const data = {
-      name: dbname || name,
+      name: dbname?.current || name,
     };
-  
+
     dispatch(renameDBThunk({ orgId, id, data }));
-    setDbname();
+    dbname.current = ""
   };
-  
+
 
   const handleOpen = () => {
     setName(false);
@@ -86,7 +88,7 @@ export default function SingleDatabase(props) {
     <Card className="singledatabasecard" onClick={() => {
       navigate("/db/" + props.db._id, { state: { db: props.db } });
     }}>
-      <CardContent sx={{ display: "flex",justifyContent:'space-between'}}>
+      <CardContent sx={{ display: "flex", justifyContent: 'space-between' }}>
         {openmove && props?.tabIndex == props?.index ? (<ClickAwayListener onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -149,7 +151,7 @@ export default function SingleDatabase(props) {
               sx={{
                 width: "8rem",
                 backgroundColor: "#1C2833",
-                fontSize:variables.editfilterbutttonsfontsize,
+                fontSize: variables.editfilterbutttonsfontsize,
 
                 mx: 3,
                 zIndex: "555",
@@ -174,7 +176,7 @@ export default function SingleDatabase(props) {
                   autoFocus
                   sx={{ width: 120, fontWeight: "bold" }}
                   defaultValue={props?.db?.name}
-                  value={dbname}
+                  // value={dbname}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       renameDatabase(
@@ -191,7 +193,7 @@ export default function SingleDatabase(props) {
                     e.stopPropagation();
                   }}
                   onChange={(e) => {
-                    setDbname(e.target.value);
+                    dbname.current = (e.target.value);
                   }}
                   size="small"
                 />
@@ -213,10 +215,10 @@ export default function SingleDatabase(props) {
                   sx={{
                     width: "8rem",
                     backgroundColor: "#1C2833",
-                    fontSize:variables.editfilterbutttonsfontsize,
+                    fontSize: variables.editfilterbutttonsfontsize,
 
                     mx: 3,
-                    
+
                     zIndex: "555",
                     ":hover": {
                       bgcolor: "#273746",
@@ -238,47 +240,47 @@ export default function SingleDatabase(props) {
               {props.db?.name}{" "}
             </Typography>
             <Box >
-            {arr1.length > 1 && !props?.db?.deleted ? (
-  <Dropdown
-    setTabIndex={props?.setTabIndex}
-    tabIndex={props?.index}
-    first={"Rename"}
-    second={"Delete"}
-    third={"Move"}
-    fourth={"Duplicate"}
-    setOpenmove={setOpenmove}
-    orgid={props?.db?.org_id?._id}
-    dbid={props?.db?._id}
-    dbname={props?.db?.name}
-    setName={setName}
-    idToDelete={props?.db?._id}
-    deleteFunction={deletDatabases}
-    title={"database"}
-  />
-) :  !props?.db?.deleted ? (
-  <Dropdown
-    setTabIndex={props?.setTabIndex}
-    tabIndex={props?.index}
-    first={"Rename"}
-    fourth={"Duplicate"}
-    orgid={props?.db?.org_id._id } 
-    dbid={props?.db?._id}
-    dbname={props?.db?.name}
-    setName={setName}
-    title={"database"}
-  />
-) : (
-  <Button    onClick={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    restoreDb(orgIdForRestore,props.db._id);
-  }}
-  className="mui-button-outlined"
-    size="small"
-    variant="outlined"
-    sx={{ display: "flex" }}
-  >restore</Button>
-)}
+              {arr1.length > 1 && !props?.db?.deleted ? (
+                <Dropdown
+                  setTabIndex={props?.setTabIndex}
+                  tabIndex={props?.index}
+                  first={"Rename"}
+                  second={"Delete"}
+                  third={"Move"}
+                  fourth={"Duplicate"}
+                  setOpenmove={setOpenmove}
+                  orgid={props?.db?.org_id?._id}
+                  dbid={props?.db?._id}
+                  dbname={props?.db?.name}
+                  setName={setName}
+                  idToDelete={props?.db?._id}
+                  deleteFunction={deletDatabases}
+                  title={"database"}
+                />
+              ) : !props?.db?.deleted ? (
+                <Dropdown
+                  setTabIndex={props?.setTabIndex}
+                  tabIndex={props?.index}
+                  first={"Rename"}
+                  fourth={"Duplicate"}
+                  orgid={props?.db?.org_id._id}
+                  dbid={props?.db?._id}
+                  dbname={props?.db?.name}
+                  setName={setName}
+                  title={"database"}
+                />
+              ) : (
+                <Button onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  restoreDb(orgIdForRestore, props.db._id);
+                }}
+                  className="mui-button-outlined"
+                  size="small"
+                  variant="outlined"
+                  sx={{ display: "flex" }}
+                >restore</Button>
+              )}
             </Box>
           </>
         )}
@@ -301,3 +303,5 @@ SingleDatabase.propTypes = {
   orgId: PropTypes.any
 
 };
+
+export default memo(SingleDatabase)
