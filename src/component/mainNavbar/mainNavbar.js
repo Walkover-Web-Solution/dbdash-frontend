@@ -24,15 +24,15 @@ import { selectOrgandDb } from '../../store/database/databaseSelector.js';
 import Sharedb from '../table/tablesList/Sharedb.js';
 import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup/createTemplatePopup.js';
 import DbSnapshotsMenu from './dbSnapshotsMenu/dbSnapshotsMenu.js';
-import { useRef } from 'react';
+
 
 
 function MainNavbar(props) {
-  let { dbId, id, tableName } = useParams();
+  const { dbId, id, tableName } = useParams();
   const [openTemplate, setOpenTemplate] = useState(false);
   const [openShareDb, setOpenShareDb] = useState(false);
   const [openDbSnapshot, setOpenDbSnapshot] = useState(false);
-  const revisionbuttonref = useRef(null);
+  const revisionbuttonref = React.useRef(null);
 
   const alldb = useSelector((state) => selectOrgandDb(state));
   let dbname = '';
@@ -51,7 +51,6 @@ function MainNavbar(props) {
   const location = useLocation();
   const user = UserAuth();
 
-
   const logOut = user?.logOut;
   const userDetails = useSelector((state) => selectActiveUser(state));
   const shouldShowTypography = useMemo(() => {
@@ -69,12 +68,18 @@ function MainNavbar(props) {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   const handleOpenMenu = (event) => {
     setAnchorElMenu(event.currentTarget);
-  }
+  };
+
   const handleCloseMenu = () => {
     setAnchorElMenu(null);
-  }
+  };
 
   const handleLogOut = async () => {
     try {
@@ -86,13 +91,69 @@ function MainNavbar(props) {
     }
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+
+
+  const userAvatar = useMemo(() => (
+    <Tooltip title="Open settings">
+        <IconButton
+          size="small"
+          onClick={handleOpenUserMenu}
+          className="main-navbar-avatar-button"
+        >
+    <Avatar
+      sx={{ height: variables.profileiconheight, width: variables.profileiconwidth }}
+      alt={userDetails?.fullName}
+      src={userDetails?.fullName || user?.user?.photoURL}
+    />
+        </IconButton>
+      </Tooltip>
+
+    
+  ), [userDetails?.fullName, user?.user?.photoURL]);
+
+  const apiButtonWithTooltip = useMemo(() => (
+    <Tooltip title="APIs">
+      <Button
+        variant="outlined"
+        className={
+          shouldShowTableButton
+            ? 'main-navbar-button show-table'
+            : 'main-navbar-button'
+        }
+        component={Link}
+        to={{ pathname: `/apiDoc/db/${dbId}`, state: tableName }}
+      >
+        APIs
+      </Button>
+    </Tooltip>
+  ), [shouldShowTableButton, dbId, tableName]);
+
+  const tableButtonWithTooltip = useMemo(() => (
+    <Tooltip title="Tables">
+      <Button
+        variant="outlined"
+        component={Link}
+        className={
+          shouldShowTypography
+            ? 'main-navbar-button show-table'
+            : 'main-navbar-button'
+        }
+        to={
+          props.dbtoredirect && props.tabletoredirect
+            ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
+            : props.dbtoredirect
+            ? { pathname: `/db/${props.dbtoredirect}` }
+            : { pathname: `/db/${dbId || id}` }
+        }
+      >
+        Tables
+      </Button>
+    </Tooltip>
+  ), [shouldShowTypography, props.dbtoredirect, props.tabletoredirect, dbId, id]);
 
 
   return (
-    <Container className="main-navbar-container" maxWidth="false">
+    <Container className="main-navbar-container" maxWidth={false}>
       <Box>
         <Link to="/dashboard" className="main-navbar-link">
           <Typography variant={variables.homebuttonvariant} component="span" className="main-navbar-title">
@@ -114,65 +175,43 @@ function MainNavbar(props) {
       )}
 
       <Box>
-
-        {openTemplate && <CreateTemplatePopup dbId={dbId} db={props?.dbData?.db?.name || dbname} open={openTemplate} setOpen={setOpenTemplate} />}
-        {openDbSnapshot && <DbSnapshotsMenu dbSnapshots={props?.dbData?.db?.dbSnapshots?props?.dbData?.db?.dbSnapshots:{}} revisionbuttonref={revisionbuttonref.current.getBoundingClientRect()} dbname={props?.dbData?.db?.name || dbname} pen={openDbSnapshot} setOpen={setOpenDbSnapshot} />}
-        <Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />
-        {dbId && (
-  <>
-    <IconButton
-      size="small"
-      onClick={handleOpenMenu}
-      className="main-navbar-avatar-button"
-      // style={{ marginLeft: '30px' }}
-    >
-      <MenuIcon />
-    </IconButton>
-
-    <Tooltip title="APIs">
-      <Button
-        variant="outlined"
-        className={
-          shouldShowTableButton
-            ? 'main-navbar-button show-table'
-            : 'main-navbar-button'
-        }
-        component={Link}
-        to={{ pathname: `/apiDoc/db/${dbId}`, state: tableName }}
-      >
-        APIs
-      </Button>
-    </Tooltip>
-  </>
-)}
-
-        {(shouldShowTypography || shouldShowTableButton) && (
-          <Tooltip title="Tables">
-            <Button
-              variant="outlined"
-              component={Link}
-              className={
-                shouldShowTypography
-                  ? 'main-navbar-button show-table'
-                  : 'main-navbar-button'
-              }
-              to={props.dbtoredirect && props.tabletoredirect ? { pathname: `/db/${props.dbtoredirect}/table/${props.tabletoredirect}` }
-                : props.dbtoredirect ? { pathname: `/db/${props.dbtoredirect}` }
-                  : { pathname: `/db/${dbId || id}` }
-              }
-            >
-
-
-              Tables
-            </Button>
-          </Tooltip>
+        {openTemplate && (
+          <CreateTemplatePopup
+            dbId={dbId}
+            db={props?.dbData?.db?.name || dbname}
+            open={openTemplate}
+            setOpen={setOpenTemplate}
+          />
         )}
-        <Tooltip title="Open settings">
-          <IconButton size="small" onClick={handleOpenUserMenu} className=" main-navbar-avatar-button">
-            <Avatar sx={{ height: variables.profileiconheight, width: variables.profileiconwidth }} alt={userDetails?.fullName} src={userDetails?.fullName || user?.user?.photoURL} />
-          </IconButton>
-        </Tooltip>
+        {openDbSnapshot && (
+          <DbSnapshotsMenu
+            dbSnapshots={props?.dbData?.db?.dbSnapshots || {}}
+            revisionbuttonref={revisionbuttonref.current?.getBoundingClientRect()}
+            dbname={props?.dbData?.db?.name || dbname}
+            pen={openDbSnapshot}
+            setOpen={setOpenDbSnapshot}
+          />
+        )}
+        {openShareDb && (<Sharedb setOpenShareDb={setOpenShareDb} openShareDb={openShareDb} />)}
+        {dbId && (
+          <>
+            <IconButton
+              size="small"
+              onClick={handleOpenMenu}
+              className="main-navbar-avatar-button"
+            >
+              <MenuIcon />
+            </IconButton>
 
+            {apiButtonWithTooltip }
+          </>
+        )}
+
+        {(shouldShowTypography || shouldShowTableButton) && tableButtonWithTooltip}
+      
+      
+          {userAvatar}
+       
         <Menu
           className="main-navbar-menu"
           id="menu-appbar"
@@ -205,8 +244,6 @@ function MainNavbar(props) {
             <Typography className="text-align-center">Logout</Typography>
           </MenuItem>
         </Menu>
-
-
 
         <Menu
           className="main-navbar-menu"
@@ -247,7 +284,6 @@ function MainNavbar(props) {
           }}>
             <Typography className="text-align-center">Db Snapshots</Typography>
           </MenuItem>
-
         </Menu>
       </Box>
     </Container>

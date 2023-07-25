@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, {memo, useState } from "react";
 // import PropTypes from "prop-types";
 import Navbar from "../component/apiDoc/navbarApi/navbarApi";
 import MainNavbar from "../component/mainNavbar/mainNavbar";
@@ -31,4 +31,4 @@ function ApiDocPage() {
   );
 }
 
-export default ApiDocPage;
+export default memo(ApiDocPage);

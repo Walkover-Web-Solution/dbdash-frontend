@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,memo } from "react";
 import PropTypes from "prop-types";
 import "./Codeblock.scss";
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
@@ -251,4 +251,4 @@ CodeBlock.propTypes = {
   table:PropTypes.any
 };
 
-export default CodeBlock;
+export default memo(CodeBlock);
