@@ -64,7 +64,35 @@ function Navbar(props) {
   const [dataforwebhook, setdataforwebhook] = useState(null);
 
   const useStyles = makeStyles(() => ({
-    // ... (Existing styles)
+    formControl: {
+      margin: 1,
+      marginLeft:0,
+      marginTop:7,
+      marginRight:3,
+      minWidth: 120,
+      '& .MuiInputLabel-root': {
+        color: `${variables.basictextcolor}`, // Change the label color here
+      },
+      '& .MuiSelect-icon': {
+        color: `${variables.basictextcolor}`, // Change the icon color here
+      },
+      '& .MuiSelect-root': {
+        borderColor: `${variables.basictextcolor}`, // Change the border color here
+        borderRadius: 0,
+        height: '36px',
+        color: `${variables.basictextcolor}`,
+      },
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: 'black', // Change the border color here
+        },
+      },
+     
+  
+    },
+    selectEmpty: {
+      marginTop: 2,
+    },
   }));
 
   const classes = useStyles();
