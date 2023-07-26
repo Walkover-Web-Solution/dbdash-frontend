@@ -1,6 +1,6 @@
-import React, { memo,useMemo, useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { memo, useMemo, useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -10,16 +10,16 @@ import {
   InputLabel,
   ListSubheader,
   ButtonGroup,
-} from '@mui/material';
-import ApiCrudTablist from '../apiCrudTab/apiCrudTablist/apiCrudTablist';
-import { getDbById } from '../../../api/dbApi';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@mui/styles';
-import { selectOrgandDb } from '../../../store/database/databaseSelector.js';
-import Webhookpage from '../../../pages/Webhookpage/Webhookpage';
-import variables from '../../../assets/styling.scss';
-import AuthKeyPage from '../../../pages/authKeyPage/authKeyPage';
-import './navbarApi.scss';
+} from "@mui/material";
+import ApiCrudTablist from "../apiCrudTab/apiCrudTablist/apiCrudTablist";
+import { getDbById } from "../../../api/dbApi";
+import PropTypes from "prop-types";
+import { makeStyles } from "@mui/styles";
+import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
+import Webhookpage from "../../../pages/Webhookpage/Webhookpage";
+import variables from "../../../assets/styling.scss";
+import AuthKeyPage from "../../../pages/authKeyPage/authKeyPage";
+import "./navbarApi.scss";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -32,28 +32,30 @@ const MenuProps = {
   },
   getContentAnchorEl: null,
   anchorOrigin: {
-    vertical: 'bottom',
-    horizontal: 'center',
+    vertical: "bottom",
+    horizontal: "center",
   },
   transformOrigin: {
-    vertical: 'top',
-    horizontal: 'center',
+    vertical: "top",
+    horizontal: "center",
   },
-  variant: 'menu',
+  variant: "menu",
 };
 
 function Navbar(props) {
   let dbchanged = 0;
   const [tables, setTables] = useState({});
-  const [dbId, setDbId] = useState('');
+  const [dbId, setDbId] = useState("");
   const navigate = useNavigate();
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb, setSelectedDb] = useState(useParams().dbId);
-  const [selectTable, setSelectTable] = useState(useLocation().state || props.tabletoredirect);
+  const [selectTable, setSelectTable] = useState(
+    useLocation().state || props.tabletoredirect
+  );
   const alldb = useSelector((state) => selectOrgandDb(state));
   const [loading, setLoading] = useState(false);
-  const [showWebhookPage, setShowWebhookPage] = useState('apidoc');
+  const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
   const [dataforwebhook, setdataforwebhook] = useState(null);
 
   const useStyles = makeStyles(() => ({
@@ -126,7 +128,6 @@ function Navbar(props) {
         db={selectedOption}
         table={selectTable}
       />
-      
     ),
     [dataforwebhook, dbId, selectedOption, selectTable]
   );
@@ -141,7 +142,13 @@ function Navbar(props) {
         tabletoredirect={props.tabletoredirect}
       />
     ),
-    [dbId, selectedOption, dataforwebhook, props.dbtoredirect, props.tabletoredirect]
+    [
+      dbId,
+      selectedOption,
+      dataforwebhook,
+      props.dbtoredirect,
+      props.tabletoredirect,
+    ]
   );
 
   return (
@@ -241,8 +248,6 @@ function Navbar(props) {
           {Object.keys(tables).length >= 1 && (
             <Box className="navbar-api-box-4">
               <ButtonGroup className="button-group" color="primary">
-          
-
                 <Button
                   className={
                     showWebhookPage == "apidoc"
@@ -289,7 +294,6 @@ function Navbar(props) {
         </Box>
 
         {showWebhookPage == "webhook" && (
-          
           <Webhookpage
             tables={tables}
             dataforwebhook={dataforwebhook}
@@ -298,16 +302,9 @@ function Navbar(props) {
           />
         )}
         {showWebhookPage === "apidoc" && (
-          <Box>
-            {loading && (
-              memoizedApiCrudTablist
-              
-            )}
-          </Box>
+          <Box>{loading && memoizedApiCrudTablist}</Box>
         )}
-        {showWebhookPage == "authkey" && (
-          memoizedAuthKeyPage 
-        )}
+        {showWebhookPage == "authkey" && memoizedAuthKeyPage}
       </div>
     </div>
   );
