@@ -105,7 +105,7 @@ export default function FieldPopupModal(props) {
     }
     props?.setTextValue(event.target.value);
   };
-
+console.log("fieldpopupmodal")
   const handleSelectChange = (event) => {
     setShowLinkField(false)
     setShowNumericOptions(false);

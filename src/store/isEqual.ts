@@ -1,3 +1,4 @@
+
 export default function isEqual(value, other) {
     // Check for simple data types and null/undefined
     if (value === other) return true;
@@ -38,4 +39,5 @@ export default function isEqual(value, other) {
     // Check for other data types (number, string, boolean)
     return value === other;
   }
+export  const customEqual=(oldVal,newVal)=>isEqual(oldVal,newVal);
   

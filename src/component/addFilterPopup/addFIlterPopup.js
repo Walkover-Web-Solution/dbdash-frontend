@@ -12,6 +12,7 @@ import CustomAutoSuggest from "../customAutoSuggest/customAutoSuggest";
 import CloseIcon from "@mui/icons-material/Close";
 import { filterQueryByAi } from "../../api/filterApi";
 import "./addFilterPopup.scss"
+import { customEqual } from "../../store/isEqual";
 
 
 const style = {
@@ -30,7 +31,7 @@ export default function AddFilterPopup(props) {
   // const navigate = useNavigate();
   const editableDivRef  = useRef()
   const editableDivRef2  = useRef()
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const AllTableInfo = useSelector((state) => getAllTableInfo(state),customEqual);
   const [filterName, setFilterName] = useState("");
   // const [html, setHtml] = useState("");
   const [html2, setHtml2] = useState("");

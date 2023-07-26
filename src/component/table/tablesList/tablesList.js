@@ -24,9 +24,8 @@ import variables from "../../../assets/styling.scss";
 import { createViewTable } from "../../../api/viewTableApi";
 import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
-import  isEqual  from "../../../store/isEqual";
+import   { customEqual }  from "../../../store/isEqual";
  function TablesList({ dbData }) {
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
   const isTableLoading = useSelector((state) => state.table?.isTableLoading,customEqual);

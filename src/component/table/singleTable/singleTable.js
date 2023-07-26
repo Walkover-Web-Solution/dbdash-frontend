@@ -16,7 +16,7 @@ import variables from "../../../assets/styling.scss";
 import "./singleTable.scss";
 import { useParams } from "react-router-dom";
 import { bulkAddColumns } from "../../../store/table/tableThunk";
-import  isEqual  from "../../../store/isEqual";
+import  { customEqual }  from "../../../store/isEqual";
 
  function SingleTable({
   dbData,
@@ -31,7 +31,6 @@ import  isEqual  from "../../../store/isEqual";
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
   const AllTableInfo = useSelector((state) => state.tables.tables,customEqual);
   const userDetails = useSelector((state) => selectActiveUser(state),customEqual);

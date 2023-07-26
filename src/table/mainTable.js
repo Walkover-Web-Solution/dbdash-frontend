@@ -571,6 +571,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
   const getHoveredItemsInfo=(event)=>{
     setHoveredRow(event?.location[1]);
   }
+  
   return (
     <>
       {JSON.stringify(selection) !== JSON.stringify(emptyselection) &&
@@ -659,13 +660,13 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           setTextValue={setTextValue}
         />
       )}
-      <Headermenu
+     {menu &&  <Headermenu
         menu={menu}
         setMenu={setMenu}
         setOpen={setOpen}
         setDirectionAndId={setDirectionAndId}
         fields={fieldsToShow}
-      />
+      />}
       {openAttachment && (
         <SelectFilepopup
           title="uplaodfile"
