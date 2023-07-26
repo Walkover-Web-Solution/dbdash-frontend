@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {memo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 
@@ -11,6 +11,7 @@ import {
 } from "../../../store/allTable/allTableThunk";
 
 function Sharedb(props) {
+  console.log("sharedb")
   const {setOpenShareDb,openShareDb}=props;
   const params = useParams();
   const adminId = localStorage.getItem("userid");
@@ -111,4 +112,4 @@ Sharedb.propTypes = {
   openShareDb: PropTypes.any,
   setOpenShareDb:PropTypes.any,
 };
-export default Sharedb;
+export default memo(Sharedb);

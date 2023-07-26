@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {  useEffect, useRef } from "react";
 import "./Webhookpage.scss";
 import {
   Box,
@@ -14,33 +14,33 @@ import { createWebhook, updateWebhook } from "../../api/webhookApi";
 import CloseIcon from '@mui/icons-material/Close';
 
 function Createwebhook(props) {
-  const [name, setName] = useState("");
-  const [action, setAction] = useState("");
-  const [url, setUrl] = useState("");
-  const [selectedtable,setSelectedTable]=useState(props?.tableId || "");
- 
+  console.log("fjjcreatewebhook");
+  let nameRef = useRef("");
+  let actionRef = useRef("");
+  let urlRef = useRef("");
+  let selectedTableRef = useRef(props?.tableId || "");
+
   const createWebHook = async () => {
-    
     const data = {
-      name: name,
-      url: url,
+      name: nameRef.current,
+      url: urlRef.current,
       isActive: true,
-      condition: action,
+      condition: actionRef.current,
     };
 
     if (props?.webhookid) {
-      if (props?.condition !== action) {
-        data.newCondition = action;
+      if (props?.condition !== actionRef.current) {
+        data.newCondition = actionRef.current;
         data.condition = props?.condition;
       }
       await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
     } else {
-      await createWebhook(props.dbId, selectedtable, data);
+      await createWebhook(props.dbId, selectedTableRef.current, data);
     }
     handleClose();
-    setName(null);
-    setAction(null);
-    setUrl(null);
+    nameRef.current = "";
+    actionRef.current = "";
+    urlRef.current = "";
     props.setNewcreated(props.newcreated + 1);
   };
 
@@ -49,17 +49,17 @@ function Createwebhook(props) {
       props?.closeDropdown();
     }
     props.handleClose();
-    setName("");
-    setAction("");
-    setUrl("");
+    nameRef.current = "";
+    actionRef.current = "";
+    urlRef.current = "";
   };
 
   useEffect(() => {
     if (props.webhookid) {
-      setName(props.webhookname);
-      setAction(props.condition);
-      setSelectedTable(props?.tableId)
-      setUrl(props.weburl);
+      nameRef.current = props.webhookname;
+      actionRef.current = props.condition;
+      selectedTableRef.current = props?.tableId;
+      urlRef.current = props.weburl;
     }
   }, [props.webhookid]);
 
@@ -84,9 +84,8 @@ function Createwebhook(props) {
                 id="standard-basic"
                 label="Name"
                 variant="standard"
-                value={name}
                 onChange={(e) => {
-                  setName(e.target.value);
+                  nameRef.current = e.target.value;
                 }}
               />
             </Box>
@@ -101,8 +100,10 @@ function Createwebhook(props) {
                   select
                   label="Action"
                   className="create-webhook-action-text-field"
-                  value={action}
-                  onChange={(e) => setAction(e.target.value)}
+                  onChange={(e) => {
+
+                    actionRef.current = e.target.value;
+                  }}
                 >
                   <MenuItem value="createRow">Create Row</MenuItem>
                   <MenuItem value="deleteRow">Delete Row</MenuItem>
@@ -121,9 +122,9 @@ function Createwebhook(props) {
                   select
                   label="Action"
                   className="create-webhook-table-text-field"
-                  value={selectedtable}
                   onChange={(e) => {
-                    setSelectedTable(e.target.value)}}
+                    selectedTableRef.current = e.target.value;
+                  }}
                 >
                   {props?.tables && 
                     Object.entries(props?.tables).map(([key, value]) => {
@@ -137,17 +138,14 @@ function Createwebhook(props) {
               </FormControl>
             </Box>}
 
-           
-
             <Box className="create-webhook-key-row" >
               <Typography className="create-webhook-key-label">URL</Typography>
               <TextField
                 id="standard-basic"
                 label="Url"
                 variant="standard"
-                value={url}
                 onChange={(e) => {
-                  setUrl(e.target.value);
+                  urlRef.current = e.target.value;
                 }}
               />
             </Box>

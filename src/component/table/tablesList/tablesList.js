@@ -33,11 +33,8 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
   const dispatch = useDispatch();
   const params = useParams();
   const AllTableInfo = useSelector((state) => state.tables.tables);
-  const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
@@ -84,7 +81,6 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
       return null;
     }
   },[params?.filterName])
-
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
   };
@@ -107,8 +103,7 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
       navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
     }
 
-    const newTableIndex = Object.keys(AllTableInfo).length;
-    setValue(newTableIndex);
+  
   };
   const handleEdit = async () => {
     if (params?.filterName) {
@@ -174,11 +169,7 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
         })
       );
     }
-    setValue(
-      tableNames?.indexOf(params?.tableName) !== -1
-        ? tableNames?.indexOf(params?.tableName)
-        : 0
-    );
+    
     if (!params?.tableName) {
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
     }
@@ -225,8 +216,7 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
         <Box className="tables-list-container">
           <Box className="tabs-container">
             <Tabs
-              value={value}
-              onChange={handleChange}
+              value={0}
               TabIndicatorProps={{
                 style: { display: "none" },
               }}

@@ -1,15 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Box, Button } from '@mui/material';
-import variables from '../../../../../assets/styling.scss';
-import CustomAutoSuggest from '../../../../customAutoSuggest/customAutoSuggest';
+import React, { useState, useEffect, useRef } from "react";
+import { Box, Button } from "@mui/material";
+import variables from "../../../../../assets/styling.scss";
+import CustomAutoSuggest from "../../../../customAutoSuggest/customAutoSuggest";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { getAllTableInfo } from "../../../../../store/allTable/allTableSelector";
-import { filterQueryByAi } from '../../../../../api/filterApi';
-import CircularProgress from '@mui/material/CircularProgress';
+import { filterQueryByAi } from "../../../../../api/filterApi";
+import CircularProgress from "@mui/material/CircularProgress";
 import "./Aifilter.scss";
-
-export default function AiFilter({ tableName, handleUse, querymade, setQuerymade, textfieldref, changeQueryMade, parent, dbId }) {
+export default function AiFilter({
+  tableName,
+  handleUse,
+  querymade,
+  setQuerymade,
+  textfieldref,
+  changeQueryMade,
+  parent,
+  dbId,
+}) {
   const [text, setText] = useState("");
   const editableDivRef = useRef();
   const textFieldRef = useRef(null);
@@ -30,7 +38,7 @@ export default function AiFilter({ tableName, handleUse, querymade, setQuerymade
     const myObj = AllTableInfo?.tables?.[tableName]?.fields;
     const arr = Object.entries(myObj).map(([key, value]) => ({
       name: value.fieldName,
-      content: key
+      content: key,
     }));
     setFields(arr);
   };
@@ -43,8 +51,8 @@ export default function AiFilter({ tableName, handleUse, querymade, setQuerymade
         editableDivRef={editableDivRef}
         suggestion={fields}
         setText={setText}
-        defaultValue=''
-        symbolForSearching={' '}
+        defaultValue=""
+        symbolForSearching={" "}
         groupByGroupName={false}
         ref={textFieldRef}
       />
@@ -55,12 +63,12 @@ export default function AiFilter({ tableName, handleUse, querymade, setQuerymade
     setShowAnsfield(false);
     let textquery = text.trim();
     const data = {
-      query: textquery
+      query: textquery,
     };
 
     const applyFilter = await filterQueryByAi(dbId, data);
 
-    if (parent !== 'updaterecord') {
+    if (parent !== "updaterecord") {
       setTextAfterWhere("filter=" + applyFilter?.data?.data);
       setQuerymade("filter=" + applyFilter?.data?.data);
     } else {
@@ -71,19 +79,27 @@ export default function AiFilter({ tableName, handleUse, querymade, setQuerymade
   };
 
   return (
-    <div className='aiFilterStyle'>
-      <div style={{ backgroundColor: variables.codeblockbgcolor, padding: '10px' }}>Filter</div>
-      <div className='contentStyle'>
-        <div className='buttonContainerStyle'>
-          <Box className={`ai-divv ${text === '' ? 'row' : 'column'}`}>
-            <div className={text === '' ? 'div76' : 'div98'}>
+    <div className="aiFilterStyle">
+      <div
+        style={{ backgroundColor: variables.codeblockbgcolor, padding: "10px" }}
+      >
+        Filter
+      </div>
+      <div className="contentStyle">
+        <div className="buttonContainerStyle">
+          <Box className={`ai-divv ${text === "" ? "row" : "column"}`}>
+            <div className={text === "" ? "div76" : "div98"}>
               {customAutosuggestfunction(fields)}
             </div>
-            <div className={`ai-Autosugg-Function ${text === '' ? 'div24' : 'div100'}`}>
+            <div
+              className={`ai-Autosugg-Function ${
+                text === "" ? "div24" : "div100"
+              }`}
+            >
               <Button
                 variant="outlined"
-                className='mui-button-outlined generatebutton'
-                sx={{ width: text === '' ? '90%' : '30%' }}
+                className="mui-button-outlined generatebutton"
+                sx={{ width: text === "" ? "90%" : "30%" }}
                 onClick={handleQuery}
               >
                 Generate Query by AI
@@ -96,24 +112,30 @@ export default function AiFilter({ tableName, handleUse, querymade, setQuerymade
           <textarea
             ref={textfieldref}
             value={querymade || textAfterWhere}
-            id={'querytextarea'}
+            id={"querytextarea"}
             onChange={(e) => {
               changeQueryMade(e);
               setTextAfterWhere(e.target.value);
             }}
             onKeyUp={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 handleUse();
               }
             }}
             className="ansfield"
           />
         ) : (
-          <div className='ai-div'><CircularProgress /></div>
+          <div className="ai-div">
+            <CircularProgress />
+          </div>
         )}
-        <Box className='ai-box'>
+        <Box className="ai-box">
           {showAnsfield && (
-            <Button className="mui-button" onClick={handleUse} variant="contained">
+            <Button
+              className="mui-button"
+              onClick={handleUse}
+              variant="contained"
+            >
               Use
             </Button>
           )}
@@ -131,5 +153,5 @@ AiFilter.propTypes = {
   textfieldref: PropTypes.any,
   changeQueryMade: PropTypes.any,
   parent: PropTypes.any,
-  dbId: PropTypes.any
+  dbId: PropTypes.any,
 };

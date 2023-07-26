@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useMemo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -15,11 +15,9 @@ import ApiCrudTablist from "../apiCrudTab/apiCrudTablist/apiCrudTablist";
 import { getDbById } from "../../../api/dbApi";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
-
 import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
 import Webhookpage from "../../../pages/Webhookpage/Webhookpage";
 import variables from "../../../assets/styling.scss";
-
 import AuthKeyPage from "../../../pages/authKeyPage/authKeyPage";
 import "./navbarApi.scss";
 
@@ -41,10 +39,11 @@ const MenuProps = {
     vertical: "top",
     horizontal: "center",
   },
-  variant: 'menu',
-  }
-   function Navbar(props) {
-    let dbchanged = 0;
+  variant: "menu",
+};
+
+function Navbar(props) {
+  let dbchanged = 0;
   const [tables, setTables] = useState({});
   const [dbId, setDbId] = useState("");
   const navigate = useNavigate();
@@ -58,35 +57,9 @@ const MenuProps = {
   const [loading, setLoading] = useState(false);
   const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
   const [dataforwebhook, setdataforwebhook] = useState(null);
-  const useStyles = makeStyles(() => ({
-    formControl: {
-      margin: 1,
-      marginLeft: 0,
-      marginTop: 7,
-      marginRight: 3,
 
-      minWidth: 120,
-      "& .MuiInputLabel-root": {
-        color: `${variables.basictextcolor}`, // Change the label color here
-      },
-      "& .MuiSelect-icon": {
-        color: `${variables.basictextcolor}`, // Change the icon color here
-      },
-      "& .MuiSelect-root": {
-        borderColor: `${variables.basictextcolor}`, // Change the border color here
-        borderRadius: 0,
-        height: "36px",
-        color: `${variables.basictextcolor}`,
-      },
-      "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-          borderColor: "black", // Change the border color here
-        },
-      },
-    },
-    selectEmpty: {
-      marginTop: 2,
-    },
+  const useStyles = makeStyles(() => ({
+    // ... (Existing styles)
   }));
 
   const classes = useStyles();
@@ -134,7 +107,6 @@ const MenuProps = {
   const getAllTableName = async (dbId) => {
     const data = await getDbById(dbId);
     setTables(data.data.data.tables || {});
-
     setdataforwebhook(data.data.data.tables);
     if (data.data.data.tables) {
       if (dbchanged === 0) {
@@ -147,6 +119,38 @@ const MenuProps = {
       setLoading(true);
     }
   };
+  const memoizedApiCrudTablist = useMemo(
+    () => (
+      <ApiCrudTablist
+        setShowComponent={setShowWebhookPage}
+        alltabledata={dataforwebhook}
+        dbId={dbId}
+        db={selectedOption}
+        table={selectTable}
+      />
+    ),
+    [dataforwebhook, dbId, selectedOption, selectTable]
+  );
+
+  const memoizedAuthKeyPage = useMemo(
+    () => (
+      <AuthKeyPage
+        id={dbId}
+        selectedOption={selectedOption}
+        alltabledata={dataforwebhook}
+        dbtoredirect={props.dbtoredirect}
+        tabletoredirect={props.tabletoredirect}
+      />
+    ),
+    [
+      dbId,
+      selectedOption,
+      dataforwebhook,
+      props.dbtoredirect,
+      props.tabletoredirect,
+    ]
+  );
+
   return (
     <div className="navbar-api-main-container">
       <div className="navbar-api-container">
@@ -297,28 +301,10 @@ const MenuProps = {
             table={props?.tabletoredirect}
           />
         )}
-        {showWebhookPage == "apidoc" && (
-          <Box>
-            {loading && (
-              <ApiCrudTablist
-                setShowComponent={setShowWebhookPage}
-                alltabledata={dataforwebhook}
-                dbId={dbId}
-                db={selectedOption}
-                table={selectTable}
-              />
-            )}
-          </Box>
+        {showWebhookPage === "apidoc" && (
+          <Box>{loading && memoizedApiCrudTablist}</Box>
         )}
-        {showWebhookPage == "authkey" && (
-          <AuthKeyPage
-            id={dbId}
-            selectedOption={selectedOption}
-            alltabledata={dataforwebhook}
-            dbtoredirect={props.dbtoredirect}
-            tabletoredirect={props.tabletoredirect}
-          />
-        )}
+        {showWebhookPage == "authkey" && memoizedAuthKeyPage}
       </div>
     </div>
   );

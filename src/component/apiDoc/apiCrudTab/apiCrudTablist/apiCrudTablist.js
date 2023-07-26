@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,memo } from "react";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
@@ -57,6 +57,7 @@ function a11yProps(index) {
 }
 
 function ApiCrudTablist(props) {
+
   const [value, setValue] = useState(0);
 
   const tablePannelListData = {
@@ -133,4 +134,4 @@ ApiCrudTablist.propTypes = {
   alltabledata: PropTypes.any,
 };
 
-export default ApiCrudTablist;
+export default memo(ApiCrudTablist);

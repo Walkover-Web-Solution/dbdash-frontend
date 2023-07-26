@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,memo } from "react";
 import { PropTypes } from "prop-types";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
@@ -146,4 +146,4 @@ BasicStuff.propTypes = {
   tablePannelListData: PropTypes.any,
 };
 
-export default BasicStuff;
+export default memo(BasicStuff);

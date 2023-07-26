@@ -20,7 +20,7 @@ export default function Webhookpage(props) {
         <Button className="mui-button" variant="contained" onClick={handleAddWebhook} endIcon={<AddIcon />}>
           Add Webhook
         </Button>
-        <Createwebhook
+       {addWebhook &&  <Createwebhook
           newcreated={newcreated}
           tables={props?.tables}
           setNewcreated={setNewcreated}
@@ -31,7 +31,7 @@ export default function Webhookpage(props) {
           open={addWebhook}
           setOpen={setAddWebhook}
           handleClose={handleAddWebhook}
-        />
+        />}
       </Box>
 
       <Box className="auth-key-page-content">
