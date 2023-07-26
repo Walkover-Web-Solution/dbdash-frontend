@@ -22,7 +22,6 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { makeStyles } from "@mui/styles";
 import "./shareOrgModal.scss";
 export default function ShareOrgModal(props) {
-  // console.log("inside ShareOrgModal")
   // const [email, setEmail] = useState("");
   const emailRef = useRef("");
   // const [userType, setUserType] = useState(111);
@@ -166,6 +165,7 @@ export default function ShareOrgModal(props) {
                     },
                   }}
                   label="selectusertype"
+                  defaultValue={userTypeRef.current}
                   onMouseDown={(e) => {
                     e.preventDefault();
                     e.stopPropagation(); // Stop the event from propagating to the dialog
@@ -257,7 +257,7 @@ export default function ShareOrgModal(props) {
                       ) : editableRef.current === user ? (
                         <Select
                           sx={{ height: "30px" }}
-                          value={user?.user_type}
+                          defaultValue={user?.user_type}
                           MenuProps={{
                             disablePortal: true,
                             onClick: (e) => {

@@ -15,7 +15,6 @@ import { toast } from 'react-toastify';
 import { createTemplate, getAllCategoryName } from '../../../api/templateApi';
 
 const CreateTemplatePopup = (props) => {
-  console.log("CreateTemplatePopup")
 
   const [name, setName] = useState('');
   const [categoryName, setCategoryName] = useState('');

@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import './dbSnapshotsMenu.scss';
 
 function DbSnapshotsMenu(props) {
-  console.log("DbSnapshotsMenu")
   const params = useParams();
   const dispatch = useDispatch();
 

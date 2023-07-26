@@ -11,7 +11,6 @@ import {
 } from "../../../store/allTable/allTableThunk";
 
 function Sharedb(props) {
-  console.log("sharedb")
   const {setOpenShareDb,openShareDb}=props;
   const params = useParams();
   const adminId = localStorage.getItem("userid");

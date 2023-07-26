@@ -14,7 +14,6 @@ import { createWebhook, updateWebhook } from "../../api/webhookApi";
 import CloseIcon from '@mui/icons-material/Close';
 
 function Createwebhook(props) {
-  console.log("fjjcreatewebhook");
   let nameRef = useRef("");
   let actionRef = useRef("");
   let urlRef = useRef("");

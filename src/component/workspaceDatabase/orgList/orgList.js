@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import './orgList.scss';
 
 export const OrgList = (props) => {
-  console.log("OrgLIst")
   const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
   const handleOpen = () => setOpen(true);
