@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   TextField,
@@ -17,25 +17,22 @@ import { selectActiveUser } from "../../store/user/userSelector.js";
 // import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
 
-
 import "./createAuth.scss";
 import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
 import { toast } from "react-toastify";
 
-const MemoizedAuthKeyPopup = React.memo(AuthKeyPopup);
-
 export default function CreateAuthKey(props) {
+  console.log("inside CreateAuthKey")
   const id = props.id;
   const [scope, setScope] = useState({});
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
+  const nameRef = useRef("");
   const userDetails = useSelector((state) => selectActiveUser(state));
   const [authKey, setAuthKey] = useState("");
   const [open, setOpen] = useState(false);
   const EditAuthKeyData =  props?.authData && props?.title  ? {     authData: props?.authData,   title: props?.title, } : undefined;
- const disabled=useMemo(()=>{
-  return !name ;
- },[name])
+ 
 
   const user = useSelector((state) => allOrg(state));
   function getCreatedByName(data) {
@@ -62,13 +59,13 @@ export default function CreateAuthKey(props) {
   const createAuth = async () => {
     const admin_id = localStorage.getItem("userid");
     const admin_name = userDetails?.fullName;
-    if(!name || name=='')
+    if(!nameRef?.current || nameRef?.current=='')
     {
       toast.warning("Please provide a name.")
       return;
     }
     let data = {
-      name: name,
+      name: nameRef?.current+"",
       userId: admin_id,
     };
     let jsontosend={};
@@ -119,7 +116,7 @@ export default function CreateAuthKey(props) {
 
   const setDataforEdit=(authkeydata)=>{
     if (!authkeydata) return;
-    setName(authkeydata?.authData?.name);
+    nameRef.current = authkeydata?.authData?.name+"";
     if (!authkeydata?.authData?.access) return;
     let obj={};
       if (authkeydata?.authData?.access == "1") {
@@ -135,19 +132,6 @@ export default function CreateAuthKey(props) {
     setScope(obj);
 
   }
-
-  const memoizedAuthKeyPopup = useMemo(
-    () => (
-      <MemoizedAuthKeyPopup
-        handleClose={props?.handleClose}
-        open={open}
-        setOpen={setOpen}
-        title={authKey}
-        EditAuthKeyData={props.id}
-      />
-    ),
-    [open, authKey, props?.handleClose, props.id]
-  );
 
   return (
     <>
@@ -165,11 +149,11 @@ export default function CreateAuthKey(props) {
             <TextField
               id="standard-basic"
               label="Name"
+              defaultValue={nameRef?.current}
               variant="standard"
-              value={name}
               sx={{width:'300px'}}
               onChange={(e) => {
-                setName(e.target.value);
+                nameRef.current = e.target.value;
               }}
               onKeyDown={handleKeyDown}
             />
@@ -182,12 +166,17 @@ export default function CreateAuthKey(props) {
                 onClick={() => {
                   createAuth();
                 }}
-                disabled={disabled}
-                className={`create-auth-key-button ${disabled?'mui-button-disabled':'mui-button'}`}
+                className="create-auth-key-button mui-button"
               >
                 {props?.authData ? "Update" : "Create"}
               </Button>
-              {memoizedAuthKeyPopup}
+              <AuthKeyPopup
+                handleClose={props?.handleClose}
+                open={open}
+                setOpen={setOpen}
+                title={authKey}
+                EditAuthKeyData={props.id}
+              />
             </Box>
             <Box>
               
