@@ -15,11 +15,14 @@ import ApiCrudTablist from "../apiCrudTab/apiCrudTablist/apiCrudTablist";
 import { getDbById } from "../../../api/dbApi";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
+
+
 import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
 import Webhookpage from "../../../pages/Webhookpage/Webhookpage";
 import variables from "../../../assets/styling.scss";
 import AuthKeyPage from "../../../pages/authKeyPage/authKeyPage";
 import "./navbarApi.scss";
+import isEqual from '../../../store/isEqual';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -50,10 +53,12 @@ function Navbar(props) {
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb, setSelectedDb] = useState(useParams().dbId);
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
+
   const [selectTable, setSelectTable] = useState(
     useLocation().state || props.tabletoredirect
   );
-  const alldb = useSelector((state) => selectOrgandDb(state));
+  const alldb = useSelector((state) => selectOrgandDb(state),customEqual);
   const [loading, setLoading] = useState(false);
   const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
   const [dataforwebhook, setdataforwebhook] = useState(null);

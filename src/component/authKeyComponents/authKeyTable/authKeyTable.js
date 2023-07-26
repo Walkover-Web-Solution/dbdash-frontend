@@ -16,11 +16,13 @@ import TableMenuDropdown from "../tableMenuDropdown/tableMenuDropdown.js";
 import { useSelector } from "react-redux";
 import { allOrg } from "../../../store/database/databaseSelector";
 import "./authKeyTable.scss";
+import isEqual from "../../../store/isEqual";
 
 export default function AuthKey(props) {
   const adminId = localStorage.getItem("userid");
-  // const [createdBy, setCreatedBy] = useState(null);
-  const user = useSelector((state) => allOrg(state));
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
+
+  const user = useSelector((state) => allOrg(state),customEqual);
  
   useEffect(() => {
     getAuthkeyFun();

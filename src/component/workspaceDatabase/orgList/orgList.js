@@ -9,18 +9,22 @@ import PropTypes from "prop-types";
 import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../../store/database/databaseThunk";
 import { useDispatch, useSelector } from "react-redux";
 import ShareOrgModal from "../shareOrgModal";
+
 import { allOrg } from "../../../store/database/databaseSelector";
 import { toast } from "react-toastify";
 import { createDb } from "../../../api/dbApi";
 import { useNavigate } from "react-router-dom";
 import './orgList.scss';
+import isEqual from "../../../store/isEqual";
 
 export const OrgList = (props) => {
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
+
   const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
-  const allorgss = useSelector((state) => allOrg(state))
+  const allorgss = useSelector((state) => allOrg(state),customEqual)
   const [name, setName] = useState(false); // [show textfield and setshowtextfield]
   const [orgUsers, setOrgUsers] = useState([])
   const orgName = useRef(props.dbs[0]?.org_id?.name)

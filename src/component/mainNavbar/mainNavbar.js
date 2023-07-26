@@ -18,22 +18,26 @@ import {
   MenuItem,
   Divider,
   Button,
-} from "@mui/material";
-import "./mainNavbar.scss";
-import { selectOrgandDb } from "../../store/database/databaseSelector.js";
-import Sharedb from "../table/tablesList/Sharedb.js";
-import CreateTemplatePopup from "../workspaceDatabase/createTemplatePopup/createTemplatePopup.js";
-import DbSnapshotsMenu from "./dbSnapshotsMenu/dbSnapshotsMenu.js";
+} from '@mui/material';
+import './mainNavbar.scss';
+import { selectOrgandDb } from '../../store/database/databaseSelector.js';
+import Sharedb from '../table/tablesList/Sharedb.js';
+import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup/createTemplatePopup.js';
+import DbSnapshotsMenu from './dbSnapshotsMenu/dbSnapshotsMenu.js';
+import { useRef } from 'react';
+import  isEqual  from '../../store/isEqual';
+
 
 function MainNavbar(props) {
   const { dbId, id, tableName } = useParams();
   const [openTemplate, setOpenTemplate] = useState(false);
   const [openShareDb, setOpenShareDb] = useState(false);
   const [openDbSnapshot, setOpenDbSnapshot] = useState(false);
-  const revisionbuttonref = React.useRef(null);
+  const revisionbuttonref = useRef(null);
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
-  const alldb = useSelector((state) => selectOrgandDb(state));
-  let dbname = "";
+  const alldb = useSelector((state) => selectOrgandDb(state),customEqual);
+  let dbname = '';
   Object.entries(alldb).forEach(([, dbs]) => {
     const matchingDb = dbs.find((db) => db?._id === props.dbtoredirect);
     if (matchingDb) {
@@ -49,7 +53,7 @@ function MainNavbar(props) {
   const user = UserAuth();
 
   const logOut = user?.logOut;
-  const userDetails = useSelector((state) => selectActiveUser(state));
+  const userDetails = useSelector((state) => selectActiveUser(state),customEqual);
   const shouldShowTypography = useMemo(() => {
     const currentPath = location.pathname;
     return (
