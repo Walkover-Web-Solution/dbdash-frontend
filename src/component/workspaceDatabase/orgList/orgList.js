@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Dropdown from "../../dropdown";
 import PopupModal from "../../popupModal/popupModal";
 import SingleDatabase from "../singledatabase/singleDatabase";
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import './orgList.scss';
 
 export const OrgList = (props) => {
+  console.log("OrgLIst")
   const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
   const handleOpen = () => setOpen(true);
@@ -23,7 +24,7 @@ export const OrgList = (props) => {
   const allorgss = useSelector((state) => allOrg(state))
   const [name, setName] = useState(false); // [show textfield and setshowtextfield]
   const [orgUsers, setOrgUsers] = useState([])
-  const [orgName, setOrgName] = useState();
+  const orgName = useRef(props.dbs[0]?.org_id?.name)
   const [db, setDb] = useState(false);
   const [open, setOpen] = useState(false); //popup model craeate db 
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
@@ -71,53 +72,38 @@ export const OrgList = (props) => {
     })).then(() => {
     });
   };
-  // const renameWorkspace = async (orgId,x) => {
-  //   const userid = localStorage.getItem("userid");
-  //   const data = {
-  //     name: x || name,
-  //   };
-  //   dispatch(renameOrgThunk({ orgId, data, userid }))
-  // };
 
-  const renameWorkspace = async (orgId, newName) => {
-    // if (!newName) {
-    //   toast.error("Workspace name is same");
-    //   return;
-    // }
-    if (!newName || newName.trim() === "") {
+
+  const renameWorkspace = async (orgId, orgName) => {
+   
+    if (! orgName ||  orgName.trim() === "") {
       toast.error("Workspace name cannot be empty");
-      setOrgName(props.dbs[0]?.org_id?.name);
+      // orgName.current = (props.dbs[0]?.org_id?.name);
       return;
     }
 
-    if (newName.length < 3) {
+    if ( orgName.length < 3) {
       toast.error("Workspace name must be at least 3 characters long");
       return;
     }
 
-    if (newName.length > 30) {
+    if ( orgName.length > 30) {
       toast.error("Workspace name cannot exceed 30 characters");
       return;
     }
 
-    if (newName.includes(" ")) {
+    if ( orgName.includes(" ")) {
       toast.error("Workspace name cannot contain spaces");
       return;
     }
 
     const userid = localStorage.getItem("userid");
     const data = {
-      name: newName,
+      name: orgName,
     };
 
     dispatch(renameOrgThunk({ orgId, data, user_id:userid }));
   };
-
-
-  // const deleteOrganization = async () => {
-  //   const userid = localStorage.getItem("userid");
-  //   dispatch(deleteOrgThunk({ orgId: props?.orgId, userid }))
-  // };
   const shareWorkspace = async (email, user_type) => {
     const adminId = localStorage.getItem("userid")
     const data = {
@@ -173,20 +159,20 @@ setOrgUsers(originalObj);
                       autoFocus
                       className="orglisttextfield1"
                       defaultValue={props.dbs[0]?.org_id?.name}
-                      value={orgName}
+                      // value={orgName}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          renameWorkspace(props?.orgId, orgName);
+                          renameWorkspace(props?.orgId,orgName);
                           setName(false);
                         }
                       }}
-                      onChange={(e) => { setOrgName(e.target.value) }}
+                      onChange={(e) => { orgName?.current=(e.target.value) }}
                       size="small"
                     />
                   </Box>
                 </Box>
                 <Button
-                  onClick={() => { renameWorkspace(props?.orgId, orgName); setName(false); }}
+                  onClick={() => { renameWorkspace(props?.orgId,  orgName?.current); setName(false); }}
                   variant="contained"
                   className="mui-button orgrenamebutton"
                  
