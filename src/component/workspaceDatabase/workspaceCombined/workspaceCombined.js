@@ -5,16 +5,15 @@ import Button from '@mui/material/Button';
 import { OrgList } from '../orgList/orgList';
 import { PropTypes } from 'prop-types';
 import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
-import { useSelector, useDispatch } from 'react-redux';
+import {  useDispatch } from 'react-redux';
 import { createOrgThunk } from '../../../store/database/databaseThunk';
 import { toast } from 'react-toastify';
 import './workspaceCombined.scss';
-import isEqual from '../../../store/isEqual';
+import  { customUseSelector } from '../../../store/customUseSelector';
  function WorkspaceCombined() {
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
   const [tabIndex, setTabIndex] = useState(0);
-  const alldbs = useSelector((state) => selectOrgandDb(state) || [],customEqual) ;
+  const alldbs = customUseSelector((state) => selectOrgandDb(state) || []) ;
   const [addedelement, setAddedelement] = useState(null);
   const dispatch = useDispatch();
   const [org, setOrg] = useState();

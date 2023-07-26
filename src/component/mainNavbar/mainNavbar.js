@@ -1,7 +1,6 @@
 import React, { memo, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { selectActiveUser } from "../../store/user/userSelector.js";
@@ -25,7 +24,8 @@ import Sharedb from '../table/tablesList/Sharedb.js';
 import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup/createTemplatePopup.js';
 import DbSnapshotsMenu from './dbSnapshotsMenu/dbSnapshotsMenu.js';
 import { useRef } from 'react';
-import  isEqual  from '../../store/isEqual';
+import   { customUseSelector }  from '../../store/customUseSelector';
+import { traceParentPropsUpdate } from "../../utility/componentPropAnalyser.js";
 
 
 function MainNavbar(props) {
@@ -34,9 +34,8 @@ function MainNavbar(props) {
   const [openShareDb, setOpenShareDb] = useState(false);
   const [openDbSnapshot, setOpenDbSnapshot] = useState(false);
   const revisionbuttonref = useRef(null);
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
-  const alldb = useSelector((state) => selectOrgandDb(state),customEqual);
+  const alldb = customUseSelector((state) => selectOrgandDb(state));
   let dbname = '';
   Object.entries(alldb).forEach(([, dbs]) => {
     const matchingDb = dbs.find((db) => db?._id === props.dbtoredirect);
@@ -53,7 +52,8 @@ function MainNavbar(props) {
   const user = UserAuth();
 
   const logOut = user?.logOut;
-  const userDetails = useSelector((state) => selectActiveUser(state),customEqual);
+  const userDetails = customUseSelector((state) => selectActiveUser(state));
+  traceParentPropsUpdate({userDetails,user},"mainnavbar")
   const shouldShowTypography = useMemo(() => {
     const currentPath = location.pathname;
     return (

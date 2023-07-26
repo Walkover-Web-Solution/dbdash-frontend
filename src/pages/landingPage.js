@@ -1,19 +1,18 @@
 import React, { useEffect } from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import MainNavbar from "../component/mainNavbar/mainNavbar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import WorkspaceCombined from "../component/workspaceDatabase/workspaceCombined/workspaceCombined";
 import "./css.scss";
 import { bulkAdd } from "../store/database/databaseThunk";
 import SingleDatabase from "../component/workspaceDatabase/singledatabase/singleDatabase";
 import variables from "../assets/styling.scss";
-import isEqual from "../store/isEqual";
+import  { customUseSelector } from "../store/customUseSelector";
 
 export default function LandingPage() {
   const dispatch = useDispatch();
-  const customEqual=(oldVal,newVal)=>isEqual(oldVal,newVal);
-  const emailId = useSelector((state) => state.user.userEmail,customEqual);
-  const alldbs = useSelector((state) => state.dataBase.orgId || [],customEqual);
+  const emailId = customUseSelector((state) => state.user.userEmail);
+  const alldbs = customUseSelector((state) => state.dataBase.orgId || []);
 
   let dbs = [];
   if (alldbs && typeof alldbs === "object") {

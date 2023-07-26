@@ -8,7 +8,7 @@ import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import SingleTable from "../../component/table/singleTable/singleTable";
 import { useParams } from "react-router-dom";
 import { bulkAddColumns, filterData } from "../../store/table/tableThunk";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import MainTable from "../../table/mainTable";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { setTableLoading } from "../../store/table/tableSlice";
@@ -20,11 +20,12 @@ import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
 import { display } from "@mui/system";
 import MainNavbar from "../../component/mainNavbar/mainNavbar";
+import { customUseSelector } from "../../store/customUseSelector";
 
 
 
 export default function TemplatePage() {
-  const isTableLoading = useSelector((state) => state.table?.isTableLoading);
+  const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
   const [value, setValue] = useState(0);

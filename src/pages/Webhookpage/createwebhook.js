@@ -1,4 +1,4 @@
-import React, {  useEffect, useRef } from "react";
+import React, {  useEffect, useMemo, useRef, useState } from "react";
 import "./Webhookpage.scss";
 import {
   Box,
@@ -18,8 +18,10 @@ function Createwebhook(props) {
   let actionRef = useRef("");
   let urlRef = useRef("");
   let selectedTableRef = useRef(props?.tableId || "");
+  const [disabled,setDisabled]=useState(true);
 
   const createWebHook = async () => {
+
     const data = {
       name: nameRef.current,
       url: urlRef.current,
@@ -42,7 +44,6 @@ function Createwebhook(props) {
     urlRef.current = "";
     props.setNewcreated(props.newcreated + 1);
   };
-
   const handleClose = () => {
     if (props.webhookid) {
       props?.closeDropdown();
@@ -53,6 +54,7 @@ function Createwebhook(props) {
     urlRef.current = "";
   };
 
+  console.log("createwebhook")
   useEffect(() => {
     if (props.webhookid) {
       nameRef.current = props.webhookname;
@@ -62,6 +64,21 @@ function Createwebhook(props) {
     }
   }, [props.webhookid]);
 
+  const memoizedButton = useMemo(() => {
+    return (
+      <Button
+        variant="contained"
+        disabled={disabled}
+        className={`create-webhook-key-button ${disabled ? 'mui-button-disabled' : 'mui-button'}`}
+        onClick={() => {
+          createWebHook();
+          handleClose();
+        }}
+      >
+        {props.webhookid ? 'Update' : 'Create'}
+      </Button>
+    );
+  }, [disabled]);
   return (
     <>
       <Modal open={props.open} onClose={handleClose}>
@@ -85,6 +102,8 @@ function Createwebhook(props) {
                 variant="standard"
                 onChange={(e) => {
                   nameRef.current = e.target.value;
+                  setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+
                 }}
               />
             </Box>
@@ -103,6 +122,8 @@ function Createwebhook(props) {
                   onChange={(e) => {
 
                     actionRef.current = e.target.value;
+                    setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+
                   }}
                 >
                   <MenuItem value="createRow">Create Row</MenuItem>
@@ -123,7 +144,10 @@ function Createwebhook(props) {
                   label="Action"
                   className="create-webhook-table-text-field"
                   onChange={(e) => {
+
                     selectedTableRef.current = e.target.value;
+                  setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+
                   }}
                 >
                   {props?.tables && 
@@ -146,21 +170,14 @@ function Createwebhook(props) {
                 variant="standard"
                 onChange={(e) => {
                   urlRef.current = e.target.value;
+                  setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+
                 }}
               />
             </Box>
           </Box>
           <Box className="create-webhook-button-box">
-            <Button
-              variant="contained"
-              className="create-webhook-key-button mui-button"
-              onClick={() => {
-                createWebHook();
-                handleClose();
-              }}
-            >
-              {props.webhookid ? "Update" : "Create"}
-            </Button>
+           {memoizedButton}
           
           </Box>
         </Box>

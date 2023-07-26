@@ -13,7 +13,7 @@ import ClickAwayListener from "@mui/base/ClickAwayListener";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../dropdown";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   renameDBThunk,
   moveDbThunk,
@@ -24,11 +24,10 @@ import { allOrg } from "../../../store/database/databaseSelector";
 import { toast } from 'react-toastify';
 import variables from '../../../assets/styling.scss'
 import './singleDatabase.scss';
-import isEqual from "../../../store/isEqual";
+import  { customUseSelector } from "../../../store/customUseSelector";
 
 function SingleDatabase(props) {
 
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
   const [name, setName] = useState(false);
   const dbname = useRef(null); // Create a ref for dbname
@@ -36,7 +35,7 @@ function SingleDatabase(props) {
   const [selectedorg, setSelectedorg] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allorgss = useSelector((state) => allOrg(state),customEqual)
+  const allorgss = customUseSelector((state) => allOrg(state))
   let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
   const handlingmove = () => {
     setOpenmove(false);

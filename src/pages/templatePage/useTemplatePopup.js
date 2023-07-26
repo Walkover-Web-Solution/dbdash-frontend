@@ -15,13 +15,14 @@ import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
 import './useTemplatePopup.scss';
 import { useTemplate } from '../../api/templateApi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { allOrg } from '../../store/database/databaseSelector';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDbThunk } from '../../store/database/databaseThunk';
+import { customUseSelector } from '../../store/customUseSelector';
 
 const UseTemplatePopup = (props) => {
-    const allorgss = useSelector((state) => allOrg(state));
+    const allorgss = customUseSelector((state) => allOrg(state));
     const params = useParams();
     const dispatch=useDispatch();
     const navigate = useNavigate();

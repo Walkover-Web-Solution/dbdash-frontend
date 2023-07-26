@@ -8,7 +8,6 @@ import {
   
  
 } from "@mui/material";
-import { useSelector } from "react-redux";
 import { PropTypes } from "prop-types";
 
 import AuthKeyPopup from "../../component/authKeyComponents/authKeyPopup/authKeyPopup.js"
@@ -21,6 +20,7 @@ import "./createAuth.scss";
 import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
 import { toast } from "react-toastify";
+import { customUseSelector } from "../../store/customUseSelector";
 
 export default function CreateAuthKey(props) {
   console.log("inside CreateAuthKey")
@@ -28,13 +28,13 @@ export default function CreateAuthKey(props) {
   const [scope, setScope] = useState({});
   // const [name, setName] = useState("");
   const nameRef = useRef("");
-  const userDetails = useSelector((state) => selectActiveUser(state));
+  const userDetails = customUseSelector((state) => selectActiveUser(state));
   const [authKey, setAuthKey] = useState("");
   const [open, setOpen] = useState(false);
   const EditAuthKeyData =  props?.authData && props?.title  ? {     authData: props?.authData,   title: props?.title, } : undefined;
  
 
-  const user = useSelector((state) => allOrg(state));
+  const user = customUseSelector((state) => allOrg(state));
   function getCreatedByName(data) {
     var array = [];
     Object.entries(Object.values(data.updatedDoc.auth_keys)).map((key) => {

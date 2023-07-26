@@ -13,16 +13,14 @@ import {
 import { PropTypes } from "prop-types";
 import { getAuthkey, deleteAuthkey } from "../../../api/authkeyApi";
 import TableMenuDropdown from "../tableMenuDropdown/tableMenuDropdown.js";
-import { useSelector } from "react-redux";
 import { allOrg } from "../../../store/database/databaseSelector";
 import "./authKeyTable.scss";
-import isEqual from "../../../store/isEqual";
+import  { customUseSelector } from "../../../store/customUseSelector";
 
 export default function AuthKey(props) {
   const adminId = localStorage.getItem("userid");
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
-  const user = useSelector((state) => allOrg(state),customEqual);
+  const user = customUseSelector((state) => allOrg(state));
  
   useEffect(() => {
     getAuthkeyFun();

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogContent, TextField, Select, MenuItem, Typography, Switch, FormGroup, FormControlLabel, Box } from "@mui/material";
-// import { useSelector } from "react-redux";
-// import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
@@ -72,7 +70,6 @@ const styles = {
 const CustomSwitch = withStyles(styles)(Switch);
 
 export default function FieldPopupModal(props) {
-  // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
@@ -105,7 +102,7 @@ export default function FieldPopupModal(props) {
     }
     props?.setTextValue(event.target.value);
   };
-
+console.log("fieldpopupmodal")
   const handleSelectChange = (event) => {
     setShowLinkField(false)
     setShowNumericOptions(false);
