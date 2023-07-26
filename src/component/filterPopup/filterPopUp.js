@@ -1,4 +1,4 @@
-import React, {  useMemo, useRef } from "react";
+import React, {  useMemo, useRef,useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Typography, TextField, Button,ClickAwayListener } from "@mui/material"; 
 import { useNavigate } from "react-router-dom";
@@ -17,9 +17,7 @@ const FilterModal = (props) => {
   // const [filterName, setFilterName] = useState("");
   const filterNameRef = useRef("");
   const dispatch = useDispatch();
-  const disabled=useMemo(()=>{
-    return !filterNameRef?.current;
-  },[filterNameRef?.current])
+  const [disabled,setDisabled]=useState(true);
   const calculatePosition = () => {
     const buttonRect = props?.buttonRef.current.getBoundingClientRect();
     const { scrollX, scrollY } = window;
@@ -87,6 +85,21 @@ filterName1=firstChar.toUpperCase() + filterNameRef?.current.slice(1);
     navigate(`/db/${props?.dbId}/table/${props?.tableName}/filter/${filterKey}`);
     return dataa;
   };
+  const buttonComponent = useMemo(() => (
+    <Button
+      variant="contained"
+      className={disabled ? 'mui-button-disabled' : 'mui-button'}
+      onClick={() => {
+        handleCreateFilter();
+        handleClose();
+      }}
+      disabled={disabled}
+      sx={{ fontSize: variables.editfilterbutttonsfontsize }}
+    >
+      Create Filter
+    </Button>
+  ), [disabled]);
+
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
     <Box sx={style}>
@@ -112,22 +125,17 @@ filterName1=firstChar.toUpperCase() + filterNameRef?.current.slice(1);
             handleCreateFilter();
             handleClose();
           }}
-          onChange={(e) => filterNameRef.current = e.target.value}
+          onChange={(e) => {
+
+            filterNameRef.current = e.target.value;
+            setDisabled(!filterNameRef.current)
+          
+          }}
+
         />
       </Box>
       <Box className="filter-actions" display="flex" justifyContent="space-between">
-        <Button
-          variant="contained"
-          className={disabled?`mui-button-disabled`:`mui-button`} 
-          onClick={() => {
-            handleCreateFilter();
-            handleClose();
-          }}
-          disabled={!filterNameRef?.current}
-          sx={{ fontSize: variables.editfilterbutttonsfontsize }}
-        >
-          Create Filter
-        </Button>
+       {buttonComponent}
       </Box>
     </Box>
   </ClickAwayListener>

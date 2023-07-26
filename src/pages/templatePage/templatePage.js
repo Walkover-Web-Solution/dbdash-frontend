@@ -18,7 +18,6 @@ import ManageFieldDropDown from "../../component/table/manageFieldDropDown/manag
 import { toast } from "react-toastify";
 import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
-import { display } from "@mui/system";
 import MainNavbar from "../../component/mainNavbar/mainNavbar";
 import { customUseSelector } from "../../store/customUseSelector";
 

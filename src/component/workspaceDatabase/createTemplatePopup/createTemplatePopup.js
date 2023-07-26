@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect,useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 import './createTemplatePopup.scss';
@@ -15,12 +15,16 @@ import { toast } from 'react-toastify';
 import { createTemplate, getAllCategoryName } from '../../../api/templateApi';
 
 const CreateTemplatePopup = (props) => {
-
-  const [name, setName] = useState('');
-  const [categoryName, setCategoryName] = useState('');
-  const [description, setDescription] = useState('');
+   console.log("inside CreateTemplatePopup")
+  // const [name, setName] = useState('');
+  const nameRef = useRef("")
+  // const [categoryName, setCategoryName] = useState('');
+  const categoryNameRef = useRef("");
+  // const [description, setDescription] = useState('');
+  const descriptionRef = useRef("");
   const [allCategory, setAllCategory] = useState([]);
-  const disabled = !name || !categoryName;
+  const [disabled,setDisabled]=useState(true);
+  // const disabled = !nameRef?.current || !categoryNameRef?.current;
 
   const handleClose = () => {
     props?.setOpen(false);
@@ -40,13 +44,13 @@ const CreateTemplatePopup = (props) => {
 
   const handleCreateTemplate = async () => {
     const data = {
-      name: name,
-      categoryName: categoryName,
-      description: description,
+      name: nameRef?.current,
+      categoryName: categoryNameRef?.current,
+      description: descriptionRef?.current,
     };
 
     if (Array.isArray(allCategory)) {
-      data.newCategory = !allCategory.includes(categoryName);
+      data.newCategory = !allCategory.includes(categoryNameRef?.current);
     }
     try {
       await createTemplate(props?.dbId, data);
@@ -57,6 +61,20 @@ const CreateTemplatePopup = (props) => {
       toast.error('Failed to create template.');
     }
   };
+
+  const memoizedButton = useMemo(() => (
+    <Button
+      variant="contained"
+      className={`create-auth-key-button ${disabled ? 'mui-button-disabled' : 'mui-button'}`}
+      onClick={() => {
+        handleCreateTemplate();
+        handleClose();
+      }}
+      disabled={disabled}
+    >
+      Create Template
+    </Button>
+  ), [disabled]);
 
   return (
     <div onClick={(e) => {
@@ -85,9 +103,10 @@ const CreateTemplatePopup = (props) => {
 
                   <Autocomplete
                     id="country-select-demo"
-                    value={categoryName}
+                    // value={categoryName}
                     onChange={(e, value) => {
-                      setCategoryName(value);
+                      categoryNameRef.current = value;
+                      setDisabled(!categoryNameRef.current)
                     }}
                     className="createTemp-autocomplete"
                     options={allCategory || []}
@@ -99,7 +118,8 @@ const CreateTemplatePopup = (props) => {
                       </Box>
                     )}
                     onInputChange={(e) => {
-                      setCategoryName(e.target.value);
+                      categoryNameRef.current = e.target.value;
+                      setDisabled(!categoryNameRef.current)
                     }}
                     renderInput={(params) => (
                       <TextField
@@ -120,9 +140,10 @@ const CreateTemplatePopup = (props) => {
                   label="Template Name"
                   variant="standard"
                   className="createTemp-textField"
-                  value={name}
+                  // value={name}
                   onChange={(e) => {
-                    setName(e.target.value);
+                    nameRef.current = e.target.value;
+                    setDisabled(!nameRef.current)
                   }}
                 />
               </Box>
@@ -132,27 +153,18 @@ const CreateTemplatePopup = (props) => {
                   id="standard-basic"
                   label="Description"
                   placeholder="Give a brief description..."
-                  value={description}
+                  // value={description}
                   rows={10}
                   className="createTemp-textField"
                   onChange={(e) => {
-                    setDescription(e.target.value);
+                    descriptionRef.current = e.target.value;
+                    setDisabled(!descriptionRef.current)
                   }}
                 />
               </Box>
             </Box>
             <Box className="createTemp-boxx3">
-              <Button
-                variant="contained"
-                className={`create-auth-key-button ${disabled ? 'mui-button-disabled' : 'mui-button'}`}
-                onClick={() => {
-                  handleCreateTemplate();
-                  handleClose();
-                }}
-                disabled={disabled}
-              >
-                Create Template
-              </Button>
+              {memoizedButton}
             </Box>
           </Box>
         </Modal>
