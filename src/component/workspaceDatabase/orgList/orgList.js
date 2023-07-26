@@ -166,7 +166,7 @@ setOrgUsers(originalObj);
                           setName(false);
                         }
                       }}
-                      onChange={(e) => { orgName?.current=(e.target.value) }}
+                      onChange={(e) => { orgName.current=(e.target.value) }}
                       size="small"
                     />
                   </Box>
