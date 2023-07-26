@@ -54,7 +54,6 @@ function Createwebhook(props) {
     urlRef.current = "";
   };
 
-  console.log("createwebhook")
   useEffect(() => {
     if (props.webhookid) {
       nameRef.current = props.webhookname;

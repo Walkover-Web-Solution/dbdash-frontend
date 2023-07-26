@@ -31,7 +31,6 @@ export default function AddFilterPopup(props) {
   // const navigate = useNavigate();
   const editableDivRef  = useRef()
   const editableDivRef2  = useRef()
-  console.log("ljdfhglh");
   const AllTableInfo =customUseSelector((state) => getAllTableInfo(state));
   const [filterName, setFilterName] = useState("");
   // const [html, setHtml] = useState("");

@@ -165,6 +165,7 @@ function Navbar(props) {
 
   const memoizedAuthKeyPage = useMemo(
     () => (
+      
       <AuthKeyPage
         id={dbId}
         selectedOption={selectedOption}
@@ -173,13 +174,7 @@ function Navbar(props) {
         tabletoredirect={props.tabletoredirect}
       />
     ),
-    [
-      dbId,
-      selectedOption,
-      dataforwebhook,
-      props.dbtoredirect,
-      props.tabletoredirect,
-    ]
+    [dbId, selectedOption, props.dbtoredirect, props.tabletoredirect]
   );
 
   return (

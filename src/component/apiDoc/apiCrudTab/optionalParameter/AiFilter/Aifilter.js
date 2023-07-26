@@ -7,17 +7,10 @@ import { getAllTableInfo } from "../../../../../store/allTable/allTableSelector"
 import { filterQueryByAi } from "../../../../../api/filterApi";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./Aifilter.scss";
-import { customUseSelector } from "../../../../../store/customUseSelector";
-export default function AiFilter({
-  tableName,
-  handleUse,
-  querymade,
-  setQuerymade,
-  textfieldref,
-  changeQueryMade,
-  parent,
-  dbId,
-}) {
+import { customUseSelector } from '../../../../../store/customUseSelector';
+
+export default function AiFilter({ tableName, handleUse, querymade, setQuerymade, textfieldref, changeQueryMade, parent, dbId }) {
+
   const [text, setText] = useState("");
   const editableDivRef = useRef();
   const textFieldRef = useRef(null);

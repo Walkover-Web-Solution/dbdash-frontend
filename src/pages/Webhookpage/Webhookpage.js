@@ -6,7 +6,6 @@ import Webhooktable from "./Webhooktable";
 import Createwebhook from "./createwebhook";
 import PropTypes from "prop-types";
 export default function Webhookpage(props) {
-
   const [addWebhook, setAddWebhook] = useState(false);
   const [newcreated, setNewcreated] = useState(0);
 

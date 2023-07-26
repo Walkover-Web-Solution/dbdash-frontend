@@ -69,7 +69,8 @@ const styles = {
 // Create a custom Switch component with the applied styles
 const CustomSwitch = withStyles(styles)(Switch);
 
-export default function FieldPopupModal(props) {
+ function FieldPopupModal(props) {
+  // const AllTableInfo = useSelector((state) => getAllTableInfo(state));
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
@@ -102,7 +103,6 @@ export default function FieldPopupModal(props) {
     }
     props?.setTextValue(event.target.value);
   };
-console.log("fieldpopupmodal")
   const handleSelectChange = (event) => {
     setShowLinkField(false)
     setShowNumericOptions(false);
@@ -319,6 +319,9 @@ console.log("fieldpopupmodal")
     </div>
   );
 }
+
+export default React.memo(FieldPopupModal);
+
 
 FieldPopupModal.propTypes = {
   setOpen: PropTypes.func,
