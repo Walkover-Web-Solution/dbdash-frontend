@@ -25,7 +25,6 @@ import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup/create
 import DbSnapshotsMenu from './dbSnapshotsMenu/dbSnapshotsMenu.js';
 import { useRef } from 'react';
 import   { customUseSelector }  from '../../store/customUseSelector';
-import { traceParentPropsUpdate } from "../../utility/componentPropAnalyser.js";
 
 
 function MainNavbar(props) {
@@ -53,7 +52,6 @@ function MainNavbar(props) {
 
   const logOut = user?.logOut;
   const userDetails = customUseSelector((state) => selectActiveUser(state));
-  traceParentPropsUpdate({userDetails,user},"mainnavbar")
   const shouldShowTypography = useMemo(() => {
     const currentPath = location.pathname;
     return (

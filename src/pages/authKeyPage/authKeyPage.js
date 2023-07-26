@@ -9,15 +9,13 @@ import CreateAuthKey from "../createAuth/createAuth";
 export default function AuthKeyPage(props) {
 
   const [open, setOpen] = useState(false);
-  const [authKeys, setAuthKeys] = useState(null);
+  
   const [createdBy, setCreatedBy] = useState(null);
 
  
-  const handleClose = useMemo(() => {
-    return () => {
-      setOpen(false);
-    };
-  }, [setOpen]);
+  const handleClose = () => {
+    setOpen(false);
+  }
 
   
   const createAuthKeyComponent = useMemo(
@@ -27,7 +25,7 @@ export default function AuthKeyPage(props) {
         setCreatedBy={setCreatedBy}
         heading={"create authkey"}
         alltabledata={props?.alltabledata}
-        setAuthKeys={setAuthKeys}
+        setAuthKeys={props?.setAuthKeys}
         open={open}
         handleClose={handleClose}
         id={props.dbtoredirect}
@@ -37,19 +35,6 @@ export default function AuthKeyPage(props) {
   );
 
  
-  const authKeyComponent = useMemo(
-    () => (
-      <AuthKey
-        authKeys={authKeys}
-        createdBy={createdBy}
-        alltabledata={props?.alltabledata}
-        setCreatedBy={setCreatedBy}
-        setAuthKeys={setAuthKeys}
-        dbId={props.dbtoredirect}
-      />
-    ),
-    [authKeys, createdBy, props.alltabledata, props.dbtoredirect]
-  );
 
   return (
     <>
@@ -70,16 +55,26 @@ export default function AuthKeyPage(props) {
       {open && createAuthKeyComponent}
       <Box className="auth-key-page-content">
    
-        {authKeyComponent}
+      <AuthKey
+        authKeys={props?.authKeys}
+        createdBy={createdBy}
+        alltabledata={props?.alltabledata}
+        setCreatedBy={setCreatedBy}
+        dbId={props.dbtoredirect}
+        setAuthKeys={props?.setAuthKeys}
+      />
       </Box>
     </>
   );
 }
 
 AuthKeyPage.propTypes = {
+  authKeys:PropTypes.any,
+  setAuthKeys:PropTypes.any,
   dbId: PropTypes.any,
   dbtoredirect: PropTypes.any,
   selectedOption: PropTypes.any,
   tabletoredirect: PropTypes.any,
   alltabledata: PropTypes.any,
+
 };

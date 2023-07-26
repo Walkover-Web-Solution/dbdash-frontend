@@ -24,7 +24,8 @@ export default function AuthDropdown(props) {
   };
 
   const handleClose = () => {
-    setState({ ...state, open1: false });
+    setState({ ...state, open1: false ,anchorElUser: null});
+
   };
 
   return (
@@ -67,6 +68,7 @@ export default function AuthDropdown(props) {
 
         <MenuItem
           onClick={(event) => {
+            
             handleCloseUserMenu(event);
             setState({ ...state, display: true });
           }}
