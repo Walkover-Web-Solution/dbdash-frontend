@@ -7,11 +7,13 @@ import "./css.scss";
 import { bulkAdd } from "../store/database/databaseThunk";
 import SingleDatabase from "../component/workspaceDatabase/singledatabase/singleDatabase";
 import variables from "../assets/styling.scss";
+import isEqual from "../store/isEqual";
 
 export default function LandingPage() {
   const dispatch = useDispatch();
-  const emailId = useSelector((state) => state.user.userEmail);
-  const alldbs = useSelector((state) => state.dataBase.orgId || []);
+  const customEqual=(oldVal,newVal)=>isEqual(oldVal,newVal);
+  const emailId = useSelector((state) => state.user.userEmail,customEqual);
+  const alldbs = useSelector((state) => state.dataBase.orgId || [],customEqual);
 
   let dbs = [];
   if (alldbs && typeof alldbs === "object") {

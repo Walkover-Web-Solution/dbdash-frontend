@@ -29,12 +29,15 @@ import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 import { headerIcons } from "./headerIcons";
 import variables from '../assets/styling.scss';
+import isEqual  from "../store/isEqual";
 export default function MainTable(props) {
   const params = useParams();
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
+
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
-  const allFieldsofTable = useSelector((state) => state.table.columns);
-  const allRowsData = useSelector((state) => state.table.data) || [];
+  const allFieldsofTable = useSelector((state) => state.table.columns,customEqual);
+  const allRowsData = useSelector((state) => state.table.data || [],customEqual);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState("longtext");
@@ -59,7 +62,7 @@ export default function MainTable(props) {
   };
   const [selection, setSelection] = useState(emptyselection);
   const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
-  const tableInfo = useSelector((state) => getTableInfo(state));
+  const tableInfo = useSelector((state) => getTableInfo(state),customEqual);
   const tableId = tableInfo?.tableId;
   useEffect(() => {
     setData(allRowsData);
@@ -305,14 +308,14 @@ export default function MainTable(props) {
     addedTags?.length > 0 &&
       updateArray.push({
         where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
-        fieldsToShow: {
+        fields: {
           [fieldsToShow[cell[0]]?.id]: joinedString.slice(1, -1),
         },
       });
     removedTags?.length > 0 &&
       updateArray.push({
         where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
-        fieldsToShow: {
+        fields: {
           [fieldsToShow[cell[0]]?.id]: { delete: removedTags },
         },
       });
@@ -358,7 +361,6 @@ export default function MainTable(props) {
     
     setMenu({ col, bounds });
   }, []);
- 
   const getData = useCallback(
     (cell) => {
       const [col, row] = cell;

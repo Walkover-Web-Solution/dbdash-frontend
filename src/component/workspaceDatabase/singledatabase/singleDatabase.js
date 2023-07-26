@@ -21,21 +21,23 @@ import {
   deleteDbThunk,
 } from "../../../store/database/databaseThunk";
 import { allOrg } from "../../../store/database/databaseSelector";
-import { toast } from "react-toastify";
-import variables from "../../../assets/styling.scss";
-import "./singleDatabase.scss";
+import { toast } from 'react-toastify';
+import variables from '../../../assets/styling.scss'
+import './singleDatabase.scss';
+import isEqual from "../../../store/isEqual";
 
 function SingleDatabase(props) {
+
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
+
   const [name, setName] = useState(false);
   const dbname = useRef(null); // Create a ref for dbname
   const [openmove, setOpenmove] = useState(false);
   const [selectedorg, setSelectedorg] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allorgss = useSelector((state) => allOrg(state));
-  let arr = Object.entries(allorgss).filter((x) => {
-    return x[1]?._id !== props?.db?.org_id?._id;
-  });
+  const allorgss = useSelector((state) => allOrg(state),customEqual)
+  let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
   const handlingmove = () => {
     setOpenmove(false);
   };

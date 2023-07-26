@@ -9,9 +9,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createOrgThunk } from '../../../store/database/databaseThunk';
 import { toast } from 'react-toastify';
 import './workspaceCombined.scss';
-function WorkspaceCombined() {
+import isEqual from '../../../store/isEqual';
+ function WorkspaceCombined() {
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
+
   const [tabIndex, setTabIndex] = useState(0);
-  const alldbs = useSelector((state) => selectOrgandDb(state)) || [];
+  const alldbs = useSelector((state) => selectOrgandDb(state) || [],customEqual) ;
   const [addedelement, setAddedelement] = useState(null);
   const dispatch = useDispatch();
   const [org, setOrg] = useState();

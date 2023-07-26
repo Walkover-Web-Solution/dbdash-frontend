@@ -22,19 +22,19 @@ import { createTable, exportCSV } from "../../../api/tableApi";
 import "./tablesList.scss";
 import variables from "../../../assets/styling.scss";
 import { createViewTable } from "../../../api/viewTableApi";
-// import HideFieldDropdown from "../hidefieldDropdown";
 import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
-import { selectActiveUser } from "../../../store/user/userSelector";
-import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
+import  isEqual  from "../../../store/isEqual";
  function TablesList({ dbData }) {
+  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
+
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
-  const isTableLoading = useSelector((state) => state.table?.isTableLoading);
+  const isTableLoading = useSelector((state) => state.table?.isTableLoading,customEqual);
   const dispatch = useDispatch();
   const params = useParams();
-  const AllTableInfo = useSelector((state) => state.tables.tables);
-  const navigate = useNavigate();
+  const AllTableInfo = useSelector((state) => state.tables.tables,customEqual);
 
+  const navigate = useNavigate();
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
@@ -51,9 +51,16 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
   const [currentTable, setcurrentTable] = useState(null);
   const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
-  const AllTable = useSelector((state) => getAllTableInfo(state));
+  const AllTable = useSelector((state) => {
+    const { tables } = state.tables;
+    const { dbId, userAcess, userDetail } = state.tables;
+    return { tables, dbId, userAcess, userDetail };
+  },customEqual);
   const [openManageField, setOpenManageField] = useState(false);
-  const userDetails = useSelector((state) => selectActiveUser(state));
+  
+    const fullName=useSelector((state) => state.user.userFirstName+" "+state.user.userLastName,customEqual);
+   const email=useSelector((state) => state.user.userEmail,customEqual)
+  
   const handleClick = (event, id) => {
     if (id === "share") {
       setShareLinkOpen(true);
@@ -93,7 +100,7 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
     };
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
-     await dispatch(createTable1({ tables: apiCreate.data.tables }));
+    await dispatch(createTable1({ tables: apiCreate.data.tables }));
     const matchedKey = Object.keys(apiCreate?.data?.tables).find(
       (key) => {
         return apiCreate?.data?.tables[key].tableName === table;
@@ -105,6 +112,7 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
 
   
   };
+
   const handleEdit = async () => {
     if (params?.filterName) {
       setOpenn(true);
@@ -115,6 +123,7 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
       toast.warning("choose the filter First");
     }
   };
+  
   function onFilterClicked(filter, id) {
    
     setFilterId(params?.filterName || id);
@@ -203,8 +212,8 @@ import { getAllTableInfo } from "../../../store/allTable/allTableSelector";
     const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query;
     const data = {
       query: query,
-      userName: userDetails?.fullName,
-      email: userDetails?.email,
+      userName: fullName,
+      email: email,
       filterId: filterId,
     };
     await exportCSV(dbData?.db?._id, params?.tableName, data);
