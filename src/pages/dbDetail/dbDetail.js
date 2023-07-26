@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Box} from "@mui/material";
 import { useParams} from "react-router-dom";
 import TablesList from "../../component/table/tablesList/tablesList";
@@ -11,7 +10,7 @@ import { resetData } from "../../store/table/tableSlice";
 import "./dbDetail.scss"; 
 
 function DbDetails() {
-    var {dbId} = useParams();
+    const {dbId} = useParams();
     const dispatch = useDispatch()
     const [dbData, setDbData] = useState(null);
     useEffect(() => {
@@ -24,9 +23,11 @@ function DbDetails() {
     }, []);
     const getAllTableName = async (dbId) => {
 
-        var object = {}
+        // var object = {}
         const data = await getDbById(dbId)
-        object.db=data.data.data
+       const object = {
+        db:data.data.data
+    }
         dispatch(setAllTablesData(
             { 
                 "dbId":dbId,
@@ -53,9 +54,3 @@ function DbDetails() {
 }
 
 export default DbDetails;
-DbDetails.propTypes = {
-    dbData: PropTypes.any,
-    location: PropTypes.shape({
-        state: PropTypes.object
-    })
-};
