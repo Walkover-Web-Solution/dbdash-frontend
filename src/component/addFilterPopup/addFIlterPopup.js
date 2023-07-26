@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { updateQuery } from "../../api/filterApi";
 import { getAllTableInfo } from "../../store/allTable/allTableSelector";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import variables from '../../assets/styling.scss';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -12,7 +12,7 @@ import CustomAutoSuggest from "../customAutoSuggest/customAutoSuggest";
 import CloseIcon from "@mui/icons-material/Close";
 import { filterQueryByAi } from "../../api/filterApi";
 import "./addFilterPopup.scss"
-import { customEqual } from "../../store/isEqual";
+import { customUseSelector } from "../../store/customUseSelector";
 
 
 const style = {
@@ -31,7 +31,8 @@ export default function AddFilterPopup(props) {
   // const navigate = useNavigate();
   const editableDivRef  = useRef()
   const editableDivRef2  = useRef()
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state),customEqual);
+  console.log("ljdfhglh");
+  const AllTableInfo =customUseSelector((state) => getAllTableInfo(state));
   const [filterName, setFilterName] = useState("");
   // const [html, setHtml] = useState("");
   const [html2, setHtml2] = useState("");

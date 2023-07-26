@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 
 import "./Glidedatagrid.css";
 import "../../src/App.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import { reorderRows } from "./reorderRows.js";
@@ -29,15 +29,15 @@ import SelectFilepopup from "./selectFilepopup";
 import { toast } from "react-toastify";
 import { headerIcons } from "./headerIcons";
 import variables from '../assets/styling.scss';
-import isEqual  from "../store/isEqual";
+import { customUseSelector } from "../store/customUseSelector";
+import CustomAutoSuggest from "../component/customAutoSuggest/customAutoSuggest";
 export default function MainTable(props) {
   const params = useParams();
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
-  const allFieldsofTable = useSelector((state) => state.table.columns,customEqual);
-  const allRowsData = useSelector((state) => state.table.data || [],customEqual);
+  const allFieldsofTable = customUseSelector((state) => state.table.columns);
+  const allRowsData = customUseSelector((state) => state.table.data || []);
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectValue, setSelectValue] = useState("longtext");
@@ -62,7 +62,7 @@ export default function MainTable(props) {
   };
   const [selection, setSelection] = useState(emptyselection);
   const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
-  const tableInfo = useSelector((state) => getTableInfo(state),customEqual);
+  const tableInfo = CustomAutoSuggest((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId;
   useEffect(() => {
     setData(allRowsData);

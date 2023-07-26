@@ -3,11 +3,11 @@ import { Box, Button } from "@mui/material";
 import variables from "../../../../../assets/styling.scss";
 import CustomAutoSuggest from "../../../../customAutoSuggest/customAutoSuggest";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { getAllTableInfo } from "../../../../../store/allTable/allTableSelector";
 import { filterQueryByAi } from "../../../../../api/filterApi";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./Aifilter.scss";
+import { customUseSelector } from "../../../../../store/customUseSelector";
 export default function AiFilter({
   tableName,
   handleUse,
@@ -24,7 +24,7 @@ export default function AiFilter({
   const [showAnsfield, setShowAnsfield] = useState(true);
   const [textAfterWhere, setTextAfterWhere] = useState();
   const [fields, setFields] = useState([]);
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const AllTableInfo = customUseSelector((state) => getAllTableInfo(state));
 
   const handleTextChange = (text) => {
     setText(text.trim());

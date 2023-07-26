@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../store/allTable/allTableSelector';
 import { getQueryByAi } from '../api/fieldApi';
 import CustomAutoSuggest from '../component/customAutoSuggest/customAutoSuggest';
 import { ClickAwayListener } from '@mui/material';
+import { customUseSelector } from '../store/customUseSelector';
 
 export default function UpdateQueryPopup(props) {
   
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const AllTableInfo = customUseSelector((state) => getAllTableInfo(state));
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState();

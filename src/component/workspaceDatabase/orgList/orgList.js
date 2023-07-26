@@ -7,7 +7,7 @@ import { Box, Card, Typography, TextField, Button, IconButton, ClickAwayListener
 import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
 import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../../store/database/databaseThunk";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ShareOrgModal from "../shareOrgModal";
 
 import { allOrg } from "../../../store/database/databaseSelector";
@@ -15,16 +15,15 @@ import { toast } from "react-toastify";
 import { createDb } from "../../../api/dbApi";
 import { useNavigate } from "react-router-dom";
 import './orgList.scss';
-import isEqual from "../../../store/isEqual";
+import  { customUseSelector } from "../../../store/customUseSelector";
 
 export const OrgList = (props) => {
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
   const [userType, setUserType] = useState("");
   const naviagate = useNavigate();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
-  const allorgss = useSelector((state) => allOrg(state),customEqual)
+  const allorgss = customUseSelector((state) => allOrg(state))
   const [name, setName] = useState(false); // [show textfield and setshowtextfield]
   const [orgUsers, setOrgUsers] = useState([])
   const orgName = useRef(props.dbs[0]?.org_id?.name)

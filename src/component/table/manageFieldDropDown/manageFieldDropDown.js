@@ -18,12 +18,13 @@ import Slide from '@mui/material/Slide';
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
+import {  useDispatch } from 'react-redux';
 import AddOptionPopup from '../addOptionPopup/addOptionPopup';
 // import variables from '../../../assets/styling.scss';
 import './manageFieldDropDown.scss'
 import { useParams } from 'react-router-dom';
 import { updateColumnHeaders } from '../../../store/table/tableThunk';
+import { customUseSelector } from '../../../store/customUseSelector';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -41,7 +42,7 @@ export default function ManageFieldDropDown(props) {
   const dispatch = useDispatch();
 
   const classes = useStyles();
-  const fields1 = useSelector((state) => state.table.columns);
+  const fields1 = customUseSelector((state) => state.table.columns);
   const [openAddFields, setOpenAddFields] = React.useState(false);
   const [fieldId, setFieldId] = useState("");
   const [fieldType, setFieldType] = useState("");

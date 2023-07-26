@@ -1,5 +1,5 @@
 import React, {memo, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import PropTypes from 'prop-types';
 
 import { useParams } from "react-router-dom";
@@ -9,14 +9,15 @@ import {
   removeDbInUserThunk,
   updateAccessOfUserInDbThunk,
 } from "../../../store/allTable/allTableThunk";
+import { customUseSelector } from "../../../store/customUseSelector";
 
 function Sharedb(props) {
   const {setOpenShareDb,openShareDb}=props;
   const params = useParams();
   const adminId = localStorage.getItem("userid");
   const dispatch = useDispatch();
-  const userAcess = useSelector((state) =>state.tables?.userAcess);
-  const userDetail = useSelector((state) =>state.tables?.userDetail);
+  const userAcess = customUseSelector((state) =>state.tables?.userAcess);
+  const userDetail = customUseSelector((state) =>state.tables?.userDetail);
   const [dbUsers, setDbUsers] = useState();
   const [userType, setUserType] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);

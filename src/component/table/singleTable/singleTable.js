@@ -2,7 +2,7 @@ import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, TextField, Tab, Button, ClickAwayListener } from "@mui/material";
 import Dropdown from "../../dropdown";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   removeTable1,
@@ -16,7 +16,7 @@ import variables from "../../../assets/styling.scss";
 import "./singleTable.scss";
 import { useParams } from "react-router-dom";
 import { bulkAddColumns } from "../../../store/table/tableThunk";
-import  { customEqual }  from "../../../store/isEqual";
+import  {customUseSelector }  from "../../../store/customUseSelector";
 
  function SingleTable({
   dbData,
@@ -32,8 +32,8 @@ import  { customEqual }  from "../../../store/isEqual";
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
 
-  const AllTableInfo = useSelector((state) => state.tables.tables,customEqual);
-  const userDetails = useSelector((state) => selectActiveUser(state),customEqual);
+  const AllTableInfo = customUseSelector((state) => state.tables.tables);
+  const userDetails = customUseSelector((state) => selectActiveUser(state));
   const params = useParams();
 
   const dispatch = useDispatch();

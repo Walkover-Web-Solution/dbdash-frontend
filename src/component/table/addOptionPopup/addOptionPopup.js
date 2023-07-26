@@ -3,12 +3,13 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { Add, Cancel } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { updateColumnHeaders, updateMultiSelectOptions } from "../../../store/table/tableThunk";
 import { getTableInfo } from "../../../store/table/tableSelector";
 import { toast } from 'react-toastify';
 import './addOptionPopup.scss'
+import { customUseSelector } from "../../../store/customUseSelector";
 
 const style = {
   position: "absolute",
@@ -30,13 +31,13 @@ export default function AddOptionPopup(props) {
   const params = useParams();
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
-  const fields1 = useSelector((state) => state.table.columns);
+  const fields1 = customUseSelector((state) => state.table.columns);
 
   const colors = ["#FFD4DF", "#CCE0FE", "#CEF5D2", "whitesmoke", "cadetblue"];
 
   const [valueAndColor, setValueAndColor] = useState();
 
-  const tableInfo = useSelector((state) => getTableInfo(state));
+  const tableInfo = customUseSelector((state) => getTableInfo(state));
   const metaDataArray = tableInfo?.columns.filter(obj => obj.id === props?.columnId);
   let top100Films = metaDataArray[0]?.metadata?.option || [];
 

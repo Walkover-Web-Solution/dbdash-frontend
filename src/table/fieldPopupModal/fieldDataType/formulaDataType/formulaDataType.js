@@ -5,14 +5,14 @@ import { Box, Button, CircularProgress, TextField } from '@mui/material';
 
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../../store/allTable/allTableSelector';
 import CustomAutoSuggest from "../../../../component/customAutoSuggest/customAutoSuggest"
 import { getQueryByAi } from '../../../../api/fieldApi';
 import './formulaDataType.scss'
+import { customUseSelector } from '../../../../store/customUseSelector';
 
 export default function FormulaDataType(props) {
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const AllTableInfo = customUseSelector((state) => getAllTableInfo(state));
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions,setSuggestions] = useState();

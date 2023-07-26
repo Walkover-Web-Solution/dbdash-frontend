@@ -1,6 +1,5 @@
 import React, { memo, useMemo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -22,7 +21,7 @@ import Webhookpage from "../../../pages/Webhookpage/Webhookpage";
 import variables from "../../../assets/styling.scss";
 import AuthKeyPage from "../../../pages/authKeyPage/authKeyPage";
 import "./navbarApi.scss";
-import isEqual from '../../../store/isEqual';
+import { customUseSelector } from '../../../store/customUseSelector';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -53,12 +52,11 @@ function Navbar(props) {
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb, setSelectedDb] = useState(useParams().dbId);
-  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
   const [selectTable, setSelectTable] = useState(
     useLocation().state || props.tabletoredirect
   );
-  const alldb = useSelector((state) => selectOrgandDb(state),customEqual);
+  const alldb = customUseSelector((state) => selectOrgandDb(state));
   const [loading, setLoading] = useState(false);
   const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
   const [dataforwebhook, setdataforwebhook] = useState(null);
@@ -138,7 +136,7 @@ function Navbar(props) {
   }, [alldb]);
 
   const getAllTableName = async (dbId) => {
-    const data = await getDbById(dbId);
+    const data = await getDbById(dbId);//{tables:,webhooks:,}
     setTables(data.data.data.tables || {});
     setdataforwebhook(data.data.data.tables);
     if (data.data.data.tables) {

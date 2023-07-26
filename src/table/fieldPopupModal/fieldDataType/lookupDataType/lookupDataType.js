@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../../store/allTable/allTableSelector';
 import { MenuItem, Select } from '@mui/material';
 import PropTypes from 'prop-types';
 import './lookupDataType.scss'
+import { customUseSelector } from '../../../../store/customUseSelector';
 
 export default function LoookupDataType(props) {
 
-  const AllTableInfo = useSelector((state) => getAllTableInfo(state));
+  const AllTableInfo = customUseSelector((state) => getAllTableInfo(state));
   const [openViewDropdown, setOpenViewDropdown] = useState(true);
   let foreignKey = AllTableInfo?.tables?.[props?.tableId]?.fields;
   if (foreignKey) {

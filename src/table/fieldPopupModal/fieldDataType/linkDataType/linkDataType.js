@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
 import { MenuItem, Select, Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
 import { getAllTableInfo } from '../../../../store/allTable/allTableSelector';
 import PropTypes from 'prop-types';
 import { cloneDeep } from "lodash";
 import { useEffect } from 'react';
 import './linkDataType.scss'
+import { customUseSelector } from '../../../../store/customUseSelector';
 
 
 export default function LinkDataType(props) {
-  const allTables = useSelector((state) => getAllTableInfo(state));
-  // const tableId = useSelector((state) => state.table.tableId);
+  const allTables = customUseSelector((state) => getAllTableInfo(state));
   const AllTableInfo = cloneDeep(allTables)
-  // delete AllTableInfo?.tables[tableId]
   const [showUniqueFieldsDropdown, setShowUniqueFieldsDropdown] = useState(true);
   let uniqueFields = AllTableInfo?.tables[props?.selectedTable]?.fields && Object.entries(AllTableInfo?.tables[props?.selectedTable]?.fields)?.filter((fields) => {
     if (fields[1]?.metaData?.unique) {

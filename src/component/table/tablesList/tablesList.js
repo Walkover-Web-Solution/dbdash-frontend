@@ -10,7 +10,7 @@ import SingleTable from "../singleTable/singleTable";
 import { useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import MainTable from "../../../table/mainTable";
 import { createTable1 } from "../../../store/allTable/allTableThunk";
 import AddFilterPopup from "../../addFilterPopup/addFIlterPopup";
@@ -24,14 +24,14 @@ import variables from "../../../assets/styling.scss";
 import { createViewTable } from "../../../api/viewTableApi";
 import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
-import   { customEqual }  from "../../../store/isEqual";
+import   {  customUseSelector }  from "../../../store/customUseSelector";
  function TablesList({ dbData }) {
 
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
-  const isTableLoading = useSelector((state) => state.table?.isTableLoading,customEqual);
+  const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
-  const AllTableInfo = useSelector((state) => state.tables.tables,customEqual);
+  const AllTableInfo = customUseSelector((state) => state.tables.tables);
 
   const navigate = useNavigate();
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
@@ -50,15 +50,15 @@ import   { customEqual }  from "../../../store/isEqual";
   const [currentTable, setcurrentTable] = useState(null);
   const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
-  const AllTable = useSelector((state) => {
+  const AllTable = customUseSelector((state) => {
     const { tables } = state.tables;
     const { dbId, userAcess, userDetail } = state.tables;
     return { tables, dbId, userAcess, userDetail };
-  },customEqual);
+  });
   const [openManageField, setOpenManageField] = useState(false);
   
-    const fullName=useSelector((state) => state.user.userFirstName+" "+state.user.userLastName,customEqual);
-   const email=useSelector((state) => state.user.userEmail,customEqual)
+    const fullName=customUseSelector((state) => state.user.userFirstName+" "+state.user.userLastName);
+   const email=customUseSelector((state) => state.user.userEmail)
   
   const handleClick = (event, id) => {
     if (id === "share") {
