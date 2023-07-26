@@ -1,4 +1,4 @@
-import React, {  useMemo, useState } from "react";
+import React, {  useMemo, useRef } from "react";
 import PropTypes from "prop-types";
 import { Box, Typography, TextField, Button,ClickAwayListener } from "@mui/material"; 
 import { useNavigate } from "react-router-dom";
@@ -12,12 +12,14 @@ import "./filterPopup.scss"
 
 
 const FilterModal = (props) => {
+  console.log("inside filter popup")
   const navigate = useNavigate();
-  const [filterName, setFilterName] = useState("");
+  // const [filterName, setFilterName] = useState("");
+  const filterNameRef = useRef("");
   const dispatch = useDispatch();
   const disabled=useMemo(()=>{
-    return !filterName;
-  },[filterName])
+    return !filterNameRef?.current;
+  },[filterNameRef?.current])
   const calculatePosition = () => {
     const buttonRect = props?.buttonRef.current.getBoundingClientRect();
     const { scrollX, scrollY } = window;
@@ -56,18 +58,18 @@ const style = {
   };
 
   const handleCreateFilter = async () => {
-    const firstChar = filterName[0];
+    const firstChar = filterNameRef?.current;
 let filterName1;
   if (/[a-zA-Z]/.test(firstChar)) {
-filterName1=firstChar.toUpperCase() + filterName.slice(1);
+filterName1=firstChar.toUpperCase() + filterNameRef?.current.slice(1);
   }
   else 
   {
-    filterName1=firstChar.toLowerCase() + filterName.slice(1);
+    filterName1=firstChar.toLowerCase() + filterNameRef?.current.slice(1);
   }
-  setFilterName(filterName1);
+  filterNameRef.current = filterName1;
     const dataa = {
-      filterName: filterName1,
+      filterName: filterNameRef?.current,
       query: "SELECT * FROM " + props?.tableName,
       htmlToShow : ""
     };
@@ -102,15 +104,15 @@ filterName1=firstChar.toUpperCase() + filterName.slice(1);
         <TextField
           label="Filter Name"
           variant="outlined"
-          value={filterName}
+          // value={filterName}
           autoFocus={true}
           onKeyDown={(e) => {
             if (e.key !== "Enter") return;
-            if (!filterName) return;
+            if (!filterNameRef?.current) return;
             handleCreateFilter();
             handleClose();
           }}
-          onChange={(e) => setFilterName(e.target.value)}
+          onChange={(e) => filterNameRef.current = e.target.value}
         />
       </Box>
       <Box className="filter-actions" display="flex" justifyContent="space-between">
@@ -121,7 +123,7 @@ filterName1=firstChar.toUpperCase() + filterName.slice(1);
             handleCreateFilter();
             handleClose();
           }}
-          disabled={!filterName}
+          disabled={!filterNameRef?.current}
           sx={{ fontSize: variables.editfilterbutttonsfontsize }}
         >
           Create Filter
