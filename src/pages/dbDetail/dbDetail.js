@@ -23,11 +23,9 @@ function DbDetails() {
     }, []);
     const getAllTableName = async (dbId) => {
 
-        // var object = {}
+        
         const data = await getDbById(dbId)
-       const object = {
-        db:data.data.data
-    }
+        const object={db:data.data.data}
         dispatch(setAllTablesData(
             { 
                 "dbId":dbId,

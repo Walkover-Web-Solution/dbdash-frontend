@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PropTypes } from "prop-types";
-import { getAuthkey, deleteAuthkey } from "../../../api/authkeyApi";
+import {  deleteAuthkey } from "../../../api/authkeyApi";
 import TableMenuDropdown from "../tableMenuDropdown/tableMenuDropdown.js";
 import { allOrg } from "../../../store/database/databaseSelector";
 import "./authKeyTable.scss";
@@ -22,16 +22,13 @@ export default function AuthKey(props) {
 
   const user = customUseSelector((state) => allOrg(state));
  
-  useEffect(() => {
-    getAuthkeyFun();
-  }, [props.dbId]);
-
+  
   
 
   function getCreatedByName(data) {
     var array = [];
-    if (data && data.data) {
-      Object.entries(data.data)?.map((key) => {
+    if (data ) {
+      Object.entries(data)?.map((key) => {
         if (key[1]?.user && Array.isArray(user)) {
           user?.map((user) => {
             if (user.users && Array.isArray(user.users)) {
@@ -49,14 +46,12 @@ export default function AuthKey(props) {
     }
     props?.setCreatedBy(array);
   }
+  useEffect(()=>{
+    getCreatedByName(props?.authKeys);
 
-  async function getAuthkeyFun() {
-    const data = await getAuthkey(props?.dbId, adminId);
-    if (data?.data?.data) {
-      props?.setAuthKeys(data.data.data);
-      getCreatedByName(data.data.data);
-    }
-  }
+  },[props?.authKeys])
+
+  
 
   async function deleteAuthkeyFun(authKey) {
     const data = await deleteAuthkey(props?.dbId, adminId, authKey);

@@ -23,10 +23,8 @@ import { toast } from "react-toastify";
 import { customUseSelector } from "../../store/customUseSelector";
 
 export default function CreateAuthKey(props) {
-  console.log("inside CreateAuthKey")
   const id = props.id;
   const [scope, setScope] = useState({});
-  // const [name, setName] = useState("");
   const nameRef = useRef("");
   const userDetails = customUseSelector((state) => selectActiveUser(state));
   const [authKey, setAuthKey] = useState("");

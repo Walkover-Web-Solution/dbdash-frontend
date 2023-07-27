@@ -98,6 +98,7 @@ function Webhooktablemenu(props) {
         webhookname={props.webhookname}
         webhookid={props.webhookid}
         dataforwebhook={props?.dataforwebhook}
+        setWebhooks={props?.setTabledata}
         dbId={props.dbId}
         tableId={props?.tableId}
         filterId={props.filterId}

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Table, TableBody, Box, Paper, TableRow, TableHead, TableContainer, TableCell, } from "@mui/material";
 import { PropTypes } from 'prop-types';
-import { deleteWebhook, getWebhook, updateWebhook } from "../../api/webhookApi";
+import { deleteWebhook, updateWebhook } from "../../api/webhookApi";
 import MenuIcon from '@mui/icons-material/MoreHoriz';
 import Webhooktablemenu from "./Webhooktablemenu";
 import './Webhookpage.scss';
@@ -14,12 +14,7 @@ export default function Webhooktable(props) {
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
   const [filters, setFilters] = useState('')
-  const [tabledata, setTabledata] = useState(null);
-  useEffect(async () => {
-    const data = await getWebhook(props.dbId);
-    setTabledata(data?.data?.data);
-  }, [props.dbId, props.newcreated]);
-
+ 
   const toggleDropdown = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -32,7 +27,7 @@ export default function Webhooktable(props) {
     const data = { condition: wbhookcondition };
     const data1 = await deleteWebhook(props.dbId, props.tableId, wbhookid, data);
     closeDropdown();
-    setTabledata(data1.data.data?.webhook);
+    props?.setTabledata(data1.data.data?.webhook);
 
   };
   const handleUpdateActive = async () => {
@@ -42,7 +37,7 @@ export default function Webhooktable(props) {
     };
     const data1 = await updateWebhook(props.dbId, props.tableId, wbhookid, data);
     
-    setTabledata(data1.data.data.webhook);
+    props?.setTabledata(data1.data.data.webhook);
   };
 
   const formatDateTime = (dateTime) => {
@@ -116,7 +111,7 @@ export default function Webhooktable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tabledata && Object.entries(tabledata).map(([condition, webhooks]) => (
+              {props?.tabledata && Object.entries(props?.tabledata).map(([condition, webhooks]) => (
                 Object.entries(webhooks).map(([webhookid, webhook]) => (
 
                   <TableRow className="webhook-table-body-table-row" key={webhookid} >
@@ -159,7 +154,8 @@ export default function Webhooktable(props) {
                         {anchorEl && <Webhooktablemenu
                         dataforwebhook={props?.dataforwebhook}
                          newcreated={props.newcreated}
-                          tabledata={tabledata} setNewcreated={props.setNewcreated} tableId={webhook.tableId} dbId={props?.dbId} filterId={filters} weburl={url} condition={wbhookcondition} webhookname={name} webhookid={wbhookid} handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl} closeDropdown={closeDropdown} isActive={wbhookactive} />
+                         setTabledata={props?.setTabledata}
+                         tabledata={props?.tabledata} setNewcreated={props.setNewcreated} tableId={webhook.tableId} dbId={props?.dbId} filterId={filters} weburl={url} condition={wbhookcondition} webhookname={name} webhookid={wbhookid} handleDeleteWebhook={handleDeleteWebhook} handleUpdateActive={handleUpdateActive} anchorEl={anchorEl} closeDropdown={closeDropdown} isActive={wbhookactive} />
                         }</div>
                     </TableCell>
                   </TableRow>

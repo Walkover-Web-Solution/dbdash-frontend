@@ -29,19 +29,25 @@ function Createwebhook(props) {
       condition: actionRef.current,
     };
 
+    let response={};
     if (props?.webhookid) {
       if (props?.condition !== actionRef.current) {
         data.newCondition = actionRef.current;
         data.condition = props?.condition;
       }
-      await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
+       response=await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
+
     } else {
-      await createWebhook(props.dbId, selectedTableRef.current, data);
+       response=await createWebhook(props.dbId, selectedTableRef.current, data);
+
     }
     handleClose();
+    props?.setWebhooks(response?.data.data);
+
     nameRef.current = "";
     actionRef.current = "";
     urlRef.current = "";
+    
     props.setNewcreated(props.newcreated + 1);
   };
   const handleClose = () => {
@@ -54,7 +60,6 @@ function Createwebhook(props) {
     urlRef.current = "";
   };
 
-  console.log("createwebhook")
   useEffect(() => {
     if (props.webhookid) {
       nameRef.current = props.webhookname;
@@ -84,10 +89,7 @@ function Createwebhook(props) {
       <Modal open={props.open} onClose={handleClose}>
         <Box
           className="create-webhook-key-main-container"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
+         
         >
           <Box className="create-webhook-key-content-container" >
           <div className="create-webhook-popupheader popupheader" >    <Typography className="create-webhook-popupheader-heading"  id="title" variant="h6" component="h2">
@@ -100,6 +102,8 @@ function Createwebhook(props) {
                 id="standard-basic"
                 label="Name"
                 variant="standard"
+                defaultValue={nameRef?.current}
+
                 onChange={(e) => {
                   nameRef.current = e.target.value;
                   setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
@@ -116,6 +120,8 @@ function Createwebhook(props) {
                 <TextField
                   id="action"
                   select
+                defaultValue={actionRef?.current}
+
                   label="Action"
                   
                   className="create-webhook-action-text-field"
@@ -141,8 +147,10 @@ function Createwebhook(props) {
                 <TextField
                   id="tables"
                   select
-                  label="Action"
+                  label="Tables"
                   className="create-webhook-table-text-field"
+                defaultValue={selectedTableRef?.current}
+
                   onChange={(e) => {
 
                     selectedTableRef.current = e.target.value;
@@ -166,6 +174,7 @@ function Createwebhook(props) {
               <Typography className="create-webhook-key-label">URL</Typography>
               <TextField
                 id="standard-basic"
+                defaultValue={urlRef?.current}
                 label="Url"
                 variant="standard"
                 onChange={(e) => {
@@ -199,6 +208,7 @@ Createwebhook.propTypes = {
   setNewcreated: PropTypes.any,
   newcreated: PropTypes.any,
   heading:PropTypes.any,
+  setWebhooks:PropTypes.any,
   webhookid: PropTypes.any,
   webhookname: PropTypes.any,
   weburl: PropTypes.any,

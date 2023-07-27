@@ -60,7 +60,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 export default function Headermenu(props) {
-  console.log("headermenu")
   const classes = useStyles();
   const[header,setHeader]=useState(props?.fields[props?.menu?.col]?.title);
   const isOpen = props?.menu !== undefined;

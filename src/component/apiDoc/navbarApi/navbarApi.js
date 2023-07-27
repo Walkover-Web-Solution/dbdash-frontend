@@ -52,6 +52,9 @@ function Navbar(props) {
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb, setSelectedDb] = useState(useParams().dbId);
+const[authkeys,setAuthKeys]=useState({});
+const[webhooks,setWebhooks]=useState({});
+
 
   const [selectTable, setSelectTable] = useState(
     useLocation().state || props.tabletoredirect
@@ -136,9 +139,11 @@ function Navbar(props) {
   }, [alldb]);
 
   const getAllTableName = async (dbId) => {
-    const data = await getDbById(dbId);//{tables:,webhooks:,}
+    const data = await getDbById(dbId);
     setTables(data.data.data.tables || {});
     setdataforwebhook(data.data.data.tables);
+    setAuthKeys(data.data.data.auth_keys);
+     setWebhooks(data.data.data.webhook);
     if (data.data.data.tables) {
       if (dbchanged === 0) {
         setSelectTable(selectTable || Object.keys(data.data.data.tables)[0]);
@@ -169,6 +174,8 @@ function Navbar(props) {
         id={dbId}
         selectedOption={selectedOption}
         alltabledata={dataforwebhook}
+        authKeys={authkeys}
+        setAuthKeys={setAuthKeys}
         dbtoredirect={props.dbtoredirect}
         tabletoredirect={props.tabletoredirect}
       />
@@ -177,6 +184,7 @@ function Navbar(props) {
       dbId,
       selectedOption,
       dataforwebhook,
+      authkeys,
       props.dbtoredirect,
       props.tabletoredirect,
     ]
@@ -330,6 +338,8 @@ function Navbar(props) {
             dataforwebhook={dataforwebhook}
             dbId={props?.dbtoredirect}
             table={props?.tabletoredirect}
+            webhooks={webhooks}
+            setWebhooks={setWebhooks}
           />
         )}
         {showWebhookPage === "apidoc" && (
