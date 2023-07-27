@@ -40,9 +40,10 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false);
+  const [filteropen, setFilteropen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleOpenn = () => setOpenn(true);
-  const [edit, setEdit] = useState(false);
+  // const [edit, setEdit] = useState(false);
   const buttonRef = useRef(null);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -113,14 +114,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   };
 
   const handleEdit = async () => {
-    if (params?.filterName) {
-      setOpenn(true);
-      setEdit(true);
-    } else {
-      setEdit(false);
-      setOpenn(false);
-      toast.warning("choose the filter First");
-    }
+      setFilteropen(true);
   };
   
   function onFilterClicked(filter, id) {
@@ -308,13 +302,13 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
             Add View
           </Button>
         </Box>
-        {openn && !edit && (
+        {openn && (
           <FilterModal
             dbData={dbData}
             buttonRef={buttonRef}
-            open={openn}
-            edit={edit}
-            setEdit={setEdit}
+            // open={openn}
+            // edit={edit}
+            // setEdit={setEdit}
             setOpen={setOpenn}
             filterId={filterId}
             dbId={dbData?.db?._id}
@@ -409,13 +403,13 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
           </MenuItem>
         </Menu>
       </div>
-      {openn && edit && (
+      {filteropen  && (
         <AddFilterPopup
           dbData={dbData}
-          open={openn}
-          edit={edit}
-          setEdit={setEdit}
-          setOpen={setOpenn}
+          open={filteropen}
+          // edit={edit}
+          // setEdit={setEdit}
+          setOpen={setFilteropen}
           filterId={params?.filterName}
           dbId={dbData?.db?._id}
           tableName={params?.tableName}
