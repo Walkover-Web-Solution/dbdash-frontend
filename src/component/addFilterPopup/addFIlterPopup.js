@@ -32,7 +32,7 @@ export default function AddFilterPopup(props) {
   const editableDivRef  = useRef()
   const editableDivRef2  = useRef()
   const AllTableInfo =customUseSelector((state) => getAllTableInfo(state));
-  const [filterName, setFilterName] = useState("");
+  // const [filterName, setFilterName] = useState("");
   // const [html, setHtml] = useState("");
   const [html2, setHtml2] = useState("");
   const [text, setText] = useState("");
@@ -51,7 +51,7 @@ const [showsavebutton,setShowsavebutton]=useState(true);
   const [textFieldHeight, setTextFieldHeight] = useState(null);
 
   const handleClose = () => {
-    props?.setEdit(false);
+    // props?.setEdit(false);
     props.setOpen(false);
   };
 
@@ -70,21 +70,21 @@ const [showsavebutton,setShowsavebutton]=useState(true);
     tableData();
   }, [props.tableName]);
 
-  useEffect(() => {
-    if (props?.edit === true) {
-      const editDataValues = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.query;
-      const htmlToShow = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow;
-      setDefaultValue(htmlToShow);
-      const searchString = "where";
-      if (editDataValues.includes(searchString)) {
-        const index = editDataValues.indexOf(searchString);
-        if (index !== -1) {
-          editDataValues.substring(index + searchString.length).trim();
-        }
-      }
-      setFilterName(AllTableInfo.tables[props?.tableName].filters[props?.filterId].filterName);
-    }
-  }, [props]);
+  // useEffect(() => {
+  //   if (props?.edit === true) {
+  //     const editDataValues = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.query;
+  //     const htmlToShow = AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow;
+  //     setDefaultValue(htmlToShow);
+  //     const searchString = "where";
+  //     if (editDataValues.includes(searchString)) {
+  //       const index = editDataValues.indexOf(searchString);
+  //       if (index !== -1) {
+  //         editDataValues.substring(index + searchString.length).trim();
+  //       }
+  //     }
+  //     setFilterName(AllTableInfo.tables[props?.tableName].filters[props?.filterId].filterName);
+  //   }
+  // }, [props]);
 
   const updateFilter = async () => {
     let queryToSend = " ";
@@ -136,7 +136,7 @@ setShowsecondfield(true);
     const data = await updateFilter();
     const dataa = {
       filterId: props?.filterId,
-      filterName: filterName,
+      // filterName: filterName,
       query: data,
       htmlToShow: html2,
     };
@@ -288,9 +288,9 @@ AddFilterPopup.propTypes = {
   setOpen: PropTypes.func,
   dbId: PropTypes.any,
   tableName: PropTypes.any,
-  edit: PropTypes.any,
+  // edit: PropTypes.any,
   filterId: PropTypes.any,
   dbData: PropTypes.any,
-  setEdit: PropTypes.func,
+  // setEdit: PropTypes.func,
 };
 
