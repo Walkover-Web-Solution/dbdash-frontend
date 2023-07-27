@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef} from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
   CompactSelection,
   DataEditor,
@@ -11,11 +11,11 @@ import {
 import PropTypes from "prop-types";
 import "./Glidedatagrid.css";
 import "../../src/App.scss";
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import {  addRow, editCell, getDataExternalFunction, reorderFuncton } from "./addRow";
+import { addRow, editCell, getDataExternalFunction, reorderFuncton } from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
@@ -36,9 +36,9 @@ export default function MainTable(props) {
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({});
   const [showSearch, setShowSearch] = useState(false);
-  const [hoveredRow,setHoveredRow]=useState(false);
-  const targetColumn=useRef(0);
-  const readOnlyDataTypes = ["autonumber","createdat","createdby","rowid","updatedby","updatedat"];
+  const [hoveredRow, setHoveredRow] = useState(false);
+  const targetColumn = useRef(0);
+  const readOnlyDataTypes = ["autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat"];
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -48,7 +48,7 @@ export default function MainTable(props) {
   const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
   const tableInfo = customUseSelector((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId;
-  
+
   const isSingleCellSelected = useMemo(() => {
     return selection.current && (selection.current.range.height * selection.current.range.width === 1);
   }, [selection]);
@@ -59,9 +59,9 @@ export default function MainTable(props) {
     const d = dataRow?.[fieldsToShow?.[col]?.id];
     const index = cell?.[0];
     if (
-      fieldsToShow?.[index]?.dataType === "attachment" 
+      fieldsToShow?.[index]?.dataType === "attachment"
     ) {
-      setOpenAttachment({cell,d,fieldId:fieldsToShow?.[col]?.id,rowAutonumber: allRowsData[row][`fld${tableId?.substring(3)}autonumber`]});
+      setOpenAttachment({ cell, d, fieldId: fieldsToShow?.[col]?.id, rowAutonumber: allRowsData[row][`fld${tableId?.substring(3)}autonumber`] });
 
     }
   });
@@ -75,7 +75,7 @@ export default function MainTable(props) {
       }
     }, [])
   );
-  
+
   useEffect(() => {
     var newcolumn = [];
     allFieldsofTable.forEach((column) => {
@@ -83,27 +83,27 @@ export default function MainTable(props) {
         newcolumn.push(column);
       }
     });
-  
+
     const targetIndex = newcolumn.findIndex((field) => {
       const dataType = field.dataType;
-     
-        return !readOnlyDataTypes.includes(dataType);
+
+      return !readOnlyDataTypes.includes(dataType);
     });
-  
+
     if (targetIndex !== -1) {
-      targetColumn.current=targetIndex;
+      targetColumn.current = targetIndex;
     }
-  
+
     setFieldsToShow(newcolumn);
   }, [allFieldsofTable]);
-  
+
   const addRows = () => {
-    if(params?.templateId) return;
+    if (params?.templateId) return;
     addRow(dispatch);
   };
   const reorder = useCallback(
     (item, newIndex) => {
-      if(params?.templateId) return;
+      if (params?.templateId) return;
       reorderFuncton(
         dispatch,
         item,
@@ -129,17 +129,17 @@ export default function MainTable(props) {
         isSingleCellSelected
       );
     },
-    [allRowsData,fieldsToShow]
+    [allRowsData, fieldsToShow]
   );
- const handleColumnResizeWithoutAPI=useCallback((_,newSize,colIndex)=>{
-  let newarrr = [...(fieldsToShow || allFieldsofTable)];
-  let obj = Object.assign({}, newarrr[colIndex]);
-  obj.width = newSize;
-  newarrr[colIndex] = obj;
-  setFieldsToShow(newarrr);
- });
+  const handleColumnResizeWithoutAPI = useCallback((_, newSize, colIndex) => {
+    let newarrr = [...(fieldsToShow || allFieldsofTable)];
+    let obj = Object.assign({}, newarrr[colIndex]);
+    obj.width = newSize;
+    newarrr[colIndex] = obj;
+    setFieldsToShow(newarrr);
+  });
   const handleColumnResize = (field, newSize) => {
-      if(params?.templateId) return;
+    if (params?.templateId) return;
     dispatch(
       updateColumnHeaders({
         filterId: params?.filterName,
@@ -150,10 +150,10 @@ export default function MainTable(props) {
       })
     );
   };
-  
+
   const validateCell = useCallback(
     (cell, newValue) => {
-      if(params?.templateId) return;
+      if (params?.templateId) return;
       if (newValue.kind === "number") {
         if (newValue?.data?.toString().length < 13 || !newValue?.data) {
           return newValue;
@@ -163,7 +163,7 @@ export default function MainTable(props) {
     [allRowsData, fieldsToShow]
   );
   const handleDeleteRow = (selection) => {
-    if(params?.templateId) return;
+    if (params?.templateId) return;
     if (selection.current) {
       return;
     }
@@ -177,53 +177,49 @@ export default function MainTable(props) {
       }
     }
     if (deletedRowIndices.length > 0) {
-      dispatch(deleteRows({ deletedRowIndices, dataa:allRowsData }));
+      dispatch(deleteRows({ deletedRowIndices, dataa: allRowsData }));
     }
     setSelection(emptyselection);
   };
   const onHeaderMenuClick = useCallback((col, bounds) => {
-    if(params?.templateId) return;
+    if (params?.templateId) return;
     setMenu({ col, bounds });
   }, []);
-  const getData = useCallback( (cell) =>   getDataExternalFunction(cell,allRowsData,fieldsToShow,readOnlyDataTypes),  [allRowsData, fieldsToShow] );
+  const getData = useCallback((cell) => getDataExternalFunction(cell, allRowsData, fieldsToShow, readOnlyDataTypes), [allRowsData, fieldsToShow]);
   const realCols = useMemo(() => [...fieldsToShow], [fieldsToShow]);
- 
+
   const handlegridselection = (event) => {
     setSelection(event);
   };
 
- 
-const handleRightClickOnHeader=useCallback((col,event)=>{
-  if(params?.templateId) return;
-  event.preventDefault();
-  setMenu({col,bounds:event.bounds});
-})
-  
-  const getRowThemeOverride=(row)=>{
-   if(row!=hoveredRow || open==true || menu!=null) return;
-    return { bgCell: variables.rowHoverColor,bgCellMedium: variables.codeblockbgcolor};
+
+  const handleRightClickOnHeader = useCallback((col, event) => {
+    if (params?.templateId) return;
+    event.preventDefault();
+    setMenu({ col, bounds: event.bounds });
+  })
+  const getRowThemeOverride = (row) => {
+    if (row != hoveredRow || open == true || menu != null) return;
+    return { bgCell: variables.rowHoverColor, bgCellMedium: variables.codeblockbgcolor };
   }
-  
-  const getHoveredItemsInfo=(event)=>{
+  const getHoveredItemsInfo = (event) => {
     setHoveredRow(event?.location[1]);
   }
   return (
     <>
-      {  selection?.rows?.items?.length > 0 && (
-          <button
-            className="fontsize deleterowbutton"
-            onClick={() => handleDeleteRow(selection)}
-          >
-            <div className="deleterows">Delete Rows</div>
-            <div>
-              <DeleteOutlineIcon className="deletecolor"/>
-            </div>
-          </button>
-        )}
-      <div
-        className="table-container"
-        style={{ height:props?.height ||  `64vh` }}
-      >
+      {selection?.rows?.items?.length > 0 && (
+        <button
+          className="fontsize deleterowbutton"
+          onClick={() => handleDeleteRow(selection)}
+        >
+          <div className="deleterows">Delete Rows</div>
+          <div>
+            <DeleteOutlineIcon className="deletecolor" />
+          </div>
+        </button>
+      )}
+      <div className="table-container"
+        style={{ height: props?.height || `64vh` }}>
         <DataEditor
           {...cellProps}
           width={props?.width || window.screen.width}
@@ -247,7 +243,7 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           onCellClicked={handleUploadFileClick}
           onColumnResize={handleColumnResizeWithoutAPI}
           onColumnResizeEnd={handleColumnResize}
-          onHeaderMenuClick={onHeaderMenuClick} 
+          onHeaderMenuClick={onHeaderMenuClick}
           headerIcons={headerIcons}
           showMinimap={props?.minimap}
           onColumnMoved={reorder}
@@ -275,10 +271,10 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
           setMetaData={setMetaData}
           setOpen={setOpen}
           setDirectionAndId={setDirectionAndId}
-        directionAndId={directionAndId}
+          directionAndId={directionAndId}
         />
       )}
-     {menu &&  <Headermenu
+      {menu && <Headermenu
         menu={menu}
         setMenu={setMenu}
         setOpen={setOpen}
@@ -299,6 +295,6 @@ const handleRightClickOnHeader=useCallback((col,event)=>{
 }
 MainTable.propTypes = {
   minimap: PropTypes.any,
-  height:PropTypes.any,
-  width:PropTypes.any,
+  height: PropTypes.any,
+  width: PropTypes.any,
 }
