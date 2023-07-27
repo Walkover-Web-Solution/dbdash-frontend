@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from 'react'
 import { useLayer } from "react-laag";
 import PropTypes from "prop-types";
-import { makeStyles } from '@mui/styles';
 import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import EastIcon from '@mui/icons-material/East';
@@ -18,49 +17,11 @@ import { createDuplicateColumn, getPropertyIcon,handleRenameColumn, hideColumns 
 import { toast } from 'react-toastify';
 import UpdateQueryPopup from './updateQueryPopup';
 import variables from '../assets/styling.scss';
+import { HeaderMenuStyles } from '../muiStyles/muiStyles';
 
 
-
-const useStyles = makeStyles(() => ({
-  simpleMenu: {
-    width: '175px',
-    padding: '8px 0',
-    borderRadius: '6px',
-    boxShadow: '0px 0px 1px rgba(62, 65, 86, 0.7), 0px 6px 12px rgba(62, 65, 86, 0.35)',
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: 'white',
-    fontSize: variables.headermenufontsize,
-    fontWeight: 600,
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
-  },
-  danger: {
-    color: 'rgba(255, 40, 40, 0.8)',
-    '&:hover': {
-      color: 'rgba(255, 40, 40, 1)',
-    },
-  },
-  menuItem: {
-    padding: '6px 8px',
-    color: 'rgba(0, 0, 0, 0.7)',
-    display: 'flex',
-    alignItems: 'center',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      color: 'rgba(0, 0, 0, 0.9)',
-    },
-    transition: 'background-color 100ms',
-    cursor: 'pointer',
-  },
-  centeredText: {
-    display: 'block',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center'
-  },
-}));
 export default function Headermenu(props) {
-  const classes = useStyles();
+  const classes = HeaderMenuStyles();
   const[header,setHeader]=useState(props?.fields[props?.menu?.col]?.title);
   const isOpen = props?.menu !== undefined;
   const [showduplicate, setShowDuplicate] = useState(false);
@@ -172,46 +133,32 @@ export default function Headermenu(props) {
   function handleChange(e) {
     setHeader(e.target.value);
   }
-
-  //rename column name --> outside click
-  function handleBlur(e) {
-     e.preventDefault();
-      if (props?.fields[props?.menu?.col]?.title == header) 
-      {toast.error(" Field is same ")
+  function handleRenameColumnAction(props, header, params, dispatch) {
+    if (props?.fields[props?.menu?.col]?.title === header) {
+      toast.error("Field is the same");
       return;
     }
-      if (header.trim() === "") {
-        toast.error("Filed is not empty ")
-        return;
+  
+    if (header.trim() === "") {
+      toast.error("Field is not empty");
+      return;
     }
+  
     if (header.includes(" ")) {
       toast.error("Table name cannot contain spaces");
       return;
     }
-    
-      handleRenameColumn(props, header, params, dispatch);
+  
+    handleRenameColumn(props, header, params, dispatch);
   }
-
-  //rename column name --> enter
+  
+  function handleBlur(e) {
+    e.preventDefault();
+    handleRenameColumnAction(props, header, params, dispatch);
+  }
   function handleKeyDown(e) {
     if (e.key === "Enter") {
-      if (props?.fields[props?.menu?.col]?.title == header) 
-      {toast.error(" Field is same ")
-      return;
-    }
-      if (header.trim() === "") {
-        toast.error("Filed is not empty ")
-        return;
-    }
-    
-    if (header.includes(" ")) {
-      toast.error("Table name cannot contain spaces");
-      return;
-    }
-    
-      handleRenameColumn(props, header, params, dispatch);
-
-    handleRenameColumn(props, header, params, dispatch);
+      handleRenameColumnAction(props, header, params, dispatch);
       props.setMenu(false);
     }
   }

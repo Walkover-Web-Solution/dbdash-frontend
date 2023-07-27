@@ -11,6 +11,7 @@ import { createViewTable } from "../../../api/viewTableApi";
 import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -28,6 +29,7 @@ export default function ShareLinkPopUp(props) {
   const params = useParams();
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
   const dispatch = useDispatch();
+  
   const handleCopy = () => {
     const textFieldValue = link;
 

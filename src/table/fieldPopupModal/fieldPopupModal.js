@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, TextField, Select, MenuItem, Typography, Switch, FormGroup, FormControlLabel, Box } from "@mui/material";
+import { Button, Dialog, DialogContent, TextField, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
@@ -9,7 +9,6 @@ import variables from '../../assets/styling.scss';
 import CloseIcon from '@mui/icons-material/Close';
 import './fieldPopupModal.scss'
 import NotesIcon from "@mui/icons-material/Notes";
-import { withStyles } from '@mui/styles';
 import LinkIcon from '@mui/icons-material/Link';
 import NumbersIcon from "@mui/icons-material/Numbers";
 import EmailIcon from '@mui/icons-material/Email';
@@ -28,41 +27,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addColumnrightandleft } from "../../store/table/tableThunk";
 import { addColumn } from "../addRow";
-const styles = {
-  root: {
-    width: 40,
-    height: 20,
-    padding: 0,
-    display: 'flex',
-    backgroundColor: 'transparent',
-  },
-  switchBase: {
-    padding: 2,
-    '&$checked': {
-      transform: 'translateX(20px)',
-      color: '#fff',
-      '& + $track': {
-        opacity: 0.7,
-        backgroundColor: '006400',
-      },
-    },
-  },
-  thumb: {
-    width: 16,
-    height: 16,
-    boxShadow: 'none',
-  },
-  track: {
-    width: '100%',
-    height: 17,
-    borderRadius: 10,
-    borderColor: 'black',
-    opacity: 0.7,
-    backgroundColor: '#000',
-  },
-  checked: {},
-};
-const CustomSwitch = withStyles(styles)(Switch);
+import { CustomSwitch } from "../../muiStyles/muiStyles";
+
 export default function FieldPopupModal(props) {
   const params = useParams();
   const [showSwitch, setShowSwitch] = useState(false);

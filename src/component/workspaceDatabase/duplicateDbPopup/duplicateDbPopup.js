@@ -18,7 +18,7 @@ import { duplicateDb } from '../../../api/dbApi';
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
 import {createDbThunk} from "../../../store/database/databaseThunk";
-import { makeStyles } from '@mui/styles';
+import { dublicateDbPopupStyle } from '../../../muiStyles/muiStyles';
 const DuplicateDbPopup = (props) => {
   const [databaseName, setDatabaseName] = useState(props?.db+"_copy");
   // const [duplicateRecords,setDuplicateRecords]=useState(false);
@@ -39,12 +39,8 @@ const DuplicateDbPopup = (props) => {
     });
     toast.success('Database created successfully!');
   };
-  const useStyles = makeStyles({
-    dialogPaper: {
-      borderRadius: 0,
-    },
-  });
-  const classes = useStyles();
+  
+  const classes = dublicateDbPopupStyle();
 
   const handleChange = (event) => {
     setDatabaseName(event.target.value);

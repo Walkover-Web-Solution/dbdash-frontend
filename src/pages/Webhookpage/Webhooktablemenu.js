@@ -1,50 +1,13 @@
 import React, { useState } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { Popover, MenuItem, Box, Switch } from '@mui/material';
-import { withStyles } from '@mui/styles';
+import { Popover, MenuItem, Box } from '@mui/material';
 import PropTypes from 'prop-types';
 import Createwebhook from './createwebhook';
 import './Webhookpage.scss'
+import { CustomSwitch } from '../../muiStyles/muiStyles';
 function Webhooktablemenu(props) {
   const { anchorEl, closeDropdown, handleUpdateActive, handleDeleteWebhook, isActive } = props;
   const [active, setActive] = useState(isActive);
-  const styles = {
-    root: {
-      width: 40,
-      height: 20,
-      padding: 0,
-      display: 'flex',
-      backgroundColor: 'transparent',
-    },
-    switchBase: {
-      padding: 2,
-      '&$checked': {
-        transform: 'translateX(20px)',
-        color: '#fff',
-        '& + $track': {
-          opacity: 0.7,
-          backgroundColor: '006400',
-        },
-      },
-    },
-    thumb: {
-      width: 16,
-      height: 16,
-      boxShadow: 'none',
-    },
-    track: {
-      width: '100%',
-      height: 17,
-      borderRadius: 10,
-      borderColor: 'black',
-      opacity: 0.7,
-      backgroundColor: '#000',
-    },
-    checked: {},
-  };
-
-  // Create a custom Switch component with the applied styles
-  const CustomSwitch = withStyles(styles)(Switch);
   const [addWebhook, setAddWebhook] = useState(false);
 
   const handleAddWebhook = () => {

@@ -210,8 +210,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         allowOverlay: true,
         kind: GridCellKind.Number,
-        data: d || "",
-        displayData: d || "",
+        data: d?.toString() || "",
+        displayData: d?.toString() || "",
       };
     } else if (dataType === "multipleselect") {
       const possibleTags = fieldsToShow[col]?.metadata?.option;

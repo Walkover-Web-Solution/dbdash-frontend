@@ -19,21 +19,16 @@ import PropTypes from "prop-types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { makeStyles } from "@mui/styles";
 import "./shareOrgModal.scss";
+import { shareOrgModalstyle } from "../../muiStyles/muiStyles";
 export default function ShareOrgModal(props) {
   // const [email, setEmail] = useState("");
   const emailRef = useRef("");
   // const [userType, setUserType] = useState(111);
   const userTypeRef = useRef(111);
   const userId = localStorage.getItem("userid");
-  const useStyles = makeStyles({
-    dialogPaper: {
-      borderRadius: 0,
-      width: "30vw",
-    },
-  });
-  const classes = useStyles();
+
+  const classes = shareOrgModalstyle();
   // const [editable, setEditable] = useState(null);
   const editableRef = useRef(null);
   const handleClose = () => {

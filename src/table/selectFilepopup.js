@@ -10,28 +10,13 @@ import {
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import './selectfilepopup.scss';
-// import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { makeStyles } from "@mui/styles";
 import { Select, MenuItem } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { updateCells } from "../store/table/tableThunk";
-// import { updateCells } from "../store/table/tableThunk";
-// import { useDispatch } from "react-redux";
+import { selectFilePopupStyles } from "../muiStyles/muiStyles";
 
-const useStyles = makeStyles({
-  input: {
-    display: "none", // hides the default file input
-  },
-  label: {
-    backgroundColor: "blue",
-    color: "white",
-    padding: "10px",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-});
 
 const style = {
   position: "absolute",
@@ -43,7 +28,6 @@ const style = {
   columnGap: "20px",
   outline:'none'
 };
-
 export default function SelectFilePopup(props) {
   const params=useParams(),dispatch=useDispatch();
   const [imageLink, setImageLink] = useState("");
@@ -86,7 +70,7 @@ export default function SelectFilePopup(props) {
     }
   };
   
-  const classes = useStyles();
+  const classes = selectFilePopupStyles();
   // const dispatch=useDispatch();
   const [uploadOption, setUploadOption] = useState("file");
   const handleClose = () => {

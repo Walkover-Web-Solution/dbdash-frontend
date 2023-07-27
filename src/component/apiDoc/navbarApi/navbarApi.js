@@ -13,7 +13,6 @@ import {
 import ApiCrudTablist from "../apiCrudTab/apiCrudTablist/apiCrudTablist";
 import { getDbById } from "../../../api/dbApi";
 import PropTypes from "prop-types";
-import { makeStyles } from "@mui/styles";
 
 import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
 import Webhookpage from "../../../pages/Webhookpage/Webhookpage";
@@ -21,6 +20,7 @@ import variables from "../../../assets/styling.scss";
 import AuthKeyPage from "../../../pages/authKeyPage/authKeyPage";
 import "./navbarApi.scss";
 import { customUseSelector } from "../../../store/customUseSelector";
+import { SelectBoxStyles, navbarApiselectbox } from "../../../muiStyles/muiStyles";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -62,37 +62,8 @@ function Navbar(props) {
   const [showWebhookPage, setShowWebhookPage] = useState("apidoc");
   const [dataforwebhook, setdataforwebhook] = useState(null);
 
-  const useStyles = makeStyles(() => ({
-    formControl: {
-      margin: 1,
-      marginLeft: 0,
-      marginTop: 7,
-      marginRight: 3,
-      minWidth: 120,
-      "& .MuiInputLabel-root": {
-        color: `${variables.basictextcolor}`, // Change the label color here
-      },
-      "& .MuiSelect-icon": {
-        color: `${variables.basictextcolor}`, // Change the icon color here
-      },
-      "& .MuiSelect-root": {
-        borderColor: `${variables.basictextcolor}`, // Change the border color here
-        borderRadius: 0,
-        height: "36px",
-        color: `${variables.basictextcolor}`,
-      },
-      "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-          borderColor: "black", // Change the border color here
-        },
-      },
-    },
-    selectEmpty: {
-      marginTop: 2,
-    },
-  }));
-
-  const classes = useStyles();
+ 
+  const classes1 = SelectBoxStyles(),classes2=navbarApiselectbox();
 
   if (selectedDb) {
     props?.setDbtoredirect(selectedDb);
@@ -194,7 +165,7 @@ function Navbar(props) {
           <Box className="navbar-api-box-3">
             {alldb && selectedDb && (
               <FormControl
-                className={`singletypemuiselect ${classes.formControl}`}
+                className={`singletypemuiselect ${classes1.formControl} ${classes2.formControl}`}
               >
                 <InputLabel htmlFor="grouped-select">
                   Organization-db
@@ -254,7 +225,7 @@ function Navbar(props) {
             selectTable &&
             Object.keys(tables).length >= 1 && (
               <Box>
-                <FormControl className={` ${classes.formControl}`}>
+                <FormControl className={`  ${classes1.formControl} ${classes2.formControl}`}>
                   <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
                   <Select
                     sx={{

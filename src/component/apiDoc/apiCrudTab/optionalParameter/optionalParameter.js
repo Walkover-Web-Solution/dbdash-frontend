@@ -12,13 +12,11 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import "./optionalParameter.scss"; // Import the CSS file
-import { makeStyles } from "@mui/styles";
-
+import "./optionalParameter.scss"; 
 import variables from "../../../../assets/styling.scss";
 import FilterConditionTable from "./filterConditionTable";
 import AiFilter from "./AiFilter/Aifilter";
-
+import { SelectBoxStyles } from "../../../../muiStyles/muiStyles";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -55,32 +53,8 @@ function OptionalParameter(props) {
     setValue(querymade);
   };
 
-  const useStyles = makeStyles(() => ({
-    formControl: {
-      "& .MuiInputLabel-root": {
-        color: `${variables.basictextcolor}`, // Change the label color here
-      },
-      "& .MuiSelect-icon": {
-        color: `${variables.basictextcolor}`, // Change the icon color here
-      },
-      "& .MuiSelect-root": {
-        borderColor: `${variables.basictextcolor}`, // Change the border color here
-        borderRadius: 0,
-        height: "36px",
-        color: `${variables.basictextcolor}`,
-      },
-      "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-          borderColor: "black", // Change the border color here
-        },
-      },
-    },
-    selectEmpty: {
-      marginTop: 2,
-    },
-  }));
-
-  const classes = useStyles();
+ 
+  const classes = SelectBoxStyles();
   useEffect(() => {
     parent != "delete" && tableData();
   }, [db, table]);

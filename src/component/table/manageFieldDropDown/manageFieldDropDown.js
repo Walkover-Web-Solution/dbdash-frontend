@@ -1,22 +1,9 @@
 import React, { useState } from 'react';
-// import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-// import ListItemText from '@mui/material/ListItemText';
-// import ListItem from '@mui/material/ListItem';
 import CloseIcon from '@mui/icons-material/Close';
-
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-// import List from '@mui/material/List';
-// import Divider from '@mui/material/Divider';
-// import AppBar from '@mui/material/AppBar';
-
-// import Toolbar from '@mui/material/Toolbar';
-// import IconButton from '@mui/material/IconButton';
-// import Typography from '@mui/material/Typography';
-// import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import PropTypes from "prop-types";
-import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import {  useDispatch } from 'react-redux';
 import AddOptionPopup from '../addOptionPopup/addOptionPopup';
@@ -25,23 +12,19 @@ import './manageFieldDropDown.scss'
 import { useParams } from 'react-router-dom';
 import { updateColumnHeaders } from '../../../store/table/tableThunk';
 import { customUseSelector } from '../../../store/customUseSelector';
+import { manageFieldDropDownStyles } from '../../../muiStyles/muiStyles';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles({
-  dialogContainer: {
-    maxWidth: 'none',
-    width: '60vw'
-  },
-});
+
 
 export default function ManageFieldDropDown(props) {
   const dispatch = useDispatch();
 
-  const classes = useStyles();
+  const classes = manageFieldDropDownStyles();
   const fields1 = customUseSelector((state) => state.table.columns);
   const [openAddFields, setOpenAddFields] = React.useState(false);
   const [fieldId, setFieldId] = useState("");

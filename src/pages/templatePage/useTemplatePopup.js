@@ -10,7 +10,6 @@ import {
     Select,
     Typography,
 } from '@mui/material';
-    import {makeStyles} from '@mui/styles';
 import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
 import './useTemplatePopup.scss';
@@ -20,6 +19,7 @@ import { allOrg } from '../../store/database/databaseSelector';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDbThunk } from '../../store/database/databaseThunk';
 import { customUseSelector } from '../../store/customUseSelector';
+import { dublicateDbPopupStyle } from '../../muiStyles/muiStyles';
 
 const UseTemplatePopup = (props) => {
     const allorgss = customUseSelector((state) => allOrg(state));
@@ -44,12 +44,8 @@ const UseTemplatePopup = (props) => {
           }));
         handleClose();
     };
-    const useStyles = makeStyles({
-        dialogPaper: {
-          borderRadius: 0,
-        },
-      });
-      const classes = useStyles();
+    
+      const classes = dublicateDbPopupStyle();
 
     const handleOrgChange = (event) => {
         setSelectedOrg(event.target.value);
