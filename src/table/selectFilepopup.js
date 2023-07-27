@@ -13,6 +13,10 @@ import './selectfilepopup.scss';
 // import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { makeStyles } from "@mui/styles";
 import { Select, MenuItem } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { updateCells } from "../store/table/tableThunk";
 // import { updateCells } from "../store/table/tableThunk";
 // import { useDispatch } from "react-redux";
 
@@ -41,6 +45,47 @@ const style = {
 };
 
 export default function SelectFilePopup(props) {
+  const params=useParams(),dispatch=useDispatch();
+  const [imageLink, setImageLink] = useState("");
+
+  const uploadImage = (source, e, type) => {
+    if (params?.templateId) return;
+    const row = props?.attachment?.cell[1];
+    let imageValue = null;
+    if (source === "file") {
+      if (e.target.files[0] != null) {
+        imageValue = e.target.files[0];
+      }
+    } 
+  
+    if (imageValue !== null || imageLink !== null) {
+      dispatch(
+        updateCells({
+          columnId: props?.attachment?.fieldId,
+          rowIndex: props?.attachment?.rowAutonumber,
+          value: imageLink?null:imageValue,
+          imageLink: imageLink,
+          dataTypes: type,
+          indexIdMapping: {
+            [props.attachment.rowAutonumber]: row,
+          },
+        })
+      ).then(() => {
+        toast.success("Image uploaded successfully!");
+      });
+    }
+  
+    // Reset the input field after uploading
+    if (source === "file") {
+      e.target.value = null;
+    } else if (source === "url") {
+      const imageUrlInput = document.getElementById("imageUrlInput");
+      if (imageUrlInput) {
+        imageUrlInput.value = null;
+      }
+    }
+  };
+  
   const classes = useStyles();
   // const dispatch=useDispatch();
   const [uploadOption, setUploadOption] = useState("file");
@@ -49,7 +94,7 @@ export default function SelectFilePopup(props) {
     props.setOpen(false);
   };
   const handleFileSelection = (e) => {
-    props.onChangeFile(e, "file");
+    uploadImage('file',e, "file");
     handleClose();
   };
 
@@ -65,7 +110,7 @@ export default function SelectFilePopup(props) {
 //  }
 
   const handleSelectChange = (event) => {
-    props?.setImageLink('');
+    setImageLink('');
 
     setUploadOption(event.target.value);
   };
@@ -164,14 +209,14 @@ export default function SelectFilePopup(props) {
                     id="text-field"
                     label="Image Link"
                     type="text"
-                    value={props?.imageLink}
+                    value={imageLink}
                     onChange={(event) => {
-                      props?.setImageLink(event.target.value);
+                      setImageLink(event.target.value);
                     }}
                     onPaste={(event) => {
                       event.preventDefault();
                       const text = event.clipboardData.getData("text/plain");
-                      props?.setImageLink(text);
+                      setImageLink(text);
 
                     }}
                     sx={{width:'100%'}}
@@ -188,7 +233,8 @@ export default function SelectFilePopup(props) {
                   variant='contained'
                     onClick={(e) => {
                       handleClose();
-                      props?.onChangeUrl(e, "file");
+                      uploadImage('url',e, "file");
+
                     }}
                   >
                     Submit

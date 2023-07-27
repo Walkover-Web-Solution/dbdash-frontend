@@ -1,7 +1,6 @@
 import {useSelector} from "react-redux";
 
- function isEqual(oldValue, newValue) {
- 
+export default function isEqual(oldValue, newValue) {
   if (oldValue === newValue) return true;
 
   if (
@@ -15,10 +14,9 @@ import {useSelector} from "react-redux";
 
   if (typeof oldValue !== typeof newValue) return false;
 
-  // Check for arrays
   if (Array.isArray(oldValue)) {
     if (!Array.isArray(newValue)) return false;
-    if (oldValue.length !== newValue.length) return false;
+    if (oldValue.length !== newValue.length)  return false;
 
     for (let i = 0; i < oldValue.length; i++) {
       if (!isEqual(oldValue[i], newValue[i])) return false;
@@ -27,7 +25,6 @@ import {useSelector} from "react-redux";
     return true;
   }
 
-  // Check for objects
   if (typeof oldValue === "object") {
     const keys1 = Object.keys(oldValue);
     const keys2 = Object.keys(newValue);
@@ -41,10 +38,13 @@ import {useSelector} from "react-redux";
     return true;
   }
 
-  // Check for newValue data types (number, string, boolean)
   return oldValue === newValue;
 }
+
  const customEqual = (oldVal, newVal) => isEqual(oldVal, newVal);
 
-export const customUseSelector = (stateChangesKaFuntion) => useSelector(stateChangesKaFuntion, customEqual);
+export const customUseSelector = (stateChangesKaFuntion) => {
+  const data=useSelector(stateChangesKaFuntion, customEqual);
+  return data;
+}
 

@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import {GridCellKind} from "@glideapps/glide-data-grid";
 import { addRows, updateCells, addColumsToLeft, updateColumnOrder } from "../store/table/tableThunk";
 import debounce from 'lodash.debounce';
 import { updatecellbeforeapi } from "../store/table/tableSlice";
@@ -32,10 +33,22 @@ const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   valuesArray = []
   indexIdMapping = {}
 }, 300);
-export const editCell = (cell, newValue, dispatch, fields, params, currentrow, dataType,isSingleCellSelected) => {
-  if (newValue?.data && newValue.data.kind == 'tags-cell') return;
-  const col = cell[0];
+export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, dataType,isSingleCellSelected) => {
   const tableId = params?.tableName.substring(3);
+  const fieldId=fields[cell[0]]?.id;
+  const currentrow= allRowsData[cell?.[1] ?? []];
+const rowAutonumber=currentrow[`fld${tableId}autonumber`];
+  if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
+  if (fields[cell[0]]?.dataType == "multipleselect") {
+    editmultipleselect(newValue, allRowsData[cell[1]][fieldId] || [], cell,params,tableId, fieldId,dispatch,rowAutonumber);
+    return;
+  }
+  if (newValue?.readonly == true || newValue?.data == allRowsData[cell[1]][fieldId] ||
+    (!newValue?.data  && !allRowsData[cell[1]][fieldId])) return;
+  if (fields[cell[0]].dataType == "singleselect") {
+    newValue = newValue.data.value;
+  }
+  const col = cell[0];
   const key = fields[col].id;
   if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) {
     let newdata;
@@ -93,3 +106,206 @@ export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1
   setFields(newOrder)
   return;
 }
+export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes)=>{
+  const [col, row] = cell;
+  const dataRow = allRowsData[row] || [];
+  if (dataRow) {
+    const d = dataRow[fieldsToShow[col]?.id];
+    let { dataType } = fieldsToShow[col] || "";
+   
+    if (dataType === "autonumber") {
+      return {
+        allowOverlay: true,
+        kind: GridCellKind.Number,
+        readonly: true,
+        data: d || "",
+        displayData: d?.toString() || "",
+      };
+    }
+    else if (readOnlyDataTypes.includes(dataType) ) {
+      
+      let updatedtime=d;
+      if(d!==null && dataType === "updatedat")
+      updatedtime=new Date(d*1000)
+      
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: true,
+        displayData: (d && updatedtime.toString()) || "",
+        data: (d && updatedtime.toString()) || "",
+      };
+    } 
+    
+    else if (dataType === "datetime") {
+      const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
+      if (currentDate instanceof Date && !isNaN(currentDate)) {
+        const day = currentDate.getDate().toString().padStart(2, "0");
+        const month = (currentDate.getMonth() + 1)
+          .toString()
+          .padStart(2, "0");
+        const year = currentDate.getFullYear().toString().padStart(4, "0");
+        const formattedDate = `${day}-${month}-${year}`;
+        return {
+          kind: GridCellKind.Custom,
+          allowOverlay: true,
+          copyData: "4",
+          data: {
+            kind: "date-picker-cell",
+            date: currentDate,
+            displayDate: formattedDate,
+            format: "date",
+          },
+        };
+      } else {
+    return {
+          kind: GridCellKind.Custom,
+          allowOverlay: true,
+          copyData: "4",
+          data: {
+            kind: "date-picker-cell",
+            date: new Date(),
+            displayDate: "",
+            format: "date",
+          },
+        };
+      }
+    } else if (dataType === "longtext") {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        allowWrapping: true,
+        displayData: d || "",
+        data: d || "",
+      };
+    }
+    else if (dataType === "url") {
+      return {
+        kind: GridCellKind.Uri,
+        allowOverlay: true,
+        readonly: false,
+        displayData: d || "",
+        data: d || "",
+      };
+    }
+    else if (dataType === "singlelinetext") {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        displayData: d || "",
+        data: d || "",
+        wrapText: false,
+        multiline: false,
+      };
+    } else if (dataType === "phone") {
+      return {
+        allowOverlay: true,
+        kind: GridCellKind.Number,
+        data: d || "",
+        displayData: d || "",
+      };
+    } else if (dataType === "numeric") {
+      return {
+        allowOverlay: true,
+        kind: GridCellKind.Number,
+        data: d || "",
+        displayData: d || "",
+      };
+    } else if (dataType === "multipleselect") {
+      const possibleTags = fieldsToShow[col]?.metadata?.option;
+      let newarr = [];
+      possibleTags &&
+        possibleTags?.map((x) => {
+          let newx = {
+            tag: x.value,
+            color: x.color,
+          };
+          newarr.push(newx);
+        });
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: true,
+        copyData: "4",
+        data: {
+          kind: "tags-cell",
+          possibleTags: newarr || [],
+          readonly: false,
+          tags: d || [],
+        },
+      };
+    } else if (dataType == "attachment" && d != null) {
+      return {
+        kind: GridCellKind.Image,
+        data: d,
+        allowAdd: true,
+      };
+    } else if (dataType === "singleselect") {
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: true,
+        copyData: d,
+        data: {
+          kind: "dropdown-cell",
+          allowedValues: fieldsToShow[col]?.metadata?.option || [],
+          value: d || "",
+        },
+      };
+    } 
+    else if (dataType === "checkbox" ) {
+           let show=false;
+           if(d)
+           {
+             if(typeof d=='string')
+             {
+               show=d=='true'?true:false;
+             }
+             else show=d;
+           }
+           return {
+             kind: GridCellKind.Boolean,
+             data: show,
+             allowOverlay: false,
+           };
+         }
+   
+   else {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        displayData: d?.toString()|| "",
+        data:  d?.toString() || "",
+      };
+    }
+  } else {
+    return {};
+  }
+}
+const editmultipleselect = (newValue, oldValuetags, cell, params, tableId, fieldId, dispatch, rowAutonumber) => {
+  if (params?.templateId || !fieldId) return;
+
+  const newValuetags = newValue.data.tags;
+  const addedTags = newValuetags.filter(tag => !oldValuetags.includes(tag));
+  const removedTags = oldValuetags.filter(tag => !newValuetags.includes(tag));
+
+  let updateArray = [];
+  const rowIndex = rowAutonumber;
+  
+  if (addedTags.length > 0) {
+    updateArray.push({
+      where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
+      fields: { [fieldId]: addedTags.join(",") },
+    });
+  }
+  
+  if (removedTags.length > 0) {
+    updateArray.push({
+      where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
+      fields: { [fieldId]: { delete: removedTags } },
+    });
+  }
+
+  dispatch(updateCells({ updatedArray: updateArray, indexIdMapping: { [rowIndex]: cell[1] } }));
+};

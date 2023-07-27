@@ -11,13 +11,9 @@ import './fieldPopupModal.scss'
 import NotesIcon from "@mui/icons-material/Notes";
 import { withStyles } from '@mui/styles';
 import LinkIcon from '@mui/icons-material/Link';
-// import PersonPinIcon from "@mui/icons-material/PersonPin";
-// import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import NumbersIcon from "@mui/icons-material/Numbers";
-// import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-// import FontDownloadIcon from '@mui/icons-material/FontDownload';
 import FormulaDataType from "./fieldDataType/formulaDataType/formulaDataType";
 import LinkDataType from "./fieldDataType/linkDataType/linkDataType";
 import LoookupDataType from "./fieldDataType/lookupDataType/lookupDataType";
@@ -28,19 +24,20 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Joi from "joi";
 import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addColumnrightandleft } from "../../store/table/tableThunk";
+import { addColumn } from "../addRow";
 const styles = {
   root: {
     width: 40,
     height: 20,
-
     padding: 0,
-  
     display: 'flex',
     backgroundColor: 'transparent',
   },
   switchBase: {
     padding: 2,
-    
     '&$checked': {
       transform: 'translateX(20px)',
       color: '#fff',
@@ -65,11 +62,9 @@ const styles = {
   },
   checked: {},
 };
-
-// Create a custom Switch component with the applied styles
 const CustomSwitch = withStyles(styles)(Switch);
-
 export default function FieldPopupModal(props) {
+  const params = useParams();
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
@@ -77,22 +72,85 @@ export default function FieldPopupModal(props) {
   const [errors, setErrors] = useState({});
   const [showNumericOptions, setShowNumericOptions] = useState(false);
   const [showDecimalOptions, setShowDecimalOptions] = useState(false);
+  const [textValue, setTextValue] = useState("");
+  const [selectValue, setSelectValue] = useState("longtext"); 
+  const [selectedTable, setSelectedTable] = useState("");
+  const [selectedFieldName, setSelectedFieldName] = useState(false);
+  const [linkedValueName, setLinkedValueName] = useState("");
+  const [queryByAi, setQueryByAi] = useState(false);
 
+
+  
+  const dispatch = useDispatch();
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(1).max(30).pattern(/^[^\s]+$/).required()
+    fieldName: Joi.string().min(1).max(30).pattern(/^[^\\s]+$/).required()
     .messages({
       "string.min": `$ Column is required`,
       "string.pattern.base": ` column must not contain spaces`,
     }),
   });
-
+  const createLeftorRightColumn = () => {
+    if(params?.templateId) return;
+    if (
+      props?.directionAndId.direction == "left" ||
+      props?.directionAndId.direction == "right"
+    ) {
+      props?.setOpen(false);
+      dispatch(
+        addColumnrightandleft({
+          filterId: params?.filterName,
+          fieldName: textValue,
+          dbId: params?.dbId,
+          tableId: params?.tableName,
+          fieldType: selectValue,
+          direction: props?.directionAndId.direction,
+          position: props?.directionAndId.position,
+          metaData: props?.metaData,
+          selectedTable,
+          selectedFieldName: selectedFieldName,
+          linkedValueName,
+        })
+      );
+      setSelectValue("longtext");
+      props?.setDirectionAndId({});
+    } else {
+      var data1 = props?.metaData;
+      if (selectValue == "link") {
+        data1.foreignKey = {
+          fieldId: selectedFieldName,
+          tableId: selectedTable,
+        };
+      }
+      if (selectValue == "formula") {
+        var queryToSend =
+          JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name
+            ?.data_type +
+          ` GENERATED ALWAYS AS (${JSON.parse(queryByAi.pgQuery)?.add_column?.new_column_name
+            ?.generated?.expression
+          }) STORED;`;
+      }
+      props?.setOpen(false);
+      addColumn(
+        dispatch,
+        params,
+        selectValue,
+        props?.metaData,
+        textValue,
+        selectedTable,
+        selectedFieldName,
+        linkedValueName,
+        queryToSend,
+        queryByAi.userQuery
+      );
+      setSelectValue("longtext");
+    }
+  };
   const handleSwitchChange = (event) => {
     var data = props?.metaData;
     data.unique = event.target.checked;
     props?.setMetaData(data);
   };
-
   const handleTextChange = (event) => {
     const { error } = schema.validate({ fieldName: event.target.value });
     if (error) {
@@ -100,7 +158,7 @@ export default function FieldPopupModal(props) {
     } else {
       setErrors({});
     }
-    props?.setTextValue(event.target.value);
+    setTextValue(event.target.value);
   };
   const handleSelectChange = (event) => {
     setShowLinkField(false)
@@ -108,65 +166,59 @@ export default function FieldPopupModal(props) {
     setShowDecimalOptions(false);
     setShowFormulaField(false);
     setShowSwitch(false)
-    props?.setSelectedFieldName(false)
+    setSelectedFieldName(false)
     setShowLookupField(false)
     const data1 = props?.metaData;
     delete data1["unique"];
     props?.setMetaData(data1);
-
     if (event.target.value == "formula") {
       setShowFormulaField(true)
-      props?.setSelectValue(event.target.value);
+      setSelectValue(event.target.value);
     }
     else if (event.target.value == "email") {
       setShowSwitch(true);
-      props?.setSelectValue(event.target.value);
+      setSelectValue(event.target.value);
     }
     else if (event.target.value == "link") {
       setShowLinkField(true)
-      props?.setSelectValue(event.target.value);
+      setSelectValue(event.target.value);
       
     }
     else if (event.target.value == "lookup") {
       setShowLookupField(true)
-      props?.setSelectValue(event.target.value);
+      setSelectValue(event.target.value);
     }
     else if (event.target.value === 'numeric') {
       setShowSwitch(true);
-      props?.setSelectValue('numeric');
-
+      setSelectValue('numeric');
       setShowNumericOptions(true);
     }
   
     else if (event.target.value === 'id') {
-      props?.setSelectValue('id')
+      setSelectValue('id')
       var data = props?.metaData;
       data.unique = "true"
       props?.setMetaData(data);
     }
     else if (event.target.value === 'decimal' && showNumericOptions) {
-      props?.setSelectValue('decimal')
+     setSelectValue('decimal')
       setShowNumericOptions(true);
       setShowDecimalOptions(true);
       setShowSwitch(true);
     } else if (event.target.value === 'checkbox') {
-      props?.setSelectValue('checkbox')
+     setSelectValue('checkbox')
     }
     else if (event.target.value === "singlelinetext") {
       setShowSwitch(true);
-
-      props?.setSelectValue(event.target.value);
+     setSelectValue(event.target.value);
     }
     else if (event.target.value === "email" || event.target.value === "phone") {
       setShowSwitch(true);
-      props?.setSelectValue(event.target.value);
+     setSelectValue(event.target.value);
     }
-    // else if (event.target.value === "singleselect" || event.target.value === "multipleselect") {
-    //   props?.setSelectValue(event.target.value);
-    // }
     else {
-      props?.setSelectedFieldName(false)
-      props?.setSelectValue(event.target.value);
+      setSelectedFieldName(false)
+     setSelectValue(event.target.value);
       setShowNumericOptions(false);
       setShowDecimalOptions(false);
       setShowLinkField(false)
@@ -174,7 +226,6 @@ export default function FieldPopupModal(props) {
       setShowLookupField(false);
     }
   }
-
   const handleClose = () => {
     setShowLinkField(false);
     setShowLookupField(false);
@@ -184,13 +235,12 @@ export default function FieldPopupModal(props) {
     setShowNumericOptions(false);
     setShowDecimalOptions(false);
     setShowSwitch(false);
-    props?.setSelectedFieldName(false);
-    props?.setSelectValue("longtext");
-    props?.setTextValue("");
+    setSelectedFieldName(false);
+    setSelectValue("longtext");
+    setTextValue("");
     props?.setMetaData({});
-    props?.setQueryByAi(false);
+    setQueryByAi(false);
   };
-
   return (
     <div className="fieldPop-main-container">
       <Dialog
@@ -202,43 +252,39 @@ export default function FieldPopupModal(props) {
          <div className="popupheader field-header">    <Typography className="field-textfield" id="title" variant="h6" component="h2">
             create column
           </Typography><CloseIcon className="field-close-icon" onClick={handleClose}/></div>
-
         <TextField
           autoFocus
           margin="dense"
           id="text-field"
           label="Field Name"
           type="text"
-          value={props?.textValue}
+          value={textValue}
           onChange={handleTextChange}
           onKeyDown={(e) => {
             if (e.target.value.length >= 1 && e.target.value.length <= 30 && !e.target.value.includes(" ")  ){
               if (e.key === "Enter") {
-
                 handleClose();
                 e.stopPropagation();
                 e.preventDefault();
-                props?.submitData(false);
+                // props?.submitData(false);
+                createLeftorRightColumn();
               }
             }
           }}
           className="field-textfield2"
-          
         />
-
         {errors.fieldName && (
           <Typography variant="body2" color="error" fontSize={12}>
             {errors.fieldName}
           </Typography>
         )}
-
         <DialogContent
           className="fieldDialogcontent"
         >
           <Select
             labelId="select-label"
             id="select"
-            value={props?.selectValue}
+            value={selectValue}
             onChange={handleSelectChange}
             defaultValue="longtext"
             displayEmpty
@@ -246,8 +292,6 @@ export default function FieldPopupModal(props) {
           >
             <MenuItem value="attachment"><InsertDriveFileIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> Attachment</MenuItem>
             <MenuItem value="checkbox"> <CheckIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Checkbox</MenuItem>
-            {/* <MenuItem value="createdat"> <MoreTimeIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Created at</MenuItem>
-            <MenuItem value="createdby"><PersonPinIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Created by </MenuItem> */}
             <MenuItem value="datetime"><DateRangeIcon  fontSize={variables.iconfontsize1}   className="field-select-option" /> Datetime </MenuItem>
             <MenuItem value="email"><EmailIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Email</MenuItem>
             <MenuItem value="formula"><FunctionsIcon  fontSize={variables.iconfontsize1}   className="field-select-option" />Formula  </MenuItem>
@@ -260,18 +304,12 @@ export default function FieldPopupModal(props) {
             <MenuItem value="singlelinetext"><TextFormatIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single line text</MenuItem>
             <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single select</MenuItem>
             <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> URL</MenuItem> 
-
           </Select>
-
-          <NumberDataType selectValue={props?.selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
-
-          {showFormulaField && <FormulaDataType setQueryByAi={props?.setQueryByAi} queryByAi={props?.queryByAi} submitData={props?.submitData}
+          <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
+          {showFormulaField && <FormulaDataType setQueryByAi={setQueryByAi} queryByAi={queryByAi} submitData={createLeftorRightColumn}
           />}
-
-          {showLinkField && <LinkDataType selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} />}
-
-          {showLookupField && <LoookupDataType linkedValueName={props?.linkedValueName} setLinkedValueName={props?.setLinkedValueName} selectedFieldName={props?.selectedFieldName} setSelectedFieldName={props?.setSelectedFieldName} setSelectedTable={props?.setSelectedTable} selectedTable={props?.selectedTable} key={props.selectedTable} tableId={props?.tableId} />}
-
+          {showLinkField && <LinkDataType selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} />}
+          {showLookupField && <LoookupDataType linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} key={selectedTable} tableId={props?.tableId} />}
           {showSwitch && (
           <FormGroup className="field-textfield">
           <FormControlLabel
@@ -292,21 +330,20 @@ export default function FieldPopupModal(props) {
         </DialogContent>
         <Box className='fieldPop-Dialog '>
             <Box >
-        {props?.selectValue !== "formula" || props?.queryByAi ? (
+        {selectValue !== "formula" || queryByAi ? (
           <Button
             sx={{ textTransform: "none" }}
             className="mui-button"
           
             disabled={
               errors.fieldName ||
-              props?.textValue?.length < 1 ||
-              props?.textValue?.length > 30 ||
-              props?.textValue?.includes(" ")
-
+              textValue?.length < 1 ||
+              textValue?.length > 30 ||
+              textValue?.includes(" ")
             }
             onClick={() => {
               handleClose();
-              props?.submitData(false);
+              createLeftorRightColumn();
             }}
           >
             Create Column
@@ -318,24 +355,16 @@ export default function FieldPopupModal(props) {
     </div>
   );
 }
-
 FieldPopupModal.propTypes = {
   setOpen: PropTypes.func,
   open: PropTypes.bool,
-  textValue: PropTypes.any,
   selectValue: PropTypes.any,
-  setTextValue: PropTypes.func,
-  setSelectValue: PropTypes.func,
   submitData: PropTypes.func,
-  queryByAi: PropTypes.any,
-  setQueryByAi: PropTypes.func,
   setMetaData: PropTypes.func,
   metaData: PropTypes.any,
   setSelectedTable: PropTypes.func,
   selectedTable: PropTypes.any,
-  selectedFieldName: PropTypes.any,
-  setSelectedFieldName: PropTypes.func,
   tableId: PropTypes.any,
-  linkedValueName: PropTypes.any,
-  setLinkedValueName: PropTypes.func,
+  directionAndId: PropTypes.any,  
+  setDirectionAndId: PropTypes.any 
 };
