@@ -1,41 +1,24 @@
 import React, { memo, useRef, useState } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Select,
-  MenuItem,
-  TextField,
-  Button,
-} from "@mui/material";
+import {Card,CardContent,Typography,Box,Select,MenuItem,TextField,Button} from "@mui/material";
 import ClickAwayListener from "@mui/base/ClickAwayListener";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../dropdown";
 import { useDispatch } from "react-redux";
-import {
-  renameDBThunk,
-  moveDbThunk,
-  restoreDbThunk,
-  deleteDbThunk,
-} from "../../../store/database/databaseThunk";
-import { allOrg } from "../../../store/database/databaseSelector";
+import {renameDBThunk,moveDbThunk,restoreDbThunk,deleteDbThunk} from "../../../store/database/databaseThunk";
 import { toast } from 'react-toastify';
-import variables from '../../../assets/styling.scss'
 import './singleDatabase.scss';
-import  { customUseSelector } from "../../../store/customUseSelector";
+import { customUseSelector } from "../../../store/customUseSelector";
 
 function SingleDatabase(props) {
 
-
   const [name, setName] = useState(false);
-  const dbname = useRef(null); // Create a ref for dbname
+  const dbname = useRef(null); 
   const [openmove, setOpenmove] = useState(false);
   const [selectedorg, setSelectedorg] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allorgss = customUseSelector((state) => allOrg(state))
+  const allorgss = customUseSelector((state) => state.dataBase.allOrg)
   let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
   const handlingmove = () => {
     setOpenmove(false);
@@ -54,7 +37,6 @@ function SingleDatabase(props) {
   const renameDatabase = async (orgId, id, name) => {
     if (!dbname?.current || dbname?.current?.trim() === "") {
       toast.error("Database name cannot be empty");
-      // setDbname(props?.db?.name)
       dbname.current = props?.db?.name;
       return;
     }
@@ -107,7 +89,7 @@ function SingleDatabase(props) {
         navigate("/db/" + props.db._id, { state: { db: props.db } });
       }}
     >
-      <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
+      <CardContent className="cardcontent-div">
         {openmove && props?.tabIndex == props?.index ? (
           <ClickAwayListener
             onClick={(e) => {
@@ -121,8 +103,8 @@ function SingleDatabase(props) {
                 Move {props.db.name} to
               </Typography>
 
-              <Box sx={{ display: "flex" }}>
-                <Box sx={{ mt: 2 }}>
+              <Box sx={{ display: "flex" }} className="singledatabase-Box">
+                <Box sx={{ mt: 2 }} className='singledatabase-Box-1'>
                   {arr.length > 0 ? (
                     <Select
                       onClick={(e) => {
@@ -141,7 +123,7 @@ function SingleDatabase(props) {
                           setOpenmove(false);
                         }
                       }}
-                      sx={{ marginBottom: 1, marginLeft: 3, minWidth: 120 }}
+                      className="singledatabase-select"
                       onChange={(event) => {
                         setSelectedorg(event.target.value);
                       }}
@@ -153,7 +135,7 @@ function SingleDatabase(props) {
                       ))}
                     </Select>
                   ) : (
-                    <div style={{ color: "red" }}>Only one org exists</div>
+                    <div className="singledatabase-div" >Only one org exists</div>
                   )}
                 </Box>
               </Box>
@@ -165,22 +147,8 @@ function SingleDatabase(props) {
                   e.stopPropagation();
                   setOpenmove(false);
                 }}
-                className="mui-button"
+                className="mui-button singledatabase-mui-btn"
                 variant="contained"
-                sx={{
-                  width: "8rem",
-                  backgroundColor: "#1C2833",
-                  fontSize: variables.editfilterbutttonsfontsize,
-
-                  mx: 3,
-                  zIndex: "555",
-                  ":hover": {
-                    bgcolor: "#273746",
-                    color: "white",
-                    border: 0,
-                    borderColor: "#1C2833",
-                  },
-                }}
               >
                 Move
               </Button>
@@ -191,11 +159,9 @@ function SingleDatabase(props) {
             <ClickAwayListener onClickAway={handleOpen}>
               <Box>
                 <TextField
-                  // onBlur={handleOpen}
                   autoFocus
-                  sx={{ width: 120, fontWeight: "bold" }}
+                  className="singledatabase-textfield"
                   defaultValue={props?.db?.name}
-                  // value={dbname}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       renameDatabase(
@@ -227,23 +193,8 @@ function SingleDatabase(props) {
                       props.db?.name
                     );
                   }}
-                  className="mui-button"
+                  className="mui-button singledatabase-mui-btn"
                   variant="contained"
-                  sx={{
-                    width: "8rem",
-                    backgroundColor: "#1C2833",
-                    fontSize: variables.editfilterbutttonsfontsize,
-
-                    mx: 3,
-
-                    zIndex: "555",
-                    ":hover": {
-                      bgcolor: "#273746",
-                      color: "white",
-                      border: 0,
-                      borderColor: "#1C2833",
-                    },
-                  }}
                 >
                   Rename
                 </Button>
@@ -252,7 +203,7 @@ function SingleDatabase(props) {
           </>
         ) : (
           <>
-            <Typography sx={{ fontWeight: "bold" }}>
+            <Typography className="singledatabase-typography">
               {props.db?.name}{" "}
             </Typography>
             <Box>
@@ -292,10 +243,9 @@ function SingleDatabase(props) {
                     e.stopPropagation();
                     restoreDb(orgIdForRestore, props.db._id);
                   }}
-                  className="mui-button-outlined"
+                  className="mui-button-outlined singleDatabase-mui-button-outlined"
                   size="small"
                   variant="outlined"
-                  sx={{ display: "flex" }}
                 >
                   restore
                 </Button>

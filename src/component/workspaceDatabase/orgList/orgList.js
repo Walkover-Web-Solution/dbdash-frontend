@@ -10,7 +10,7 @@ import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThun
 import { useDispatch } from "react-redux";
 import ShareOrgModal from "../shareOrgModal";
 
-import { allOrg } from "../../../store/database/databaseSelector";
+// import { allOrg } from "../../../store/database/databaseSelector";
 import { toast } from "react-toastify";
 import { createDb } from "../../../api/dbApi";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ export const OrgList = (props) => {
   const naviagate = useNavigate();
   const handleOpen = () => setOpen(true);
   const dispatch = useDispatch()
-  const allorgss = customUseSelector((state) => allOrg(state))
+  const allorgss = customUseSelector((state) => state.dataBase.allOrg)
   const [name, setName] = useState(false); // [show textfield and setshowtextfield]
   const [orgUsers, setOrgUsers] = useState([])
   const orgName = useRef(props.dbs[0]?.org_id?.name)
@@ -194,10 +194,7 @@ setOrgUsers(originalObj);
                         setTabIndex={props?.setTabIndex}
                         tabIndex={props?.index}
                         first={"Rename workspace"}
-                        // second={"Delete workspace"}
                         setName={setName}
-                        // idToDelete={props?.orgId}
-                        // deleteFunction={deleteOrganization}
                         title="Organization"
                       />
                     </Box>
@@ -235,7 +232,7 @@ setOrgUsers(originalObj);
         <Box className="displayflex">
           <Box  className="displayflex">
             <Grid container spacing={2}>
-              {Dbs.map((db, index) => (
+              {orgUsers && Dbs.map((db, index) => (
                 <Box key={db?._id} className="singledatabasebox displayflex" >
                   <SingleDatabase db={db} dblength={Dbs.length} getOrgAndDbs={props?.getOrgAndDbs} tabIndex={tabIndex} setTabIndex={setTabIndex} index={index} />
                 </Box>
