@@ -30,7 +30,6 @@ import { toast } from "react-toastify";
 import { headerIcons } from "./headerIcons";
 import variables from '../assets/styling.scss';
 import { customUseSelector } from "../store/customUseSelector";
-import CustomAutoSuggest from "../component/customAutoSuggest/customAutoSuggest";
 export default function MainTable(props) {
   const params = useParams();
 
@@ -62,7 +61,9 @@ export default function MainTable(props) {
   };
   const [selection, setSelection] = useState(emptyselection);
   const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
-  const tableInfo = CustomAutoSuggest((state) => getTableInfo(state));
+  const tableInfo = customUseSelector((state) => getTableInfo(state));
+
+
   const tableId = tableInfo?.tableId;
   useEffect(() => {
     setData(allRowsData);
@@ -79,7 +80,8 @@ export default function MainTable(props) {
     if (
       fieldsToShow?.[index]?.dataType === "attachment" 
     ) {
-      setOpenAttachment({cell,d,fieldId:fieldsToShow?.[col]?.id,rowAutonumber: allRowsData[row][`fld${tableId.substring(3)}autonumber`]});
+      console.log( allRowsData[row][`fld${tableId?.substring(3)}autonumber`])
+      setOpenAttachment({cell,d,fieldId:fieldsToShow?.[col]?.id,rowAutonumber: allRowsData[row][`fld${tableId?.substring(3)}autonumber`]});
 
     }
   });
