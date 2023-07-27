@@ -26,7 +26,7 @@ import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import   {  customUseSelector }  from "../../../store/customUseSelector";
  function TablesList({ dbData }) {
-
+           console.log("TablesList")
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
   const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
@@ -37,7 +37,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
-  const [tabIndex, setTabIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -46,7 +45,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const buttonRef = useRef(null);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const tableLength = Object.keys(AllTableInfo)?.length;
   const [currentTable, setcurrentTable] = useState(null);
   const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
@@ -237,9 +235,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
                 Object.entries(AllTableInfo).map((table, index) => (
                   <SingleTable
                     table={table}
-                    tableLength={tableLength}
-                    tabIndex={tabIndex}
-                    setTabIndex={setTabIndex}
                     index={index}
                     dbData={dbData}
                     setPage={setPage}

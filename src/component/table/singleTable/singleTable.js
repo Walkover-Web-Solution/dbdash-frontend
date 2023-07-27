@@ -21,19 +21,19 @@ import  {customUseSelector }  from "../../../store/customUseSelector";
  function SingleTable({
   dbData,
   table,
-  setTabIndex,
-  tableLength,
   index,
-  tabIndex,
   setPage,
   setTableIdForFilter
 }) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
+  const [tabIndex, setTabIndex] = useState(0);
 
   const AllTableInfo = customUseSelector((state) => state.tables.tables);
   const userDetails = customUseSelector((state) => selectActiveUser(state));
+  const tableLength = Object.keys(AllTableInfo)?.length;
+
   const params = useParams();
 
   const dispatch = useDispatch();
@@ -276,10 +276,7 @@ import  {customUseSelector }  from "../../../store/customUseSelector";
 SingleTable.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.array,
-  setTabIndex: PropTypes.func,
-  tableLength: PropTypes.any,
   index: PropTypes.number,
-  tabIndex: PropTypes.number,
   setPage: PropTypes.any,
   label: PropTypes.string,
   dropdown: PropTypes.node,

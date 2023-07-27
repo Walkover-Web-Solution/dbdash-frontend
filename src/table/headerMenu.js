@@ -268,7 +268,7 @@ export default function Headermenu(props) {
                   </div>
                 )}
                 <div onClick={() => { handleOpenDuplicate(); } } className={classes.menuItem}>
-                <QueueOutlinedIcon fontSize={variables.iconfontsize1} />Duplicate cell</div>
+                <QueueOutlinedIcon fontSize={variables.iconfontsize1} />Duplicate field</div>
                 <div style={{color:styling.deletecolor}} onClick={() => {handleDelete();props.setMenu(false);}} className={classes.menuItem}>
                 <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
             </>
