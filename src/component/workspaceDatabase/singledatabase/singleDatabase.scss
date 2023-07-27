@@ -1,7 +1,59 @@
+@import  '../../../assets/styling.scss' ;
+
 .singledatabasecard{
-     
     min-width:16vw !important;
     min-height: 200px !important;
     box-shadow: 1% !important;
     cursor: pointer !important;
+}
+
+.cardcontent-div{
+    display: flex !important; 
+    justify-content: space-between !important;
+}
+
+.singledatabase-select{
+    margin-bottom: 8px !important; 
+    margin-left: 24px !important;
+    min-width: 120px !important;
+}
+
+.singledatabase-div{
+    color: red !important;
+}
+
+.singledatabase-Box{
+    display: flex !important;
+}
+
+.singledatabase-Box-1{
+    margin-top: 16px !important;
+}
+
+.singledatabase-mui-btn{
+    width: 8rem !important;
+    background-color: #1C2833 !important ;
+    font-size: $editfilterbutttonsfontsize !important;
+    margin: 0 24px !important;
+    margin-top: 555 !important;
+
+    &:hover{
+        background-color: #273746 !important;
+        color:$selectedtabfontcolor !important;
+        border: 0 !important;
+        border-color: #1C2833;
+    }
+}
+
+.singledatabase-textfield{
+    width: 120 !important;
+    font-weight: bold !important;
+}
+
+.singledatabase-typography{
+    font-weight: bold !important;
+}
+
+.singleDatabase-mui-button-outlined{
+    display: flex !important;
 }

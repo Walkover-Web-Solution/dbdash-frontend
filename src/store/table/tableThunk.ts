@@ -599,7 +599,7 @@ export const updateColumnsType = createAsyncThunk(
 export const deleteRows = createAsyncThunk(
   "table/deleteRows",
   async (
-    payload: { deletedRowIndices: string; dataa: Array<any> },
+    payload: { deletedRowIndices: any; dataa: Array<any> },
     { getState }: { getState: any }
   ) => {
     const { tableId, dbId } = getState().table;

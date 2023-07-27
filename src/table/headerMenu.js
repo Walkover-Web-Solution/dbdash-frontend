@@ -60,7 +60,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 export default function Headermenu(props) {
-  console.log("headermenu")
   const classes = useStyles();
   const[header,setHeader]=useState(props?.fields[props?.menu?.col]?.title);
   const isOpen = props?.menu !== undefined;
@@ -273,9 +272,6 @@ export default function Headermenu(props) {
                 <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
             </>
             )}
-              {/* {isPopupOpen && <UpdateQueryPopup
-               isOpen={isPopupOpen} handleClosePopup={handleClosePopup} onClose={handleClosePopup} queryByAi={props?.queryByAi} submitData={props?.submitData} queryResult={queryResult} setQueryResult={setQueryResult}
-            />} */}
             {isPopupOpen && (
   <UpdateQueryPopup
     isOpen={isPopupOpen}
@@ -285,7 +281,6 @@ export default function Headermenu(props) {
     submitData={updateColumnQuery}
     fields={props?.fields}
     menu={props?.menu}
-    // Pass any other necessary props to the UpdateQueryPopup component
   />
 )}
           </div>

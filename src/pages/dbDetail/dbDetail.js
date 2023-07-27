@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import { resetData } from "../../store/table/tableSlice";
 import "./dbDetail.scss"; 
-
 function DbDetails() {
     const {dbId} = useParams();
     const dispatch = useDispatch()
@@ -22,10 +21,8 @@ function DbDetails() {
         return ()=> dispatch (resetData())
     }, []);
     const getAllTableName = async (dbId) => {
-
-        
         const data = await getDbById(dbId)
-      const object={db:data.data.data}
+        const object={db:data.data.data}
         dispatch(setAllTablesData(
             { 
                 "dbId":dbId,
@@ -39,11 +36,9 @@ function DbDetails() {
       }
     return (
         <>
-
         <Box className="db-detail-navbar-box">
       <MainNavbar dbData={dbData}/>
     </Box>
-           
             <Box className="db-detail-table-list-box" >
             { dbData && <TablesList  dbData={dbData} />}
             </Box> 
