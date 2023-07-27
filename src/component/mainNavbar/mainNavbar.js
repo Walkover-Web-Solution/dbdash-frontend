@@ -17,15 +17,14 @@ import {
   MenuItem,
   Divider,
   Button,
-} from '@mui/material';
-import './mainNavbar.scss';
-import { selectOrgandDb } from '../../store/database/databaseSelector.js';
-import Sharedb from '../table/tablesList/Sharedb.js';
-import CreateTemplatePopup from '../workspaceDatabase/createTemplatePopup/createTemplatePopup.js';
-import DbSnapshotsMenu from './dbSnapshotsMenu/dbSnapshotsMenu.js';
-import { useRef } from 'react';
-import   { customUseSelector }  from '../../store/customUseSelector';
-
+} from "@mui/material";
+import "./mainNavbar.scss";
+import { selectOrgandDb } from "../../store/database/databaseSelector.js";
+import Sharedb from "../table/tablesList/Sharedb.js";
+import CreateTemplatePopup from "../workspaceDatabase/createTemplatePopup/createTemplatePopup.js";
+import DbSnapshotsMenu from "./dbSnapshotsMenu/dbSnapshotsMenu.js";
+import { useRef } from "react";
+import { customUseSelector } from "../../store/customUseSelector";
 
 function MainNavbar(props) {
   const { dbId, id, tableName } = useParams();
@@ -35,7 +34,7 @@ function MainNavbar(props) {
   const revisionbuttonref = useRef(null);
 
   const alldb = customUseSelector((state) => selectOrgandDb(state));
-  let dbname = '';
+  let dbname = "";
   Object.entries(alldb).forEach(([, dbs]) => {
     const matchingDb = dbs.find((db) => db?._id === props.dbtoredirect);
     if (matchingDb) {

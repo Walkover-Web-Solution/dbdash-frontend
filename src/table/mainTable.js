@@ -1,13 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import {
-  CompactSelection,
-  DataEditor,
-} from "@glideapps/glide-data-grid";
+import { CompactSelection, DataEditor } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import {
-  deleteRows,
-  updateColumnHeaders,
-} from "../store/table/tableThunk";
+import { deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
 import "./Glidedatagrid.css";
 import "../../src/App.scss";
@@ -15,14 +9,19 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addRow, editCell, getDataExternalFunction, reorderFuncton } from "./addRow";
+import {
+  addRow,
+  editCell,
+  getDataExternalFunction,
+  reorderFuncton,
+} from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 import { getTableInfo } from "../store/table/tableSelector";
 import SelectFilepopup from "./selectFilepopup";
 import { headerIcons } from "./headerIcons";
-import variables from '../assets/styling.scss';
+import variables from "../assets/styling.scss";
 import { customUseSelector } from "../store/customUseSelector";
 export default function MainTable(props) {
   const params = useParams();
@@ -38,7 +37,14 @@ export default function MainTable(props) {
   const [showSearch, setShowSearch] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(false);
   const targetColumn = useRef(0);
-  const readOnlyDataTypes = ["autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat"];
+  const readOnlyDataTypes = [
+    "autonumber",
+    "createdat",
+    "createdby",
+    "rowid",
+    "updatedby",
+    "updatedat",
+  ];
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -50,7 +56,10 @@ export default function MainTable(props) {
   const tableId = tableInfo?.tableId;
 
   const isSingleCellSelected = useMemo(() => {
-    return selection.current && (selection.current.range.height * selection.current.range.width === 1);
+    return (
+      selection.current &&
+      selection.current.range.height * selection.current.range.width === 1
+    );
   }, [selection]);
   const handleUploadFileClick = useCallback((cell) => {
     if (!allRowsData) return;
@@ -58,11 +67,14 @@ export default function MainTable(props) {
     const dataRow = allRowsData?.[row] || allRowsData?.[row - 1];
     const d = dataRow?.[fieldsToShow?.[col]?.id];
     const index = cell?.[0];
-    if (
-      fieldsToShow?.[index]?.dataType === "attachment"
-    ) {
-      setOpenAttachment({ cell, d, fieldId: fieldsToShow?.[col]?.id, rowAutonumber: allRowsData[row][`fld${tableId?.substring(3)}autonumber`] });
-
+    if (fieldsToShow?.[index]?.dataType === "attachment") {
+      setOpenAttachment({
+        cell,
+        d,
+        fieldId: fieldsToShow?.[col]?.id,
+        rowAutonumber:
+          allRowsData[row][`fld${tableId?.substring(3)}autonumber`],
+      });
     }
   });
   document.addEventListener(
@@ -75,7 +87,6 @@ export default function MainTable(props) {
       }
     }, [])
   );
-
   useEffect(() => {
     var newcolumn = [];
     allFieldsofTable.forEach((column) => {
@@ -150,7 +161,6 @@ export default function MainTable(props) {
       })
     );
   };
-
   const validateCell = useCallback(
     (cell, newValue) => {
       if (params?.templateId) return;
@@ -185,26 +195,37 @@ export default function MainTable(props) {
     if (params?.templateId) return;
     setMenu({ col, bounds });
   }, []);
-  const getData = useCallback((cell) => getDataExternalFunction(cell, allRowsData, fieldsToShow, readOnlyDataTypes), [allRowsData, fieldsToShow]);
+  const getData = useCallback(
+    (cell) =>
+      getDataExternalFunction(
+        cell,
+        allRowsData,
+        fieldsToShow,
+        readOnlyDataTypes
+      ),
+    [allRowsData, fieldsToShow]
+  );
   const realCols = useMemo(() => [...fieldsToShow], [fieldsToShow]);
 
   const handlegridselection = (event) => {
     setSelection(event);
   };
 
-
   const handleRightClickOnHeader = useCallback((col, event) => {
     if (params?.templateId) return;
     event.preventDefault();
     setMenu({ col, bounds: event.bounds });
-  })
+  });
   const getRowThemeOverride = (row) => {
     if (row != hoveredRow || open == true || menu != null) return;
-    return { bgCell: variables.rowHoverColor, bgCellMedium: variables.codeblockbgcolor };
-  }
+    return {
+      bgCell: variables.rowHoverColor,
+      bgCellMedium: variables.codeblockbgcolor,
+    };
+  };
   const getHoveredItemsInfo = (event) => {
     setHoveredRow(event?.location[1]);
-  }
+  };
   return (
     <>
       {selection?.rows?.items?.length > 0 && (
@@ -218,8 +239,10 @@ export default function MainTable(props) {
           </div>
         </button>
       )}
-      <div className="table-container"
-        style={{ height: props?.height || `64vh` }}>
+      <div
+        className="table-container"
+        style={{ height: props?.height || `64vh` }}
+      >
         <DataEditor
           {...cellProps}
           width={props?.width || window.screen.width}
@@ -257,7 +280,7 @@ export default function MainTable(props) {
             sticky: true,
             tint: true,
             hint: "New row...",
-            targetColumn: targetColumn.current
+            targetColumn: targetColumn.current,
           }}
         />
       </div>
@@ -274,13 +297,15 @@ export default function MainTable(props) {
           directionAndId={directionAndId}
         />
       )}
-      {menu && <Headermenu
-        menu={menu}
-        setMenu={setMenu}
-        setOpen={setOpen}
-        setDirectionAndId={setDirectionAndId}
-        fields={fieldsToShow}
-      />}
+      {menu && (
+        <Headermenu
+          menu={menu}
+          setMenu={setMenu}
+          setOpen={setOpen}
+          setDirectionAndId={setDirectionAndId}
+          fields={fieldsToShow}
+        />
+      )}
       {openAttachment && (
         <SelectFilepopup
           title="uplaodfile"
@@ -297,4 +322,4 @@ MainTable.propTypes = {
   minimap: PropTypes.any,
   height: PropTypes.any,
   width: PropTypes.any,
-}
+};

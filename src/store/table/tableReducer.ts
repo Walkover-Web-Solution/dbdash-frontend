@@ -18,7 +18,6 @@ import {
   TableDataFieldMapping,
   UpdatecellbeforeapiPayload,
 } from "../../types/tableDataTypes";
-// import { dbDataType } from "../../types/dbDataType.js";
 import { TableDataType } from "../../types/tableDataTypes";
 import {
   ActionReducerMapBuilder,

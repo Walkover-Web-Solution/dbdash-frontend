@@ -1,9 +1,17 @@
 import React, { useState, useEffect, useRef, memo, useMemo } from "react";
-import ShareLinkPopUp from "../ShareLinkPopUp/ShareLinkPopUp"
-import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
+import ShareLinkPopUp from "../ShareLinkPopUp/ShareLinkPopUp";
+import {
+  Box,
+  Button,
+  Tabs,
+  IconButton,
+  Menu,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material";
 import PopupModal from "../../popupModal/popupModal";
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import FilterModal from "../../filterPopup/filterPopUp";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
@@ -12,23 +20,21 @@ import AddIcon from "@mui/icons-material/Add";
 import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import MainTable from "../../../table/mainTable";
-import { createTable1 } from "../../../store/allTable/allTableThunk";
 import AddFilterPopup from "../../addFilterPopup/addFIlterPopup";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
-import { createTable, exportCSV } from "../../../api/tableApi";
+import { exportCSV } from "../../../api/tableApi";
 import "./tablesList.scss";
 import variables from "../../../assets/styling.scss";
-import { createViewTable } from "../../../api/viewTableApi";
 import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
-import   {  customUseSelector }  from "../../../store/customUseSelector";
- function TablesList({ dbData }) {
-           console.log("TablesList")
-  const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
-  const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
+import { customUseSelector } from "../../../store/customUseSelector";
+function TablesList({ dbData }) {
+  const isTableLoading = customUseSelector(
+    (state) => state.table?.isTableLoading
+  );
   const dispatch = useDispatch();
   const params = useParams();
   const AllTableInfo = customUseSelector((state) => state.tables.tables);
@@ -36,7 +42,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const navigate = useNavigate();
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [table, setTable] = useState();
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false);
   const [filteropen, setFilteropen] = useState(false);
@@ -47,18 +52,14 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentTable, setcurrentTable] = useState(null);
-  const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
-  const AllTable = customUseSelector((state) => {
-    const { tables } = state.tables;
-    const { dbId, userAcess, userDetail } = state.tables;
-    return { tables, dbId, userAcess, userDetail };
-  });
   const [openManageField, setOpenManageField] = useState(false);
-  
-    const fullName=customUseSelector((state) => state.user.userFirstName+" "+state.user.userLastName);
-   const email=customUseSelector((state) => state.user.userEmail)
-  
+
+  const fullName = customUseSelector(
+    (state) => state.user.userFirstName + " " + state.user.userLastName
+  );
+  const email = customUseSelector((state) => state.user.userEmail);
+
   const handleClick = (event, id) => {
     if (id === "share") {
       setShareLinkOpen(true);
@@ -68,8 +69,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
       setAnchorEl(event.currentTarget);
     }
   };
-  const underLine=useMemo(()=>{
-
+  const underLine = useMemo(() => {
     if (params?.filterName) {
       dispatch(
         filterData({
@@ -81,42 +81,21 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
         })
       );
       return params?.filterName;
-
     } else {
       return null;
     }
-  },[params?.filterName])
+  }, [params?.filterName]);
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const saveTable = async () => {
-    const data = {
-      tableName: table,
-    };
-    setOpen(false);
-    const apiCreate = await createTable(dbData?.db?._id, data);
-    await dispatch(createTable1({ tables: apiCreate.data.tables }));
-    const matchedKey = Object.keys(apiCreate?.data?.tables).find(
-      (key) => {
-        return apiCreate?.data?.tables[key].tableName === table;
-      }
-    );
-    if (matchedKey) {
-      navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
-    }
-
-  
-  };
-
   const handleEdit = async () => {
-      setFilteropen(true);
+    setFilteropen(true);
   };
-  
+
   function onFilterClicked(filter, id) {
-   
     setFilterId(params?.filterName || id);
     if (params?.filterName == id) {
       dispatch(
@@ -152,13 +131,13 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
         dbId: dbData?.db?._id,
         tableName: params?.tableName,
         org_id: dbData?.db?.org_id,
-        pageNo: 1
+        pageNo: 1,
       })
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
   useEffect(() => {
-    const tableNames = Object.keys(dbData?.db?.tables)||[];
+    const tableNames = Object.keys(dbData?.db?.tables) || [];
     dispatch(setTableLoading(true));
     if (params?.tableName && !params?.filterName) {
       dispatch(
@@ -169,36 +148,12 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
         })
       );
     }
-    
+
     if (!params?.tableName) {
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
     }
   }, [params?.tableName]);
- 
-  
-  const shareLink = async () => {
-    const isViewExits =
-      AllTable?.tables?.[params?.tableName]?.filters?.[params?.filterName]
-        ?.viewId;
-    if (isViewExits) {
-      setLink(shareViewUrl + `/${isViewExits}`);
-      return;
-    }
-    
-    const data = {
-      tableId: params?.tableName,
-      filterId: params?.filterName,
-    };
-    const dataa1 = await createViewTable(AllTable.dbId, data);
-    dispatch(
-      setAllTablesData({
-        dbId: dataa1.data.data.dbData._id,
-        tables: dataa1.data.data.dbData.tables,
-        orgId: dataa1.data.data.dbData.org_id,
-      })
-    );
-    setLink(shareViewUrl + `/${dataa1.data.data.viewId}`);
-  };
+
   const exportCSVTable = async () => {
     const query = AllTableInfo?.[params?.tableName].filters?.[filterId].query;
     const data = {
@@ -247,10 +202,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
         </Box>
         <Box className="tableList-add-view">
           <div className="tableList-div-1">
-            <div
-              className="tableList-div-2"
-             
-            >
+            <div className="tableList-div-2">
               {AllTableInfo[params?.tableName]?.filters &&
                 Object.entries(AllTableInfo[params?.tableName]?.filters).map(
                   (filter, index) => (
@@ -301,9 +253,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
           <FilterModal
             dbData={dbData}
             buttonRef={buttonRef}
-            // open={openn}
-            // edit={edit}
-            // setEdit={setEdit}
             setOpen={setOpenn}
             filterId={filterId}
             dbId={dbData?.db?._id}
@@ -332,7 +281,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
             >
               Minimap{" "}
               {!minimap ? (
-                <CheckBoxOutlineBlankIcon fontSize={variables.iconfontsize2}/>
+                <CheckBoxOutlineBlankIcon fontSize={variables.iconfontsize2} />
               ) : (
                 <CheckBoxIcon fontSize={variables.iconfontsize1} />
               )}
@@ -347,7 +296,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
                 className="tableList-buttons"
                 onClick={(e) => {
                   handleClick(e, "share");
-                  shareLink();
+                  // shareLink();
                 }}
               >
                 Share View
@@ -361,17 +310,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
             setOpenManageField={setOpenManageField}
           />
         )}
-        {open && (
-          <PopupModal
-            title="Create Table"
-            label="Table Name"
-            open={open}
-            setOpen={setOpen}
-            submitData={saveTable}
-            setVariable={setTable}
-            joiMessage={"Table name"}
-          />
-        )}
+        {open && <PopupModal open={open} setOpen={setOpen} dbData={dbData} />}
 
         <Menu
           anchorEl={anchorEl}
@@ -392,18 +331,15 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
               handleClose();
             }}
             className="delete-color"
-           
           >
             Delete
           </MenuItem>
         </Menu>
       </div>
-      {filteropen  && (
+      {filteropen && (
         <AddFilterPopup
           dbData={dbData}
           open={filteropen}
-          // edit={edit}
-          // setEdit={setEdit}
           setOpen={setFilteropen}
           filterId={params?.filterName}
           dbId={dbData?.db?._id}
@@ -412,17 +348,17 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
       )}
       {shareLinkOpen && (
         <ShareLinkPopUp
-          title="Share Link"
           open={shareLinkOpen}
           setOpen={setShareLinkOpen}
-          label="Link"
-          textvalue={link}
+          // textvalue={link}
         />
       )}
       <div style={{ marginTop: "250px" }}>
-     
         {isTableLoading ? (
-          <div className="table-loading"> <CircularProgress className="table-loading" /></div>
+          <div className="table-loading">
+            {" "}
+            <CircularProgress className="table-loading" />
+          </div>
         ) : (
           <div>
             <MainTable setPage={setPage} page={page} minimap={minimap} />

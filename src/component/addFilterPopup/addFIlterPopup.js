@@ -6,14 +6,13 @@ import { updateQuery } from "../../api/filterApi";
 import { getAllTableInfo } from "../../store/allTable/allTableSelector";
 import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
-import variables from '../../assets/styling.scss';
-import CircularProgress from '@mui/material/CircularProgress';
+import variables from "../../assets/styling.scss";
+import CircularProgress from "@mui/material/CircularProgress";
 import CustomAutoSuggest from "../customAutoSuggest/customAutoSuggest";
 import CloseIcon from "@mui/icons-material/Close";
 import { filterQueryByAi } from "../../api/filterApi";
-import "./addFilterPopup.scss"
+import "./addFilterPopup.scss";
 import { customUseSelector } from "../../store/customUseSelector";
-
 
 const style = {
   position: "absolute",
@@ -26,24 +25,24 @@ const style = {
   bgcolor: "background.paper",
 };
 
-
 export default function AddFilterPopup(props) {
   // const navigate = useNavigate();
-  const editableDivRef  = useRef()
-  const editableDivRef2  = useRef()
-  const AllTableInfo =customUseSelector((state) => getAllTableInfo(state));
+  const editableDivRef = useRef();
+  const editableDivRef2 = useRef();
+  const AllTableInfo = customUseSelector((state) => getAllTableInfo(state));
   // const [filterName, setFilterName] = useState("");
   // const [html, setHtml] = useState("");
   const [html2, setHtml2] = useState("");
   const [text, setText] = useState("");
   const [text2, setText2] = useState("");
-const [showsecondfield,setShowsecondfield]=useState(true);
-const [showsavebutton,setShowsavebutton]=useState(true);
+  const [showsecondfield, setShowsecondfield] = useState(true);
+  const [showsavebutton, setShowsavebutton] = useState(true);
 
   const [fields, setFields] = useState([]);
   // const [aiQuery, setAiQuery] = useState("");
   const [defaultValue, setDefaultValue] = useState(
-    AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]?.htmlToShow || ""
+    AllTableInfo?.tables[props?.tableName]?.filters[props?.filterId]
+      ?.htmlToShow || ""
   );
   const textFieldRef = useRef(null);
   const buttonContainerRef = useRef(null);
@@ -51,11 +50,8 @@ const [showsavebutton,setShowsavebutton]=useState(true);
   const [textFieldHeight, setTextFieldHeight] = useState(null);
 
   const handleClose = () => {
-    // props?.setEdit(false);
     props.setOpen(false);
   };
-
-
 
   const tableData = async () => {
     const myObj = AllTableInfo?.tables[props?.tableName]?.fields;
@@ -93,31 +89,24 @@ const [showsavebutton,setShowsavebutton]=useState(true);
     //   // const viewId = props?.dbData?.db?.tables[props?.tableName]?.view?.id;
     //   queryToSend = text2.trim();
     // } else {
-      queryToSend =  text2.trim();
+    queryToSend = text2.trim();
     // }
     return queryToSend;
   };
-  const handleQuery=async () => { 
-    let textquery=text.trim();
+  const handleQuery = async () => {
+    let textquery = text.trim();
 
-    const data ={
-      query: textquery
-    }
+    const data = {
+      query: textquery,
+    };
 
-    const applyFilter=await filterQueryByAi(props.dbId,data);
+    const applyFilter = await filterQueryByAi(props.dbId, data);
     setDefaultValue(applyFilter?.data?.data);
-setShowsecondfield(true);
+    setShowsecondfield(true);
     setText2(applyFilter?.data?.data);
     setHtml2(applyFilter?.data?.data);
+  };
 
-  
-    
-   
-
-  }
-  
-
-      
   //   }
   //   const filter = await createFilter(props?.dbId, props?.tableName, dataa)
   //   const filters = filter?.data?.data?.data?.tables[props?.tableName]?.filters;
@@ -141,7 +130,11 @@ setShowsecondfield(true);
       htmlToShow: html2,
     };
 
-    const updatedFilter = await updateQuery(props?.dbId, props?.tableName, dataa);
+    const updatedFilter = await updateQuery(
+      props?.dbId,
+      props?.tableName,
+      dataa
+    );
     dispatch(
       setAllTablesData({
         dbId: props?.dbId,
@@ -172,7 +165,6 @@ setShowsecondfield(true);
     }
   };
 
-
   useEffect(() => {
     updateButtonContainerPosition();
   }, [textFieldHeight]);
@@ -192,7 +184,7 @@ setShowsecondfield(true);
       }
     }
   };
-  
+
   return (
     <Box>
       <Modal
@@ -202,8 +194,15 @@ setShowsecondfield(true);
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} >
-        <div className="popupheader">     <Typography className="addfilter-header" id="title" variant="h6" component="h2">
+        <Box sx={style}>
+          <div className="popupheader">
+            {" "}
+            <Typography
+              className="addfilter-header"
+              id="title"
+              variant="h6"
+              component="h2"
+            >
               filter
             </Typography>
             <CloseIcon className="close-icon" onClick={handleClose} />
@@ -214,7 +213,7 @@ setShowsecondfield(true);
               <div className="edit-div-inner">
                 <CustomAutoSuggest
                   getInputValueWithContext={handleTextChange}
-                  symbolForSearching={' '}
+                  symbolForSearching={" "}
                   suggestion={fields}
                   editableDivRef={editableDivRef2}
                   setText={setText}
@@ -231,7 +230,7 @@ setShowsecondfield(true);
                   handleQuery();
                   setShowsecondfield(false);
                 }}
-                style={{fontSize:variables.editfilterbutttonsfontsize}}
+                style={{ fontSize: variables.editfilterbutttonsfontsize }}
               >
                 Generate Query by AI
               </Button>
@@ -243,7 +242,7 @@ setShowsecondfield(true);
                   <CustomAutoSuggest
                     editableDivRef={editableDivRef}
                     groupByGroupName={false}
-                    symbolForSearching={' '}
+                    symbolForSearching={" "}
                     getInputValueWithContext={handleTextChange2}
                     width="100%"
                     suggestion={fields}
@@ -275,11 +274,9 @@ setShowsecondfield(true);
               showsecondfield && <CircularProgress />
             )}
           </Box>
-
         </Box>
       </Modal>
     </Box>
-    
   );
 }
 
@@ -293,4 +290,3 @@ AddFilterPopup.propTypes = {
   dbData: PropTypes.any,
   // setEdit: PropTypes.func,
 };
-

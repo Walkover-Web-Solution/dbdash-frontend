@@ -15,13 +15,12 @@ import { getDbById } from "../../../api/dbApi";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 
-
 import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
 import Webhookpage from "../../../pages/Webhookpage/Webhookpage";
 import variables from "../../../assets/styling.scss";
 import AuthKeyPage from "../../../pages/authKeyPage/authKeyPage";
 import "./navbarApi.scss";
-import { customUseSelector } from '../../../store/customUseSelector';
+import { customUseSelector } from "../../../store/customUseSelector";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -52,9 +51,8 @@ function Navbar(props) {
   const params = useParams();
   const [selectedOption, setSelectedOption] = useState();
   const [selectedDb, setSelectedDb] = useState(useParams().dbId);
-const[authkeys,setAuthKeys]=useState({});
-const[webhooks,setWebhooks]=useState({});
-
+  const [authkeys, setAuthKeys] = useState({});
+  const [webhooks, setWebhooks] = useState({});
 
   const [selectTable, setSelectTable] = useState(
     useLocation().state || props.tabletoredirect
@@ -67,29 +65,27 @@ const[webhooks,setWebhooks]=useState({});
   const useStyles = makeStyles(() => ({
     formControl: {
       margin: 1,
-      marginLeft:0,
-      marginTop:7,
-      marginRight:3,
+      marginLeft: 0,
+      marginTop: 7,
+      marginRight: 3,
       minWidth: 120,
-      '& .MuiInputLabel-root': {
+      "& .MuiInputLabel-root": {
         color: `${variables.basictextcolor}`, // Change the label color here
       },
-      '& .MuiSelect-icon': {
+      "& .MuiSelect-icon": {
         color: `${variables.basictextcolor}`, // Change the icon color here
       },
-      '& .MuiSelect-root': {
+      "& .MuiSelect-root": {
         borderColor: `${variables.basictextcolor}`, // Change the border color here
         borderRadius: 0,
-        height: '36px',
+        height: "36px",
         color: `${variables.basictextcolor}`,
       },
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: 'black', // Change the border color here
+      "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+          borderColor: "black", // Change the border color here
         },
       },
-     
-  
     },
     selectEmpty: {
       marginTop: 2,
@@ -143,7 +139,7 @@ const[webhooks,setWebhooks]=useState({});
     setTables(data.data.data.tables || {});
     setdataforwebhook(data.data.data.tables);
     setAuthKeys(data.data.data.auth_keys);
-     setWebhooks(data.data.data.webhook);
+    setWebhooks(data.data.data.webhook);
     if (data.data.data.tables) {
       if (dbchanged === 0) {
         setSelectTable(selectTable || Object.keys(data.data.data.tables)[0]);
