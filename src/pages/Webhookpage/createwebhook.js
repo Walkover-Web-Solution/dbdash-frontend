@@ -14,7 +14,6 @@ import { createWebhook, updateWebhook } from "../../api/webhookApi";
 import CloseIcon from '@mui/icons-material/Close';
 
 function Createwebhook(props) {
-  console.log(props,"props")
   let nameRef = useRef("");
   let actionRef = useRef("");
   let urlRef = useRef("");
@@ -43,7 +42,6 @@ function Createwebhook(props) {
 
     }
     handleClose();
-    // console.log(2356,toSave)
     props?.setWebhooks(response?.data.data);
 
     nameRef.current = "";
@@ -91,10 +89,7 @@ function Createwebhook(props) {
       <Modal open={props.open} onClose={handleClose}>
         <Box
           className="create-webhook-key-main-container"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
+         
         >
           <Box className="create-webhook-key-content-container" >
           <div className="create-webhook-popupheader popupheader" >    <Typography className="create-webhook-popupheader-heading"  id="title" variant="h6" component="h2">
