@@ -296,6 +296,7 @@ export default function MainTable(props) {
       })
     );
   };
+  
   const editmultipleselect = (newValue, oldValuetags, cell) => {
     if(params?.templateId) return;
     if (!fieldsToShow[cell[0]]?.id) return;
