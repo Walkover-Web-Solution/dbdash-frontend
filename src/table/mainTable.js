@@ -9,12 +9,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import {
-  addRow,
-  editCell,
-  getDataExternalFunction,
-  reorderFuncton,
-} from "./addRow";
+import { addRow,editCell,getDataExternalFunction,reorderFuncton,} from "./addRow";
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
@@ -37,14 +32,7 @@ export default function MainTable(props) {
   const [showSearch, setShowSearch] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(false);
   const targetColumn = useRef(0);
-  const readOnlyDataTypes = [
-    "autonumber",
-    "createdat",
-    "createdby",
-    "rowid",
-    "updatedby",
-    "updatedat",
-  ];
+  const readOnlyDataTypes = [ "autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat",];
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -56,10 +44,7 @@ export default function MainTable(props) {
   const tableId = tableInfo?.tableId;
 
   const isSingleCellSelected = useMemo(() => {
-    return (
-      selection.current &&
-      selection.current.range.height * selection.current.range.width === 1
-    );
+    return (selection.current && selection.current.range.height * selection.current.range.width === 1 );
   }, [selection]);
   const handleUploadFileClick = useCallback((cell) => {
     if (!allRowsData) return;
@@ -173,22 +158,15 @@ export default function MainTable(props) {
     [allRowsData, fieldsToShow]
   );
   const handleDeleteRow = (selection) => {
-    if (params?.templateId) return;
-    if (selection.current) {
-      return;
-    }
+    if (params?.templateId || selection?.current) return;
     const deletedRowIndices = [];
     for (const element of selection.rows.items) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
-        deletedRowIndices.push(
-          allRowsData[i][`fld${tableId.substring(3)}autonumber`]
-        );
+        deletedRowIndices.push(allRowsData[i][`fld${tableId.substring(3)}autonumber`] );
       }
     }
-    if (deletedRowIndices.length > 0) {
-      dispatch(deleteRows({ deletedRowIndices, dataa: allRowsData }));
-    }
+    if (deletedRowIndices.length > 0)  dispatch(deleteRows({ deletedRowIndices, dataa: allRowsData }));
     setSelection(emptyselection);
   };
   const onHeaderMenuClick = useCallback((col, bounds) => {
@@ -197,19 +175,12 @@ export default function MainTable(props) {
   }, []);
   const getData = useCallback(
     (cell) =>
-      getDataExternalFunction(
-        cell,
-        allRowsData,
-        fieldsToShow,
-        readOnlyDataTypes
-      ),
+      getDataExternalFunction(cell,allRowsData,fieldsToShow,readOnlyDataTypes),
     [allRowsData, fieldsToShow]
   );
   const realCols = useMemo(() => [...fieldsToShow], [fieldsToShow]);
 
-  const handlegridselection = (event) => {
-    setSelection(event);
-  };
+  const handlegridselection = (event) => {setSelection(event);};
 
   const handleRightClickOnHeader = useCallback((col, event) => {
     if (params?.templateId) return;
@@ -217,32 +188,22 @@ export default function MainTable(props) {
     setMenu({ col, bounds: event.bounds });
   });
   const getRowThemeOverride = (row) => {
-    if (row != hoveredRow || open == true || menu != null) return;
+    if (row != hoveredRow || open || menu) return;
     return {
       bgCell: variables.rowHoverColor,
       bgCellMedium: variables.codeblockbgcolor,
     };
   };
-  const getHoveredItemsInfo = (event) => {
-    setHoveredRow(event?.location[1]);
-  };
+  const getHoveredItemsInfo = (event) => {setHoveredRow(event?.location[1]); };
   return (
     <>
       {selection?.rows?.items?.length > 0 && (
-        <button
-          className="fontsize deleterowbutton"
-          onClick={() => handleDeleteRow(selection)}
-        >
+        <button className="fontsize deleterowbutton" onClick={() => handleDeleteRow(selection)}>
           <div className="deleterows">Delete Rows</div>
-          <div>
-            <DeleteOutlineIcon className="deletecolor" />
-          </div>
+          <div><DeleteOutlineIcon className="deletecolor" /></div>
         </button>
       )}
-      <div
-        className="table-container"
-        style={{ height: props?.height || `64vh` }}
-      >
+      <div className="table-container" style={{ height: props?.height || `64vh` }}>
         <DataEditor
           {...cellProps}
           width={props?.width || window.screen.width}
@@ -271,17 +232,8 @@ export default function MainTable(props) {
           showMinimap={props?.minimap}
           onColumnMoved={reorder}
           onPaste={true}
-          rightElement={
-            <div className="addCol">
-              <button onClick={() => setOpen(true)}>+</button>
-            </div>
-          }
-          trailingRowOptions={{
-            sticky: true,
-            tint: true,
-            hint: "New row...",
-            targetColumn: targetColumn.current,
-          }}
+          rightElement={<div className="addCol"><button onClick={() => setOpen(true)}>+</button></div>}
+          trailingRowOptions={{ sticky: true,tint: true,hint: "New row...",targetColumn: targetColumn.current,}}
         />
       </div>
       {open && (

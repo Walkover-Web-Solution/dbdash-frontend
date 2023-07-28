@@ -35,8 +35,8 @@ function BasicStuff(props) {
         onMouseUp={handleMouseUp}
         onClick={handleClick}
       >
-        <ContentCopyOutlinedIcon className="color-black" />
-        {copiedIndex === index && <span className="copied-text">Copied!</span>}
+        
+        {copiedIndex === index ? <span className="color-black" >Copied!</span>:<ContentCopyOutlinedIcon className="color-black" />}
       </span>
     );
   };

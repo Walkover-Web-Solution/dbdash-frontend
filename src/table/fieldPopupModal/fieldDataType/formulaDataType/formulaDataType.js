@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 // import Autosuggest from 'react-autosuggest';
-import { Box, Button, CircularProgress, TextField } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 // import Paper from '@mui/material/Paper';
 
 import PropTypes from 'prop-types';
@@ -10,6 +10,7 @@ import CustomAutoSuggest from "../../../../component/customAutoSuggest/customAut
 import { getQueryByAi } from '../../../../api/fieldApi';
 import './formulaDataType.scss'
 import { customUseSelector } from '../../../../store/customUseSelector';
+import CustomTextField from '../../../../muiStyles/customTextfield';
 
 export default function FormulaDataType(props) {
   const AllTableInfo = customUseSelector((state) => getAllTableInfo(state));
@@ -93,7 +94,7 @@ export default function FormulaDataType(props) {
       </Box>}
 
       {props?.queryByAi && (
-        <TextField
+        <CustomTextField
           autoFocus
           margin="dense"
           id="text-field"

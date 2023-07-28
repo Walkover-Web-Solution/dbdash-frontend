@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
-  TextField,
   Typography,
   Button,
   Modal,
-  
- 
 } from "@mui/material";
 import { PropTypes } from "prop-types";
 
@@ -21,6 +18,7 @@ import { allOrg } from "../../store/database/databaseSelector";
 import Selectaccessandscope from "./Selectaccessandscope";
 import { toast } from "react-toastify";
 import { customUseSelector } from "../../store/customUseSelector";
+import CustomTextField from "../../muiStyles/customTextfield.js";
 
 export default function CreateAuthKey(props) {
   const id = props.id;
@@ -144,7 +142,7 @@ export default function CreateAuthKey(props) {
 
           <Box className="create-auth-key-row" sx={{ml:2,pr:1}}>
             <Typography className="create-auth-key-label">Name</Typography>
-            <TextField
+            <CustomTextField
               id="standard-basic"
               label="Name"
               defaultValue={nameRef?.current}

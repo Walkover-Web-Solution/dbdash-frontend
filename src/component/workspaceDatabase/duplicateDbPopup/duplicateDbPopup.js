@@ -5,13 +5,11 @@ import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 import './duplicateDbPopup.scss'
 import {
-  
   Box,
   Button,
   Dialog,
   DialogContent,
   DialogContentText,
-  TextField,
   Typography
 } from '@mui/material';
 import { duplicateDb } from '../../../api/dbApi';
@@ -19,6 +17,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
 import {createDbThunk} from "../../../store/database/databaseThunk";
 import { dublicateDbPopupStyle } from '../../../muiStyles/muiStyles';
+import CustomTextField from '../../../muiStyles/customTextfield';
 const DuplicateDbPopup = (props) => {
   const [databaseName, setDatabaseName] = useState(props?.db+"_copy");
   // const [duplicateRecords,setDuplicateRecords]=useState(false);
@@ -65,7 +64,7 @@ const DuplicateDbPopup = (props) => {
           <DialogContentText> 
             Enter the name for the duplicated database:
           </DialogContentText>
-          <TextField
+          <CustomTextField
             autoFocus
             
             margin="dense"

@@ -295,14 +295,14 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, tableId, field
   
   if (addedTags.length > 0) {
     updateArray.push({
-      where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
-      fields: { [fieldId]: addedTags.join(",") },
-    });
+      where: `fld${tableId}autonumber = ${rowIndex}`,
+      fields: { [fieldId]: addedTags.map((element) => `'${element}'`).join(",").slice(1,-1) },
+    });   
   }
   
   if (removedTags.length > 0) {
     updateArray.push({
-      where: `fld${tableId.substring(3)}autonumber = ${rowIndex}`,
+      where: `fld${tableId}autonumber = ${rowIndex}`,
       fields: { [fieldId]: { delete: removedTags } },
     });
   }

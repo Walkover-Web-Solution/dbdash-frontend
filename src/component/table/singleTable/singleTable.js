@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
-import { Box, TextField, Tab, Button, ClickAwayListener } from "@mui/material";
+import { Box, Tab, Button, ClickAwayListener } from "@mui/material";
 import Dropdown from "../../dropdown";
 import { useDispatch} from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -17,6 +17,7 @@ import "./singleTable.scss";
 import { useParams } from "react-router-dom";
 import { bulkAddColumns } from "../../../store/table/tableThunk";
 import  {customUseSelector }  from "../../../store/customUseSelector";
+import CustomTextField from "../../../muiStyles/customTextfield";
 
  function SingleTable({
   dbData,
@@ -172,7 +173,7 @@ import  {customUseSelector }  from "../../../store/customUseSelector";
               }}
             >
               <Box >
-                <TextField
+                <CustomTextField
                   defaultValue={table[1]?.tableName || table[0] || " "}
                   autoFocus
                   

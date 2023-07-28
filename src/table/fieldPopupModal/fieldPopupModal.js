@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, TextField, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
+import { Button, Dialog, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
@@ -28,6 +28,7 @@ import { useDispatch } from "react-redux";
 import { addColumnrightandleft } from "../../store/table/tableThunk";
 import { addColumn } from "../addRow";
 import { CustomSwitch } from "../../muiStyles/muiStyles";
+import CustomTextField from "../../muiStyles/customTextfield";
 
 export default function FieldPopupModal(props) {
   const params = useParams();
@@ -218,7 +219,7 @@ export default function FieldPopupModal(props) {
          <div className="popupheader field-header">    <Typography className="field-textfield" id="title" variant="h6" component="h2">
             create column
           </Typography><CloseIcon className="field-close-icon" onClick={handleClose}/></div>
-        <TextField
+        <CustomTextField
           autoFocus
           margin="dense"
           id="text-field"

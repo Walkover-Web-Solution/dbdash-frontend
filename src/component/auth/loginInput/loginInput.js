@@ -3,9 +3,9 @@ import Joi from "joi"
 import { useValidator } from "react-joi"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import PropTypes from 'prop-types';
-import './loginInput.scss'; // Import the CSS file
+import '../signupInput/signupInput.scss'; // Import the CSS file
+import CustomTextField from '../../../muiStyles/customTextfield';
 
 export default function LoginInput(props) {
 
@@ -60,24 +60,26 @@ export default function LoginInput(props) {
 
 
     return (
-        <Box onSubmit={onSubmitLogin} component="form" className="login-input-form">
-          <Box className="login-input-field">
-            <TextField className="login-input-textfield" error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' label="Email" type="email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
-            {/* error display */}
-            <Box className="login-input-error">
-              {state.$errors.email.map((data) => data.$message).join(",")}
+        <Box className='flex-col-center-center'>
+            <Box className="flex-col-center-center" onSubmit={onSubmitLogin} component="form">
+                <Box className="p-1">
+                    <CustomTextField size='small' error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' label="Email" type="email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
+                    {/* error display */}
+                    <Box className="errorContainer">
+                        {state.$errors.email.map((data) => data.$message).join(",")}
+                    </Box>
+                </Box>
+                <Box className="p-1">
+                    <CustomTextField size='small' error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' label="Password" type="password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
+                    {/* error display */}
+                    <Box className="errorContainer">
+                        {state.$errors.password.map((data) => data.$message).join(",")}
+                    </Box>
+                </Box>
+                <Button onClick={validate} type='submit' className='primary-btn mt-1' variant="contained">Login</Button>
             </Box>
-          </Box>
-          <Box className="login-input-field">
-            <TextField className="login-input-textfield" error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' label="Password" type="password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
-            {/* error display */}
-            <Box className="login-input-error">
-              {state.$errors.password.map((data) => data.$message).join(",")}
-            </Box>
-          </Box>
-          <Button onClick={validate} type='submit' className="login-input-button mui-button" variant="contained">Login</Button>
         </Box>
-      )
+    )
 }
 
 LoginInput.propTypes = {

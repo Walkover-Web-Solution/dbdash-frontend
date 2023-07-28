@@ -45,13 +45,12 @@
   margin-right: 10px !important;
 
   .filter-box {
-    background-color: transparent;
     min-width: 100px !important;
     width: auto !important;
     display: flex !important;
     align-items: center !important;
     font-size: $tablepagefontsize !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
     color: $filterColorValue !important;
     border-radius: 0 !important;
     padding: 8px !important;

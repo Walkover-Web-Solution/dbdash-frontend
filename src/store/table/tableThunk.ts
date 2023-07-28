@@ -339,7 +339,6 @@ export const updateColumnHeaders = createAsyncThunk(
       payload?.columnId,
       data
     );
-    // update the all table reducer so all tables in the db will be updated
     dispatch(
       setAllTablesData({
         dbId: updatedDbdata?.data?.data?._id,
@@ -363,17 +362,14 @@ export const updateColumnHeaders = createAsyncThunk(
           payload?.filterId
         ]?.fields?.[payload?.columnId];
       const updatedMetaData = {
-        ...updatedColumn.metaData, // Copy the existing metaData properties
-        hide: updatedFilterColumn.hide, // Update the hide property
+        ...updatedColumn.metaData, 
+        hide: updatedFilterColumn.hide,
         width: updatedFilterColumn.width,
       };
-      // Create a new updatedColumn object with the updated metaData
       updatedColumn = {
-        ...updatedColumn, // Copy the existing properties of updatedColumn
-        metaData: updatedMetaData, // Update the metaData property
+        ...updatedColumn, 
+        metaData: updatedMetaData, 
       };
-      //    updatedColumn.metaData.hide = updatedFilterColumn.hide
-      //    updatedColumn.metaData.width = updatedFilterColumn.width
     }
     updatedColumn = { [payload?.columnId]: updatedColumn };
     updatedColumn = await getHeaders(
@@ -382,7 +378,6 @@ export const updateColumnHeaders = createAsyncThunk(
       updatedColumn,
       { getState }
     );
-    // now will update the table reducer so current table fields  will be updated as well
     return updatedColumn[0];
   }
 );

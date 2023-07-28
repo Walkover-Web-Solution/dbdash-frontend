@@ -1,5 +1,5 @@
 import React, { memo, useRef, useState } from "react";
-import {Card,CardContent,Typography,Box,Select,MenuItem,TextField,Button} from "@mui/material";
+import {Card,CardContent,Typography,Box,Select,MenuItem,Button} from "@mui/material";
 import ClickAwayListener from "@mui/base/ClickAwayListener";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import {renameDBThunk,moveDbThunk,restoreDbThunk,deleteDbThunk} from "../../../s
 import { toast } from 'react-toastify';
 import './singleDatabase.scss';
 import { customUseSelector } from "../../../store/customUseSelector";
+import CustomTextField from "../../../muiStyles/customTextfield";
 
 function SingleDatabase(props) {
 
@@ -158,7 +159,7 @@ function SingleDatabase(props) {
           <>
             <ClickAwayListener onClickAway={handleOpen}>
               <Box>
-                <TextField
+                <CustomTextField
                   autoFocus
                   className="singledatabase-textfield"
                   defaultValue={props?.db?.name}

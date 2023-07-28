@@ -3,19 +3,19 @@ import Dropdown from "../../dropdown";
 import PopupModal from "../../popupModal/popupModal";
 import SingleDatabase from "../singledatabase/singleDatabase";
 import Grid from "@mui/material/Grid";
-import { Box, Card, Typography, TextField, Button, IconButton, ClickAwayListener } from "@mui/material";
+import { Box, Card, Typography, Button, IconButton, ClickAwayListener } from "@mui/material";
 import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
 import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../../store/database/databaseThunk";
 import { useDispatch } from "react-redux";
 import ShareOrgModal from "../shareOrgModal";
 
-// import { allOrg } from "../../../store/database/databaseSelector";
 import { toast } from "react-toastify";
 import { createDb } from "../../../api/dbApi";
 import { useNavigate } from "react-router-dom";
 import './orgList.scss';
 import  { customUseSelector } from "../../../store/customUseSelector";
+import CustomTextField from "../../../muiStyles/customTextfield";
 
 export const OrgList = (props) => {
 
@@ -155,7 +155,7 @@ setOrgUsers(originalObj);
               <>
                 <Box  className="orglistbox3">
                   <Box>
-                    <TextField
+                    <CustomTextField
                       id="orgName"
                       name="orgName"
                       autoFocus
@@ -164,7 +164,7 @@ setOrgUsers(originalObj);
                       // value={orgName}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          renameWorkspace(props?.orgId,orgName);
+                          renameWorkspace(props?.orgId,orgName?.current);
                           setName(false);
                         }
                       }}

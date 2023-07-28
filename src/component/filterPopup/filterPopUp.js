@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import {
   Box,
   Typography,
-  TextField,
   Button,
   ClickAwayListener,
 } from "@mui/material";
@@ -15,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import variables from "../../assets/styling.scss";
 import "./filterPopup.scss";
+import CustomTextField from "../../muiStyles/customTextfield";
 
 const FilterModal = (props) => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const FilterModal = (props) => {
   const style = {
     position: "absolute",
     ...calculatePosition(),
-    transform: "translate(-0%, -20%)",
+    top:'12vh',
     backgroundColor: variables.bgcolorvalue,
     zIndex: "10000",
     borderRadius: "0px",
@@ -114,7 +114,7 @@ const FilterModal = (props) => {
         </div>
 
         <Box className="filter-content">
-          <TextField
+          <CustomTextField
             label="Filter Name"
             variant="outlined"
             // value={filterName}

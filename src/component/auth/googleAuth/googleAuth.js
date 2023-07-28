@@ -13,15 +13,10 @@ export default function GoogleAuth() {
     await googleSignIn();
   }
 
-  return (
-    <Button
-      type="outlined"
-      variant="outlined"
-      className="google-auth-button mui-button-outlined" // Apply the CSS class to the Button component
-      onClick={(e) => { handleGoogleSignIn(e) }}
-    >
-      <img className="google-auth-icon" src={googleIcon} alt="" /> {/* Apply the CSS class to the img element */}
-      <p>Google</p>
-    </Button>
-  )
+    return (
+      <Button className='googleBtn' onClick={(e) => { handleGoogleSignIn(e) }}>
+        <img width={"16px"} className='mr-1' src={googleIcon} alt="" />
+        <span>Google</span>
+      </Button>
+    )
 }

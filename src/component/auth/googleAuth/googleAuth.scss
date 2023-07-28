@@ -1,12 +1,14 @@
-@import '../../../assets/styling.scss';
-.google-auth-button {
-    margin-top: 10px !important ;
-    font-weight: bold !important ;
-    border: 2px !important ;
-    border-color: $googleauthbordercolor !important ;
-  }
-  
-  .google-auth-icon {
-    width: 30px !important ;
-    height: auto !important ;
-  }   
+.googleBtn{
+  margin-top: 20px !important;
+  font-weight: bold !important;
+  border: 1px solid #273746 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: white;
+  cursor: pointer !important; 
+  padding: 9px 24px !important;
+}
+.mr-1 {
+  margin-right: 7px !important;
+}

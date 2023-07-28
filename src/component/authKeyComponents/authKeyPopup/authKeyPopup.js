@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Box, Button, Modal, TextField } from "@mui/material";
+import { Box, Button, Modal } from "@mui/material";
 import PropTypes from "prop-types";
 import "./authKeyPopup.scss";
+import CustomTextField from "../../../muiStyles/customTextfield";
 
 
 export default function AuthKeyPopup(props) {
@@ -36,7 +37,7 @@ export default function AuthKeyPopup(props) {
         <Box className="authKeyPopUp-b2">
           <Box className="create-auth-key">
             <Box className="copy-auto-key">
-              <TextField
+              <CustomTextField
                 disabled
                 label="Auth Key"
                 variant="standard"

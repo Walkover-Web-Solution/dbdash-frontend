@@ -1,49 +1,36 @@
-.authpage-container {
+.flex-center-center {
     display: flex !important;
     justify-content: center !important;
-    background-color: rgb(211, 211, 211,0.3) !important;
-    padding: 0px !important;
-    height: 625px !important;
-    max-width: 1360px!important;
+    align-items: center !important;
+}
+.authPageMainContainer{
+    background-color: #E8E8E8 !important;
+    min-width: 100vw;
+    max-width: fit-content;
+    min-height: 100vh;
+    max-height: fit-content;
+    overflow: scroll;
 }
 
-.authpage-main-box {
+.authContainer2{
     background-color: white !important;
-    width: 35% !important;
+    min-width: 27% !important;
+    max-width: fit-content !important;
+    min-height: 80% !important;
+    max-height: fit-content !important;
+    box-shadow: 3 !important;
+    border-radius: 5px ;
+    padding: 16px;
+}
+
+.bottomLine{
+    color: blueviolet;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.flex-col-center-center {
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important; 
-    box-shadow: 24px !important;
-    border-radius: 32px !important;
-    margin-top: 16px !important;
-    margin-bottom: 16px !important;
-    height: 600px !important;
-}
-.authpage-box-2 {
-    margin: 16px !important;
-}
-
-.authpage-h2 {
-    margin-bottom: 15px !important;
-}
-
-.authpage-p {
-    margin-top: 15px !important;
-}
-
-.authpage-box-4 {
-    display:flex !important;
-    flex-direction: column !important;
     justify-content: center !important;
-}
-.blueviolet{
-    color:blueviolet !important;
-    text-decoration: underline !important;
-    cursor:pointer !important;
-}
-
-.authpage-box-5 {
-    display:flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
+    align-items: center !important;
 }

@@ -6,9 +6,10 @@ import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { createDbThunk } from '../../../store/database/databaseThunk';
-import { Box, Button, ClickAwayListener, TextField, Typography } from '@mui/material';
+import { Box, Button, ClickAwayListener, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 import './dbSnapshotsMenu.scss';
+import CustomTextField from '../../../muiStyles/customTextfield';
 
 function DbSnapshotsMenu(props) {
   const params = useParams();
@@ -92,7 +93,7 @@ function DbSnapshotsMenu(props) {
         ) : (
           <Box className="snapshot-box">
             <Typography fontWeight="bold">{new Date(inside?.[1]?.snapshotTime * 1000).toLocaleString()}</Typography>
-            <TextField value={value || `${props.dbname}(${new Date(inside?.[1]?.snapshotTime * 1000).toLocaleDateString()})`} onChange={(e) => { setValue(e.target.value); }} />
+            <CustomTextField value={value || `${props.dbname}(${new Date(inside?.[1]?.snapshotTime * 1000).toLocaleDateString()})`} onChange={(e) => { setValue(e.target.value); }} />
             <div className="snapshot-div">
               <Button variant="contained" className="mui-button snapshot-button2" onClick={() => { restoreDbSnapshot(inside?.[0], value || `${props.dbname}(${new Date(inside?.[1]?.snapshotTime * 1000).toLocaleDateString()})`); }}>Restore</Button>
             </div>

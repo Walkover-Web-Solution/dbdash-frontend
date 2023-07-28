@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import useValidator from "react-joi";
@@ -16,6 +16,7 @@ const style = {
   boxShadow: 24,
 };
 import "./popupModal.scss"
+import CustomTextField from "../../muiStyles/customTextfield";
 
  function PopupModal(props) {
   const handleClose = () => props.setOpen(false);
@@ -75,7 +76,7 @@ import "./popupModal.scss"
 
        
           <Box className='popupModalContent'>
-            <TextField
+            <CustomTextField
               error={
                 state?.$errors?.[props?.id].length === 0 || textFieldValue.includes(" ")
                   ? false

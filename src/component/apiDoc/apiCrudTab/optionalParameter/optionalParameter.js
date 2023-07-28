@@ -4,7 +4,6 @@ import {
   Typography,
   InputLabel,
   FormControl,
-  TextField,
   Checkbox,
   Box,
   Select,
@@ -17,6 +16,7 @@ import variables from "../../../../assets/styling.scss";
 import FilterConditionTable from "./filterConditionTable";
 import AiFilter from "./AiFilter/Aifilter";
 import { SelectBoxStyles } from "../../../../muiStyles/muiStyles";
+import CustomTextField from "../../../../muiStyles/customTextfield";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -266,18 +266,14 @@ function OptionalParameter(props) {
                   selected.includes("all") ? "All Fields" : selected.join(", ")
                 }
               >
-                <MenuItem value="select_all" className="menu-item-1">
-                  <ListItemText>All Fields</ListItemText>
+               <MenuItem value="select_all" sx={{ borderBottom: '1px solid lightblue' ,color:`${variables.basictextcolor}`}}>
+                    <ListItemText>All Fields</ListItemText>
                   <ListItemIcon>
                     <Checkbox checked={selectedFields.includes("all")} />
                   </ListItemIcon>
                 </MenuItem>
                 {fields.map((field) => (
-                  <MenuItem
-                    key={field.content}
-                    value={field.content}
-                    className="blackcolor"
-                  >
+                <MenuItem key={field.content} value={field.content} sx={{color:`${variables.basictextcolor}`}}>
                     <ListItemText>{field.name}</ListItemText>
                     <ListItemIcon>
                       <Checkbox
@@ -360,7 +356,7 @@ function OptionalParameter(props) {
               <FormControl
                 className={` ${classes.formControl} marginandminwidth mt0`}
               >
-                <TextField
+                <CustomTextField
                   id="demo-simple-select-helper"
                   value={age}
                   label="Limit"
@@ -376,7 +372,7 @@ function OptionalParameter(props) {
             <FormControl
               className={` ${classes.formControl} marginandminwidth `}
             >
-              <TextField
+              <CustomTextField
                 id="demo-simple-select-helper"
                 value={offset}
                 label="Offset"

@@ -264,31 +264,37 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
                     <Box key={index} className="custom-box">
                       <Box
                         className="filter-box"
-                        style={{
+                        onClick={() => {
+                          onFilterClicked(
+                            filter[1].query,
+                            filter[0],
+                            filter[1]
+                          );
+                        }}
+                        sx={{
                           backgroundColor:
                             underLine === filter[0]
                               ? variables.highlightedfilterboxcolor
                               : variables.filterboxcolor,
+                             
                         }}
                         variant="outlined"
                       >
                         <div
                           className="tableList-div-3"
-                          onClick={() => {
-                            onFilterClicked(
-                              filter[1].query,
-                              filter[0],
-                              filter[1]
-                            );
-                          }}
+                         
                         >
                           {filter[1]?.filterName.length > 10
                             ? `${filter[1]?.filterName.slice(0, 6)}...`
                             : filter[1]?.filterName}
                         </div>
-                        <IconButton onClick={(e) => handleClick(e, filter[0])}>
+                                            <IconButton onClick={(e) =>{
+                                              e.stopPropagation();
+                                              handleClick(e, filter[0])}}>
                           <MoreVertIcon className="moreverticon" />
                         </IconButton>
+                        
+
                       </Box>
                     </Box>
                   )

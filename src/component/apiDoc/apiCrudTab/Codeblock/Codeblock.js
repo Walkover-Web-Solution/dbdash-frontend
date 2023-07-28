@@ -10,11 +10,10 @@ function CodeBlock(props) {
   const [showAPI, setShowAPI] = useState(true);
 
   const handleCopyClick = () => {
-    const codeElement = document.querySelector(".code-block pre");
+    const codeElement = document.querySelector(".pre-wrapper");
     if (codeElement) {
       navigator.clipboard.writeText(codeElement.textContent);
       setIsCopied(true);
-
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
@@ -224,7 +223,7 @@ function CodeBlock(props) {
             )}
         </div>
       ) : (
-        <pre className="pre-wrapper">
+        <div className="pre-wrapper">
           <code className="code">
             {`curl -X ${props.method} 'https://dbdash-backend-h7duexlbuq-el.a.run.app/`}
             <span className={"valuescolor"}>{props?.db}</span>/
@@ -250,7 +249,7 @@ function CodeBlock(props) {
                 {"   }' "}
               </code>
             )}
-        </pre>
+        </div>
       )}
     </div>
   );

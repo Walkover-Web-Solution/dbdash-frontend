@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -10,6 +10,7 @@ import { useParams } from "react-router";
 import { createViewTable } from "../../../api/viewTableApi";
 import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
+import CustomTextField from "../../../muiStyles/customTextfield";
 
 
 const style = {
@@ -96,7 +97,7 @@ export default function ShareLinkPopUp(props) {
           </div>
 
           <Box className="Linkfield">
-            <TextField
+            <CustomTextField
               autoFocus
               id={props?.id}
               name={props?.id}

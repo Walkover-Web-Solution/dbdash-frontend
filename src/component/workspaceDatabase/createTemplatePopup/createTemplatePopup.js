@@ -5,7 +5,6 @@ import './createTemplatePopup.scss';
 
 import {
   Box,
-  TextField,
   Typography,
   Button,
   Modal,
@@ -13,6 +12,7 @@ import {
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import { createTemplate, getAllCategoryName } from '../../../api/templateApi';
+import CustomTextField from '../../../muiStyles/customTextfield';
 
 const CreateTemplatePopup = (props) => {
 
@@ -102,7 +102,7 @@ const CreateTemplatePopup = (props) => {
                       setCategoryName(e.target.value);
                     }}
                     renderInput={(params) => (
-                      <TextField
+                      <CustomTextField
                         label={'Category Name   '}
                         {...params}
                         inputProps={{
@@ -115,7 +115,7 @@ const CreateTemplatePopup = (props) => {
               </Box>
               <Box className="create-auth-key-row createTemp-container">
                 <Typography className="create-auth-key-label createTemp-typo">Template Name</Typography>
-                <TextField
+                <CustomTextField
                   id="standard-basic"
                   label="Template Name"
                   variant="standard"

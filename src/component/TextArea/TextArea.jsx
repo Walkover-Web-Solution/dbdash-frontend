@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { TextField, Button } from "@mui/material";
+import {  Button } from "@mui/material";
+import CustomTextField from "../../muiStyles/customTextfield";
 
 const TextArea = ({ onMessageSubmit, isLoading }) => {
   const [text, setText] = useState("");
 
   const handleInputChange = (event) => {
-    setText(event.target.value);
+  setText(event.target.value);
   };
-
+  
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -38,7 +39,7 @@ const TextArea = ({ onMessageSubmit, isLoading }) => {
         marginBottom: "16px",
       }}
     >
-      <TextField
+      <CustomTextField
         multiline
         rows={2}
         placeholder="Ask Something..."
