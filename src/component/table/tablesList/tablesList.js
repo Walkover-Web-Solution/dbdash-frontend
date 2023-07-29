@@ -37,7 +37,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const navigate = useNavigate();
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [table, setTable] = useState();
   const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -46,7 +45,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const buttonRef = useRef(null);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [currentTable, setcurrentTable] = useState(null);
   const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
   const AllTable = customUseSelector((state) => {
@@ -64,13 +62,12 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
       setShareLinkOpen(true);
     } else {
       setFilterId(id);
-      setcurrentTable(id);
       setAnchorEl(event.currentTarget);
     }
   };
   const underLine=useMemo(()=>{
 
-    if (params?.filterName) {
+    if (!params?.filterName) return null;
       dispatch(
         filterData({
           filterId: params?.filterName,
@@ -81,10 +78,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
         })
       );
       return params?.filterName;
-
-    } else {
-      return null;
-    }
   },[params?.filterName])
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
@@ -92,16 +85,17 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const saveTable = async () => {
+  const saveTable = async (table_name) => {
     const data = {
-      tableName: table,
+      tableName: table_name,
     };
     setOpen(false);
     const apiCreate = await createTable(dbData?.db?._id, data);
-    await dispatch(createTable1({ tables: apiCreate.data.tables }));
-    const matchedKey = Object.keys(apiCreate?.data?.tables).find(
+
+    await dispatch(createTable1({ tables: apiCreate?.data?.data?.tables }));
+    const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(
       (key) => {
-        return apiCreate?.data?.tables[key].tableName === table;
+        return apiCreate?.data?.data?.tables[key].tableName === table_name;
       }
     );
     if (matchedKey) {
@@ -138,7 +132,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
 
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
-  const deleteFilterInDb = async (filterId) => {
+  const deleteFilterInDb = async () => {
     const data = {
       filterId: filterId,
     };
@@ -381,7 +375,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
             open={open}
             setOpen={setOpen}
             submitData={saveTable}
-            setVariable={setTable}
             joiMessage={"Table name"}
           />
         )}
@@ -401,7 +394,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
           </MenuItem>
           <MenuItem
             onClick={() => {
-              deleteFilterInDb(currentTable);
+              deleteFilterInDb();
               handleClose();
             }}
             className="delete-color"

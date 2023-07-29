@@ -51,7 +51,8 @@ export default function FieldPopupModal(props) {
   const dispatch = useDispatch();
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(1).max(30).pattern(/^[^\\s]+$/).required()
+    fieldName: Joi.string().min(1).max(30).pattern(/^[^\s]+$/).required()
+
     .messages({
       "string.min": `$ Column is required`,
       "string.pattern.base": ` column must not contain spaces`,
@@ -241,7 +242,7 @@ export default function FieldPopupModal(props) {
           className="field-textfield2"
         />
         {errors.fieldName && (
-          <Typography variant="body2" color="error" fontSize={12}>
+          <Typography variant="body2" sx={{ml:2}} color="error" fontSize={12}>
             {errors.fieldName}
           </Typography>
         )}

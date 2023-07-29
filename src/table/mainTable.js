@@ -22,17 +22,18 @@ export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
-  const allFieldsofTable = customUseSelector((state) => state.table.columns);
-  const allRowsData = customUseSelector((state) => state.table.data || []);
+  const allFieldsofTable = customUseSelector((state) => state.table.columns);//fields from redux
+  const allRowsData = customUseSelector((state) => state.table.data || []); // data from redux
   const [open, setOpen] = useState(false);
   const [openAttachment, setOpenAttachment] = useState(null);
-  const [metaData, setMetaData] = useState({});
+  const [metaData, setMetaData] = useState({}); // why we need this metaData here 
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({});
   const [showSearch, setShowSearch] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(false);
-  const targetColumn = useRef(0);
-  const readOnlyDataTypes = [ "autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat",];
+  const targetColumn = useRef(0); // 
+  const readOnlyDataTypes = [ "autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat"];
+
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -46,6 +47,7 @@ export default function MainTable(props) {
   const isSingleCellSelected = useMemo(() => {
     return (selection.current && selection.current.range.height * selection.current.range.width === 1 );
   }, [selection]);
+
   const handleUploadFileClick = useCallback((cell) => {
     if (!allRowsData) return;
     const [col, row] = cell;
@@ -112,8 +114,7 @@ export default function MainTable(props) {
     },
     [fieldsToShow, allFieldsofTable]
   );
-  const onCellEdited = useCallback(
-    (cell, newValue) => {
+  const onCellEdited =(cell, newValue) => {
       editCell(
         cell,
         newValue,
@@ -124,9 +125,8 @@ export default function MainTable(props) {
         fieldsToShow[cell[0]].dataType,
         isSingleCellSelected
       );
-    },
-    [allRowsData, fieldsToShow]
-  );
+    }
+   
   const handleColumnResizeWithoutAPI = useCallback((_, newSize, colIndex) => {
     let newarrr = [...(fieldsToShow || allFieldsofTable)];
     let obj = Object.assign({}, newarrr[colIndex]);
@@ -146,17 +146,8 @@ export default function MainTable(props) {
       })
     );
   };
-  const validateCell = useCallback(
-    (cell, newValue) => {
-      if (params?.templateId) return;
-      if (newValue.kind === "number") {
-        if (newValue?.data?.toString().length < 13 || !newValue?.data) {
-          return newValue;
-        } else return false;
-      }
-    },
-    [allRowsData, fieldsToShow]
-  );
+  
+
   const handleDeleteRow = (selection) => {
     if (params?.templateId || selection?.current) return;
     const deletedRowIndices = [];
@@ -169,6 +160,7 @@ export default function MainTable(props) {
     if (deletedRowIndices.length > 0)  dispatch(deleteRows({ deletedRowIndices, dataa: allRowsData }));
     setSelection(emptyselection);
   };
+
   const onHeaderMenuClick = useCallback((col, bounds) => {
     if (params?.templateId) return;
     setMenu({ col, bounds });
@@ -178,7 +170,6 @@ export default function MainTable(props) {
       getDataExternalFunction(cell,allRowsData,fieldsToShow,readOnlyDataTypes),
     [allRowsData, fieldsToShow]
   );
-  const realCols = useMemo(() => [...fieldsToShow], [fieldsToShow]);
 
   const handlegridselection = (event) => {setSelection(event);};
 
@@ -188,7 +179,7 @@ export default function MainTable(props) {
     setMenu({ col, bounds: event.bounds });
   });
   const getRowThemeOverride = (row) => {
-    if (row != hoveredRow || open || menu) return;
+    if (row != hoveredRow || open || menu || openAttachment) return;
     return {
       bgCell: variables.rowHoverColor,
       bgCellMedium: variables.codeblockbgcolor,
@@ -210,7 +201,7 @@ export default function MainTable(props) {
           fillHandle={true}
           getCellContent={getData}
           onRowAppended={addRows}
-          columns={realCols}
+          columns={fieldsToShow}
           rows={allRowsData.length}
           gridSelection={selection}
           rowMarkers="both"
@@ -218,7 +209,7 @@ export default function MainTable(props) {
           onItemHovered={getHoveredItemsInfo}
           onGridSelectionChange={handlegridselection}
           onCellEdited={onCellEdited}
-          validateCell={validateCell}
+          // validateCell={validateCell}
           onHeaderContextMenu={handleRightClickOnHeader}
           getCellsForSelection={true}
           showSearch={showSearch}

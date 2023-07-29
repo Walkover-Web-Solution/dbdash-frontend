@@ -1,7 +1,7 @@
 import axiosInstance from "../interceptor/interceptor";
 
 const createTable = async (db_id, data) => {
-  return (await axiosInstance.post(`/dbs/${db_id}/table`, data)).data;
+  return await axiosInstance.post(`/dbs/${db_id}/table`, data);
 };
 
 const getTable = async (db_id, tableName, page) => {

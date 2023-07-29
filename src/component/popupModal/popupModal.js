@@ -13,21 +13,24 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
+  outline:'none',
   boxShadow: 24,
 };
 import "./popupModal.scss"
 import CustomTextField from "../../muiStyles/customTextfield";
 
- function PopupModal(props) {
+function PopupModal(props) {
   const handleClose = () => props.setOpen(false);
   const [textFieldValue, setTextFieldValue] = useState("");
+
 
   const { state, setData, setExplicitField, validate } = useValidator({
     initialData: {
       [props?.id]: null,
     },
     schema: Joi.object({
-      [props?.id]: Joi.string().min(3).max(30).pattern(/^[^\\s]+$/).required()
+      [props?.id]: Joi.string().min(1).max(30).pattern(/^[^\s]+$/).required()
+
         .messages({
           "string.min": `${props?.joiMessage} must be at least {#limit} characters long`,
           "string.max": `${props?.joiMessage} must not exceed {#limit} characters`,
@@ -67,14 +70,14 @@ import CustomTextField from "../../muiStyles/customTextfield";
       >
 
         <Box sx={style}>
-        <div className="popupheader">    
-        <Typography className="popupModalTitle" id="title" variant="h6" component="h2">
+          <div className="popupheader">
+            <Typography className="popupModalTitle" id="title" variant="h6" component="h2">
               {props.title}
             </Typography>
             <CloseIcon className="closeIcon" onClick={handleClose} />
           </div>
 
-       
+
           <Box className='popupModalContent'>
             <CustomTextField
               error={
@@ -90,7 +93,7 @@ import CustomTextField from "../../muiStyles/customTextfield";
               label={props.label}
               variant="standard"
               onChange={(e) => {
-                props.setVariable(e.target.value);
+                
                 createProjectJoi(e);
               }}
               onBlur={() => setExplicitField(`${props?.id}`, true)}
@@ -101,39 +104,39 @@ import CustomTextField from "../../muiStyles/customTextfield";
                   !textFieldValue.includes(" ")
                 ) {
                   if (e.key === "Enter") {
-                    props.submitData(e);
+                    props.submitData(textFieldValue);
                     handleClose();
                   }
                 }
               }}
             />
-            <div  className="errorcolor" style={{ fontSize: variables.editfilterbutttonsfontsize }}>
+            <div className="errorcolor" style={{ fontSize: variables.editfilterbutttonsfontsize }}>
               {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
             </div>
           </Box>
-         {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a  rel="noreferrer" href='http://localhost:5000/64a806e049f009459a84201b'> click here</a></Typography></Box>
-         } <Box className="buttonContainer">
+          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a rel="noreferrer" href='http://localhost:5000/64a806e049f009459a84201b'> click here</a></Typography></Box>
+          } <Box className="buttonContainer">
             <Box >
-            <Button
-  className={textFieldValue.length < 3 || textFieldValue.length > 30 || textFieldValue.includes(" ")
-    ? "mui-button mui-button-disabled"
-    : "mui-button"
-  }
-  variant="contained"
-  disabled={
-    textFieldValue.length < 3 ||
-    textFieldValue.length > 30 ||
-    textFieldValue.includes(" ")
-  }
-  onClick={() => {
-    validate();
-    props?.submitData();
-  }}
->
+              <Button
+                className={textFieldValue.length < 3 || textFieldValue.length > 30 || textFieldValue.includes(" ")
+                  ? "mui-button mui-button-disabled"
+                  : "mui-button"
+                }
+                variant="contained"
+                disabled={
+                  textFieldValue.length < 3 ||
+                  textFieldValue.length > 30 ||
+                  textFieldValue.includes(" ")
+                }
+                onClick={() => {
+                  validate();
+                  props?.submitData(textFieldValue);
+                }}
+              >
                 Create
               </Button>
             </Box>
-           
+
           </Box>
         </Box>
       </Modal>
@@ -146,7 +149,7 @@ PopupModal.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   label: PropTypes.string,
-  templateoption:PropTypes.any,
+  templateoption: PropTypes.any,
   submitData: PropTypes.func,
   setVariable: PropTypes.func,
   id: PropTypes.string,

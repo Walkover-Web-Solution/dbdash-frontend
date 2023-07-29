@@ -27,7 +27,6 @@ export const OrgList = (props) => {
   const [name, setName] = useState(false); // [show textfield and setshowtextfield]
   const [orgUsers, setOrgUsers] = useState([])
   const orgName = useRef(props.dbs[0]?.org_id?.name)
-  const [db, setDb] = useState(false);
   const [open, setOpen] = useState(false); //popup model craeate db 
   const [shareOrg, setShareOrg] = useState(false); // shred org model open closse 
   const [orgId, setOrg] = useState();
@@ -59,11 +58,11 @@ export const OrgList = (props) => {
       });
     }
   }, [allorgss])
-  const saveDb = async () => {
+  const saveDb = async (dbName) => {
     const userId = localStorage.getItem("userid");  
     const data = {
       user_id: userId,
-      name: db,
+      name: dbName,
     };
     setOpen(false);
     const createDb1 = await createDb(orgId, data);
@@ -80,7 +79,6 @@ export const OrgList = (props) => {
    
     if (! orgName ||  orgName.trim() === "") {
       toast.error("Workspace name cannot be empty");
-      // orgName.current = (props.dbs[0]?.org_id?.name);
       return;
     }
 
@@ -256,7 +254,6 @@ setOrgUsers(originalObj);
               title="create database"
               label="Database Name"
               submitData={saveDb}
-              setVariable={setDb}
               joiMessage={"Database name"}
               templateoption={true}
             >

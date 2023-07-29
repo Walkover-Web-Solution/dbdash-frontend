@@ -8,12 +8,15 @@ const axiosInstance = axios.create({
 //request interceptor
 axiosInstance.interceptors.request.use(
   async (config) => {
+    try{
     const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers["Authorization"] = token;
     }
     return config;
-  },
+  } catch (error) {
+    return Promise.reject(error);
+  }},
   (error) => {
     Promise.reject(error);
   }
@@ -25,6 +28,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
+    try{
     if (error?.response?.status === 401) {
       toast.error('Session Expired');
       localStorage.removeItem("accessToken");
@@ -40,8 +44,13 @@ axiosInstance.interceptors.response.use(
     else{
       toast.error(error?.response?.data?.message)
     }
-    return Promise.reject(error);
+    return new Promise(() => {});
   }
+  catch(e)
+  {
+    return Promise.reject(e);
+  }
+}
 );
 
 export default axiosInstance;

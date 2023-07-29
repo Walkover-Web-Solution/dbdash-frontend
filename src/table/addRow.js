@@ -37,19 +37,21 @@ export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, 
   const tableId = params?.tableName.substring(3);
   const fieldId=fields[cell[0]]?.id;
   const currentrow= allRowsData[cell?.[1] ?? []];
-const rowAutonumber=currentrow[`fld${tableId}autonumber`];
+  const rowAutonumber=currentrow[`fld${tableId}autonumber`];
+
   if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
+
   if (fields[cell[0]]?.dataType == "multipleselect") {
     editmultipleselect(newValue, allRowsData[cell[1]][fieldId] || [], cell,params,tableId, fieldId,dispatch,rowAutonumber);
     return;
   }
-  if (newValue?.readonly == true || newValue?.data == allRowsData[cell[1]][fieldId] ||
-    (!newValue?.data  && !allRowsData[cell[1]][fieldId])) return;
-  if (fields[cell[0]].dataType == "singleselect") {
-    newValue = newValue.data.value;
-  }
+
+  if (newValue?.readonly == true || newValue?.data == allRowsData[cell[1]][fieldId] ||(!newValue?.data  && !allRowsData[cell[1]][fieldId])) return;
+ 
+
   const col = cell[0];
   const key = fields[col].id;
+
   if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) {
     let newdata;
     if (dataType == "datetime") {
@@ -68,7 +70,7 @@ const rowAutonumber=currentrow[`fld${tableId}autonumber`];
     };
     
     if (dataType == "singleselect") {
-      currentupdatedvalue.fields[key] = newValue;
+      currentupdatedvalue.fields[key] = newValue.data.value;
     } else {
       currentupdatedvalue.fields[key] = newdata || newValue?.data || null;
     }
@@ -76,7 +78,7 @@ const rowAutonumber=currentrow[`fld${tableId}autonumber`];
     valuesArray.push(currentupdatedvalue);
     indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
   
-    if (isSingleCellSelected) {
+    if (isSingleCellSelected==true) {
       dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentrow }));
       dispatch(updateCells({
         updatedArray: [currentupdatedvalue],

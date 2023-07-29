@@ -16,7 +16,6 @@ import  { customUseSelector } from '../../../store/customUseSelector';
   const alldbs = customUseSelector((state) => selectOrgandDb(state) || []) ;
   const [addedelement, setAddedelement] = useState(null);
   const dispatch = useDispatch();
-  const [org, setOrg] = useState();
   const [open, setOpen] = useState(false);
 const [openTemplate,setOpenTemplate]=useState(false);
 
@@ -55,9 +54,9 @@ const [openTemplate,setOpenTemplate]=useState(false);
   };
 
 
-  const saveOrgToDB = async () => {
+  const saveOrgToDB = async (org_name) => {
     const userid = localStorage.getItem("userid");
-    dispatch(createOrgThunk({ name: org, user_id: userid })).then((e) => {
+    dispatch(createOrgThunk({ name: org_name, user_id: userid })).then((e) => {
       if(e.type.includes('fulfilled'))
       {
         toast.success('Organisation created successfully!');
@@ -90,7 +89,7 @@ const [openTemplate,setOpenTemplate]=useState(false);
             open={open}
             setOpen={setOpen}
             submitData={saveOrgToDB}
-            setVariable={setOrg}
+        
             joiMessage={"Organization name"}
           />
         ) : (
@@ -100,7 +99,7 @@ const [openTemplate,setOpenTemplate]=useState(false);
             open={openTemplate}
             setOpen={setOpenTemplate}
             submitData={saveOrgToDB}
-            setVariable={setOrg}
+        
             joiMessage={"Organization name"}
           />
         ))}
