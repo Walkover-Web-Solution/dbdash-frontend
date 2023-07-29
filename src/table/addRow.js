@@ -111,15 +111,17 @@ export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1
 export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes)=>{
   const [col, row] = cell;
   const dataRow = allRowsData[row] || [];
+
   if (dataRow) {
     const d = dataRow[fieldsToShow[col]?.id];
     let { dataType } = fieldsToShow[col] || "";
+    const readOnlyOrNot=(fieldsToShow[col]?.metadata?.isLookup || readOnlyDataTypes.includes(dataType))?true:false;
    
     if (dataType === "autonumber") {
       return {
         allowOverlay: true,
         kind: GridCellKind.Number,
-        readonly: true,
+        readonly: readOnlyOrNot,
         data: d || "",
         displayData: d?.toString() || "",
       };
@@ -133,7 +135,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,
-        readonly: true,
+        readonly: readOnlyOrNot,
         displayData: (d && updatedtime.toString()) || "",
         data: (d && updatedtime.toString()) || "",
       };
@@ -176,7 +178,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,
-        readonly: false,
+        readonly: readOnlyOrNot,
         allowWrapping: true,
         displayData: d || "",
         data: d || "",
@@ -186,7 +188,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Uri,
         allowOverlay: true,
-        readonly: false,
+        readonly: readOnlyOrNot,
         displayData: d || "",
         data: d || "",
       };
@@ -195,7 +197,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,
-        readonly: false,
+        readonly: readOnlyOrNot,
         displayData: d || "",
         data: d || "",
         wrapText: false,
@@ -204,6 +206,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
     } else if (dataType === "phone") {
       return {
         allowOverlay: true,
+        readonly: readOnlyOrNot,
+
         kind: GridCellKind.Number,
         data: d || "",
         displayData: d || "",
@@ -211,6 +215,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
     } else if (dataType === "numeric") {
       return {
         allowOverlay: true,
+        readonly: readOnlyOrNot,
+
         kind: GridCellKind.Number,
         data: d?.toString() || "",
         displayData: d?.toString() || "",
@@ -233,7 +239,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
         data: {
           kind: "tags-cell",
           possibleTags: newarr || [],
-          readonly: false,
+          readonly: readOnlyOrNot,
           tags: d || [],
         },
       };
@@ -241,6 +247,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Image,
         data: d,
+        readonly: readOnlyOrNot,
+
         allowAdd: true,
       };
     } else if (dataType === "singleselect") {
@@ -249,6 +257,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
         allowOverlay: true,
         copyData: d,
         data: {
+          readonly: readOnlyOrNot,
           kind: "dropdown-cell",
           allowedValues: fieldsToShow[col]?.metadata?.option || [],
           value: d || "",
@@ -266,6 +275,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
              else show=d;
            }
            return {
+          readonly: readOnlyOrNot,
+
              kind: GridCellKind.Boolean,
              data: show,
              allowOverlay: false,
@@ -276,7 +287,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,
-        readonly: false,
+        readonly: readOnlyOrNot,
         displayData: d?.toString()|| "",
         data:  d?.toString() || "",
       };
@@ -288,7 +299,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
 const editmultipleselect = (newValue, oldValuetags, cell, params, tableId, fieldId, dispatch, rowAutonumber) => {
   if (params?.templateId || !fieldId) return;
 
-  const newValuetags = newValue.data.tags;
+  const newValuetags = newValue.data.tags || [];
   const addedTags = newValuetags.filter(tag => !oldValuetags.includes(tag));
   const removedTags = oldValuetags.filter(tag => !newValuetags.includes(tag));
 
