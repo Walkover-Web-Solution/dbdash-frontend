@@ -540,6 +540,7 @@ export const updateCells = createAsyncThunk(
     }
 
     const data = await updateRow(dbId, tableId, jsonToSend);
+
     const createdby = "fld" + tableId.substring(3) + "createdby";
     const updatedby = "fld" + tableId.substring(3) + "updatedby";
     // const tableInfo = getTableInfo(getState())

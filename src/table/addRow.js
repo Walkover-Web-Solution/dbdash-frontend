@@ -1,7 +1,6 @@
 import { toast } from "react-toastify";
 import {GridCellKind} from "@glideapps/glide-data-grid";
 import { addRows, updateCells, addColumsToLeft, updateColumnOrder } from "../store/table/tableThunk";
-import debounce from 'lodash.debounce';
 import { updatecellbeforeapi } from "../store/table/tableSlice";
 export const addRow = (dispatch) => {
   dispatch(addRows({ type: "add_row" }))
@@ -16,9 +15,8 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
   }));
   return;
 }
-let valuesArray = [];
-let indexIdMapping = {}
-const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
+
+const updateCellsBatchFunction = async (dispatch,valuesArray,indexIdMapping) => {
   const batchSize = 1000; // Set the batch size to 1000
   const totalRows = valuesArray.length;
   for (let i = 0; i < totalRows; i += batchSize) {
@@ -32,64 +30,80 @@ const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   }
   valuesArray = []
   indexIdMapping = {}
-}, 300);
-export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, dataType,isSingleCellSelected) => {
+}
+
+export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
+  if(params?.templateId || fields[list[0].location[0]]?.dataType == "attachment") return;
   const tableId = params?.tableName.substring(3);
-  const fieldId=fields[cell[0]]?.id;
-  const currentrow= allRowsData[cell?.[1] ?? []];
-  const rowAutonumber=currentrow[`fld${tableId}autonumber`];
 
-  if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
-
-  if (fields[cell[0]]?.dataType == "multipleselect") {
-    editmultipleselect(newValue, allRowsData[cell[1]][fieldId] || [], cell,params,tableId, fieldId,dispatch,rowAutonumber);
+  
+  if(list.length==1)
+  {
+    const cell=list[0].location;
+    let currentRow=allRowsData[cell[1]];
+    let fieldId=fields[cell[0]]?.id;
+    if (fields[cell[0]]?.dataType == "multipleselect" ) {
+      editmultipleselect(list[0].value, currentRow[fieldId] || [], cell,params,tableId, fieldId,dispatch,currentRow[`fld${tableId}autonumber`]);
+      return;
+    }
+    
+   let currentupdatedvalue=giveCurrentUpdatedValue(fields[cell[0]]?.dataType,list[0].value,tableId,currentRow,fieldId)
+   if(!currentupdatedvalue) return ;
+    dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentRow }));
+    dispatch(updateCells({
+      updatedArray: [currentupdatedvalue],
+      indexIdMapping: { [currentRow[`fld${tableId}autonumber`]]: cell[1]},
+      oldData : currentRow[fieldId]
+    }))
     return;
   }
+  let  valuesArray = []
+  let indexIdMapping = {}
+  for(let i=0;i<list.length;i++)
+  {
+    const cell=list[i].location;
+    const newValue=list[i].value;
+    let currentRow=allRowsData[cell[1]];
+    let fieldId=fields[cell[0]]?.id;
+    if (!fieldId) continue;
+    
+    const dataType=fields[cell[0]]?.dataType;
+    let currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId);
+    if (!currentupdatedvalue) continue;
+    
+    indexIdMapping[currentRow[`fld${tableId}autonumber`]] = cell[1];
+    valuesArray.push(currentupdatedvalue);
+              
+  }
+  updateCellsBatchFunction(dispatch,valuesArray,indexIdMapping);
 
-  if (newValue?.readonly == true || newValue?.data == allRowsData[cell[1]][fieldId] ||(!newValue?.data  && !allRowsData[cell[1]][fieldId])) return;
- 
 
-  const col = cell[0];
-  const key = fields[col].id;
-
-  if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) {
+}
+  const giveCurrentUpdatedValue=(dataType,newValue,tableId,currentRow,fieldId)=>{
     let newdata;
     if (dataType == "datetime") {
       if (!newValue?.data?.date && newValue?.data?.date != "") {
         toast.warning("Invalid or undefined date");
-        return;
+        return null;
       }
       newdata = newValue?.data?.date;
     } else {
       newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
     }
-   
     let currentupdatedvalue = {
-      "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
+      "where": `fld${tableId}autonumber = ${currentRow[`fld${tableId}autonumber`]}`,
       "fields": {}
     };
-    
     if (dataType == "singleselect") {
-      currentupdatedvalue.fields[key] = newValue.data.value;
+      currentupdatedvalue.fields[fieldId] = newValue.data.value;
     } else {
-      currentupdatedvalue.fields[key] = newdata || newValue?.data || null;
+      currentupdatedvalue.fields[fieldId] = newdata || newValue?.data || null;
     }
-    
-    valuesArray.push(currentupdatedvalue);
-    indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
-  
-    if (isSingleCellSelected==true) {
-      dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentrow }));
-      dispatch(updateCells({
-        updatedArray: [currentupdatedvalue],
-        indexIdMapping: { [currentrow[`fld${tableId}autonumber`]]: cell[1]},
-        oldData : currentrow[key]
-      }))
-    }
-    else updateCellsAfterSomeDelay(dispatch);
-    return;
+    if(currentupdatedvalue.fields[fieldId]==currentRow[fieldId]) return null;
+
+    return currentupdatedvalue;
   }
-}
+
 export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1, filterId, setFields) => {
   const newOrder = Array.from(fields);
   const key = fields[currentIndex].id;
@@ -298,7 +312,6 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
 }
 const editmultipleselect = (newValue, oldValuetags, cell, params, tableId, fieldId, dispatch, rowAutonumber) => {
   if (params?.templateId || !fieldId) return;
-
   const newValuetags = newValue.data.tags || [];
   const addedTags = newValuetags.filter(tag => !oldValuetags.includes(tag));
   const removedTags = oldValuetags.filter(tag => !newValuetags.includes(tag));

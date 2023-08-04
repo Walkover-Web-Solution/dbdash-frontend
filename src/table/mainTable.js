@@ -9,8 +9,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addRow,editCell,getDataExternalFunction,reorderFuncton,} from "./addRow";
-import { useMemo } from "react";
+import { addRow,editCellsInBatch,getDataExternalFunction,reorderFuncton,} from "./addRow";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 import { getTableInfo } from "../store/table/tableSelector";
@@ -43,10 +42,6 @@ export default function MainTable(props) {
   const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
   const tableInfo = customUseSelector((state) => getTableInfo(state));
   const tableId = tableInfo?.tableId;
-
-  const isSingleCellSelected = useMemo(() => {
-    return (selection.current && selection.current.range.height * selection.current.range.width === 1 );
-  }, [selection]);
 
   const handleUploadFileClick = useCallback((cell) => {
     if (!allRowsData) return;
@@ -114,18 +109,7 @@ export default function MainTable(props) {
     },
     [fieldsToShow, allFieldsofTable]
   );
-  const onCellEdited =(cell, newValue) => {
-      editCell(
-        cell,
-        newValue,
-        dispatch,
-        fieldsToShow,
-        params,
-        allRowsData,
-        fieldsToShow[cell[0]].dataType,
-        isSingleCellSelected
-      );
-    }
+  
    
   const handleColumnResizeWithoutAPI = useCallback((_, newSize, colIndex) => {
     let newarrr = [...(fieldsToShow || allFieldsofTable)];
@@ -185,6 +169,10 @@ export default function MainTable(props) {
       bgCellMedium: variables.codeblockbgcolor,
     };
   };
+  const onCellsEdited=useCallback((list)=>{
+    editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData);
+
+  },[fieldsToShow,allRowsData])
   const getHoveredItemsInfo = (event) => {setHoveredRow(event?.location[1]); };
   return (
     <>
@@ -202,13 +190,14 @@ export default function MainTable(props) {
           getCellContent={getData}
           onRowAppended={addRows}
           columns={fieldsToShow}
+          onCellsEdited={onCellsEdited}
           rows={allRowsData.length}
           gridSelection={selection}
           rowMarkers="both"
           rowSelectionMode="multi"
           onItemHovered={getHoveredItemsInfo}
           onGridSelectionChange={handlegridselection}
-          onCellEdited={onCellEdited}
+          // onCellEdited={onCellEdited}
           // validateCell={validateCell}
           onHeaderContextMenu={handleRightClickOnHeader}
           getCellsForSelection={true}
