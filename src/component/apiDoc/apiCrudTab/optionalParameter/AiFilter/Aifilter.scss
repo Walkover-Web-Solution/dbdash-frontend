@@ -14,25 +14,11 @@
         justify-items: flex-start;
 }
 
-// @mixin setFlexDirection($direction) {
-//     flex-direction: $direction;
-//   }
-  
-//   .box {
-//     display: flex;
-//     width: 100%;
-//     align-items: center;
-  
-//     @if text == '' {
-//       flex-direction: row;
-//     } @else {
-//       flex-direction: column;
-//     }
-//   }
+
 .ai-divv{
     display: flex;
     width: 100%;
-    align-items: center;
+    align-items:center;
 }
 .row{
     flex-direction: row !important;
@@ -44,7 +30,7 @@
     width: 76% !important;
   }
   .div98{
-    width: 98% !important;
+    width: 96% !important;
   }
   .div24{
     width: 24% !important;
@@ -67,11 +53,13 @@
 .ai-Autosugg-Function{
     display: flex;
     justify-content: right;
+    align-items: end;
 }
 .generatebutton{
     font-size: $editfilterbutttonsfontsize !important;
     background-color: $codeblockbgcolor !important;
     height:50px !important;
+    margin: 2px !important;
 
 }
 .ansfield{
@@ -80,17 +68,6 @@
         width:99% !important;
 
 }
-.box {
-    display: flex;
-    width: 100%;
-    align-items: center;
-  
-    $flex-direction: row;
-    @if not (text == '') {
-      $flex-direction: column;
-    }
-    flex-direction: $flex-direction;
-  }
-  
+
   
   

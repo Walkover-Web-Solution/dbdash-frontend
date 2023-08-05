@@ -54,8 +54,8 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   });
   const [openManageField, setOpenManageField] = useState(false);
   
-    const fullName=customUseSelector((state) => state.user.userFirstName+" "+state.user.userLastName);
-   const email=customUseSelector((state) => state.user.userEmail)
+  const fullName=customUseSelector((state) => state.user.userFirstName+" "+state.user.userLastName);
+  const email=customUseSelector((state) => state.user.userEmail)
   
   const handleClick = (event, id) => {
     if (id === "share") {
@@ -211,99 +211,93 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     await exportCSV(dbData?.db?._id, params?.tableName, data);
     toast.success("Your CSV file has been mailed successfully");
   };
+  const tabsContainer=useMemo(()=> <Box className="tabs-container">
+  <Tabs
+    value={0}
+    TabIndicatorProps={{
+      style: { display: "none" },
+    }}
+    className={`tabs`}
+    variant="scrollable"
+    scrollButtons={false}
+    aria-label="scrollable auto tabs example"
+  >
+    {AllTableInfo &&
+      Object.entries(AllTableInfo).map((table, index) => (
+        <SingleTable
+          table={table}
+          index={index}
+          dbData={dbData}
+          setPage={setPage}
+          key={index}
+        />
+      ))}
+  </Tabs>
+  <Button
+    variant="outlined"
+    className="mui-button-outlined add-button"
+    onClick={() => handleOpen()}
+  >
+    <AddIcon />
+  </Button>
+</Box>,[AllTableInfo])
+const showingFilters=useMemo(()=> <Box className="tableList-add-view">
+<div className="tableList-div-1">
+  <div className="tableList-div-2">
+    {AllTableInfo[params?.tableName]?.filters &&
+      Object.entries(AllTableInfo[params?.tableName]?.filters).map(
+        (filter, index) => (
+          <Box key={index} className="custom-box">
+            <Box
+              className="filter-box"
+              onClick={() => {
+                onFilterClicked(
+                  filter[1].query,
+                  filter[0],
+                  filter[1]
+                );
+              }}
+              sx={{
+                backgroundColor:
+                  underLine === filter[0]
+                    ? variables.highlightedfilterboxcolor: variables.filterboxcolor,
+                   
+              }}
+              variant="outlined"
+            >
+              <div
+                className="tableList-div-3" >
+                {filter[1]?.filterName?.length > 10
+                  ? `${filter[1]?.filterName?.slice(0, 6)}...`
+                  : filter[1]?.filterName}
+              </div>
+                                  <IconButton onClick={(e) =>{
+                                    e.stopPropagation();
+                                    handleClick(e, filter[0])}}>
+                <MoreVertIcon className="moreverticon" />
+              </IconButton>
+            </Box>
+          </Box>
+        )
+      )}
+  </div>
+</div>
+<Button
+  onClick={() => handleOpenn()}
+  variant="outlined"
+  ref={buttonRef}
+  className="mui-button-outlined filter-button custom-button-add-view"
+>
+  Add View
+</Button>
+</Box>,[AllTableInfo[params?.tableName]?.filters,underLine,params?.filterName])
   return (
     <>
       <div className="tableslist">
         <Box className="tables-list-container">
-          <Box className="tabs-container">
-            <Tabs
-              value={0}
-              TabIndicatorProps={{
-                style: { display: "none" },
-              }}
-              className={`tabs`}
-              variant="scrollable"
-              scrollButtons={false}
-              aria-label="scrollable auto tabs example"
-            >
-              {AllTableInfo &&
-                Object.entries(AllTableInfo).map((table, index) => (
-                  <SingleTable
-                    table={table}
-                    index={index}
-                    dbData={dbData}
-                    setPage={setPage}
-                    key={index}
-                  />
-                ))}
-            </Tabs>
-            <Button
-              variant="outlined"
-              className="mui-button-outlined add-button"
-              onClick={() => handleOpen()}
-            >
-              <AddIcon />
-            </Button>
-          </Box>
+         {tabsContainer}
         </Box>
-        <Box className="tableList-add-view">
-          <div className="tableList-div-1">
-            <div
-              className="tableList-div-2"
-             
-            >
-              {AllTableInfo[params?.tableName]?.filters &&
-                Object.entries(AllTableInfo[params?.tableName]?.filters).map(
-                  (filter, index) => (
-                    <Box key={index} className="custom-box">
-                      <Box
-                        className="filter-box"
-                        onClick={() => {
-                          onFilterClicked(
-                            filter[1].query,
-                            filter[0],
-                            filter[1]
-                          );
-                        }}
-                        sx={{
-                          backgroundColor:
-                            underLine === filter[0]
-                              ? variables.highlightedfilterboxcolor
-                              : variables.filterboxcolor,
-                             
-                        }}
-                        variant="outlined"
-                      >
-                        <div
-                          className="tableList-div-3"
-                         
-                        >
-                          {filter[1]?.filterName.length > 10
-                            ? `${filter[1]?.filterName.slice(0, 6)}...`
-                            : filter[1]?.filterName}
-                        </div>
-                                            <IconButton onClick={(e) =>{
-                                              e.stopPropagation();
-                                              handleClick(e, filter[0])}}>
-                          <MoreVertIcon className="moreverticon" />
-                        </IconButton>
-                        
-
-                      </Box>
-                    </Box>
-                  )
-                )}
-            </div>
-          </div>
-          <Button
-            onClick={() => handleOpenn()}
-            variant="outlined"
-            ref={buttonRef}
-            className="mui-button-outlined filter-button custom-button-add-view"
-          >
-            Add View
-          </Button>
-        </Box>
+       {showingFilters}
         {openn && !edit && (
           <FilterModal
             dbData={dbData}

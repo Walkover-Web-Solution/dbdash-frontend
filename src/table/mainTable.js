@@ -25,12 +25,11 @@ export default function MainTable(props) {
   const allRowsData = customUseSelector((state) => state.table.data || []); // data from redux
   const [open, setOpen] = useState(false);
   const [openAttachment, setOpenAttachment] = useState(null);
-  const [metaData, setMetaData] = useState({}); // why we need this metaData here 
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({});
   const [showSearch, setShowSearch] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(false);
-  const targetColumn = useRef(0); // 
+  const targetColumn = useRef(0); 
   const readOnlyDataTypes = [ "autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat"];
 
   const emptyselection = {
@@ -197,8 +196,6 @@ export default function MainTable(props) {
           rowSelectionMode="multi"
           onItemHovered={getHoveredItemsInfo}
           onGridSelectionChange={handlegridselection}
-          // onCellEdited={onCellEdited}
-          // validateCell={validateCell}
           onHeaderContextMenu={handleRightClickOnHeader}
           getCellsForSelection={true}
           showSearch={showSearch}
@@ -218,12 +215,8 @@ export default function MainTable(props) {
       </div>
       {open && (
         <FieldPopupModal
-          title="create column"
-          label="Column Name"
           tableId={params?.tableName}
           open={open}
-          metaData={metaData}
-          setMetaData={setMetaData}
           setOpen={setOpen}
           setDirectionAndId={setDirectionAndId}
           directionAndId={directionAndId}
@@ -240,8 +233,6 @@ export default function MainTable(props) {
       )}
       {openAttachment && (
         <SelectFilepopup
-          title="uplaodfile"
-          label="UploadFileIcon"
           attachment={openAttachment}
           open={openAttachment ? true : false}
           setOpen={setOpenAttachment}

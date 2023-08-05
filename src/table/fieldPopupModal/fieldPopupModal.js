@@ -33,6 +33,7 @@ import CustomTextField from "../../muiStyles/customTextfield";
 export default function FieldPopupModal(props) {
   const params = useParams();
   const [showSwitch, setShowSwitch] = useState(false);
+  const [metaData, setMetaData] = useState({}); 
   const [showFormulaField, setShowFormulaField] = useState(false);
   const [showLookupField, setShowLookupField] = useState(false);
   const [showLinkField, setShowLinkField] = useState(false);
@@ -66,6 +67,7 @@ export default function FieldPopupModal(props) {
     ) {
       props?.setOpen(false);
       dispatch(
+        
         addColumnrightandleft({
           filterId: params?.filterName,
           fieldName: textValue,
@@ -74,7 +76,7 @@ export default function FieldPopupModal(props) {
           fieldType: selectValue,
           direction: props?.directionAndId.direction,
           position: props?.directionAndId.position,
-          metaData: props?.metaData,
+          metaData: metaData,
           selectedTable,
           selectedFieldName: selectedFieldName,
           linkedValueName,
@@ -83,7 +85,7 @@ export default function FieldPopupModal(props) {
       setSelectValue("longtext");
       props?.setDirectionAndId({});
     } else {
-      var data1 = props?.metaData;
+      var data1 = metaData;
       if (selectValue == "link") {
         data1.foreignKey = {
           fieldId: selectedFieldName,
@@ -103,7 +105,7 @@ export default function FieldPopupModal(props) {
         dispatch,
         params,
         selectValue,
-        props?.metaData,
+        metaData,
         textValue,
         selectedTable,
         selectedFieldName,
@@ -115,9 +117,9 @@ export default function FieldPopupModal(props) {
     }
   };
   const handleSwitchChange = (event) => {
-    var data = props?.metaData;
+    var data = metaData;
     data.unique = event.target.checked;
-    props?.setMetaData(data);
+    setMetaData(data);
   };
   const handleTextChange = (event) => {
     const { error } = schema.validate({ fieldName: event.target.value });
@@ -136,9 +138,9 @@ export default function FieldPopupModal(props) {
     setShowSwitch(false)
     setSelectedFieldName(false)
     setShowLookupField(false)
-    const data1 = props?.metaData;
+    const data1 = metaData;
     delete data1["unique"];
-    props?.setMetaData(data1);
+    setMetaData(data1);
     if (event.target.value == "formula") {
       setShowFormulaField(true)
       setSelectValue(event.target.value);
@@ -164,9 +166,9 @@ export default function FieldPopupModal(props) {
   
     else if (event.target.value === 'id') {
       setSelectValue('id')
-      var data = props?.metaData;
+      var data = metaData;
       data.unique = "true"
-      props?.setMetaData(data);
+      setMetaData(data);
     }
     else if (event.target.value === 'decimal' && showNumericOptions) {
      setSelectValue('decimal')
@@ -206,7 +208,7 @@ export default function FieldPopupModal(props) {
     setSelectedFieldName(false);
     setSelectValue("longtext");
     setTextValue("");
-    props?.setMetaData({});
+    setMetaData({});
     setQueryByAi(false);
   };
   return (
@@ -273,7 +275,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single select</MenuItem>
             <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> URL</MenuItem> 
           </Select>
-          <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
+          <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
           {showFormulaField && <FormulaDataType setQueryByAi={setQueryByAi} queryByAi={queryByAi} submitData={createLeftorRightColumn}
           />}
           {showLinkField && <LinkDataType selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} />}
@@ -284,7 +286,7 @@ export default function FieldPopupModal(props) {
             control={
               <CustomSwitch
               
-                checked={props?.metaData?.unique}
+                checked={metaData?.unique}
                 onClick={(e) => {
                   handleSwitchChange(e);
                 }}
@@ -328,8 +330,6 @@ FieldPopupModal.propTypes = {
   open: PropTypes.bool,
   selectValue: PropTypes.any,
   submitData: PropTypes.func,
-  setMetaData: PropTypes.func,
-  metaData: PropTypes.any,
   setSelectedTable: PropTypes.func,
   selectedTable: PropTypes.any,
   tableId: PropTypes.any,

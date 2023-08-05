@@ -28,78 +28,30 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 
 
+const iconMap = {
+  singlelinetext: <TextFormatIcon fontSize={variables.iconfontsize1} />,
+  formula: <FunctionsIcon fontSize={variables.iconfontsize1} />,
+  datetime: <DateRangeIcon fontSize={variables.iconfontsize1} />,
+  checkbox: <CheckIcon fontSize={variables.iconfontsize1} />,
+  numeric: <TagIcon fontSize={variables.iconfontsize1} />,
+  longtext: <NotesIcon fontSize={variables.iconfontsize1} />,
+  singleselect: <ArrowDropDownCircleIcon fontSize={variables.iconfontsize1} />,
+  createdby: <PersonPinIcon fontSize={variables.iconfontsize1} />,
+  createdat: <MoreTimeIcon fontSize={variables.iconfontsize1} />,
+  updatedat: <MoreTimeIcon fontSize={variables.iconfontsize1} />,
+  attachment: <InsertDriveFileIcon fontSize={variables.iconfontsize1} />,
+  link: <ArrowForwardIcon fontSize={variables.iconfontsize1} />,
+  lookup: <ManageSearchOutlinedIcon fontSize={variables.iconfontsize1} />,
+  rowid: <KeyIcon fontSize={variables.iconfontsize1} />,
+  email: <EmailIcon fontSize={variables.iconfontsize1} />,
+  phone: <LocalPhoneIcon fontSize={variables.iconfontsize1} />,
+  multipleselect: <DoneAllIcon fontSize={variables.iconfontsize1} />,
+  autonumber: <PinIcon fontSize={variables.iconfontsize1} />,
+  updatedby: <PersonIcon fontSize={variables.iconfontsize1} />,
+};
 export function getPropertyIcon(data_type) {
-  let propertyIcon;
-
-  switch (data_type) {
-    case "singlelinetext":
-      propertyIcon = <TextFormatIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "formula":
-      propertyIcon = <FunctionsIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "datetime":
-      propertyIcon = <DateRangeIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "checkbox":
-      propertyIcon = <CheckIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "numeric":
-      propertyIcon = <TagIcon  fontSize={variables.iconfontsize1}  />
-      break;
-    case "longtext":
-      propertyIcon = <NotesIcon  fontSize={variables.iconfontsize1}  />
-      break;
-    case "singleselect":
-      propertyIcon = <ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    // case "multiselect":
-    //   propertyIcon = <DoneAllIcon  fontSize={variables.iconfontsize1}  />;
-    //   break;
-    case "createdby":
-      propertyIcon = <PersonPinIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "createdat":
-      propertyIcon = <MoreTimeIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-      case "updatedat":
-        propertyIcon = <MoreTimeIcon  fontSize={variables.iconfontsize1}  />;
-        break;
-    case "attachment":
-      propertyIcon = <InsertDriveFileIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "link":
-      propertyIcon = <ArrowForwardIcon   fontSize={variables.iconfontsize1} />
-      break;
-    case "lookup":
-      propertyIcon = <ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "rowid":
-      propertyIcon = <KeyIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "email":
-      propertyIcon = <EmailIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "phone":
-      propertyIcon = <LocalPhoneIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "multipleselect":
-      propertyIcon = <DoneAllIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-    case "autonumber":
-      propertyIcon = <PinIcon  fontSize={variables.iconfontsize1}  />;
-      break;
-      case "updatedby":
-        propertyIcon = <PersonIcon  fontSize={variables.iconfontsize1}  />;
-        break;
-    default:
-      propertyIcon = <MultiIcon  fontSize={variables.iconfontsize1} />;
-      break;
-  }
-
-  return propertyIcon;
+  return iconMap[data_type] || <MultiIcon fontSize={variables.iconfontsize1} />;
 }
-
 
 export function handleRenameColumn(props, header, params, dispatch) {
     dispatch(updateColumnHeaders({
