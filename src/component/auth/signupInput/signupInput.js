@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 import './signupInput.scss'; // Import the CSS file
-import CustomTextField from '../../../muiStyles/customTextfield';
+import { TextField } from '@mui/material';
 
 export default function SignupInput(props) {
   // Joi implementation
@@ -99,13 +99,13 @@ export default function SignupInput(props) {
     <Box className='flex-col-center-center w-100per h-100per' onSubmit={onSubmitSignup} component="form">
       <Box className="flex-center-center h-100per p-1" >
         <Box className="p-1">
-          <CustomTextField size='small' error={state?.$errors?.firstName.length === 0 ? false : state.$errors.firstName ? true : false} required id="firstName" name='firstName' type="text" label="First Name" variant="outlined" onChange={updateFirstName} onBlur={() => setExplicitField("firstName", true)} />
+          <TextField size='small' error={state?.$errors?.firstName.length === 0 ? false : state.$errors.firstName ? true : false} required id="firstName" name='firstName' type="text" label="First Name" variant="outlined" onChange={updateFirstName} onBlur={() => setExplicitField("firstName", true)} />
           <Box className='errorContainer'>
             {state.$errors.firstName.map((data) => data.$message).join(",")}
           </Box>
         </Box>
         <Box className="p-1" >
-          <CustomTextField size='small' error={state?.$errors?.lastName.length === 0 ? false : state.$errors.lastName ? true : false} required id="lastName" name='lastName' type="text" label="Last Name" variant="outlined" onChange={updateLastName} onBlur={() => setExplicitField("lastName", true)} />
+          <TextField size='small' error={state?.$errors?.lastName.length === 0 ? false : state.$errors.lastName ? true : false} required id="lastName" name='lastName' type="text" label="Last Name" variant="outlined" onChange={updateLastName} onBlur={() => setExplicitField("lastName", true)} />
           <Box className='errorContainer'>
             {state.$errors.lastName.map((data) => data.$message).join(",")}
           </Box>
@@ -114,7 +114,7 @@ export default function SignupInput(props) {
 
       <Box className="flex-center-center w-100per h-100per ">
 
-        <CustomTextField size='small' className='w-100per m-2 ' error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' type="email" label="Email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
+        <TextField size='small' className='w-100per m-2 ' error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' type="email" label="Email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
       </Box>
 
       <Box className='errorContainer'>
@@ -124,13 +124,13 @@ export default function SignupInput(props) {
       {/* Password and confirm Password */}
       <Box className="flex-center-center w-100per h-100per">
         <Box className="p-1">
-          <CustomTextField size='small' error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' type="password" label="Password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
+          <TextField size='small' error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' type="password" label="Password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
           <Box className='errorContainer'>
             {state.$errors.password.map((data) => data.$message).join(",")}
           </Box>
         </Box>
         <Box className="p-1">
-          <CustomTextField size='small' error={state?.$errors?.confirmPassword.length === 0 ? false : state.$errors.confirmPassword ? true : false} required id="confirmPassword" name="confirmPassword" type="password" label="Confirm Password" variant="outlined" onChange={updateConfirmPassword} onBlur={() => setExplicitField("confirmPassword", true)} />
+          <TextField size='small' error={state?.$errors?.confirmPassword.length === 0 ? false : state.$errors.confirmPassword ? true : false} required id="confirmPassword" name="confirmPassword" type="password" label="Confirm Password" variant="outlined" onChange={updateConfirmPassword} onBlur={() => setExplicitField("confirmPassword", true)} />
           <Box className='errorContainer'>
             {state.$errors.confirmPassword.map((data) => data.$message).join(",")}
           </Box>

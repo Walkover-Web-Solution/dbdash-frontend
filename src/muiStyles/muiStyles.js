@@ -76,23 +76,7 @@ export  const SelectBoxStyles = makeStyles(() => ({
     }
 
   }));
-  export const manageFieldDropDownStyles = makeStyles({
-    dialogContainer: {
-      maxWidth: 'none',
-      width: '60vw'
-    },
-  });
-  export   const shareOrgModalstyle = makeStyles({
-    dialogPaper: {
-      borderRadius: 0,
-      width: "30vw",
-    },
-  });
-  export const  dublicateDbPopupStyle = makeStyles({
-    dialogPaper: {
-      borderRadius: 0,
-    },
-  });
+  
   export const selectFilePopupStyles = makeStyles({
     input: {
       display: "none", // hides the default file input

@@ -1,0 +1,372 @@
+// utility classes
+
+.flex-center-center {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.flex-verticalcenter{
+    display: flex !important;
+    align-items: center !important;
+}
+.flex-spaceBetween-center {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+.transparent{
+    background-color: transparent !important;
+}
+
+.flex-spaceBetween-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items:flex-start !important;
+}
+
+.flex-spaceAround-center {
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+}
+
+.flex-start-center {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+}
+
+.flex-start-end {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-end !important;
+}
+
+.flex-center-end {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+}
+
+.flex-end-center {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+}
+
+.flex-center-start {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+}
+
+.flex-col-center-center {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+.flex-col-center-end {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: end !important;
+}
+
+
+.flex-col-spaceAround-center {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+}
+
+.flex-col-spaceBetween-center {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.flex-col-start-start {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+}
+.flex-col-start-center {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: flex-center !important;
+}
+
+.flex-center
+{
+    display: flex;
+    align-items: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* width classes */
+.w-100vw {
+    width: 100vw !important;
+}
+
+.w-15vw {
+    width: 15vw !important;
+}
+
+
+.w-100per {
+    width: 100% !important;
+}
+
+/* flex classes */
+
+.w-50per {
+    width: 50% !important;
+}
+
+.w-20per {
+    width: 20% !important;
+}
+.w-5per{
+    width: 5% !important;
+}
+.w-10per{
+    width: 10% !important;
+}
+
+.w-90per
+{
+    width: 90%;
+}
+.thintitle
+{
+    font-weight: 10 !important;
+    opacity: 0.7 !important;
+}
+
+/* height classes */
+.h-100vh {
+    height: 100vh !important;
+}
+
+.h-100per {
+    height: 100% !important;
+}
+
+/* padding classes */
+.p-1 {
+    padding: 7px !important;
+}
+
+.p-2 {
+    padding: 14px !important;
+}
+
+.pt-1 {
+    padding-top: 7px !important;
+}
+
+.pt-2 {
+    padding-top: 14px !important;
+}
+
+.pr-1 {
+    padding-right: 7px !important;
+}
+
+.pr-2 {
+    padding-right: 14px !important;
+}
+.pr-3
+{
+    padding-right: 20px;
+}
+.pl-1 {
+    padding-left: 7px !important;
+}
+
+.pl-2 {
+    padding-left: 14px !important;
+}
+.pb-1
+{
+    padding-bottom : 7px
+}
+
+/* margin classes */
+.m-1 {
+    margin: 7px !important;
+}
+
+.m-2 {
+    margin: 14px !important;
+}
+
+.mt-1 {
+    margin-top: 7px !important;
+}
+
+.mt-2 {
+    margin-top: 14px !important;
+}
+
+.mb-1 {
+    margin-bottom: 7px !important;
+}
+
+.mb-2 {
+    margin-bottom: 14px !important;
+}
+
+.mr-1 {
+    margin-right: 7px !important;
+}
+
+.mr-2 {
+    margin-right: 14px !important;
+}
+
+.ml-1 {
+    margin-left: 7px !important;
+}
+
+.ml-2 {
+    margin-left: 14px !important;
+}
+
+.minHeight-8vh{
+    min-height: 8vh !important;
+}
+/* Border classes */
+.border-1 {
+    border: 1px solid black !important;
+}
+
+.border-2 {
+    border: 2px solid black !important;
+}
+
+.border-3 {
+    border: 3px solid black !important;
+}
+
+.borderRadius-1 {
+    border-radius: 7px !important;
+}
+
+.borderRadius-2 {
+    border-radius: 14px !important;
+}
+
+/* color classes */
+.color-white {
+    color: white !important;
+}
+
+.color-black {
+    color: black !important;
+}
+
+.color-red {
+    color: red !important;
+}
+
+.color-blue
+{
+    color : blue !important ;
+}
+
+/* background-color classes */
+.bg-white {
+    background-color: white !important;
+}
+
+.bg-black {
+    background-color: black !important;
+}
+
+.bg-red {
+    background-color: red !important;
+}
+
+/* overflow classes */
+.overflow-hide {
+    overflow: hidden !important;
+}
+
+.overflow-scroll {
+    overflow: scroll !important;
+}
+
+/* font classes */
+.font-12 {
+    font-size: 12px !important;
+}
+.font-30 {
+    font-size: 30px !important;
+}
+
+
+
+
+
+.font-bold {
+    font-weight: bold !important;
+}
+.errorcolor{
+    color:#a51226 !important;
+}
+/* text classes */
+.underline {
+    text-decoration: underline !important;
+}
+.column{
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.no-texttransform{
+    text-transform: none !important;
+}
+.no-textdecoration{
+    text-decoration: none !important;
+}
+.light-bottom-border{
+    border-bottom: 0.1px solid var(--col-dark);
+}
+.small{
+    width:var(--width-small) !important;
+}
+.medium{
+    width:var(--width-medium) !important;
+
+}
+.large{
+    width:var(--width-large) !important;
+
+}
+
+.textOverFlowEclipse{
+    white-space:nowrap !important;
+    text-overflow :ellipsis !important ;
+overflow: hidden !important;
+
+}
+

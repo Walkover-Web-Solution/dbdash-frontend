@@ -10,13 +10,13 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  TextField,
 } from "@mui/material";
 import "./optionalParameter.scss"; 
 import variables from "../../../../assets/styling.scss";
 import FilterConditionTable from "./filterConditionTable";
 import AiFilter from "./AiFilter/Aifilter";
 import { SelectBoxStyles } from "../../../../muiStyles/muiStyles";
-import CustomTextField from "../../../../muiStyles/customTextfield";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -356,7 +356,7 @@ function OptionalParameter(props) {
               <FormControl
                 className={` ${classes.formControl} marginandminwidth mt0`}
               >
-                <CustomTextField
+                <TextField
                   id="demo-simple-select-helper"
                   value={age}
                   label="Limit"
@@ -372,7 +372,7 @@ function OptionalParameter(props) {
             <FormControl
               className={` ${classes.formControl} marginandminwidth `}
             >
-              <CustomTextField
+              <TextField
                 id="demo-simple-select-helper"
                 value={offset}
                 label="Offset"

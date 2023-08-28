@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import useValidator from "react-joi";
@@ -17,7 +17,6 @@ const style = {
   boxShadow: 24,
 };
 import "./popupModal.scss"
-import CustomTextField from "../../muiStyles/customTextfield";
 
 function PopupModal(props) {
   const handleClose = () => props.setOpen(false);
@@ -79,7 +78,8 @@ function PopupModal(props) {
 
 
           <Box className='popupModalContent'>
-            <CustomTextField
+            <TextField
+
               error={
                 state?.$errors?.[props?.id].length === 0 || textFieldValue.includes(" ")
                   ? false
@@ -114,14 +114,11 @@ function PopupModal(props) {
               {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
             </div>
           </Box>
-          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a rel="noreferrer" href='http://localhost:5000/64a806e049f009459a84201b'> click here</a></Typography></Box>
+          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a rel="noreferrer" href="https://dbdash-backend-h7duexlbuq-el.a.run.app/64a3fb1f135d26837027e15e"> click here</a></Typography></Box>
           } <Box className="buttonContainer">
             <Box >
               <Button
-                className={textFieldValue.length < 3 || textFieldValue.length > 30 || textFieldValue.includes(" ")
-                  ? "mui-button mui-button-disabled"
-                  : "mui-button"
-                }
+               
                 variant="contained"
                 disabled={
                   textFieldValue.length < 3 ||

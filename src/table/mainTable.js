@@ -17,6 +17,7 @@ import SelectFilepopup from "./selectFilepopup";
 import { headerIcons } from "./headerIcons";
 import variables from "../assets/styling.scss";
 import { customUseSelector } from "../store/customUseSelector";
+import { Button } from "@mui/material";
 export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
@@ -176,12 +177,11 @@ export default function MainTable(props) {
   return (
     <>
       {selection?.rows?.items?.length > 0 && (
-        <button className="fontsize deleterowbutton" onClick={() => handleDeleteRow(selection)}>
-          <div className="deleterows">Delete Rows</div>
-          <div><DeleteOutlineIcon className="deletecolor" /></div>
-        </button>
+        <Button className="fontsize deleterowbutton" color="error" endIcon={<DeleteOutlineIcon className="deletecolor" />}  onClick={() => handleDeleteRow(selection)}>
+        Delete Rows
+        </Button>
       )}
-      <div className="table-container" style={{ height: props?.height || `64vh` }}>
+      <div className="table-container" style={{ height: props?.height || `60vh` }}>
         <DataEditor
           {...cellProps}
           width={props?.width || window.screen.width}

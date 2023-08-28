@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import '../signupInput/signupInput.scss'; // Import the CSS file
-import CustomTextField from '../../../muiStyles/customTextfield';
+import { TextField } from '@mui/material';
 
 export default function LoginInput(props) {
 
@@ -63,14 +63,14 @@ export default function LoginInput(props) {
         <Box className='flex-col-center-center'>
             <Box className="flex-col-center-center" onSubmit={onSubmitLogin} component="form">
                 <Box className="p-1">
-                    <CustomTextField size='small' error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' label="Email" type="email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
+                    <TextField size='small' error={state?.$errors?.email.length === 0 ? false : state.$errors.email ? true : false} required id="email" name='email' label="Email" type="email" variant="outlined" onChange={updateEmail} onBlur={() => setExplicitField("email", true)} />
                     {/* error display */}
                     <Box className="errorContainer">
                         {state.$errors.email.map((data) => data.$message).join(",")}
                     </Box>
                 </Box>
                 <Box className="p-1">
-                    <CustomTextField size='small' error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' label="Password" type="password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
+                    <TextField size='small' error={state?.$errors?.password.length === 0 ? false : state.$errors.password ? true : false} required id="password" name='password' label="Password" type="password" variant="outlined" onChange={updatePassword} onBlur={() => setExplicitField("password", true)} />
                     {/* error display */}
                     <Box className="errorContainer">
                         {state.$errors.password.map((data) => data.$message).join(",")}

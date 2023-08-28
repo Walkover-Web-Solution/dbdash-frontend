@@ -9,10 +9,10 @@ import {
   Button,
   Modal,
   Autocomplete,
+  TextField,
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import { createTemplate, getAllCategoryName } from '../../../api/templateApi';
-import CustomTextField from '../../../muiStyles/customTextfield';
 
 const CreateTemplatePopup = (props) => {
 
@@ -102,7 +102,7 @@ const CreateTemplatePopup = (props) => {
                       setCategoryName(e.target.value);
                     }}
                     renderInput={(params) => (
-                      <CustomTextField
+                      <TextField
                         label={'Category Name   '}
                         {...params}
                         inputProps={{
@@ -115,7 +115,7 @@ const CreateTemplatePopup = (props) => {
               </Box>
               <Box className="create-auth-key-row createTemp-container">
                 <Typography className="create-auth-key-label createTemp-typo">Template Name</Typography>
-                <CustomTextField
+                <TextField
                   id="standard-basic"
                   label="Template Name"
                   variant="standard"
@@ -144,7 +144,7 @@ const CreateTemplatePopup = (props) => {
             <Box className="createTemp-boxx3">
               <Button
                 variant="contained"
-                className={`create-auth-key-button ${disabled ? 'mui-button-disabled' : 'mui-button'}`}
+                className={`create-auth-key-button`}
                 onClick={() => {
                   handleCreateTemplate();
                   handleClose();

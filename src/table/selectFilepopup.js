@@ -5,6 +5,7 @@ import {
   Modal,
   Button,
   Typography,
+  TextField,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
@@ -15,7 +16,6 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { updateCells } from "../store/table/tableThunk";
 import { selectFilePopupStyles } from "../muiStyles/muiStyles";
-import CustomTextField from "../muiStyles/customTextfield";
 
 
 const style = {
@@ -188,7 +188,7 @@ export default function SelectFilePopup(props) {
 
               {uploadOption === "url" && (
                 <div style={{margin:'0.6rem'}}>
-                  <CustomTextField
+                  <TextField
                     margin="dense"
                     id="text-field"
                     label="Image Link"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { Add, Cancel } from "@mui/icons-material";
@@ -10,7 +10,6 @@ import { getTableInfo } from "../../../store/table/tableSelector";
 import { toast } from 'react-toastify';
 import './addOptionPopup.scss'
 import { customUseSelector } from "../../../store/customUseSelector";
-import CustomTextField from "../../../muiStyles/customTextfield";
 
 const style = {
   position: "absolute",
@@ -173,7 +172,7 @@ export default function AddOptionPopup(props) {
           <Box className='addoption-container'>
             {inputValues.map((val, index) => (
               <Box key={index} className='addOption-textfield'>
-                <CustomTextField
+                <TextField
                   id={`input-${index}`}
                   variant="standard"
                   label="saved option"
@@ -189,7 +188,7 @@ export default function AddOptionPopup(props) {
               </Box>
             ))}
             <Box className='addOption-textfield'>
-              <CustomTextField
+              <TextField
                 autoFocus
                 id="myTextField"
                 label="Enter"

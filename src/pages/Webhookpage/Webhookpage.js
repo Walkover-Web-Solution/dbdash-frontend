@@ -16,7 +16,7 @@ export default function Webhookpage(props) {
   return (
     <>
       <Box className="auth-key-page-container">
-        <Button className="mui-button" variant="contained" onClick={handleAddWebhook} endIcon={<AddIcon />}>
+        <Button variant="contained" onClick={handleAddWebhook} endIcon={<AddIcon />}>
           Add Webhook
         </Button>
        {addWebhook &&  <Createwebhook

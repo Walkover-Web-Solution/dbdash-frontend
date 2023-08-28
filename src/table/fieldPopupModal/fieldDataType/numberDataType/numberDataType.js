@@ -20,10 +20,10 @@ export default function NumberDataType(props) {
                 labelId="numeric-select-label"
                 id="numeric-select"
                 value={props?.selectValue}
+                width="small"
                 onChange={(e)=>props?.handleSelectChange(e)}
                 defaultValue="numeric"
                 displayEmpty
-                className='numberDataType-div'
               >
                 <MenuItem value="numeric">Integer</MenuItem>
                 <MenuItem value="decimal">Decimal</MenuItem>
@@ -37,7 +37,7 @@ export default function NumberDataType(props) {
           onChange={(e)=>{selectDecimalValue(e)}}
           defaultValue="1"
           displayEmpty
-          className='numberDataType-div'
+          width='small'
 
         >
           <MenuItem value="Select">Select decimal value </MenuItem>

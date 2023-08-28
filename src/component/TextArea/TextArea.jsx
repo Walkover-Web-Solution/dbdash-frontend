@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {  Button } from "@mui/material";
-import CustomTextField from "../../muiStyles/customTextfield";
+import {  Button, TextField } from "@mui/material";
 
 const TextArea = ({ onMessageSubmit, isLoading }) => {
   const [text, setText] = useState("");
@@ -39,7 +38,7 @@ const TextArea = ({ onMessageSubmit, isLoading }) => {
         marginBottom: "16px",
       }}
     >
-      <CustomTextField
+      <TextField
         multiline
         rows={2}
         placeholder="Ask Something..."

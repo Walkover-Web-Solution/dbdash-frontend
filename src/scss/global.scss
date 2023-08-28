@@ -1,0 +1,101 @@
+//base
+@import './base/import';
+.bottomLine{
+    border-bottom: 0.2px solid var(--col-dark) !important;
+    opacity: 0.2 !important;
+}
+.bottomLine-header{
+    border-bottom: 0.2px solid var(--col-dark) !important;
+}
+.primary-btn {
+    color: white !important;
+    font-size: 13px !important;
+    background-color: #273746 !important;
+    margin-right: 2px !important;
+    border: 1px solid #273746 !important;
+    width: fit-content;
+}
+// .hoverAndSee .hiddenbutton{
+//     display: none ;
+// }
+// .hoverAndSee:hover .hiddenbutton{
+//     display: inline-flex !important;
+// }
+
+
+.primary-btn:hover {
+    color: white !important;
+    font-size: 13px !important;
+    background-color: #1C2833 !important;
+    margin-right: 2px !important;
+}
+
+/* secondary button classes */
+.secondary-btn {
+    color: black !important;
+    font-size: 13px !important;
+    background-color: white !important;
+    margin-right: 2px !important;
+    border: 1px solid #273746 !important;
+    width: fit-content;
+
+}
+
+.secondary-btn:hover {
+    color: black !important;
+    font-size: 13px !important;
+    background-color: white !important;
+    margin-right: 2px !important;
+    border: 1 !important;
+    border: 1px solid #273746 !important;
+}
+.textButton{
+   
+    color:var(--col-prime) !important;
+
+
+}
+.disabled{
+opacity: 0.5 !important;
+}
+.Accordian{
+    width:18vw !important;
+    background-color: transparent !important;
+}
+
+.logBlocks {
+    font-size: 16px;
+    height:7vh !important;
+    cursor: pointer;
+    padding:1rem;
+    display: flex;
+    
+    justify-content: space-between;
+    align-items: center;
+    
+    &:hover {
+        background-color: var(--col-grey-white);
+    }
+
+}
+
+.selectedBlock {
+    font-size: 16px;    
+    height:7vh !important;
+    align-items: center;
+    padding:1rem;
+
+
+
+    background-color: var(--col-grey-two) !important;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-between;
+}
+.componentspagebox{
+    display: flex !important;
+    padding: 8px;
+    flex-direction: column !important;
+    background-color: beige !important;
+    border-radius: 10px !important;
+}

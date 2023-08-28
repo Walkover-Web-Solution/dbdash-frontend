@@ -17,20 +17,23 @@
     flex-direction: row;
   }
  
-  // .navbar-api-box-1 {
-
-  // }
+  
 
   .navbar-api-box-2 {
    display: flex !important;
    align-items: center !important;
+   position: fixed;
+   margin-left: 24px !important;
+   top:9vh !important;
    flex-direction: row !important;
   }
 
   .navbar-api-box-3 {
+ 
     display: flex !important;
     flex-direction: row !important;
-    padding-left: 24px !important;
+   
+    
   }
  
   .Organization-db-input-select {
@@ -60,7 +63,7 @@
       margin-right: 10px !important;
       position: fixed !important;
       right: 0px !important;
-      top: 9vh !important;
+      top: 11vh !important;
   }
 
   .button-group {

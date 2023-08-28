@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import {  toast } from 'react-toastify';
-import CustomTextField from '../../muiStyles/customTextfield';
 
 const Msg91bi_id_page = () => {
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ const Msg91bi_id_page = () => {
         <br/>
         <br/>
         <form onSubmit={handleSubmit} style={{display : "flex"}}>
-          <CustomTextField
+          <TextField
             label="Enter a value"
             value={value}
             onChange={handleChange}

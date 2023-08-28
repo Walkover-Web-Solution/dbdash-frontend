@@ -12,7 +12,7 @@ import './manageFieldDropDown.scss'
 import { useParams } from 'react-router-dom';
 import { updateColumnHeaders } from '../../../store/table/tableThunk';
 import { customUseSelector } from '../../../store/customUseSelector';
-import { manageFieldDropDownStyles } from '../../../muiStyles/muiStyles';
+// import { manageFieldDropDownStyles } from '../../../muiStyles/muiStyles';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,7 +24,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function ManageFieldDropDown(props) {
   const dispatch = useDispatch();
 
-  const classes = manageFieldDropDownStyles();
+  // const classes = manageFieldDropDownStyles();
   const fields1 = customUseSelector((state) => state.table.columns);
   const [openAddFields, setOpenAddFields] = React.useState(false);
   const [fieldId, setFieldId] = useState("");
@@ -70,9 +70,10 @@ export default function ManageFieldDropDown(props) {
     <div>
       <Dialog
         open={props.setOpenManageField}
-        classes={{
-          paper: classes.dialogContainer,
-        }} onClose={handleClose}
+        // classes={{
+        //   paper: classes.dialogContainer,
+        // }}
+         onClose={handleClose}
         TransitionComponent={Transition}
       >
         {/* <AppBar sx={{ position: 'relative' ,backgroundColor:`${variables.basictextcolor}`}}>

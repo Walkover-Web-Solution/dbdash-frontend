@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import { Box, Button, ClickAwayListener, Dialog, DialogContent, FormControl, IconButton, InputLabel, MenuItem, Select,Typography,
+import { Box, Button, ClickAwayListener, Dialog, DialogContent, FormControl, IconButton, InputLabel, MenuItem, Select,TextField,Typography,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from "prop-types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { shareOrgModalstyle } from "../../muiStyles/muiStyles";
-import CustomTextField from "../../muiStyles/customTextfield";
 export default function ShareOrgModal(props) {
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState(111);
   const userId = localStorage.getItem("userid");
   
-  const classes = shareOrgModalstyle();
   const [editable, setEditable] = useState(null);
   const handleClose = () => {
     props.setShareOrg(false);
@@ -79,9 +76,7 @@ export default function ShareOrgModal(props) {
   };
   return (
     <Dialog
-    classes={{
-      paper: classes.dialogPaper, // Apply custom styles to the dialog paper
-    }}
+    
     
     open={props.shareOrg}  onClose={handleClose}>
       <ClickAwayListener
@@ -95,7 +90,7 @@ export default function ShareOrgModal(props) {
           </Typography><CloseIcon sx={{'&:hover': { cursor: 'pointer' }}} onClick={handleClose}/></div>
           <DialogContent>
   <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-    <CustomTextField
+    <TextField
       autoFocus
       margin="dense"
       placeholder="Email Address"
@@ -155,7 +150,7 @@ export default function ShareOrgModal(props) {
               e.preventDefault();
               e.stopPropagation();
             }}
-            sx={{ml:2,width:'92%'}}
+            sx={{ml:2,width:'94%'}}
           >
             {props?.org?.users?.map((user,index) => {
                 if ( user?.user_id?._id !== userId ) {
@@ -209,7 +204,6 @@ export default function ShareOrgModal(props) {
                           )
                         ) : editable === user ? (
                           <Select
-                            sx={{ height: "30px" }}
                             value={user?.user_type}
                             MenuProps={{
                               disablePortal: true,

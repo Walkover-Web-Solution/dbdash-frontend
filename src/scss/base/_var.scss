@@ -1,0 +1,54 @@
+:root{
+    // font size
+
+    --font-size : 16px;
+
+    // headings
+    --fs-head : 3rem;
+    --fs-sub-head : 2rem;
+    --fs-small-head : 1.5rem;
+
+    // base
+    --fs-base : 1rem; //16px
+    --fs-base-xxl : 1.8rem; //30px
+    --fs-base-xl : 1.6rem; //26px
+    --fs-base-lg : 1.3rem; //20px
+    --fs-base-sm : 0.8rem; //12px
+    --fs-base-xxs : 0.6rem; //10px
+
+    // button
+    --fs-sm-bnt : var(--fs-base-xxs);
+    --fs-bnt : var(--fs-base-sm);
+
+--width-small:15vw;
+--width-medium:25vw;
+--width-large:45vw;
+
+    // colors
+
+    --col-primary : #004225;
+    --col-secondary:#9c27b0;
+    --col-error : #a51226;
+    --col-warning : #ed6c02;
+    --col-info : #0288d1;
+    --col-success : #2e7d32;
+    --col-text-primary : rgba(0, 0, 0, 0.87);
+    --col-text-secondary : rgba(0, 0, 0, 0.6);
+    --col-text-disabled : rgba(0, 0, 0, 0.38);
+    --col-text-hint : rgba(0, 0, 0, 0.38);
+    --border-radius-mui:0;
+    --col-selected-tab:#f7f7f7;
+
+
+
+
+
+
+    --col-dark:#000;
+    --col-grey-one : #8F9396;
+    --col-grey-two : #D5D9DC;
+    --col-grey-white : #F7F7F7;
+    --col-white:#fff;
+
+
+}

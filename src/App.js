@@ -1,4 +1,5 @@
 import React from 'react';
+import './scss/global.scss'
 import './App.scss';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import Authpage from './pages/authPage/authPage';
@@ -18,12 +19,14 @@ import Chat from './component/Chat/Chat';
 import TemplatePage from "./pages/templatePage/templatePage.js"
 import ViewTable from './pages/viewTable/viewTable';
 import Msg91bi_id_page from './component/msg91bi/msg91bi_id_page';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './assets/MuiTheme';
 
   
 
 function App() {
   return (
-   <>
+   <ThemeProvider theme={theme}>
    <AuthContextProvider>
    <ToastContainer />
     <Routes>
@@ -46,7 +49,7 @@ function App() {
     </AuthContextProvider>
 
 
-   </>
+   </ThemeProvider>
   );
 }
 

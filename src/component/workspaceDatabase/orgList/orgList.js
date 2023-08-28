@@ -3,7 +3,7 @@ import Dropdown from "../../dropdown";
 import PopupModal from "../../popupModal/popupModal";
 import SingleDatabase from "../singledatabase/singleDatabase";
 import Grid from "@mui/material/Grid";
-import { Box, Card, Typography, Button, IconButton, ClickAwayListener } from "@mui/material";
+import { Box, Card, Typography, Button, IconButton, ClickAwayListener, TextField } from "@mui/material";
 import ControlPointSharpIcon from '@mui/icons-material/AddSharp';
 import PropTypes from "prop-types";
 import { createDbThunk, removeUserInOrgThunk, renameOrgThunk, shareUserInOrgThunk, updateUserInOrgThunk } from "../../../store/database/databaseThunk";
@@ -15,7 +15,6 @@ import { createDb } from "../../../api/dbApi";
 import { useNavigate } from "react-router-dom";
 import './orgList.scss';
 import  { customUseSelector } from "../../../store/customUseSelector";
-import CustomTextField from "../../../muiStyles/customTextfield";
 
 export const OrgList = (props) => {
 
@@ -153,7 +152,7 @@ setOrgUsers(originalObj);
               <>
                 <Box  className="orglistbox3">
                   <Box>
-                    <CustomTextField
+                    <TextField
                       id="orgName"
                       name="orgName"
                       autoFocus

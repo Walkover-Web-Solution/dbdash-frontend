@@ -21,29 +21,11 @@ Tab{
 .fontsize{
   font-size: $tablepagefontsize !important;
 }
-.mui-button{
-  background-color: $fontColorVAlue !important;
-  color:white !important;
-}
-.mui-button-disabled{
-  background-color: $fontColorVAlue !important;
-  color:white !important;
-  opacity: 0.4 !important;
-}
-.mui-button-outlined{
-  color:$fontColorVAlue !important;
-  border-color:$fontColorVAlue !important;
-  text-transform: none !important;
-}
+
  .deletecolor{
    color:$errorcolor !important;
  }
-.Mui-selected  {
-  background-color: $fontColorVAlue !important;
-  color: $bgColorValue !important;
-  text-transform: none !important;
 
-}
 .deleterows{
   margin-top: 5px !important;
 color:$errorcolor !important;

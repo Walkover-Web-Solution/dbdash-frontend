@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
+import { Button, Dialog, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
@@ -28,7 +28,6 @@ import { useDispatch } from "react-redux";
 import { addColumnrightandleft } from "../../store/table/tableThunk";
 import { addColumn } from "../addRow";
 import { CustomSwitch } from "../../muiStyles/muiStyles";
-import CustomTextField from "../../muiStyles/customTextfield";
 
 export default function FieldPopupModal(props) {
   const params = useParams();
@@ -222,7 +221,7 @@ export default function FieldPopupModal(props) {
          <div className="popupheader field-header">    <Typography className="field-textfield" id="title" variant="h6" component="h2">
             create column
           </Typography><CloseIcon className="field-close-icon" onClick={handleClose}/></div>
-        <CustomTextField
+        <TextField
           autoFocus
           margin="dense"
           id="text-field"
@@ -248,13 +247,11 @@ export default function FieldPopupModal(props) {
             {errors.fieldName}
           </Typography>
         )}
-        <DialogContent
-          className="fieldDialogcontent"
-        >
-          <Select
+        <Box sx={{ml:2}}>          <Select
             labelId="select-label"
             id="select"
             value={selectValue}
+            width="medium"
             onChange={handleSelectChange}
             defaultValue="longtext"
             displayEmpty
@@ -297,14 +294,14 @@ export default function FieldPopupModal(props) {
         </FormGroup>
         
           )}
-        </DialogContent>
+          </Box>
+
+       
         <Box className='fieldPop-Dialog '>
             <Box >
         {selectValue !== "formula" || queryByAi ? (
           <Button
-            sx={{ textTransform: "none" }}
-            className="mui-button"
-          
+            className='outlined'
             disabled={
               errors.fieldName ||
               textValue?.length < 1 ||

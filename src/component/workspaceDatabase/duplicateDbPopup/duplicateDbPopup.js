@@ -10,14 +10,13 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
+  TextField,
   Typography
 } from '@mui/material';
 import { duplicateDb } from '../../../api/dbApi';
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
 import {createDbThunk} from "../../../store/database/databaseThunk";
-import { dublicateDbPopupStyle } from '../../../muiStyles/muiStyles';
-import CustomTextField from '../../../muiStyles/customTextfield';
 const DuplicateDbPopup = (props) => {
   const [databaseName, setDatabaseName] = useState(props?.db+"_copy");
   // const [duplicateRecords,setDuplicateRecords]=useState(false);
@@ -39,7 +38,6 @@ const DuplicateDbPopup = (props) => {
     toast.success('Database created successfully!');
   };
   
-  const classes = dublicateDbPopupStyle();
 
   const handleChange = (event) => {
     setDatabaseName(event.target.value);
@@ -52,9 +50,7 @@ const DuplicateDbPopup = (props) => {
     }}>
       
       <Dialog 
-       classes={{
-        paper: classes.dialogPaper, // Apply custom styles to the dialog paper
-      }}
+      
       open={props?.open} onClose={handleClose}>
       <div className="popupheader dbduplicate-container">    <Typography className="dbduplicate-typography" id="title" variant="h6" component="h2">
       duplicate <strong>{props?.db}</strong>
@@ -64,7 +60,7 @@ const DuplicateDbPopup = (props) => {
           <DialogContentText> 
             Enter the name for the duplicated database:
           </DialogContentText>
-          <CustomTextField
+          <TextField
             autoFocus
             
             margin="dense"

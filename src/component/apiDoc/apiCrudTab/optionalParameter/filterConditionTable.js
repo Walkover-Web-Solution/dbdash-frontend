@@ -156,6 +156,7 @@ const FilterConditionTable = (props) => {
                 <div className="ilter-condition-div">
                   {rowfieldData && (
                     <Select
+                    width="small"
                       defaultValue={Object.entries(rowfieldData)?.[0][0]}
                       onChange={(e) => {
                         handleSelectChange(row.filterCondition, e, row.example);

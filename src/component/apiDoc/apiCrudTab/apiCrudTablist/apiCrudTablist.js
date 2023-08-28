@@ -1,6 +1,5 @@
 import React, { useState,memo } from "react";
 import { Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -11,9 +10,7 @@ import UpdateRecord from "../updateRecord/updateRecord";
 import DeleteRecord from "../deletRecord/deleteRecord";
 import "./apiCrudTablist.scss"; 
 
-const StyledTab = styled(Tab)(() => ({
-  // ...styles
-}));
+
 
 const styledTabLabelList = [
   "BASIC STUFF",
@@ -86,21 +83,15 @@ function ApiCrudTablist(props) {
     <Box className="api-crud-tablist-container">
       <Box className="tab-container">
         <Tabs
-          TabIndicatorProps={{
-            style: {
-              display: "none",
-            },
-            className: "custom-tab-indicator",
-          }}
+        
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
           {styledTabLabelList.map((listLabel, labelIndex) => {
             return (
-              <StyledTab
+              <Tab
                 key={labelIndex}
-                className="custom-tab-label"
                 label={listLabel}
                 {...a11yProps(labelIndex)}
               />

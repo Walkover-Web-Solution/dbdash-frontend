@@ -5,6 +5,7 @@ import {
   Typography,
   Button,
   ClickAwayListener,
+  TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { setAllTablesData } from "../../store/allTable/allTableSlice";
 import variables from "../../assets/styling.scss";
 import "./filterPopup.scss";
-import CustomTextField from "../../muiStyles/customTextfield";
 
 const FilterModal = (props) => {
   const navigate = useNavigate();
@@ -114,7 +114,7 @@ const FilterModal = (props) => {
         </div>
 
         <Box className="filter-content">
-          <CustomTextField
+          <TextField
             label="Filter Name"
             variant="outlined"
             // value={filterName}

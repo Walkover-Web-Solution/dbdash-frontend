@@ -13,14 +13,11 @@ import {
 import ApiCrudTablist from "../apiCrudTab/apiCrudTablist/apiCrudTablist";
 import { getDbById } from "../../../api/dbApi";
 import PropTypes from "prop-types";
-
 import { selectOrgandDb } from "../../../store/database/databaseSelector.js";
 import Webhookpage from "../../../pages/Webhookpage/Webhookpage";
-import variables from "../../../assets/styling.scss";
 import AuthKeyPage from "../../../pages/authKeyPage/authKeyPage";
 import "./navbarApi.scss";
 import { customUseSelector } from "../../../store/customUseSelector";
-import { SelectBoxStyles, navbarApiselectbox } from "../../../muiStyles/muiStyles";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -63,7 +60,6 @@ function Navbar(props) {
   const [dataforwebhook, setdataforwebhook] = useState(null);
 
  
-  const classes1 = SelectBoxStyles(),classes2=navbarApiselectbox();
 
   if (selectedDb) {
     props?.setDbtoredirect(selectedDb);
@@ -137,6 +133,7 @@ function Navbar(props) {
 
   const memoizedAuthKeyPage = useMemo(
     () => (
+      <Box sx={{mt:'12vh'}}>
       <AuthKeyPage
         id={dbId}
         selectedOption={selectedOption}
@@ -146,6 +143,7 @@ function Navbar(props) {
         dbtoredirect={props.dbtoredirect}
         tabletoredirect={props.tabletoredirect}
       />
+      </Box>
     ),
     [
       dbId,
@@ -160,28 +158,20 @@ function Navbar(props) {
   return (
     <div className="navbar-api-main-container">
       <div className="navbar-api-container">
-        <Box className="navbar-api-box-1" align="center"></Box>
         <Box className="navbar-api-box-2">
           <Box className="navbar-api-box-3">
             {alldb && selectedDb && (
               <FormControl
-                className={`singletypemuiselect ${classes1.formControl} ${classes2.formControl}`}
+                className={`singletypemuiselect`}
               >
                 <InputLabel htmlFor="grouped-select">
                   Organization-db
                 </InputLabel>
                 <Select
-                  inputProps={{
-                    style: {
-                      border: "none",
-                    },
-                  }}
+                  width="small"
+                variant="standard"
                   id="grouped-select"
-                  sx={{
-                    borderRadius: 0,
-                    height: "36px",
-                    color: `${variables.basictextcolor}`,
-                  }}
+                 
                   label="Organization and dbs"
                   value={selectedDb}
                   MenuProps={MenuProps}
@@ -208,7 +198,6 @@ function Navbar(props) {
                         </ListSubheader>,
                         sortedDbs.map((db, index) => (
                           <MenuItem
-                            sx={{ color: `${variables.basictextcolor}` }}
                             key={index}
                             value={db?._id}
                           >
@@ -224,15 +213,12 @@ function Navbar(props) {
           {showWebhookPage == "apidoc" &&
             selectTable &&
             Object.keys(tables).length >= 1 && (
-              <Box>
-                <FormControl className={`  ${classes1.formControl} ${classes2.formControl}`}>
+              <Box className="ml-2">
+                <FormControl>
                   <InputLabel htmlFor="grouped-select">Tables-Name</InputLabel>
                   <Select
-                    sx={{
-                      borderRadius: 0,
-                      height: "36px",
-                      color: `${variables.basictextcolor}`,
-                    }}
+                  width="small"
+                  variant="standard"
                     value={selectTable}
                     label="Tables-Nameee"
                     onChange={handleChangeTable}
@@ -240,7 +226,6 @@ function Navbar(props) {
                   >
                     {Object.entries(tables)?.map((table) => (
                       <MenuItem
-                        sx={{ color: `${variables.basictextcolor}` }}
                         key={table[0]}
                         value={table[0]}
                       >
@@ -255,12 +240,12 @@ function Navbar(props) {
             <Box className="navbar-api-box-4">
               <ButtonGroup className="button-group" color="primary">
                 <Button
-                  className={
+                  variant={
                     showWebhookPage == "apidoc"
-                      ? "mui-button notpointed"
-                      : "mui-button-outlined"
+                    ? "contained"
+                    : "outlined"
                   }
-                  variant="outlined"
+                 
                   onClick={() => {
                     setShowWebhookPage("apidoc");
                   }}
@@ -269,25 +254,25 @@ function Navbar(props) {
                 </Button>
 
                 <Button
-                  className={
+                  variant={
                     showWebhookPage == "authkey"
-                      ? "mui-button notpointed"
-                      : "mui-button-outlined"
+                      ? "contained"
+                      : "outlined"
                   }
                   onClick={() => {
                     setShowWebhookPage("authkey");
                   }}
-                  variant="outlined"
+                
                 >
                   {"Auth Key"}
                 </Button>
                 <Button
-                  className={
+                  variant={
                     showWebhookPage == "webhook"
-                      ? "mui-button notpointed"
-                      : "mui-button-outlined"
+                    ? "contained"
+                    : "outlined"
                   }
-                  variant="outlined"
+                
                   onClick={() => {
                     setShowWebhookPage("webhook");
                   }}
@@ -300,7 +285,7 @@ function Navbar(props) {
         </Box>
 
         {showWebhookPage == "webhook" && (
-          <Webhookpage
+          <Box sx={{mt:'12vh'}}>          <Webhookpage
             tables={tables}
             dataforwebhook={dataforwebhook}
             dbId={props?.dbtoredirect}
@@ -308,6 +293,8 @@ function Navbar(props) {
             webhooks={webhooks}
             setWebhooks={setWebhooks}
           />
+          </Box>
+
         )}
         {showWebhookPage === "apidoc" && (
           <Box>{loading && memoizedApiCrudTablist}</Box>

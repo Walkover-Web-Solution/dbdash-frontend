@@ -19,7 +19,6 @@ import { allOrg } from '../../store/database/databaseSelector';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDbThunk } from '../../store/database/databaseThunk';
 import { customUseSelector } from '../../store/customUseSelector';
-import { dublicateDbPopupStyle } from '../../muiStyles/muiStyles';
 
 const UseTemplatePopup = (props) => {
     const allorgss = customUseSelector((state) => allOrg(state));
@@ -45,7 +44,6 @@ const UseTemplatePopup = (props) => {
         handleClose();
     };
     
-      const classes = dublicateDbPopupStyle();
 
     const handleOrgChange = (event) => {
         setSelectedOrg(event.target.value);
@@ -57,9 +55,7 @@ const UseTemplatePopup = (props) => {
             e.stopPropagation();
         }}>
             <Dialog 
-             classes={{
-                paper: classes.dialogPaper, // Apply custom styles to the dialog paper
-              }}
+            
             open={props?.open} onClose={handleClose}>
             <div className="popupheader">    
             <Typography  className='useTemplatePopup-text' id="title" variant="h6" component="h2">

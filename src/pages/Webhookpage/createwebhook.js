@@ -7,11 +7,11 @@ import {
   FormControl,
   MenuItem,
   Modal,
+  TextField,
 } from "@mui/material";
 import { PropTypes } from "prop-types";
 import { createWebhook, updateWebhook } from "../../api/webhookApi";
 import CloseIcon from '@mui/icons-material/Close';
-import CustomTextField from "../../muiStyles/customTextfield";
 
 function Createwebhook(props) {
   let nameRef = useRef("");
@@ -74,7 +74,7 @@ function Createwebhook(props) {
       <Button
         variant="contained"
         disabled={disabled}
-        className={`create-webhook-key-button ${disabled ? 'mui-button-disabled' : 'mui-button'}`}
+      
         onClick={() => {
           createWebHook();
           handleClose();
@@ -98,7 +98,7 @@ function Createwebhook(props) {
 
             <Box className="create-webhook-key-row" >
               <Typography className="create-webhook-key-label">Name</Typography>
-              <CustomTextField
+              <TextField
                 id="standard-basic"
                 label="Name"
                 variant="standard"
@@ -117,7 +117,7 @@ function Createwebhook(props) {
                 variant="standard"
                 className="create-webhook-key-dropdown"
               >
-                <CustomTextField
+                <TextField
                   id="action"
                   select
                 defaultValue={actionRef?.current}
@@ -135,7 +135,7 @@ function Createwebhook(props) {
                   <MenuItem value="createRow">Create Row</MenuItem>
                   <MenuItem value="deleteRow">Delete Row</MenuItem>
                   <MenuItem value="updateRow">Update Row</MenuItem>
-                </CustomTextField>
+                </TextField>
               </FormControl>
             </Box>
             { props?.tables && <Box className="create-webhook-key-row" >
@@ -144,7 +144,7 @@ function Createwebhook(props) {
                 variant="standard"
                 className="create-webhook-key-dropdown"
               >
-                <CustomTextField
+                <TextField
                   id="tables"
                   select
                   label="Tables"
@@ -166,13 +166,13 @@ function Createwebhook(props) {
                         </MenuItem>
                       );
                     })}
-                </CustomTextField>
+                </TextField>
               </FormControl>
             </Box>}
 
             <Box className="create-webhook-key-row" >
-              <Typography className="create-webhook-key-label">URL</Typography>
-              <CustomTextField
+              <Typography>URL</Typography>
+              <TextField
                 id="standard-basic"
                 defaultValue={urlRef?.current}
                 label="Url"
