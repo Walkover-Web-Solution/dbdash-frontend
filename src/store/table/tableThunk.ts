@@ -105,8 +105,8 @@ const getRowData = async (
   const userInfo: UserInfoTypes[] = allOrg(getState());
   // const tableInfo = getTableInfo(getState())
   const userJson = await replaceCreatedByIdWithName(userInfo, org_id);
-  const createdby = "fld" + tableName.substring(3) + "createdby";
-  const updatedby = "fld" + tableName.substring(3) + "updatedby";
+  // const createdby = "fld" + tableName.substring(3) + "createdby";
+  // const updatedby = "fld" + tableName.substring(3) + "updatedby";
 
   const dataAndPageNo = {
     offset: true,
@@ -117,16 +117,16 @@ const getRowData = async (
     const data = await getTable(dbId, tableName, page);
     const obj = data.data.data?.rows || data.data.data;
     obj.map((row) => {
-      row[createdby] = userJson?.[row[createdby]]
-        ? userJson?.[row[createdby]]?.first_name +
+      row["createdby"] = userJson?.[row["createdby"]]
+        ? userJson?.[row["createdby"]]?.first_name +
           " " +
-          userJson?.[row[createdby]]?.last_name
-        : row[createdby];
-      row[updatedby] = userJson?.[row[updatedby]]
-        ? userJson?.[row[updatedby]]?.first_name +
+          userJson?.[row["createdby"]]?.last_name
+        : row["createdby"];
+      row["updatedby"] = userJson?.[row["updatedby"]]
+        ? userJson?.[row["updatedby"]]?.first_name +
           " " +
-          userJson?.[row[updatedby]]?.last_name
-        : row[updatedby];
+          userJson?.[row["updatedby"]]?.last_name
+        : row["updatedby"];
     });
     dataAndPageNo.offset = data.data.data?.offset;
     dataAndPageNo.rows = [...dataAndPageNo.rows, ...obj];
@@ -150,13 +150,19 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
   "table/bulkAddColumns",
   async (payload: BulkAddColumnsTypes, { getState, dispatch }) => {
+    console.log("hiiii")
     let columns;
-    columns = await getHeaders(
-      payload.dbId,
-      payload.tableName,
-      payload?.fields,
-      { getState }
-    );
+    try {
+      columns = await getHeaders(
+        payload.dbId,
+        payload.tableName,
+        payload?.fields,
+        { getState }
+      ); 
+    } catch (error) {
+    console.log("hiiii22",error)
+      
+    }
     const data = await getRowData(
       payload.dbId,
       payload.tableName,
@@ -164,6 +170,8 @@ export const bulkAddColumns = createAsyncThunk(
       payload.org_id,
       payload.pageNo
     );
+    console.log("hiiii22")
+
     const dataa = {
       columns: columns,
       row: data.rows,
@@ -198,7 +206,7 @@ export const filterData = createAsyncThunk(
       userInfo,
       payload?.org_id
     );
-    const createdby = "fld" + payload?.tableId.substring(3) + "createdby";
+    // const createdby = "fld" + payload?.tableId.substring(3) + "createdby";
 
     var offset = true;
     var rows: any = [];
@@ -213,11 +221,11 @@ export const filterData = createAsyncThunk(
       );
       querydata?.data?.data?.rows &&
         querydata?.data?.data?.rows?.map((row) => {
-          row[createdby] = userJson?.[row[createdby]]
-            ? userJson?.[row[createdby]]?.first_name +
+          row["createdby"] = userJson?.[row["createdby"]]
+            ? userJson?.[row["createdby"]]?.first_name +
               " " +
-              userJson?.[row[createdby]]?.last_name
-            : row[createdby];
+              userJson?.[row["createdby"]]?.last_name
+            : row["createdby"];
         });
       const obj = querydata?.data?.data?.rows;
       offset = !!querydata?.data?.data?.offset;
@@ -530,7 +538,8 @@ export const updateCells = createAsyncThunk(
     let jsonToSend = {
       records: [
         {
-          where: `fld${tableId.substring(3)}autonumber = ${payload.rowIndex}`,
+          // where: `fld${tableId.substring(3)}autonumber = ${payload.rowIndex}`,
+          where: `autonumber = ${payload.rowIndex}`,
           fields: { [columnId]: value },
         },
       ],
@@ -540,24 +549,24 @@ export const updateCells = createAsyncThunk(
     }
 
     const data = await updateRow(dbId, tableId, jsonToSend);
-    const createdby = "fld" + tableId.substring(3) + "createdby";
-    const updatedby = "fld" + tableId.substring(3) + "updatedby";
+    // const createdby = "fld" + tableId.substring(3) + "createdby";
+    // const updatedby = "fld" + tableId.substring(3) + "updatedby";
     // const tableInfo = getTableInfo(getState())
     const userJson = await replaceCreatedByIdWithName(
       userInfo,
       getState().tables?.orgId
     );
     data.data.data.map((row) => {
-      row[createdby] = userJson?.[row[createdby]]
-        ? userJson?.[row[createdby]]?.first_name +
+      row["createdby"] = userJson?.[row["createdby"]]
+        ? userJson?.[row["createdby"]]?.first_name +
           " " +
-          userJson?.[row[createdby]]?.last_name
-        : row[createdby];
-      row[updatedby] = userJson?.[row[updatedby]]
-        ? userJson?.[row[updatedby]]?.first_name +
+          userJson?.[row["createdby"]]?.last_name
+        : row["createdby"];
+      row["updatedby"] = userJson?.[row["updatedby"]]
+        ? userJson?.[row["updatedby"]]?.first_name +
           " " +
-          userJson?.[row[updatedby]]?.last_name
-        : row[updatedby];
+          userJson?.[row["updatedby"]]?.last_name
+        : row["updatedby"];
     });
 
     payload.newData = data?.data?.data;
@@ -570,11 +579,11 @@ export const addRows = createAsyncThunk(
     const userInfo = allOrg(getState());
     const { tableId, dbId } = getState().table;
     const newRow = await insertRow(dbId, tableId);
-    const createdby = "fld" + tableId.substring(3) + "createdby";
+    // const createdby = "fld" + tableId.substring(3) + "createdby";
     userInfo.forEach((obj) => {
       obj.users.forEach((user) => {
-        if (user?.user_id?._id == newRow?.data?.data[0]?.[createdby]) {
-          newRow.data.data[0][createdby] =
+        if (user?.user_id?._id == newRow?.data?.data[0]?.["createdby"]) {
+          newRow.data.data[0]["createdby"] =
             user?.user_id?.first_name + " " + user?.user_id?.last_name;
           return;
         }

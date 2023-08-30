@@ -570,10 +570,10 @@ export function extraReducers(
       const action = payload;
       state.skipReset = true;
       let arr = [...state.data];
-      const autonumberId = "fld" + state.tableId.substring(3) + "autonumber";
+      // const autonumberId = "fld" + state.tableId.substring(3) + "autonumber";
       const indexIdMapping = action?.indexIdMapping;
       action?.newData?.forEach((row) => {
-        arr[indexIdMapping[row?.[autonumberId]]] = row;
+        arr[indexIdMapping[row?.["autonumber"]]] = row;
       });
       if (action?.dataTypes == "file") {
         var row = arr[indexIdMapping[action?.rowIndex]];

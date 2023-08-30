@@ -14,13 +14,13 @@ function UpdateRecord(props) {
     "success": true,
     "message": "'tbluclzgl'row updated successfully",
     "data": {
-      "flduclzglrowid": "rowgivdqa",
-      "flduclzglautonumber": 3,
-      "flduclzglcreatedat": "2023-06-19T09:16:21.066Z",
-      "flduclzglcreatedby": "6433a9f57992c87a61237f7c",
-      "flduclzglupdatedat": "1687166915",
-      "flduclzglupdatedby": "6433a9f57992c87a61237f7c",
-      "flduclzglt0u": "hello"
+      "rowid": "rowgivdqa",
+      "autonumber": 3,
+      "createdat": "2023-06-19T09:16:21.066Z",
+      "createdby": "6433a9f57992c87a61237f7c",
+      "updatedat": "1687166915",
+      "updatedby": "6433a9f57992c87a61237f7c",
+      "name": "hello"
     }
   }`;
   const [value, setValue] = useState("");

@@ -13,7 +13,7 @@ import { addRow,editCell,getDataExternalFunction,reorderFuncton,} from "./addRow
 import { useMemo } from "react";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
-import { getTableInfo } from "../store/table/tableSelector";
+// import { getTableInfo } from "../store/table/tableSelector";
 import SelectFilepopup from "./selectFilepopup";
 import { headerIcons } from "./headerIcons";
 import variables from "../assets/styling.scss";
@@ -41,8 +41,8 @@ export default function MainTable(props) {
   };
   const [selection, setSelection] = useState(emptyselection);
   const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
-  const tableInfo = customUseSelector((state) => getTableInfo(state));
-  const tableId = tableInfo?.tableId;
+  // const tableInfo = customUseSelector((state) => getTableInfo(state));
+  // const tableId = tableInfo?.tableId;
 
   const isSingleCellSelected = useMemo(() => {
     return (selection.current && selection.current.range.height * selection.current.range.width === 1 );
@@ -59,8 +59,8 @@ export default function MainTable(props) {
         cell,
         d,
         fieldId: fieldsToShow?.[col]?.id,
-        rowAutonumber:
-          allRowsData[row][`fld${tableId?.substring(3)}autonumber`],
+        // rowAutonumber: allRowsData[row][`fld${tableId?.substring(3)}autonumber`],
+        rowAutonumber: allRowsData[row][`autonumber`],
       });
     }
   });
@@ -154,7 +154,8 @@ export default function MainTable(props) {
     for (const element of selection.rows.items) {
       const [start, end] = element;
       for (let i = start; i < end; i++) {
-        deletedRowIndices.push(allRowsData[i][`fld${tableId.substring(3)}autonumber`] );
+        // deletedRowIndices.push(allRowsData[i][`fld${tableId.substring(3)}autonumber`] );
+        deletedRowIndices.push(allRowsData[i][`autonumber`] );
       }
     }
     if (deletedRowIndices.length > 0)  dispatch(deleteRows({ deletedRowIndices, dataa: allRowsData }));

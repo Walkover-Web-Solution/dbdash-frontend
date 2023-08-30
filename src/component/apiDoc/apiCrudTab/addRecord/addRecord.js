@@ -16,12 +16,12 @@ function AddRecord(props) {
   "success": true,
   "message": "'tblzpf863'row created successfully",
   "data": {
-    "fldzpf863rowid": "rowghnrkd",
-    "fldzpf863autonumber": 11,
-    "fldzpf863createdat": "2023-06-19T08:50:38.670Z",
-    "fldzpf863createdby": "6433a9f57992c87a61237f7c",
-    "fldzpf863updatedby": "chirag devlani",
-    "fldzpf863sow": "it is a long long text"
+    "rowid": "rowghnrkd",
+    "autonumber": 11,
+    "createdat": "2023-06-19T08:50:38.670Z",
+    "createdby": "6433a9f57992c87a61237f7c",
+    "updatedby": "chirag devlani",
+    "name": "it is a long long text"
   }
 }`;
   return (

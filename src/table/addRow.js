@@ -34,15 +34,16 @@ const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
   indexIdMapping = {}
 }, 300);
 export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, dataType,isSingleCellSelected) => {
-  const tableId = params?.tableName.substring(3);
+  // const tableId = params?.tableName.substring(3);
   const fieldId=fields[cell[0]]?.id;
   const currentrow= allRowsData[cell?.[1] ?? []];
-  const rowAutonumber=currentrow[`fld${tableId}autonumber`];
+  const rowAutonumber=currentrow[`autonumber`];
 
   if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
 
   if (fields[cell[0]]?.dataType == "multipleselect") {
-    editmultipleselect(newValue, allRowsData[cell[1]][fieldId] || [], cell,params,tableId, fieldId,dispatch,rowAutonumber);
+    editmultipleselect(newValue, allRowsData[cell[1]][fieldId] || [], cell,params ,fieldId,dispatch,rowAutonumber);
+
     return;
   }
 
@@ -65,7 +66,8 @@ export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, 
     }
    
     let currentupdatedvalue = {
-      "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
+      // "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
+      "where": `autonumber = ${currentrow[`autonumber`]}`,
       "fields": {}
     };
     
@@ -76,13 +78,15 @@ export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, 
     }
     
     valuesArray.push(currentupdatedvalue);
-    indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
+    // indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
+    indexIdMapping[currentrow[`autonumber`]] = cell[1]
   
     if (isSingleCellSelected==true) {
       dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentrow }));
       dispatch(updateCells({
         updatedArray: [currentupdatedvalue],
-        indexIdMapping: { [currentrow[`fld${tableId}autonumber`]]: cell[1]},
+        // indexIdMapping: { [currentrow[`fld${tableId}autonumber`]]: cell[1]},
+        indexIdMapping: { [currentrow[`autonumber`]]: cell[1]},
         oldData : currentrow[key]
       }))
     }
@@ -296,7 +300,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
     return {};
   }
 }
-const editmultipleselect = (newValue, oldValuetags, cell, params, tableId, fieldId, dispatch, rowAutonumber) => {
+const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispatch, rowAutonumber) => {
   if (params?.templateId || !fieldId) return;
 
   const newValuetags = newValue.data.tags || [];
@@ -308,14 +312,16 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, tableId, field
   
   if (addedTags.length > 0) {
     updateArray.push({
-      where: `fld${tableId}autonumber = ${rowIndex}`,
+      // where: `fld${tableId}autonumber = ${rowIndex}`,
+      where: `autonumber = ${rowIndex}`,
       fields: { [fieldId]: addedTags.map((element) => `'${element}'`).join(",").slice(1,-1) },
     });   
   }
   
   if (removedTags.length > 0) {
     updateArray.push({
-      where: `fld${tableId}autonumber = ${rowIndex}`,
+      // where: `fld${tableId}autonumber = ${rowIndex}`,
+      where: `autonumber = ${rowIndex}`,
       fields: { [fieldId]: { delete: removedTags } },
     });
   }
