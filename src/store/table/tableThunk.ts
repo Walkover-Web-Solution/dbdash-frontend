@@ -152,17 +152,12 @@ export const bulkAddColumns = createAsyncThunk(
   async (payload: BulkAddColumnsTypes, { getState, dispatch }) => {
     console.log("hiiii")
     let columns;
-    try {
       columns = await getHeaders(
         payload.dbId,
         payload.tableName,
         payload?.fields,
         { getState }
       ); 
-    } catch (error) {
-    console.log("hiiii22",error)
-      
-    }
     const data = await getRowData(
       payload.dbId,
       payload.tableName,
