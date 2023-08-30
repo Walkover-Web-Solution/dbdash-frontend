@@ -56,12 +56,13 @@ function Records(props) {
               props?.CopyButton ? (
                 <div className="field-name-container" key={index}>
                   <Typography className="center-aligned field-name" key={index}>
-                    {fields[1].fieldName}
+                    {fields[1].fieldName.toLowerCase()}
                   </Typography>
                 </div>
               ) : (
                 <Typography className="center-aligned field-name" key={index}>
-                  {fields[1].fieldName}
+                  {fields[1].fieldName.toLowerCase()}
+
                 </Typography>
               )
             )}

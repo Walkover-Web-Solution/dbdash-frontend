@@ -148,6 +148,11 @@ export default function Headermenu(props) {
       toast.error("Table name cannot contain spaces");
       return;
     }
+
+    if (!isNaN(parseInt(header.charAt(0)))) {
+      toast.error("First character cannot be an integer");
+      return;
+    }
   
     handleRenameColumn(props, header, params, dispatch);
   }
@@ -186,11 +191,13 @@ export default function Headermenu(props) {
                     onKeyDown={handleKeyDown}
                   />
                 </div>
-            <div className={`${classes.menuItem} ${classes.danger}`}>Property type</div>
-            <div className={`${classes.centeredText}`}>
-            <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
-                  <span style={{ textTransform: "capitalize" }}>{data_type}</span>
-            </div>
+            <div className={`${classes.menuItem} ${classes.danger}`}>Property type </div>
+         
+             <div className={`${classes.centeredText}`}>
+             <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
+                   <span style={{ textTransform: "capitalize" }}>{data_type}  {dataType == "link"  ? `to ${props?.fields[props?.menu?.col]?.metadata?.foreignKey?.tableId} `: ""}</span>
+             </div>
+           
             <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize={variables.iconfontsize1} />Hide Field</div>
             <div onClick={() => {
               props?.setOpen(true),
