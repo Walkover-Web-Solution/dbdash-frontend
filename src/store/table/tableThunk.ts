@@ -150,7 +150,6 @@ export const addColumns = createAsyncThunk(
 export const bulkAddColumns = createAsyncThunk(
   "table/bulkAddColumns",
   async (payload: BulkAddColumnsTypes, { getState, dispatch }) => {
-    console.log("hiiii")
     let columns;
       columns = await getHeaders(
         payload.dbId,
