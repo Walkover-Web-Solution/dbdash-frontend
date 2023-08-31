@@ -26,6 +26,7 @@ const style = {
 };
 
 export default function AddFilterPopup(props) {
+  console.log(props,"dsfsa")
   // const navigate = useNavigate();
   const editableDivRef = useRef();
   const editableDivRef2 = useRef();

@@ -177,7 +177,10 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     }
   }, [params?.tableName]);
  
-  
+  const handleAddView = async()=>{
+    handleOpenn();
+    setEdit(false);
+  }
   const shareLink = async () => {
     const isViewExits =
       AllTable?.tables?.[params?.tableName]?.filters?.[params?.filterName]
@@ -297,7 +300,8 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
             </div>
           </div>
           <Button
-            onClick={() => handleOpenn()}
+            // onClick={() => handleOpenn()}
+            onClick={()=>{handleAddView()}}
             variant="outlined"
             ref={buttonRef}
             className="mui-button-outlined filter-button custom-button-add-view"
