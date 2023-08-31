@@ -82,6 +82,8 @@ const getHeaders = async (
 
       json.id = fieldId;
       json.title = field.fieldName?.toLowerCase() || fieldId.toLowerCase();
+      if (field.tableId)  json["tableId"] = field.tableId
+      if (field.actualFieldId)  json["actualFieldId"] = field.actualFieldId
       // json.accessor = fieldId.toLowerCase();
       json.metadata = field.metaData;
       json.dataType = field.fieldType?.toLowerCase();
@@ -164,7 +166,6 @@ export const bulkAddColumns = createAsyncThunk(
       payload.org_id,
       payload.pageNo
     );
-    console.log("hiiii22")
 
     const dataa = {
       columns: columns,

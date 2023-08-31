@@ -192,11 +192,24 @@ export default function Headermenu(props) {
                   />
                 </div>
             <div className={`${classes.menuItem} ${classes.danger}`}>Property type </div>
-         
-             <div className={`${classes.centeredText}`}>
-             <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
-                   <span style={{ textTransform: "capitalize" }}>{data_type}  {dataType == "link"  ? `to ${props?.fields[props?.menu?.col]?.metadata?.foreignKey?.tableId} `: ""}</span>
-             </div>
+              <div >
+              <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
+                    <span style={{ textTransform: "capitalize" }}>{data_type}</span>
+                   
+                    
+                
+              </div>
+              <div className={classes.menuItem}>
+              {
+              dataType == "link"  &&
+               <> <span style={{display : "contents"}}> linkedTableId  = {props?.fields[props?.menu?.col]?.metadata?.foreignKey?.tableId} </span>
+                   <span style={{display : "contents"}}> linkedFieldId  = {props?.fields[props?.menu?.col]?.metadata?.foreignKey?.fieldId} </span></> }
+              {   props?.fields[props?.menu?.col]?.metadata?.isLookup  &&  <>
+              <span style={{display : "contents"}}> lookupTableId  = { props?.fields[props?.menu?.col]?.tableId} </span>
+              <span style={{display : "contents"}}> lookupFieldId  = { props?.fields[props?.menu?.col]?.actualFieldId} </span>
+              </>
+               }
+               </div>
            
             <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize={variables.iconfontsize1} />Hide Field</div>
             <div onClick={() => {

@@ -44,7 +44,7 @@ export default function FormulaDataType(props) {
       while ((match = regex.exec(html))) {
         matches.push(match[1]);
       
-        query =   query.replaceAll(match[1], data[match[1]].fieldName)
+        query =  query.replaceAll(match[1], data[match[1]].fieldName)
       }
       setQueryResult(query);
       setIsLoading(false);

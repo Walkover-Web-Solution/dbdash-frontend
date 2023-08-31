@@ -162,7 +162,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     const tableNames = Object.keys(dbData?.db?.tables)||[];
     dispatch(setTableLoading(true));
     if (params?.tableName && !params?.filterName) {
-      console.log("jain ho ")
+
       dispatch(
         bulkAddColumns({
           dbId: dbData?.db?._id,
