@@ -1,6 +1,6 @@
 import React, { memo, useRef, useState } from "react";
 import {Card,CardContent,Typography,Box,Select,MenuItem,Button} from "@mui/material";
-import ClickAwayListener from "@mui/base/ClickAwayListener";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../dropdown";
