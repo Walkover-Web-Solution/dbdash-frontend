@@ -114,7 +114,8 @@ function PopupModal(props) {
               {state.$errors?.[props?.id].map((data) => data.$message).join(",")}
             </div>
           </Box>
-          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a rel="noreferrer" href='http://localhost:5000/64a806e049f009459a84201b'> click here</a></Typography></Box>
+          {/* author : rohitmirchandani, changed href link */}
+          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a rel="noreferrer" target="_blank" href='https://dbdash-backend-h7duexlbuq-el.a.run.app/64a3fb1f135d26837027e15e'> click here</a></Typography></Box>
           } <Box className="buttonContainer">
             <Box >
               <Button

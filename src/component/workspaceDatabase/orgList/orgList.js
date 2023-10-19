@@ -96,21 +96,27 @@ export const OrgList = (props) => {
       toast.error("Workspace name cannot contain spaces");
       return;
     }
-
+    if(allorgss.some((org)=>org.name == orgName)){
+      toast.error("Workspace name already exists");
+    }
     const userid = localStorage.getItem("userid");
     const data = {
       name: orgName,
     };
 
-    dispatch(renameOrgThunk({ orgId, data, user_id:userid }));
+    dispatch(renameOrgThunk({ orgId, data, user_id:userid })).then(()=>{
+      toast.success("Workspace renamed successfully");
+    });
   };
-  const shareWorkspace = async (email, user_type) => {
+  const shareWorkspace = async (email, user_type,showSuccess) => {
     const adminId = localStorage.getItem("userid")
     const data = {
       email: email,
       user_type: user_type
     }
-    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, data: data }))
+    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, data: data })).then(()=>{
+      showSuccess();  // author : rohitmirchandani, to show message only on success
+    })
   }
   const removeUserFromWorkspace = async (email) => {
     const adminId = localStorage.getItem("userid")
