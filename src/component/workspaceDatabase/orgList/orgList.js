@@ -239,8 +239,12 @@ setOrgUsers(originalObj);
 
                 <IconButton 
                   onClick={(e) => {
-                    handleOpen(e);
-                    setOrg(props?.orgId);
+                    if(isAdmin || isOwner){
+                      handleOpen(e);
+                      setOrg(props?.orgId);
+                    }else{
+                        toast.warn("You are not authorized to create database");
+                    }
                   }}
                   
                 >
