@@ -24,7 +24,7 @@ function SingleDatabase(props) {
   const accesibleOrgs = new Set(Object.values(allorgss).filter(org => org.users.some(user => user.user_id._id == userId && (user.user_type === 1 || user.user_type === 11))));
   let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id }).sort((a)=> accesibleOrgs.has(a[1]) ? -1 : 1);
   const handlingmove = () => {
-    setOpenmove(accesibleOrgs);
+    setOpenmove(false);
   };
   const restoreDb = async (orgId, dbId) => {
     dispatch(restoreDbThunk({ orgId, dbId }));
