@@ -173,7 +173,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     }
     
     if (!params?.tableName) {
-      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`);
+      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
     }
   }, [params?.tableName]);
  

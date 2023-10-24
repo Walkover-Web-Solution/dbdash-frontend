@@ -43,10 +43,9 @@ export default function ShareOrgModal(props) {
       }
       return;
     }
-    shareWorkspace(email, userType);
+    shareWorkspace(email, userType,()=>toast.success("Invitation sent successfully"));
     setEmail("");
     setUserType(111);
-    toast.success("Invitation sent successfully");
   };
   
   const handleKeyDown = (event) => {
