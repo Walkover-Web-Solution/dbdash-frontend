@@ -26,6 +26,7 @@ import {
   UserInfoTypes,
 } from "../../types/tableDataTypes";
 import { TableColumType, TableDataType } from "../../types/tableDataTypes";
+// import { uploadCSV } from "../../api/rowApi";
 const replaceCreatedByIdWithName = async (
   userInfo: Array<UserInfoTypes>,
   org_id?: string
@@ -511,6 +512,12 @@ export const addColumsToLeft = createAsyncThunk(
     return payload;
   }
 );
+// export const uploadCSV = createAsyncThunk(
+//   "table/uploadCSV",
+//   async(payload:UpdateColumnHeaderTypes, {dispatch, getState}:{dispatch:any,getState:any}) => {
+
+//   } 
+// )
 export const updateCells = createAsyncThunk(
   "table/updateCells",
   async (payload: UpdateColumnHeaderTypes, { getState }: { getState: any }) => {
