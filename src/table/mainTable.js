@@ -18,6 +18,9 @@ import SelectFilepopup from "./selectFilepopup";
 import { headerIcons } from "./headerIcons";
 import variables from "../assets/styling.scss";
 import { customUseSelector } from "../store/customUseSelector";
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import { Box } from "@mui/system";
 export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
@@ -224,7 +227,15 @@ export default function MainTable(props) {
           showMinimap={props?.minimap}
           onColumnMoved={reorder}
           onPaste={true}
-          rightElement={<div className="addCol"><button onClick={() => setOpen(true)}>+</button></div>}
+          // 
+          rightElement={
+          <Box>
+            <IconButton aria-label="add" size="medium" onClick={() => setOpen(true)}>
+              <AddIcon fontSize="medium" />
+            </IconButton>
+          </Box>
+          }
+          rightElementProps={{fill:true, sticky:false}}
           trailingRowOptions={{ sticky: true,tint: true,hint: "New row...",targetColumn: targetColumn.current,}}
         />
       </div>
