@@ -20,7 +20,6 @@ import variables from "../assets/styling.scss";
 import { customUseSelector } from "../store/customUseSelector";
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import { Box } from "@mui/system";
 export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
@@ -226,16 +225,13 @@ export default function MainTable(props) {
           headerIcons={headerIcons}
           showMinimap={props?.minimap}
           onColumnMoved={reorder}
-          onPaste={true}
-          // 
+          onPaste={true} 
           rightElement={
-          <Box>
-            <IconButton aria-label="add" size="medium" onClick={() => setOpen(true)}>
-              <AddIcon fontSize="medium" />
+            <IconButton aria-label="add" size="medium" onClick={()=>setOpen(true)}>
+                <AddIcon fontSize="medium" />
             </IconButton>
-          </Box>
           }
-          rightElementProps={{fill:true, sticky:false}}
+          rightElementProps={{sticky:false, fill:true}}
           trailingRowOptions={{ sticky: true,tint: true,hint: "New row...",targetColumn: targetColumn.current,}}
         />
       </div>
