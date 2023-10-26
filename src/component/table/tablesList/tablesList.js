@@ -46,8 +46,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const [anchorEl, setAnchorEl] = useState(null);
   const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
-  // const [showImportCSV, setShowImportCSV] = useState(false);
-  // const excluedFields = ['rowid','autonumber','createdat','createdby','updatedby','updatedat']
   const AllTable = customUseSelector((state) => {
     const { tables } = state.tables;
     const { dbId, userAcess, userDetail } = state.tables;
