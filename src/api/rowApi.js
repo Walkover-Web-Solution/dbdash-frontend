@@ -1,8 +1,8 @@
 import axiosInstance from '../interceptor/interceptor';
 
-const insertRow = async (db_id, tableName) => {
+const insertRow = async (db_id, tableName, records) => {
 
-    return await axiosInstance.post( `/${db_id}/${tableName}`, { "records": [{}] })
+    return await axiosInstance.post( `/${db_id}/${tableName}`, { "records": records })
 
 }
 

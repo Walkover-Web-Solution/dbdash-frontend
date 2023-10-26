@@ -604,7 +604,7 @@ export function extraReducers(
     })
     .addCase(addRows.fulfilled, (state, { payload }) => {
       let arr = [...state.data];
-      state.data = [...arr, payload];
+      state.data = [...arr, ...payload];
       state.status = "succeeded";
     })
     .addCase(addRows.rejected, (state) => {

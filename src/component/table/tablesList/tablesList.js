@@ -25,9 +25,6 @@ import { createViewTable } from "../../../api/viewTableApi";
 import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import   {  customUseSelector }  from "../../../store/customUseSelector";
-import Modal from "@mui/material/Modal";
-import { Importer, ImporterField } from 'react-csv-importer';
-import "react-csv-importer/dist/index.css";
 
  function TablesList({ dbData }) {
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
@@ -49,9 +46,8 @@ import "react-csv-importer/dist/index.css";
   const [anchorEl, setAnchorEl] = useState(null);
   const [link, setLink] = useState("Link");
   const [minimap, setMinimap] = useState(false);
-  const [showImportCSV, setShowImportCSV] = useState(false);
+  // const [showImportCSV, setShowImportCSV] = useState(false);
   // const excluedFields = ['rowid','autonumber','createdat','createdby','updatedby','updatedat']
-  const excluedFields = []
   const AllTable = customUseSelector((state) => {
     const { tables } = state.tables;
     const { dbId, userAcess, userDetail } = state.tables;
@@ -62,12 +58,6 @@ import "react-csv-importer/dist/index.css";
     const fullName=customUseSelector((state) => state.user.userFirstName+" "+state.user.userLastName);
    const email=customUseSelector((state) => state.user.userEmail)
   
-   let tableName;
-   if(!params?.tableName){
-     tableName = Object.keys(dbData?.db?.tables)[0];
-   }else{
-     tableName = params.tableName;
-   }
   const handleClick = (event, id) => {
     if (id === "share") {
       setShareLinkOpen(true);
@@ -319,56 +309,6 @@ import "react-csv-importer/dist/index.css";
           >
             Add View
           </Button>
-          <Button
-            onClick={()=>setShowImportCSV(true)}
-            ref={buttonRef}
-            variant="outined"
-            className="mui-button-outlined filter-button custom-button-add-view custom-button-import-csv"
-          >
-            Import CSV
-          </Button>
-          <Modal
-            disableRestoreFocus
-            open={showImportCSV}
-            onClose={()=>setShowImportCSV(false)}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Importer
-                dataHandler = {async(rows, {startIndex}) => {
-                  console.log(rows, startIndex);
-                }}
-                // defaultNoHeader={true}
-                // restartable={true}
-                // onStart={({ file, preview, fields, columnFields }) => {
-                //   console.log(file);
-                //   console.log(preview);
-                //   console.log(fields);
-                //   console.log(columnFields);
-                // }}
-                // onComplete={({ file, preview, fields, columnFields }) => {
-                //   console.log(file);
-                //   console.log(preview);
-                //   console.log(fields);
-                //   console.log(columnFields);
-                // }}
-                // onClose={({ file, preview, fields, columnFields }) => {
-                //   console.log(file);
-                //   console.log(preview);
-                //   console.log(fields);
-                //   console.log(columnFields);
-                // }}
-                >
-                {
-                  Object.entries(dbData?.db.tables?.[tableName]?.fields).map(field=>{
-                    if(!excluedFields.includes(field[0])){
-                      // console.log(field);
-                      return <ImporterField key={field[0]} name={field[0]} label={field[1].fieldName} optional/>
-                    }
-                  })
-                }
-            </Importer>
-          </Modal>
         </Box>
         {openn && !edit && (
           <FilterModal

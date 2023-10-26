@@ -97,7 +97,7 @@ export default function MainTable(props) {
 
   const addRows = () => {
     if (params?.templateId) return;
-    addRow(dispatch);
+    addRow(dispatch, [{}]);
   };
   const reorder = useCallback(
     (item, newIndex) => {

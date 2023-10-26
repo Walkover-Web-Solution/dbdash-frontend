@@ -18,6 +18,10 @@ import { useParams } from "react-router-dom";
 import { bulkAddColumns } from "../../../store/table/tableThunk";
 import  {customUseSelector }  from "../../../store/customUseSelector";
 import CustomTextField from "../../../muiStyles/customTextfield";
+import Modal from "@mui/material/Modal";
+import { Importer, ImporterField } from 'react-csv-importer';
+import { addRow } from "../../../table/addRow";
+import "react-csv-importer/dist/index.css";
 
  function SingleTable({
   dbData,
@@ -30,6 +34,7 @@ import CustomTextField from "../../../muiStyles/customTextfield";
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
   const [tabIndex, setTabIndex] = useState(0);
+  const [showImportCSV, setShowImportCSV] = useState(false);
 
   const AllTableInfo = customUseSelector((state) => state.tables.tables);
   const userDetails = customUseSelector((state) => selectActiveUser(state));
@@ -38,6 +43,7 @@ import CustomTextField from "../../../muiStyles/customTextfield";
   const params = useParams();
 
   const dispatch = useDispatch();
+  const excludedFields = ['rowid','autonumber','createdat','createdby','updatedby','updatedat']
 
   const TabWithDropdown = ({ label, dropdown }) => (
     <Box className="flex-center" >
@@ -239,8 +245,10 @@ import CustomTextField from "../../../muiStyles/customTextfield";
                       deleteFunction={deleteTableName}
                       setName={setName}
                       exportCSVTable={exportCSVTable}
+                      importCSV="Import CSV"
+                      showImportCSV = {()=>{setShowImportCSV(true)}}
                     />
-                  }
+                    }
                 />
               </Box>
             ) : (
@@ -262,6 +270,8 @@ import CustomTextField from "../../../muiStyles/customTextfield";
                       deleteFunction={deleteTableName}
                       setName={setName}
                       exportCSVTable={exportCSVTable}
+                      importCSV="Import CSV"
+                      showImportCSV={()=>{setShowImportCSV(true)}}
                     />
                   }
                 />
@@ -270,6 +280,39 @@ import CustomTextField from "../../../muiStyles/customTextfield";
           </>
         )}
       </Box>
+      <Modal
+          disableRestoreFocus
+          open={showImportCSV}
+          onClose={()=>setShowImportCSV(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <div className="import-csv-div">
+            <Importer
+                dataHandler = {async(rows) => {
+                  addRow(dispatch, rows);
+                }}
+                onStart={({ file }) => {
+                  const extension = file.path.split('.').pop();
+                  if(extension !== 'csv'){
+                    toast.error("Please select a CSV file")
+                    setShowImportCSV(false);
+                  }
+                }}
+                onComplete={() => {
+                  setShowImportCSV(false);
+                }}
+                >
+                {
+                  Object.entries(table?.[1]?.fields).map(field=>{
+                    if(!excludedFields.includes(field[0])){
+                      return <ImporterField key={field[0]} name={field[0]} label={field[1].fieldName} optional/>
+                    }
+                  })
+                }
+            </Importer>
+          </div>
+        </Modal>
     </div>
   );
 }

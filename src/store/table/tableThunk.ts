@@ -577,21 +577,23 @@ export const updateCells = createAsyncThunk(
 );
 export const addRows = createAsyncThunk(
   "table/addRows",
-  async (_, { getState }: { getState: any }) => {
+  async (payload: UpdateColumnHeaderTypes, { getState }: { getState: any }) => {
     const userInfo = allOrg(getState());
     const { tableId, dbId } = getState().table;
-    const newRow = await insertRow(dbId, tableId);
+    const newRow = await insertRow(dbId, tableId,payload["allRows"]);
     // const createdby = "fld" + tableId.substring(3) + "createdby";
-    userInfo.forEach((obj) => {
-      obj.users.forEach((user) => {
-        if (user?.user_id?._id == newRow?.data?.data[0]?.["createdby"]) {
-          newRow.data.data[0]["createdby"] =
-            user?.user_id?.first_name + " " + user?.user_id?.last_name;
-          return;
-        }
+    for(let i in newRow?.data?.data){
+      userInfo.forEach((obj) => {
+        obj.users.forEach((user) => {
+          if (user?.user_id?._id == newRow?.data?.data[i]?.["createdby"]) {
+            newRow.data.data[i]["createdby"] =
+              user?.user_id?.first_name + " " + user?.user_id?.last_name;
+            return;
+          }
+        });
       });
-    });
-    return newRow?.data?.data[0];
+    }
+    return newRow?.data?.data;
   }
 );
 

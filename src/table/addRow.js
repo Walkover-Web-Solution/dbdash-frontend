@@ -3,8 +3,8 @@ import {GridCellKind} from "@glideapps/glide-data-grid";
 import { addRows, updateCells, addColumsToLeft, updateColumnOrder } from "../store/table/tableThunk";
 import debounce from 'lodash.debounce';
 import { updatecellbeforeapi } from "../store/table/tableSlice";
-export const addRow = (dispatch) => {
-  dispatch(addRows({ type: "add_row" }))
+export const addRow = (dispatch, allRows) => {
+  dispatch(addRows({ type: "add_row", allRows:allRows}))
   return;
 }
 export const addColumn = (dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName, queryToSend, userQuery) => {
