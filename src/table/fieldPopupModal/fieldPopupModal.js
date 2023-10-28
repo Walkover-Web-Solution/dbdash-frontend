@@ -21,6 +21,7 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import { DataObject } from "@mui/icons-material";
 import Joi from "joi";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
@@ -278,6 +279,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="singlelinetext"><TextFormatIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single line text</MenuItem>
             <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single select</MenuItem>
             <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> URL</MenuItem> 
+            <MenuItem value="json"><DataObject  fontSize={variables.iconfontsize1}  className="field-select-option" /> JSON</MenuItem> 
           </Select>
           <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
           {showFormulaField && <FormulaDataType setQueryByAi={setQueryByAi} queryByAi={queryByAi} submitData={createLeftorRightColumn}
