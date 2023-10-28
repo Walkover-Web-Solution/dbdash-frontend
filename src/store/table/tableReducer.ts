@@ -5,6 +5,7 @@ import {
   updateColumnsType,
   updateCells,
   addRows,
+  addMultipleRows,
   deleteColumns,
   updateColumnHeaders,
   addColumsToLeft,
@@ -608,6 +609,17 @@ export function extraReducers(
       state.status = "succeeded";
     })
     .addCase(addRows.rejected, (state) => {
+      state.status = "failed";
+    })
+    .addCase(addMultipleRows.pending, (state)=>{
+      state.status = "loading";
+    })
+    .addCase(addMultipleRows.fulfilled, (state, {payload})=>{
+      let arr = [...state.data];
+      state.data = [...arr, ...payload]
+      state.status = "succeeded";
+    })
+    .addCase(addMultipleRows.rejected, (state)=>{
       state.status = "failed";
     })
 

@@ -99,6 +99,11 @@ e.preventDefault();
               menuclick(e); props?.exportCSVTable(props?.tableId)}}>
               <Typography  textAlign="center" >{props?.exportCSV}</Typography>
             </MenuItem>}
+
+            {props?.importCSV==="Import CSV" && <MenuItem onClick={props.showImportCSV}>
+              <Typography  textAlign="center" >{props?.importCSV}</Typography>
+            </MenuItem>}
+
             {props?.second!=="" && props?.second && <MenuItem onClick={(e)=>{ 
               if(params?.templateId) return;
               menuclick(e); setOpen(true);}}>
@@ -128,8 +133,9 @@ Dropdown.propTypes = {
   setOpenmove:PropTypes.func,
   exportCSV: PropTypes.any,
   exportCSVTable: PropTypes.any,
-  dbname:PropTypes.any
-  
+  dbname:PropTypes.any,
+  importCSV:PropTypes.string,
+  showImportCSV:PropTypes.func
 };
 
 export default memo(Dropdown)
