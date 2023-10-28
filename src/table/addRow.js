@@ -1,11 +1,14 @@
 import { toast } from "react-toastify";
 import {GridCellKind} from "@glideapps/glide-data-grid";
-import { addRows, updateCells, addColumsToLeft, updateColumnOrder } from "../store/table/tableThunk";
+import { addRows, updateCells, addColumsToLeft, updateColumnOrder, addMultipleRows } from "../store/table/tableThunk";
 import debounce from 'lodash.debounce';
 import { updatecellbeforeapi } from "../store/table/tableSlice";
 export const addRow = (dispatch) => {
   dispatch(addRows({ type: "add_row" }))
   return;
+}
+export const addMultipleRow = (dispatch, rows)=>{
+  dispatch(addMultipleRows({type:"add_multiple_rows", rows:rows}))
 }
 export const addColumn = (dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName, queryToSend, userQuery) => {
   dispatch(addColumsToLeft({

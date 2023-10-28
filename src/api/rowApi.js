@@ -5,7 +5,9 @@ const insertRow = async (db_id, tableName) => {
     return await axiosInstance.post( `/${db_id}/${tableName}`, { "records": [{}] })
 
 }
-
+const insertMultipleRows = async (db_id, tableName, rows) => {
+    return await axiosInstance.post(`dbs/${db_id}/${tableName}/csvupload`, {"records":rows})
+}
 
 const updateRow = async (db_id, tableName, data) => {
     return await axiosInstance.patch( `/${db_id}/${tableName}`, data)
@@ -34,5 +36,6 @@ export {
     updateRow,
     deleteRow,
     uploadImage,
-    uploadCSV
+    uploadCSV,
+    insertMultipleRows
 }
