@@ -593,17 +593,18 @@ export const addMultipleRows = createAsyncThunk(
     const userInfo = allOrg(getState());
     const {tableId, dbId} = getState().table;
     const newRows = await insertMultipleRows(dbId, tableId, payload.rows);
-    for(let i in newRows){
+    
       userInfo.forEach((obj) => {
         obj.users.forEach((user) => {
-          if (user?.user_id?._id == newRows?.data?.data[i]?.["createdby"]) {
-            newRows.data.data[i]["createdby"] =
-              user?.user_id?.first_name + " " + user?.user_id?.last_name;
+          if (user?.user_id?._id == newRows?.data?.data[0]?.["createdby"]) {
+            for(let i in newRows.data.data){
+              newRows.data.data[i]["createdby"] =
+                user.user_id.first_name + " " + user.user_id.last_name;
+            }
             return;
           }
         });
       });
-    }
     return newRows.data?.data;
   }
 );
