@@ -120,7 +120,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
   const dataRow = allRowsData[row] || [];
 
   if (dataRow) {
-    const d = dataRow[fieldsToShow[col]?.id];
+    let d = dataRow[fieldsToShow[col]?.id];
     let { dataType } = fieldsToShow[col] || "";
     const readOnlyOrNot=(fieldsToShow[col]?.metadata?.isLookup || readOnlyDataTypes.includes(dataType))?true:false;
    
@@ -205,8 +205,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
         kind: GridCellKind.Text,
         allowOverlay: true,
         readonly: readOnlyOrNot,
-        displayData: d || "",
-        data: d || "",
+        displayData: d,
+        data: d,
         wrapText: false,
         multiline: false,
       };

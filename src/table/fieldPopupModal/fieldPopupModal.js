@@ -29,6 +29,7 @@ import { addColumnrightandleft } from "../../store/table/tableThunk";
 import { addColumn } from "../addRow";
 import { CustomSwitch } from "../../muiStyles/muiStyles";
 import CustomTextField from "../../muiStyles/customTextfield";
+import DataObjectIcon from '@mui/icons-material/DataObject';
 
 export default function FieldPopupModal(props) {
   const params = useParams();
@@ -278,6 +279,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="singlelinetext"><TextFormatIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single line text</MenuItem>
             <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single select</MenuItem>
             <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> URL</MenuItem> 
+            <MenuItem value="json"><DataObjectIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> JSON</MenuItem>            
           </Select>
           <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
           {showFormulaField && <FormulaDataType setQueryByAi={setQueryByAi} queryByAi={queryByAi} submitData={createLeftorRightColumn}

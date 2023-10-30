@@ -311,7 +311,7 @@ export const reducers: ValidateSliceCaseReducers<
           };
         }
       case "longtext" || "json":
-        if (["text","jsonb"].includes(state.columns[typeIndex].dataType)) {
+        if (state.columns[typeIndex].dataType == "text" || state.columns[typeIndex].dataType == "json") {
           return state;
         } else if (state.columns[typeIndex].dataType === "select") {
           return {
