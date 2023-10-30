@@ -51,7 +51,7 @@ export default function FieldPopupModal(props) {
   const dispatch = useDispatch();
 
   const schema = Joi.object({
-    fieldName: Joi.string().min(1).max(30).pattern(/^[^\s]+$/).custom((value, helpers) => {
+    fieldName: Joi.string().min(1).max(30).regex(/^[A-Za-z0-9_\s]+$/).custom((value, helpers) => {
       if (parseInt(value, 10) === 0 || parseInt(value, 10) || value === '0') {
         return helpers.error('Field name can not start with integer');
       }
@@ -61,7 +61,7 @@ export default function FieldPopupModal(props) {
 
     .messages({
       "string.min": `$ Column is required`,
-      "string.pattern.base": ` column must not contain spaces`,
+      "string.pattern.base": ` column must not contain special characters`,
     }),
   });
   const createLeftorRightColumn = () => {
@@ -132,7 +132,7 @@ export default function FieldPopupModal(props) {
     } else {
       setErrors({});
     }
-    setTextValue(event.target.value);
+    setTextValue(event.target.value.replace(/\s/g,'_'));
   };
   const handleSelectChange = (event) => {
     setShowLinkField(false)

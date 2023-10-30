@@ -17,10 +17,12 @@ function SingleDatabase(props) {
   const dbname = useRef(null); 
   const [openmove, setOpenmove] = useState(false);
   const [selectedorg, setSelectedorg] = useState({});
+  const userId = localStorage.getItem("userid");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const allorgss = customUseSelector((state) => state.dataBase.allOrg)
-  let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id });
+  const accesibleOrgs = new Set(Object.values(allorgss).filter(org => org.users.some(user => user.user_id._id == userId && (user.user_type === 1 || user.user_type === 11))));
+  let arr = Object.entries(allorgss).filter(x => { return x[1]?._id !== props?.db?.org_id?._id }).sort((a)=> accesibleOrgs.has(a[1]) ? -1 : 1);
   const handlingmove = () => {
     setOpenmove(false);
   };
@@ -130,7 +132,7 @@ function SingleDatabase(props) {
                       }}
                     >
                       {arr?.map((fields, index) => (
-                        <MenuItem key={index} value={fields[1]}>
+                        <MenuItem key={index} disabled = {!accesibleOrgs.has(fields[1])} value={fields[1]}>
                           {fields[1].name}
                         </MenuItem>
                       ))}

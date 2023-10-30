@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import { bulkAddColumns } from "../../../store/table/tableThunk";
 import  {customUseSelector }  from "../../../store/customUseSelector";
 import CustomTextField from "../../../muiStyles/customTextfield";
+import ImportCSV from "../../importCSV/importCSV";
 
  function SingleTable({
   dbData,
@@ -30,6 +31,7 @@ import CustomTextField from "../../../muiStyles/customTextfield";
   const [tableNa, setTableNa] = useState(null);
   const [name, setName] = useState();
   const [tabIndex, setTabIndex] = useState(0);
+  const [showImportCSV, setShowImportCSV] = useState(false);
 
   const AllTableInfo = customUseSelector((state) => state.tables.tables);
   const userDetails = customUseSelector((state) => selectActiveUser(state));
@@ -239,6 +241,8 @@ import CustomTextField from "../../../muiStyles/customTextfield";
                       deleteFunction={deleteTableName}
                       setName={setName}
                       exportCSVTable={exportCSVTable}
+                      importCSV={"Import CSV"}
+                      showImportCSV = {()=>setShowImportCSV(true)}
                     />
                   }
                 />
@@ -262,6 +266,8 @@ import CustomTextField from "../../../muiStyles/customTextfield";
                       deleteFunction={deleteTableName}
                       setName={setName}
                       exportCSVTable={exportCSVTable}
+                      importCSV="Import CSV"
+                      showImportCSV = {()=>{setShowImportCSV(true)}}
                     />
                   }
                 />
@@ -270,6 +276,7 @@ import CustomTextField from "../../../muiStyles/customTextfield";
           </>
         )}
       </Box>
+      <ImportCSV showImportCSV={showImportCSV} setShowImportCSV = {setShowImportCSV}  table={table}/>
     </div>
   );
 }

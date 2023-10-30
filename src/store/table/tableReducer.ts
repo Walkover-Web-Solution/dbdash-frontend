@@ -5,6 +5,7 @@ import {
   updateColumnsType,
   updateCells,
   addRows,
+  addMultipleRows,
   deleteColumns,
   updateColumnHeaders,
   addColumsToLeft,
@@ -309,8 +310,8 @@ export const reducers: ValidateSliceCaseReducers<
             ],
           };
         }
-      case "longtext":
-        if (state.columns[typeIndex].dataType === "text") {
+      case "longtext" || "json":
+        if (["text","jsonb"].includes(state.columns[typeIndex].dataType)) {
           return state;
         } else if (state.columns[typeIndex].dataType === "select") {
           return {
@@ -608,6 +609,17 @@ export function extraReducers(
       state.status = "succeeded";
     })
     .addCase(addRows.rejected, (state) => {
+      state.status = "failed";
+    })
+    .addCase(addMultipleRows.pending, (state)=>{
+      state.status = "loading";
+    })
+    .addCase(addMultipleRows.fulfilled, (state, {payload})=>{
+      let arr = [...state.data];
+      state.data = [...arr, ...payload]
+      state.status = "succeeded";
+    })
+    .addCase(addMultipleRows.rejected, (state)=>{
       state.status = "failed";
     })
 

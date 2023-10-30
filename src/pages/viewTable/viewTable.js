@@ -56,7 +56,8 @@ const ViewTable = () => {
         dataType === "createdat" ||
         dataType === "createdby" ||
         dataType === "longtext" ||
-        dataType === "rowid"
+        dataType === "rowid" || 
+        dataType == "json"
       ) {
         return {
           kind: GridCellKind.Text,
