@@ -310,8 +310,8 @@ export const reducers: ValidateSliceCaseReducers<
             ],
           };
         }
-      case "longtext":
-        if (state.columns[typeIndex].dataType === "text") {
+      case "longtext" || "json":
+        if (["text","jsonb"].includes(state.columns[typeIndex].dataType)) {
           return state;
         } else if (state.columns[typeIndex].dataType === "select") {
           return {

@@ -181,7 +181,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
           },
         };
       }
-    } else if (dataType === "longtext") {
+    } else if (dataType === "longtext" || dataType === "json") {
       return {
         kind: GridCellKind.Text,
         allowOverlay: true,

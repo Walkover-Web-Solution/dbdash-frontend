@@ -25,8 +25,7 @@ import KeyIcon from '@mui/icons-material/Key';
 import PersonIcon from '@mui/icons-material/Person';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-
-
+import DataObjectIcon from '@mui/icons-material/DataObject';
 
 export function getPropertyIcon(data_type) {
   let propertyIcon;
@@ -91,6 +90,9 @@ export function getPropertyIcon(data_type) {
       break;
       case "updatedby":
         propertyIcon = <PersonIcon  fontSize={variables.iconfontsize1}  />;
+        break;
+      case "json":
+        propertyIcon = <DataObjectIcon fontSize={variables.iconfontsize1} />;
         break;
     default:
       propertyIcon = <MultiIcon  fontSize={variables.iconfontsize1} />;
