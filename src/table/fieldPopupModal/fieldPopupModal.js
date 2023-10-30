@@ -53,7 +53,7 @@ export default function FieldPopupModal(props) {
   const schema = Joi.object({
     fieldName: Joi.string().min(1).max(30).regex(/^[A-Za-z0-9_\s]+$/).custom((value, helpers) => {
       if (parseInt(value, 10) === 0 || parseInt(value, 10) || value === '0') {
-        return helpers.error('string.integerInvalid');
+        return helpers.error('Field name can not start with integer');
       }
       return value;
     })
