@@ -1,7 +1,6 @@
 import axios from "axios";
 import { toast } from 'react-toastify'
 
-
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_BASE_URL,
   });
@@ -33,15 +32,14 @@ axiosInstance.interceptors.response.use(
       toast.error('Session Expired');
       localStorage.removeItem("accessToken");
       window.location.href = "/";
-    }
-    if (error?.response?.status === 403) {
+    } else if (error?.response?.status === 403) {
       toast.error('forbidden Error : you have limited access');
       // alert("forbidden Error : you have limited access")
-    }
-    if (error?.response?.status === 405) {
+    } else if (error?.response?.status === 405) {
       toast.error("Can't Delete Becuase this Org only one DB")
-    }
-    else{
+    } else if (error?.response?.status === 404) {
+      window.location.href = "/notFound";      
+    } else{
       toast.error(error?.response?.data?.message)
     }
     return new Promise(() => {});
