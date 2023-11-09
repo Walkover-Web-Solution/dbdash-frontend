@@ -21,7 +21,7 @@ function CodeBlock(props) {
   };
   const records = () => {
     return (
-      <>
+      <div style={{marginLeft:30}}>
         {"{\n"}
         {props.body.map((x, index) => (
           <span key={index}>
@@ -42,8 +42,8 @@ function CodeBlock(props) {
             ,<br />
           </span>
         ))}
-        {"}\n"}
-      </>
+        {"} ,\n"}
+      </div>
     );
   };
 
@@ -51,14 +51,13 @@ function CodeBlock(props) {
     if (props.parent === "addrecord") {
       return (
         <pre className="pre-wrapper">
-          <span>{'    "records"'}</span>
+          <span>{'"records"'}</span>
           <span>: </span>
           {" [\n"}
           {records()}
-          {`,\n`}
           {records()}
-          {"          ...\n"}
-          {"    ]\n"}
+          {"       ...\n"}
+          {" ]\n"}
         </pre>
       );
     }
@@ -216,9 +215,9 @@ function CodeBlock(props) {
           {((props.body && typeof props.body === "object") || props.where) &&
             (props.where || props.body.length > 0) && (
               <code>
-                {"-data{\n"}
+                {"-data {\n"}
                 {renderBody()}
-                {"   }"}
+                {"}"}
               </code>
             )}
         </div>

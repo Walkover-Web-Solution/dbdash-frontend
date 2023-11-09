@@ -125,8 +125,9 @@ function MainNavbar(props) {
               ? "main-navbar-button show-table"
               : "main-navbar-button"
           }
-          component={Link}
-          to={{ pathname: `/apiDoc/db/${dbId}`, state: tableName }}
+          onClick={()=>{
+            navigate(`/apiDoc/db/${dbId}`, {state: tableName});
+          }}
         >
           APIs
         </Button>
