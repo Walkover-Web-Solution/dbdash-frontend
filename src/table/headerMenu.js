@@ -212,14 +212,14 @@ export default function Headermenu(props) {
                </div>
            
             <div onClick={() => { hideColumn(); }} className={classes.menuItem}><VisibilityOffIcon fontSize={variables.iconfontsize1} />Hide Field</div>
-            <div onClick={() => {
-              props?.setOpen(true),
+            <div onClick={(event) => {
+              props?.openPopper(event),
               props?.setDirectionAndId({
               direction: "left",
               position: props?.fields[props?.menu?.col].id})}} 
               className={classes.menuItem}><WestIcon fontSize={variables.iconfontsize1} />Insert Left</div>
-            <div onClick={() => {
-              props?.setOpen(true),
+            <div onClick={(event) => {
+              props?.openPopper(event),
               props?.setDirectionAndId({
               direction: "right",
               position: props?.fields[props?.menu?.col].id})}} 
@@ -259,7 +259,7 @@ export default function Headermenu(props) {
 Headermenu.propTypes = {
   menu: PropTypes.any,
   setMenu: PropTypes.any,
-  setOpen: PropTypes.any,
+  openPopper: PropTypes.any,
   fields: PropTypes.any,
   setDirectionAndId: PropTypes.any,
   submitData: PropTypes.func,
