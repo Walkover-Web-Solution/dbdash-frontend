@@ -175,7 +175,6 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
           copyData: "4",
           data: {
             kind: "date-picker-cell",
-            date: new Date(),
             displayDate: "",
             format: "date",
           },
