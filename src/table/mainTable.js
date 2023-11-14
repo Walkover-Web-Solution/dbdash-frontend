@@ -197,7 +197,7 @@ export default function MainTable(props) {
     setAnchorEl(event.currentTarget)
   }
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
+  const id = open ? 'simple-popover' : undefined;
   
   return (
     <>
@@ -237,7 +237,7 @@ export default function MainTable(props) {
           onColumnMoved={reorder}
           onPaste={true} 
           rightElement={
-            <IconButton aria-label="add" size="medium" aria-describedby={id} type="button" onClick={openPopper}>
+            <IconButton aria-label="add" size="medium" variant="contained" aria-describedby={id} type="button" onClick={openPopper}>
                 <AddIcon fontSize="medium" />
             </IconButton>
           }

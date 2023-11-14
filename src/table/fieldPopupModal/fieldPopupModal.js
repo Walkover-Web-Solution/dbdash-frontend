@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Popper, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
+import { Button, Popover, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
@@ -224,26 +224,19 @@ export default function FieldPopupModal(props) {
   })
   return (
     <div className="fieldPop-main-container">
-      <Popper
+      <Popover
         id = {props?.id}
         anchorEl={props?.anchorEl}
         open={props?.open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-        className="fieldPop-Dialog"
-        modifiers={[
-          {
-            name: 'preventOverflow',
-            enabled: true,
-            options: {
-              // altAxis: true,
-              altBoundary: true,
-              tether: true,
-              rootBoundary: 'document',
-              padding: 40,
-            }
-          }
-        ]}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
       >
        
          <div className="popupheader field-header">    <Typography className="field-textfield" id="title" variant="h6" component="h2">
@@ -351,7 +344,7 @@ export default function FieldPopupModal(props) {
         ) : null}
         </Box>
         </Box>
-      </Popper>
+      </Popover>
     </div>
   );
 }
