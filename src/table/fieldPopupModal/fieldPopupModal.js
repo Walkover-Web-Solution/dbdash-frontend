@@ -223,6 +223,7 @@ export default function FieldPopupModal(props) {
         anchorEl={props?.anchorEl}
         open={props?.open}
         onClose={handleClose}
+        className="fieldPop-Dialog"
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center',
