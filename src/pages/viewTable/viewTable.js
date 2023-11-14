@@ -64,8 +64,8 @@ const ViewTable = () => {
           kind: GridCellKind.Text,
           allowOverlay: true,
           readonly: false,
-          displayData: cellData || "",
-          data: cellData || "",
+          displayData: cellData,
+          data: cellData,
         };
       } else if (dataType === "multipleselect" && cellData != null) {
         return {

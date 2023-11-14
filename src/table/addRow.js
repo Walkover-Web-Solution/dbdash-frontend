@@ -205,8 +205,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
         kind: GridCellKind.Text,
         allowOverlay: true,
         readonly: readOnlyOrNot,
-        displayData: d || "",
-        data: d || "",
+        displayData: d,
+        data: d,
         wrapText: false,
         multiline: false,
       };
