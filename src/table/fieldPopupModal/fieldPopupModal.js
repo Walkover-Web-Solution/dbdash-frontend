@@ -219,7 +219,7 @@ export default function FieldPopupModal(props) {
   const lookupFields = new Set();
   Object.entries(allTableInfo.tables[props.tableId].fields).forEach((field)=>{
     if(field[1]?.metaData?.isLookup){
-      lookupFields.add(field[1].fieldName)
+      lookupFields.add(field[1].fieldName) 
     }
   })
   return (
