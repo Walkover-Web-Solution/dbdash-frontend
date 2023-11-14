@@ -26,7 +26,6 @@ export default function MainTable(props) {
   const dispatch = useDispatch();
   const allFieldsofTable = customUseSelector((state) => state.table.columns);//fields from redux
   const allRowsData = customUseSelector((state) => state.table.data || []); // data from redux
-  const [open, setOpen] = useState(false);
   const [openAttachment, setOpenAttachment] = useState(null);
   const [metaData, setMetaData] = useState({}); // why we need this metaData here 
   const [menu, setMenu] = useState();
@@ -35,6 +34,8 @@ export default function MainTable(props) {
   const [hoveredRow, setHoveredRow] = useState(false);
   const targetColumn = useRef(0); // 
   const readOnlyDataTypes = [ "autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat"];
+  const [anchorEl, setAnchorEl] = useState(null);
+
 
   const emptyselection = {
     columns: CompactSelection.empty(),
@@ -189,6 +190,15 @@ export default function MainTable(props) {
     };
   };
   const getHoveredItemsInfo = (event) => {setHoveredRow(event?.location[1]); };
+  const closePopper = () => {
+    setAnchorEl(null);
+  };
+  const openPopper = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+  
   return (
     <>
       {selection?.rows?.items?.length > 0 && (
@@ -227,7 +237,7 @@ export default function MainTable(props) {
           onColumnMoved={reorder}
           onPaste={true} 
           rightElement={
-            <IconButton aria-label="add" size="medium" onClick={()=>setOpen(true)}>
+            <IconButton aria-label="add" size="medium" variant="contained" aria-describedby={id} type="button" onClick={openPopper}>
                 <AddIcon fontSize="medium" />
             </IconButton>
           }
@@ -243,16 +253,18 @@ export default function MainTable(props) {
           open={open}
           metaData={metaData}
           setMetaData={setMetaData}
-          setOpen={setOpen}
           setDirectionAndId={setDirectionAndId}
           directionAndId={directionAndId}
+          anchorEl = {anchorEl}
+          closePopper = {closePopper}
+          id={id}
         />
       )}
       {menu && (
         <Headermenu
           menu={menu}
           setMenu={setMenu}
-          setOpen={setOpen}
+          openPopper = {openPopper}
           setDirectionAndId={setDirectionAndId}
           fields={fieldsToShow}
         />

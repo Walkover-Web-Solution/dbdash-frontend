@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
+import { Button, Popover, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
@@ -71,7 +71,7 @@ export default function FieldPopupModal(props) {
       props?.directionAndId.direction == "left" ||
       props?.directionAndId.direction == "right"
     ) {
-      props?.setOpen(false);
+      props.closePopper();
       dispatch(
         addColumnrightandleft({
           filterId: params?.filterName,
@@ -105,7 +105,7 @@ export default function FieldPopupModal(props) {
             ?.generated?.expression
           }) STORED;`;
       }
-      props?.setOpen(false);
+      props?.closePopper();
       addColumn(
         dispatch,
         params,
@@ -204,7 +204,7 @@ export default function FieldPopupModal(props) {
   const handleClose = () => {
     setShowLinkField(false);
     setShowLookupField(false);
-    props?.setOpen(false);
+    props?.closePopper();
     setShowFormulaField(false);
     setShowLinkField(false);
     setShowNumericOptions(false);
@@ -218,12 +218,22 @@ export default function FieldPopupModal(props) {
   };
   return (
     <div className="fieldPop-main-container">
-      <Dialog
+      <Popover
+        id = {props?.id}
+        anchorEl={props?.anchorEl}
         open={props?.open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-       className="fieldPop-Dialog"
+        className="fieldPop-Dialog"
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
       >
+       
          <div className="popupheader field-header">    <Typography className="field-textfield" id="title" variant="h6" component="h2">
             create column
           </Typography><CloseIcon className="field-close-icon" onClick={handleClose}/></div>
@@ -304,7 +314,7 @@ export default function FieldPopupModal(props) {
         
           )}
         </DialogContent>
-        <Box className='fieldPop-Dialog '>
+        <Box sx={{m:4}}>
             <Box >
         {selectValue !== "formula" || queryByAi ? (
           <Button
@@ -327,12 +337,12 @@ export default function FieldPopupModal(props) {
         ) : null}
         </Box>
         </Box>
-      </Dialog>
+      </Popover>
     </div>
   );
 }
 FieldPopupModal.propTypes = {
-  setOpen: PropTypes.func,
+  closePopper : PropTypes.func,
   open: PropTypes.bool,
   selectValue: PropTypes.any,
   submitData: PropTypes.func,
@@ -342,5 +352,7 @@ FieldPopupModal.propTypes = {
   selectedTable: PropTypes.any,
   tableId: PropTypes.any,
   directionAndId: PropTypes.any,  
-  setDirectionAndId: PropTypes.any 
+  setDirectionAndId: PropTypes.any, 
+  id : PropTypes.any,
+  anchorEl : PropTypes.any
 };
