@@ -40,8 +40,13 @@ axiosInstance.interceptors.response.use(
     }
     if (error?.response?.status === 405) {
       toast.error("Can't Delete Becuase this Org only one DB")
-    }
-    else{
+    } else if (error?.response?.status === 404) {
+      if(error.response?.data?.message.toLowerCase().indexOf("user") !== -1){
+        toast.error(error.response.data.message);
+      }else{
+        window.location.href = "/notFound";      
+      }
+    } else{
       toast.error(error?.response?.data?.message)
     }
     return new Promise(() => {});
