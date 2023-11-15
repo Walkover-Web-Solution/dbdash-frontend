@@ -30,7 +30,8 @@ import { addColumn } from "../addRow";
 import { CustomSwitch } from "../../muiStyles/muiStyles";
 import CustomTextField from "../../muiStyles/customTextfield";
 import DataObjectIcon from '@mui/icons-material/DataObject';
-
+import { customUseSelector } from '../../store/customUseSelector';
+import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 export default function FieldPopupModal(props) {
   const params = useParams();
   const [showSwitch, setShowSwitch] = useState(false);
@@ -46,8 +47,7 @@ export default function FieldPopupModal(props) {
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [linkedValueName, setLinkedValueName] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
-
-
+  const allTableInfo = customUseSelector((state) => getAllTableInfo(state));
   
   const dispatch = useDispatch();
 
@@ -216,6 +216,12 @@ export default function FieldPopupModal(props) {
     props?.setMetaData({});
     setQueryByAi(false);
   };
+  const lookupFields = new Set();
+  Object.entries(allTableInfo.tables[props.tableId].fields).forEach((field)=>{
+    if(field[1]?.metaData?.isLookup){
+      lookupFields.add(field[1].fieldName)
+    }
+  })
   return (
     <div className="fieldPop-main-container">
       <Popover
@@ -296,6 +302,7 @@ export default function FieldPopupModal(props) {
           />}
           {showLinkField && <LinkDataType selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} />}
           {showLookupField && <LoookupDataType linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} key={selectedTable} tableId={props?.tableId} />}
+          {showLookupField && lookupFields.has(selectedFieldName) && <Typography variant="body2" color="error" fontSize={12}>You can not set lookup for a lookup</Typography>}
           {showSwitch && (
           <FormGroup className="field-textfield">
           <FormControlLabel
@@ -325,7 +332,8 @@ export default function FieldPopupModal(props) {
               errors.fieldName ||
               textValue?.length < 1 ||
               textValue?.length > 30 ||
-              textValue?.includes(" ")
+              textValue?.includes(" ") ||
+              lookupFields.has(selectedFieldName)
             }
             onClick={() => {
               handleClose();
