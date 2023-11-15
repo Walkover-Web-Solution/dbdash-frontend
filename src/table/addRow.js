@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import {GridCellKind} from "@glideapps/glide-data-grid";
 import { addRows, updateCells, addColumsToLeft, updateColumnOrder, addMultipleRows } from "../store/table/tableThunk";
 import debounce from 'lodash.debounce';
@@ -59,15 +58,14 @@ export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, 
   if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) {
     let newdata;
     if (dataType == "datetime") {
-      if (!newValue?.data?.date && newValue?.data?.date != "") {
-        toast.warning("Invalid or undefined date");
-        return;
+      if (!newValue.data?.date) {
+        newdata = null;
+      }else{
+        newdata = newValue.data.date;
       }
-      newdata = newValue?.data?.date;
     } else {
       newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
     }
-   
     let currentupdatedvalue = {
       // "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
       "where": `autonumber = ${currentrow[`autonumber`]}`,
@@ -76,7 +74,9 @@ export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, 
     
     if (dataType == "singleselect") {
       currentupdatedvalue.fields[key] = newValue.data.value;
-    } else {
+    } else if(dataType == "datetime"){
+      currentupdatedvalue.fields[key] = newdata;
+    }else {
       currentupdatedvalue.fields[key] = newdata || newValue?.data || null;
     }
     
@@ -175,7 +175,6 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
           copyData: "4",
           data: {
             kind: "date-picker-cell",
-            date: new Date(),
             displayDate: "",
             format: "date",
           },
