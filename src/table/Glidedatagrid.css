@@ -1,16 +1,25 @@
 /* linaria:data-grid-overlay-editor-style_115vs9w.linaria.css */
-.deleterowbutton{
+.deleterowbutton, .revision-history-button{
   position: absolute !important;
   display: flex !important;
   flex-direction: row !important;
-  right: 1% !important;
-  top: 19.9% !important;
   z-index: 10000 !important;
   background: none !important;
   border: none !important;
   outline: none !important;
   cursor: pointer !important;
- 
+}
+.revision-history-button{
+  right: 1rem !important;
+  top: 19.9% !important;
+}
+.revision-history{
+  margin-top:5px;
+  margin-right:2px;
+}
+.deleterowbutton{
+  right: 12rem !important;
+  top: 19.9% !important;
 }
 .d1t1th9s {
   position: absolute;

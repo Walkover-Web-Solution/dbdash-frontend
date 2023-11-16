@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { CompactSelection, DataEditor } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import HistoryIcon from '@mui/icons-material/History';
 import { deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
 import "./Glidedatagrid.css";
@@ -20,6 +21,7 @@ import variables from "../assets/styling.scss";
 import { customUseSelector } from "../store/customUseSelector";
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import RowHistoryPopup from "../component/rowHistoryPopup/rowHistoryPopup";
 export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
@@ -35,8 +37,7 @@ export default function MainTable(props) {
   const targetColumn = useRef(0); // 
   const readOnlyDataTypes = [ "autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat"];
   const [anchorEl, setAnchorEl] = useState(null);
-
-
+  const [showHistory, setShowHistory] = useState(false);
   const emptyselection = {
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -198,7 +199,9 @@ export default function MainTable(props) {
   }
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  
+  // const index = selection.rows.items[0][1];
+  console.log(selection.rows.items)
+  // console.log(index, allRowsData);
   return (
     <>
       {selection?.rows?.items?.length > 0 && (
@@ -207,6 +210,12 @@ export default function MainTable(props) {
           <div><DeleteOutlineIcon className="deletecolor" /></div>
         </button>
       )}
+      {selection?.rows?.items?.length === 1 && (
+        <button className="fontsize revision-history-button" onClick={()=>{setShowHistory(true)}}>
+          <div className="revision-history">Revision History</div>
+          <div><HistoryIcon/></div>
+        </button>
+        )}
       <div className="table-container" style={{ height: props?.height || `64vh` }}>
         <DataEditor
           {...cellProps}
@@ -278,6 +287,15 @@ export default function MainTable(props) {
           setOpen={setOpenAttachment}
         />
       )}
+      {
+        showHistory && (
+          <RowHistoryPopup
+            setShowHistory = {setShowHistory}
+            open = {showHistory}
+            index = {selection.rows.items[0][1]}
+          />
+        )
+      }
     </>
   );
 }
