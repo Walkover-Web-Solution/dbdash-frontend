@@ -31,16 +31,11 @@ const uploadCSV = async (dbId, tableName, data) => {
     return await axiosInstance.post( `/${dbId}/${tableName}/csvupload`, data)
 }
 
-const getRowHistory = async (dbId, tableName, autoNumber) => {
-    return await axiosInstance.post(`/${dbId}/${tableName}/${autoNumber}/history`)
-}
-
 export {
     insertRow,
     updateRow,
     deleteRow,
     uploadImage,
     uploadCSV,
-    insertMultipleRows,
-    getRowHistory
+    insertMultipleRows
 }
