@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, memo } from "react";
 import { CompactSelection, DataEditor } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
@@ -20,7 +20,11 @@ import variables from "../assets/styling.scss";
 import { customUseSelector } from "../store/customUseSelector";
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-export default function MainTable(props) {
+import HistoryIcon from '@mui/icons-material/History';
+import RowHistoryPopup from "../component/rowHistoryPopup/rowHistoryPopup";
+import { getRowHistory1 } from "../store/allTable/allTableThunk";
+
+function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
@@ -35,7 +39,8 @@ export default function MainTable(props) {
   const targetColumn = useRef(0); // 
   const readOnlyDataTypes = [ "autonumber", "createdat", "createdby", "rowid", "updatedby", "updatedat"];
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const [showHistory, setShowHistory] = useState(false);
+  const [autonumber, setAutonumber] = useState(0);
 
   const emptyselection = {
     columns: CompactSelection.empty(),
@@ -46,11 +51,11 @@ export default function MainTable(props) {
   const [fieldsToShow, setFieldsToShow] = useState(allFieldsofTable || []);
   // const tableInfo = customUseSelector((state) => getTableInfo(state));
   // const tableId = tableInfo?.tableId;
-
+  
   const isSingleCellSelected = useMemo(() => {
     return (selection.current && selection.current.range.height * selection.current.range.width === 1 );
   }, [selection]);
-
+  
   const handleUploadFileClick = useCallback((cell) => {
     if (!allRowsData) return;
     const [col, row] = cell;
@@ -196,11 +201,33 @@ export default function MainTable(props) {
   const openPopper = (event) => {
     setAnchorEl(event.currentTarget)
   }
+  const handleShowHistory = (index) => {
+    setAutonumber(allRowsData[index]['autonumber']);
+  }
+  useEffect(()=>{
+    const {dbId, tableName} = params;
+      if(!showHistory && autonumber > 0){
+        setShowHistory(true);
+        dispatch(getRowHistory1({dbId, autonumber, tableName}))
+      }
+  }, [autonumber])
+  const handleClose = ()=>{
+    setShowHistory(false);
+    setAutonumber(0);
+  }
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   
   return (
     <>
+      {
+        selection?.rows?.items.length === 1 && selection.rows.items[0][0]+1 === selection.rows.items[0][1] && (
+          <button className="fontsize revision-history-button" onClick = {()=>handleShowHistory(selection.rows.items[0][0])}>
+            <div className="revision-history">Revision History</div>
+            <div><HistoryIcon /></div>
+          </button>
+      )}
       {selection?.rows?.items?.length > 0 && (
         <button className="fontsize deleterowbutton" onClick={() => handleDeleteRow(selection)}>
           <div className="deleterows">Delete Rows</div>
@@ -278,6 +305,15 @@ export default function MainTable(props) {
           setOpen={setOpenAttachment}
         />
       )}
+      {
+        showHistory && (
+          <RowHistoryPopup
+              open = {showHistory}
+              handleClose = {handleClose}
+              autonumber = {autonumber}
+          />
+        )
+      }
     </>
   );
 }
@@ -286,3 +322,5 @@ MainTable.propTypes = {
   height: PropTypes.any,
   width: PropTypes.any,
 };
+
+export default memo(MainTable)
