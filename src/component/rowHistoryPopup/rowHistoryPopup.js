@@ -18,8 +18,8 @@ function RowHistoryPopup(props) {
   const tables = customUseSelector((state) => state.tables); // data from redux
   let rowHistory = tables.rowHistory ? [...tables.rowHistory] : []
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <Box className="row-history-dialog">
+    <Dialog className="row-history-dialog" onClose={handleClose} open={open}>
+      <Box>
       <DialogTitle className="row-history-header" variant="h4">
         History of Row {props.autonumber}
         <IconButton onClick={handleClose} className='close-button'>

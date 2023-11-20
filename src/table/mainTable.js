@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, memo } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { CompactSelection, DataEditor } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
@@ -24,7 +24,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import RowHistoryPopup from "../component/rowHistoryPopup/rowHistoryPopup";
 import { getRowHistory1 } from "../store/allTable/allTableThunk";
 
-function MainTable(props) {
+export default function MainTable(props) {
   const params = useParams();
   const cellProps = useExtraCells();
   const dispatch = useDispatch();
@@ -322,5 +322,3 @@ MainTable.propTypes = {
   height: PropTypes.any,
   width: PropTypes.any,
 };
-
-export default memo(MainTable)
