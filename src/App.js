@@ -9,7 +9,7 @@ import DbDetail from './pages/dbDetail/dbDetail';
 import ApiDocPage from './pages/apidocPage';
 import Protected from './component/protected';
 import WithAuth from './component/withAuth';
-import Notfoundpage from './component/notFoundPage';
+import Notfoundpage from './component/notFoundPage/notFoundPage';
 import AuthKeyPage from '../src/pages/authKeyPage/authKeyPage';
 import CreateAuth from './pages/createAuth/createAuth';
 import { ToastContainer } from 'react-toastify';

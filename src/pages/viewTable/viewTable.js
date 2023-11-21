@@ -42,7 +42,7 @@ const ViewTable = () => {
     const column = columns[col];
 
     if (rowData && column) {
-      const cellData = rowData[column.id];
+      let cellData = rowData[column.id];
       const { dataType } = column;
 
       if (dataType === "autonumber") {
@@ -57,14 +57,15 @@ const ViewTable = () => {
         dataType === "createdby" ||
         dataType === "longtext" ||
         dataType === "rowid" || 
-        dataType == "json"
+        dataType === "json"
       ) {
+        cellData = cellData ? (typeof cellData !== "string" &&  dataType === "json" ? JSON.stringify(cellData) : cellData) : "";
         return {
           kind: GridCellKind.Text,
           allowOverlay: true,
           readonly: false,
-          displayData: cellData || "",
-          data: cellData || "",
+          displayData: cellData,
+          data: cellData,
         };
       } else if (dataType === "multipleselect" && cellData != null) {
         return {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
+import { Button, Popover, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import FunctionsIcon from "@mui/icons-material/Functions";
@@ -29,7 +29,9 @@ import { addColumnrightandleft } from "../../store/table/tableThunk";
 import { addColumn } from "../addRow";
 import { CustomSwitch } from "../../muiStyles/muiStyles";
 import CustomTextField from "../../muiStyles/customTextfield";
-
+import DataObjectIcon from '@mui/icons-material/DataObject';
+import { customUseSelector } from '../../store/customUseSelector';
+import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 export default function FieldPopupModal(props) {
   const params = useParams();
   const [showSwitch, setShowSwitch] = useState(false);
@@ -45,8 +47,7 @@ export default function FieldPopupModal(props) {
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [linkedValueName, setLinkedValueName] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
-
-
+  const allTableInfo = customUseSelector((state) => getAllTableInfo(state));
   
   const dispatch = useDispatch();
 
@@ -70,7 +71,7 @@ export default function FieldPopupModal(props) {
       props?.directionAndId.direction == "left" ||
       props?.directionAndId.direction == "right"
     ) {
-      props?.setOpen(false);
+      props.closePopper();
       dispatch(
         addColumnrightandleft({
           filterId: params?.filterName,
@@ -104,7 +105,7 @@ export default function FieldPopupModal(props) {
             ?.generated?.expression
           }) STORED;`;
       }
-      props?.setOpen(false);
+      props?.closePopper();
       addColumn(
         dispatch,
         params,
@@ -203,7 +204,7 @@ export default function FieldPopupModal(props) {
   const handleClose = () => {
     setShowLinkField(false);
     setShowLookupField(false);
-    props?.setOpen(false);
+    props?.closePopper();
     setShowFormulaField(false);
     setShowLinkField(false);
     setShowNumericOptions(false);
@@ -215,14 +216,30 @@ export default function FieldPopupModal(props) {
     props?.setMetaData({});
     setQueryByAi(false);
   };
+  const lookupFields = new Set();
+  Object.entries(allTableInfo.tables[props.tableId].fields).forEach((field)=>{
+    if(field[1]?.metaData?.isLookup){
+      lookupFields.add(field[1].fieldName)
+    }
+  })
   return (
     <div className="fieldPop-main-container">
-      <Dialog
+      <Popover
+        id = {props?.id}
+        anchorEl={props?.anchorEl}
         open={props?.open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-       className="fieldPop-Dialog"
+        className="fieldPop-Dialog"
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
       >
+       
          <div className="popupheader field-header">    <Typography className="field-textfield" id="title" variant="h6" component="h2">
             create column
           </Typography><CloseIcon className="field-close-icon" onClick={handleClose}/></div>
@@ -278,12 +295,14 @@ export default function FieldPopupModal(props) {
             <MenuItem value="singlelinetext"><TextFormatIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single line text</MenuItem>
             <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single select</MenuItem>
             <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> URL</MenuItem> 
+            <MenuItem value="json"><DataObjectIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> JSON</MenuItem>            
           </Select>
           <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
           {showFormulaField && <FormulaDataType setQueryByAi={setQueryByAi} queryByAi={queryByAi} submitData={createLeftorRightColumn}
           />}
           {showLinkField && <LinkDataType selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} />}
           {showLookupField && <LoookupDataType linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} key={selectedTable} tableId={props?.tableId} />}
+          {showLookupField && lookupFields.has(selectedFieldName) && <Typography variant="body2" color="error" fontSize={12}>You can not set lookup for a lookup</Typography>}
           {showSwitch && (
           <FormGroup className="field-textfield">
           <FormControlLabel
@@ -302,7 +321,7 @@ export default function FieldPopupModal(props) {
         
           )}
         </DialogContent>
-        <Box className='fieldPop-Dialog '>
+        <Box sx={{m:4}}>
             <Box >
         {selectValue !== "formula" || queryByAi ? (
           <Button
@@ -313,7 +332,8 @@ export default function FieldPopupModal(props) {
               errors.fieldName ||
               textValue?.length < 1 ||
               textValue?.length > 30 ||
-              textValue?.includes(" ")
+              textValue?.includes(" ") ||
+              lookupFields.has(selectedFieldName)
             }
             onClick={() => {
               handleClose();
@@ -325,12 +345,12 @@ export default function FieldPopupModal(props) {
         ) : null}
         </Box>
         </Box>
-      </Dialog>
+      </Popover>
     </div>
   );
 }
 FieldPopupModal.propTypes = {
-  setOpen: PropTypes.func,
+  closePopper : PropTypes.func,
   open: PropTypes.bool,
   selectValue: PropTypes.any,
   submitData: PropTypes.func,
@@ -340,5 +360,7 @@ FieldPopupModal.propTypes = {
   selectedTable: PropTypes.any,
   tableId: PropTypes.any,
   directionAndId: PropTypes.any,  
-  setDirectionAndId: PropTypes.any 
+  setDirectionAndId: PropTypes.any, 
+  id : PropTypes.any,
+  anchorEl : PropTypes.any
 };
