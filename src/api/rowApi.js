@@ -30,6 +30,9 @@ const uploadImage = async (dbId, tableName, rowId, columnId, fileobj, link) => {
 const uploadCSV = async (dbId, tableName, data) => {
     return await axiosInstance.post( `/${dbId}/${tableName}/csvupload`, data)
 }
+const getRowHistory = async (dbId, tableName, autoNumber) => {
+    return await axiosInstance.get(`/${dbId}/${tableName}/${autoNumber}/history`)
+}
 
 export {
     insertRow,
@@ -37,5 +40,6 @@ export {
     deleteRow,
     uploadImage,
     uploadCSV,
-    insertMultipleRows
+    insertMultipleRows,
+    getRowHistory
 }
