@@ -142,6 +142,7 @@ export default function AddFilterPopup(props) {
         tables: updatedFilter.data.data.tables,
       })
     );
+    props.dispatchFilterData();
     setShowsavebutton(true);
     handleClose();
   };
@@ -290,4 +291,5 @@ AddFilterPopup.propTypes = {
   filterId: PropTypes.any,
   dbData: PropTypes.any,
   // setEdit: PropTypes.func,
+  dispatchFilterData : PropTypes.func
 };
