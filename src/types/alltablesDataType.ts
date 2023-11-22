@@ -10,6 +10,7 @@ export interface AllTableDataType {
   userAcess: UserAcessType;
   userDetail: UsersMapping | {};
   status?: "idle" | "loading" | "succeeded" | "failed";
+  rowHistory ?: Array<any>
 }
 
 //Interface representing the structure of all tables in the database.
