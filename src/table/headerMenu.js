@@ -201,7 +201,7 @@ export default function Headermenu(props) {
               </div>
               <div className={classes.menuItem}>
               {
-              dataType == "link"  &&
+              dataType == "link"  && props?.fields[props?.menu?.col]?.metadata?.foreignKey &&
                <> <span style={{display : "contents"}}> linkedTableId  = {props?.fields[props?.menu?.col]?.metadata?.foreignKey?.tableId} </span>
                    <span style={{display : "contents"}}> linkedFieldId  = {props?.fields[props?.menu?.col]?.metadata?.foreignKey?.fieldId} </span></> }
               {   props?.fields[props?.menu?.col]?.metadata?.isLookup  &&  <>
