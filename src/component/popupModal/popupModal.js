@@ -115,7 +115,7 @@ function PopupModal(props) {
             </div>
           </Box>
           {/* author : rohitmirchandani, changed href link */}
-          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a rel="noreferrer" target="_blank" href='https://dbdash-backend-h7duexlbuq-el.a.run.app/64a3fb1f135d26837027e15e'> click here</a></Typography></Box>
+          {props?.templateoption && <Box className="templateOption"><Typography>To create a base using template <a rel="noreferrer" target="_blank" href= {process.env.REACT_APP_TEMPLATEDB}> click here</a></Typography></Box>
           } <Box className="buttonContainer">
             <Box >
               <Button
