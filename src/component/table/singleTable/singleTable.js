@@ -122,13 +122,13 @@ import ImportCSV from "../../importCSV/importCSV";
   };
   
 
-  const exportCSVTable =  (tableid) => {
+  const exportCSVTable =  async (tableid) => {
     const data = {
       query: "",
       userName: userDetails?.fullName,
       email: userDetails?.email,
     };
-     exportCSV(dbData?.db?._id, tableid, data);
+    await exportCSV(dbData?.db?._id, tableid, data);
     toast.success("Your CSV file has been mailed successfully");
   };
 
