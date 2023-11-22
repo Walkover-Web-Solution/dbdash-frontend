@@ -31,7 +31,7 @@ const CreateTemplatePopup = (props) => {
       const allCategoryResponse = await getAllCategoryName();
       const allCategoryData = allCategoryResponse?.data?.data || [];
       const values = allCategoryData
-        .map((obj) => obj?.fld1yhgjz9fg)
+        .map((obj) => obj?.categoryname)
         .filter((obj) => obj !== null && obj !== '');
       setAllCategory(values);
     };
