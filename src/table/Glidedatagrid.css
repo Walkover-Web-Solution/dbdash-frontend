@@ -3,7 +3,7 @@
   position: absolute !important;
   display: flex !important;
   flex-direction: row !important;
-  z-index: 10000 !important;
+  z-index: 100 !important;
   background: none !important;
   border: none !important;
   outline: none !important;
