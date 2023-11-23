@@ -1,7 +1,7 @@
 import {GridCellKind} from "@glideapps/glide-data-grid";
 import { addRows, updateCells, addColumsToLeft, updateColumnOrder, addMultipleRows } from "../store/table/tableThunk";
-import debounce from 'lodash.debounce';
 import { updatecellbeforeapi } from "../store/table/tableSlice";
+import { toast } from "react-toastify";
 export const addRow = (dispatch) => {
   dispatch(addRows({ type: "add_row" }))
   return;
@@ -18,85 +18,93 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
   }));
   return;
 }
-let valuesArray = [];
-let indexIdMapping = {}
-const updateCellsAfterSomeDelay = debounce(async (dispatch) => {
-  const batchSize = 1000; // Set the batch size to 1000
-  const totalRows = valuesArray.length;
-  for (let i = 0; i < totalRows; i += batchSize) {
-    const batch = valuesArray.slice(i, i + batchSize);
-    dispatch(
-      updateCells({
-        updatedArray: batch,
-        indexIdMapping: indexIdMapping
-      })
-    );
+
+const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list) => {
+  let  updatedArray = []
+  let indexIdMapping = {}
+  let listLength=list.length;
+  for(let i=0;i<listLength;i++)
+  {
+    const {location:cell, value:newValue}=list[i];
+    let currentRow=allRowsData[cell[1]];
+    let fieldId=fields[cell[0]]?.id;
+    let rowAutonumber=currentRow[`autonumber`];
+
+    const dataType=fields[cell[0]]?.dataType;
+    
+    let currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId);
+    let updatedArrayLength=updatedArray.length;
+    let latestElement=updatedArray[updatedArrayLength-1];
+
+    if (!currentupdatedvalue) continue;
+    if([rowAutonumber] in indexIdMapping && updatedArrayLength>0 && latestElement.where==currentupdatedvalue.where)
+    {
+      let obj=latestElement.fields;
+      const[key,value]= Object.entries(currentupdatedvalue.fields)[0];
+      obj[key]=value;
+      updatedArray[updatedArrayLength - 1] = { ...latestElement, fields: obj }; 
+    }
+    else{
+      indexIdMapping[rowAutonumber] = cell[1];
+      updatedArray.push(currentupdatedvalue);
+    }
+    
+    if( (i%1000==0 && i!=0) || i==listLength-1)
+    {
+      dispatch(updateCells({updatedArray,indexIdMapping}));
+      updatedArray = []
+      indexIdMapping = {}
+    }           
   }
-  valuesArray = []
-  indexIdMapping = {}
-}, 300);
-export const editCell = (cell, newValue, dispatch, fields, params, allRowsData, dataType,isSingleCellSelected) => {
-  // const tableId = params?.tableName.substring(3);
-  const fieldId=fields[cell[0]]?.id;
-  const currentrow= allRowsData[cell?.[1] ?? []];
-  const rowAutonumber=currentrow[`autonumber`];
+
+}
+
+export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
+  const cell=list[0].location;
 
   if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
+  const tableId = params?.tableName.substring(3);
 
-  if (fields[cell[0]]?.dataType == "multipleselect") {
-    editmultipleselect(newValue, allRowsData[cell[1]][fieldId] || [], cell,params ,fieldId,dispatch,rowAutonumber);
-
-    return;
-  }
-
-  if (newValue?.readonly == true || newValue?.data == allRowsData[cell[1]][fieldId] ||(!newValue?.data  && !allRowsData[cell[1]][fieldId])) return;
- 
-
-  const col = cell[0];
-  const key = fields[col].id;
-
-  if (currentrow && Object.entries(currentrow)[1] && Object.entries(currentrow)[1][1]) {
-    let newdata;
-    if (dataType == "datetime") {
-      if (!newValue.data?.date) {
-        newdata = null;
-      }else{
-        newdata = newValue.data.date;
-      }
-    } else {
-      newdata = dataType == 'phone' || dataType == 'checkbox' ? newValue?.data?.toString() : newValue?.data;
-    }
-    let currentupdatedvalue = {
-      // "where": `fld${tableId}autonumber = ${currentrow[`fld${tableId}autonumber`]}`,
-      "where": `autonumber = ${currentrow[`autonumber`]}`,
-      "fields": {}
-    };
-    
-    if (dataType == "singleselect") {
-      currentupdatedvalue.fields[key] = newValue.data.value;
-    } else if(dataType == "datetime"){
-      currentupdatedvalue.fields[key] = newdata;
-    }else {
-      currentupdatedvalue.fields[key] = newdata || newValue?.data || null;
-    }
-    
-    valuesArray.push(currentupdatedvalue);
-    // indexIdMapping[currentrow[`fld${tableId}autonumber`]] = cell[1]
-    indexIdMapping[currentrow[`autonumber`]] = cell[1]
   
-    if (isSingleCellSelected==true) {
-      dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentrow }));
-      dispatch(updateCells({
-        updatedArray: [currentupdatedvalue],
-        // indexIdMapping: { [currentrow[`fld${tableId}autonumber`]]: cell[1]},
-        indexIdMapping: { [currentrow[`autonumber`]]: cell[1]},
-        oldData : currentrow[key]
-      }))
-    }
-    else updateCellsAfterSomeDelay(dispatch);
+  if(list.length>1)
+  {
+    updateCellsBatchFunction(dispatch,tableId,allRowsData,fields,list);
+    return ;
+  }
+const newValue=list[0].value;
+  let currentRow=allRowsData[cell[1]];
+  console.log("asdf",currentRow)
+  let fieldId=fields[cell[0]]?.id;
+  let rowAutonumber=currentRow[`autonumber`];
+  if (fields[cell[0]]?.dataType == "multipleselect" ) {
+    editmultipleselect(newValue, currentRow[fieldId] || [], cell,params,tableId, fieldId,dispatch,rowAutonumber);
     return;
   }
+  
+  let currentupdatedvalue=giveCurrentUpdatedValue(fields[cell[0]]?.dataType,newValue,tableId,currentRow,fieldId)
+  if(!currentupdatedvalue) return ;
+  dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentRow }));
+  dispatch(updateCells({
+    updatedArray: [currentupdatedvalue],
+    indexIdMapping: { [rowAutonumber]: cell[1]},
+    oldData : currentRow[fieldId]
+  }))
+  
 }
+const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldId) => {
+  const rowAutonumber = currentRow[`autonumber`];
+  const isDatetime = dataType === "datetime";
+  const isSingleSelect = dataType === "singleselect";
+
+  if (isDatetime && !newValue?.data?.date) { toast.warning("Invalid or undefined date");
+                                             return null;}
+
+  const newdata = isDatetime ? newValue.data.date : (isSingleSelect ? newValue.data.value : newValue.data);
+  const where=`autonumber = ${rowAutonumber}`;
+  const fields=isSingleSelect?{[fieldId]:newdata}:{ [fieldId]: newdata || null };
+  return newdata !== currentRow[fieldId] ? { where, fields} : null;
+};
+
 export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1, filterId, setFields) => {
   const newOrder = Array.from(fields);
   const key = fields[currentIndex].id;
@@ -315,7 +323,7 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispa
   
   if (addedTags.length > 0) {
     updateArray.push({
-      // where: `fld${tableId}autonumber = ${rowIndex}`,
+      // where: `autonumber = ${rowIndex}`,
       where: `autonumber = ${rowIndex}`,
       fields: { [fieldId]: addedTags.map((element) => `'${element}'`).join(",").slice(1,-1) },
     });   
@@ -323,7 +331,7 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispa
   
   if (removedTags.length > 0) {
     updateArray.push({
-      // where: `fld${tableId}autonumber = ${rowIndex}`,
+      // where: `autonumber = ${rowIndex}`,
       where: `autonumber = ${rowIndex}`,
       fields: { [fieldId]: { delete: removedTags } },
     });

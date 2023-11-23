@@ -9,8 +9,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addRow,editCell,getDataExternalFunction,reorderFuncton,} from "./addRow";
-import { useMemo } from "react";
+import { addRow,getDataExternalFunction,reorderFuncton,editCellsInBatch} from "./addRow";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 // import { getTableInfo } from "../store/table/tableSelector";
@@ -52,9 +51,6 @@ export default function MainTable(props) {
   // const tableInfo = customUseSelector((state) => getTableInfo(state));
   // const tableId = tableInfo?.tableId;
   
-  const isSingleCellSelected = useMemo(() => {
-    return (selection.current && selection.current.range.height * selection.current.range.width === 1 );
-  }, [selection]);
   
   const handleUploadFileClick = useCallback((cell) => {
     if (!allRowsData) return;
@@ -122,19 +118,10 @@ export default function MainTable(props) {
     },
     [fieldsToShow, allFieldsofTable]
   );
-  const onCellEdited =(cell, newValue) => {
-      editCell(
-        cell,
-        newValue,
-        dispatch,
-        fieldsToShow,
-        params,
-        allRowsData,
-        fieldsToShow[cell[0]].dataType,
-        isSingleCellSelected
-      );
-    }
-   
+  const onCellsEdited=useCallback((list)=>{
+    editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData);
+  },[fieldsToShow,allRowsData])
+
   const handleColumnResizeWithoutAPI = useCallback((_, newSize, colIndex) => {
     let newarrr = [...(fieldsToShow || allFieldsofTable)];
     let obj = Object.assign({}, newarrr[colIndex]);
@@ -248,7 +235,8 @@ export default function MainTable(props) {
           rowSelectionMode="multi"
           onItemHovered={getHoveredItemsInfo}
           onGridSelectionChange={handlegridselection}
-          onCellEdited={onCellEdited}
+          // onCellEdited={onCellEdited}
+          onCellsEdited={onCellsEdited}
           // validateCell={validateCell}
           onHeaderContextMenu={handleRightClickOnHeader}
           getCellsForSelection={true}
