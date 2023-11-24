@@ -1,52 +1,35 @@
-import React, { useState, useEffect, useRef, memo, useMemo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp/ShareLinkPopUp"
-import { Box, Button, Tabs, IconButton, Menu, MenuItem, CircularProgress, } from "@mui/material";
-import PopupModal from "../../popupModal/popupModal";
+import { Button, Menu, MenuItem } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import FilterModal from "../../filterPopup/filterPopUp";
 import PropTypes from "prop-types";
-import SingleTable from "../singleTable/singleTable";
 import { useNavigate, useParams } from "react-router-dom";
-import AddIcon from "@mui/icons-material/Add";
 import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
-import MainTable from "../../../table/mainTable";
-import { createTable1 } from "../../../store/allTable/allTableThunk";
 import AddFilterPopup from "../../addFilterPopup/addFIlterPopup";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
 import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
-import { createTable, exportCSV } from "../../../api/tableApi";
-import "./tablesList.scss";
 import variables from "../../../assets/styling.scss";
 import { createViewTable } from "../../../api/viewTableApi";
 import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import   {  customUseSelector }  from "../../../store/customUseSelector";
+import { exportCSV } from "../../../api/tableApi";
 
-
- function TablesList({ dbData }) {
+ function TableOptions({ dbData, minimap, setMinimap }) {
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
-  const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const AllTableInfo = customUseSelector((state) => state.tables.tables);
   const dispatch = useDispatch();
   const params = useParams();
 
   const navigate = useNavigate();
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const [open, setOpen] = useState(false);
   const [openn, setOpenn] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleOpenn = () => setOpenn(true);
-  const [edit, setEdit] = useState(false);
-  const buttonRef = useRef(null);
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [link, setLink] = useState("Link");
-  const [minimap, setMinimap] = useState(false);
   const AllTable = customUseSelector((state) => {
     const { tables } = state.tables;
     const { dbId, userAcess, userDetail } = state.tables;
@@ -79,60 +62,22 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
       );
       return params?.filterName;
   }
-  const underLine=useMemo(dispatchFilterData,[params?.filterName])
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const saveTable = async (table_name) => {
-    const data = {
-      tableName: table_name,
-    };
-    setOpen(false);
-    const apiCreate = await createTable(dbData?.db?._id, data);
-
-    await dispatch(createTable1({ tables: apiCreate?.data?.data?.tables }));
-    const matchedKey = Object.keys(apiCreate?.data?.data?.tables).find(
-      (key) => {
-        return apiCreate?.data?.data?.tables[key].tableName === table_name;
-      }
-    );
-    if (matchedKey) {
-      navigate(`/db/${dbData?.db?._id}/table/${matchedKey}`);
-    }
-
-  
-  };
 
   const handleEdit = async () => {
     if (params?.filterName) {
       setOpenn(true);
-      setEdit(true);
     } else {
-      setEdit(false);
       setOpenn(false);
       toast.warning("choose the filter First");
     }
   };
   
-  function onFilterClicked(filter, id) {
-   
-    setFilterId(params?.filterName || id);
-    if (params?.filterName == id) {
-      dispatch(
-        filterData({
-          filterId: id,
-          tableId: params?.tableName,
-          filter: filter,
-          dbId: dbData?.db?._id,
-        })
-      );
-    }
-
-    navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
-  }
   const deleteFilterInDb = async () => {
     const data = {
       filterId: filterId,
@@ -178,10 +123,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     }
   }, [params?.tableName]);
  
-  const handleAddView = async()=>{
-    handleOpenn();
-    setEdit(false);
-  }
   const shareLink = async () => {
     const isViewExits =
       AllTable?.tables?.[params?.tableName]?.filters?.[params?.filterName]
@@ -218,111 +159,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   };
   return (
     <>
-      <div className="tableslist">
-        <Box className="tables-list-container">
-          <Box className="tabs-container">
-            <Tabs
-              value={0}
-              TabIndicatorProps={{
-                style: { display: "none" },
-              }}
-              className={`tabs`}
-              variant="scrollable"
-              scrollButtons={false}
-              aria-label="scrollable auto tabs example"
-            >
-              {AllTableInfo &&
-                Object.entries(AllTableInfo).map((table, index) => (
-                  <SingleTable
-                    table={table}
-                    index={index}
-                    dbData={dbData}
-                    setPage={setPage}
-                    key={index}
-                  />
-                ))}
-            </Tabs>
-            <Button
-              variant="outlined"
-              className="mui-button-outlined add-button"
-              onClick={() => handleOpen()}
-            >
-              <AddIcon />
-            </Button>
-          </Box>
-        </Box>
-        <Box className="tableList-add-view">
-          <div className="tableList-div-1">
-            <div
-              className="tableList-div-2"
-             
-            >
-              {AllTableInfo[params?.tableName]?.filters &&
-                Object.entries(AllTableInfo[params?.tableName]?.filters).map(
-                  (filter, index) => (
-                    <Box key={index} className="custom-box">
-                      <Box
-                        className="filter-box"
-                        onClick={() => {
-                          onFilterClicked(
-                            filter[1].query,
-                            filter[0],
-                            filter[1]
-                          );
-                        }}
-                        sx={{
-                          backgroundColor:
-                            underLine === filter[0]
-                              ? variables.highlightedfilterboxcolor
-                              : variables.filterboxcolor,
-                             
-                        }}
-                        variant="outlined"
-                      >
-                        <div
-                          className="tableList-div-3"
-                         
-                        >
-                          {filter[1]?.filterName.length > 10
-                            ? `${filter[1]?.filterName.slice(0, 6)}...`
-                            : filter[1]?.filterName}
-                        </div>
-                                            <IconButton onClick={(e) =>{
-                                              e.stopPropagation();
-                                              handleClick(e, filter[0])}}>
-                          <MoreVertIcon className="moreverticon" />
-                        </IconButton>
-                        
-
-                      </Box>
-                    </Box>
-                  )
-                )}
-            </div>
-          </div>
-          <Button
-            // onClick={() => handleOpenn()}
-            onClick={()=>{handleAddView()}}
-            variant="outlined"
-            ref={buttonRef}
-            className="mui-button-outlined filter-button custom-button-add-view"
-          >
-            Add View
-          </Button>
-        </Box>
-        {openn && !edit && (
-          <FilterModal
-            dbData={dbData}
-            buttonRef={buttonRef}
-            open={openn}
-            edit={edit}
-            setEdit={setEdit}
-            setOpen={setOpenn}
-            filterId={filterId}
-            dbId={dbData?.db?._id}
-            tableName={params?.tableName}
-          />
-        )}
         <div className="tableList-div-4">
           <div
             className="tableList-div-5"
@@ -374,16 +210,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
             setOpenManageField={setOpenManageField}
           />
         )}
-        {open && (
-          <PopupModal
-            title="Create Table"
-            label="Table Name"
-            open={open}
-            setOpen={setOpen}
-            submitData={saveTable}
-            joiMessage={"Table name"}
-          />
-        )}
 
         <Menu
           anchorEl={anchorEl}
@@ -409,13 +235,10 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
             Delete
           </MenuItem>
         </Menu>
-      </div>
-      {openn && edit && (
+      {openn && (
         <AddFilterPopup
           dbData={dbData}
           open={openn}
-          edit={edit}
-          setEdit={setEdit}
           setOpen={setOpenn}
           filterId={params?.filterName}
           dbId={dbData?.db?._id}
@@ -432,28 +255,12 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
           textvalue={link}
         />
       )}
-      <div style={{ marginTop: "250px" }}>
-     
-        {isTableLoading ? (
-          <div className="table-loading"> <CircularProgress className="table-loading" /></div>
-        ) : (
-          <div>
-            <MainTable setPage={setPage} page={page} minimap={minimap} />
-          </div>
-        )}
-      </div>
     </>
   );
 }
-export default memo(TablesList);
-TablesList.propTypes = {
+export default memo(TableOptions);
+TableOptions.propTypes = {
   dbData: PropTypes.any,
-  table: PropTypes.string,
-  dbId: PropTypes.string,
-  orgId: PropTypes.string,
-  tables: PropTypes.any,
-  dropdown: PropTypes.any,
-  setSelectedTable: PropTypes.any,
-  label: PropTypes.any,
-  setTables: PropTypes.any,
+  minimap : PropTypes.any,
+  setMinimap : PropTypes.func,
 };

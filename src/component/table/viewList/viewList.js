@@ -1,0 +1,161 @@
+import React, { useState, useEffect, useRef, memo, useMemo } from "react";
+import { Box, Button, IconButton, } from "@mui/material";
+import FilterModal from "../../filterPopup/filterPopUp";
+import PropTypes from "prop-types";
+import { useNavigate, useParams } from "react-router-dom";
+import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
+import { useDispatch } from "react-redux";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { setTableLoading } from "../../../store/table/tableSlice";
+import variables from "../../../assets/styling.scss";
+import   {  customUseSelector }  from "../../../store/customUseSelector";
+
+
+ function ViewList({ dbData }) {
+  const AllTableInfo = customUseSelector((state) => state.tables.tables);
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const navigate = useNavigate();
+  const [openn, setOpenn] = useState(false);
+  const handleOpenn = () => setOpenn(true);
+  const buttonRef = useRef(null);
+  const [filterId, setFilterId] = useState("");
+
+
+  const handleClick = (id) => {
+    setFilterId(id);
+  };
+  const dispatchFilterData = ()=>{
+
+    if (!params?.filterName) return null;
+      dispatch(
+        filterData({
+          filterId: params?.filterName,
+          tableId: params?.tableName,
+          filter:
+            AllTableInfo[params?.tableName]?.filters[params?.filterName]?.query,
+          dbId: dbData?.db?._id,
+        })
+      );
+      return params?.filterName;
+  }
+  const underLine=useMemo(dispatchFilterData,[params?.filterName])
+  
+  function onFilterClicked(filter, id) {
+   
+    setFilterId(params?.filterName || id);
+    if (params?.filterName == id) {
+      dispatch(
+        filterData({
+          filterId: id,
+          tableId: params?.tableName,
+          filter: filter,
+          dbId: dbData?.db?._id,
+        })
+      );
+    }
+
+    navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
+  }
+  useEffect(() => {
+    const tableNames = Object.keys(dbData?.db?.tables)||[];
+    dispatch(setTableLoading(true));
+    if (params?.tableName && !params?.filterName) {
+
+      dispatch(
+        bulkAddColumns({
+          dbId: dbData?.db?._id,
+          tableName: params?.tableName || tableNames[0],
+          pageNo: 1,
+        })
+      );
+    }
+    
+    if (!params?.tableName) {
+      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
+    }
+  }, [params?.tableName]);
+ 
+  const handleAddView = async()=>{
+    handleOpenn();
+  }
+  return (
+    <>
+        <Box className="tableList-add-view">
+          <div className="tableList-div-1">
+            <div
+              className="tableList-div-2"
+             
+            >
+              {AllTableInfo[params?.tableName]?.filters &&
+                Object.entries(AllTableInfo[params?.tableName]?.filters).map(
+                  (filter, index) => (
+                    <Box key={index} className="custom-box">
+                      <Box
+                        className="filter-box"
+                        onClick={() => {
+                          onFilterClicked(
+                            filter[1].query,
+                            filter[0],
+                            filter[1]
+                          );
+                        }}
+                        sx={{
+                          backgroundColor:
+                            underLine === filter[0]
+                              ? variables.highlightedfilterboxcolor
+                              : variables.filterboxcolor,
+                             
+                        }}
+                        variant="outlined"
+                      >
+                        <div
+                          className="tableList-div-3"
+                         
+                        >
+                          {filter[1]?.filterName.length > 10
+                            ? `${filter[1]?.filterName.slice(0, 6)}...`
+                            : filter[1]?.filterName}
+                        </div>
+                                            <IconButton onClick={(e) =>{
+                                              e.stopPropagation();
+                                              handleClick(filter[0])}}>
+                          <MoreVertIcon className="moreverticon" />
+                        </IconButton>
+                        
+
+                      </Box>
+                    </Box>
+                  )
+                )}
+            </div>
+          </div>
+          <Button
+            // onClick={() => handleOpenn()}
+            onClick={()=>{handleAddView()}}
+            variant="outlined"
+            ref={buttonRef}
+            className="mui-button-outlined filter-button custom-button-add-view"
+          >
+            Add View
+          </Button>
+        </Box>
+        {openn && (
+          <FilterModal
+            dbData={dbData}
+            buttonRef={buttonRef}
+            open={openn}
+            setOpen={setOpenn}
+            filterId={filterId}
+            dbId={dbData?.db?._id}
+            tableName={params?.tableName}
+          />
+        )}
+    </>
+  );
+}
+export default memo(ViewList);
+ViewList.propTypes = {
+  dbData: PropTypes.any,
+};

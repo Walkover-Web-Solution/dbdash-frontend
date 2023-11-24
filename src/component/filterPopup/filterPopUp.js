@@ -17,7 +17,6 @@ import "./filterPopup.scss";
 import CustomTextField from "../../muiStyles/customTextfield";
 
 const FilterModal = (props) => {
-  console.log(props.open,props.edit,"abc")
   const navigate = useNavigate();
   const filterNameRef = useRef("");
   const dispatch = useDispatch();
@@ -151,8 +150,7 @@ FilterModal.propTypes = {
   tableName: PropTypes.any,
   filterId: PropTypes.any,
   dbData: PropTypes.any,
-  buttonRef: PropTypes.any,
-  edit:PropTypes.any
+  buttonRef: PropTypes.any
 };
 
 export default FilterModal;

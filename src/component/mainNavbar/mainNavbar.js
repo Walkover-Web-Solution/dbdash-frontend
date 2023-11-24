@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import "./mainNavbar.scss";
 import { selectOrgandDb } from "../../store/database/databaseSelector.js";
-import Sharedb from "../table/tablesList/Sharedb.js";
+import Sharedb from "../table/tableAndViewList/Sharedb.js";
 import CreateTemplatePopup from "../workspaceDatabase/createTemplatePopup/createTemplatePopup.js";
 import DbSnapshotsMenu from "./dbSnapshotsMenu/dbSnapshotsMenu.js";
 import { useRef } from "react";

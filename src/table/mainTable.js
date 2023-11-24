@@ -220,7 +220,8 @@ export default function MainTable(props) {
   const id = open ? 'simple-popover' : undefined;
   
   return (
-    <>
+    <div className = "main-table">
+      
       {
         selection?.rows?.items.length === 1 && selection.rows.items[0][0]+1 === selection.rows.items[0][1] && (
           <button className="fontsize revision-history-button" onClick = {()=>handleShowHistory(selection.rows.items[0][0])}>
@@ -314,7 +315,7 @@ export default function MainTable(props) {
           />
         )
       }
-    </>
+    </div>
   );
 }
 MainTable.propTypes = {

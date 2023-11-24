@@ -12,7 +12,7 @@
 }
 .revision-history-button{
   right: 9rem !important;
-  top: 19.9% !important;
+  top : -7% !important;
 }
 .revision-history{
   margin-top:5px;
@@ -20,7 +20,10 @@
 }
 .deleterowbutton{
   right: 1rem !important;
-  top: 19.9% !important;
+  top: -7% !important;
+}
+.main-table{
+  position: relative;
 }
 .d1t1th9s {
   position: absolute;
