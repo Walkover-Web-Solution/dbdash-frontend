@@ -65,7 +65,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
       setAnchorEl(event.currentTarget);
     }
   };
-  const underLine=useMemo(()=>{
+  const dispatchFilterData = ()=>{
 
     if (!params?.filterName) return null;
       dispatch(
@@ -78,7 +78,8 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
         })
       );
       return params?.filterName;
-  },[params?.filterName])
+  }
+  const underLine=useMemo(dispatchFilterData,[params?.filterName])
   const handleClickOpenManageField = () => {
     setOpenManageField(true);
   };
@@ -419,6 +420,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
           filterId={params?.filterName}
           dbId={dbData?.db?._id}
           tableName={params?.tableName}
+          dispatchFilterData = {dispatchFilterData}
         />
       )}
       {shareLinkOpen && (

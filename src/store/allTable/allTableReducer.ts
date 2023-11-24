@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit';
 import { ActionDataType, AllTableDataType , TableDataType, RemoveDbReducerPayloadType} from '../../types/alltablesDataType';
-import { createTable1,updateTable1,getTable1, removeTable1, addDbInUserThunk, updateAccessOfUserInDbThunk, removeDbInUserThunk } from './allTableThunk';
+import { createTable1,updateTable1,getTable1, removeTable1, addDbInUserThunk, updateAccessOfUserInDbThunk, removeDbInUserThunk, getRowHistory1 } from './allTableThunk';
 import { NoInfer } from 'react-redux';
 export const initialState :AllTableDataType= {
   dbId  : "",
@@ -8,7 +8,8 @@ export const initialState :AllTableDataType= {
   orgId :  "", 
   userAcess: {},
   userDetail :{},
-  status : "idle"
+  status : "idle",
+  rowHistory : []
 };
 // import { TableDataType } from '../../types/alltablesDataType';
 
@@ -53,6 +54,16 @@ export function extraReducers(builder: ActionReducerMapBuilder<NoInfer<AllTableD
       .addCase(getTable1.rejected, (state) => {
         state.status = "failed";
     })
+      .addCase(getRowHistory1.pending, (state)=>{
+        state.status = "loading";
+      })
+      .addCase(getRowHistory1.fulfilled, (state, action)=>{
+        state.rowHistory = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(getRowHistory1.rejected, (state)=>{
+        state.status = "failed";
+      })
       .addCase(updateTable1.pending, (state) => {
         state.status = "loading"
     })
