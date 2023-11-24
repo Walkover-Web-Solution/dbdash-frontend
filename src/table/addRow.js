@@ -73,7 +73,6 @@ export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
   }
 const newValue=list[0].value;
   let currentRow=allRowsData[cell[1]];
-  console.log("asdf",currentRow)
   let fieldId=fields[cell[0]]?.id;
   let rowAutonumber=currentRow[`autonumber`];
   if (fields[cell[0]]?.dataType == "multipleselect" ) {

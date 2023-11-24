@@ -119,6 +119,7 @@ export default function MainTable(props) {
     [fieldsToShow, allFieldsofTable]
   );
   const onCellsEdited=useCallback((list)=>{
+    if(!list || list.length===0) return;
     editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData);
   },[fieldsToShow,allRowsData])
 
