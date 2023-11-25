@@ -46,12 +46,12 @@ axiosInstance.interceptors.response.use(
     } else{
       toast.error(error?.response?.data?.message)
     }
-    return new Promise(() => {});
   }
   catch(e)
   {
-    return Promise.reject(e);
+    toast.error(`Error occurred : ${e.message}`);
   }
+  return Promise.reject(error);
 }
 );
 

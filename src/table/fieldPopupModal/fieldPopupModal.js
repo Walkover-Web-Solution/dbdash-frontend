@@ -216,12 +216,9 @@ export default function FieldPopupModal(props) {
     props?.setMetaData({});
     setQueryByAi(false);
   };
-  const lookupFields = new Set();
-  Object.entries(allTableInfo.tables[props.tableId].fields).forEach((field)=>{
-    if(field[1]?.metaData?.isLookup){
-      lookupFields.add(field[1].fieldName)
-    }
-  })
+  const isLookupField = (selectedTable, selectedFieldName)=>{
+    return allTableInfo?.tables?.[selectedTable]?.fields[selectedFieldName]?.metaData?.isLookup;
+  }
   return (
     <div className="fieldPop-main-container">
       <Popover
@@ -302,7 +299,7 @@ export default function FieldPopupModal(props) {
           />}
           {showLinkField && <LinkDataType selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} />}
           {showLookupField && <LoookupDataType linkedValueName={linkedValueName} setLinkedValueName={setLinkedValueName} selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} key={selectedTable} tableId={props?.tableId} />}
-          {showLookupField && lookupFields.has(selectedFieldName) && <Typography variant="body2" color="error" fontSize={12}>You can not set lookup for a lookup</Typography>}
+          {showLookupField && isLookupField(selectedTable, selectedFieldName) && <Typography variant="body2" color="error" fontSize={12}>You can not set lookup for a lookup</Typography>}
           {showSwitch && (
           <FormGroup className="field-textfield">
           <FormControlLabel
@@ -333,7 +330,7 @@ export default function FieldPopupModal(props) {
               textValue?.length < 1 ||
               textValue?.length > 30 ||
               textValue?.includes(" ") ||
-              lookupFields.has(selectedFieldName)
+              isLookupField(selectedTable, selectedFieldName)
             }
             onClick={() => {
               handleClose();
