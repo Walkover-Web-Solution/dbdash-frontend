@@ -311,6 +311,7 @@ export default function MainTable(props) {
               open = {showHistory}
               handleClose = {handleClose}
               autonumber = {autonumber}
+              fields = {allFieldsofTable.filter(field=>!readOnlyDataTypes.includes(field.id))}
           />
         )
       }
