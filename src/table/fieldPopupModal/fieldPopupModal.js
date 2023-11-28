@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Popover, DialogContent, Select, MenuItem, Typography, FormGroup, FormControlLabel, Box } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DateRangeIcon from "@mui/icons-material/DateRange";
@@ -33,6 +33,7 @@ import DataObjectIcon from '@mui/icons-material/DataObject';
 import { customUseSelector } from '../../store/customUseSelector';
 import { getAllTableInfo } from '../../store/allTable/allTableSelector';
 export default function FieldPopupModal(props) {
+  const [metaData, setMetaData] = useState({});
   const params = useParams();
   const [showSwitch, setShowSwitch] = useState(false);
   const [showFormulaField, setShowFormulaField] = useState(false);
@@ -47,8 +48,10 @@ export default function FieldPopupModal(props) {
   const [selectedFieldName, setSelectedFieldName] = useState(false);
   const [linkedValueName, setLinkedValueName] = useState("");
   const [queryByAi, setQueryByAi] = useState(false);
+  const defaultValue = useRef("");
   const allTableInfo = customUseSelector((state) => getAllTableInfo(state));
-  
+  const defaultNumeric = ["phone", "numeric", "decimal"];
+  const defaultText = ["longtext", "Url", "text", "email","singlelinetext","json"];
   const dispatch = useDispatch();
 
   const schema = Joi.object({
@@ -67,6 +70,7 @@ export default function FieldPopupModal(props) {
   });
   const createLeftorRightColumn = () => {
     if(params?.templateId) return;
+    let metaDataMod = {...metaData , ...(defaultValue?.current?.value ? {defaultValue : defaultValue.current.value} : {})};
     if (
       props?.directionAndId.direction == "left" ||
       props?.directionAndId.direction == "right"
@@ -81,7 +85,7 @@ export default function FieldPopupModal(props) {
           fieldType: selectValue,
           direction: props?.directionAndId.direction,
           position: props?.directionAndId.position,
-          metaData: props?.metaData,
+          metaData: metaDataMod,
           selectedTable,
           selectedFieldName: selectedFieldName,
           linkedValueName,
@@ -90,7 +94,7 @@ export default function FieldPopupModal(props) {
       setSelectValue("longtext");
       props?.setDirectionAndId({});
     } else {
-      var data1 = props?.metaData;
+      var data1 = metaDataMod;
       if (selectValue == "link") {
         data1.foreignKey = {
           fieldId: selectedFieldName,
@@ -110,7 +114,7 @@ export default function FieldPopupModal(props) {
         dispatch,
         params,
         selectValue,
-        props?.metaData,
+        metaDataMod,
         textValue,
         selectedTable,
         selectedFieldName,
@@ -122,9 +126,7 @@ export default function FieldPopupModal(props) {
     }
   };
   const handleSwitchChange = (event) => {
-    var data = props?.metaData;
-    data.unique = event.target.checked;
-    props?.setMetaData(data);
+    setMetaData((data) => { return ({...data ,unique: event.target.checked})});
   };
   const handleTextChange = (event) => {
     const { error } = schema.validate({ fieldName: event.target.value });
@@ -143,9 +145,9 @@ export default function FieldPopupModal(props) {
     setShowSwitch(false)
     setSelectedFieldName(false)
     setShowLookupField(false)
-    const data1 = props?.metaData;
+    const data1 = metaData;
     delete data1["unique"];
-    props?.setMetaData(data1);
+    setMetaData(data1);
     if (event.target.value == "formula") {
       setShowFormulaField(true)
       setSelectValue(event.target.value);
@@ -171,9 +173,9 @@ export default function FieldPopupModal(props) {
   
     else if (event.target.value === 'id') {
       setSelectValue('id')
-      var data = props?.metaData;
+      var data = metaData;
       data.unique = "true"
-      props?.setMetaData(data);
+      setMetaData(data);
     }
     else if (event.target.value === 'decimal' && showNumericOptions) {
      setSelectValue('decimal')
@@ -213,7 +215,7 @@ export default function FieldPopupModal(props) {
     setSelectedFieldName(false);
     setSelectValue("longtext");
     setTextValue("");
-    props?.setMetaData({});
+    setMetaData({});
     setQueryByAi(false);
   };
   const isLookupField = (selectedTable, selectedFieldName)=>{
@@ -294,7 +296,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="Url"><LinkIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> URL</MenuItem> 
             <MenuItem value="json"><DataObjectIcon  fontSize={variables.iconfontsize1}  className="field-select-option" /> JSON</MenuItem>            
           </Select>
-          <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={props?.metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
+          <NumberDataType selectValue={selectValue} handleSelectChange={handleSelectChange} metaData={metaData} showNumericOptions={showNumericOptions} showDecimalOptions={showDecimalOptions} />
           {showFormulaField && <FormulaDataType setQueryByAi={setQueryByAi} queryByAi={queryByAi} submitData={createLeftorRightColumn}
           />}
           {showLinkField && <LinkDataType selectedFieldName={selectedFieldName} setSelectedFieldName={setSelectedFieldName} setSelectedTable={setSelectedTable} selectedTable={selectedTable} />}
@@ -305,8 +307,7 @@ export default function FieldPopupModal(props) {
           <FormControlLabel
             control={
               <CustomSwitch
-              
-                checked={props?.metaData?.unique}
+                checked={metaData?.unique || false}
                 onClick={(e) => {
                   handleSwitchChange(e);
                 }}
@@ -317,6 +318,17 @@ export default function FieldPopupModal(props) {
         </FormGroup>
         
           )}
+        {(defaultNumeric.includes(selectValue) || defaultText.includes(selectValue)) && !metaData?.unique && 
+          <label className = "field-default-input">
+            Default Value (optional) : 
+            <input type={defaultNumeric.includes(selectValue) ? "number" : "text"} ref={defaultValue} onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleClose();
+                createLeftorRightColumn();
+              }
+            }}/>
+          </label>
+        }
         </DialogContent>
         <Box sx={{m:4}}>
             <Box >

@@ -26,3 +26,15 @@
 .field-select-option{
     margin-right: 8px!important;
 }
+.field-default-input{
+    display: flex;
+    margin : 10px 0;
+    justify-content: left;
+    align-items: center;
+    input{
+        padding : 5px;
+        margin-left : 5px;
+        height : 1.2rem;
+        width: 100%;
+    }
+}

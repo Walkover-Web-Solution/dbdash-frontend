@@ -31,7 +31,6 @@ export default function MainTable(props) {
   const allFieldsofTable = customUseSelector((state) => state.table.columns);//fields from redux
   const allRowsData = customUseSelector((state) => state.table.data || []); // data from redux
   const [openAttachment, setOpenAttachment] = useState(null);
-  const [metaData, setMetaData] = useState({}); // why we need this metaData here 
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({});
   const [showSearch, setShowSearch] = useState(false);
@@ -278,8 +277,6 @@ export default function MainTable(props) {
           label="Column Name"
           tableId={params?.tableName}
           open={open}
-          metaData={metaData}
-          setMetaData={setMetaData}
           setDirectionAndId={setDirectionAndId}
           directionAndId={directionAndId}
           anchorEl = {anchorEl}
