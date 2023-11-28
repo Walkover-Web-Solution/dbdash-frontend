@@ -587,17 +587,18 @@ export function extraReducers(
       state.status = "succeeded";
     })
     .addCase(updateCells.rejected, (state, payload: any) => {
+      state.status = "failed";
       const action = payload.meta.arg;
       let arr = [...state.data];
       const indexIdMapping = action?.indexIdMapping;
       const updatedArray = action?.updatedArray;
-      const fieldsObject = (Object.values(updatedArray)[0] as any).fields;
+      const fieldsObject = (Object.values(updatedArray)[0] as any)?.fields;
+      if(!fieldsObject) return;
       const fieldsKey = Object.keys(fieldsObject)[0];
       let row = arr[Object.values(indexIdMapping)[0] as any];
       row[fieldsKey] = action?.oldData;
       arr[Object.values(indexIdMapping)[0] as any] = row;
       state.data = arr;
-      state.status = "failed";
     })
 
     .addCase(addRows.pending, (state) => {
