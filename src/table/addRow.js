@@ -1,7 +1,6 @@
 import {GridCellKind} from "@glideapps/glide-data-grid";
 import { addRows, updateCells, addColumsToLeft, updateColumnOrder, addMultipleRows } from "../store/table/tableThunk";
 import { updatecellbeforeapi } from "../store/table/tableSlice";
-import { toast } from "react-toastify";
 export const addRow = (dispatch) => {
   dispatch(addRows({ type: "add_row" }))
   return;
@@ -95,10 +94,8 @@ const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldI
   const isDatetime = dataType === "datetime";
   const isSingleSelect = dataType === "singleselect";
 
-  if (isDatetime && !newValue?.data?.date) { toast.warning("Invalid or undefined date");
-                                             return null;}
-
   const newdata = isDatetime ? newValue.data.date : (isSingleSelect ? newValue.data.value : newValue.data);
+  console.log("dsf",newdata)
   const where=`autonumber = ${rowAutonumber}`;
   const fields=isSingleSelect?{[fieldId]:newdata}:{ [fieldId]: newdata || null };
   return newdata !== currentRow[fieldId] ? { where, fields} : null;
