@@ -114,8 +114,6 @@ const getRowData = async (
     offset: true,
     rows: [],
   } as any;
-  page = 1;
-  while (dataAndPageNo?.offset) {
     const data = await getTable(dbId, tableName, page);
     const obj = data.data.data?.rows || data.data.data;
     obj.map((row) => {
@@ -132,8 +130,7 @@ const getRowData = async (
     });
     dataAndPageNo.offset = data.data.data?.offset;
     dataAndPageNo.rows = [...dataAndPageNo.rows, ...obj];
-    page = page + 1;
-  }
+    dataAndPageNo.pageNo = page;
   // if (tableInfo.tableId == tableName && tableInfo.pageNo < page) {
   //     dataAndPageNo.rows = [...tableInfo.data, ...obj];
   //     return dataAndPageNo;
@@ -172,9 +169,10 @@ export const bulkAddColumns = createAsyncThunk(
       row: data.rows,
       tableId: payload?.tableName,
       dbId: payload?.dbId,
-      pageNo: data?.pageNo,
+      pageNo: data?.pageNo || 1,
       isMoreData: !(data?.offset == null),
       filterId: "",
+      dispatch: dispatch
     };
     dispatch(setTableLoading(false));
     return dataa;

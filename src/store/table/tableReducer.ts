@@ -467,7 +467,7 @@ export function extraReducers(
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
         if (action.payload.columns) state.columns = action.payload.columns;
-        state.data = action.payload.row;
+        state.data = action.payload.pageNo === 1 ? action.payload.row : [...state.data, ...(action.payload.row||[])];
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId;
         state.pageNo = action?.payload?.pageNo
@@ -475,6 +475,15 @@ export function extraReducers(
           : state.pageNo + 1;
         state.isMoreData = action?.payload?.isMoreData;
         state.filterId = action?.payload?.filterId;
+        if(action.payload.isMoreData){
+          setTimeout(()=>{
+            action.payload.dispatch(bulkAddColumns({
+              dbId : action.payload.dbId,
+              tableName: action.payload.tableId,
+              pageNo: action.payload.pageNo + 1
+            }))
+          }, 1)
+        }
         // state.page = 100;
       }
       state.status = "succeeded";
