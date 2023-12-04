@@ -233,7 +233,7 @@ export default function MainTable(props) {
           <div><DeleteOutlineIcon className="deletecolor" /></div>
         </button>
       )}
-      <div className="table-container" style={{ height: props?.height || `64vh` }}>
+      <div className="table-container" style={{ height: props?.height || `74vh` }}>
         <DataEditor
           {...cellProps}
           width={props?.width || window.screen.width}
