@@ -122,7 +122,7 @@ export default function MainTable(props) {
     [fieldsToShow, allFieldsofTable]
   );
   const onCellEdited =(cell, newValue) => {
-      editCell(
+            editCell(
         cell,
         newValue,
         dispatch,
@@ -309,6 +309,7 @@ export default function MainTable(props) {
               handleClose = {handleClose}
               autonumber = {autonumber}
               fields = {allFieldsofTable.filter(field=>!readOnlyDataTypes.includes(field.id))}
+              rowIndex = {selection.rows.items[0][0]}
           />
         )
       }

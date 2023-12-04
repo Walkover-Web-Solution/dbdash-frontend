@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Box,  } from "@mui/material";
+import { Box, Tooltip,  } from "@mui/material";
 import PropTypes from "prop-types";
 import Typography from '@mui/material/Typography';
 import { customUseSelector } from "../../store/customUseSelector";
@@ -14,14 +14,30 @@ import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import {Select} from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
+import UndoIcon from '@mui/icons-material/Undo';
+import { useDispatch } from "react-redux";
+import { updateCells } from "../../store/table/tableThunk";
 
 function RowHistoryPopup(props) {
   const {open , handleClose} = props;
   const tables = customUseSelector((state) => state.tables); // data from redux
+  const rowData = customUseSelector(state => state.table.data[props.rowIndex]);
   let rowHistory = tables.rowHistory ? [...tables.rowHistory] : []
+  const dispatch = useDispatch();
   let allfields = "all#fields";
   let [field, setField] = useState(allfields);
   rowHistory = rowHistory.filter(o=>field === allfields || o.fieldid === field).sort((o1, o2)=>o2['updatedat'] - o1['updatedat']);
+  const revertChange = (fieldId, value)=>{
+    let updatedArray = [{
+      fields : {[fieldId] : value}, 
+      where : `autonumber = ${props.autonumber}`
+    }];
+    dispatch(updateCells({
+      updatedArray, 
+      indexIdMapping : {[props.autonumber] : props.rowIndex }, 
+      oldData : rowData[fieldId]
+    }));
+  }
   return (
     <Dialog 
       onClose={handleClose} open={open}
@@ -74,14 +90,21 @@ function RowHistoryPopup(props) {
                   const time = formatDateTime(history['updatedat']*1000);
                   return (
                     <ListItem className = "edited-item" key={index}>
-                      <Box className="edited-by">
-                        <Typography className="edited-name">{user ? user.first_name + " " + user.last_name : "Deleted User"} edited this record.</Typography>
-                        <Typography className = "edited-time">{time}</Typography>
+                      <Box width="100%">
+                        <Box className="edited-by">
+                          <Typography className="edited-name">{user ? user.first_name + " " + user.last_name : "Deleted User"} edited this record.</Typography>
+                          <Typography className = "edited-time">{time}</Typography>
+                        </Box>
+                        <Box className = "edited-field">
+                          <Typography className="edited-field-id">{history['fieldid']}</Typography>
+                          <Typography className = "edited-value">{history['data'] ? <span>{history['data']}</span> : "null"}</Typography>
+                        </Box>
                       </Box>
-                      <Box className = "edited-field">
-                        <Typography className="edited-field-id">{history['fieldid']}</Typography>
-                        <Typography className = "edited-value">{history['data'] ? <span>{history['data']}</span> : "null"}</Typography>
-                      </Box>
+                      <Tooltip className = "revert-button" title="Revert to this change">
+                        <IconButton size = "large" onClick = {()=>{revertChange(history['fieldid'], history['data'])}}>
+                          <UndoIcon />
+                        </IconButton>
+                      </Tooltip>
                     </ListItem>
                   )
                 })
@@ -107,6 +130,7 @@ RowHistoryPopup.propTypes = {
     handleClose : PropTypes.func,
     open : PropTypes.bool,
     autonumber : PropTypes.number,
-    fields : PropTypes.array
+    fields : PropTypes.array,
+    rowIndex : PropTypes.number,
 };
 export default RowHistoryPopup;
