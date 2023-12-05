@@ -5,8 +5,8 @@ export const addRow = (dispatch) => {
   dispatch(addRows({ type: "add_row" }))
   return;
 }
-export const addMultipleRow = (dispatch, rows)=>{
-  dispatch(addMultipleRows({type:"add_multiple_rows", rows:rows}))
+export const addMultipleRow = (dispatch, rows, fromCSV)=>{
+  dispatch(addMultipleRows({type:"add_multiple_rows", rows:rows, fromCSV:fromCSV}))
 }
 export const addColumn = (dispatch, params, selectValue, metaData, textValue, selectedTable, selectedFieldName, linkedValueName, queryToSend, userQuery) => {
   dispatch(addColumsToLeft({

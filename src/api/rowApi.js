@@ -6,7 +6,7 @@ const insertRow = async (db_id, tableName) => {
 
 }
 const insertMultipleRows = async (db_id, tableName, rows) => {
-    return await axiosInstance.post(`dbs/${db_id}/${tableName}/csvupload`, {"records":rows})
+    return await axiosInstance.post(`${db_id}/${tableName}`, {"records":rows})
 }
 
 const updateRow = async (db_id, tableName, data) => {
@@ -27,8 +27,8 @@ const uploadImage = async (dbId, tableName, rowId, columnId, fileobj, link) => {
         }
     });
 }
-const uploadCSV = async (dbId, tableName, data) => {
-    return await axiosInstance.post( `/${dbId}/${tableName}/csvupload`, data)
+const uploadCSV = async (dbId, tableName, rows) => {
+    return await axiosInstance.post(`dbs/${dbId}/${tableName}/csvupload`, {"records":rows})
 }
 const getRowHistory = async (dbId, tableName, autoNumber) => {
     return await axiosInstance.get(`/${dbId}/${tableName}/${autoNumber}/history`)
