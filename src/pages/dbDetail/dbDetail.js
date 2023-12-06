@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
-import TablesList from "../../component/table/tablesList/tablesAndViews";
+import TablesAndViews from "../../component/table/tablesList/tablesAndViews";
 import MainNavbar from "../../component/mainNavbar/mainNavbar";
 import { getDbById } from "../../api/dbApi";
 import { useDispatch } from "react-redux";
@@ -39,7 +39,7 @@ function DbDetails() {
         <MainNavbar dbData={dbData} />
       </Box>
       <Box className="db-detail-table-list-box">
-        {dbData && <TablesList dbData={dbData} />}
+        {dbData && <TablesAndViews dbData={dbData} />}
       </Box>
     </>
   );

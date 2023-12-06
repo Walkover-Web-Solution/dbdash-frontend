@@ -13,7 +13,7 @@ import TableOptions from "./tableOptions";
 import { CircularProgress } from "@mui/material";
 
 
- function TablesList({ dbData }) {
+ function TablesAndViews({ dbData }) {
   const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
@@ -81,8 +81,8 @@ import { CircularProgress } from "@mui/material";
     </>
   );
 }
-export default memo(TablesList);
-TablesList.propTypes = {
+export default memo(TablesAndViews);
+TablesAndViews.propTypes = {
   dbData: PropTypes.any,
   table: PropTypes.string,
   dbId: PropTypes.string,
