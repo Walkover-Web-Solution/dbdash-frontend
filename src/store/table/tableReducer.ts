@@ -475,15 +475,6 @@ export function extraReducers(
           : state.pageNo + 1;
         state.isMoreData = action?.payload?.isMoreData;
         state.filterId = action?.payload?.filterId;
-        if(action.payload.isMoreData){
-          setTimeout(()=>{
-            action.payload.dispatch(bulkAddColumns({
-              dbId : action.payload.dbId,
-              tableName: action.payload.tableId,
-              pageNo: action.payload.pageNo + 1
-            }))
-          }, 1)
-        }
         // state.page = 100;
       }
       state.status = "succeeded";

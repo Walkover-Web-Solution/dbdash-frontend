@@ -171,10 +171,16 @@ export const bulkAddColumns = createAsyncThunk(
       dbId: payload?.dbId,
       pageNo: data?.pageNo || 1,
       isMoreData: !(data?.offset == null),
-      filterId: "",
-      dispatch: dispatch
+      filterId: ""
     };
     dispatch(setTableLoading(false));
+    if(dataa.isMoreData) {
+      dispatch(bulkAddColumns({
+        dbId: payload?.dbId,
+        tableName : payload?.tableName,
+        pageNo: dataa.pageNo + 1
+      }))
+    }
     return dataa;
   }
 );
