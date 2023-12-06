@@ -17,32 +17,32 @@ const getOrgById = async (id) =>
     return await axiosInstance.get(`/orgs/${id}`);
 }
 
-const addUserInOrg = async (id, adminId, data) =>
+const addUserInOrg = async (id, data) =>
 {
-    const okk=  await axiosInstance.patch( `/orgs/${id}/${adminId}/handleUser?operation=add`,data);
+    const okk=  await axiosInstance.patch( `/orgs/${id}/handleUser?operation=add`,data);
     return okk;
 }
 
-const updateUserType = async (id, adminId, data) =>
+const updateUserType = async (id, data) =>
 {
-    return  await axiosInstance.patch( `/orgs/${id}/${adminId}/handleUser?operation=update`,data)  
+    return  await axiosInstance.patch( `/orgs/${id}/handleUser?operation=update`,data)  
 }
 
 
 
-const updateOrg = async (id ,data,userId) =>
+const updateOrg = async (id ,data) =>
 {
-    return await axiosInstance.patch( `/orgs/${id}/${userId}`,data)
+    return await axiosInstance.patch( `/orgs/${id}`,data)
 }
 
-const removeUserInOrg = async (id ,adminId, data) =>
+const removeUserInOrg = async (id, data) =>
 {
-    return await axiosInstance.patch( `/orgs/${id}/${adminId}/handleUser?operation=remove`,data)
+    return await axiosInstance.patch( `/orgs/${id}/handleUser?operation=remove`,data)
 }    
 
-const deleteOrg = async (id,userId)=>
+const deleteOrg = async (id)=>
 {
-    return await axiosInstance.delete( `/orgs/${id}/${userId}`)
+    return await axiosInstance.delete( `/orgs/${id}/`)
 }
 
 

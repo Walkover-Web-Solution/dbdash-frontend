@@ -6,7 +6,7 @@ import {
   updateField,
 } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
-import { insertRow, uploadImage, updateRow, deleteRow, insertMultipleRows } from "../../api/rowApi";
+import { insertRow, uploadImage, updateRow, deleteRow, insertMultipleRows, uploadCSV } from "../../api/rowApi";
 import {
   addOptionToColumn,
   setTableLoading,
@@ -587,12 +587,16 @@ export const addRows = createAsyncThunk(
 );
 export const addMultipleRows = createAsyncThunk(
   "table/addMultipleRows",
-  async (payload:{rows: Array<any>}, {getState}:{getState:any}) => {
+  async (payload:{rows: Array<any>, fromCSV:boolean}, {getState}:{getState:any}) => {
     const userInfo = allOrg(getState());
     const {tableId, dbId} = getState().table;
-    const newRows = await insertMultipleRows(dbId, tableId, payload.rows);
-    
-      userInfo.forEach((obj) => {
+    let newRows:any;
+    if(payload.fromCSV){
+      newRows = await uploadCSV(dbId, tableId, payload.rows);
+    }else{
+      newRows = await insertMultipleRows(dbId, tableId, payload.rows);
+    }
+     userInfo.forEach((obj) => {
         obj.users.forEach((user) => {
           if (user?.user_id?._id == newRows?.data?.data[0]?.["createdby"]) {
             for(let i in newRows.data.data){

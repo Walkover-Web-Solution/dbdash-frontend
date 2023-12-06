@@ -22,7 +22,7 @@ function ImportCSV ({table, showImportCSV, setShowImportCSV}) {
         <div className="import-csv-div">
           <Importer
               dataHandler = {async(rows) => {
-                addMultipleRow(dispatch, rows);
+                addMultipleRow(dispatch, rows, true);
               }}
               onStart={({ file }) => {
                 const extension = file.path.split('.').pop();
