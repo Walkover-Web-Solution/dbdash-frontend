@@ -98,6 +98,7 @@ export const OrgList = (props) => {
     }
     if(allorgss.some((org)=>org.name == orgName)){
       toast.error("Workspace name already exists");
+      return;
     }
     const userid = localStorage.getItem("userid");
     const data = {
@@ -114,8 +115,8 @@ export const OrgList = (props) => {
       email: email,
       user_type: user_type
     }
-    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, data: data })).then(()=>{
-      showSuccess();  // author : rohitmirchandani, to show message only on success
+    dispatch(shareUserInOrgThunk({ orgId: props?.orgId, adminId: adminId, data: data })).then((res)=>{
+      if(!res.error) showSuccess(); 
     })
   }
   const removeUserFromWorkspace = async (email) => {
