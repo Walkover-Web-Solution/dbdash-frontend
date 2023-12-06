@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { CompactSelection, DataEditor } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
+import {deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
 import "./Glidedatagrid.css";
 import "../../src/App.scss";
@@ -9,8 +9,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addRow,editCell,getDataExternalFunction,reorderFuncton,} from "./addRow";
-import { useMemo } from "react";
+import { addRow,getDataExternalFunction,reorderFuncton,editCellsInBatch, addMultipleRow} from "./addRow";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 // import { getTableInfo } from "../store/table/tableSelector";
@@ -51,9 +50,6 @@ export default function MainTable(props) {
   // const tableInfo = customUseSelector((state) => getTableInfo(state));
   // const tableId = tableInfo?.tableId;
   
-  const isSingleCellSelected = useMemo(() => {
-    return (selection.current && selection.current.range.height * selection.current.range.width === 1 );
-  }, [selection]);
   
   const handleUploadFileClick = useCallback((cell) => {
     if (!allRowsData) return;
@@ -121,19 +117,11 @@ export default function MainTable(props) {
     },
     [fieldsToShow, allFieldsofTable]
   );
-  const onCellEdited =(cell, newValue) => {
-            editCell(
-        cell,
-        newValue,
-        dispatch,
-        fieldsToShow,
-        params,
-        allRowsData,
-        fieldsToShow[cell[0]].dataType,
-        isSingleCellSelected
-      );
-    }
-   
+  const onCellsEdited=useCallback((list)=>{
+    if(!list || list.length===0) return;
+    editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData);
+  },[fieldsToShow,allRowsData])
+
   const handleColumnResizeWithoutAPI = useCallback((_, newSize, colIndex) => {
     let newarrr = [...(fieldsToShow || allFieldsofTable)];
     let obj = Object.assign({}, newarrr[colIndex]);
@@ -214,6 +202,21 @@ export default function MainTable(props) {
     setShowHistory(false);
     setAutonumber(0);
   }
+  const onPaste = (target, values)=>{
+    const fields = fieldsToShow.slice(target[0], target[0]+values[0].length).map(field => field.title);
+    console.log(fields);
+    const rows = [];
+    for(let i = allRowsData.length-target[1];i < values.length;i++){
+        console.log(values[i]);
+        const row = {};
+        for(let field in fields){
+          row[fields[field]] = values[i][field];
+        }
+        rows.push(row);
+    }
+    addMultipleRow(dispatch, rows);
+    return true;
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -233,7 +236,7 @@ export default function MainTable(props) {
           <div><DeleteOutlineIcon className="deletecolor" /></div>
         </button>
       )}
-      <div className="table-container" style={{ height: props?.height || `64vh` }}>
+      <div className="table-container" style={{ height: props?.height || `74vh` }}>
         <DataEditor
           {...cellProps}
           width={props?.width || window.screen.width}
@@ -247,7 +250,8 @@ export default function MainTable(props) {
           rowSelectionMode="multi"
           onItemHovered={getHoveredItemsInfo}
           onGridSelectionChange={handlegridselection}
-          onCellEdited={onCellEdited}
+          // onCellEdited={onCellEdited}
+          onCellsEdited={onCellsEdited}
           // validateCell={validateCell}
           onHeaderContextMenu={handleRightClickOnHeader}
           getCellsForSelection={true}
@@ -261,7 +265,7 @@ export default function MainTable(props) {
           headerIcons={headerIcons}
           showMinimap={props?.minimap}
           onColumnMoved={reorder}
-          onPaste={true} 
+          onPaste={onPaste} 
           rightElement={
             <IconButton aria-label="add" size="medium" variant="contained" aria-describedby={id} type="button" onClick={openPopper}>
                 <AddIcon fontSize="medium" />
