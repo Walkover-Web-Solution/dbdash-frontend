@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import UndoIcon from '@mui/icons-material/Undo';
 import { useDispatch } from "react-redux";
 import { updateCells } from "../../store/table/tableThunk";
+import { toast } from "react-toastify"
 
 function RowHistoryPopup(props) {
   const {open , handleClose} = props;
@@ -26,8 +27,12 @@ function RowHistoryPopup(props) {
   const dispatch = useDispatch();
   let allfields = "all#fields";
   let [field, setField] = useState(allfields);
-  rowHistory = rowHistory.filter(o=>field === allfields || o.fieldid === field).sort((o1, o2)=>o2['updatedat'] - o1['updatedat']);
+  rowHistory = rowHistory.filter(row => field === allfields || row.fieldid === field);
   const revertChange = (fieldId, value)=>{
+    if(rowData[fieldId] == value){
+      toast.info(`${fieldId} is already set to the desired value.`)
+      return;
+    }
     let updatedArray = [{
       fields : {[fieldId] : value}, 
       where : `autonumber = ${props.autonumber}`
@@ -36,7 +41,11 @@ function RowHistoryPopup(props) {
       updatedArray, 
       indexIdMapping : {[props.autonumber] : props.rowIndex }, 
       oldData : rowData[fieldId]
-    }));
+    })).then((res)=>{
+      if(!res.error){
+        toast.success(`Updated ${fieldId} successfully`);
+      }
+    });
   }
   return (
     <Dialog 

@@ -515,7 +515,7 @@ export const updateCells = createAsyncThunk(
   "table/updateCells",
   async (payload: UpdateColumnHeaderTypes, { getState }: { getState: any }) => {
     const { tableId, dbId } = getState().table;
-        const value = payload?.value;
+    const value = payload?.value;
     const columnId = payload?.columnId;
     const userInfo = allOrg(getState());
     if (payload?.dataTypes == "file") {
