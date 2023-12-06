@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { CompactSelection, DataEditor } from "@glideapps/glide-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
+import {deleteRows, updateColumnHeaders } from "../store/table/tableThunk";
 import PropTypes from "prop-types";
 import "./Glidedatagrid.css";
 import "../../src/App.scss";
@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "./style.css";
 import FieldPopupModal from "./fieldPopupModal/fieldPopupModal";
-import { addRow,getDataExternalFunction,reorderFuncton,editCellsInBatch} from "./addRow";
+import { addRow,getDataExternalFunction,reorderFuncton,editCellsInBatch, addMultipleRow} from "./addRow";
 import Headermenu from "./headerMenu";
 import { useExtraCells } from "@glideapps/glide-data-grid-cells";
 // import { getTableInfo } from "../store/table/tableSelector";
@@ -202,6 +202,21 @@ export default function MainTable(props) {
     setShowHistory(false);
     setAutonumber(0);
   }
+  const onPaste = (target, values)=>{
+    const fields = fieldsToShow.slice(target[0], target[0]+values[0].length).map(field => field.title);
+    console.log(fields);
+    const rows = [];
+    for(let i = allRowsData.length-target[1];i < values.length;i++){
+        console.log(values[i]);
+        const row = {};
+        for(let field in fields){
+          row[fields[field]] = values[i][field];
+        }
+        rows.push(row);
+    }
+    addMultipleRow(dispatch, rows);
+    return true;
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -250,7 +265,7 @@ export default function MainTable(props) {
           headerIcons={headerIcons}
           showMinimap={props?.minimap}
           onColumnMoved={reorder}
-          onPaste={true} 
+          onPaste={onPaste} 
           rightElement={
             <IconButton aria-label="add" size="medium" variant="contained" aria-describedby={id} type="button" onClick={openPopper}>
                 <AddIcon fontSize="medium" />
