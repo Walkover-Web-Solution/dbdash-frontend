@@ -467,7 +467,7 @@ export function extraReducers(
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
         if (action.payload.columns) state.columns = action.payload.columns;
-        state.data = action.payload.row;
+        state.data = action.payload.pageNo === 1 ? action.payload.row : [...state.data, ...(action.payload.row||[])];
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId;
         state.pageNo = action?.payload?.pageNo
