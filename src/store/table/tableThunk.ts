@@ -148,7 +148,7 @@ export const addColumns = createAsyncThunk(
 );
 export const bulkAddColumns = createAsyncThunk(
   "table/bulkAddColumns",
-  async (payload: BulkAddColumnsTypes, { getState, dispatch }) => {
+  async (payload: BulkAddColumnsTypes, { getState, dispatch } : {getState : Function, dispatch : Function}) => {
     let columns;
       columns = await getHeaders(
         payload.dbId,
@@ -174,7 +174,8 @@ export const bulkAddColumns = createAsyncThunk(
       filterId: ""
     };
     dispatch(setTableLoading(false));
-    if(dataa.isMoreData) {
+    let getMoreData = dataa.isMoreData && (dataa.pageNo === 1 || (getState().table.pageNo + 1 === dataa.pageNo && getState().table.tableId === payload.tableName));
+    if(getMoreData) {
       dispatch(bulkAddColumns({
         dbId: payload?.dbId,
         tableName : payload?.tableName,
@@ -186,7 +187,7 @@ export const bulkAddColumns = createAsyncThunk(
 );
 export const filterData = createAsyncThunk(
   "table/bulkAddColumns",
-  async (payload: FilterDataTypes, { getState, dispatch }) => {
+  async (payload: FilterDataTypes, { getState, dispatch }: {getState : Function, dispatch : Function}) => {
     var filterQuery;
     const table = getAllTableInfo(getState())?.tables?.[payload?.tableId];
     const filter = table?.filters?.[payload?.filterId];
@@ -259,8 +260,9 @@ export const filterData = createAsyncThunk(
       // "isMoreData": !(querydata?.data?.data?.offset == null),
       filterId: payload?.filterId,
     };
+    let getMoreData = offset && (page === 1 || (getState().table.pageNo + 1 === dataa.pageNo && getState().table.filterId === payload.filterId));
     dispatch(setTableLoading(false));
-    if(offset){
+    if(getMoreData){
       dispatch(filterData({
         filterId : payload.filterId,
         tableId : payload.tableId,
