@@ -227,7 +227,6 @@ export const filterData = createAsyncThunk(
     var rows = querydata?.data?.data?.rows || [];
     let offset = !!querydata?.data?.data?.offset;
     
-    // }
     let columns = {};
     fieldArrayInFilter?.forEach((id) => {
       columns[id] = table?.fields?.[id];
