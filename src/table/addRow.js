@@ -75,7 +75,7 @@ const newValue=list[0].value;
   let fieldId=fields[cell[0]]?.id;
   let rowAutonumber=currentRow[`autonumber`];
   if (fields[cell[0]]?.dataType == "multipleselect" ) {
-    editmultipleselect(newValue, currentRow[fieldId] || [], cell,params,tableId, fieldId,dispatch,rowAutonumber);
+    editmultipleselect(newValue, currentRow[fieldId] || [], cell,params, fieldId,dispatch,rowAutonumber);
     return;
   }
   
