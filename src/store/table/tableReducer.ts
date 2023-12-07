@@ -573,7 +573,7 @@ export function extraReducers(
       let arr = [...state.data];
       // const autonumberId = "fld" + state.tableId.substring(3) + "autonumber";
       const indexIdMapping = action?.indexIdMapping;
-      action?.newData?.forEach((row) => {
+        action?.newData?.forEach((row) => {
         arr[indexIdMapping[row?.["autonumber"]]] = row;
       });
       if (action?.dataTypes == "file") {
