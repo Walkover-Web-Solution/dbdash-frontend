@@ -7,7 +7,6 @@
     margin: 16px !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 .field-header{
     margin-bottom: 5%!important;
@@ -25,4 +24,16 @@
 }
 .field-select-option{
     margin-right: 8px!important;
+}
+.field-default-input{
+    display: flex;
+    margin : 10px 0;
+    justify-content: left;
+    align-items: center;
+    input{
+        padding : 5px;
+        margin-left : 5px;
+        height : 1.2rem;
+        width: 100%;
+    }
 }

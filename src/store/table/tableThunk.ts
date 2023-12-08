@@ -6,7 +6,7 @@ import {
   updateField,
 } from "../../api/fieldApi";
 import { getTable } from "../../api/tableApi";
-import { insertRow, uploadImage, updateRow, deleteRow, insertMultipleRows } from "../../api/rowApi";
+import { insertRow, uploadImage, updateRow, deleteRow, insertMultipleRows, uploadCSV } from "../../api/rowApi";
 import {
   addOptionToColumn,
   setTableLoading,
@@ -114,8 +114,6 @@ const getRowData = async (
     offset: true,
     rows: [],
   } as any;
-  page = 1;
-  while (dataAndPageNo?.offset) {
     const data = await getTable(dbId, tableName, page);
     const obj = data.data.data?.rows || data.data.data;
     obj.map((row) => {
@@ -132,8 +130,7 @@ const getRowData = async (
     });
     dataAndPageNo.offset = data.data.data?.offset;
     dataAndPageNo.rows = [...dataAndPageNo.rows, ...obj];
-    page = page + 1;
-  }
+    dataAndPageNo.pageNo = page;
   // if (tableInfo.tableId == tableName && tableInfo.pageNo < page) {
   //     dataAndPageNo.rows = [...tableInfo.data, ...obj];
   //     return dataAndPageNo;
@@ -151,7 +148,7 @@ export const addColumns = createAsyncThunk(
 );
 export const bulkAddColumns = createAsyncThunk(
   "table/bulkAddColumns",
-  async (payload: BulkAddColumnsTypes, { getState, dispatch }) => {
+  async (payload: BulkAddColumnsTypes, { getState, dispatch } : {getState : Function, dispatch : Function}) => {
     let columns;
       columns = await getHeaders(
         payload.dbId,
@@ -172,17 +169,25 @@ export const bulkAddColumns = createAsyncThunk(
       row: data.rows,
       tableId: payload?.tableName,
       dbId: payload?.dbId,
-      pageNo: data?.pageNo,
+      pageNo: data?.pageNo || 1,
       isMoreData: !(data?.offset == null),
-      filterId: "",
+      filterId: ""
     };
     dispatch(setTableLoading(false));
+    let getMoreData = dataa.isMoreData && (dataa.pageNo === 1 || (getState().table.pageNo + 1 === dataa.pageNo && getState().table.tableId === payload.tableName));
+    if(getMoreData) {
+      dispatch(bulkAddColumns({
+        dbId: payload?.dbId,
+        tableName : payload?.tableName,
+        pageNo: dataa.pageNo + 1
+      }))
+    }
     return dataa;
   }
 );
 export const filterData = createAsyncThunk(
   "table/bulkAddColumns",
-  async (payload: FilterDataTypes, { getState, dispatch }) => {
+  async (payload: FilterDataTypes, { getState, dispatch }: {getState : Function, dispatch : Function}) => {
     var filterQuery;
     const table = getAllTableInfo(getState())?.tables?.[payload?.tableId];
     const filter = table?.filters?.[payload?.filterId];
@@ -203,40 +208,30 @@ export const filterData = createAsyncThunk(
     );
     // const createdby = "fld" + payload?.tableId.substring(3) + "createdby";
 
-    var offset = true;
-    var rows: any = [];
-    var page = 1;
-    while (offset) {
-      const querydata = await runQueryonTable(
-        payload.dbId,
-        payload?.tableId,
-        payload?.filterId,
-        filterQuery,
-        page
-      );
-      querydata?.data?.data?.rows &&
-        querydata?.data?.data?.rows?.map((row) => {
-          row["createdby"] = userJson?.[row["createdby"]]
-            ? userJson?.[row["createdby"]]?.first_name +
-              " " +
-              userJson?.[row["createdby"]]?.last_name
-            : row["createdby"];
-        });
-      const obj = querydata?.data?.data?.rows;
-      offset = !!querydata?.data?.data?.offset;
-      rows = [...rows, ...obj];
-      page = page + 1;
-    }
+    var page = payload?.pageNo || 1;
+    const querydata = await runQueryonTable(
+      payload.dbId,
+      payload?.tableId,
+      payload?.filterId,
+      filterQuery,
+      page
+    );
+    querydata?.data?.data?.rows &&
+      querydata?.data?.data?.rows?.map((row) => {
+        row["createdby"] = userJson?.[row["createdby"]]
+          ? userJson?.[row["createdby"]]?.first_name +
+            " " +
+            userJson?.[row["createdby"]]?.last_name
+          : row["createdby"];
+      });
+    var rows = querydata?.data?.data?.rows || [];
+    let offset = !!querydata?.data?.data?.offset;
+    
     let columns = {};
-    // const viewFields =table.view?.fields || {}//views fields
     fieldArrayInFilter?.forEach((id) => {
       columns[id] = table?.fields?.[id];
     });
-    // if(!fieldArrayInFilter)
-    // {
     columns = { ...table?.fields };
-    // }
-
     filterFields &&
       Object.entries(filterFields).map((entry: any) => {
         const id = entry[0];
@@ -260,11 +255,22 @@ export const filterData = createAsyncThunk(
       row: rows,
       tableId: payload?.tableId,
       dbId: payload?.dbId,
-      // "pageNo": querydata?.data?.data?.pageNo,
+      pageNo: page,
       // "isMoreData": !(querydata?.data?.data?.offset == null),
       filterId: payload?.filterId,
     };
+    let getMoreData = offset && (page === 1 || (getState().table.pageNo + 1 === dataa.pageNo && getState().table.filterId === payload.filterId));
     dispatch(setTableLoading(false));
+    if(getMoreData){
+      dispatch(filterData({
+        filterId : payload.filterId,
+        tableId : payload.tableId,
+        filter : payload.filter,
+        org_id : payload.org_id,
+        pageNo : page+1 ,
+        dbId : payload.dbId
+      }))
+    }
     return dataa;
   }
 );
@@ -589,12 +595,16 @@ export const addRows = createAsyncThunk(
 );
 export const addMultipleRows = createAsyncThunk(
   "table/addMultipleRows",
-  async (payload:{rows: Array<any>}, {getState}:{getState:any}) => {
+  async (payload:{rows: Array<any>, fromCSV:boolean}, {getState}:{getState:any}) => {
     const userInfo = allOrg(getState());
     const {tableId, dbId} = getState().table;
-    const newRows = await insertMultipleRows(dbId, tableId, payload.rows);
-    
-      userInfo.forEach((obj) => {
+    let newRows:any;
+    if(payload.fromCSV){
+      newRows = await uploadCSV(dbId, tableId, payload.rows);
+    }else{
+      newRows = await insertMultipleRows(dbId, tableId, payload.rows);
+    }
+     userInfo.forEach((obj) => {
         obj.users.forEach((user) => {
           if (user?.user_id?._id == newRows?.data?.data[0]?.["createdby"]) {
             for(let i in newRows.data.data){

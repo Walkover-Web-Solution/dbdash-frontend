@@ -467,7 +467,9 @@ export function extraReducers(
     .addCase(bulkAddColumns.fulfilled, (state, action) => {
       if (action.payload) {
         if (action.payload.columns) state.columns = action.payload.columns;
-        state.data = action.payload.row;
+        if(action.payload.pageNo !== 1 && state.pageNo + 1 !== action.payload.pageNo) return;
+        let appendData = action.payload.pageNo > 1 && action.payload.filterId == state.filterId && action.payload.tableId === state.tableId;
+        state.data = appendData ? [...state.data, ...(action.payload.row||[])] : action.payload.row;
         state.tableId = action.payload.tableId;
         state.dbId = action.payload.dbId;
         state.pageNo = action?.payload?.pageNo
@@ -573,7 +575,7 @@ export function extraReducers(
       let arr = [...state.data];
       // const autonumberId = "fld" + state.tableId.substring(3) + "autonumber";
       const indexIdMapping = action?.indexIdMapping;
-      action?.newData?.forEach((row) => {
+        action?.newData?.forEach((row) => {
         arr[indexIdMapping[row?.["autonumber"]]] = row;
       });
       if (action?.dataTypes == "file") {
@@ -587,17 +589,18 @@ export function extraReducers(
       state.status = "succeeded";
     })
     .addCase(updateCells.rejected, (state, payload: any) => {
+      state.status = "failed";
       const action = payload.meta.arg;
       let arr = [...state.data];
       const indexIdMapping = action?.indexIdMapping;
       const updatedArray = action?.updatedArray;
-      const fieldsObject = (Object.values(updatedArray)[0] as any).fields;
+      const fieldsObject = (Object.values(updatedArray)[0] as any)?.fields;
+      if(!fieldsObject) return;
       const fieldsKey = Object.keys(fieldsObject)[0];
       let row = arr[Object.values(indexIdMapping)[0] as any];
       row[fieldsKey] = action?.oldData;
       arr[Object.values(indexIdMapping)[0] as any] = row;
       state.data = arr;
-      state.status = "failed";
     })
 
     .addCase(addRows.pending, (state) => {

@@ -1,11 +1,18 @@
 .edited-item{
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin: 10px 0;
     width: 100%;
+    .edited-div{
+        display: flex;
+        width: 100%;
+
+    }
+    .revert-button{
+        margin-top : 30px;
+    }
     .edited-by{
-        // min-width: 35rem;
-        width: 35rem;
         display:flex;
         justify-content: space-between;
         .edited-name{
@@ -32,13 +39,20 @@
         }
     }
 }
+.row-history-dialog{
+    height: 80vh;
+}
 .row-history{
     min-width: 35rem;
     min-height: 10rem;
+    width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     padding : 0 10px;
+    .no-history{
+        margin: 30px 0;
+    }
 }
 .row-history-header{
     display: flex;
@@ -47,6 +61,11 @@
         background-color: transparent;
     }
 }
-.row-history-dialog{
-    z-index: 100001 !important;
+.field-selector{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .field-dropdown{
+        margin-left: 10px;
+    }
 }
