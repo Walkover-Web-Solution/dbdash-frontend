@@ -119,7 +119,7 @@ export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1
   setFields(newOrder)
   return;
 }
-export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes)=>{
+export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes, users)=>{
   const [col, row] = cell;
   const dataRow = allRowsData[row] || [];
 
@@ -294,6 +294,19 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
            };
          }
    
+   else if(dataType === "user"){
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: true,
+        copyData: d,
+        data: {
+          readonly: readOnlyOrNot,
+          kind: "dropdown-cell",
+          allowedValues: Object.values(users).map(user => user.first_name + " "+  user.last_name + " \n" + user.email), //users.map(user => user.first_name + " " + user.last_name),
+          value: d || ""
+        }
+      };
+   }
    else {
       return {
         kind: GridCellKind.Text,

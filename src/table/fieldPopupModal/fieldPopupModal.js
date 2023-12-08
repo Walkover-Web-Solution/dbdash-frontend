@@ -32,6 +32,7 @@ import CustomTextField from "../../muiStyles/customTextfield";
 import DataObjectIcon from '@mui/icons-material/DataObject';
 import { customUseSelector } from '../../store/customUseSelector';
 import { getAllTableInfo } from '../../store/allTable/allTableSelector';
+import Person from "@mui/icons-material/Person";
 export default function FieldPopupModal(props) {
   const [metaData, setMetaData] = useState({});
   const params = useParams();
@@ -290,6 +291,7 @@ export default function FieldPopupModal(props) {
             <MenuItem value="lookup"><ManageSearchOutlinedIcon  fontSize={variables.iconfontsize1}  className="field-select-option" />Lookup</MenuItem>
             <MenuItem value="multipleselect"><DoneAllIcon  fontSize={variables.iconfontsize1}  className="field-select-option" />Multiple select</MenuItem>
             <MenuItem value="numeric"><NumbersIcon  fontSize={variables.iconfontsize1} className="field-select-option" /> Number</MenuItem>
+            <MenuItem value ="user"><Person fontSize={variables.iconfontsize1} className = "field-select-option"/> User</MenuItem>
             <MenuItem value="phone"><LocalPhoneIcon  fontSize={variables.iconfontsize1}  className="field-select-option" />Phone number</MenuItem>
             <MenuItem value="singlelinetext"><TextFormatIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single line text</MenuItem>
             <MenuItem value="singleselect"><ArrowDropDownCircleIcon  fontSize={variables.iconfontsize1} className="field-select-option" />Single select</MenuItem>

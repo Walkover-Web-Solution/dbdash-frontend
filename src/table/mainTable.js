@@ -29,6 +29,7 @@ export default function MainTable(props) {
   const dispatch = useDispatch();
   const allFieldsofTable = customUseSelector((state) => state.table.columns);//fields from redux
   const allRowsData = customUseSelector((state) => state.table.data || []); // data from redux
+  const users = customUseSelector((state) => state.tables.userDetail || {});
   const [openAttachment, setOpenAttachment] = useState(null);
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({});
@@ -163,8 +164,8 @@ export default function MainTable(props) {
   }, []);
   const getData = useCallback(
     (cell) =>
-      getDataExternalFunction(cell,allRowsData,fieldsToShow,readOnlyDataTypes),
-    [allRowsData, fieldsToShow]
+      getDataExternalFunction(cell,allRowsData,fieldsToShow,readOnlyDataTypes, users),
+    [allRowsData, fieldsToShow, users]
   );
 
   const handlegridselection = (event) => {setSelection(event);};
