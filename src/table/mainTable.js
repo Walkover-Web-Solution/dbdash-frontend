@@ -234,7 +234,7 @@ export default function MainTable(props) {
           <div><DeleteOutlineIcon className="deletecolor" /></div>
         </button>
       )}
-      <div className="table-container" style={{ height: props?.height || `64vh` }}>
+      <div className="table-container" style={{ height: props?.height || `74vh` }}>
         <DataEditor
           {...cellProps}
           width={props?.width || window.screen.width}
@@ -311,6 +311,7 @@ export default function MainTable(props) {
               handleClose = {handleClose}
               autonumber = {autonumber}
               fields = {allFieldsofTable.filter(field=>!readOnlyDataTypes.includes(field.id))}
+              rowIndex = {selection.rows.items[0][0]}
           />
         )
       }

@@ -78,7 +78,7 @@ export const restoreDbThunk = createAsyncThunk(
 );
 export const renameOrgThunk = createAsyncThunk(
     "organdDb/renameOrgThunk", async (payload:RenameOrgThunkPayloadType) => {
-        const data = await updateOrg(payload.orgId, payload.data, payload.user_id);
+        const data = await updateOrg(payload.orgId, payload.data);
         return data.data.data;
     }
 );
@@ -99,7 +99,7 @@ export const createOrgThunk = createAsyncThunk(
 
     export const shareUserInOrgThunk = createAsyncThunk(
         "organdDb/shareUserInOrgThunk", async (payload:ShareOrgThunkPayloadType) => {
-            await addUserInOrg(payload.orgId, payload.adminId,payload.data);
+            await addUserInOrg(payload.orgId,payload.data);
             const allorgs = await getAllOrgs(payload.orgId)
             const allData= {
                 allorgs:allorgs?.data?.data
@@ -109,7 +109,7 @@ export const createOrgThunk = createAsyncThunk(
 );  
 export const updateUserInOrgThunk=createAsyncThunk(
     "organdDb/updateUserInOrgThunk", async (payload:ShareOrgThunkPayloadType) => {
-        await updateUserType(payload.orgId, payload.adminId,payload.data);
+        await updateUserType(payload.orgId, payload.data);
         const allorgs = await getAllOrgs(payload.orgId)
         const allData= {
             allorgs:allorgs?.data?.data
@@ -120,7 +120,7 @@ export const updateUserInOrgThunk=createAsyncThunk(
 export const removeUserInOrgThunk = createAsyncThunk(
     "organdDb/removeUserInOrgThunk", async (payload:ShareOrgThunkPayloadType) => {
         
-         await removeUserInOrg(payload.orgId, payload.adminId,payload.data);
+         await removeUserInOrg(payload.orgId, payload.data);
         const allorgs = await getAllOrgs(payload.orgId)
         const allData= {
             allorgs:allorgs?.data?.data
