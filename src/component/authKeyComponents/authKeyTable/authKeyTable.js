@@ -135,7 +135,7 @@ export default function AuthKey(props) {
             <TableBody>
               {props.authKeys &&
                 Object.keys(props?.authKeys)?.map((keys, index) => (
-                  !props.authKeys.appKey && 
+                  !props.authKeys[keys]?.appKey && 
                   <TableRow
                     key={keys}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
