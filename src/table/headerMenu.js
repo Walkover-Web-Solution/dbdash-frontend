@@ -230,7 +230,7 @@ export default function Headermenu(props) {
             <div className={classes.menuItem}><SouthIcon fontSize={variables.iconfontsize1} />Sort descending</div>
             {defaultValue && (<div className = {classes.menuItem} style = {{flexWrap : "wrap"}}>
               <p>default value :</p> 
-              <Tooltip title = {defaultValue} arrow placement="bottom" anchorEl = {props.anchorEl}>
+              <Tooltip title = {defaultValue} arrow placement="bottom">
               <Typography fontSize={"small"}
                 sx = {{
                   overflow: 'hidden',
@@ -280,5 +280,4 @@ Headermenu.propTypes = {
   submitData: PropTypes.func,
   queryByAi: PropTypes.any,
   setQueryByAi: PropTypes.func,
-  anchorEl : PropTypes.any
 };
