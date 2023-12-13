@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import UpdateQueryPopup from './updateQueryPopup';
 import variables from '../assets/styling.scss';
 import { HeaderMenuStyles } from '../muiStyles/muiStyles';
+import { Tooltip, Typography } from '@mui/material';
 
 
 export default function Headermenu(props) {
@@ -38,6 +39,7 @@ export default function Headermenu(props) {
   }, [props?.menu?.col])
 
   const dataType = props?.fields[props?.menu?.col]?.dataType;
+  const defaultValue = props?.fields[props?.menu?.col]?.metadata?.defaultValue;
   const handleDelete=()=>{dispatch(
     deleteColumns({
       label: props?.fields[props?.menu?.col]?.title,
@@ -226,6 +228,19 @@ export default function Headermenu(props) {
               className={classes.menuItem}><EastIcon fontSize={variables.iconfontsize1} />Insert Right</div>
             <div className={classes.menuItem}><NorthIcon fontSize={variables.iconfontsize1} />Sort ascending</div>
             <div className={classes.menuItem}><SouthIcon fontSize={variables.iconfontsize1} />Sort descending</div>
+            {defaultValue && (<div className = {classes.menuItem} style = {{flexWrap : "wrap"}}>
+              <p>default value :</p> 
+              <Tooltip title = {defaultValue} arrow placement="bottom" anchorEl = {props.anchorEl}>
+              <Typography fontSize={"small"}
+                sx = {{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                  {defaultValue}
+              </Typography>
+              </Tooltip>
+            </div>)}
             {((dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") || (props?.fields[props?.menu?.col]?.metadata?.isLookup && props?.fields[props?.menu?.col]?.metadata?.isLookup==true)) && (
             <>
               {dataType === "formula" && (
@@ -265,4 +280,5 @@ Headermenu.propTypes = {
   submitData: PropTypes.func,
   queryByAi: PropTypes.any,
   setQueryByAi: PropTypes.func,
+  anchorEl : PropTypes.any
 };
