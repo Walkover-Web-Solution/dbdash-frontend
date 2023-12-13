@@ -234,7 +234,8 @@ export default function Headermenu(props) {
               <Typography fontSize={"small"}
                 sx = {{
                   overflow: 'hidden',
-                  textOverflow: 'ellipsis'
+                  textOverflow: 'ellipsis',
+                  whiteSpace: "nowrap"
                 }}
               >
                   {defaultValue}
