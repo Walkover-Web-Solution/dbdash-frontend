@@ -93,9 +93,7 @@ const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldI
   const rowAutonumber = currentRow[`autonumber`];
   const isDatetime = dataType === "datetime";
   const isSingleSelect = dataType === "singleselect";
-
-  const newdata = isDatetime ? newValue.data.date : (isSingleSelect ? newValue.data.value : newValue.data);
-  console.log("dsf",newdata)
+  const newdata = isDatetime ? (newValue.data.date || "") : (isSingleSelect ? newValue.data.value : newValue.data);
   const where=`autonumber = ${rowAutonumber}`;
   const fields=isSingleSelect?{[fieldId]:newdata}:{ [fieldId]: newdata || null };
   return newdata !== currentRow[fieldId] ? { where, fields} : null;
@@ -153,7 +151,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
     } 
     
     else if (dataType === "datetime") {
-      const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
+      const dateObj = new Date(d);
+      const currentDate = d && (dateObj !== "Invalid Date" && !isNaN(dateObj) ? dateObj : null);
       if (currentDate instanceof Date && !isNaN(currentDate)) {
         const day = currentDate.getDate().toString().padStart(2, "0");
         const month = (currentDate.getMonth() + 1)
@@ -164,7 +163,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
-          copyData: "4",
+          copyData: d.toString(),
           data: {
             kind: "date-picker-cell",
             date: currentDate,
@@ -176,7 +175,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
     return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
-          copyData: "4",
+          copyData: "",
           data: {
             kind: "date-picker-cell",
             displayDate: "",
