@@ -120,7 +120,7 @@ export default function MainTable(props) {
   );
   const onCellsEdited=useCallback((list)=>{
     if(!list || list.length===0) return;
-    editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData);
+    editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData, users);
   },[fieldsToShow,allRowsData])
 
   const handleColumnResizeWithoutAPI = useCallback((_, newSize, colIndex) => {

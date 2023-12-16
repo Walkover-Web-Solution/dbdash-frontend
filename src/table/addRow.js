@@ -18,7 +18,7 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
   return;
 }
 
-const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list) => {
+const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list, users) => {
   let  updatedArray = []
   let indexIdMapping = {}
   let listLength=list.length;
@@ -31,7 +31,7 @@ const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list
 
     const dataType=fields[cell[0]]?.dataType;
     
-    let currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId);
+    let currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId, users);
     let updatedArrayLength=updatedArray.length;
     let latestElement=updatedArray[updatedArrayLength-1];
 
@@ -58,7 +58,7 @@ const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list
 
 }
 
-export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
+export const editCellsInBatch=(list, dispatch,fields,params,allRowsData, users) => {
   const cell=list[0].location;
 
   if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
@@ -67,7 +67,7 @@ export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
   
   if(list.length>1)
   {
-    updateCellsBatchFunction(dispatch,tableId,allRowsData,fields,list);
+    updateCellsBatchFunction(dispatch,tableId,allRowsData,fields,list, users);
     return ;
   }
 const newValue=list[0].value;
@@ -79,7 +79,7 @@ const newValue=list[0].value;
     return;
   }
   
-  let currentupdatedvalue=giveCurrentUpdatedValue(fields[cell[0]]?.dataType,newValue,tableId,currentRow,fieldId)
+  let currentupdatedvalue=giveCurrentUpdatedValue(fields[cell[0]]?.dataType,newValue,tableId,currentRow,fieldId, users)
   if(!currentupdatedvalue) return ;
   dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentRow }));
   dispatch(updateCells({
@@ -89,13 +89,18 @@ const newValue=list[0].value;
   }))
   
 }
-const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldId) => {
+const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldId, users) => {
   const rowAutonumber = currentRow[`autonumber`];
   const isDatetime = dataType === "datetime";
   const isSingleSelect = dataType === "singleselect";
+  const isUser = dataType === "user";
 
-  const newdata = isDatetime ? newValue.data.date : (isSingleSelect ? newValue.data.value : newValue.data);
-  console.log("dsf",newdata)
+  let newdata = isDatetime ? newValue.data.date : (isSingleSelect || isUser ? newValue.data.value : newValue.data);
+  if(isUser){
+    let userEmail = newdata?.split("(")[1]?.slice(0, -1);
+    let userId = Object.keys(users).find(user => users[user].email === userEmail);
+    newdata = [userId];
+  }
   const where=`autonumber = ${rowAutonumber}`;
   const fields=isSingleSelect?{[fieldId]:newdata}:{ [fieldId]: newdata || null };
   return newdata !== currentRow[fieldId] ? { where, fields} : null;
@@ -295,15 +300,22 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
          }
    
    else if(dataType === "user"){
+    let dValue;
+    if(!d || d.length === 0){
+      dValue = undefined;
+    }else{
+      dValue = userIdToProfile(users[d[0]]);
+    }
       return {
         kind: GridCellKind.Custom,
         allowOverlay: true,
-        copyData: d,
+        copyData: dValue || "",
         data: {
+          displayData : d ? (users?.[d]?.first_name + " " + users?.[d]?.last_name) : "",
           readonly: readOnlyOrNot,
           kind: "dropdown-cell",
-          allowedValues: Object.values(users).map(user => user.first_name + " "+  user.last_name + " \n" + user.email), //users.map(user => user.first_name + " " + user.last_name),
-          value: d || ""
+          allowedValues: Object.values(users).map(user => userIdToProfile(user)), //users.map(user => user.first_name + " " + user.last_name),
+          value: dValue
         }
       };
    }
@@ -348,3 +360,6 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispa
 
   dispatch(updateCells({ updatedArray: updateArray, indexIdMapping: { [rowIndex]: cell[1] } }));
 };
+const userIdToProfile = (user)=>{
+  return `${user?.first_name} ${user?.last_name} (${user?.email})`
+}
