@@ -148,7 +148,7 @@ export const addColumns = createAsyncThunk(
 );
 export const bulkAddColumns = createAsyncThunk(
   "table/bulkAddColumns",
-  async (payload: BulkAddColumnsTypes, { getState, dispatch }) => {
+  async (payload: BulkAddColumnsTypes, { getState, dispatch } : {getState : Function, dispatch : Function}) => {
     let columns;
       columns = await getHeaders(
         payload.dbId,
@@ -174,7 +174,8 @@ export const bulkAddColumns = createAsyncThunk(
       filterId: ""
     };
     dispatch(setTableLoading(false));
-    if(dataa.isMoreData) {
+    let getMoreData = dataa.isMoreData && (dataa.pageNo === 1 || (getState().table.pageNo + 1 === dataa.pageNo && getState().table.tableId === payload.tableName));
+    if(getMoreData) {
       dispatch(bulkAddColumns({
         dbId: payload?.dbId,
         tableName : payload?.tableName,
@@ -186,7 +187,7 @@ export const bulkAddColumns = createAsyncThunk(
 );
 export const filterData = createAsyncThunk(
   "table/bulkAddColumns",
-  async (payload: FilterDataTypes, { getState, dispatch }) => {
+  async (payload: FilterDataTypes, { getState, dispatch }: {getState : Function, dispatch : Function}) => {
     var filterQuery;
     const table = getAllTableInfo(getState())?.tables?.[payload?.tableId];
     const filter = table?.filters?.[payload?.filterId];
@@ -207,40 +208,30 @@ export const filterData = createAsyncThunk(
     );
     // const createdby = "fld" + payload?.tableId.substring(3) + "createdby";
 
-    var offset = true;
-    var rows: any = [];
-    var page = 1;
-    while (offset) {
-      const querydata = await runQueryonTable(
-        payload.dbId,
-        payload?.tableId,
-        payload?.filterId,
-        filterQuery,
-        page
-      );
-      querydata?.data?.data?.rows &&
-        querydata?.data?.data?.rows?.map((row) => {
-          row["createdby"] = userJson?.[row["createdby"]]
-            ? userJson?.[row["createdby"]]?.first_name +
-              " " +
-              userJson?.[row["createdby"]]?.last_name
-            : row["createdby"];
-        });
-      const obj = querydata?.data?.data?.rows;
-      offset = !!querydata?.data?.data?.offset;
-      rows = [...rows, ...obj];
-      page = page + 1;
-    }
+    var page = payload?.pageNo || 1;
+    const querydata = await runQueryonTable(
+      payload.dbId,
+      payload?.tableId,
+      payload?.filterId,
+      filterQuery,
+      page
+    );
+    querydata?.data?.data?.rows &&
+      querydata?.data?.data?.rows?.map((row) => {
+        row["createdby"] = userJson?.[row["createdby"]]
+          ? userJson?.[row["createdby"]]?.first_name +
+            " " +
+            userJson?.[row["createdby"]]?.last_name
+          : row["createdby"];
+      });
+    var rows = querydata?.data?.data?.rows || [];
+    let offset = !!querydata?.data?.data?.offset;
+    
     let columns = {};
-    // const viewFields =table.view?.fields || {}//views fields
     fieldArrayInFilter?.forEach((id) => {
       columns[id] = table?.fields?.[id];
     });
-    // if(!fieldArrayInFilter)
-    // {
     columns = { ...table?.fields };
-    // }
-
     filterFields &&
       Object.entries(filterFields).map((entry: any) => {
         const id = entry[0];
@@ -264,11 +255,22 @@ export const filterData = createAsyncThunk(
       row: rows,
       tableId: payload?.tableId,
       dbId: payload?.dbId,
-      // "pageNo": querydata?.data?.data?.pageNo,
+      pageNo: page,
       // "isMoreData": !(querydata?.data?.data?.offset == null),
       filterId: payload?.filterId,
     };
+    let getMoreData = offset && (page === 1 || (getState().table.pageNo + 1 === dataa.pageNo && getState().table.filterId === payload.filterId));
     dispatch(setTableLoading(false));
+    if(getMoreData){
+      dispatch(filterData({
+        filterId : payload.filterId,
+        tableId : payload.tableId,
+        filter : payload.filter,
+        org_id : payload.org_id,
+        pageNo : page+1 ,
+        dbId : payload.dbId
+      }))
+    }
     return dataa;
   }
 );

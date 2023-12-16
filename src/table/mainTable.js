@@ -205,17 +205,15 @@ export default function MainTable(props) {
   }
   const onPaste = (target, values)=>{
     const fields = fieldsToShow.slice(target[0], target[0]+values[0].length).map(field => field.title);
-    console.log(fields);
     const rows = [];
     for(let i = allRowsData.length-target[1];i < values.length;i++){
-        console.log(values[i]);
         const row = {};
         for(let field in fields){
           row[fields[field]] = values[i][field];
         }
         rows.push(row);
     }
-    addMultipleRow(dispatch, rows);
+    if(rows.length > 0) addMultipleRow(dispatch, rows);
     return true;
   }
 
