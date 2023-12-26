@@ -25,7 +25,8 @@ import { createViewTable } from "../../../api/viewTableApi";
 import ManageFieldDropDown from "../manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import   {  customUseSelector }  from "../../../store/customUseSelector";
-
+import { useLocation } from "react-router-dom";
+import { resetData } from "../../../store/table/tableSlice";
 
  function TablesList({ dbData }) {
   const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
@@ -53,6 +54,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     return { tables, dbId, userAcess, userDetail };
   });
   const [openManageField, setOpenManageField] = useState(false);
+  const location = useLocation();
   
     const fullName=customUseSelector((state) => state.user.userFirstName+" "+state.user.userLastName);
    const email=customUseSelector((state) => state.user.userEmail)
@@ -133,6 +135,21 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
 
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}/filter/${id}`);
   }
+  useEffect(()=>{
+    if(!params.filterName){
+      setPage(1);
+      dispatch(resetData());
+      if (params?.tableName) {
+        dispatch(
+          bulkAddColumns({
+            dbId : dbData?.db?._id,
+            tableName: params?.tableName,
+            pageNo: 1,
+          })
+        );
+      }
+    }
+  }, [location])
   const deleteFilterInDb = async () => {
     const data = {
       filterId: filterId,
