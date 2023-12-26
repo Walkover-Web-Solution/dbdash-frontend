@@ -18,7 +18,7 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
   return;
 }
 
-const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list, params) => {
+const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list, params, users) => {
   let  updatedArray = []
   let indexIdMapping = {}
   let listLength=list.length;
@@ -35,7 +35,7 @@ const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list
     if(dataType === "multipleselect"){
       currentupdatedvalue = editmultipleselect(newValue, currentRow[fieldId] || [], cell, params, fieldId, dispatch, rowAutonumber);
     }else{
-      currentupdatedvalue = currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId);
+      currentupdatedvalue = currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId, users);
     }
     let updatedArrayLength=updatedArray.length;
     let latestElement=updatedArray[updatedArrayLength-1];
@@ -67,7 +67,7 @@ const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list
 
 }
 
-export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
+export const editCellsInBatch=(list, dispatch,fields,params,allRowsData, users) => {
   const cell=list[0].location;
 
   if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
@@ -76,7 +76,7 @@ export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
   
   if(list.length>1)
   {
-    updateCellsBatchFunction(dispatch,tableId,allRowsData,fields,list, params);
+    updateCellsBatchFunction(dispatch,tableId,allRowsData,fields,list, params, users);
     return ;
   }
 const newValue=list[0].value;
@@ -89,7 +89,7 @@ const newValue=list[0].value;
     currentupdatedvalue = editmultipleselect(newValue, currentRow[fieldId] || [], cell,params, fieldId,dispatch,rowAutonumber);
     // return;
   }else{
-    currentupdatedvalue=[giveCurrentUpdatedValue(fields[cell[0]]?.dataType,newValue,tableId,currentRow,fieldId)];
+    currentupdatedvalue=[giveCurrentUpdatedValue(fields[cell[0]]?.dataType,newValue,tableId,currentRow,fieldId, users)];
   }
   
   if(!currentupdatedvalue) return ;
@@ -103,11 +103,18 @@ const newValue=list[0].value;
   }))
   
 }
-const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldId) => {
+const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldId, users) => {
   const rowAutonumber = currentRow[`autonumber`];
   const isDatetime = dataType === "datetime";
   const isSingleSelect = dataType === "singleselect";
-  const newdata = isDatetime ? (newValue.data.date || "") : (isSingleSelect ? newValue.data.value : newValue.data);
+  const isUser = dataType === "user";
+
+  let newdata = isDatetime ? (newValue.data.date || "") : (isSingleSelect || isUser ? newValue.data.value : newValue.data);
+  if(isUser){
+    let userEmail = newdata?.split("(")[1]?.slice(0, -1);
+    let userId = Object.keys(users).find(user => users[user].email === userEmail);
+    newdata = [userId];
+  }
   const where=`autonumber = ${rowAutonumber}`;
   const fields=isSingleSelect?{[fieldId]:newdata}:{ [fieldId]: newdata || null };
   return newdata !== currentRow[fieldId] ? { where, fields} : null;
@@ -131,7 +138,7 @@ export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1
   setFields(newOrder)
   return;
 }
-export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes)=>{
+export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes, users)=>{
   const [col, row] = cell;
   const dataRow = allRowsData[row] || [];
 
@@ -279,7 +286,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Custom,
         allowOverlay: true,
-        copyData: d,
+        copyData: d || "",
         data: {
           readonly: readOnlyOrNot,
           kind: "dropdown-cell",
@@ -307,6 +314,26 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
            };
          }
    
+   else if(dataType === "user"){
+    let dValue;
+    if(!d || d.length === 0){
+      dValue = undefined;
+    }else{
+      dValue = userIdToProfile(users[d[0]]);
+    }
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: true,
+        copyData: dValue || "",
+        data: {
+          displayData : d ? (users?.[d]?.first_name + " " + users?.[d]?.last_name) : "",
+          readonly: readOnlyOrNot,
+          kind: "dropdown-cell",
+          allowedValues: Object.values(users).map(user => userIdToProfile(user)), //users.map(user => user.first_name + " " + user.last_name),
+          value: dValue
+        }
+      };
+   }
    else {
       return {
         kind: GridCellKind.Text,
@@ -347,3 +374,6 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispa
   }
   return updateArray;
 };
+const userIdToProfile = (user)=>{
+  return `${user?.first_name} ${user?.last_name} (${user?.email})`
+}
