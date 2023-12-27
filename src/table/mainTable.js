@@ -29,6 +29,7 @@ export default function MainTable(props) {
   const dispatch = useDispatch();
   const allFieldsofTable = customUseSelector((state) => state.table.columns);//fields from redux
   const allRowsData = customUseSelector((state) => state.table.data || []); // data from redux
+  const users = customUseSelector((state) => state.tables.userDetail || {});
   const [openAttachment, setOpenAttachment] = useState(null);
   const [menu, setMenu] = useState();
   const [directionAndId, setDirectionAndId] = useState({});
@@ -119,7 +120,7 @@ export default function MainTable(props) {
   );
   const onCellsEdited=useCallback((list)=>{
     if(!list || list.length===0) return;
-    editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData);
+    editCellsInBatch(list, dispatch,fieldsToShow,params,allRowsData, users);
   },[fieldsToShow,allRowsData])
 
   const handleColumnResizeWithoutAPI = useCallback((_, newSize, colIndex) => {
@@ -163,8 +164,8 @@ export default function MainTable(props) {
   }, []);
   const getData = useCallback(
     (cell) =>
-      getDataExternalFunction(cell,allRowsData,fieldsToShow,readOnlyDataTypes),
-    [allRowsData, fieldsToShow]
+      getDataExternalFunction(cell,allRowsData,fieldsToShow,readOnlyDataTypes, users),
+    [allRowsData, fieldsToShow, users]
   );
 
   const handlegridselection = (event) => {setSelection(event);};
@@ -204,17 +205,15 @@ export default function MainTable(props) {
   }
   const onPaste = (target, values)=>{
     const fields = fieldsToShow.slice(target[0], target[0]+values[0].length).map(field => field.title);
-    console.log(fields);
     const rows = [];
     for(let i = allRowsData.length-target[1];i < values.length;i++){
-        console.log(values[i]);
         const row = {};
         for(let field in fields){
           row[fields[field]] = values[i][field];
         }
         rows.push(row);
     }
-    addMultipleRow(dispatch, rows);
+    if(rows.length > 0) addMultipleRow(dispatch, rows);
     return true;
   }
 
@@ -313,6 +312,7 @@ export default function MainTable(props) {
               handleClose = {handleClose}
               autonumber = {autonumber}
               fields = {allFieldsofTable.filter(field=>!readOnlyDataTypes.includes(field.id))}
+              rowIndex = {selection.rows.items[0][0]}
           />
         )
       }

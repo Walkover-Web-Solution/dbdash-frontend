@@ -18,7 +18,7 @@ export const addColumn = (dispatch, params, selectValue, metaData, textValue, se
   return;
 }
 
-const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list) => {
+const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list, params, users) => {
   let  updatedArray = []
   let indexIdMapping = {}
   let listLength=list.length;
@@ -30,13 +30,18 @@ const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list
     let rowAutonumber=currentRow[`autonumber`];
 
     const dataType=fields[cell[0]]?.dataType;
-    
-    let currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId);
+
+    let currentupdatedvalue;
+    if(dataType === "multipleselect"){
+      currentupdatedvalue = editmultipleselect(newValue, currentRow[fieldId] || [], cell, params, fieldId, dispatch, rowAutonumber);
+    }else{
+      currentupdatedvalue = currentupdatedvalue=giveCurrentUpdatedValue(dataType,newValue,tableId,currentRow,fieldId, users);
+    }
     let updatedArrayLength=updatedArray.length;
     let latestElement=updatedArray[updatedArrayLength-1];
 
     if (!currentupdatedvalue) continue;
-    if([rowAutonumber] in indexIdMapping && updatedArrayLength>0 && latestElement.where==currentupdatedvalue.where)
+    if([rowAutonumber] in indexIdMapping && updatedArrayLength>0 && latestElement.where==currentupdatedvalue.where && dataType !== "multipleselect")
     {
       let obj=latestElement.fields;
       const[key,value]= Object.entries(currentupdatedvalue.fields)[0];
@@ -45,7 +50,11 @@ const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list
     }
     else{
       indexIdMapping[rowAutonumber] = cell[1];
-      updatedArray.push(currentupdatedvalue);
+      if(dataType === "multipleselect"){
+        updatedArray.push(...currentupdatedvalue);
+      }else{
+        updatedArray.push(currentupdatedvalue);
+      }
     }
     
     if( (i%1000==0 && i!=0) || i==listLength-1)
@@ -58,7 +67,7 @@ const updateCellsBatchFunction = async (dispatch,tableId,allRowsData,fields,list
 
 }
 
-export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
+export const editCellsInBatch=(list, dispatch,fields,params,allRowsData, users) => {
   const cell=list[0].location;
 
   if(params?.templateId || fields[cell[0]]?.dataType == "attachment") return;
@@ -67,35 +76,45 @@ export const editCellsInBatch=(list, dispatch,fields,params,allRowsData) => {
   
   if(list.length>1)
   {
-    updateCellsBatchFunction(dispatch,tableId,allRowsData,fields,list);
+    updateCellsBatchFunction(dispatch,tableId,allRowsData,fields,list, params, users);
     return ;
   }
 const newValue=list[0].value;
   let currentRow=allRowsData[cell[1]];
   let fieldId=fields[cell[0]]?.id;
   let rowAutonumber=currentRow[`autonumber`];
-  if (fields[cell[0]]?.dataType == "multipleselect" ) {
-    editmultipleselect(newValue, currentRow[fieldId] || [], cell,params,tableId, fieldId,dispatch,rowAutonumber);
-    return;
+  let currentupdatedvalue;
+  let isMultipleSelect = fields[cell[0]]?.dataType == "multipleselect";
+  if (isMultipleSelect) {
+    currentupdatedvalue = editmultipleselect(newValue, currentRow[fieldId] || [], cell,params, fieldId,dispatch,rowAutonumber);
+    // return;
+  }else{
+    currentupdatedvalue=[giveCurrentUpdatedValue(fields[cell[0]]?.dataType,newValue,tableId,currentRow,fieldId, users)];
   }
   
-  let currentupdatedvalue=giveCurrentUpdatedValue(fields[cell[0]]?.dataType,newValue,tableId,currentRow,fieldId)
   if(!currentupdatedvalue) return ;
-  dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue, rowIndex: cell[1], row: currentRow }));
+  if(!isMultipleSelect){
+    dispatch(updatecellbeforeapi({ updatedvalue: currentupdatedvalue[0], rowIndex: cell[1], row: currentRow }));
+  }
   dispatch(updateCells({
-    updatedArray: [currentupdatedvalue],
+    updatedArray: currentupdatedvalue,
     indexIdMapping: { [rowAutonumber]: cell[1]},
     oldData : currentRow[fieldId]
   }))
   
 }
-const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldId) => {
+const giveCurrentUpdatedValue = (dataType, newValue, tableId, currentRow, fieldId, users) => {
   const rowAutonumber = currentRow[`autonumber`];
   const isDatetime = dataType === "datetime";
   const isSingleSelect = dataType === "singleselect";
+  const isUser = dataType === "user";
 
-  const newdata = isDatetime ? newValue.data.date : (isSingleSelect ? newValue.data.value : newValue.data);
-  console.log("dsf",newdata)
+  let newdata = isDatetime ? (newValue.data.date || "") : (isSingleSelect || isUser ? newValue.data.value : newValue.data);
+  if(isUser){
+    let userEmail = newdata?.split("(")[1]?.slice(0, -1);
+    let userId = Object.keys(users).find(user => users[user].email === userEmail);
+    newdata = [userId];
+  }
   const where=`autonumber = ${rowAutonumber}`;
   const fields=isSingleSelect?{[fieldId]:newdata}:{ [fieldId]: newdata || null };
   return newdata !== currentRow[fieldId] ? { where, fields} : null;
@@ -119,7 +138,7 @@ export const reorderFuncton = (dispatch, currentIndex, newIndex, fields, fields1
   setFields(newOrder)
   return;
 }
-export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes)=>{
+export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyDataTypes, users)=>{
   const [col, row] = cell;
   const dataRow = allRowsData[row] || [];
 
@@ -153,7 +172,8 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
     } 
     
     else if (dataType === "datetime") {
-      const currentDate = d && !isNaN(new Date(d)) ? new Date(d) : null;
+      const dateObj = new Date(d);
+      const currentDate = d && (dateObj !== "Invalid Date" && !isNaN(dateObj) ? dateObj : null);
       if (currentDate instanceof Date && !isNaN(currentDate)) {
         const day = currentDate.getDate().toString().padStart(2, "0");
         const month = (currentDate.getMonth() + 1)
@@ -164,7 +184,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
         return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
-          copyData: "4",
+          copyData: d.toString(),
           data: {
             kind: "date-picker-cell",
             date: currentDate,
@@ -176,7 +196,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
     return {
           kind: GridCellKind.Custom,
           allowOverlay: true,
-          copyData: "4",
+          copyData: "",
           data: {
             kind: "date-picker-cell",
             displayDate: "",
@@ -246,7 +266,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Custom,
         allowOverlay: true,
-        copyData: "4",
+        copyData: d?.toString() || "",
         data: {
           kind: "tags-cell",
           possibleTags: newarr || [],
@@ -266,7 +286,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
       return {
         kind: GridCellKind.Custom,
         allowOverlay: true,
-        copyData: d,
+        copyData: d || "",
         data: {
           readonly: readOnlyOrNot,
           kind: "dropdown-cell",
@@ -294,6 +314,26 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
            };
          }
    
+   else if(dataType === "user"){
+    let dValue;
+    if(!d || d.length === 0){
+      dValue = undefined;
+    }else{
+      dValue = userIdToProfile(users[d[0]]);
+    }
+      return {
+        kind: GridCellKind.Custom,
+        allowOverlay: true,
+        copyData: dValue || "",
+        data: {
+          displayData : d ? (users?.[d]?.first_name + " " + users?.[d]?.last_name) : "",
+          readonly: readOnlyOrNot,
+          kind: "dropdown-cell",
+          allowedValues: Object.values(users).map(user => userIdToProfile(user)), //users.map(user => user.first_name + " " + user.last_name),
+          value: dValue
+        }
+      };
+   }
    else {
       return {
         kind: GridCellKind.Text,
@@ -332,6 +372,8 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispa
       fields: { [fieldId]: { delete: removedTags } },
     });
   }
-
-  dispatch(updateCells({ updatedArray: updateArray, indexIdMapping: { [rowIndex]: cell[1] } }));
+  return updateArray;
 };
+const userIdToProfile = (user)=>{
+  return `${user?.first_name} ${user?.last_name} (${user?.email})`
+}

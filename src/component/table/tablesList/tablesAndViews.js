@@ -11,6 +11,8 @@ import TableList from "./tableList";
 import ViewList from "./viewList";
 import TableOptions from "./tableOptions";
 import { CircularProgress } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import { resetData } from "../../../store/table/tableSlice";
 
 
  function TablesAndViews({ dbData }) {
@@ -24,6 +26,7 @@ import { CircularProgress } from "@mui/material";
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [minimap, setMinimap] = useState(false);
+  const location = useLocation();
 
 
   useEffect(() => {
@@ -45,6 +48,21 @@ import { CircularProgress } from "@mui/material";
     }
   }, [params?.tableName]);
 
+  useEffect(()=>{
+    if(!params.filterName){
+      setPage(1);
+      dispatch(resetData());
+      if (params?.tableName) {
+        dispatch(
+          bulkAddColumns({
+            dbId : dbData?.db?._id,
+            tableName: params?.tableName,
+            pageNo: 1,
+          })
+        );
+      }
+    }
+  }, [location])
 
   return (
     <>
