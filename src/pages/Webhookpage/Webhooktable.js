@@ -37,7 +37,7 @@ export default function Webhooktable(props) {
     };
     const data1 = await updateWebhook(props.dbId, props.tableId, wbhookid, data);
     
-    props?.setTabledata(data1.data.data.webhook);
+    props?.setTabledata(data1.data.data);
   };
 
   const formatDateTime = (dateTime) => {
