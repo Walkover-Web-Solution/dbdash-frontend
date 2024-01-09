@@ -1,14 +1,13 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState,memo } from "react";
 import ShareLinkPopUp from "../ShareLinkPopUp/ShareLinkPopUp"
 import { Button, } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PropTypes from "prop-types";
-import { useNavigate, useParams } from "react-router-dom";
-import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
+import { useParams } from "react-router-dom";
+import { filterData } from "../../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import AddFilterPopup from "../../addFilterPopup/addFIlterPopup";
-import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 import "./tablesAndViews.scss";
 import variables from "../../../assets/styling.scss";
@@ -24,7 +23,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const dispatch = useDispatch();
   const params = useParams();
 
-  const navigate = useNavigate();
   const [openn, setOpenn] = useState(false);
   const [edit, setEdit] = useState(false);
   const [link, setLink] = useState("Link");
@@ -72,24 +70,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     }
   };
 
-  useEffect(() => {
-    const tableNames = Object.keys(dbData?.db?.tables)||[];
-    dispatch(setTableLoading(true));
-    if (params?.tableName && !params?.filterName) {
-
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?.db?._id,
-          tableName: params?.tableName || tableNames[0],
-          pageNo: 1,
-        })
-      );
-    }
-    
-    if (!params?.tableName) {
-      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
-    }
-  }, [params?.tableName]);
  
   const shareLink = async () => {
     const isViewExits =
