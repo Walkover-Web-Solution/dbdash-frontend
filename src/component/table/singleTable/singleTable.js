@@ -8,14 +8,12 @@ import {
   removeTable1,
   updateTable1,
 } from "../../../store/allTable/allTableThunk";
-import { resetData } from "../../../store/table/tableSlice";
 import { deleteTable, exportCSV } from "../../../api/tableApi";
 import { selectActiveUser } from "../../../store/user/userSelector.js";
 import { toast } from "react-toastify";
 import variables from "../../../assets/styling.scss";
 import "./singleTable.scss";
 import { useParams } from "react-router-dom";
-import { bulkAddColumns } from "../../../store/table/tableThunk";
 import  {customUseSelector }  from "../../../store/customUseSelector";
 import CustomTextField from "../../../muiStyles/customTextfield";
 import ImportCSV from "../../importCSV/importCSV";
@@ -142,16 +140,6 @@ import ImportCSV from "../../importCSV/importCSV";
     } else {
       navigate(`/db/${dbId}/table/${currentTableName}`);
       setPage(1);
-      dispatch(resetData());
-      if (currentTableName === params?.tableName) {
-        dispatch(
-          bulkAddColumns({
-            dbId,
-            tableName: currentTableName,
-            pageNo: 1,
-          })
-        );
-      }
     }
   }
   
