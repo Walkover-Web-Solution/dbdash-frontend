@@ -1,14 +1,12 @@
-import React, { useState, useEffect,  memo, } from "react";
+import React, { useState,  memo, } from "react";
 import { Box, Button, Tabs } from "@mui/material";
 import PopupModal from "../../popupModal/popupModal";
 import PropTypes from "prop-types";
 import SingleTable from "../singleTable/singleTable";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
-import { bulkAddColumns } from "../../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import { createTable1 } from "../../../store/allTable/allTableThunk";
-import { setTableLoading } from "../../../store/table/tableSlice";
 import { createTable } from "../../../api/tableApi";
 import   {  customUseSelector }  from "../../../store/customUseSelector";
 
@@ -16,7 +14,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
  function TableList({ dbData, setPage }) {
   const AllTableInfo = customUseSelector((state) => state.tables.tables);
   const dispatch = useDispatch();
-  const params = useParams();
 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -41,24 +38,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
 
   
   };
-  useEffect(() => {
-    const tableNames = Object.keys(dbData?.db?.tables)||[];
-    dispatch(setTableLoading(true));
-    if (params?.tableName && !params?.filterName) {
-
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?.db?._id,
-          tableName: params?.tableName || tableNames[0],
-          pageNo: 1,
-        })
-      );
-    }
-    
-    if (!params?.tableName) {
-      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
-    }
-  }, [params?.tableName]);
 
   return (
     <>

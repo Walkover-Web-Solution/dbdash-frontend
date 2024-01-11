@@ -11,7 +11,6 @@ import TableList from "./tableList";
 import ViewList from "./viewList";
 import TableOptions from "./tableOptions";
 import { CircularProgress } from "@mui/material";
-import { useLocation } from "react-router-dom";
 import { resetData } from "../../../store/table/tableSlice";
 
 
@@ -26,7 +25,6 @@ import { resetData } from "../../../store/table/tableSlice";
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [minimap, setMinimap] = useState(false);
-  const location = useLocation();
 
 
   useEffect(() => {
@@ -46,7 +44,7 @@ import { resetData } from "../../../store/table/tableSlice";
     if (!params?.tableName) {
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
     }
-  }, [params?.tableName]);
+  }, [params]);
 
   useEffect(()=>{
     if(!params.filterName){

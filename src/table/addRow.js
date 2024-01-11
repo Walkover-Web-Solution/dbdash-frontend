@@ -241,7 +241,7 @@ export const getDataExternalFunction=(cell,allRowsData,fieldsToShow,readOnlyData
 
         kind: GridCellKind.Number,
         data: d || "",
-        displayData: d || "",
+        displayData: d?.toString() || "",
       };
     } else if (dataType === "numeric") {
       return {

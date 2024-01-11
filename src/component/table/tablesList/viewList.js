@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, memo, useMemo } from "react";
+import React, { useState, useRef, memo, useMemo } from "react";
 import { Box, Button, IconButton, Menu, MenuItem} from "@mui/material";
 import FilterModal from "../../filterPopup/filterPopUp";
 import PropTypes from "prop-types";
@@ -7,7 +7,6 @@ import { bulkAddColumns, filterData } from "../../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteFilter } from "../../../api/filterApi";
-import { setTableLoading } from "../../../store/table/tableSlice";
 import { setAllTablesData } from "../../../store/allTable/allTableSlice";
 import { exportCSV } from "../../../api/tableApi";
 import "./tablesAndViews.scss";
@@ -99,24 +98,6 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
     );
     navigate(`/db/${dbData?.db?._id}/table/${params?.tableName}`);
   };
-  useEffect(() => {
-    const tableNames = Object.keys(dbData?.db?.tables)||[];
-    dispatch(setTableLoading(true));
-    if (params?.tableName && !params?.filterName) {
-
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?.db?._id,
-          tableName: params?.tableName || tableNames[0],
-          pageNo: 1,
-        })
-      );
-    }
-    
-    if (!params?.tableName) {
-      navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
-    }
-  }, [params?.tableName]);
  
   const handleAddView = async()=>{
     handleOpenn();
