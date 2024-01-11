@@ -375,5 +375,6 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispa
   return updateArray;
 };
 const userIdToProfile = (user)=>{
+  if(!user) return "";
   return `${user?.first_name} ${user?.last_name} (${user?.email})`
 }
