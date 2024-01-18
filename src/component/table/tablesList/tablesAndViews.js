@@ -11,7 +11,6 @@ import TableList from "./tableList";
 import ViewList from "./viewList";
 import TableOptions from "./tableOptions";
 import { CircularProgress } from "@mui/material";
-import { resetData } from "../../../store/table/tableSlice";
 
 
  function TablesAndViews({ dbData }) {
@@ -45,22 +44,6 @@ import { resetData } from "../../../store/table/tableSlice";
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
     }
   }, [params]);
-
-  useEffect(()=>{
-    if(!params.filterName){
-      setPage(1);
-      dispatch(resetData());
-      if (params?.tableName) {
-        dispatch(
-          bulkAddColumns({
-            dbId : dbData?.db?._id,
-            tableName: params?.tableName,
-            pageNo: 1,
-          })
-        );
-      }
-    }
-  }, [location])
 
   return (
     <>
