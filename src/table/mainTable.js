@@ -204,12 +204,16 @@ export default function MainTable(props) {
     setAutonumber(0);
   }
   const onPaste = (target, values)=>{
-    const fields = fieldsToShow.slice(target[0], target[0]+values[0].length).map(field => field.title);
+    const fields = fieldsToShow.slice(target[0], target[0]+values[0].length);
     const rows = [];
     for(let i = allRowsData.length-target[1];i < values.length;i++){
         const row = {};
         for(let field in fields){
-          row[fields[field]] = values[i][field];
+          if(fields[field].dataType === 'multipleselect'){
+            row[fields[field].title] = values?.[i]?.[field].split(',') || [];
+          }else{
+            row[fields[field].title] = values[i][field];
+          }
         }
         rows.push(row);
     }

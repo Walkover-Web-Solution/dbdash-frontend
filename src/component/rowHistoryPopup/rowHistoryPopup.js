@@ -32,9 +32,7 @@ function RowHistoryPopup(props) {
   const revertChange = (fieldId, value)=>{
     const isMultipleSelect = tables.tables[params.tableName].fields[fieldId].fieldType === "multipleselect"
     if(isMultipleSelect){
-      value = {
-        change : value.substring(1, value.length-1).split(",")
-      }
+      value = value.substring(1, value.length-1).split(",");
     }
     if(rowData[fieldId] == value){
       toast.info(`${fieldId} is already set to the desired value.`)
