@@ -46,7 +46,7 @@ import { CircularProgress } from "@mui/material";
   }, [params]);
 
   return (
-    <>
+    <div className = "table-parent">
       <div className="tableslist">  
         <TableList dbData = {dbData} setPage = {setPage} />
         <ViewList 
@@ -67,7 +67,7 @@ import { CircularProgress } from "@mui/material";
           setShareLinkOpen = {setShareLinkOpen}
         />
       </div>
-      <div style={{ marginTop: "250px" }}>
+      <div>
      
         {isTableLoading ? (
           <div className="table-loading"> <CircularProgress className="table-loading" /></div>
@@ -77,7 +77,7 @@ import { CircularProgress } from "@mui/material";
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 export default memo(TablesAndViews);

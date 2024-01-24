@@ -8,11 +8,10 @@
   border: none !important;
   outline: none !important;
   cursor: pointer !important;
- 
+  top: 18.9% !important;
 }
 .revision-history-button{
   right: 9rem !important;
-  top: 19.9% !important;
 }
 .revision-history{
   margin-top:5px;
@@ -20,7 +19,6 @@
 }
 .deleterowbutton{
   right: 1rem !important;
-  top: 19.9% !important;
 }
 .d1t1th9s {
   position: absolute;
