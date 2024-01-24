@@ -174,6 +174,7 @@ function MainNavbar(props) {
             className="main-navbar-title"
           >
             dbDash
+            {/*  : Is it working fine after backend changes on update */}
           </Typography>
         </Link>
       </Box>
