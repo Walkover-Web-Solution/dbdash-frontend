@@ -489,9 +489,13 @@ export function extraReducers(
     .addCase(deleteRows.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(deleteRows.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.data = action.payload;
+    .addCase(deleteRows.fulfilled, (state, {payload}) => {
+      state.data = state.data.filter((_,index) => {
+        if(payload.length === 0 || index < payload[0][0]) return true;
+        if(index >= payload[0][0] && index < payload[0][1]) return false;
+        if(index >= payload[0][1]) payload.shift();
+        return true;
+      });
     })
     .addCase(deleteRows.rejected, (state) => {
       state.status = "failed";
@@ -535,7 +539,7 @@ export function extraReducers(
     .addCase(updateMultiSelectOptions.fulfilled, (state, { payload }: any) => {
       state.columns.forEach((column, index) => {
         if (column.id == payload.columnId) {
-          state.columns[index].metadata.option = payload.metaData;
+          state.columns[index]['metadata']['option'] = payload.metaData;
           // state.columns[index].metadata = {...state?.columns[index]?.metadata,option:payload.metaData}
         }
       });

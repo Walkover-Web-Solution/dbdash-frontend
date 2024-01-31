@@ -154,7 +154,7 @@ export default function MainTable(props) {
         deletedRowIndices.push(allRowsData[i][`autonumber`] );
       }
     }
-    if (deletedRowIndices.length > 0)  dispatch(deleteRows({ deletedRowIndices, dataa: allRowsData }));
+    if (deletedRowIndices.length > 0)  dispatch(deleteRows({ deletedRowIndices, dataa: allRowsData, indicesRange : selection.rows.items}));
     setSelection(emptyselection);
   };
 
