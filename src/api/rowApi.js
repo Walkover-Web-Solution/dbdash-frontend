@@ -16,11 +16,12 @@ const updateRow = async (db_id, tableName, data) => {
 const deleteRow = async (db_id, tableName, row_id) => {
     return await axiosInstance.patch( `/${db_id}/${tableName}/delete`, row_id)
 }
-const uploadImage = async (dbId, tableName, rowId, columnId, fileobj, link) => {
+const uploadImage = async (dbId, tableName, rowId, columnId, fileobj, link, indexIdMapping) => {
     return await axiosInstance.post( `/${dbId}/${tableName}/${rowId}/upload`, {
         file: fileobj,
         columnId: columnId,
-        link: link
+        link: link,
+        indexIdMapping
     }, {
         headers: {
             'Content-Type': 'multipart/form-data'
