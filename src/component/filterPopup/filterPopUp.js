@@ -17,7 +17,6 @@ import "./filterPopup.scss";
 import CustomTextField from "../../muiStyles/customTextfield";
 
 const FilterModal = (props) => {
-  console.log(props.open,props.edit,"abc")
   const navigate = useNavigate();
   const filterNameRef = useRef("");
   const dispatch = useDispatch();
