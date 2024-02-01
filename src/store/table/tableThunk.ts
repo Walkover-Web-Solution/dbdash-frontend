@@ -531,7 +531,8 @@ export const updateCells = createAsyncThunk(
         payload.rowIndex,
         columnId,
         payload?.value,
-        payload?.imageLink
+        payload?.imageLink,
+        payload?.indexIdMapping
       );
       payload.value = data?.data?.data;
       return payload;
@@ -544,9 +545,10 @@ export const updateCells = createAsyncThunk(
           fields: { [columnId]: value },
         },
       ],
+      indexIdMapping : payload.indexIdMapping
     };
     if (payload?.updatedArray) {
-      jsonToSend = { records: payload?.updatedArray };
+      jsonToSend = { records: payload?.updatedArray, indexIdMapping : payload?.indexIdMapping };
     }
 
     const data = await updateRow(dbId, tableId, jsonToSend);
@@ -625,21 +627,18 @@ export const updateColumnsType = createAsyncThunk(
     return payload;
   }
 );
-export const deleteRows = createAsyncThunk(
+export const deleteRows = createAsyncThunk( // unoptimized
   "table/deleteRows",
   async (
-    payload: { deletedRowIndices: any; dataa: Array<any> },
+    payload: { deletedRowIndices: any; dataa: Array<any> , indicesRange : Array<Array<number>>},
     { getState }: { getState: any }
   ) => {
     const { tableId, dbId } = getState().table;
-    await deleteRow(dbId, tableId, { row_id: payload.deletedRowIndices });
-    let rows = payload.dataa;
-    let newrows = rows.filter((row) => {
-      return !payload.deletedRowIndices.includes(
-        Object.entries(row)[1][1] as any
-      );
+    await deleteRow(dbId, tableId, { 
+      row_id: payload.deletedRowIndices, 
+      indicesRange : payload.indicesRange,
     });
-    return newrows;
+    return payload.indicesRange;
   }
 );
 export const updateColumnOrder = createAsyncThunk(
