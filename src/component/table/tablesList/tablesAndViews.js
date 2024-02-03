@@ -11,8 +11,7 @@ import TableList from "./tableList";
 import ViewList from "./viewList";
 import TableOptions from "./tableOptions";
 import { CircularProgress } from "@mui/material";
-
-
+import {initConn, resetConn  } from "./rtlClient";
  function TablesAndViews({ dbData }) {
   const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
@@ -29,8 +28,14 @@ import { CircularProgress } from "@mui/material";
   useEffect(() => {
     const tableNames = Object.keys(dbData?.db?.tables)||[];
     dispatch(setTableLoading(true));
+    const id = params?.dbId + params?.tableName
     if (params?.tableName && !params?.filterName) {
-
+      initConn(id, function handleChange(type, payload){
+        dispatch({
+          type : type,
+          payload: payload
+        })
+      });
       dispatch(
         bulkAddColumns({
           dbId: dbData?.db?._id,
@@ -38,6 +43,9 @@ import { CircularProgress } from "@mui/material";
           pageNo: 1,
         })
       );
+      return ()=>{
+        resetConn(id)
+      }
     }
     
     if (!params?.tableName) {

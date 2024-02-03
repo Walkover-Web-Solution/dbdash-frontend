@@ -102,6 +102,7 @@ export interface UpdateColumnHeaderTypes{
   imageLink?:string
   updatedArray?:Array<any>;
   newData?:TableDataType;
+  indexIdMapping ?: any;
 }
 
 export interface BulkAddColumnsTypes{

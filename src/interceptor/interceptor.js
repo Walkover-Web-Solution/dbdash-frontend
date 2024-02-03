@@ -12,6 +12,13 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers["Authorization"] = token;
     }
+    const sessionId = sessionStorage.getItem('sessionId');
+    if(sessionId){
+      config.headers["session-id"] = sessionId;
+      if(window.location.pathname.includes('filter')){
+        config.headers["rt-update"] = "no-update";
+      }
+    }
     return config;
   } catch (error) {
     return Promise.reject(error);
