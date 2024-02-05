@@ -15,7 +15,7 @@ import CustomTextField from "../../muiStyles/customTextfield";
 
 function Createwebhook(props) {
   let nameRef = useRef("");
-  let actionRef = useRef("");
+  let [action, setAction] = useState("");
   let urlRef = useRef("");
   let selectedTableRef = useRef(props?.tableId || "");
   const [disabled,setDisabled]=useState(true);
@@ -26,13 +26,13 @@ function Createwebhook(props) {
       name: nameRef.current,
       url: urlRef.current,
       isActive: true,
-      condition: actionRef.current,
+      condition: action.current,
     };
 
     let response={};
     if (props?.webhookid) {
-      if (props?.condition !== actionRef.current) {
-        data.newCondition = actionRef.current;
+      if (props?.condition !== action) {
+        data.newCondition = action;
         data.condition = props?.condition;
       }
        response=await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
@@ -45,7 +45,7 @@ function Createwebhook(props) {
     props?.setWebhooks(response?.data.data);
 
     nameRef.current = "";
-    actionRef.current = "";
+    setAction("");
     urlRef.current = "";
     
     props.setNewcreated(props.newcreated + 1);
@@ -56,14 +56,14 @@ function Createwebhook(props) {
     }
     props.handleClose();
     nameRef.current = "";
-    actionRef.current = "";
+    setAction("");
     urlRef.current = "";
   };
 
   useEffect(() => {
     if (props.webhookid) {
       nameRef.current = props.webhookname;
-      actionRef.current = props.condition;
+      setAction(props.condition);
       selectedTableRef.current = props?.tableId;
       urlRef.current = props.weburl;
     }
@@ -84,6 +84,12 @@ function Createwebhook(props) {
       </Button>
     );
   }, [disabled]);
+  const whInfo = useMemo(()=>{
+    return (
+      action ? <Typography variant="caption" className="mb-2" color="#555">when a row is {action.replace("Row","")}d, data will be send to the given webhook through a POST request</Typography>
+             : null
+    )
+  }, [action]);
   return (
     <>
       <Modal open={props.open} onClose={handleClose}>
@@ -106,7 +112,7 @@ function Createwebhook(props) {
 
                 onChange={(e) => {
                   nameRef.current = e.target.value;
-                  setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+                  setDisabled(!nameRef.current || !action || !selectedTableRef.current ||  !urlRef.current)
 
                 }}
               />
@@ -120,15 +126,15 @@ function Createwebhook(props) {
                 <CustomTextField
                   id="action"
                   select
-                defaultValue={actionRef?.current}
+                defaultValue={action}
 
                   label="Action"
                   
                   className="create-webhook-action-text-field"
                   onChange={(e) => {
 
-                    actionRef.current = e.target.value;
-                    setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+                    setAction(e.target.value);
+                    setDisabled(!nameRef.current || !action || !selectedTableRef.current ||  !urlRef.current)
 
                   }}
                 >
@@ -136,6 +142,7 @@ function Createwebhook(props) {
                   <MenuItem value="deleteRow">Delete Row</MenuItem>
                   <MenuItem value="updateRow">Update Row</MenuItem>
                 </CustomTextField>
+                {whInfo}
               </FormControl>
             </Box>
             { props?.tables && <Box className="create-webhook-key-row" >
@@ -154,7 +161,7 @@ function Createwebhook(props) {
                   onChange={(e) => {
 
                     selectedTableRef.current = e.target.value;
-                  setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+                  setDisabled(!nameRef.current || !action || !selectedTableRef.current ||  !urlRef.current)
 
                   }}
                 >
@@ -179,7 +186,7 @@ function Createwebhook(props) {
                 variant="standard"
                 onChange={(e) => {
                   urlRef.current = e.target.value;
-                  setDisabled(!nameRef.current || !actionRef.current || !selectedTableRef.current ||  !urlRef.current)
+                  setDisabled(!nameRef.current || !action || !selectedTableRef.current ||  !urlRef.current)
 
                 }}
               />
