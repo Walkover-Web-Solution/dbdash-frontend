@@ -26,7 +26,7 @@ function Createwebhook(props) {
       name: nameRef.current,
       url: urlRef.current,
       isActive: true,
-      condition: action.current,
+      condition: action,
     };
 
     let response={};
