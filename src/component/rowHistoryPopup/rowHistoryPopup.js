@@ -18,17 +18,22 @@ import UndoIcon from '@mui/icons-material/Undo';
 import { useDispatch } from "react-redux";
 import { updateCells } from "../../store/table/tableThunk";
 import { toast } from "react-toastify"
-
+import { useParams } from "react-router";
 function RowHistoryPopup(props) {
   const {open , handleClose} = props;
   const tables = customUseSelector((state) => state.tables); // data from redux
   const rowData = customUseSelector(state => state.table.data[props.rowIndex]);
   let rowHistory = tables.rowHistory ? [...tables.rowHistory] : []
   const dispatch = useDispatch();
+  const params = useParams();
   let allfields = "all#fields";
   let [field, setField] = useState(allfields);
   rowHistory = rowHistory.filter(row => field === allfields || row.fieldid === field);
   const revertChange = (fieldId, value)=>{
+    const isMultipleSelect = tables.tables[params.tableName].fields[fieldId].fieldType === "multipleselect"
+    if(isMultipleSelect){
+      value = value.substring(1, value.length-1).split(",");
+    }
     if(rowData[fieldId] == value){
       toast.info(`${fieldId} is already set to the desired value.`)
       return;

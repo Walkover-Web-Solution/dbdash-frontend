@@ -11,7 +11,6 @@ import TableList from "./tableList";
 import ViewList from "./viewList";
 import TableOptions from "./tableOptions";
 import { CircularProgress } from "@mui/material";
-import { resetData } from "../../../store/table/tableSlice";
 import {initConn, resetConn  } from "./rtlClient";
  function TablesAndViews({ dbData }) {
   const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
@@ -54,24 +53,8 @@ import {initConn, resetConn  } from "./rtlClient";
     }
   }, [params]);
 
-  useEffect(()=>{
-    if(!params.filterName){
-      setPage(1);
-      dispatch(resetData());
-      if (params?.tableName) {
-        dispatch(
-          bulkAddColumns({
-            dbId : dbData?.db?._id,
-            tableName: params?.tableName,
-            pageNo: 1,
-          })
-        );
-      }
-    }
-  }, [location])
-
   return (
-    <>
+    <div className = "table-parent">
       <div className="tableslist">  
         <TableList dbData = {dbData} setPage = {setPage} />
         <ViewList 
@@ -92,7 +75,7 @@ import {initConn, resetConn  } from "./rtlClient";
           setShareLinkOpen = {setShareLinkOpen}
         />
       </div>
-      <div style={{ marginTop: "250px" }}>
+      <div>
      
         {isTableLoading ? (
           <div className="table-loading"> <CircularProgress className="table-loading" /></div>
@@ -102,7 +85,7 @@ import {initConn, resetConn  } from "./rtlClient";
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 export default memo(TablesAndViews);
