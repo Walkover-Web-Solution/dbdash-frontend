@@ -173,7 +173,7 @@ function MainNavbar(props) {
             component="span"
             className="main-navbar-title"
           >
-            dbDash
+            dbDash   
           </Typography>
         </Link>
       </Box>

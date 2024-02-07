@@ -361,7 +361,7 @@ const editmultipleselect = (newValue, oldValuetags, cell, params, fieldId, dispa
     updateArray.push({
       // where: `autonumber = ${rowIndex}`,
       where: `autonumber = ${rowIndex}`,
-      fields: { [fieldId]: addedTags.map((element) => `'${element}'`).join(",").slice(1,-1) },
+      fields: { [fieldId]: {add : addedTags} },
     });   
   }
   
