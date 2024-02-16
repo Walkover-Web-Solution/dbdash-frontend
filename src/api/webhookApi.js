@@ -15,14 +15,14 @@ const getWebhook = async (db_id) =>
 
 
 
-const updateWebhook = async (db_id,table_id,webhook_id,data) =>
+const updateWebhook = async (db_id,webhook_id,data) =>
 {
-    return await axiosInstance.patch(`/dbs/${db_id}/${table_id}/${webhook_id}/update`,data)
+    return await axiosInstance.patch(`/dbs/${db_id}/${webhook_id}/update`,data)
 }
 
-const deleteWebhook = async (db_id,table_id,webhook_id,data) =>
+const deleteWebhook = async (db_id,webhook_id,data) =>
 {
-    return await axiosInstance.patch(`/dbs/${db_id}/${table_id}/${webhook_id}/delete`,data)
+    return await axiosInstance.patch(`/dbs/${db_id}/${webhook_id}/delete`,data)
 
 }
 

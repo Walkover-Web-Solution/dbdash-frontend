@@ -21,29 +21,45 @@ function Createwebhook(props) {
   const [disabled,setDisabled]=useState(true);
 
   const createWebHook = async () => {
-
+    
     const data = {
-      name: nameRef.current,
-      url: urlRef.current,
+      webhookName: nameRef.current,
+      webhookUrl: urlRef.current,
       isActive: true,
-      condition: action,
+      webhookEvent: action,
     };
 
-    let response={};
     if (props?.webhookid) {
-      if (props?.condition !== action) {
-        data.newCondition = action;
-        data.condition = props?.condition;
+      data.currentWebhookEvent = props?.condition;
+      const isConditionUpdated = props?.condition !== action;
+      if (!isConditionUpdated) {
+        delete data.webhookEvent;
       }
-       response=await updateWebhook(props?.dbId, props?.tableId, props?.webhookid, data);
-
+      const {updatedWebhook} = await updateWebhook(props?.dbId, props?.webhookid, data).then(res => res.data.data);
+      props.setWebhooks((currentWebhooks) => {
+        if(isConditionUpdated){
+          delete currentWebhooks[props.condition]?.[props.webhookid];
+          currentWebhooks[action] ??= {};
+          currentWebhooks[action][props.webhookid] = updatedWebhook
+        }else{
+          console.log(currentWebhooks);
+          console.log(props);
+          currentWebhooks[props.condition][props.webhookid] = updatedWebhook;
+          console.log(currentWebhooks);
+        }
+        return currentWebhooks;
+      })
     } else {
-       response=await createWebhook(props.dbId, selectedTableRef.current, data);
-
+       let {webhookId, webhookData} = await createWebhook(props.dbId, selectedTableRef.current, data).then(res => res.data.data);
+       props.setWebhooks((currentWebhook) => {
+          currentWebhook ??= {};
+          currentWebhook[action] ??= {};
+          console.log(currentWebhook);
+          currentWebhook[action][webhookId] = webhookData
+          return currentWebhook;
+       })
     }
     handleClose();
-    props?.setWebhooks(response?.data.data);
-
     nameRef.current = "";
     setAction("");
     urlRef.current = "";
@@ -56,7 +72,7 @@ function Createwebhook(props) {
     }
     props.handleClose();
     nameRef.current = "";
-    setAction("");
+    setAction("");  // FIXME : To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
     urlRef.current = "";
   };
 
