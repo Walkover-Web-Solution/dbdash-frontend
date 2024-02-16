@@ -42,10 +42,7 @@ function Createwebhook(props) {
           currentWebhooks[action] ??= {};
           currentWebhooks[action][props.webhookid] = updatedWebhook
         }else{
-          console.log(currentWebhooks);
-          console.log(props);
           currentWebhooks[props.condition][props.webhookid] = updatedWebhook;
-          console.log(currentWebhooks);
         }
         return currentWebhooks;
       })
@@ -54,7 +51,6 @@ function Createwebhook(props) {
        props.setWebhooks((currentWebhook) => {
           currentWebhook ??= {};
           currentWebhook[action] ??= {};
-          console.log(currentWebhook);
           currentWebhook[action][webhookId] = webhookData
           return currentWebhook;
        })
