@@ -24,20 +24,26 @@ export default function Webhooktable(props) {
   };
 
   const handleDeleteWebhook = async () => {
-    const data = { condition: wbhookcondition };
-    const data1 = await deleteWebhook(props.dbId, props.tableId, wbhookid, data);
+    const data = { webhookEvent: wbhookcondition };
+    await deleteWebhook(props.dbId, wbhookid, data);
     closeDropdown();
-    props?.setTabledata(data1.data.data?.webhook);
+    props?.setTabledata((currentState) => {
+      let newState = {...currentState};
+      delete newState[wbhookcondition][wbhookid];
+      return newState;
+    });
 
   };
   const handleUpdateActive = async () => {
     const data = {
-      condition: wbhookcondition,
+      currentWebhookEvent: wbhookcondition,
       isActive: wbhookactive === true ? false : true,
     };
-    const data1 = await updateWebhook(props.dbId, props.tableId, wbhookid, data);
-    
-    props?.setTabledata(data1.data.data);
+    const {updatedWebhook} = await updateWebhook(props.dbId, wbhookid, data).then(res => res.data.data);
+    props?.setTabledata((currentWebhooks) => {
+      currentWebhooks[wbhookcondition][wbhookid] = updatedWebhook;
+      return currentWebhooks;
+    });
   };
 
   const formatDateTime = (dateTime) => {
