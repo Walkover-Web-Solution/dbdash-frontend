@@ -69,7 +69,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
               className="mui-button-outlined add-button"
               onClick={() => handleOpen()}
             >
-              <AddIcon />
+              <AddIcon color="action"/>
             </Button>
           </Box>
         </Box>

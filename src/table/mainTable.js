@@ -68,16 +68,22 @@ export default function MainTable(props) {
       });
     }
   });
-  document.addEventListener(
-    "keydown",
-    React.useCallback((event) => {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.code === "KeyF") {
         setShowSearch(!showSearch);
         event.stopPropagation();
         event.preventDefault();
       }
-    }, [])
-  );
+    };
+  
+    document.addEventListener("keydown", handleKeyDown);
+  
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   useEffect(() => {
     var newcolumn = [];
     allFieldsofTable.forEach((column) => {
