@@ -8,11 +8,12 @@ import variables from "../../../../assets/styling.scss";
 function CodeBlock(props) {
   const [isCopied, setIsCopied] = useState(false);
   const [showAPI, setShowAPI] = useState(true);
-
+  const style = {marginLeft : 30};
+  
   const handleCopyClick = () => {
     const codeElement = document.querySelector(".pre-wrapper");
     if (codeElement) {
-      navigator.clipboard.writeText(codeElement.textContent);
+      navigator.clipboard.writeText(codeElement.textContent.replace("...",""));
       setIsCopied(true);
       setTimeout(() => {
         setIsCopied(false);
@@ -21,7 +22,7 @@ function CodeBlock(props) {
   };
   const records = () => {
     return (
-      <div style={{marginLeft:30}}>
+      <span>
         {"{\n"}
         {props.body.map((x, index) => (
           <span key={index}>
@@ -39,11 +40,11 @@ function CodeBlock(props) {
                 x[1]
               )}"`}</span>
             )}
-            ,<br />
+            {index == props.body.length-1 ? "" : ","}<br />
           </span>
         ))}
-        {"} ,\n"}
-      </div>
+        {"}"}
+      </span>
     );
   };
 
@@ -54,8 +55,9 @@ function CodeBlock(props) {
           <span>{'"records"'}</span>
           <span>: </span>
           {" [\n"}
-          {records()}
-          {records()}
+          <div style={style}>{records()},</div>
+          {"\n"}
+          <div style = {style}>{records()}</div>
           {"       ...\n"}
           {" ]\n"}
         </pre>
@@ -68,17 +70,18 @@ function CodeBlock(props) {
           <span>{'    "records"'}</span>
           <span>: </span>
           {" [\n       {\n"}
-          <span>{`                   "where"`}</span>
+          <span>{`          "where"`}</span>
           <span>: </span>
           <span style={{ color: "#ab4b52" }}>
             &quot;{`${props?.where}`}&quot;
           </span>
           <span>,</span>
           {"\n"}
-          <span>{`                   "fields"`}</span>
+          <span>{`          "fields"`}</span>
           <span>: </span>
           {"{\n"}
-          {props?.body?.map((x, index) => (
+          <div style={{marginLeft:"80px"}}>
+            {props?.body?.map((x, index) => (
             <span key={index}>
               <span contentEditable={true} className="blue">
                 {'"' + x[0] + '"'}
@@ -93,12 +96,13 @@ function CodeBlock(props) {
                   {'"' + dummy(x[1]) + '"'}
                 </span>
               )}
-              <span>,</span>
+              <span>{index === props.body.length -1 ? "" : ","}</span>
               <br />
             </span>
           ))}
-          {"         }\n"}
-          {"       }\n"}
+          </div>  
+          {"           }\n"}
+          {"        }\n"}
           {"     ]\n"}
         </div>
       );

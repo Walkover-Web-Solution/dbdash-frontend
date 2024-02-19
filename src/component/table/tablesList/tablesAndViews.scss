@@ -27,15 +27,13 @@
     padding-right: 29px !important;
     
     .tabs {
-      width: 99vw !important;
       overflow-x: auto !important;
       overflow-y: hidden !important;
     }
     .add-button {
-      margin-left: 0.5rem !important;
-      margin-top: 4px !important;
-      width: fit-content !important;
-      height: 4vh !important;
+      width: 80px !important;
+      height : 97.5%;
+      border: 1px solid rgba(0, 0, 0, 0.2) !important;
     }
   }
 }
