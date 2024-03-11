@@ -524,7 +524,7 @@ export const updateCells = createAsyncThunk(
     const value = payload?.value;
     const columnId = payload?.columnId;
     const userInfo = allOrg(getState());
-    if (payload?.dataTypes == "file") {
+    if (payload?.dataTypes == "file"){
       const data = await uploadImage(
         dbId,
         tableId,
@@ -571,7 +571,7 @@ export const updateCells = createAsyncThunk(
           userJson?.[row["updatedby"]]?.last_name
         : row["updatedby"];
     });
-
+    
     payload.newData = data?.data?.data;
     return payload;
   }
@@ -595,6 +595,7 @@ export const addRows = createAsyncThunk(
     return newRow?.data?.data[0];
   }
 );
+
 export const addMultipleRows = createAsyncThunk(
   "table/addMultipleRows",
   async (payload:{rows: Array<any>, fromCSV:boolean}, {getState}:{getState:any}) => {

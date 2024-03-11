@@ -47,36 +47,36 @@ import {initConn, resetConn  } from "./rtlClient";
         resetConn(id)
       }
     }
-    
+
     if (!params?.tableName) {
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
-    }
+    }  
   }, [params]);
 
   return (
-    <div className = "table-parent">
-      <div className="tableslist">  
-        <TableList dbData = {dbData} setPage = {setPage} />
-        <ViewList 
-          dbData = {dbData} 
-          filterId = {filterId}   
-          setFilterId = {setFilterId} 
-          anchorEl = {anchorEl} 
+    <div className="table-parent">
+      <div className="tableslist">
+        <TableList dbData={dbData} setPage={setPage} />
+        <ViewList
+          dbData={dbData}
+          filterId={filterId}
+          setFilterId={setFilterId}
+          anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
           setShareLinkOpen={setShareLinkOpen}
         />
         <TableOptions
-          dbData = {dbData}
+          dbData={dbData}
           setFilterId={setFilterId}
-          setAnchorEl = {setAnchorEl}
-          minimap = {minimap}
-          setMinimap={ setMinimap} 
-          shareLinkOpen = {shareLinkOpen}
-          setShareLinkOpen = {setShareLinkOpen}
+          setAnchorEl={setAnchorEl}
+          minimap={minimap}
+          setMinimap={setMinimap}
+          shareLinkOpen={shareLinkOpen}
+          setShareLinkOpen={setShareLinkOpen}
         />
       </div>
       <div>
-     
+
         {isTableLoading ? (
           <div className="table-loading"> <CircularProgress className="table-loading" /></div>
         ) : (

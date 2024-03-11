@@ -33,5 +33,23 @@ const handleMessage = (message) => {
             handleChange( "table/deleteRows/fulfilled", response.meta)
             break;
         }
+        // not fully implemented
+        case 'field/insert': {
+            handleChange("table/addColumsToLeft/fulfilled",
+                response.data
+            );
+            break;
+        }
+        case 'field/update': {
+            handleChange( "table/updateColumnHeaders/fulfilled", {
+                indexIdMapping: response.meta,
+                newData: response.data,
+            });
+            break;
+        }
+        case 'field/delete': {
+            handleChange( "table/deleteColumns/fulfilled", response.meta)
+            break;
+        }
     }
 }

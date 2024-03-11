@@ -25,6 +25,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
   const handleOpenn = () => setOpenn(true);
   const [edit, setEdit] = useState(false);
   const buttonRef = useRef(null);
+  
     const fullName=customUseSelector((state) => state.user.userFirstName+" "+state.user.userLastName);
    const email=customUseSelector((state) => state.user.userEmail)
   
