@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { updateCells } from "../store/table/tableThunk";
 import { selectFilePopupStyles } from "../muiStyles/muiStyles";
 import CustomTextField from "../muiStyles/customTextfield";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 
 const style = {
@@ -82,16 +83,25 @@ export default function SelectFilePopup(props) {
     handleClose();
   };
 
-//    const deleteImage = async(imageUrl)=>{
-//     dispatch(
-//       updateCells({
-//          columnId: props?.attachment?.fieldId,
-// rowIndex: props?.attachment?.rowAutonumber,
-//         value: {delete:imageUrl},
-//        dataTypes: null
-//          })
-//      )
-//  }
+   const deleteImage = async(imageUrl)=>{
+    dispatch(
+      updateCells({
+        columnId: props?.attachment?.fieldId,
+        rowIndex: props?.attachment?.rowAutonumber,
+        value: {delete:[imageUrl]},
+        dataTypes: null,
+        indexIdMapping: {
+        [props.attachment.rowAutonumber]: props?.attachment?.cell[1],       
+        },
+      })
+    )
+    props?.setOpen(state => {
+      return {
+        ...state, 
+        d : state.d.filter(image => image !== imageUrl)
+      };
+    })
+ }
 
   const handleSelectChange = (event) => {
     setImageLink('');
@@ -127,7 +137,7 @@ export default function SelectFilePopup(props) {
           >
 
 {props?.attachment?.d?.length > 0 && (
-  <div style={{ height: '32vh', overflowY: 'hidden', margin: '0.6rem' }}>
+  <div style={{ height: '40vh', overflowY: 'hidden', margin: '0.6rem' }}>
     <div
       className="carousel-container"
       style={{
@@ -139,7 +149,7 @@ export default function SelectFilePopup(props) {
       }}
     >
       {props?.attachment?.d?.map((link, index) => (
-        <Box key={index} sx={{ p: 2, height: '30vh', width: 'fit-content', position: 'relative' }}>
+        <Box key={index} sx={{ p: 2, height: '38vh', width: 'fit-content', position: 'relative' }}>
           <a href={link} target="_blank" rel="noopener noreferrer">
             <img
               height={'100%'}
@@ -147,13 +157,13 @@ export default function SelectFilePopup(props) {
               src={link}
               alt={`Image ${index + 1}`}
             />
-            {/* <div className="transparent-blur-background " onClick={(e)=>{
+            <div className="transparent-blur-background" onClick={(e)=>{
               e.stopPropagation();
               e.preventDefault();
               deleteImage(link)}} >
-              Delete
-            <DeleteOutlinedIcon  sx={{fontSize:'15px'}} />
-          </div> */}
+              delete
+            <DeleteOutlineIcon  sx={{fontSize:'18px'}} />
+          </div>
           </a>
           
         </Box>

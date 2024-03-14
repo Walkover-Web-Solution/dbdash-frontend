@@ -8,24 +8,27 @@
  .transparent-blur-background {
    color:$errorcolor  !important;
    position: absolute !important;
-   top:8% !important;
-   right: 9% !important;
+   bottom:18px !important;
+   right: 50% !important;
+   transform:translateX(50%);
    z-index: 1 !important;
    display: flex !important;
    align-items: center !important;
    font-size: $tablepagefontsize !important;
-   background-color: $bgColorValue !important;
-   
+   background-color: #fffa!important;
+   border: 1px solid black;
    padding: 1px 5px !important;
    border-radius: 2.5px !important;
 
  }
  .transparent-blur-background:hover{
-background-color:blanchedalmond !important;
+  background-color:$errorcolor !important;
+  color: #fff !important;
  }
  
  .carousel-image {
-   flex: 0 0 100% !important;
+  //  flex: 0 0 80% !important;
+   height : 90%;
    scroll-snap-align: start !important;
    transition: transform 0.3s ease !important;
  }
