@@ -4,10 +4,10 @@ const createTable = async (db_id, data) => {
   return await axiosInstance.post(`/dbs/${db_id}/table`, data);
 };
 
-const getTable = async (db_id, tableName, page) => {
+const getTable = async (db_id, tableName, page,orderBy) => {
   // return await axiosInstance.get(`/dbs/${db_id}/${tableName}/fetchtable`)
   return await axiosInstance.get(
-    `/${db_id}/${tableName}?page=${page || 1}&limit=200`
+    `/${db_id}/${tableName}?page=${page || 1}&limit=200&sort=${orderBy.name} ${orderBy.order}`
   );
 };
 

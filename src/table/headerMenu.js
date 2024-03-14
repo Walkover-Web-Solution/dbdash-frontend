@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLayer } from "react-laag";
 import PropTypes from "prop-types";
 import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
@@ -13,17 +13,17 @@ import DuplicateFieldPopup from './duplicateFieldPopup/duplicateFieldPopup';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { deleteColumns, updateColumnHeaders } from '../store/table/tableThunk';
-import { createDuplicateColumn, getPropertyIcon,handleRenameColumn, hideColumns } from './headerFunctionality';
+import { createDuplicateColumn, getPropertyIcon, handleRenameColumn, hideColumns } from './headerFunctionality';
 import { toast } from 'react-toastify';
 import UpdateQueryPopup from './updateQueryPopup';
 import variables from '../assets/styling.scss';
 import { HeaderMenuStyles } from '../muiStyles/muiStyles';
 import { Tooltip, Typography } from '@mui/material';
-
+import { orderBy } from '../store/table/tableSlice';
 
 export default function Headermenu(props) {
   const classes = HeaderMenuStyles();
-  const[header,setHeader]=useState(props?.fields[props?.menu?.col]?.title);
+  const [header, setHeader] = useState(props?.fields[props?.menu?.col]?.title);
   const isOpen = props?.menu !== undefined;
   const [showduplicate, setShowDuplicate] = useState(false);
   const [duplicateField, setDuplicateField] = useState(true);
@@ -96,10 +96,10 @@ export default function Headermenu(props) {
     setIsPopupOpen(false);
   };
 
-  const updateColumnQuery = ()=>{
-    let metaData = {} ;
+  const updateColumnQuery = () => {
+    let metaData = {};
     var queryToSend = JSON.parse(queryResult.pgQuery)?.add_column?.new_column_name?.data_type + ` GENERATED ALWAYS AS (${JSON.parse(queryResult.pgQuery)?.add_column?.new_column_name?.generated?.expression}) STORED`
-    metaData.query = queryToSend ;
+    metaData.query = queryToSend;
     metaData.userQuery = queryResult.userQuery
     dispatch(updateColumnHeaders({
       dbId: params?.dbId,
@@ -111,7 +111,7 @@ export default function Headermenu(props) {
 
   const handleDuplicate = () => {
     setShowDuplicate(false);
-    createDuplicateColumn(params, props, dispatch,duplicateField);
+    createDuplicateColumn(params, props, dispatch, duplicateField);
     setDuplicateField(true);
   };
 
@@ -128,7 +128,7 @@ export default function Headermenu(props) {
 
   const hideColumn = async () => {
     const metaData = { hide: true };
-    hideColumns(dispatch, params, props,metaData);
+    hideColumns(dispatch, params, props, metaData);
     props?.setMenu(null);
   }
 
@@ -140,12 +140,12 @@ export default function Headermenu(props) {
       toast.error("Field is the same");
       return;
     }
-  
+
     if (header.trim() === "") {
       toast.error("Field is not empty");
       return;
     }
-  
+
     if (header.includes(" ")) {
       toast.error("Table name cannot contain spaces");
       return;
@@ -155,10 +155,10 @@ export default function Headermenu(props) {
       toast.error("First character cannot be an integer");
       return;
     }
-  
+
     handleRenameColumn(props, header, params, dispatch);
   }
-  
+
   function handleBlur(e) {
     e.preventDefault();
     handleRenameColumnAction(props, header, params, dispatch);
@@ -169,6 +169,22 @@ export default function Headermenu(props) {
       props.setMenu(false);
     }
   }
+  const sortAscending = (order) => {
+    return async () => {
+      try {
+        dispatch(orderBy({
+          data:
+          {
+          name: props?.fields[props?.menu?.col]?.title,
+          order: order
+          }
+        }
+        ));
+      } catch (error) {
+        console.error('Error sorting ascending:', error);
+      }
+    };
+  };
   return (
     <>
       {props?.menu &&
@@ -181,20 +197,20 @@ export default function Headermenu(props) {
               handleUniqueChange={handleUniqueChange}
               duplicateField={duplicateField}
             />}
-           
-             <div className='is-fullwidth' style={{ marginBottom: 5,display:"flex",justifyContent:"center" }} >
-                  <input
-                    className='form-input'
-                    type='text'
-                    value={header}
-                    style={{ width: "90%"}}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                  />
-                </div>
+
+            <div className='is-fullwidth' style={{ marginBottom: 5, display: "flex", justifyContent: "center" }} >
+              <input
+                className='form-input'
+                type='text'
+                value={header}
+                style={{ width: "90%" }}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
+              />
+            </div>
             <div className={`${classes.menuItem} ${classes.danger}`}>Property type </div>
-              <div >
+            <div >
               <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
                     <span style={{ textTransform: "capitalize" }}>{data_type}</span>
                    
@@ -226,46 +242,46 @@ export default function Headermenu(props) {
               direction: "right",
               position: props?.fields[props?.menu?.col].id})}} 
               className={classes.menuItem}><EastIcon fontSize={variables.iconfontsize1} />Insert Right</div>
-            <div className={classes.menuItem}><NorthIcon fontSize={variables.iconfontsize1} />Sort ascending</div>
-            <div className={classes.menuItem}><SouthIcon fontSize={variables.iconfontsize1} />Sort descending</div>
-            {defaultValue && (<div className = {classes.menuItem} style = {{flexWrap : "wrap"}}>
-              <p>default value :</p> 
+            <div className={classes.menuItem} onClick={sortAscending("ASC")} ><NorthIcon fontSize={variables.iconfontsize1} />Sort ascending</div>
+            <div className={classes.menuItem} onClick={sortAscending("DESC")} ><SouthIcon fontSize={variables.iconfontsize1} />Sort descending</div>
+            {defaultValue && (<div className={classes.menuItem} style={{ flexWrap: "wrap" }}>
+              <p>default value :</p>
               <Tooltip title = {defaultValue} arrow placement="bottom">
-              <Typography fontSize={"small"}
-                sx = {{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: "nowrap"
-                }}
-              >
+                <Typography fontSize={"small"}
+                  sx={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: "nowrap"
+                  }}
+                >
                   {defaultValue}
-              </Typography>
+                </Typography>
               </Tooltip>
             </div>)}
-            {((dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") || (props?.fields[props?.menu?.col]?.metadata?.isLookup && props?.fields[props?.menu?.col]?.metadata?.isLookup==true)) && (
-            <>
-              {dataType === "formula" && (
+            {((dataType !== "createdat" && dataType !== "createdby" && dataType !== "updatedat" && dataType !== "updatedby" && dataType !== "rowid" && dataType !== "autonumber") || (props?.fields[props?.menu?.col]?.metadata?.isLookup && props?.fields[props?.menu?.col]?.metadata?.isLookup == true)) && (
+              <>
+                {dataType === "formula" && (
                   <div onClick={handleOpenPopup} className={classes.menuItem}>
                     <QueueOutlinedIcon fontSize={variables.iconfontsize1} />Query Update
                   </div>
                 )}
-                <div onClick={() => { handleOpenDuplicate(); } } className={classes.menuItem}>
-                <QueueOutlinedIcon fontSize={variables.iconfontsize1} />Duplicate field</div>
-                <div style={{color:styling.deletecolor}} onClick={() => {handleDelete();props.setMenu(false);}} className={classes.menuItem}>
-                <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
-            </>
+                <div onClick={() => { handleOpenDuplicate(); }} className={classes.menuItem}>
+                  <QueueOutlinedIcon fontSize={variables.iconfontsize1} />Duplicate field</div>
+                <div style={{ color: styling.deletecolor }} onClick={() => { handleDelete(); props.setMenu(false); }} className={classes.menuItem}>
+                  <DeleteOutlineIcon fontSize='2.5px' />Delete</div>
+              </>
             )}
             {isPopupOpen && (
-  <UpdateQueryPopup
-    isOpen={isPopupOpen}
-    onClose={handleClosePopup}
-    queryByAi={queryResult}
-    setQueryByAi={setQueryResult}
-    submitData={updateColumnQuery}
-    fields={props?.fields}
-    menu={props?.menu}
-  />
-)}
+              <UpdateQueryPopup
+                isOpen={isPopupOpen}
+                onClose={handleClosePopup}
+                queryByAi={queryResult}
+                setQueryByAi={setQueryResult}
+                submitData={updateColumnQuery}
+                fields={props?.fields}
+                menu={props?.menu}
+              />
+            )}
           </div>
         )}
     </>

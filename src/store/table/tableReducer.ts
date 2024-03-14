@@ -12,7 +12,9 @@ import {
   updateColumnOrder,
   updateMultiSelectOptions,
   deleteRows,
+
 } from "./tableThunk";
+import { PayloadAction } from '@reduxjs/toolkit';
 
 import { randomColor, shortId } from "../../table/utils.js";
 import {
@@ -37,6 +39,11 @@ export const initialState: TableDataType = {
   isMoreData: true,
   filterId: null,
   rows: null,
+  orderBy:
+  {
+    name: 'autonumber',
+    order: 'ASC'
+  },
 };
 
 export const reducers: ValidateSliceCaseReducers<
@@ -442,6 +449,18 @@ export const reducers: ValidateSliceCaseReducers<
         }
       default:
         return state;
+    }
+  },
+  orderBy(state, action: PayloadAction<{
+    data: {
+      name: string,
+      order: string,
+    }
+  }>) {
+    try {
+      state.orderBy = action.payload.data;
+    } catch (err) {
+      console.log("err :", err);
     }
   },
 };

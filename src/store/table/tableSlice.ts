@@ -26,6 +26,7 @@ export const {
   updateTableData,
   setTableLoading,
   updatecellbeforeapi,
+  orderBy
 } = tableSlice.actions;
 
 export default tableSlice.reducer;

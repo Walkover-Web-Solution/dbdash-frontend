@@ -41,6 +41,7 @@ export interface TableDataType {
   skipReset?: any;
   offset?: boolean;
   rows?: any;
+  orderBy?: object;
 }
 export interface UpdatecellbeforeapiPayload {
   payload: {
@@ -110,5 +111,6 @@ export interface BulkAddColumnsTypes{
   tableName:string;
   fields?:any;
   org_id?:string;
-  pageNo?:number
+  pageNo?:number;
+  orderBy?: object
 }

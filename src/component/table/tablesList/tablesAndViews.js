@@ -23,8 +23,7 @@ import {initConn, resetConn  } from "./rtlClient";
   const [filterId, setFilterId] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [minimap, setMinimap] = useState(false);
-
-
+  var orderState=customUseSelector((state) => state.table?.orderBy);
   useEffect(() => {
     const tableNames = Object.keys(dbData?.db?.tables)||[];
     dispatch(setTableLoading(true));
@@ -41,6 +40,7 @@ import {initConn, resetConn  } from "./rtlClient";
           dbId: dbData?.db?._id,
           tableName: params?.tableName || tableNames[0],
           pageNo: 1,
+          orderBy: orderState
         })
       );
       return ()=>{
@@ -51,7 +51,7 @@ import {initConn, resetConn  } from "./rtlClient";
     if (!params?.tableName) {
       navigate(`/db/${dbData?.db?._id}/table/${tableNames[0]}`,{replace:true});  // author: rohitmirchandani, replace the current page to fix navigation
     }
-  }, [params]);
+  }, [params,orderState]);
 
   return (
     <div className = "table-parent">
