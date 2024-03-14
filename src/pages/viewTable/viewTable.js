@@ -77,8 +77,7 @@ const ViewTable = () => {
         return {
           kind: GridCellKind.Image,
           data: cellData,
-          allowOverlay: true,
-          allowAdd: true,
+          readonly: false
         };
       } else {
         return {
