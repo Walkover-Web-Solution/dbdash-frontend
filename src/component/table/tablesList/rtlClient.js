@@ -2,9 +2,13 @@ import WebSocketClient from 'rtlayer-client'
 var client,id, handleChange;
 
 export function initConn(_id, _handleChange) {
-    client = new WebSocketClient(process.env.REACT_APP_RTLAYER_OID, process.env.REACT_APP_RTLAYER_SID);
     id = _id;
     handleChange = _handleChange;
+    if(client){
+        subscribe();
+        return;
+    }
+    client = new WebSocketClient(process.env.REACT_APP_RTLAYER_OID, process.env.REACT_APP_RTLAYER_SID);
     client.on('open', subscribe)
     client.on('message', handleMessage)
 }
