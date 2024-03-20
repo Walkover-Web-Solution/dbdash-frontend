@@ -29,29 +29,72 @@ function RowHistoryPopup(props) {
   let allfields = "all#fields";
   let [field, setField] = useState(allfields);
   rowHistory = rowHistory.filter(row => field === allfields || row.fieldid === field);
-  const revertChange = (fieldId, value)=>{
-    const isMultipleSelect = tables.tables[params.tableName].fields[fieldId].fieldType === "multipleselect"
-    if(isMultipleSelect){
-      value = value.substring(1, value.length-1).split(",");
+  const revertChange = (fieldId, value) => {
+    const field = tables.tables[params.tableName].fields[fieldId];
+    const isMultipleSelect = field.fieldType === "multipleselect";
+    const isAttachment = field.fieldType === "attachment";
+  
+    if (isMultipleSelect) {
+      value = value.substring(1, value.length - 1).split(",");
     }
-    if(rowData[fieldId] == value){
-      toast.info(`${fieldId} is already set to the desired value.`)
-      return;
-    }
-    let updatedArray = [{
-      fields : {[fieldId] : value}, 
-      where : `autonumber = ${props.autonumber}`
-    }];
-    dispatch(updateCells({
-      updatedArray, 
-      indexIdMapping : {[props.autonumber] : props.rowIndex }, 
-      oldData : rowData[fieldId]
-    })).then((res)=>{
-      if(!res.error){
-        toast.success(`Updated ${fieldId} successfully`);
+  
+    if (isAttachment) {
+      const prevState = value ? value.substring(1, value.length - 1).split(",") : [];
+      if (rowData[fieldId]?.join(',') === prevState.join(',')) {
+        toast.info(`${fieldId} is already set to the desired value.`);
+        return;
       }
-    });
+  
+      const currentStateSet = new Set(rowData[fieldId]);
+      const prevStateSet = new Set(prevState);
+      const deletedLinks = rowData[fieldId]?.filter(item => !prevStateSet.has(item)) || [];
+      const addedLinks = prevState?.filter(item => !currentStateSet.has(item)) || [];
+      
+      const updatedArray = [];
+      if (addedLinks.length > 0) {
+        updatedArray.push({
+          where: `autonumber = ${props.autonumber}`,
+          fields: { [fieldId]: { restore: addedLinks } },
+        });
+      }
+      
+      if (deletedLinks.length > 0) {
+        updatedArray.push({
+          where: `autonumber = ${props.autonumber}`,
+          fields: { [fieldId]: { delete: deletedLinks } },
+        });
+      }
+  
+      dispatch(updateCells({
+        updatedArray,
+        indexIdMapping: { [props.autonumber]: props.rowIndex },
+        oldData: rowData[fieldId]
+      })).then((res) => {
+        if (!res.error) {
+          toast.success(`Updated ${fieldId} successfully`);
+        }
+      });
+    } else {
+      if (rowData[fieldId] === value) {
+        toast.info(`${fieldId} is already set to the desired value.`);
+        return;
+      }
+      const updatedArray = [{
+        fields: { [fieldId]: value },
+        where: `autonumber = ${props.autonumber}`
+      }];
+      dispatch(updateCells({
+        updatedArray,
+        indexIdMapping: { [props.autonumber]: props.rowIndex },
+        oldData: rowData[fieldId]
+      })).then((res) => {
+        if (!res.error) {
+          toast.success(`Updated ${fieldId} successfully`);
+        }
+      });
+    }
   }
+  
   return (
     <Dialog 
       onClose={handleClose} open={open}
