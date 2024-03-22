@@ -146,6 +146,19 @@ export const addColumns = createAsyncThunk(
     return 5;
   }
 );
+export const resetColumnHeaders = createAsyncThunk(
+  "table/resetColumnHeaders", 
+  async (payload : any, {getState} : any) => {
+    let columns = await getHeaders(
+      payload.dbId, 
+      payload.tableId, 
+      payload.fields, 
+      {getState}  
+    )
+    return columns;
+  }
+)
+
 export const bulkAddColumns = createAsyncThunk(
   "table/bulkAddColumns",
   async (payload: BulkAddColumnsTypes, { getState, dispatch } : {getState : Function, dispatch : Function}) => {
@@ -333,6 +346,10 @@ export const updateColumnHeaders = createAsyncThunk(
       newFieldName: payload?.label,
       newFieldType: payload?.fieldType,
       metaData: payload?.metaData,
+      meta : {
+        tableId : payload.tableName,
+        fieldId : payload.columnId
+      }
     };
     if (payload?.metaData?.isAllHide) {
       await hideAllField(payload?.dbId, payload?.tableName, {
@@ -534,7 +551,7 @@ export const updateCells = createAsyncThunk(
         payload?.imageLink,
         payload?.indexIdMapping
       );
-      payload.value = data?.data?.data;
+      payload.newData = data?.data?.data;
       return payload;
     }
     let jsonToSend = {
@@ -545,10 +562,10 @@ export const updateCells = createAsyncThunk(
           fields: { [columnId]: value },
         },
       ],
-      indexIdMapping : payload.indexIdMapping
+      meta : payload.indexIdMapping
     };
     if (payload?.updatedArray) {
-      jsonToSend = { records: payload?.updatedArray, indexIdMapping : payload?.indexIdMapping };
+      jsonToSend = { records: payload?.updatedArray, meta : payload?.indexIdMapping };
     }
 
     const data = await updateRow(dbId, tableId, jsonToSend);
@@ -636,7 +653,7 @@ export const deleteRows = createAsyncThunk( // unoptimized
     const { tableId, dbId } = getState().table;
     await deleteRow(dbId, tableId, { 
       row_id: payload.deletedRowIndices, 
-      indicesRange : payload.indicesRange,
+      meta : payload.indicesRange,
     });
     return payload.indicesRange;
   }

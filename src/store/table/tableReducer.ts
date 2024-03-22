@@ -12,6 +12,7 @@ import {
   updateColumnOrder,
   updateMultiSelectOptions,
   deleteRows,
+  resetColumnHeaders
 } from "./tableThunk";
 
 import { randomColor, shortId } from "../../table/utils.js";
@@ -579,15 +580,16 @@ export function extraReducers(
       let arr = [...state.data];
       // const autonumberId = "fld" + state.tableId.substring(3) + "autonumber";
       const indexIdMapping = action?.indexIdMapping;
-        action?.newData?.forEach((row) => {
-        arr[indexIdMapping[row?.["autonumber"]]] = row;
-      });
       if (action?.dataTypes == "file") {
-        var row = arr[indexIdMapping[action?.rowIndex]];
-        var imageArray: any = row[action?.columnId] || [];
-        imageArray = [...imageArray, action.value];
-        row[action?.columnId] = imageArray;
+        var row = arr[indexIdMapping[action?.newData?.autonumber]];
+        var imageArray: any = row?.[action?.newData?.fieldId] || [];
+        imageArray = [...imageArray, action?.newData?.imageUrl];
+        row[action?.newData.fieldId] = imageArray;
         arr[indexIdMapping[action?.rowIndex]] = row;
+      }else{
+        action?.newData?.forEach((row) => {
+          arr[indexIdMapping[row?.["autonumber"]]] = row;
+        });
       }
       state.data = arr;
       state.status = "succeeded";
@@ -649,5 +651,8 @@ export function extraReducers(
     })
     .addCase(updateColumnOrder.rejected, (state) => {
       state.status = "failed";
+    })
+    .addCase(resetColumnHeaders.fulfilled, (state, { payload }: any) => {
+      state.columns = payload;
     });
 }

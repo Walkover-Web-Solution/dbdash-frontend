@@ -24,25 +24,32 @@ import {initConn, resetConn  } from "./rtlClient";
   const [anchorEl, setAnchorEl] = useState(null);
   const [minimap, setMinimap] = useState(false);
 
+  const relaodRows = (tableId)=>{
+    dispatch(
+      bulkAddColumns({
+        dbId: dbData?.db?._id,
+        tableName: tableId,
+        pageNo: 1,
+      })
+    );
+  }
 
   useEffect(() => {
     const tableNames = Object.keys(dbData?.db?.tables)||[];
+    const currentTableId = params?.tableName || tableNames[0];
     dispatch(setTableLoading(true));
     const id = params?.dbId + params?.tableName
     if (params?.tableName && !params?.filterName) {
-      initConn(id, function handleChange(type, payload){
+      initConn(id, function handleChange(type, payload, shouldReloadRows){
         dispatch({
           type : type,
           payload: payload
         })
+        if(shouldReloadRows){
+          relaodRows(currentTableId);    
+        }
       });
-      dispatch(
-        bulkAddColumns({
-          dbId: dbData?.db?._id,
-          tableName: params?.tableName || tableNames[0],
-          pageNo: 1,
-        })
-      );
+      relaodRows(currentTableId);
       return ()=>{
         resetConn(id)
       }
