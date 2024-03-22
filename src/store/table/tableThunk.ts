@@ -538,18 +538,17 @@ export const updateCells = createAsyncThunk(
   "table/updateCells",
   async (payload: UpdateColumnHeaderTypes, { getState }: { getState: any }) => {
     const { tableId, dbId } = getState().table;
-    const value = payload?.value;
-    const columnId = payload?.columnId;
+    const {value, columnId, indexIdMapping, rowIndex, imageLink} = payload;
     const userInfo = allOrg(getState());
     if (payload?.dataTypes == "file") {
       const data = await uploadImage(
         dbId,
         tableId,
-        payload.rowIndex,
+        rowIndex,
         columnId,
-        payload?.value,
-        payload?.imageLink,
-        payload?.indexIdMapping
+        value,
+        imageLink,
+        {rowIndex, indexIdMapping, columnId}
       );
       payload.newData = data?.data?.data;
       return payload;

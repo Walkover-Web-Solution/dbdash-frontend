@@ -581,10 +581,10 @@ export function extraReducers(
       // const autonumberId = "fld" + state.tableId.substring(3) + "autonumber";
       const indexIdMapping = action?.indexIdMapping;
       if (action?.dataTypes == "file") {
-        var row = arr[indexIdMapping[action?.newData?.autonumber]];
-        var imageArray: any = row?.[action?.newData?.fieldId] || [];
-        imageArray = [...imageArray, action?.newData?.imageUrl];
-        row[action?.newData.fieldId] = imageArray;
+        var row = arr[indexIdMapping[action?.rowIndex]];
+        var imageArray: any = row?.[action?.columnId] || [];
+        imageArray = [...imageArray, action?.newData];
+        row[action?.columnId] = imageArray;
         arr[indexIdMapping[action?.rowIndex]] = row;
       }else{
         action?.newData?.forEach((row) => {

@@ -23,18 +23,24 @@ const handleMessage = async (message) => {
     let response = JSON.parse(message);
     const sessionId = response.sessionId;
     if (!sessionId || sessionId === sessionStorage.getItem('sessionId')) return;
-    const operation = response.operation;
     switch (response.operation) {
         case 'row/insert': {
             handleChange("table/addMultipleRows/fulfilled", response.data);
             break;
         }
-        case 'row/file/add':
+        case 'row/file/add':{
+            const {indexIdMapping, rowIndex, columnId} = response.meta;
+            handleChange("table/updateCells/fulfilled", {
+                indexIdMapping, rowIndex, columnId,
+                newData : response.data, 
+                dataTypes : 'file'
+            })
+            break;
+        }
         case 'row/update': {
             handleChange( "table/updateCells/fulfilled", {
                 indexIdMapping: response.meta,
                 newData: response.data,
-                dataTypes : operation === 'row/file/add' ? 'file' : undefined,
             });
             break;
         }
