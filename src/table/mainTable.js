@@ -193,6 +193,7 @@ export default function MainTable(props) {
     setAnchorEl(null);
   };
   const openPopper = (event) => {
+    if(params?.templateId) return ;
     setAnchorEl(event.currentTarget)
   }
   const handleShowHistory = (index) => {

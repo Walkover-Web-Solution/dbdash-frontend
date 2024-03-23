@@ -9,28 +9,36 @@ import SingleTable from "../../component/table/singleTable/singleTable";
 import { useParams } from "react-router-dom";
 import { bulkAddColumns, filterData } from "../../store/table/tableThunk";
 import { useDispatch } from "react-redux";
-import MainTable from "../../table/mainTable";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { setTableLoading } from "../../store/table/tableSlice";
 import './templatePage.scss'
 import variables from "../../assets/styling.scss";
-import ManageFieldDropDown from "../../component/table/manageFieldDropDown/manageFieldDropDown";
 import { toast } from "react-toastify";
 import { getTemplate } from "../../api/templateApi";
 import UseTemplatePopup from "./useTemplatePopup";
-import { display } from "@mui/system";
 import MainNavbar from "../../component/mainNavbar/mainNavbar";
 import { customUseSelector } from "../../store/customUseSelector";
-
+import TemplateTable from "../../component/table/templateTable/templateTable";
 
 
 export default function TemplatePage() {
   const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = async () => {
+    const data = await templateDataa(params?.templateId)
+    const tableNames = Object.keys(data?.data?.data?.dbId?.tables);
+    setTableName(tableNames[0])
+    if(tableIdForFilter==="") setTableIdForFilter(tableNames[0])
+    dispatch(
+      bulkAddColumns({
+        dbId: data?.data?.data?.dbId?._id,
+        tableName: tableIdForFilter,
+        pageNo: 1,
+      })
+    );
+    dispatch(setTableLoading(true));
+    setFilterId('');
   };
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
@@ -45,39 +53,10 @@ export default function TemplatePage() {
   const [tableIdForFilter, setTableIdForFilter] = useState("");
   const buttonRef = useRef(null);
   const [filterId, setFilterId] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
   const [underLine, setUnderLine] = useState(params?.filterName)
   const [minimap, setMinimap] = useState(false);
-  const [openManageField, setOpenManageField] = useState(false);
   const [openUseTemplate, setOpenUseTemplate] = useState(false);
-  const handleClick = (event, id) => {
-    if (id === "share") {
-      // setShareLinkOpen(true);
-    } else {
-      setFilterId(id);
-      // setcurrentTable(id);
-      setAnchorEl(event.currentTarget);
-    }
-  };
-  const handleClickOpenManageField = () => {
-    setOpenManageField(true);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
-  const handleEdit = async () => {
-    if (params?.filterName) {
-
-      setOpenn(true);
-      setEdit(true);
-      // setOpenFilter(true); 
-    } else {
-      setEdit(false);
-      setOpenn(false);
-      toast.error("choose the filter First");
-    }
-  };
   function onFilterClicked(filter, id) {
     setUnderLine(id);
     setFilterId(params?.filterName || id);
@@ -94,40 +73,34 @@ export default function TemplatePage() {
   }
 
   useEffect(async () => {
+    if(filterId) return;
     const data = await templateDataa(params?.templateId)
     const tableNames = Object.keys(data?.data?.data?.dbId?.tables);
-    setTableName(tableNames[0])
-    setTableIdForFilter(tableNames[0])
-    dispatch(setAllTablesData({
-      dbId: data?.data?.data?.dbId?._id,
-      tables: data?.data?.data?.dbId?.tables,
-      orgId: data?.data?.data?.dbId?.org_id
-    }))
+    if(tableIdForFilter==="") setTableIdForFilter(tableNames[0])
     dispatch(
       bulkAddColumns({
         dbId: data?.data?.data?.dbId?._id,
-        tableName: tableNames[0],
+        tableName: tableIdForFilter,
         pageNo: 1,
       })
     );
     dispatch(setTableLoading(true));
-  }, [params?.templateId]);
+  }, [params?.templateId,tableIdForFilter,filterId]);
 
   useEffect(() => {
-    if (params?.filterName) {
-      setUnderLine(params?.filterName)
+    if (filterId) {
+      setUnderLine(filterId)
       dispatch(filterData({
-        filterId: params?.filterName,
-        tableId: params?.tableName,
-        filter: templateData?.dbId.tables[params?.tableName]?.filters[params?.filterName]?.query,
+        filterId: filterId,
+        tableId: tableIdForFilter,
+        filter: templateData?.dbId.tables[tableIdForFilter]?.filters[filterId]?.query,
         dbId: templateData?.dbId?._id,
       }))
-
     }
     else {
       setUnderLine(null);
     }
-  }, [params?.filterName]);
+  }, [params?.filterName,filterId]);
 
   const templateDataa = async (templateId) => {
     const templateData = await getTemplate(templateId)
@@ -156,10 +129,10 @@ export default function TemplatePage() {
         <div  className="templatePage-div1">
           <div className="templatePage-div2">
             <div className="tableslist1">
-              <Box className="tabs-container1">
+              <Box className="tabs-container">
                 <Tabs
-                  value={value}
-                  onChange={handleChange}
+                  value={0}
+                  onClick={handleChange}
                   TabIndicatorProps={{
                     style: { display: "none" },
                   }}
@@ -173,8 +146,7 @@ export default function TemplatePage() {
                       <SingleTable
                         table={table}
                         setTableIdForFilter={setTableIdForFilter}
-                        tabIndex={tabIndex}
-                        setTabIndex={setTabIndex}
+                        activeTableName={tableIdForFilter}
                         index={index}
                         dbData={templateData?.dbId}
                         setPage={setPage}
@@ -205,9 +177,6 @@ export default function TemplatePage() {
                           >
                             {filter[1]?.filterName}
                           </div>
-                          <IconButton onClick={(e) => handleClick(e, filter[0])}>
-                            <MoreVertIcon className="moreverticon" />
-                          </IconButton>
                         </Box>
                       </Box>
 
@@ -231,46 +200,9 @@ export default function TemplatePage() {
               )}
 
               <div >
-                <Button className="templatePage-button1" onClick={handleClickOpenManageField}>Manage Fields</Button>
-
+              
                 <Button className="templatePage-button1"  onClick={() => setMinimap(!minimap)}>Minimap {!minimap ? <CheckBoxOutlineBlankIcon fontSize="4px" /> : <CheckBoxIcon  fontSize={variables.iconfontsize1}  />}</Button>
-                {params?.filterName && <> <Button className="templatePage-button2"   onClick={handleEdit}>Edit filter</Button>
-                  <Button className="templatePage-button2"  onClick={(e) => {
-                    handleClick(e, "share");
-                  }
-                  }>share view</Button></>}
               </div>
-              {openManageField && (
-                <ManageFieldDropDown
-                  openManageField={openManageField}
-                  setOpenManageField={setOpenManageField}
-                />
-              )}
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => handleClose()}
-              >
-
-
-                <MenuItem
-                  onClick={() => {
-                    handleClose();
-                  }}
-                >
-                  Export CSV
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    handleClose();
-                  }}
-                  sx={{ color: `#a51226` }}
-                >
-                  Delete
-                </MenuItem>
-
-
-              </Menu>
             </div>
 
             <div >
@@ -278,7 +210,7 @@ export default function TemplatePage() {
                 <CircularProgress className="table-loading" />
               ) : (
                 <div className="templatePage-div3" >
-                  <MainTable setPage={setPage} width={'100%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{ padding: '0 auto' }} className="templatePage-maintable" />
+                 <TemplateTable setPage={setPage} width={'100%'} height={`${(window?.screen?.height * 40) / 100}px`} page={page} minimap={minimap} style={{ padding: '0 auto' }} className="templatePage-maintable" />
                 </div>
               )}
             </div>
