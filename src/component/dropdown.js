@@ -36,6 +36,7 @@ e.preventDefault();
 
   return (
     <>
+    {!params?.templateId &&
         <Tooltip>
           {/* <IconButton> */}
               <MoreHorizIcon  onClick={(e)=>{
@@ -45,6 +46,7 @@ e.preventDefault();
               {/* </IconButton> */}
         </Tooltip>
 
+              }
           <Menu
           
             id="menu-appbar"
