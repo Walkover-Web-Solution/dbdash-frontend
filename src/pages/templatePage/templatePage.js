@@ -25,9 +25,20 @@ export default function TemplatePage() {
   const isTableLoading = customUseSelector((state) => state.table?.isTableLoading);
   const dispatch = useDispatch();
   const params = useParams();
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = async () => {
+    const data = await templateDataa(params?.templateId)
+    const tableNames = Object.keys(data?.data?.data?.dbId?.tables);
+    setTableName(tableNames[0])
+    if(tableIdForFilter==="") setTableIdForFilter(tableNames[0])
+    dispatch(
+      bulkAddColumns({
+        dbId: data?.data?.data?.dbId?._id,
+        tableName: tableIdForFilter,
+        pageNo: 1,
+      })
+    );
+    dispatch(setTableLoading(true));
+    setFilterId('');
   };
   const [page, setPage] = useState(1);
   const [table, setTable] = useState();
@@ -62,15 +73,10 @@ export default function TemplatePage() {
   }
 
   useEffect(async () => {
+    if(filterId) return;
     const data = await templateDataa(params?.templateId)
     const tableNames = Object.keys(data?.data?.data?.dbId?.tables);
-    setTableName(tableNames[0])
     if(tableIdForFilter==="") setTableIdForFilter(tableNames[0])
-     dispatch(setAllTablesData({
-      dbId: data?.data?.data?.dbId?._id,
-      tables: data?.data?.data?.dbId?.tables,
-      orgId: data?.data?.data?.dbId?.org_id
-    }))
     dispatch(
       bulkAddColumns({
         dbId: data?.data?.data?.dbId?._id,
@@ -79,7 +85,7 @@ export default function TemplatePage() {
       })
     );
     dispatch(setTableLoading(true));
-  }, [params?.templateId,tableIdForFilter]);
+  }, [params?.templateId,tableIdForFilter,filterId]);
 
   useEffect(() => {
     if (filterId) {
@@ -90,7 +96,6 @@ export default function TemplatePage() {
         filter: templateData?.dbId.tables[tableIdForFilter]?.filters[filterId]?.query,
         dbId: templateData?.dbId?._id,
       }))
-      
     }
     else {
       setUnderLine(null);
@@ -124,10 +129,10 @@ export default function TemplatePage() {
         <div  className="templatePage-div1">
           <div className="templatePage-div2">
             <div className="tableslist1">
-              <Box className="tabs-container1">
+              <Box className="tabs-container">
                 <Tabs
-                  value={value}
-                  onChange={handleChange}
+                  value={0}
+                  onClick={handleChange}
                   TabIndicatorProps={{
                     style: { display: "none" },
                   }}
@@ -141,8 +146,7 @@ export default function TemplatePage() {
                       <SingleTable
                         table={table}
                         setTableIdForFilter={setTableIdForFilter}
-                        tabIndex={tabIndex}
-                        setTabIndex={setTabIndex}
+                        activeTableName={tableIdForFilter}
                         index={index}
                         dbData={templateData?.dbId}
                         setPage={setPage}

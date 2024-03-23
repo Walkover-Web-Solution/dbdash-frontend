@@ -23,7 +23,8 @@ import ImportCSV from "../../importCSV/importCSV";
   table,
   index,
   setPage,
-  setTableIdForFilter
+  setTableIdForFilter,
+  activeTableName = ""
 }) {
   const navigate = useNavigate();
   const [tableNa, setTableNa] = useState(null);
@@ -149,8 +150,10 @@ import ImportCSV from "../../importCSV/importCSV";
   return (
     <div  style={{width:'fit-content'}}>
       <Box
-        className={`single-table ${location.pathname.includes(`table/${table[0]}`) ? "active" : ""
-          }`}
+        className={`single-table ${location.pathname.includes(`table/${table[0]}`) || activeTableName === table[0]
+            ? "active"
+            : ""
+        }`}
         onClick={() => {
           onTableClicked(table[0]);
         }}
@@ -276,7 +279,8 @@ SingleTable.propTypes = {
   setPage: PropTypes.any,
   label: PropTypes.string,
   dropdown: PropTypes.node,
-  setTableIdForFilter:PropTypes.any
+  setTableIdForFilter:PropTypes.any,
+  activeTableName: PropTypes.any
 };
 
 export default memo(SingleTable);
