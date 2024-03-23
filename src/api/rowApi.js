@@ -21,7 +21,7 @@ const uploadImage = async (dbId, tableName, rowId, columnId, fileobj, link, inde
         file: fileobj,
         columnId: columnId,
         link: link,
-        indexIdMapping
+        meta: indexIdMapping
     }, {
         headers: {
             'Content-Type': 'multipart/form-data'
