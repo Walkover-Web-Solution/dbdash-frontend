@@ -72,7 +72,13 @@ export default function ShareOrgModal(props) {
     toast.success("User removed successfully");
   };
   const handleRemoveUserindb = (email, userId) => {
-   
+    const currentUser = props?.org?.users.find(
+      (user) => user.user_id?.email === email
+    );
+    if (currentUser && currentUser.user_type === 1) {
+      toast.error("You cannot remove an owner");
+      return;
+    }
     props.removeUserFromWorkspace(email, userId);
     toast.success("User removed successfully");
   };
