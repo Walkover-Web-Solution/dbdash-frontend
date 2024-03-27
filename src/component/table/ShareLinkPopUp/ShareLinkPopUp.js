@@ -28,7 +28,7 @@ export default function ShareLinkPopUp(props) {
   const handleClose = () => setOpen(false);
   const [link, setLink] = useState("Link");
   const params = useParams();
-  const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
+  const shareViewUrl = process.env.REACT_APP_API_BASE_URL+'/view';
   const dispatch = useDispatch();
   
   const handleCopy = () => {

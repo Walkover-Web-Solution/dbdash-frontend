@@ -18,7 +18,7 @@ import   {  customUseSelector }  from "../../../store/customUseSelector";
 
 
  function TableOptions({ dbData, setFilterId, setAnchorEl, minimap, setMinimap, shareLinkOpen, setShareLinkOpen }) {
-  const shareViewUrl = process.env.REACT_APP_API_BASE_URL;
+  const shareViewUrl = process.env.REACT_APP_API_BASE_URL + '/view';
   const AllTableInfo = customUseSelector((state) => state.tables.tables);
   const dispatch = useDispatch();
   const params = useParams();
